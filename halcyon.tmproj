@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>documents</key>
+	<array>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/AMFConnection.as</string>
+			<key>lastUsed</key>
+			<date>2009-05-30T10:52:22Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/Connection.as</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/Globals.as</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/Map.as</string>
+			<key>lastUsed</key>
+			<date>2009-05-30T10:43:34Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/Node.as</string>
+			<key>lastUsed</key>
+			<date>2009-05-30T08:37:45Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/POI.as</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/Way.as</string>
+			<key>lastUsed</key>
+			<date>2009-05-30T10:43:35Z</date>
+		</dict>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>styleparser</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>net/systemeD/halcyon/styleparser</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>halcyon.mxml</string>
+			<key>lastUsed</key>
+			<date>2009-05-30T10:52:25Z</date>
+			<key>selected</key>
+			<true/>
+		</dict>
+	</array>
+	<key>fileHierarchyDrawerWidth</key>
+	<integer>200</integer>
+	<key>metaData</key>
+	<dict/>
+	<key>showFileHierarchyDrawer</key>
+	<true/>
+	<key>windowFrame</key>
+	<string>{{272, 182}, {710, 564}}</string>
+</dict>
+</plist>

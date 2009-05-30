@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:halcyon="net.systemeD.halcyon.*"
+	layout="vertical"
+	horizontalAlign="center" 
+	addedToStage="initApp()">
+
+<!--    <halcyon:CountryComboBox /> -->
+
+<!--	<halcyon:Map width="400" height="200" id="theMap" /> -->
+<!-- applicationComplete -->
+<!-- rawChildren -->
+
+	<mx:Script><![CDATA[
+		import net.systemeD.halcyon.*;
+		import flash.system.Security;
+		import flash.net.*;
+		import flash.events.MouseEvent;
+		import flash.display.Sprite;
+		import mx.core.IChildList;
+
+		private function initApp():void {
+
+			Globals.vars.root=rawChildren;			// set up global reference to root level
+			var _root:IChildList=rawChildren;		// convenient local shorthand
+
+			// map backdrop object
+			var b:Sprite=new Sprite();
+			b.graphics.beginFill(0xFFFFEA,100);
+			b.graphics.drawRect(0,0,200,200);
+			b.graphics.endFill();
+			_root.addChild(b);
+
+			// add map
+			var theMap:Map=new Map();
+			theMap.backdrop=b;
+			_root.addChild(theMap);
+
+			// add mask for map
+			var s:Sprite=new Sprite();
+			s.graphics.beginFill(0xFFFFFF,100);
+			s.graphics.drawRect(0,0,200,200);
+			s.graphics.endFill();
+			_root.addChild(s);
+
+			theMap.mask=s;
+
+			// mouse-up handler attached to stage, so the user can release outside the map
+			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
+			theMap.backdrop.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
+			theMap.backdrop.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
+
+			// keyboard event attached to stage
+			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
+
+			// add debug field
+			var t:TextField=new TextField();
+			t.width=400; t.height=100; t.border=true; 
+			t.multiline=true;
+			_root.addChild(t);
+			Globals.vars.debug=t;
+		}
+
+	]]></mx:Script>
+
+</mx:Application>
+
