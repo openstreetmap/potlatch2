@@ -43,8 +43,16 @@
 			s.graphics.drawRect(0,0,200,200);
 			s.graphics.endFill();
 			_root.addChild(s);
-
 			theMap.mask=s;
+
+			// add crosshair
+			s=new Sprite();
+			s.graphics.lineStyle(2,0);
+			s.graphics.moveTo(stage.stageWidth/2-20,stage.stageHeight/2);
+			s.graphics.lineTo(stage.stageWidth/2+20,stage.stageHeight/2);
+			s.graphics.moveTo(stage.stageWidth/2,stage.stageHeight/2-20);
+			s.graphics.lineTo(stage.stageWidth/2,stage.stageHeight/2+20);
+			_root.addChild(s);
 
 			// mouse-up handler attached to stage, so the user can release outside the map
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);

@@ -29,7 +29,6 @@ package net.systemeD.halcyon {
 		public var bigedge_r:Number=-999999;			//  |
 		public var bigedge_b:Number= 999999;			//  |
 		public var bigedge_t:Number=-999999;			//  |
-		public var bscale:Number=Math.pow(2,scale-13);	// scale factor (2**(zoom-13))
 
 		public var waycount:uint=0;						// ways:		number currently loaded
 		public var waysrequested:uint=0;				// 				total number requested
@@ -46,8 +45,8 @@ package net.systemeD.halcyon {
 		public var edge_t:Number;						//  |
 		public var edge_b:Number;						//  |
 
-		public var baselon:Number;						// urllon-xradius/masterscale/bscale;
-		public var basey:Number;						// lat2lat2p(urllat)+yradius/masterscale/bscale;
+		public var baselon:Number;						// urllon-xradius/masterscale;
+		public var basey:Number;						// lat2lat2p(urllat)+yradius/masterscale;
 		public var mapwidth:uint;						// width (Flash pixels)
 		public var mapheight:uint;						// height (Flash pixels)
 
@@ -93,11 +92,10 @@ package net.systemeD.halcyon {
 //			rules.initExample();		// initialise dummy rules
 
 			updateSize();
-			baselon  =startlon			-(mapwidth /2)/MASTERSCALE/bscale;
-			basey    =lat2latp(startlat)+(mapheight/2)/MASTERSCALE/bscale;
+			baselon  =startlon			-(mapwidth /2)/MASTERSCALE;
+			basey    =lat2latp(startlat)+(mapheight/2)/MASTERSCALE;
 			addDebug("Baselon "+baselon+", basey "+basey);
 			updateCoords(0,0);
-			addDebug("L "+edge_l+", R "+edge_r);
 			download();
 			
         }
@@ -106,18 +104,23 @@ package net.systemeD.halcyon {
 		// Recalculate co-ordinates from new Flash origin
 
 		public function updateCoords(tx:Number,ty:Number):void {
-
-			bscale=Math.pow(2,scale-13);
 			x=tx; y=ty;
-//			scaleX=bscale; scaleY=bscale;
 
 			// ** calculate tile_l etc.
-			edge_t=coord2lat((-y          )/bscale);
-			edge_b=coord2lat((-y+mapheight)/bscale);
-			edge_l=coord2lon((-x          )/bscale);
-			edge_r=coord2lon((-x+mapwidth )/bscale);
-
+			edge_t=coord2lat(-y          );
+			edge_b=coord2lat(-y+mapheight);
+			edge_l=coord2lon(-x          );
+			edge_r=coord2lon(-x+mapwidth );
+			addDebug("Lon "+edge_l+"-"+edge_r);
+			addDebug("Lat "+edge_b+"-"+edge_t);
 		}
+		
+		public function updateCoordsFromLatLon(lat:Number,lon:Number):void {
+			var cy:Number=-(lat2coord(lat)-mapheight/2);
+			var cx:Number=-(lon2coord(lon)-mapwidth/2);
+			updateCoords(cx,cy);
+		}
+
 
 		// Co-ordinate conversion functions
 
@@ -142,7 +145,6 @@ package net.systemeD.halcyon {
 		public function updateSize():void {
 			mapwidth =stage.stageWidth; mask.width=mapwidth; backdrop.width=mapwidth;
 			mapheight=stage.stageHeight; mask.height=mapheight; backdrop.height=mapheight;
-			// addDebug("Mapwidth "+mapwidth+", mapheight "+mapheight);
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -209,9 +211,11 @@ package net.systemeD.halcyon {
 			addDebug("new scale "+newscale);
 			scale=newscale;
 			scalefactor=MASTERSCALE/Math.pow(2,14-scale);
+			updateCoordsFromLatLon((edge_t+edge_b)/2,(edge_l+edge_r)/2);	// recentre
+			download();
 			redraw();
 		}
-		
+
 		private function reportPosition():void {
 			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
