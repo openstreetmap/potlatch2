@@ -63,13 +63,15 @@ package net.systemeD.halcyon {
 
         public function Map() {
 
-			for (var l:int=0; l<11; l++) {				// 11 layers (10 is +5, 0 is -5)
+			for (var l:int=0; l<13; l++) {				// 11 layers (10 is +5, 0 is -5)
 				var s:Sprite=new Sprite();
 				s.addChild(new Sprite());				// [layer][0]=fill, [1]=stroke, [2]=names
 				s.addChild(new Sprite());
 				s.addChild(new Sprite());
 				addChild(s);
 			}
+			s=new Sprite(); addChild(s);				// 11 - POIs
+			s=new Sprite(); addChild(s);				// 12 - shields
 
 			connection=new AMFConnection(
 				"http://127.0.0.1:3000/api/0.6/amf/read",
@@ -177,9 +179,9 @@ package net.systemeD.halcyon {
 			}
 
 			for each (var p:Array in pointlist) {
-				i=w[0]; v=w[4];
+				i=p[0]; v=p[4];
 				if (pois[i] && pois[i].version==v) { continue; }
-				pois[i]=new POI(i,v,w[1],w[2],w[3],this);
+				pois[i]=new POI(i,v,p[1],p[2],p[3],this);
 			}
 
 			addDebug("waylist is "+waylist);

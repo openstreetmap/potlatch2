@@ -3,10 +3,12 @@ package net.systemeD.halcyon.styleparser {
 	import org.as3yaml.*;
 	import flash.events.*;
 	import flash.net.*;
+	import net.systemeD.halcyon.Globals;
 
 	public class RuleSet {
 
 		public var rules:Array=new Array();		// list of rules
+		public var images:Object=new Object();	// loaded images
 
 		// variables for name, author etc.
 
@@ -19,8 +21,8 @@ package net.systemeD.halcyon.styleparser {
 			for each (var rule:* in rules) {
 				if ( isPoint && rule is ShapeRule) { continue; }
 				if (!isPoint && rule is PointRule) { continue; }
-				if (scale>rule.minScale) { continue; }
-				if (scale<rule.maxScale) { continue; }
+				if (scale>rule.minScale && !isPoint) { continue; }
+				if (scale<rule.maxScale && !isPoint) { continue; }
 				if (rule.test(tags)) {
 					if (rule is ShapeRule && rule.shapeStyle)  { ss=rule.shapeStyle; }
 					if (rule is PointRule && rule.pointStyle)  { ps=rule.pointStyle; }
@@ -76,7 +78,8 @@ package net.systemeD.halcyon.styleparser {
 		private function loadedRuleSet(event:Event):void {
 			var loader:URLLoader = URLLoader(event.target);  
 			rules=YAML.decode(event.target.data) as Array;
-			// fire some event or other to tell map to redraw
+			// ** fire some event or other to tell map to redraw
+			loadImages();
 		}
 
 		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
@@ -84,5 +87,38 @@ package net.systemeD.halcyon.styleparser {
 		private function ioErrorHandler( event:IOErrorEvent ):void { }
 		
 		// serialise/deserialise methods
+
+
+		// ------------------------------------------------------------------------------------------------
+		// Load all referenced images
+		// ** currently only looks in PointRules
+		// ** will duplicate if referenced twice, shouldn't
+		
+		public function loadImages():void {
+			var ps:PointStyle;
+			for each (var rule:* in rules) {
+				if (!(rule is PointRule)) { continue; }
+				if (!(rule.pointStyle)) { continue; }
+				if (!(rule.pointStyle.icon)) { continue; }
+				
+				var request:URLRequest=new URLRequest(rule.pointStyle.icon);
+				var loader:ImageLoader=new ImageLoader();
+				loader.dataFormat=URLLoaderDataFormat.BINARY;
+				loader.filename=rule.pointStyle.icon;
+				loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
+				loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
+				loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
+				loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
+				loader.load(request);
+			}
+		}
+
+		// data handler
+
+		private function loadedImage(event:Event):void {
+			Globals.vars.debug.appendText("Target is "+event.target+", name"+event.target.filename+"\n");
+			images[event.target.filename]=event.target.data;
+		}
+
 	}
 }

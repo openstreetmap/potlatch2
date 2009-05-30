@@ -3,6 +3,7 @@ package net.systemeD.halcyon {
 	public class POI extends Object {
 
 		import flash.display.*;
+		import flash.events.*;
 		import flash.text.TextField;
 		import flash.text.TextFormat;
 		import net.systemeD.halcyon.styleparser.*;
@@ -25,12 +26,37 @@ package net.systemeD.halcyon {
 			this.id=id;
 			this.version=version;
 			this.map=map;
+			if (tags==null) { tags=new Object(); }
 			this.tags=tags;
+map.addDebug("POI "+id);
 			if (map.nodes[id]) {
 				// ** already exists - do stuff if it's moved, or in a way
 			} else {
 				map.nodes[id]=new Node(id,lon,map.lat2latp(lat),tags,version);
 			}
+
+			// place icon on map
+			var styles:Array=map.ruleset.getStyle(true,tags,map.scale);
+			var ps:PointStyle=styles[1];
+
+			if (ps) {
+map.addDebug("pointstyle found");
+ 				if (ps.icon && ps.icon!='') {
+map.addDebug("placing "+ps.icon);
+					var loader:Loader = new Loader();
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon);
+					loader.loadBytes(map.ruleset.images[ps.icon]);
+				}
+			}
+		}
+
+		private function loadedIcon(event:Event):void {
+map.addDebug("loadedIcon");
+			var bitmap:Bitmap = Bitmap(event.target.content);
+			var l:DisplayObject=map.getChildAt(11);
+			bitmap.x=map.lon2coord(map.nodes[id].lon);
+			bitmap.y=map.latp2coord(map.nodes[id].latp);
+			Sprite(l).addChild(bitmap);
 		}
 		
 		// redraw
