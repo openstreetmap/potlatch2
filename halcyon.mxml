@@ -12,6 +12,15 @@
 <!-- applicationComplete -->
 <!-- rawChildren -->
 
+    <mx:HDividedBox width="100%" height="100%">
+
+      <mx:VBox height="100%">
+        <mx:Button label="+" click="theMap.zoomIn();"/>
+        <mx:Button label="-" click="theMap.zoomOut();"/>
+      </mx:VBox>
+      <mx:Canvas id="map_area" clipContent="true"/>
+    </mx:HDividedBox>
+
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import flash.system.Security;
@@ -19,21 +28,27 @@
 		import flash.events.MouseEvent;
 		import flash.display.Sprite;
 		import mx.core.IChildList;
+        import mx.containers.Canvas;
+
+        public var theMap:Map;
 
 		private function initApp():void {
 
-			Globals.vars.root=rawChildren;			// set up global reference to root level
-			var _root:IChildList=rawChildren;		// convenient local shorthand
+			Globals.vars.root=map_area.rawChildren;			// set up global reference to root level
+			var _root:IChildList=map_area.rawChildren;		// convenient local shorthand
 
 			// map backdrop object
-			var b:Sprite=new Sprite();
-			b.graphics.beginFill(0xFFFFEA,100);
-			b.graphics.drawRect(0,0,200,200);
-			b.graphics.endFill();
+            var b:Canvas = new Canvas();
+            b.height=200; b.width=200;
+            b.setStyle("backgroundColor", 0xFFFFEA);
+			//var b:Sprite=new Sprite();
+			//b.graphics.beginFill(0xFFFFEA,100);
+			//b.graphics.drawRect(0,0,200,200);
+			//b.graphics.endFill();
 			_root.addChild(b);
 
 			// add map
-			var theMap:Map=new Map();
+			theMap=new Map();
 			theMap.backdrop=b;
 			_root.addChild(theMap);
 
@@ -64,9 +79,9 @@
 
 			// add debug field
 			var t:TextField=new TextField();
-			t.width=400; t.height=100; t.border=true; 
-			t.multiline=true;
-			_root.addChild(t);
+			//t.width=400; t.height=100; t.border=true; 
+			//t.multiline=true;
+			//_root.addChild(t);
 			Globals.vars.debug=t;
 		}
 

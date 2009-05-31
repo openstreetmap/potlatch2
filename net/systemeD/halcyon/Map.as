@@ -6,9 +6,12 @@ package net.systemeD.halcyon {
 	import flash.display.Shape;
 	import flash.display.Stage;
 	import flash.events.*;
-	import net.systemeD.halcyon.styleparser.*;
 	import flash.net.*;
-	
+
+    import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.EntityEvent;
+	import net.systemeD.halcyon.styleparser.*;
+
     public class Map extends Sprite {
 
 		public const MASTERSCALE:Number=5825.4222222222;// master map scale - how many Flash pixels in 1 degree longitude
@@ -56,7 +59,7 @@ package net.systemeD.halcyon {
 		
 		public var backdrop:Object;						// reference to backdrop sprite
 		
-		public var connection:AMFConnection;			// server connection
+		public var connection:Connection;			// server connection
 
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function
@@ -73,16 +76,15 @@ package net.systemeD.halcyon {
 			s=new Sprite(); addChild(s);				// 11 - POIs
 			s=new Sprite(); addChild(s);				// 12 - shields
 
-			connection=new AMFConnection(
-				"http://127.0.0.1:3000/api/0.6/amf/read",
-				"http://127.0.0.1:3000/api/0.6/amf/write",
-				"http://127.0.0.1:3000/api/crossdomain.xml");
+			connection= Connection.getConnection();
+            connection.addEventListener(Connection.NEW_WAY, newWayCreated);
+            connection.addEventListener(Connection.NEW_POI, newPOICreated);
 			connection.getEnvironment(new Responder(gotEnvironment,connectionError));
 
         }
 
 		public function gotEnvironment(r:Object):void {
-			init(52.022,-1.2745);
+			init(51.45889,-0.21476);
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -145,8 +147,8 @@ package net.systemeD.halcyon {
 		// Resize map size based on current stage and height
 
 		public function updateSize():void {
-			mapwidth =stage.stageWidth; mask.width=mapwidth; backdrop.width=mapwidth;
-			mapheight=stage.stageHeight; mask.height=mapheight; backdrop.height=mapheight;
+			mapwidth =stage.stageWidth; backdrop.width=mapwidth; mask.width=mapwidth;
+			mapheight=stage.stageHeight; backdrop.height=mapheight; mask.height=mapheight;
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -159,9 +161,10 @@ package net.systemeD.halcyon {
 			bigedge_l=edge_l; bigedge_r=edge_r;
 			bigedge_b=edge_b; bigedge_t=edge_t;
 			addDebug("Calling with "+edge_l+"-"+edge_r+", "+edge_t+"-"+edge_b);
-			connection.getBbox(edge_l,edge_r,edge_t,edge_b,new Responder(gotBbox,connectionError));
+			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 		}
 
+/*
 		public function gotBbox(r:Object):void {
 			addDebug("got whichways");
 			var code:uint         =r.shift(); if (code) { connectionError(); return; }
@@ -186,16 +189,29 @@ package net.systemeD.halcyon {
 
 			addDebug("waylist is "+waylist);
 		}
+*/
 
+        private function newWayCreated(event:EntityEvent):void {
+            var way:Way = event.entity as Way;
+            ways[way.id] = new WayUI(way, this);
+        }
+
+        private function newPOICreated(event:EntityEvent):void {
+            var node:Node = event.entity as Node;
+            pois[node.id] = new POI(node, this);
+        }
 
 		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out
 		
 		public function redraw():void {
-			addDebug("redrawing");
-			var s:String='';
-			for each (var w:Way in ways) { w.redraw(); s+=w.id+","; }
-			addDebug(s);
+//			addDebug("redrawing");
+//			var s:String='';
+			for each (var w:WayUI in ways) {
+                w.redraw();
+//                s+=w.id+",";
+            }
+//			addDebug(s);
 			// ** do POIs, etc.
 		}
 

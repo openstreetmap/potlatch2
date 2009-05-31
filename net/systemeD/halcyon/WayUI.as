@@ -1,6 +1,5 @@
 package net.systemeD.halcyon {
 
-	import flash.net.*;
 	import flash.display.*;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -10,18 +9,13 @@ package net.systemeD.halcyon {
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import net.systemeD.halcyon.styleparser.*;
+    import net.systemeD.halcyon.connection.*;
 
-	public class Way extends Object {
+	public class WayUI {
+        private var way:Way;
 
-		public var id:int;
-		public var path:Array;
 		public var pathlength:Number;				// length of path
 
-		public var tags:Object;
-		public var clean:Boolean=true;				// altered since last upload?
-		public var uploading:Boolean=false;			// currently uploading?
-		public var locked:Boolean=false;			// locked against upload?
-		public var version:uint=0;					// version number?
 		public var layer:int=0;						// map layer
 		public var map:Map;							// reference to parent map
 		public var stroke:Sprite;					// instance in display list
@@ -37,50 +31,28 @@ package net.systemeD.halcyon {
 		public static var DejaVu:Class;
 		public var nameformat:TextFormat;
 
-//		public var depth:int=-1;					// child id ('depth') of sprite: -1=undrawn
-//		public var historic:Boolean=false;			// is this an undeleted, not-uploaded way?
-//		public var checkconnections:Boolean=false;	// check shared nodes on reload
-//		public var mergedways:Array;
 
-		public function Way(id:int,version:int,map:Map) {
-			this.id=id;
-			this.version=version;
-			this.map=map;
-		}
-
-		// ------------------------------------------------------------------------------------------
-		// Load from server
-
-		public function load(connection:AMFConnection):void {
-			connection.getWay(id,new Responder(gotWay,null));
-			// ** should be connectionError, not null
+		public function WayUI(way:Way, map:Map) {
+			this.way = way;
+			this.map = map;
+            init();
 		}
 		
-		public function gotWay(r:Object):void {
-			var lx:Number,ly:Number;
-			var code:uint     =r.shift(); if (code) { map.connectionError(); return; }
-			var message:String=r.shift();
-			clean=true;
-			locked=false;
-			tags=r[2];
-			version=r[3];
-//			this.historic=false;
-//			removeNodeIndex();
-//			resetBbox();
-			path=[];
+		private function init():void {
+			var lx:Number, ly:Number;
 			pathlength=0;
 			
-			for each (var p:Array in r[1]) {
-//				updateBbox(p[0],p[1]);
-				if (!isNaN(lx)) { pathlength+=Math.sqrt( Math.pow(p[0]-lx,2)+Math.pow(p[1]-ly,2) ) };
-				lx=p[0]; ly=p[1];
-				var n:uint=p[2];
-				// ** what to do if node exists?
-				map.nodes[n]=new Node(n, p[0], map.lat2latp(p[1]), p[3], p[4]);
-				map.nodes[n].clean=true;
-				path.push(map.nodes[n]);
-//				map.nodes[id].addWay(this.id);
+			for ( var i:uint = 0; i < way.length; i++ ) {
+                var node:Node = way.getNode(i);
+                var lat:Number = node.lat;
+                var lon:Number = node.lon;
+//				updateBbox(lon, lat);
+				if ( !isNaN(lx) ) {
+                    pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(lat-ly,2) );
+                }
+				lx=lon; ly=lat;
 			}
+
 			pathlength*=map.scalefactor;
 			redraw();
 			// ** various other stuff
@@ -90,10 +62,12 @@ package net.systemeD.halcyon {
 		// Redraw
 
 		public function redraw():void {
+            var tags:Object = way.getTagsCopy();
 
 			// ** remove previous version from any layer
 			layer=5;
-			if (tags['layer']) { layer=Math.min(Math.max(tags['layer']+5,-5),5)+5; }
+			if ( tags['layer'] )
+                layer=Math.min(Math.max(tags['layer']+5,-5),5)+5;
 
 			// find/create sprites
 			if (stroke) {
@@ -110,7 +84,7 @@ package net.systemeD.halcyon {
 			var f:Graphics=fill.graphics;
 
 			// set style
-			var styles:Array=map.ruleset.getStyle(false,tags,map.scale);
+			var styles:Array=map.ruleset.getStyle(false, tags, map.scale);
 
 			// ShapeStyle
 			// ** do line-caps/joints
@@ -133,19 +107,29 @@ package net.systemeD.halcyon {
 			}
 
 			// draw line
-			if (doFill            ) { f.beginFill(fill_colour,fill_opacity); }
-			if (doStroke          ) { g.moveTo(map.lon2coord(path[0].lon),map.latp2coord(path[0].latp)); }
-			if (doFill || doCasing) { f.moveTo(map.lon2coord(path[0].lon),map.latp2coord(path[0].latp)); }
+			if (doFill)
+                f.beginFill(fill_colour,fill_opacity);
+			if (doStroke)
+                g.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
+			if (doFill || doCasing)
+                f.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
 
-			if (doDashed) { dashedLine(g,ss.stroke_dashArray); }
-			else if (doStroke) { solidLine(g); }
+			if (doDashed)
+                dashedLine(g,ss.stroke_dashArray);
+			else if (doStroke)
+                solidLine(g);
 			
-			if (doDashedCasing) { dashedLine(f,ss.casing_dashArray); f.lineStyle(); }
+			if (doDashedCasing) {
+                dashedLine(f,ss.casing_dashArray);
+                f.lineStyle();
+            }
 			if (doFill) {
  				f.beginFill(fill_colour,fill_opacity); 
 				solidLine(f);
 				f.endFill(); 
-			} else if (doCasing && !doDashedCasing) { solidLine(f); }
+			} else if (doCasing && !doDashedCasing) {
+                solidLine(f);
+            }
 
 			// TextStyle
 			// ** do pull-out
@@ -169,9 +153,11 @@ package net.systemeD.halcyon {
 		// Draw solid polyline
 		
 		private function solidLine(g:Graphics):void {
- 			g.moveTo(map.lon2coord(path[0].lon),map.latp2coord(path[0].latp));
-			for (var i:uint=1; i<path.length; i++) {
-				g.lineTo(map.lon2coord(path[i].lon),map.latp2coord(path[i].latp));
+            var node:Node = way.getNode(0);
+ 			g.moveTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
+			for (var i:uint = 1; i < way.length; i++) {
+                node = way.getNode(i);
+				g.lineTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
 			}
 		}
 
@@ -183,16 +169,23 @@ package net.systemeD.halcyon {
 			var curx:Number, cury:Number;
 			var dx:Number, dy:Number, segleft:Number=0;
  			var i:int=0;
- 			g.moveTo(map.lon2coord(path[0].lon),map.latp2coord(path[0].latp));
-			while (i<path.length-1 || segleft>0) {
+
+            var node:Node = way.getNode(0);
+            var nextNode:Node = way.getNode(0);
+ 			g.moveTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
+			while (i < way.length-1 || segleft>0) {
 				if (dashleft<=0) {	// should be ==0
 					if (dc.length==0) { dc=dashes.slice(0); }
 					dashleft=dc.shift();
 					draw=!draw;
 				}
 				if (segleft<=0) {	// should be ==0
-					curx=map.lon2coord(path[i].lon ); dx=map.lon2coord(path[i+1].lon )-curx;
-					cury=map.latp2coord(path[i].latp); dy=map.latp2coord(path[i+1].latp)-cury;
+                    node = way.getNode(i);
+                    nextNode = way.getNode(i+1);
+					curx=map.lon2coord(node.lon);
+                    dx=map.lon2coord(nextNode.lon)-curx;
+					cury=map.latp2coord(node.latp);
+                    dy=map.latp2coord(nextNode.latp)-cury;
 					a=Math.atan2(dy,dx); xc=Math.cos(a); yc=Math.sin(a);
 					segleft=Math.sqrt(dx*dx+dy*dy);
 					i++;
@@ -227,13 +220,13 @@ package net.systemeD.halcyon {
 			var totallen:Number = t*pathlength;
 			var curlen:Number = 0;
 			var dx:Number, dy:Number, seglen:Number;
-			for (var i:int=1; i<path.length; i++){
-				dx=map.lon2coord(path[i].lon )-map.lon2coord(path[i-1].lon );
-				dy=map.latp2coord(path[i].latp)-map.latp2coord(path[i-1].latp);
+			for (var i:int = 1; i < way.length; i++){
+				dx=map.lon2coord(way.getNode(i).lon)-map.lon2coord(way.getNode(i-1).lon);
+				dy=map.latp2coord(way.getNode(i).latp)-map.latp2coord(way.getNode(i-1).latp);
 				seglen=Math.sqrt(dx*dx+dy*dy);
 				if (totallen > curlen+seglen) { curlen+=seglen; continue; }
-				return new Array(map.lon2coord(path[i-1].lon )+(totallen-curlen)/seglen*dx,
-								 map.latp2coord(path[i-1].latp)+(totallen-curlen)/seglen*dy,
+				return new Array(map.lon2coord(way.getNode(i-1).lon)+(totallen-curlen)/seglen*dx,
+								 map.latp2coord(way.getNode(i-1).latp)+(totallen-curlen)/seglen*dy,
 								 Math.atan2(dy,dx));
 			}
 			return new Array(0, 0, 0);
