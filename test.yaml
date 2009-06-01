@@ -19,6 +19,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 6
     stroke_width: 4.5
     stroke_colour: 16777139
     casing_width: 6
@@ -39,6 +40,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 6
     stroke_width: 6
     stroke_colour: 16777139
     casing_width: 7.5
@@ -58,6 +60,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 6
     stroke_width: 9.4
     stroke_colour: 16777139
 
@@ -75,6 +78,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 6
     stroke_width: 13
     stroke_colour: 16777139
 
@@ -96,6 +100,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 7
     stroke_width: 1
     stroke_colour: 16698507
 
@@ -113,6 +118,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 7
     stroke_width: 2
     stroke_colour: 16698507
 
@@ -131,6 +137,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 7
     stroke_width: 2
     stroke_colour: 16701349
     casing_width: 2.5
@@ -151,6 +158,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 7
     stroke_width: 8
     stroke_colour: 16701349
     casing_width: 8.5
@@ -171,6 +179,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 7
     stroke_width: 11
     stroke_colour: 16701349
     casing_width: 11.5
@@ -191,6 +200,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 7
     stroke_width: 15.5
     stroke_colour: 16701349
     casing_width: 16
@@ -216,6 +226,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 10
     stroke_width: 1
     stroke_colour: 8428480
 
@@ -233,6 +244,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 10
     stroke_width: 1.5
     stroke_colour: 8428480
 
@@ -250,6 +262,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 10
     stroke_width: 2
     stroke_colour: 8428480
 
@@ -267,6 +280,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 10
     stroke_width: 2.5
     stroke_colour: 8428480
 
@@ -286,6 +300,7 @@
     isStroked: true
     isCased: true
     # link was originally 0.5 on 1.5
+    sublayer: 10
     stroke_width: 2
     stroke_colour: 8428480
     casing_width: 3
@@ -307,6 +322,7 @@
     isStroked: true
     isCased: true
     # link was originally 3 on 4.5
+    sublayer: 10
     stroke_width: 5
     stroke_colour: 8428480
     casing_width: 6.5
@@ -328,6 +344,7 @@
     isStroked: true
     isCased: true
     # link was originally 6.5 on 8
+    sublayer: 10
     stroke_width: 8.5
     stroke_colour: 8428480
     casing_width: 10
@@ -349,6 +366,7 @@
     isStroked: true
     isCased: true
     # link was originally 9 on 11
+    sublayer: 10
     stroke_width: 11
     stroke_colour: 8428480
     casing_width: 13
@@ -374,6 +392,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 8
     stroke_width: 0.7
     stroke_colour: 15505562
 
@@ -391,6 +410,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 8
     stroke_width: 1.6
     stroke_colour: 15505562
 
@@ -408,6 +428,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 8
     stroke_width: 2.5
     stroke_colour: 15505562
 
@@ -426,6 +447,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 8
     stroke_width: 2.5
     stroke_colour: 15505562
     casing_width: 3
@@ -446,6 +468,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 8
     stroke_width: 7
     stroke_colour: 15505562
     casing_width: 7.5
@@ -466,6 +489,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 8
     stroke_width: 11
     stroke_colour: 15505562
     casing_width: 11.5
@@ -486,6 +510,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 8
     stroke_width: 15.5
     stroke_colour: 15505562
     casing_width: 16
@@ -511,6 +536,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 9
     stroke_width: 1
     stroke_colour: 11131817
 
@@ -528,6 +554,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 9
     stroke_width: 1.7
     stroke_colour: 9950103
 
@@ -545,6 +572,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 9
     stroke_width: 2.5
     stroke_colour: 9950103
 
@@ -563,6 +591,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 9
     stroke_width: 2.5
     stroke_colour: 11131817
     casing_width: 3
@@ -583,6 +612,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 9
     stroke_width: 7
     stroke_colour: 11131817
     casing_width: 7.5
@@ -606,6 +636,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 9
     stroke_width: 11
     stroke_colour: 11131817
     casing_width: 11.5
@@ -629,6 +660,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 9
     stroke_width: 15.5
     stroke_colour: 11131817
     casing_width: 16
@@ -651,6 +683,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    sublayer: 5
     stroke_width: 1
     stroke_colour: 12303291
 
@@ -667,6 +700,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 5
     stroke_width: 2
     stroke_colour: 16777215
     casing_width: 3
@@ -687,6 +721,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 5
     stroke_width: 3
     stroke_colour: 16777215
     casing_width: 4.5
@@ -707,6 +742,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 5
     stroke_width: 9.4
     stroke_colour: 16777215
     casing_width: 11
@@ -727,6 +763,7 @@
     isFilled: false
     isStroked: true
     isCased: true
+    sublayer: 5
     stroke_width: 13
     stroke_colour: 16777215
     casing_width: 16

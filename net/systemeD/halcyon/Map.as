@@ -66,12 +66,21 @@ package net.systemeD.halcyon {
 
         public function Map() {
 
+			// Set up layering
+			// [layer][2]			- names
+			// [layer][1][sublayer]	- stroke
+			// [layer][0]			- fill
+
 			for (var l:int=0; l<13; l++) {				// 11 layers (10 is +5, 0 is -5)
-				var s:Sprite=new Sprite();
-				s.addChild(new Sprite());				// [layer][0]=fill, [1]=stroke, [2]=names
-				s.addChild(new Sprite());
-				s.addChild(new Sprite());
-				addChild(s);
+				var s:Sprite=new Sprite();				//  |
+				s.addChild(new Sprite());				//	| 0 fill
+				var t:Sprite=new Sprite();				//  | 1 stroke
+				for (var j:int=0; j<11; j++) {			//	|  | ten sublayers
+					t.addChild(new Sprite());			//  |  |  |
+				}										//  |  |  |
+				s.addChild(t);							//  |  |
+				s.addChild(new Sprite());				//	| 2 names
+				addChild(s);							//  |
 			}
 			s=new Sprite(); addChild(s);				// 11 - POIs
 			s=new Sprite(); addChild(s);				// 12 - shields

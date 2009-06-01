@@ -64,10 +64,14 @@ package net.systemeD.halcyon {
 		public function redraw():void {
             var tags:Object = way.getTagsCopy();
 
-			// ** remove previous version from any layer
+			// ** remove previous version from any layer/sublayer
 			layer=5;
 			if ( tags['layer'] )
                 layer=Math.min(Math.max(tags['layer']+5,-5),5)+5;
+
+			// set style
+			var styles:Array=map.ruleset.getStyle(false, tags, map.scale);
+			var sublayer:uint=0; if (styles[0] && styles[0].sublayer) { sublayer=styles[0].sublayer; }
 
 			// find/create sprites
 			if (stroke) {
@@ -77,14 +81,11 @@ package net.systemeD.halcyon {
 				while (roadname.numChildren) { roadname.removeChildAt(0); }
 			} else {
 				fill=new Sprite(); addToLayer(fill,0);
-				stroke=new Sprite(); addToLayer(stroke,1); 
+				stroke=new Sprite(); addToLayer(stroke,1,sublayer); 
 				roadname=new Sprite(); addToLayer(roadname,2); 
 			}
 			var g:Graphics=stroke.graphics;
 			var f:Graphics=fill.graphics;
-
-			// set style
-			var styles:Array=map.ruleset.getStyle(false, tags, map.scale);
 
 			// ShapeStyle
 			// ** do line-caps/joints
@@ -295,9 +296,10 @@ package net.systemeD.halcyon {
 		
 		// Add object (stroke/fill/roadname) to layer sprite
 		
-		private function addToLayer(s:Sprite,sublayer:uint):void {
+		private function addToLayer(s:Sprite,t:uint,sublayer:int=-1):void {
 			var l:DisplayObject=Map(map).getChildAt(layer);
-			var o:DisplayObject=Sprite(l).getChildAt(sublayer);
+			var o:DisplayObject=Sprite(l).getChildAt(t);
+			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
 			Sprite(o).addChild(s);
 		}
 	}

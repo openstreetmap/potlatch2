@@ -9,6 +9,7 @@ package net.systemeD.halcyon.styleparser {
 		public var stroke_dashArray:Array=[];
 		public var stroke_linecap:String="none";
 		public var stroke_linejoin:String="round";
+		public var sublayer:uint=0;
 		
 		public var isFilled:Boolean=false;
 		public var fill_colour:uint=0xFFFFFF;
