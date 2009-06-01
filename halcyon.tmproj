@@ -6,45 +6,33 @@
 	<array>
 		<dict>
 			<key>filename</key>
-			<string>net/systemeD/halcyon/AMFConnection.as</string>
-			<key>lastUsed</key>
-			<date>2009-05-30T13:59:09Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>net/systemeD/halcyon/Connection.as</string>
-			<key>lastUsed</key>
-			<date>2009-05-30T13:59:04Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>net/systemeD/halcyon/Globals.as</string>
-			<key>lastUsed</key>
-			<date>2009-05-30T15:21:19Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
 			<string>net/systemeD/halcyon/Map.as</string>
 			<key>lastUsed</key>
-			<date>2009-05-30T15:21:19Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>net/systemeD/halcyon/Node.as</string>
-			<key>lastUsed</key>
-			<date>2009-05-30T13:59:07Z</date>
+			<date>2009-06-01T11:58:41Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>net/systemeD/halcyon/POI.as</string>
 			<key>lastUsed</key>
-			<date>2009-05-30T15:09:53Z</date>
+			<date>2009-06-01T12:11:15Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
-			<string>net/systemeD/halcyon/Way.as</string>
+			<string>net/systemeD/halcyon/WayUI.as</string>
 			<key>lastUsed</key>
-			<date>2009-05-30T15:16:50Z</date>
+			<date>2009-06-01T11:58:42Z</date>
+		</dict>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>connection</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>net/systemeD/halcyon/connection</string>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -58,11 +46,13 @@
 		</dict>
 		<dict>
 			<key>filename</key>
+			<string>net/systemeD/halcyon/Globals.as</string>
+		</dict>
+		<dict>
+			<key>filename</key>
 			<string>halcyon.mxml</string>
 			<key>lastUsed</key>
-			<date>2009-05-30T15:21:19Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2009-06-01T11:49:17Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -72,6 +62,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{272, 182}, {710, 564}}</string>
+	<string>{{268, 182}, {710, 564}}</string>
 </dict>
 </plist>

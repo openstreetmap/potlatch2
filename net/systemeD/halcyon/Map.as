@@ -19,7 +19,7 @@ package net.systemeD.halcyon {
 		public const MINSCALE:uint=13;					// don't zoom out past this
 		public const MAXSCALE:uint=19;					// don't zoom in past this
 
-		public var ruleset:RuleSet=new RuleSet();		// rules
+		public var ruleset:RuleSet=new RuleSet(redrawPOIs);	// rules
 		
 		public var ways:Object=new Object();			// geodata
 		public var nodes:Object=new Object();			//  |
@@ -84,7 +84,7 @@ package net.systemeD.halcyon {
         }
 
 		public function gotEnvironment(r:Object):void {
-			init(51.45889,-0.21476);
+			init(52.022,-1.2745);
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -205,14 +205,12 @@ package net.systemeD.halcyon {
 		// Redraw all items, zoom in and out
 		
 		public function redraw():void {
-//			addDebug("redrawing");
-//			var s:String='';
-			for each (var w:WayUI in ways) {
-                w.redraw();
-//                s+=w.id+",";
-            }
-//			addDebug(s);
-			// ** do POIs, etc.
+			for each (var w:WayUI in ways) { w.redraw(); }
+			for each (var p:POI in pois) { p.redraw(); }
+		}
+
+		public function redrawPOIs():void {
+			for each (var p:POI in pois) { p.redraw(); }
 		}
 
 		public function zoomIn():void {

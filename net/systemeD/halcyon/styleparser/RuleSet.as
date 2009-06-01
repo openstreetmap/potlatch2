@@ -9,8 +9,14 @@ package net.systemeD.halcyon.styleparser {
 
 		public var rules:Array=new Array();		// list of rules
 		public var images:Object=new Object();	// loaded images
+		private var iconCallback:Function=null;	// function to call when all icons loaded
+		private var iconsToLoad:uint=0;			// number of icons left to load (fire callback when ==0)
 
 		// variables for name, author etc.
+
+		public function RuleSet(f:Function=null):void {
+			iconCallback=f;
+		}
 
 		// returns array of ShapeStyle,PointStyle,TextStyle,ShieldStyle
 		public function getStyle(isPoint:Boolean,tags:Object,scale:uint):Array {
@@ -21,8 +27,8 @@ package net.systemeD.halcyon.styleparser {
 			for each (var rule:* in rules) {
 				if ( isPoint && rule is ShapeRule) { continue; }
 				if (!isPoint && rule is PointRule) { continue; }
-				if (scale>rule.minScale && !isPoint) { continue; }
-				if (scale<rule.maxScale && !isPoint) { continue; }
+				if (scale>rule.minScale) { continue; }
+				if (scale<rule.maxScale) { continue; }
 				if (rule.test(tags)) {
 					if (rule is ShapeRule && rule.shapeStyle)  { ss=rule.shapeStyle; }
 					if (rule is PointRule && rule.pointStyle)  { ps=rule.pointStyle; }
@@ -96,11 +102,13 @@ package net.systemeD.halcyon.styleparser {
 		
 		public function loadImages():void {
 			var ps:PointStyle;
+
 			for each (var rule:* in rules) {
 				if (!(rule is PointRule)) { continue; }
 				if (!(rule.pointStyle)) { continue; }
 				if (!(rule.pointStyle.icon)) { continue; }
 				
+				iconsToLoad++;
 				var request:URLRequest=new URLRequest(rule.pointStyle.icon);
 				var loader:ImageLoader=new ImageLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
@@ -116,9 +124,9 @@ package net.systemeD.halcyon.styleparser {
 		// data handler
 
 		private function loadedImage(event:Event):void {
-			Globals.vars.debug.appendText("Target is "+event.target+", name"+event.target.filename+"\n");
 			images[event.target.filename]=event.target.data;
+			iconsToLoad--;
+			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }
 		}
-
 	}
 }

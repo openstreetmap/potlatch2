@@ -79,9 +79,9 @@
 
 			// add debug field
 			var t:TextField=new TextField();
-			//t.width=400; t.height=100; t.border=true; 
-			//t.multiline=true;
-			//_root.addChild(t);
+			t.width=400; t.height=100; t.border=true; 
+			t.multiline=true;
+			_root.addChild(t);
 			Globals.vars.debug=t;
 		}
 

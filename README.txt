@@ -2,7 +2,7 @@
 
 Here's some embryonic unfinished stuff to play with.
 
-This is a live OSM renderer written in AS3 which will one day grow into a beautiful map editor.
+This is a live OSM renderer written in AS3 which will one day grow into a beautiful map editor. It's rules-based (like, say, Mapnik) and does dotted lines, text on a path, casing, icons for POIs, all of that.
 
 === What you'll need ===
 
@@ -15,10 +15,15 @@ This is a live OSM renderer written in AS3 which will one day grow into a beauti
 === How to compile and run ===
 
 Compiling:
-mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml
+* fcsh
+  - launches the Flex Compiler SHell
+* mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml 
+  - compile for the first time
+* compile 1 
+  - compile each subsequent time (_much_ faster than using mxmlc every time)
 
 Running:
-* Make sure test.yaml is in the same directory as halcyon.swf
+* Make sure test.yaml and icons/ are in the same directory as halcyon.swf
 * Open halcyon.swf in your browser
 
 === Some other stuff you might need to know ===

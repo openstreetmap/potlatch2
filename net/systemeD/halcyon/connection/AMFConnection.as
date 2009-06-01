@@ -53,6 +53,8 @@ package net.systemeD.halcyon.connection {
 			var relationlist:Array=r[2];
 			var id:Number, version:uint;
 
+			// Load ways
+
 			for each (var w:Array in waylist) {
 				id=Number(w[0]);
                 version=uint(w[1]);
@@ -63,15 +65,17 @@ package net.systemeD.halcyon.connection {
                 }
 			}
 
+			// Create POIs
+
 			for each (var p:Array in pointlist) {
-				id = Number(w[0]);
-                version = uint(w[4]);
+				id = Number(p[0]);
+                version = uint(p[4]);
 
                 var node:Node = getNode(id);
                 if ( node == null ) {
-                    var lat:Number = Number(w[2]);
-                    var lon:Number = Number(w[1]);
-                    var tags:Object = w[3];
+                    var lat:Number = Number(p[2]);
+                    var lon:Number = Number(p[1]);
+                    var tags:Object = p[3];
                     node = new Node(id, version, tags, lat, lon);
                     setNode(node);
                 }

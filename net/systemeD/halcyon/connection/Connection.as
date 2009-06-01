@@ -65,7 +65,7 @@ package net.systemeD.halcyon.connection {
         }
 
         protected function unregisterPOI(node:Node):void {
-            var index:uint = pois.indexOf(node)
+            var index:uint = pois.indexOf(node);
             if ( index >= 0 ) {
                 pois.splice(index,1);
             }
