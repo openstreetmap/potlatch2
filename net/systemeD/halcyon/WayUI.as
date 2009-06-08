@@ -55,23 +55,23 @@ package net.systemeD.halcyon {
 			pathlength=0;
 			patharea=0;
 			
+			lx = way.getNode(way.length-1).lon;
+			ly = way.getNode(way.length-1).latp;
 			for ( var i:uint = 0; i < way.length; i++ ) {
                 var node:Node = way.getNode(i);
                 var latp:Number = node.latp;
                 var lon:Number  = node.lon;
-				if ( !isNaN(lx) ) {
-                    pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(latp-ly,2) );
-					patharea += lx*latp-lon*ly;
-					sc = (lx*latp-lon*ly); 
-					cx += (lx+lon)*sc;
-					cy += (ly+latp)*sc;
-                }
+				if ( i>0 ) { pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(latp-ly,2) ); }
+				sc = (lx*latp-lon*ly)*map.scalefactor;
+				cx += (lx+lon)*sc;
+				cy += (ly+latp)*sc;
+				patharea += sc;
 				lx=lon; ly=latp;
 			}
 
 			pathlength*=map.scalefactor;
-			patharea*=map.scalefactor/2;
-			if (patharea>0 && way.isArea()) {
+			patharea/=2;
+			if (patharea!=0 && way.isArea()) {
 				centroid_x=map.lon2coord(cx/patharea/6);
 				centroid_y=map.latp2coord(cy/patharea/6);
 			} else if (pathlength>0) {

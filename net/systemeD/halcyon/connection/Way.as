@@ -35,7 +35,7 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function isArea():Boolean {
-			return nodes[0]==nodes[nodes.length-1] && nodes.length>2;
+			return (nodes[0].id==nodes[nodes.length-1].id  && nodes.length>2);
 		}
     }
 

@@ -168,8 +168,7 @@ package net.systemeD.halcyon {
 		// (typically from whichways, but will want to add more connections)
 
 		public function download():void {
-			var e:MapEvent = new MapEvent("download",edge_l,edge_r,edge_t,edge_b);
-			this.dispatchEvent(e);
+			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD,edge_l,edge_r,edge_t,edge_b));
 			
 			if (edge_l>=bigedge_l && edge_r<=bigedge_r &&
 				edge_b>=bigedge_b && edge_t<=bigedge_t) { return; } 	// we have already loaded this area, so ignore
