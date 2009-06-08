@@ -1,310 +1,6 @@
 # ====================================================
-# Tertiary roads
-# ====================================================
-
-# Zoom levels 10-12 are rendered with unclassified roads
-
-# Zoom level 13 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 13
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','tertiary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 6
-    stroke_width: 4.5
-    stroke_colour: 16777139
-    casing_width: 6
-    casing_colour: 12303291
-
-# Zoom level 14 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','tertiary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 6
-    stroke_width: 6
-    stroke_colour: 16777139
-    casing_width: 7.5
-    casing_colour: 12303291
-
-# Zoom levels 15-16 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 16
-  maxScale: 15
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','tertiary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 6
-    stroke_width: 9.4
-    stroke_colour: 16777139
-
-# Zoom level 17 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 17
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','tertiary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 6
-    stroke_width: 13
-    stroke_colour: 16777139
-
-# ====================================================
-# Secondary roads
-# ====================================================
-
-# Zoom level 9-10
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 10
-  maxScale: 9
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^secondary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 7
-    stroke_width: 1
-    stroke_colour: 16698507
-
-# Zoom level 11
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 11
-  maxScale: 11
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^secondary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 7
-    stroke_width: 2
-    stroke_colour: 16698507
-
-# Zoom level 12 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^secondary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 7
-    stroke_width: 2
-    stroke_colour: 16701349
-    casing_width: 2.5
-    casing_colour: 10713928
-
-# Zoom level 13-14 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^secondary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 7
-    stroke_width: 8
-    stroke_colour: 16701349
-    casing_width: 8.5
-    casing_colour: 10713928
-
-# Zoom level 15-16 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 16
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^secondary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 7
-    stroke_width: 11
-    stroke_colour: 16701349
-    casing_width: 11.5
-    casing_colour: 10713928
-
-# Zoom level 17 (originally not in tunnel)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 17
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','^secondary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 7
-    stroke_width: 15.5
-    stroke_colour: 16701349
-    casing_width: 16
-    casing_colour: 10713928
-
-
-
-# ====================================================
 # Motorways
 # ====================================================
-
-# Zoom levels 5-6
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 6
-  maxScale: 5
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^motorway']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 10
-    stroke_width: 1
-    stroke_colour: 8428480
-
-# Zoom levels 7-9
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 9
-  maxScale: 7
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^motorway']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 10
-    stroke_width: 1.5
-    stroke_colour: 8428480
-
-# Zoom level 10
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 10
-  maxScale: 10
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^motorway']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 10
-    stroke_width: 2
-    stroke_colour: 8428480
-
-# Zoom level 11
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 11
-  maxScale: 11
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^motorway']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 10
-    stroke_width: 2.5
-    stroke_colour: 8428480
-
-# Zoom level 12 (originally not in tunnels)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^motorway']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    # link was originally 0.5 on 1.5
-    sublayer: 10
-    stroke_width: 2
-    stroke_colour: 8428480
-    casing_width: 3
-    casing_colour: 5267575
 
 # Zoom levels 13-14 (originally not in tunnels)
 
@@ -323,8 +19,10 @@
     isCased: true
     # link was originally 3 on 4.5
     sublayer: 10
+    stroke_opacity: 100
     stroke_width: 5
     stroke_colour: 8428480
+    casing_opacity: 100
     casing_width: 6.5
     casing_colour: 5267575
 
@@ -345,15 +43,17 @@
     isCased: true
     # link was originally 6.5 on 8
     sublayer: 10
+    stroke_opacity: 100
     stroke_width: 8.5
     stroke_colour: 8428480
+    casing_opacity: 100
     casing_width: 10
     casing_colour: 5267575
 
 # Zoom level 17 (originally not in tunnels)
 
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
+  minScale: 18
   maxScale: 17
   isAnd: true
   breaker: true
@@ -367,235 +67,16 @@
     isCased: true
     # link was originally 9 on 11
     sublayer: 10
+    stroke_opacity: 100
     stroke_width: 11
     stroke_colour: 8428480
+    casing_opacity: 100
     casing_width: 13
     casing_colour: 5267575
-
-
-
-# ====================================================
-# Primary roads
-# ====================================================
-
-# Zoom levels 7-8
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 8
-  maxScale: 7
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 8
-    stroke_width: 0.7
-    stroke_colour: 15505562
-
-# Zoom levels 9-10
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 10
-  maxScale: 9
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 8
-    stroke_width: 1.6
-    stroke_colour: 15505562
-
-# Zoom level 11
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 11
-  maxScale: 11
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 8
-    stroke_width: 2.5
-    stroke_colour: 15505562
-
-# Zoom level 12 (originally not for tunnels)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 8
-    stroke_width: 2.5
-    stroke_colour: 15505562
-    casing_width: 3
-    casing_colour: 9257798
-
-# Zoom levels 13-14 (originally not for tunnels)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 8
-    stroke_width: 7
-    stroke_colour: 15505562
-    casing_width: 7.5
-    casing_colour: 9257798
-
-# Zoom levels 15-16 (originally not for tunnels)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 16
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 8
-    stroke_width: 11
-    stroke_colour: 15505562
-    casing_width: 11.5
-    casing_colour: 9257798
-
-# Zoom level 17 (originally not for tunnels)
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 17
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^primary']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 8
-    stroke_width: 15.5
-    stroke_colour: 15505562
-    casing_width: 16
-    casing_colour: 9257798
-
-
 
 # ====================================================
 # Trunk roads
 # ====================================================
-
-# Zoom levels 5-8
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 8
-  maxScale: 5
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^trunk']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 9
-    stroke_width: 1
-    stroke_colour: 11131817
-
-# Zoom levels 9-10
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 10
-  maxScale: 9
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^trunk']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 9
-    stroke_width: 1.7
-    stroke_colour: 9950103
-
-# Zoom level 11
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 11
-  maxScale: 11
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^trunk']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 9
-    stroke_width: 2.5
-    stroke_colour: 9950103
-
-# Zoom level 12 (originally type:untrue, params:['tunnel'])
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','^trunk']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    isCased: true
-    sublayer: 9
-    stroke_width: 2.5
-    stroke_colour: 11131817
-    casing_width: 3
-    casing_colour: 4682055
 
 # Zoom levels 13-14 (originally type:untrue, params:['tunnel'])
 
@@ -613,11 +94,14 @@
     isStroked: true
     isCased: true
     sublayer: 9
+    stroke_opacity: 100
     stroke_width: 7
     stroke_colour: 11131817
+    casing_opacity: 100
     casing_width: 7.5
     casing_colour: 4682055
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
     tag: name
     text_size: 6
     
@@ -637,18 +121,21 @@
     isStroked: true
     isCased: true
     sublayer: 9
+    stroke_opacity: 100
     stroke_width: 11
     stroke_colour: 11131817
-    casing_width: 11.5
+    casing_opacity: 100
+    casing_width: 12
     casing_colour: 4682055
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
     tag: name
     text_size: 10
 
 # Zoom level 17 (originally type:untrue, params:['tunnel'])
 
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
+  minScale: 18
   maxScale: 17
   isAnd: true
   breaker: true
@@ -661,31 +148,307 @@
     isStroked: true
     isCased: true
     sublayer: 9
-    stroke_width: 15.5
+    stroke_opacity: 100
+    stroke_width: 15
     stroke_colour: 11131817
+    casing_opacity: 100
     casing_width: 16
     casing_colour: 4682055
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 12
+
+
+# ====================================================
+# Primary roads
+# ====================================================
+
+
+# Zoom levels 13-14 (originally not for tunnels)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 14
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['highway','^primary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 8
+    stroke_opacity: 100
+    stroke_width: 7
+    stroke_colour: 15505562
+    casing_opacity: 100
+    casing_width: 7.5
+    casing_colour: 9257798
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 6
+
+# Zoom levels 15-16 (originally not for tunnels)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 16
+  maxScale: 15
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['highway','^primary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 8
+    stroke_opacity: 100
+    stroke_width: 11
+    stroke_colour: 15505562
+    casing_opacity: 100
+    casing_width: 12
+    casing_colour: 9257798
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 10
+
+# Zoom level 17 (originally not for tunnels)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 17
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['highway','^primary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 8
+    stroke_opacity: 100
+    stroke_width: 15
+    stroke_colour: 15505562
+    casing_opacity: 100
+    casing_width: 16
+    casing_colour: 9257798
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 12
+
+# ====================================================
+# Secondary roads
+# ====================================================
+
+
+# Zoom level 13-14 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 14
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['highway','^secondary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 7
+    stroke_opacity: 100
+    stroke_width: 8
+    stroke_colour: 16701349
+    casing_opacity: 100
+    casing_width: 8.5
+    casing_colour: 10713928
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 6
+
+# Zoom level 15-16 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 16
+  maxScale: 15
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['highway','^secondary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 7
+    stroke_opacity: 100
+    stroke_width: 11
+    stroke_colour: 16701349
+    casing_opacity: 100
+    casing_width: 12
+    casing_colour: 10713928
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 10
+
+# Zoom level 17 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 17
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['highway','^secondary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 7
+    stroke_opacity: 100
+    stroke_width: 15
+    stroke_colour: 16701349
+    casing_opacity: 100
+    casing_width: 16
+    casing_colour: 10713928
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 12
+
+
+# ====================================================
+# Tertiary roads
+# ====================================================
+
+# Zoom level 13 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 13
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['highway','tertiary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 6
+    stroke_opacity: 100
+    stroke_width: 4
+    stroke_colour: 16777139
+    casing_opacity: 100
+    casing_width: 6
+    casing_colour: 12303291
+
+# Zoom level 14 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 14
+  maxScale: 14
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['highway','tertiary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 6
+    stroke_opacity: 100
+    stroke_width: 6
+    stroke_colour: 16777139
+    casing_opacity: 100
+    casing_width: 8
+    casing_colour: 12303291
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 6
+
+# Zoom levels 15-16 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 16
+  maxScale: 15
+  isAnd: false
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['highway','tertiary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 6
+    stroke_opacity: 100
+    stroke_width: 9
+    stroke_colour: 16777139
+    casing_opacity: 100
+    casing_width: 11
+    casing_colour: 12303291
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 8
+
+# Zoom level 17 (originally not in tunnel)
+
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 17
+  isAnd: false
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['highway','tertiary']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    sublayer: 6
+    stroke_opacity: 100
+    stroke_width: 13
+    stroke_colour: 16777139
+    casing_opacity: 100
+    casing_width: 15
+    casing_colour: 12303291
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 12
+
+
+
+
 
 
 # ====================================================
 # Minor roads (unclassified/residential)
 # ====================================================
-
-# Zoom levels 10-12
-
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 10
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['highway','tertiary|residential|unclassified']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    sublayer: 5
-    stroke_width: 1
-    stroke_colour: 12303291
 
 # Zoom level 13
 
@@ -701,8 +464,10 @@
     isStroked: true
     isCased: true
     sublayer: 5
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 16777215
+    casing_opacity: 100
     casing_width: 3
     casing_colour: 10066329
 
@@ -722,8 +487,10 @@
     isStroked: true
     isCased: true
     sublayer: 5
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 16777215
+    casing_opacity: 100
     casing_width: 4.5
     casing_colour: 10066329
 
@@ -731,7 +498,7 @@
 
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 16
-  maxScale: 16
+  maxScale: 15
   isAnd: false
   breaker: true
   conditions:
@@ -743,15 +510,21 @@
     isStroked: true
     isCased: true
     sublayer: 5
+    stroke_opacity: 100
     stroke_width: 9.4
     stroke_colour: 16777215
+    casing_opacity: 100
     casing_width: 11
     casing_colour: 12303291
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 8
 
 # Zoom level 17
 
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
+  minScale: 18
   maxScale: 17
   isAnd: false
   breaker: true
@@ -764,595 +537,16 @@
     isStroked: true
     isCased: true
     sublayer: 5
+    stroke_opacity: 100
     stroke_width: 13
     stroke_colour: 16777215
+    casing_opacity: 100
     casing_width: 16
     casing_colour: 12303291
-
-
-# ====================================================
-# Railways
-# ====================================================
-
-# noncased-ways-bridges -- [railway]='subway' and ([bridge]='yes' or [bridge]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','subway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['bridge']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 10066329
-
-# noncased-ways-bridges -- [railway]='light_rail' and ([bridge]='yes' or [bridge]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','light_rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['bridge']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 6710886
-
-
-
-# roads -- [railway]='rail' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 9
-  maxScale: 8
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 1
-    stroke_colour: 11184810
-
-# roads -- [railway]='rail' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 9
-  maxScale: 8
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,2]
-    stroke_width: 1
-    stroke_colour: 11184810
-
-# roads -- [railway]='tram' or [railway]='light_rail' or [railway]='narrow_gauge'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 9
-  maxScale: 8
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','tram']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','light_rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','narrow_gauge']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 1
-    stroke_colour: 13421772
-
-# roads -- [railway]='rail' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 10
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 11184810
-
-# roads -- [railway]='rail' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 10
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,2]
-    stroke_width: 2
-    stroke_colour: 11184810
-
-# roads -- [railway]='tram' or [railway]='light_rail' or [railway]='narrow_gauge'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 10
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','tram']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','light_rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','narrow_gauge']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 1
-    stroke_colour: 11184810
-
-# roads -- [railway]='preserved'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 12
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','preserved']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_linejoin: round
-    stroke_width: 1.5
-    stroke_colour: 11184810
-
-# roads -- [railway]='preserved'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','preserved']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [0,1,8,1]
-    stroke_linejoin: round
-    stroke_width: 1
-    stroke_colour: 16777215
-
-# roads -- [railway]='monorail'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 14
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','monorail']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [2,3]
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_opacity: 40
-    stroke_width: 3.0
-    stroke_colour: 7829367
-
-# trams -- [railway]='tram' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','tram']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 1
-    stroke_colour: 4473924
-
-# trams -- [railway]='tram' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','tram']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 4473924
-
-# buildings -- [railway]='station' or [building]='station'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 18
-  maxScale: 10
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','station']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['building','station']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: true
-    isStroked: false
-    fill_colour: 13937322
-
-# minor-roads-fill -- [railway]='rail' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 13
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [0,6,1,3]
-    stroke_linejoin: round
-    stroke_width: 3
-    stroke_colour: 10197915
-
-# minor-roads-fill -- ([railway]='disused' or [railway]='abandoned' or [railway]='construction') and not [highway] &lt;&gt; ''
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['railway','disused|abandoned|construction']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: unset
-      params: ['highway']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [2,4]
-    stroke_linejoin: round
-    stroke_width: 2
-    stroke_colour: 8421504
-
-# minor-roads-fill -- ([railway]='disused' or [railway]='abandoned' or [railway]='construction') and not [highway] &lt;&gt; '' and [bridge]='yes'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['railway','disused|abandoned|construction']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: unset
-      params: ['highway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['bridge']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [2,4]
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 2
-    stroke_colour: 8421504
-
-# minor-roads-fill -- [railway]='rail' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 13
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [8,12]
-    stroke_linejoin: round
-    stroke_width: 1
-    stroke_colour: 16777215
-
-# minor-roads-fill -- [railway]='rail' and ([bridge]='yes' or [bridge]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['bridge']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_linejoin: round
-    stroke_width: 5
-    stroke_colour: 16777215
-
-# minor-roads-fill -- [railway]='rail' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [0,11,8,1]
-    stroke_linejoin: round
-    stroke_width: 1
-    stroke_colour: 16777215
-
-# minor-roads-fill -- [railway]='rail' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [0,6,1,3]
-    stroke_linejoin: round
-    stroke_width: 3
-    stroke_colour: 10197915
-
-# minor-roads-fill -- [railway]='narrow_gauge' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','narrow_gauge']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 6710886
-
-# minor-roads-fill -- [railway]='narrow_gauge' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','narrow_gauge']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,3]
-    stroke_width: 1.5
-    stroke_colour: 11184810
-
-# minor-roads-fill -- [railway]='tram' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','tram']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,3]
-    stroke_width: 1
-    stroke_colour: 4473924
-
-# minor-roads-fill -- [railway]='tram' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','tram']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,3]
-    stroke_width: 2
-    stroke_colour: 4473924
-
-# minor-roads-fill -- [railway]='light_rail' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','light_rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,3]
-    stroke_width: 2
-    stroke_colour: 6710886
-
-# minor-roads-fill -- [railway]='light_rail' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','light_rail']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 6710886
-
-# minor-roads-fill -- [railway]='subway' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','subway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [5,3]
-    stroke_width: 2
-    stroke_colour: 10066329
-
-# minor-roads-fill -- [railway]='subway' and not ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','subway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_width: 2
-    stroke_colour: 10066329
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    isLine: true
+    tag: name
+    text_size: 12
 
 
 
@@ -1366,92 +560,100 @@
   minScale: 18
   maxScale: 13
   isAnd: true
+  breaker: false
   conditions:
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','bridleway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
     stroke_dashArray: [4,2]
     stroke_linecap: round
-    stroke_linejoin: round
     stroke_opacity: 40
     stroke_width: 1.5
     stroke_colour: 32768
-
-# minor-roads-fill -- [highway]='bridleway' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 18
-  maxScale: 13
-  isAnd: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','bridleway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_opacity: 50
-    stroke_width: 2
-    stroke_colour: 32768
+    sublayer: 4
+  hasTags: true
+  setTags: {_bridgetype: 4px}
 
 # minor-roads-fill -- [highway]='footway' and not ([tunnel]='yes' or [tunnel]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 18
   maxScale: 13
   isAnd: true
+  breaker: false
   conditions:
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','footway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,3]
     stroke_opacity: 40
-    stroke_width: 2.0
+    stroke_width: 5
     stroke_colour: 16416882
+    sublayer: 4
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
     tag: name
     text_size: 5
     text_offset: 4
-    
-# minor-roads-fill -- [highway]='footway' and ([tunnel]='yes' or [tunnel]='true')
+  hasTags: true
+  setTags: {_bridgetype: 4px}
+
+# minor-roads-fill -- [highway]='track'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 18
   maxScale: 13
-  isAnd: true
+  isAnd: false
+  breaker: false
   conditions:
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
-      params: ['highway','footway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
+      params: ['highway','track']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,3]
     stroke_linecap: round
-    stroke_linejoin: round
-    stroke_opacity: 50
-    stroke_width: 2.5
-    stroke_colour: 16416882
+    stroke_dashArray: [3,4]
+    stroke_opacity: 40
+    stroke_width: 1.5
+    stroke_colour: 10053120
+    sublayer: 4
+  hasTags: true
+  setTags: {_bridgetype: 4px}
+
+# bridge
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 13
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['_bridgetype','4px']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: true
+      params: ['bridge']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    isCased: true
+    stroke_opacity: 100
+    stroke_width: 4
+    stroke_colour: 0xFFFFFF
+    casing_opacity: 100
+    casing_width: 5
+    casing_colour: 0
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    tag: bridge_name
+    text_size: 10
+    isLine: false
+    text_offset: 8
+    text_width: 70
+    pullout_colour: 0xFFFFFF
+    pullout_radius: 2
 
 # minor-roads-fill -- [highway]='path' and not ([tunnel]='yes' or [tunnel]='true' or [tunnel]='1')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1462,40 +664,15 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','path']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [6,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [6,3]
     stroke_opacity: 40
     stroke_width: 0.5
     stroke_colour: 0
-
-# minor-roads-fill -- [highway]='path' and ([tunnel]='yes' or [tunnel]='true' or [tunnel]='1')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 18
-  maxScale: 13
-  isAnd: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','path']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [6,3]
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_opacity: 40
-    stroke_width: 0.5
-    stroke_colour: 0
+    sublayer: 4
 
 # minor-roads-fill -- [highway]='steps'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1509,12 +686,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,3]
     stroke_opacity: 40
     stroke_width: 2.0
     stroke_colour: 16416882
+    sublayer: 4
 
 # minor-roads-fill -- [highway]='cycleway' and not ([tunnel]='yes' or [tunnel]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1525,40 +702,15 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','cycleway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,3]
     stroke_opacity: 40
     stroke_width: 1.5
     stroke_colour: 255
-
-# minor-roads-fill -- [highway]='cycleway' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 18
-  maxScale: 13
-  isAnd: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','cycleway']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [1,3]
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_opacity: 50
-    stroke_width: 2
-    stroke_colour: 255
+    sublayer: 4
 
 # minor-roads-fill -- [highway]='byway'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1573,32 +725,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [3,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [3,4]
     stroke_opacity: 40
     stroke_width: 2.0
     stroke_colour: 16763904
-
-# minor-roads-fill -- [highway]='track'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 13
-  maxScale: 13
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','track']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [3,4]
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_opacity: 40
-    stroke_width: 1.5
-    stroke_colour: 10053120
+    sublayer: 4
 
 # minor-roads-fill -- [highway]='unsurfaced'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1613,12 +745,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [2,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [2,4]
     stroke_opacity: 40
     stroke_width: 3
     stroke_colour: 14597532
+    sublayer: 4
 
 # minor-roads-fill -- [highway]='unsurfaced'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1633,12 +765,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,6]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,6]
     stroke_opacity: 40
     stroke_width: 4
     stroke_colour: 14597532
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='unsurfaced' and ([bridge]='yes' or [bridge]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1656,11 +788,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [2,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [2,4]
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 14597532
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='unsurfaced' and ([bridge]='yes' or [bridge]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1678,11 +811,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,6]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,6]
+    stroke_opacity: 100
     stroke_width: 4
     stroke_colour: 14597532
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='bridleway' and ([bridge]='yes' or [bridge]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1699,11 +833,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,2]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 1.5
     stroke_colour: 32768
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='footway' and ([bridge]='yes' or [bridge]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1720,11 +855,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,3]
+    stroke_opacity: 100
     stroke_width: 2.0
     stroke_colour: 16416882
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='path' and ([bridge]='yes' or [bridge]='true' or [bridge]='1')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1741,11 +877,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [6,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [6,3]
+    stroke_opacity: 100
     stroke_width: 0.5
     stroke_colour: 0
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='cycleway' and ([bridge]='yes' or [bridge]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1762,11 +899,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,3]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,3]
+    stroke_opacity: 100
     stroke_width: 1.5
     stroke_colour: 255
+    sublayer: 4
 
 # noncased-ways-bridges -- [highway]='byway' and ([bridge]='yes' or [bridge]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1784,12 +922,13 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [3,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [3,4]
+    stroke_opacity: 100
     stroke_width: 1.5
     stroke_colour: 16763904
-    
+    sublayer: 4
+
 # tracks-notunnel-nobridge -- [tracktype]='grade1'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 18
@@ -1806,6 +945,7 @@
     stroke_opacity: 70
     stroke_width: 2
     stroke_colour: 11761408
+    sublayer: 4
 
 # tracks-notunnel-nobridge -- [tracktype]='grade2'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1820,12 +960,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [9,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [9,4]
     stroke_opacity: 80
     stroke_width: 1.5
     stroke_colour: 11038720
+    sublayer: 4
 
 # tracks-notunnel-nobridge -- [tracktype]='grade3'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1840,12 +980,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [3,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [3,4]
     stroke_opacity: 80
     stroke_width: 1.5
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-notunnel-nobridge -- [tracktype]='grade4'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1860,12 +1000,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,7,1,5]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,7,1,5]
     stroke_opacity: 80
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-notunnel-nobridge -- [tracktype]='grade5'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1880,12 +1020,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,5]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,5]
     stroke_opacity: 80
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-bridges -- [tracktype]='grade1'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1903,6 +1043,7 @@
     stroke_opacity: 70
     stroke_width: 2
     stroke_colour: 11761408
+    sublayer: 4
 
 # tracks-bridges -- [tracktype]='grade2'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1917,12 +1058,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [3,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [3,4]
     stroke_opacity: 80
     stroke_width: 1.5
     stroke_colour: 11038720
+    sublayer: 4
 
 # tracks-bridges -- [tracktype]='grade3'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1937,11 +1078,10 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
     stroke_opacity: 70
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-bridges -- [tracktype]='grade4'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1956,12 +1096,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,7,1,5]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,7,1,5]
     stroke_opacity: 80
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-bridges -- [tracktype]='grade5'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1976,12 +1116,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,5]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,5]
     stroke_opacity: 80
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-tunnels -- [tracktype]='grade1'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -1996,10 +1136,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_linecap: round
     stroke_dashArray: [4,2]
     stroke_opacity: 50
     stroke_width: 2
     stroke_colour: 11761408
+    sublayer: 4
 
 # tracks-tunnels -- [tracktype]='grade2'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2014,12 +1156,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [3,4]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [3,4]
     stroke_opacity: 50
     stroke_width: 1.5
     stroke_colour: 11038720
+    sublayer: 4
 
 # tracks-tunnels -- [tracktype]='grade3'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2034,12 +1176,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,2]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,2]
     stroke_opacity: 50
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-tunnels -- [tracktype]='grade4'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2054,12 +1196,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [4,7,1,5]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [4,7,1,5]
     stroke_opacity: 50
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 # tracks-tunnels -- [tracktype]='grade5'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2074,18 +1216,66 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_dashArray: [1,5]
     stroke_linecap: round
-    stroke_linejoin: round
+    stroke_dashArray: [1,5]
     stroke_opacity: 50
     stroke_width: 2
     stroke_colour: 10053120
+    sublayer: 4
 
 
 
 # ====================================================
 # Waterways
 # ====================================================
+
+# Canal, z12-15
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 15
+  maxScale: 12
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['waterway','canal']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: untrue
+      params: ['disused']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 3
+    stroke_colour: 11915472
+
+# Canal, z16-18
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 16
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['waterway','canal']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: untrue
+      params: ['disused']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 10
+    stroke_colour: 11915472
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    tag: name
+    text_colour: 6724044
+    text_size: 10
+    pullout_radius: 2
+    pullout_colour: 0xDDDDFF
+    isLine: true
+
 
 # water_lines -- [waterway]='weir'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2100,8 +1290,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 11184810
 
@@ -2118,58 +1307,9 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 11915472
-
-# water_lines -- [waterway]='canal' and not [disused]='yes'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 12
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['waterway','canal']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['disused']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 3
-    stroke_colour: 11915472
-
-# water_lines -- [waterway]='canal' and not [disused]='yes'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 13
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['waterway','canal']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['disused']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 4
-    stroke_colour: 11915472
-  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
-    tag: name
-    text_colour: 6724044
-    text_size: 8
-    pullout_radius: 1
-    isLine: true
 
 # water_lines -- [waterway]='river'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2184,8 +1324,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 10
     stroke_colour: 11915472
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
@@ -2195,85 +1334,13 @@
     pullout_radius: 1
     isLine: true
 
-# water_lines -- [waterway]='canal' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 16
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['waterway','canal']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
-    stroke_width: 3
-    stroke_colour: 16777215
-  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
-    tag: name
-    text_colour: 6724044
-    text_size: 9
-    pullout_radius: 1
-    isLine: true
-
-# water_lines -- [waterway]='canal' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 17
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['waterway','canal']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
-    stroke_width: 7
-    stroke_colour: 16777215
-  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
-    tag: name
-    text_colour: 6724044
-    text_size: 9
-    pullout_radius: 1
-    isLine: true
-
-# water_lines -- ([waterway]='stream' or [waterway]='drain') and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: regex
-      params: ['waterway','stream|drain']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
-    stroke_width: 1.4
-    stroke_colour: 16777215
 
 
 
 
-
-
-
-
+# ====================================================
+# Other stuff
+# ====================================================
 
 # highway-area-casing -- [highway]='pedestrian' or [highway]='service'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2291,6 +1358,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 1
     stroke_colour: 8421504
 
@@ -2307,6 +1375,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15592941
 
 # leisure -- [man_made]='pier'
@@ -2322,9 +1391,10 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15921129
 
-# leisure -- [leisure]='playground' or [tourism]='picnic_site'
+# leisure -- [leisure]='playgnone' or [tourism]='picnic_site'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 18
   maxScale: 13
@@ -2333,15 +1403,17 @@
   conditions:
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
-      params: ['leisure','playground']
+      params: ['leisure','playgnone']
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['tourism','picnic_site']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.3
     stroke_colour: 6710886
+    fill_opacity: 100
     fill_colour: 13434879
 
 # leisure -- [tourism]='attraction'
@@ -2357,6 +1429,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15911658
 
 # leisure -- [landuse]='quarry'
@@ -2372,26 +1445,10 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.5
     stroke_colour: 8421504
 
-# leisure -- [leisure]='nature_reserve' or [landuse]='vineyard'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 12
-  maxScale: 10
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['leisure','nature_reserve']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['landuse','vineyard']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: true
-    isStroked: false
-    fill_colour: 11263894
 
 # leisure -- [landuse]='vineyard'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2453,6 +1510,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11193263
 
 # leisure -- [landuse]='residential'
@@ -2468,6 +1526,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 14540253
 
 # leisure -- [military]='barracks'
@@ -2483,6 +1542,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 16748431
 
 # leisure -- [landuse]='military'
@@ -2520,21 +1580,6 @@
     fill_opacity: 20
     fill_colour: 6710784
 
-# leisure -- [military]='danger_area'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 10
-  maxScale: 9
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['military','danger_area']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: true
-    isStroked: false
-    fill_opacity: 30
-    fill_colour: 16761035
 
 # leisure -- [military]='danger_area'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2577,9 +1622,10 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13626536
 
-# leisure -- [leisure]='park' or [leisure]='recreation_ground'
+# leisure -- [leisure]='park' or [leisure]='recreation_gnone'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 18
   maxScale: 10
@@ -2591,10 +1637,11 @@
       params: ['leisure','park']
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
-      params: ['leisure','recreation_ground']
+      params: ['leisure','recreation_gnone']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11992502
 
 # leisure -- [tourism]='zoo'
@@ -2621,6 +1668,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13626536
 
 # leisure -- [leisure]='garden'
@@ -2636,6 +1684,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13626536
 
 # leisure -- [leisure]='golf_course'
@@ -2651,6 +1700,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11920309
 
 # leisure -- [landuse]='allotments'
@@ -2666,6 +1716,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13152388
 
 # leisure -- [landuse]='forest'
@@ -2681,6 +1732,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 9291116
 
 # leisure -- [landuse]='forest'
@@ -2707,9 +1759,10 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15390909
 
-# leisure -- [landuse]='recreation_ground' or [landuse]='conservation'
+# leisure -- [landuse]='recreation_gnone' or [landuse]='conservation'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
   minScale: 18
   maxScale: 10
@@ -2718,13 +1771,14 @@
   conditions:
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
-      params: ['landuse','recreation_ground']
+      params: ['landuse','recreation_gnone']
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['landuse','conservation']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13626536
 
 # leisure -- [landuse]='village_green'
@@ -2740,6 +1794,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13626536
 
 # leisure -- [landuse]='retail'
@@ -2755,6 +1810,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15850202
 
 # leisure -- [landuse]='retail'
@@ -2770,6 +1826,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.3
     stroke_colour: 16711680
 
@@ -2786,22 +1843,9 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 14668246
 
-# leisure -- [power]='station'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 11
-  maxScale: 10
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['power','station']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: true
-    isStroked: false
-    fill_colour: 12303291
 
 # leisure -- [power]='station'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2816,8 +1860,10 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.4
     stroke_colour: 5592405
+    fill_opacity: 100
     fill_colour: 12303291
 
 # leisure -- [power]='sub_station'
@@ -2833,26 +1879,12 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.4
     stroke_colour: 5592405
+    fill_opacity: 100
     fill_colour: 12303291
 
-# leisure -- [natural]='glacier'
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 7
-  maxScale: 6
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['natural','glacier']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
-    stroke_width: 1.5
-    stroke_colour: 10079487
 
 # leisure -- [natural]='glacier'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -2868,6 +1900,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 1.5
     stroke_colour: 10079487
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
@@ -2889,6 +1922,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15714504
 
 # leisure -- [landuse]='brownfield' or [landuse]='landfill' or [landuse]='greenfield' or [landuse]='construction'
@@ -2913,6 +1947,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 10329452
 
 # leisure -- [natural]='wood' or [landuse]='wood'
@@ -2931,6 +1966,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11456928
 
 # leisure -- [natural]='heath'
@@ -2946,6 +1982,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 16777152
 
 # leisure -- [landuse]='basin'
@@ -2961,6 +1998,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11915472
 
 # leisure -- [amenity]='university' or [amenity]='college' or [amenity]='school' or [amenity]='hospital'
@@ -2985,6 +2023,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15790296
 
 # leisure -- [amenity]='university' or [amenity]='college' or [amenity]='school' or [amenity]='hospital'
@@ -3009,6 +2048,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.3
     stroke_colour: 10824234
 
@@ -3025,6 +2065,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 16248759
 
 # leisure -- [amenity]='parking'
@@ -3040,6 +2081,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.3
     stroke_colour: 15658705
 
@@ -3056,6 +2098,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 9098159
 
 # leisure -- [aeroway]='apron'
@@ -3071,6 +2114,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15786239
 
 # leisure -- [natural]='beach'
@@ -3140,6 +2184,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.3
     stroke_colour: 1118481
     fill_opacity: 50
@@ -3164,6 +2209,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 3394713
 
 # buildings -- [building] &lt;&gt; 'station' and [building] &lt;&gt; 'supermarket' and [building] &lt;&gt; ''
@@ -3185,6 +2231,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13408665
 
 # buildings -- [aeroway]='terminal'
@@ -3200,6 +2247,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 13408767
 
 # buildings -- [aeroway]='terminal'
@@ -3215,6 +2263,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.2
     stroke_colour: 3342438
 
@@ -3250,6 +2299,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [2,4]
+    stroke_opacity: 100
     stroke_width: 1
     stroke_colour: 5592405
 
@@ -3298,6 +2348,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11915472
 
 # water_areas -- [natural]='lake' or [natural]='water'
@@ -3316,6 +2367,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 11915472
 
 # water_areas -- [natural]='marsh'
@@ -3353,27 +2405,8 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: true
     isStroked: false
+    fill_opacity: 100
     fill_colour: 15921129
-
-# minor-roads-casing -- [highway]='service' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','service']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
-    stroke_width: 3
-    stroke_colour: 10066329
 
 # minor-roads-casing -- [highway]='service' and not ([tunnel]='yes' or [tunnel]='true')
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -3385,34 +2418,10 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','service']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 8
-    stroke_colour: 10066329
-
-# minor-roads-casing -- [highway]='service' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 17
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','service']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 8
     stroke_colour: 10066329
 
@@ -3426,34 +2435,10 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 2
-    stroke_colour: 8421504
-
-# minor-roads-casing -- [highway]='pedestrian' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 13
-  maxScale: 13
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 8421504
 
@@ -3467,34 +2452,10 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 3.6
-    stroke_colour: 8421504
-
-# minor-roads-casing -- [highway]='pedestrian' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 14
-  maxScale: 14
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 3.6
     stroke_colour: 8421504
 
@@ -3508,34 +2469,10 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 6.5
-    stroke_colour: 8421504
-
-# minor-roads-casing -- [highway]='pedestrian' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 15
-  maxScale: 15
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 6.5
     stroke_colour: 8421504
 
@@ -3549,34 +2486,10 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
-    stroke_width: 9
-    stroke_colour: 8421504
-
-# minor-roads-casing -- [highway]='pedestrian' and ([tunnel]='yes' or [tunnel]='true')
-- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
-  minScale: 18
-  maxScale: 16
-  isAnd: true
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['highway','pedestrian']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: true
-      params: ['tunnel']
-  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
-    isFilled: false
-    isStroked: true
-    stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 9
     stroke_colour: 8421504
 
@@ -3597,6 +2510,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [4,2]
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 16777215
 
@@ -3617,6 +2531,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [6,4]
+    stroke_opacity: 100
     stroke_width: 3.5
     stroke_colour: 16777215
 
@@ -3637,6 +2552,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [8,6]
+    stroke_opacity: 100
     stroke_width: 7
     stroke_colour: 16777215
 
@@ -3653,8 +2569,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 14540253
 
@@ -3671,8 +2586,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 14540253
 
@@ -3689,8 +2603,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 9.4
     stroke_colour: 14540253
 
@@ -3707,8 +2620,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 13
     stroke_colour: 14540253
 
@@ -3726,8 +2638,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 12303291
 
@@ -3744,8 +2655,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 9.4
     stroke_colour: 12303291
 
@@ -3762,8 +2672,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 13
     stroke_colour: 12303291
 
@@ -3780,6 +2689,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 1
     stroke_colour: 12303291
 
@@ -3796,6 +2706,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 16777215
 
@@ -3812,8 +2723,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 6
     stroke_colour: 16777215
 
@@ -3830,8 +2740,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 1.5
     stroke_colour: 15592941
 
@@ -3848,8 +2757,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 15592941
 
@@ -3866,8 +2774,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 5.5
     stroke_colour: 15592941
 
@@ -3884,8 +2791,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 8
     stroke_colour: 15592941
 
@@ -3903,6 +2809,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [2,1]
+    stroke_opacity: 100
     stroke_width: 5.0
     stroke_colour: 16416882
 
@@ -3920,8 +2827,6 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [1,3]
-    stroke_linecap: round
-    stroke_linejoin: round
     stroke_opacity: 40
     stroke_width: 2.0
     stroke_colour: 16416882
@@ -3941,6 +2846,7 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [6,6]
+    stroke_opacity: 100
     stroke_width: 0.8
     stroke_colour: 128
 
@@ -3957,6 +2863,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 12303308
 
@@ -3973,6 +2880,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 7
     stroke_colour: 12303308
 
@@ -3992,6 +2900,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 18
     stroke_colour: 12303308
 
@@ -4008,6 +2917,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 1
     stroke_colour: 12303308
 
@@ -4027,6 +2937,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 4
     stroke_colour: 12303308
 
@@ -4046,6 +2957,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 6
     stroke_colour: 12303308
 
@@ -4066,8 +2978,6 @@
     isFilled: false
     isStroked: true
     stroke_dashArray: [6,8]
-    stroke_linecap: round
-    stroke_linejoin: round
     stroke_opacity: 50
     stroke_width: 6
     stroke_colour: 15706537
@@ -4091,6 +3001,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 0
 
@@ -4110,6 +3021,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 8
     stroke_colour: 0
 
@@ -4129,6 +3041,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 2.2
     stroke_colour: 0
 
@@ -4148,6 +3061,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 3.8
     stroke_colour: 0
 
@@ -4167,6 +3081,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 7
     stroke_colour: 0
 
@@ -4186,6 +3101,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 9.5
     stroke_colour: 0
 
@@ -4205,8 +3121,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 3.5
     stroke_colour: 14540253
 
@@ -4226,8 +3141,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 9.5
     stroke_colour: 14540253
 
@@ -4247,8 +3161,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 14
     stroke_colour: 14540253
 
@@ -4268,8 +3181,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 16777215
 
@@ -4289,8 +3201,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 6
     stroke_colour: 16777215
 
@@ -4310,8 +3221,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 1.5
     stroke_colour: 15592941
 
@@ -4331,8 +3241,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 15592941
 
@@ -4352,8 +3261,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 5.5
     stroke_colour: 15592941
 
@@ -4373,8 +3281,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 8
     stroke_colour: 15592941
 
@@ -4394,8 +3301,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 6
     stroke_colour: 11915472
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
@@ -4421,8 +3327,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 10
     stroke_colour: 11915472
   textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
@@ -4448,6 +3353,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 18
     stroke_colour: 12303308
 
@@ -4467,6 +3373,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 4
     stroke_colour: 12303308
 
@@ -4486,6 +3393,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 6
     stroke_colour: 12303308
 
@@ -4502,6 +3410,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 15921129
 
@@ -4518,6 +3427,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 4
     stroke_colour: 15921129
 
@@ -4534,6 +3444,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 7
     stroke_colour: 15921129
 
@@ -4556,6 +3467,7 @@
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
+    stroke_opacity: 100
     stroke_width: 0.4
     stroke_colour: 0
 
@@ -4574,6 +3486,7 @@
     isStroked: true
     stroke_dashArray: [0,18,1,155]
     stroke_linejoin: bevel
+    stroke_opacity: 100
     stroke_width: 4
     stroke_colour: 7106773
 
@@ -4592,6 +3505,7 @@
     isStroked: true
     stroke_dashArray: [0,15,1,158]
     stroke_linejoin: bevel
+    stroke_opacity: 100
     stroke_width: 4
     stroke_colour: 7106773
 
@@ -4776,14 +3690,10 @@
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
       params: ['highway','service']
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: untrue
-      params: ['tunnel']
   shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
     isFilled: false
     isStroked: true
-    stroke_linecap: round
-    stroke_linejoin: round
+    stroke_opacity: 100
     stroke_width: 3
     stroke_colour: 10066329
 
@@ -4834,36 +3744,8 @@
 
 # stations -- [railway]='station'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
-  minScale: 12
-  maxScale: 12
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','station']
-  pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
-    width: 4
-    height: 4
-
-# stations -- [railway]='station'
-- !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
-  minScale: 14
-  maxScale: 13
-  isAnd: false
-  breaker: true
-  conditions:
-    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
-      type: eq
-      params: ['railway','station']
-  pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
-    width: 6
-    height: 6
-
-# stations -- [railway]='station'
-- !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
   minScale: 18
-  maxScale: 15
+  maxScale: 14
   isAnd: false
   breaker: true
   conditions:
@@ -4871,8 +3753,9 @@
       type: eq
       params: ['railway','station']
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
-    width: 9
-    height: 9
+    width: 16
+    height: 16
+    icon: icons/station.png
 
 # stations -- [railway]='halt' or [railway]='tram_stop' or [aerialway]='station'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -4930,8 +3813,8 @@
 
 # symbols -- [aeroway]='airport'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
-  minScale: 10
-  maxScale: 9
+  minScale: 18
+  maxScale: 12
   isAnd: false
   breaker: true
   conditions:
@@ -4947,6 +3830,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/airport.png
 
 # symbols -- [aeroway]='airport'
 # symbols -- [aeroway]='aerodrome'
@@ -5054,7 +3938,7 @@
     width: 20
     height: 20
 
-# symbols -- [highway]='mini_roundabout'
+# symbols -- [highway]='mini_noneabout'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
   minScale: 18
   maxScale: 15
@@ -5063,7 +3947,7 @@
   conditions:
     - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
       type: eq
-      params: ['highway','mini_roundabout']
+      params: ['highway','mini_noneabout']
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 9
     height: 9
@@ -5095,6 +3979,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/atm.png
 
 # points -- [amenity]='bank'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5113,7 +3998,7 @@
 # points -- [amenity]='bar'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
   minScale: 18
-  maxScale: 17
+  maxScale: 15
   isAnd: false
   breaker: true
   conditions:
@@ -5123,6 +4008,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 20
     height: 20
+    icon: icons/bar.png
 
 # points -- [amenity]='bus_stop' or [highway]='bus_stop'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5140,11 +4026,12 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 12
     height: 12
+    icon: icons/bus_stop.png
 
 # points -- [amenity]='cafe'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
   minScale: 18
-  maxScale: 17
+  maxScale: 15
   isAnd: false
   breaker: true
   conditions:
@@ -5154,6 +4041,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/cafe.png
 
 # points -- [tourism]='camp_site'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5210,11 +4098,12 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/hospital.png
 
 # points -- [tourism]='hotel'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
   minScale: 18
-  maxScale: 17
+  maxScale: 15
   isAnd: false
   breaker: true
   conditions:
@@ -5222,8 +4111,9 @@
       type: eq
       params: ['tourism','hotel']
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
-    width: 20
-    height: 20
+    width: 16
+    height: 16
+    icon: icons/hotel.png
 
 # points -- [amenity]='library'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5280,6 +4170,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/parking.png
 
 # points -- [amenity]='place_of_worship' and [religion]='christian'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5376,6 +4267,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/post_box.png
 
 # points -- [amenity]='post_office'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5394,7 +4286,7 @@
 # points -- [amenity]='pub'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
   minScale: 18
-  maxScale: 16
+  maxScale: 15
   isAnd: false
   breaker: true
   conditions:
@@ -5404,6 +4296,15 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/pub.png
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    tag: name
+    text_size: 10
+    isLine: false
+    text_offset: 8
+    text_width: 70
+    pullout_colour: 0xFFFFFF
+    pullout_radius: 2
 
 # points -- [amenity]='recycling'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5418,6 +4319,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/recycling.png
 
 # points -- [amenity]='restaurant'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5432,6 +4334,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/restaurant.png
 
 # points -- [amenity]='telephone'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5446,6 +4349,7 @@
   pointStyle: !actionscript/object:net.systemeD.halcyon.styleparser.PointStyle
     width: 16
     height: 16
+    icon: icons/telephone.png
 
 # points -- [amenity]='toilets'
 - !actionscript/object:net.systemeD.halcyon.styleparser.PointRule
@@ -5461,3 +4365,293 @@
     width: 20
     height: 20
 
+
+
+# ====================================================
+# Railways
+# ====================================================
+
+# noncased-ways-bridges -- [railway]='subway' and ([bridge]='yes' or [bridge]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 14
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','subway']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: true
+      params: ['bridge']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 10066329
+
+# noncased-ways-bridges -- [railway]='light_rail' and ([bridge]='yes' or [bridge]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 14
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','light_rail']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: true
+      params: ['bridge']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 6710886
+
+
+
+
+# roads -- [railway]='preserved'
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 13
+  isAnd: false
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','preserved']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_dashArray: [0,1,8,1]
+    stroke_opacity: 100
+    stroke_width: 1
+    stroke_colour: 16777215
+
+# roads -- [railway]='monorail'
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 14
+  isAnd: false
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','monorail']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_dashArray: [2,3]
+    stroke_opacity: 40
+    stroke_width: 3.0
+    stroke_colour: 7829367
+
+# trams -- [railway]='tram' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 14
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','tram']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 1
+    stroke_colour: 4473924
+
+# trams -- [railway]='tram' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 15
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','tram']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 4473924
+
+# buildings -- [railway]='station' or [building]='station'
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 10
+  isAnd: false
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','station']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['building','station']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: true
+    isStroked: false
+    fill_opacity: 100
+    fill_colour: 13937322
+
+
+# minor-roads-fill -- ([railway]='disused' or [railway]='abandoned' or [railway]='construction') and not [highway] &lt;&gt; ''
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['railway','disused|abandoned|construction']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: unset
+      params: ['highway']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_dashArray: [2,4]
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 8421504
+
+# minor-roads-fill -- ([railway]='disused' or [railway]='abandoned' or [railway]='construction') and not [highway] &lt;&gt; '' and [bridge]='yes'
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: regex
+      params: ['railway','disused|abandoned|construction']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: unset
+      params: ['highway']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: true
+      params: ['bridge']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_dashArray: [2,4]
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 8421504
+
+# minor-roads-fill -- [railway]='rail' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 13
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','rail']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_dashArray: [8,12]
+    stroke_opacity: 100
+    stroke_width: 1
+    stroke_colour: 16777215
+
+# minor-roads-fill -- [railway]='rail' and ([bridge]='yes' or [bridge]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 14
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','rail']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: true
+      params: ['bridge']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 5
+    stroke_colour: 16777215
+
+# minor-roads-fill -- [railway]='rail' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 14
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','rail']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_dashArray: [0,11,8,1]
+    stroke_opacity: 100
+    stroke_width: 1
+    stroke_colour: 16777215
+
+# minor-roads-fill -- [railway]='narrow_gauge' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','narrow_gauge']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 6710886
+
+# minor-roads-fill -- [railway]='light_rail' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 13
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','light_rail']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 6710886
+
+# minor-roads-fill -- [railway]='subway' and not ([tunnel]='yes' or [tunnel]='true')
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 17
+  maxScale: 12
+  isAnd: true
+  breaker: true
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: eq
+      params: ['railway','subway']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 100
+    stroke_width: 2
+    stroke_colour: 10066329
