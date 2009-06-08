@@ -18,26 +18,31 @@ package net.systemeD.halcyon.styleparser {
 			iconCallback=f;
 		}
 
-		// returns array of ShapeStyle,PointStyle,TextStyle,ShieldStyle
-		public function getStyle(isPoint:Boolean,tags:Object,scale:uint):Array {
-			var ss:ShapeStyle;
-			var ps:PointStyle;
-			var ts:TextStyle;
-			var hs:ShieldStyle;
+		// returns array of styles
+		public function getStyles(isPoint:Boolean,tags:Object,scale:uint):Array {
+			var rt:Object=tags; var rtused:Boolean=false;			// new tag object to be returned
+			var i:String;
+			var styles:Array=[];
 			for each (var rule:* in rules) {
 				if ( isPoint && rule is ShapeRule) { continue; }
 				if (!isPoint && rule is PointRule) { continue; }
 				if (scale>rule.minScale) { continue; }
 				if (scale<rule.maxScale) { continue; }
-				if (rule.test(tags)) {
-					if (rule is ShapeRule && rule.shapeStyle)  { ss=rule.shapeStyle; }
-					if (rule is PointRule && rule.pointStyle)  { ps=rule.pointStyle; }
-					if (                     rule.textStyle )  { ts=rule.textStyle; }
-					if (rule is ShapeRule && rule.shieldStyle) { hs=rule.shieldStyle; }
-					if (rule.breaker)     { break; }
+				if (rule.test(rt)) {
+					if (rule is ShapeRule && rule.shapeStyle)  { styles.push(rule.shapeStyle); }
+					if (rule is PointRule && rule.pointStyle)  { styles.push(rule.pointStyle); }
+					if (                     rule.textStyle )  { styles.push(rule.textStyle); }
+					if (rule is ShapeRule && rule.shieldStyle) { styles.push(rule.shieldStyle); }
+					if (rule.breaker) { break; }
+					if (rule.hasTags) {
+						// deep copy tag object so we're not modifying in situ
+						if (!rtused) { for (i in tags) { rt[i]=tags[i]; }; rtused=true; }
+						// and apply new tags
+						for (i in rule.setTags) { rt[i]=rule.setTags[i]; }
+					}
 				}
 			}
-			return new Array(ss,ps,ts,hs);
+			return styles;
 		}
 
 		// Save and load rulesets

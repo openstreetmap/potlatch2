@@ -15,12 +15,12 @@ package net.systemeD.halcyon {
         private var way:Way;
 
 		public var pathlength:Number;				// length of path
-
+		public var patharea:Number;					// area of path
+		public var centroid_x:Number;				// centroid
+		public var centroid_y:Number;				//  |
 		public var layer:int=0;						// map layer
 		public var map:Map;							// reference to parent map
-		public var stroke:Sprite;					// instance in display list
-		public var fill:Sprite;						//  |
-		public var roadname:Sprite;					//  |
+		public var sprites:Array=new Array();		// instances in display list
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
 			embedFonts: true,
@@ -39,23 +39,46 @@ package net.systemeD.halcyon {
 		}
 		
 		private function init():void {
-			var lx:Number, ly:Number;
+			recalculate();
+			redraw();
+			// updateBbox(lon, lat);
+			// ** various other stuff
+		}
+
+		// ------------------------------------------------------------------------------------------
+		// Calculate length etc.
+		// ** this could be made scale-independent - would speed up redraw
+		
+		public function recalculate():void {
+			var lx:Number, ly:Number, sc:Number;
+			var cx:Number=0, cy:Number=0;
 			pathlength=0;
+			patharea=0;
 			
 			for ( var i:uint = 0; i < way.length; i++ ) {
                 var node:Node = way.getNode(i);
-                var lat:Number = node.lat;
-                var lon:Number = node.lon;
-//				updateBbox(lon, lat);
+                var latp:Number = node.latp;
+                var lon:Number  = node.lon;
 				if ( !isNaN(lx) ) {
-                    pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(lat-ly,2) );
+                    pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(latp-ly,2) );
+					patharea += lx*latp-lon*ly;
+					sc = (lx*latp-lon*ly); 
+					cx += (lx+lon)*sc;
+					cy += (ly+latp)*sc;
                 }
-				lx=lon; ly=lat;
+				lx=lon; ly=latp;
 			}
 
 			pathlength*=map.scalefactor;
-			redraw();
-			// ** various other stuff
+			patharea*=map.scalefactor/2;
+			if (patharea>0 && way.isArea()) {
+				centroid_x=map.lon2coord(cx/patharea/6);
+				centroid_y=map.latp2coord(cy/patharea/6);
+			} else if (pathlength>0) {
+				var c:Array=pointAt(0.5);
+				centroid_x=c[0];
+				centroid_y=c[1];
+			}
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -64,88 +87,70 @@ package net.systemeD.halcyon {
 		public function redraw():void {
             var tags:Object = way.getTagsCopy();
 
-			// ** remove previous version from any layer/sublayer
+			// remove all currently existing sprites
+			while (sprites.length>0) {
+				var d:Sprite=sprites.pop(); d.parent.removeChild(d);
+			}
+
+			// which layer?
 			layer=5;
 			if ( tags['layer'] )
                 layer=Math.min(Math.max(tags['layer']+5,-5),5)+5;
 
 			// set style
-			var styles:Array=map.ruleset.getStyle(false, tags, map.scale);
-			var sublayer:uint=0; if (styles[0] && styles[0].sublayer) { sublayer=styles[0].sublayer; }
+			var styles:Array=map.ruleset.getStyles(false, tags, map.scale);
+			for each (var s:* in styles) {
 
-			// find/create sprites
-			if (stroke) {
-				fill.graphics.clear(); 
-				stroke.graphics.clear(); 
-				roadname.graphics.clear();
-				while (roadname.numChildren) { roadname.removeChildAt(0); }
-			} else {
-				fill=new Sprite(); addToLayer(fill,0);
-				stroke=new Sprite(); addToLayer(stroke,1,sublayer); 
-				roadname=new Sprite(); addToLayer(roadname,2); 
-			}
-			var g:Graphics=stroke.graphics;
-			var f:Graphics=fill.graphics;
+				if (s is ShapeStyle) {
+					var stroke:Sprite, fill:Sprite, roadname:Sprite, f:Graphics, g:Graphics;
+					var doStroke:Boolean=false, doDashed:Boolean=false;
+					var doFill:Boolean=false, fill_colour:uint, fill_opacity:Number;
+					var doCasing:Boolean=false, doDashedCasing:Boolean=false;
 
-			// ShapeStyle
-			// ** do line-caps/joints
-			var doStroke:Boolean=false, doDashed:Boolean=false;
-			var doFill:Boolean=false, fill_colour:uint, fill_opacity:Number;
-			var doCasing:Boolean=false, doDashedCasing:Boolean=false;
-			if (styles[0]) {
-				var ss:ShapeStyle=styles[0];
-				if (ss.isStroked) {	doStroke=true;
-									doDashed=(ss.stroke_dashArray.length>0);
-									g.lineStyle(ss.stroke_width, ss.stroke_colour, ss.stroke_opacity/100,
-												false,"normal", ss.stroke_linecap,ss.stroke_linejoin); }
-				if (ss.isCased)   { doCasing=true;
-									doDashedCasing=(ss.casing_dashArray.length>0);
-									f.lineStyle(ss.casing_width, ss.casing_colour, ss.casing_opacity/100,
-												false,"normal", ss.stroke_linecap, ss.stroke_linejoin); }
-				if (ss.isFilled)  { doFill=true;
-									fill_colour = ss.fill_colour;
-									fill_opacity= ss.fill_opacity/100; }
-			}
+					// Set stroke style
+					if (s.isStroked)  {
+						stroke=new Sprite(); addToLayer(stroke,1,s.sublayer); g=stroke.graphics;
+		                g.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
+						g.lineStyle(s.stroke_width, s.stroke_colour, s.stroke_opacity/100,
+									false, "normal", s.stroke_linecap, s.stroke_linejoin);
+					}
 
-			// draw line
-			if (doFill)
-                f.beginFill(fill_colour,fill_opacity);
-			if (doStroke)
-                g.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
-			if (doFill || doCasing)
-                f.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
+					// Set fill and casing style
+					if (s.isFilled || s.isCased) {
+						fill=new Sprite(); addToLayer(fill,0); f=fill.graphics;
+		                f.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
+						if (s.isCased)  { f.lineStyle(s.casing_width, s.casing_colour, s.casing_opacity/100,
+										  false, "normal", s.stroke_linecap, s.stroke_linejoin); }
+						if (s.isFilled) { f.beginFill(s.fill_colour,s.fill_opacity/100); }
+					}
 
-			if (doDashed)
-                dashedLine(g,ss.stroke_dashArray);
-			else if (doStroke)
-                solidLine(g);
+					// Draw stroke
+					if (s.stroke_dashArray.length>0) { dashedLine(g,s.stroke_dashArray); }
+							   else if (s.isStroked) { solidLine(g); }
 			
-			if (doDashedCasing) {
-                dashedLine(f,ss.casing_dashArray);
-                f.lineStyle();
-            }
-			if (doFill) {
- 				f.beginFill(fill_colour,fill_opacity); 
-				solidLine(f);
-				f.endFill(); 
-			} else if (doCasing && !doDashedCasing) {
-                solidLine(f);
-            }
+					// Draw fill and casing
+					if (s.casing_dashArray.length>0) { dashedLine(f,s.casing_dashArray); f.lineStyle(); }
+					if (s.isFilled)					 { f.beginFill(s.fill_colour,s.fill_opacity/100); 
+													   solidLine(f); f.endFill(); }
+					else if (s.isCased && s.casing_dashArray.length==0) { solidLine(f); }
 
-			// TextStyle
-			// ** do pull-out
-			if (styles[2] && styles[2].tag && tags[styles[2].tag]) {
-				var ts:TextStyle=styles[2];
-				nameformat = new TextFormat(ts.font_name   ? ts.font_name : "DejaVu",
-											ts.text_size   ? ts.text_size : 8,
-											ts.text_colour ? ts.text_colour: 0,
-											ts.font_bold   ? ts.font_bold : false,
-											ts.font_italic ? ts.font_italic: false);
-				var a:String=tags[ts.tag]; if (ts.font_caps) { a=a.toUpperCase(); }
-				writeName(roadname,a,ts.text_offset ? ts.text_offset : 0);
+
+				} else if (s is TextStyle && s.tag && tags[s.tag]) {
+					roadname=new Sprite(); addToLayer(roadname,2);
+					nameformat = s.getTextFormat();
+					var a:String=tags[s.tag]; if (s.font_caps) { a=a.toUpperCase(); }
+					if (s.isLine) {
+						writeNameOnPath(roadname,a,s.text_offset ? s.text_offset : 0);
+						if (s.pullout_radius>0) { roadname.filters=s.getPulloutFilter(); }
+					} else if (centroid_x) {
+						s.writeNameLabel(roadname,tags[s.tag],centroid_x,centroid_y);
+					}
+
+
+				} else if (s is ShieldStyle) {
+					// ** to do
+				}
 			}
-			// ShieldStyle - 3
-			// ** to do
 		}
 		
 		// ------------------------------------------------------------------------------------------
@@ -237,7 +242,7 @@ package net.systemeD.halcyon {
 		// based on code by Tom Carden
 		// ** needs styling
 		
-		private function writeName(s:Sprite,a:String,textOffset:Number=0):void {
+		private function writeNameOnPath(s:Sprite,a:String,textOffset:Number=0):void {
 
 			// make a dummy textfield so we can measure its width
 			var tf:TextField = new TextField();
@@ -301,6 +306,7 @@ package net.systemeD.halcyon {
 			var o:DisplayObject=Sprite(l).getChildAt(t);
 			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
 			Sprite(o).addChild(s);
+			sprites.push(s);
 		}
 	}
 }

@@ -33,6 +33,10 @@ package net.systemeD.halcyon.connection {
             return "Way("+id+"@"+version+"): "+getTagList()+
                      " "+nodes.map(function(item:Node,index:int, arr:Array):String {return item.id.toString();}).join(",");
         }
+
+		public function isArea():Boolean {
+			return nodes[0]==nodes[nodes.length-1] && nodes.length>2;
+		}
     }
 
 }

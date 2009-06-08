@@ -5,6 +5,7 @@ package net.systemeD.halcyon.styleparser {
 		public var icon:String;
 		public var width:uint;
 		public var height:uint;
+		public var sublayer:uint=0;
 
 	}
 

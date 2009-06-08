@@ -7,7 +7,9 @@ package net.systemeD.halcyon.styleparser {
 		public var isAnd:Boolean = true;
 		public var minScale:uint = 19;
 		public var maxScale:uint = 13;
-
+		public var hasTags:Boolean = false;
+		public var setTags:Object = {};
+		
 		public function test(tags:Object):Boolean {
 			var v:Boolean; var i:uint=0;
 			for each (var condition:Condition in conditions) {

@@ -83,7 +83,7 @@ package net.systemeD.halcyon {
 				addChild(s);							//  |
 			}
 			s=new Sprite(); addChild(s);				// 11 - POIs
-			s=new Sprite(); addChild(s);				// 12 - shields
+			s=new Sprite(); addChild(s);				// 12 - shields and POI names
 
 			connection= Connection.getConnection();
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
@@ -93,20 +93,23 @@ package net.systemeD.halcyon {
         }
 
 		public function gotEnvironment(r:Object):void {
-			init(52.022,-1.2745);
+			init(53.09465,-2.56495,17);
 		}
 
 		// ------------------------------------------------------------------------------------------
 		// Initialise map at a given lat/lon
 
-        public function init(startlat:Number,startlon:Number):void {
+        public function init(startlat:Number,startlon:Number,startscale:uint):void {
 
 			ruleset.load("test.yaml?d="+Math.random());
 //			rules.initExample();		// initialise dummy rules
 
 			updateSize();
-			baselon  =startlon			-(mapwidth /2)/MASTERSCALE;
-			basey    =lat2latp(startlat)+(mapheight/2)/MASTERSCALE;
+
+			scale=startscale;
+			scalefactor=MASTERSCALE/Math.pow(2,14-scale);
+			baselon    =startlon          -(mapwidth /2)/scalefactor;
+			basey      =lat2latp(startlat)+(mapheight/2)/scalefactor;
 			addDebug("Baselon "+baselon+", basey "+basey);
 			updateCoords(0,0);
 			download();
@@ -165,6 +168,9 @@ package net.systemeD.halcyon {
 		// (typically from whichways, but will want to add more connections)
 
 		public function download():void {
+			var e:MapEvent = new MapEvent("download",edge_l,edge_r,edge_t,edge_b);
+			this.dispatchEvent(e);
+			
 			if (edge_l>=bigedge_l && edge_r<=bigedge_r &&
 				edge_b>=bigedge_b && edge_t<=bigedge_t) { return; } 	// we have already loaded this area, so ignore
 			bigedge_l=edge_l; bigedge_r=edge_r;
@@ -214,7 +220,7 @@ package net.systemeD.halcyon {
 		// Redraw all items, zoom in and out
 		
 		public function redraw():void {
-			for each (var w:WayUI in ways) { w.redraw(); }
+			for each (var w:WayUI in ways) { w.recalculate(); w.redraw(); }
 			for each (var p:POI in pois) { p.redraw(); }
 		}
 
@@ -275,7 +281,7 @@ package net.systemeD.halcyon {
 		// Miscellaneous events
 		
 		public function keyUpHandler(event:KeyboardEvent):void {
-addDebug("pressed "+event.keyCode);
+// addDebug("pressed "+event.keyCode);
 			if (event.keyCode==82) { this.redraw(); }			// R - redraw
 			if (event.keyCode==73) { this.zoomIn(); }			// I - zoom in
 			if (event.keyCode==79) { this.zoomOut(); } 			// O - zoom out
