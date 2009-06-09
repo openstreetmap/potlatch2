@@ -2350,6 +2350,14 @@
     isStroked: false
     fill_opacity: 100
     fill_colour: 11915472
+  textStyle: !actionscript/object:net.systemeD.halcyon.styleparser.TextStyle
+    tag: name
+    text_colour: 6724044
+    text_size: 10
+    text_width: 100
+    pullout_radius: 2
+    pullout_colour: 0xDDDDFF
+    isLine: false
 
 # water_areas -- [natural]='lake' or [natural]='water'
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
