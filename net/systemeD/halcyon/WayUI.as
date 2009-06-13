@@ -8,6 +8,7 @@ package net.systemeD.halcyon {
 	import flash.text.GridFitType;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.events.*;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
 
@@ -21,6 +22,7 @@ package net.systemeD.halcyon {
 		public var layer:int=0;						// map layer
 		public var map:Map;							// reference to parent map
 		public var sprites:Array=new Array();		// instances in display list
+        private var hitzone:Sprite;
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
 			embedFonts: true,
@@ -89,7 +91,7 @@ package net.systemeD.halcyon {
 
 			// remove all currently existing sprites
 			while (sprites.length>0) {
-				var d:Sprite=sprites.pop(); d.parent.removeChild(d);
+				var d:DisplayObject=sprites.pop(); d.parent.removeChild(d);
 			}
 
 			// which layer?
@@ -102,14 +104,14 @@ package net.systemeD.halcyon {
 			for each (var s:* in styles) {
 
 				if (s is ShapeStyle) {
-					var stroke:Sprite, fill:Sprite, roadname:Sprite, f:Graphics, g:Graphics;
+					var stroke:Shape, fill:Shape, roadname:Sprite, f:Graphics, g:Graphics;
 					var doStroke:Boolean=false, doDashed:Boolean=false;
 					var doFill:Boolean=false, fill_colour:uint, fill_opacity:Number;
 					var doCasing:Boolean=false, doDashedCasing:Boolean=false;
 
 					// Set stroke style
 					if (s.isStroked)  {
-						stroke=new Sprite(); addToLayer(stroke,1,s.sublayer); g=stroke.graphics;
+						stroke=new Shape(); addToLayer(stroke,1,s.sublayer); g=stroke.graphics;
 		                g.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
 						g.lineStyle(s.stroke_width, s.stroke_colour, s.stroke_opacity/100,
 									false, "normal", s.stroke_linecap, s.stroke_linejoin);
@@ -117,7 +119,7 @@ package net.systemeD.halcyon {
 
 					// Set fill and casing style
 					if (s.isFilled || s.isCased) {
-						fill=new Sprite(); addToLayer(fill,0); f=fill.graphics;
+						fill=new Shape(); addToLayer(fill,0); f=fill.graphics;
 		                f.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
 						if (s.isCased)  { f.lineStyle(s.casing_width, s.casing_colour, s.casing_opacity/100,
 										  false, "normal", s.stroke_linecap, s.stroke_linejoin); }
@@ -151,6 +153,32 @@ package net.systemeD.halcyon {
 					// ** to do
 				}
 			}
+
+            if ( styles.length == 0 ) {
+                // there's no styles... so add a thin trace
+                var def:Sprite = new Sprite();
+                def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
+                solidLine(def.graphics);
+                addToLayer(def, 1);
+            }
+
+            // create a generic "way" hitzone sprite
+            hitzone = new Sprite();
+            hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
+            solidLine(hitzone.graphics);
+            addToLayer(hitzone, 2);
+            hitzone.visible = false;
+
+            var listenSprite:Sprite = new Sprite();
+            listenSprite.hitArea = hitzone;
+            addToLayer(listenSprite, 2);
+            listenSprite.buttonMode = true;
+            listenSprite.mouseEnabled = true;
+            listenSprite.addEventListener(MouseEvent.CLICK, mouseEvent);
+            listenSprite.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
+            listenSprite.addEventListener(MouseEvent.MOUSE_OVER, mouseEvent);
+            listenSprite.addEventListener(MouseEvent.MOUSE_OUT, mouseEvent);
+
 		}
 		
 		// ------------------------------------------------------------------------------------------
@@ -284,6 +312,8 @@ package net.systemeD.halcyon {
 		private function rotatedLetter(char:String, t:Number, w:Number, h:Number, a:Number, o:Number):TextField {
 			var tf:TextField = new TextField();
 			tf.embedFonts = true;
+            tf.mouseEnabled = false;
+            tf.mouseWheelEnabled = false;
 			tf.defaultTextFormat = nameformat;
 			tf.text = char;
 			tf.width = tf.textWidth+4;
@@ -301,12 +331,21 @@ package net.systemeD.halcyon {
 		
 		// Add object (stroke/fill/roadname) to layer sprite
 		
-		private function addToLayer(s:Sprite,t:uint,sublayer:int=-1):void {
+		private function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
 			var l:DisplayObject=Map(map).getChildAt(layer);
 			var o:DisplayObject=Sprite(l).getChildAt(t);
 			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
 			Sprite(o).addChild(s);
 			sprites.push(s);
+            if ( s is Sprite ) Sprite(s).mouseEnabled = false;
 		}
+
+        private function mouseEvent(event:MouseEvent):void {
+            map.wayMouseEvent(event, way);
+        }
+
+        public function setHighlight(highlight:Boolean):void {
+            hitzone.visible = highlight;
+        }
 	}
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<mapFeatures>
+
+  <feature name="Motorway">
+    <icon background="blue" image="features/highway__motorway.png">
+      <font size="16pt"><b>${ref}</b></font><br/>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="motorway"/>
+  </feature>
+
+  <feature name="Motorway link" icon="features/motorway_link.png">
+    <line/>
+    <tag k="highway" v="motorway_link"/>
+  </feature>
+
+  <feature name="Trunk Road">
+    <icon background="green" image="features/highway__trunk.png">
+      <font size="16pt"><b>${ref}</b></font><br/>
+      <font size="10pt">${name}</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="trunk"/>
+  </feature>
+
+  <feature name="Residential Road">
+    <icon background="white" image="features/highway__residential.png">
+      <font size="14pt"><b>${name}</b></font><br/>
+      <font size="6pt">${postal_code}</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="residential"/>
+  </feature>
+
+  <feature name="Unclassified Road">
+    <icon background="white" image="features/highway__unclassified.png">
+      <font size="14pt"><b>${name}</b></font><br/>
+      Road
+    </icon>
+
+    <line/>
+    <tag k="highway" v="unclassified"/>
+  </feature>
+
+  <feature name="Service Road">
+    <icon background="white" image="features/highway__service.png">
+      <font size="14pt"><b>${name}</b></font><br/>
+      Service Road
+    </icon>
+    <description>
+      Access roads
+    </description>
+
+    <line/>
+    <tag k="highway" v="service"/>
+  </feature>
+
+  <feature name="Building">
+    <icon background="white">
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <line/>
+    <tag k="building" v="*"/>
+  </feature>
+
+</mapFeatures>
+

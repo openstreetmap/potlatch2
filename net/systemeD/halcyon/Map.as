@@ -72,24 +72,30 @@ package net.systemeD.halcyon {
 			// [layer][0]			- fill
 
 			for (var l:int=0; l<13; l++) {				// 11 layers (10 is +5, 0 is -5)
-				var s:Sprite=new Sprite();				//  |
-				s.addChild(new Sprite());				//	| 0 fill
-				var t:Sprite=new Sprite();				//  | 1 stroke
+				var s:Sprite = getPaintSprite();		//  |
+				s.addChild(getPaintSprite());			//	| 0 fill
+				var t:Sprite = getPaintSprite();		//  | 1 stroke
 				for (var j:int=0; j<11; j++) {			//	|  | ten sublayers
-					t.addChild(new Sprite());			//  |  |  |
+					t.addChild(getPaintSprite());		//  |  |  |
 				}										//  |  |  |
 				s.addChild(t);							//  |  |
-				s.addChild(new Sprite());				//	| 2 names
+				s.addChild(getPaintSprite());			//	| 2 names
 				addChild(s);							//  |
 			}
-			s=new Sprite(); addChild(s);				// 11 - POIs
-			s=new Sprite(); addChild(s);				// 12 - shields and POI names
+			s=getPaintSprite(); addChild(s);			// 11 - POIs
+			s=getPaintSprite(); addChild(s);			// 12 - shields and POI names
 
 			connection= Connection.getConnection();
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
             connection.addEventListener(Connection.NEW_POI, newPOICreated);
 			connection.getEnvironment(new Responder(gotEnvironment,connectionError));
 
+        }
+
+        private function getPaintSprite():Sprite {
+            var s:Sprite = new Sprite();
+            s.mouseEnabled = false;
+            return s;
         }
 
 		public function gotEnvironment(r:Object):void {
@@ -178,32 +184,7 @@ package net.systemeD.halcyon {
 			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 		}
 
-/*
-		public function gotBbox(r:Object):void {
-			addDebug("got whichways");
-			var code:uint         =r.shift(); if (code) { connectionError(); return; }
-			var message:String    =r.shift();
-			var waylist:Array     =r[0];
-			var pointlist:Array   =r[1];
-			var relationlist:Array=r[2];
-			var i:uint, v:uint;
 
-			for each (var w:Array in waylist) {
-				i=w[0]; v=w[1];
-				if (ways[i] && ways[i].version==v) { continue; }
-				ways[i]=new Way(i,v,this);
-				ways[i].load(connection);
-			}
-
-			for each (var p:Array in pointlist) {
-				i=p[0]; v=p[4];
-				if (pois[i] && pois[i].version==v) { continue; }
-				pois[i]=new POI(i,v,p[1],p[2],p[3],this);
-			}
-
-			addDebug("waylist is "+waylist);
-		}
-*/
 
         private function newWayCreated(event:EntityEvent):void {
             var way:Way = event.entity as Way;
@@ -213,6 +194,26 @@ package net.systemeD.halcyon {
         private function newPOICreated(event:EntityEvent):void {
             var node:Node = event.entity as Node;
             pois[node.id] = new POI(node, this);
+        }
+
+        public function setHighlight(entity:Entity, highlight:Boolean):void {
+            if ( entity is Way ) {
+                var wayUI:WayUI = ways[entity.id];
+                if ( wayUI != null )
+                    wayUI.setHighlight(highlight);
+            }
+        }
+
+        // Handle mouse events on ways/nodes
+        private var mapController:MapController = null;
+
+        public function setController(controller:MapController):void {
+            this.mapController = controller;
+        }
+
+        public function wayMouseEvent(event:MouseEvent, way:Way):void {
+            if ( mapController != null )
+                mapController.entityMouseEvent(event, way);
         }
 
 		// ------------------------------------------------------------------------------------------

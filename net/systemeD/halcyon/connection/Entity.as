@@ -44,6 +44,13 @@ package net.systemeD.halcyon.connection {
             return copy;
         }
 
+        public function getTagArray():Array {
+            var copy:Array = [];
+            for (var key:String in tags )
+                copy.push(new Tag(key, tags[key]));
+            return copy;
+        }
+
     }
 
 }
