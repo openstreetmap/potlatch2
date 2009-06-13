@@ -2,6 +2,8 @@
 
 <mapFeatures>
 
+  <!-- Roads -->
+
   <feature name="Motorway">
     <icon background="blue" image="features/highway__motorway.png">
       <font size="16pt"><b>${ref}</b></font><br/>
@@ -26,6 +28,36 @@
     <tag k="highway" v="trunk"/>
   </feature>
 
+  <feature name="Primary Road">
+    <icon background="red">
+      <font size="16pt"><b>${ref}</b></font><br/>
+      <font size="10pt">${name}</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="primary"/>
+  </feature>
+
+  <feature name="Secondary Road">
+    <icon background="orange">
+      <font size="16pt"><b>${ref}</b></font><br/>
+      <font size="10pt">${name}</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="secondary"/>
+  </feature>
+
+  <feature name="Tertiary Road">
+    <icon background="yellow">
+      <font size="14pt"><b>${name}</b></font><br/>
+      <font size="10pt">${ref}</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="tertiary"/>
+  </feature>
+
   <feature name="Residential Road">
     <icon background="white" image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font><br/>
@@ -36,10 +68,9 @@
     <tag k="highway" v="residential"/>
   </feature>
 
-  <feature name="Unclassified Road">
+  <feature name="Road">
     <icon background="white" image="features/highway__unclassified.png">
-      <font size="14pt"><b>${name}</b></font><br/>
-      Road
+      <font size="14pt"><b>${name}</b></font>
     </icon>
 
     <line/>
@@ -48,8 +79,7 @@
 
   <feature name="Service Road">
     <icon background="white" image="features/highway__service.png">
-      <font size="14pt"><b>${name}</b></font><br/>
-      Service Road
+      <font size="14pt"><b>${name}</b></font>
     </icon>
     <description>
       Access roads
@@ -58,6 +88,186 @@
     <line/>
     <tag k="highway" v="service"/>
   </feature>
+
+  <feature name="Unknown Road">
+    <icon background="gray">
+      <font size="10pt">This road has not been given a specific type. It's a road, and that's all that's known.</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="tertiary"/>
+  </feature>
+
+  <feature name="Living Street">
+    <icon background="white">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="tertiary"/>
+  </feature>
+
+  <feature name="Track">
+    <icon background="white">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="track"/>
+  </feature>
+
+  <feature name="Pedestrian Road">
+    <icon background="white">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="pedestrian"/>
+  </feature>
+
+
+
+  <!-- Paths -->
+
+  <feature name="Cycle Path">
+    <icon background="white">
+    </icon>
+
+    <line/>
+    <tag k="highway" v="cycleway"/>
+  </feature>
+
+  <feature name="Foot Path">
+    <icon background="white">
+    </icon>
+
+    <line/>
+    <tag k="highway" v="footway"/>
+  </feature>
+
+  <feature name="Bridleway">
+    <icon background="white">
+    </icon>
+
+    <line/>
+    <tag k="highway" v="bridleway"/>
+  </feature>
+
+  <feature name="Steps">
+    <icon background="white">
+    </icon>
+
+    <line/>
+    <tag k="highway" v="steps"/>
+  </feature>
+
+
+  <!-- Barriers -->
+
+  <feature name="Fence">
+    <icon>
+    </icon>
+
+    <line/>
+    <tag k="barrier" v="fence"/>
+  </feature>
+
+  <feature name="Hedge">
+    <icon>
+    </icon>
+
+    <line/>
+    <tag k="barrier" v="hedge"/>
+  </feature>
+
+  <feature name="Wall">
+    <icon>
+    </icon>
+
+    <line/>
+    <tag k="barrier" v="wall"/>
+  </feature>
+
+
+  <!-- Waterway -->
+
+  <feature name="Stream">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="waterway" v="stream"/>
+  </feature>
+
+  <feature name="River">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="waterway" v="river"/>
+  </feature>
+
+  <feature name="Canal">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="waterway" v="canal"/>
+  </feature>
+
+  <feature name="Dam">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="waterway" v="dam"/>
+  </feature>
+
+
+  <!-- Railways -->
+
+  <feature name="Railway Line">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="rail"/>
+  </feature>
+
+  <feature name="Tram Line">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="tram"/>
+  </feature>
+
+  <feature name="Subway Line">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="subway"/>
+  </feature>
+
+  <feature name="Tram Line">
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="tram"/>
+  </feature>
+
+
+  <!-- building -->
 
   <feature name="Building">
     <icon background="white">
@@ -68,6 +278,7 @@
     <line/>
     <tag k="building" v="*"/>
   </feature>
+
 
 </mapFeatures>
 
