@@ -32,7 +32,7 @@ package net.systemeD.halcyon.connection {
             this._lon = lon;
         }
 
-        public function toString():String {
+        public override function toString():String {
             return "Node("+id+"@"+version+"): "+lat+","+lon+" "+getTagList();
         }
 

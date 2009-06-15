@@ -110,7 +110,7 @@ package net.systemeD.halcyon {
 			ruleset.load("test.yaml?d="+Math.random());
 //			rules.initExample();		// initialise dummy rules
 
-			updateSize();
+			//updateSize();
 
 			scale=startscale;
 			scalefactor=MASTERSCALE/Math.pow(2,14-scale);
@@ -164,9 +164,17 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Resize map size based on current stage and height
 
-		public function updateSize():void {
-			mapwidth =stage.stageWidth; backdrop.width=mapwidth; mask.width=mapwidth;
-			mapheight=stage.stageHeight; backdrop.height=mapheight; mask.height=mapheight;
+		public function updateSize(w:uint, h:uint):void {
+			mapwidth = w;
+			mapheight= h;
+            if ( backdrop != null ) {
+                backdrop.width=mapwidth;
+                backdrop.height=mapheight;
+            }
+            if ( mask != null ) {
+                mask.width=mapwidth;
+                mask.height=mapheight;
+            }
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -282,6 +290,7 @@ package net.systemeD.halcyon {
 		
 		public function keyUpHandler(event:KeyboardEvent):void {
 // addDebug("pressed "+event.keyCode);
+            if ( !event.ctrlKey ) return;
 			if (event.keyCode==82) { this.redraw(); }			// R - redraw
 			if (event.keyCode==73) { this.zoomIn(); }			// I - zoom in
 			if (event.keyCode==79) { this.zoomOut(); } 			// O - zoom out

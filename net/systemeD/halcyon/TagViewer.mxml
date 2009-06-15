@@ -8,27 +8,29 @@
   <mx:ViewStack id="stack" width="100%" height="100%">
 
   <mx:VBox width="100%" height="100%" label="Simple">
-    <mx:HBox borderStyle="solid" verticalAlign="middle" width="100%" paddingLeft="3">
+    <mx:HBox borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3" id="iconContainer">
         <mx:Image id="iconImage"/>
         <mx:Text condenseWhite="true" width="100%" id="iconText"/>
         <mx:LinkButton label="?" click="openDescription()" id="helpLabel"/>
     </mx:HBox>
   </mx:VBox>
 
-  <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()">
+  <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
     <mx:Label id="advancedID">
       <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
     </mx:Label>
 
-    <mx:DataGrid width="100%" height="100%" id="advancedTagGrid">
+    <mx:DataGrid editable="true" width="100%" height="100%" id="advancedTagGrid">
             <mx:columns>
-                <mx:DataGridColumn dataField="key" headerText="Key"/>
-                <mx:DataGridColumn dataField="value" headerText="Value"/>
+                <mx:DataGridColumn editable="true" dataField="key" headerText="Key"/>
+                <mx:DataGridColumn editable="true" dataField="value" headerText="Value"/>
             </mx:columns>
     </mx:DataGrid>
 
-    <mx:Label text="Key: {advancedTagGrid.selectedItem.key}"/>
-    <mx:Label text="Value: {advancedTagGrid.selectedItem.value}"/>
+    <mx:HBox horizontalAlign="right" width="100%">
+      <mx:LinkButton label="Delete" click="removeTag()"/>
+      <mx:LinkButton label="Add" click="addNewTag()"/>
+    </mx:HBox>
   </mx:VBox>
 
   </mx:ViewStack>
@@ -39,21 +41,33 @@
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.mapfeatures.*;
 
+      import mx.collections.*
+
       private var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
       private var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
+      private var collection:ArrayCollection;
 
       public function setEntity(entity:Entity):void {
-          this.selectedEntity = entity;
+          if ( selectedEntity != entity ) {
+              if ( selectedEntity != null )
+                  selectedEntity.removeEventListener(Connection.TAG_CHANGE, tagChanged);
+              selectedEntity = entity;
+              selectedEntity.addEventListener(Connection.TAG_CHANGE, tagChanged);
+          }
 
           if ( advancedID != null )
               setupAdvanced(entity);
 
-          var feature:XML = mapFeatures.findMatchingFeature(entity);
+          refreshFeatureIcon();
+      }
+
+      private function refreshFeatureIcon():void {
+          var feature:XML = mapFeatures.findMatchingFeature(selectedEntity);
           if ( feature != null )
-              setFeatureIcon(entity, feature);
+              setFeatureIcon(selectedEntity, feature);
           else
-              blankFeatureIcon(entity);
+              blankFeatureIcon(selectedEntity);
       }
 
       private function setFeatureIcon(entity:Entity, feature:XML):void {
@@ -78,7 +92,9 @@
 
       private function blankFeatureIcon(entity:Entity):void {
           iconImage.source = null;
-          iconText.htmlText = entity == null ? "<i>Nothing selected</i>" : "<b>Not recognised</b><br/>Try looking at advanced";
+          iconText.htmlText = entity == null ?
+               "<i>Nothing selected</i>" :
+               "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
       }
 
       private function checkAdvanced():void {
@@ -91,8 +107,47 @@
           if ( entity is Node ) entityText = "Node";
           else if ( entity is Way ) entityText = "Way";
           else if ( entity is Relation ) entityText = "Relation";
+
           advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
-          advancedTagGrid.dataProvider = entity.getTagArray();
+
+          if ( collection == null ) {
+              collection = new ArrayCollection();
+              //var sort:Sort = new Sort();
+              //sort.fields = [new SortField("key", true)];
+              //collection.sort = sort;
+              //collection.refresh();
+              advancedTagGrid.dataProvider = collection;
+          }
+          collection.removeAll();
+          var tags:Array = entity.getTagArray();
+          tags.sortOn("key");
+          for each(var tag:Tag in tags)
+              collection.addItem(tag);
+      }
+
+      private function tagChanged(event:TagEvent):void {
+          refreshFeatureIcon();
+          
+          if ( collection != null ) {
+              // check to see if the key is already in our list
+              var exists:Boolean = false;
+              var tag:Tag = null;
+              var i:uint;
+              for ( i = 0; i < collection.length && !exists; i++ ) {
+                  tag = Tag(collection.getItemAt(i));
+                  exists = tag.key == event.key;
+              }
+              if ( !exists ) {
+                  tag = new Tag(selectedEntity, event.key, event.newValue);
+                  collection.addItem(tag);
+                  collection.refresh();
+              } else {
+                  if ( event.newValue == null ) {
+                      collection.removeItemAt(i-1);
+                      collection.refresh();
+                  }
+              }
+          }
       }
 
       public function loadFeatures():void {
@@ -101,6 +156,18 @@
 
       public function openDescription():void {
           trace("open description here");
+      }
+
+      public function addNewTag():void {
+          var newKey:String = "(new tag)";
+          var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
+          collection.addItem(newTag);
+          advancedTagGrid.editedItemPosition = {rowIndex: collection.getItemIndex(newTag), columnIndex: 0};
+      }
+
+      public function removeTag():void {
+          var k:String = advancedTagGrid.selectedItem.key;
+          selectedEntity.setTag(k, null);
       }
   ]]></mx:Script>
 </mx:VBox>

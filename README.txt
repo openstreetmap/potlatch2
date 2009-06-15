@@ -22,6 +22,9 @@ Compiling:
 * compile 1 
   - compile each subsequent time (_much_ faster than using mxmlc every time)
 
+* for nice debug reports compile with the mxmlc command:
+  mxmlc -managers=flash.fonts.AFEFontManager -compiler.debug -compiler.verbose-stacktraces -output=halcyon.swf halcyon.mxml
+
 Running:
 * Make sure test.yaml and icons/ are in the same directory as halcyon.swf
 * Open halcyon.swf in your browser

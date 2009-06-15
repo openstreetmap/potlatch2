@@ -1,6 +1,8 @@
 package net.systemeD.halcyon.connection {
 
-    public class Entity {
+    import flash.events.EventDispatcher;
+
+    public class Entity extends EventDispatcher {
         private var _id:Number;
         private var _version:uint;
         private var tags:Object = {};
@@ -30,7 +32,23 @@ package net.systemeD.halcyon.connection {
         }
 
         public function setTag(key:String, value:String):void {
-            tags[key] = value;
+            var old:String = tags[key];
+            if ( old != value ) {
+                if ( value == null || value == "" )
+                    delete tags[key];
+                else
+                    tags[key] = value;
+                dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, key, key, old, value));
+            }
+        }
+
+        public function renameTag(oldKey:String, newKey:String):void {
+            var value:String = tags[oldKey];
+            if ( oldKey != newKey ) {
+                delete tags[oldKey];
+                tags[newKey] = value;
+                dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, oldKey, newKey, value, value));
+            }
         }
 
         public function getTagList():TagList {
@@ -47,7 +65,7 @@ package net.systemeD.halcyon.connection {
         public function getTagArray():Array {
             var copy:Array = [];
             for (var key:String in tags )
-                copy.push(new Tag(key, tags[key]));
+                copy.push(new Tag(this, key, tags[key]));
             return copy;
         }
 

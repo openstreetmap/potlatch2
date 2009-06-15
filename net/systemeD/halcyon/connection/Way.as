@@ -29,7 +29,7 @@ package net.systemeD.halcyon.connection {
             nodes.splice(index, 1);
         }
 
-        public function toString():String {
+        public override function toString():String {
             return "Way("+id+"@"+version+"): "+getTagList()+
                      " "+nodes.map(function(item:Node,index:int, arr:Array):String {return item.id.toString();}).join(",");
         }

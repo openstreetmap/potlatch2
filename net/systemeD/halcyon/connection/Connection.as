@@ -30,6 +30,7 @@ package net.systemeD.halcyon.connection {
         public static var NEW_WAY:String = "new_way";
         public static var NEW_RELATION:String = "new_relation";
         public static var NEW_POI:String = "new_poi";
+        public static var TAG_CHANGE:String = "tag_change";
 
         // store the data we download
         private var negativeID:Number = -1;

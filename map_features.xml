@@ -5,7 +5,7 @@
   <!-- Roads -->
 
   <feature name="Motorway">
-    <icon background="blue" image="features/highway__motorway.png">
+    <icon image="features/highway__motorway.png">
       <font size="16pt"><b>${ref}</b></font><br/>
     </icon>
 
@@ -19,7 +19,7 @@
   </feature>
 
   <feature name="Trunk Road">
-    <icon background="green" image="features/highway__trunk.png">
+    <icon image="features/highway__trunk.png">
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
@@ -29,7 +29,7 @@
   </feature>
 
   <feature name="Primary Road">
-    <icon background="red">
+    <icon>
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
@@ -39,7 +39,7 @@
   </feature>
 
   <feature name="Secondary Road">
-    <icon background="orange">
+    <icon>
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
@@ -49,7 +49,7 @@
   </feature>
 
   <feature name="Tertiary Road">
-    <icon background="yellow">
+    <icon>
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="10pt">${ref}</font>
     </icon>
@@ -59,7 +59,7 @@
   </feature>
 
   <feature name="Residential Road">
-    <icon background="white" image="features/highway__residential.png">
+    <icon image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="6pt">${postal_code}</font>
     </icon>
@@ -69,7 +69,7 @@
   </feature>
 
   <feature name="Road">
-    <icon background="white" image="features/highway__unclassified.png">
+    <icon image="features/highway__unclassified.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -78,7 +78,7 @@
   </feature>
 
   <feature name="Service Road">
-    <icon background="white" image="features/highway__service.png">
+    <icon image="features/highway__service.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
     <description>
@@ -90,7 +90,7 @@
   </feature>
 
   <feature name="Unknown Road">
-    <icon background="gray">
+    <icon>
       <font size="10pt">This road has not been given a specific type. It's a road, and that's all that's known.</font>
     </icon>
 
@@ -99,7 +99,7 @@
   </feature>
 
   <feature name="Living Street">
-    <icon background="white">
+    <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -108,7 +108,7 @@
   </feature>
 
   <feature name="Track">
-    <icon background="white">
+    <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -117,7 +117,7 @@
   </feature>
 
   <feature name="Pedestrian Road">
-    <icon background="white">
+    <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -130,7 +130,8 @@
   <!-- Paths -->
 
   <feature name="Cycle Path">
-    <icon background="white">
+    <icon>
+      ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
 
     <line/>
@@ -138,7 +139,8 @@
   </feature>
 
   <feature name="Foot Path">
-    <icon background="white">
+    <icon>
+      ${name} <i>${ref}</i>
     </icon>
 
     <line/>
@@ -146,7 +148,7 @@
   </feature>
 
   <feature name="Bridleway">
-    <icon background="white">
+    <icon>
     </icon>
 
     <line/>
@@ -154,7 +156,7 @@
   </feature>
 
   <feature name="Steps">
-    <icon background="white">
+    <icon>
     </icon>
 
     <line/>
@@ -270,7 +272,7 @@
   <!-- building -->
 
   <feature name="Building">
-    <icon background="white">
+    <icon>
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>

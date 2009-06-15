@@ -38,8 +38,13 @@ package net.systemeD.halcyon {
 			this.way = way;
 			this.map = map;
             init();
+            way.addEventListener(Connection.TAG_CHANGE, wayTagChanged);
 		}
 		
+        private function wayTagChanged(event:TagEvent):void {
+            redraw();
+        }
+
 		private function init():void {
 			recalculate();
 			redraw();

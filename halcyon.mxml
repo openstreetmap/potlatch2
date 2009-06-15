@@ -8,12 +8,14 @@
 
     <mx:HDividedBox width="100%" height="100%">
 
-      <mx:VBox height="100%" width="25%">
-        <mx:Button label="+" click="theMap.zoomIn();"/>
-        <mx:Button label="-" click="theMap.zoomOut();"/>
+      <mx:VBox height="100%" width="25%" horizontalAlign="right">
+        <mx:HBox>
+          <mx:Button label="-" click="theMap.zoomOut();"/>
+          <mx:Button label="+" click="theMap.zoomIn();"/>
+        </mx:HBox>
         <halcyon:TagViewer width="100%" height="100%" id="tagViewer"/>
       </mx:VBox>
-      <mx:Canvas id="map_area" width="75%"/>
+      <mx:Canvas id="map_area" width="75%" height="100%" resize="onResizeMap()"/>
     </mx:HDividedBox>
 
 	<mx:Script><![CDATA[
@@ -30,14 +32,17 @@
 
 		private function initApp():void {
 
+			Globals.vars.map_area=map_area;
 			Globals.vars.root=map_area.rawChildren;			// set up global reference to root level
 			var _root:IChildList=map_area.rawChildren;		// convenient local shorthand
 
 			// map backdrop object
+            var w:uint = map_area.width;
+            var h:uint = map_area.height;
             var b:Sprite = new Sprite();
-            b.height=200; b.width=200;
+            b.height=h; b.width=w;
             b.graphics.beginFill(0xFFFFEA,100); 
-            b.graphics.drawRect(0,0,200,200); 
+            b.graphics.drawRect(0,0,w,h); 
             b.graphics.endFill();
 			_root.addChild(b);
 
@@ -45,23 +50,24 @@
 			theMap=new Map();
 			theMap.backdrop=b;
 			_root.addChild(theMap);
+            theMap.updateSize(w, h);
 
 			// add mask for map
 			var s:Sprite=new Sprite();
 			s.graphics.beginFill(0xFFFFFF,100);
-			s.graphics.drawRect(0,0,200,200);
+			s.graphics.drawRect(0,0,w,h);
 			s.graphics.endFill();
 			_root.addChild(s);
 			theMap.mask=s;
 
 			// add crosshair
-			s=new Sprite();
+			/*s=new Sprite();
 			s.graphics.lineStyle(2,0);
 			s.graphics.moveTo(stage.stageWidth/2-20,stage.stageHeight/2);
 			s.graphics.lineTo(stage.stageWidth/2+20,stage.stageHeight/2);
 			s.graphics.moveTo(stage.stageWidth/2,stage.stageHeight/2-20);
 			s.graphics.lineTo(stage.stageWidth/2,stage.stageHeight/2+20);
-			_root.addChild(s);
+			_root.addChild(s);*/
 
 			// mouse-up handler attached to stage, so the user can release outside the map
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
@@ -84,10 +90,16 @@
 			t.multiline=true;
 			_root.addChild(t);
 			Globals.vars.debug=t;
+            t.visible = false;
 
             var controller:EditController = new EditController(theMap, tagViewer);
             controller.setActive();
 		}
+
+        public function onResizeMap():void {
+            if ( theMap != null )
+                theMap.updateSize(map_area.width, map_area.height);
+        }
 
 	]]></mx:Script>
 
