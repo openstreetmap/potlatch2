@@ -17,7 +17,7 @@ This is a live OSM renderer written in AS3 which will one day grow into a beauti
 Compiling:
 * fcsh
   - launches the Flex Compiler SHell
-* mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml 
+* mxmlc -target-player=10.0.0 -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml 
   - compile for the first time
 * compile 1 
   - compile each subsequent time (_much_ faster than using mxmlc every time)
@@ -31,7 +31,7 @@ Running:
 
 === Some other stuff you might need to know ===
 
-* The as3yaml library has been patched a bit to actually make it work.
+* The as3yaml library has been patched a bit to actually make it work. It will nonetheless spit out 300 warnings on Flex SDK 3.3.
 * The stuff about -managers=flash.fonts.AFEFontManager is probably only required on OS X.
 * Flex compiler runs at about the speed of a tortoise soaked in molasses which happens also to be dead.
 
