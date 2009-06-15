@@ -10,6 +10,7 @@
 
       <mx:VBox height="100%" width="25%" horizontalAlign="right">
         <mx:HBox>
+          <mx:Button label="Export" click="theMap.export();"/>
           <mx:Button label="-" click="theMap.zoomOut();"/>
           <mx:Button label="+" click="theMap.zoomIn();"/>
         </mx:HBox>
@@ -90,7 +91,7 @@
 			t.multiline=true;
 			_root.addChild(t);
 			Globals.vars.debug=t;
-            t.visible = false;
+            t.visible = true;
 
             var controller:EditController = new EditController(theMap, tagViewer);
             controller.setActive();

@@ -5,12 +5,17 @@ package net.systemeD.halcyon {
 	import flash.display.Sprite;
 	import flash.display.Shape;
 	import flash.display.Stage;
+	import flash.display.BitmapData;
+	import flash.utils.ByteArray;
 	import flash.events.*;
+	import flash.net.FileReference;
 	import flash.net.*;
 
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
+
+	import com.adobe.images.JPGEncoder;
 
     public class Map extends Sprite {
 
@@ -259,6 +264,24 @@ package net.systemeD.halcyon {
 			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
 
+		// ------------------------------------------------------------------------------------------
+		// Export (experimental)
+		// ** just a bit of fun for now!
+		// really needs to take a bbox, and make sure that the image is correctly cropped/resized 
+		// to that area (will probably require creating a new DisplayObject with a different origin
+		// and mask)
+		
+		public function export():void {
+			addDebug("size is "+this.width+","+this.height);
+			var jpgSource:BitmapData = new BitmapData(800,800); // (this.width, this.height);
+			jpgSource.draw(this);
+			var jpgEncoder:JPGEncoder = new JPGEncoder(85);
+			var jpgStream:ByteArray = jpgEncoder.encode(jpgSource);
+			var fileRef:FileReference = new FileReference();
+			fileRef.save(jpgStream,'map.jpeg');
+		}
+
+
 
 		// ==========================================================================================
 		// Events
@@ -295,6 +318,7 @@ package net.systemeD.halcyon {
 			if (event.keyCode==73) { this.zoomIn(); }			// I - zoom in
 			if (event.keyCode==79) { this.zoomOut(); } 			// O - zoom out
 			if (event.keyCode==76) { this.reportPosition(); }	// L - report lat/long
+			if (event.keyCode==69) { this.export(); }			// E - export
 		}
 
 		public function connectionError(err:Object=null): void {

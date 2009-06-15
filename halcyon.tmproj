@@ -2,27 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>net/systemeD/halcyon/styleparser/ShapeStyle.as</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>net/systemeD/halcyon/Map.as</string>
 			<key>lastUsed</key>
-			<date>2009-06-05T16:08:57Z</date>
+			<date>2009-06-15T21:57:23Z</date>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>net/systemeD/halcyon/MapEvent.as</string>
+			<key>lastUsed</key>
+			<date>2009-06-09T06:03:24Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>net/systemeD/halcyon/POI.as</string>
 			<key>lastUsed</key>
-			<date>2009-06-05T15:58:51Z</date>
+			<date>2009-06-08T14:44:42Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>net/systemeD/halcyon/WayUI.as</string>
 			<key>lastUsed</key>
-			<date>2009-06-05T15:58:51Z</date>
+			<date>2009-06-15T21:57:22Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -52,50 +58,16 @@
 			<key>filename</key>
 			<string>halcyon.mxml</string>
 			<key>lastUsed</key>
-			<date>2009-06-04T15:10:55Z</date>
+			<date>2009-06-08T16:41:45Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
-	<dict>
-		<key>net/systemeD/halcyon/Map.as</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>78</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>56</integer>
-		</dict>
-		<key>net/systemeD/halcyon/styleparser/ShapeStyle.as</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>net/systemeD/halcyon/Map.as</string>
-		<string>net/systemeD/halcyon/styleparser/ShapeStyle.as</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{261, 43}, {836, 630}}</string>
+	<string>{{313, 106}, {918, 472}}</string>
 </dict>
 </plist>
