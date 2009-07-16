@@ -6,16 +6,18 @@ package net.systemeD.halcyon {
 	import flash.display.Shape;
 	import flash.display.Stage;
 	import flash.display.BitmapData;
+	import flash.display.LoaderInfo;
 	import flash.utils.ByteArray;
 	import flash.events.*;
-	import flash.net.FileReference;
 	import flash.net.*;
 
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
 
-	import com.adobe.images.JPGEncoder;
+//	for experimental export function:
+//	import flash.net.FileReference;
+//	import com.adobe.images.JPGEncoder;
 
     public class Map extends Sprite {
 
@@ -62,14 +64,16 @@ package net.systemeD.halcyon {
 		private var lastxmouse:Number;					//  |
 		private var lastymouse:Number;					//  |
 		
+		public var initparams:Object;					// object containing 
+
 		public var backdrop:Object;						// reference to backdrop sprite
 		
-		public var connection:Connection;			// server connection
+		public var connection:Connection;				// server connection
 
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function
 
-        public function Map() {
+        public function Map(initparams:Object) {
 
 			// Set up layering
 			// [layer][2]			- names
@@ -90,7 +94,8 @@ package net.systemeD.halcyon {
 			s=getPaintSprite(); addChild(s);			// 11 - POIs
 			s=getPaintSprite(); addChild(s);			// 12 - shields and POI names
 
-			connection= Connection.getConnection();
+			this.initparams=initparams;
+			connection = Connection.getConnection(initparams['api'],initparams['policy'],initparams['connection']);
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
             connection.addEventListener(Connection.NEW_POI, newPOICreated);
 			connection.getEnvironment(new Responder(gotEnvironment,connectionError));
@@ -104,15 +109,25 @@ package net.systemeD.halcyon {
         }
 
 		public function gotEnvironment(r:Object):void {
-			init(53.09465,-2.56495,17);
+			if (initparams.hasOwnProperty('lat')) {
+				// parameters sent from HTML
+				init(initparams['lat'],
+					 initparams['lon'],
+					 initparams['zoom'],
+					 initparams['style']);
+
+			} else {
+				// somewhere innocuous
+				init(53.09465,-2.56495,17,"test.yaml?d="+Math.random());
+			}
 		}
 
 		// ------------------------------------------------------------------------------------------
 		// Initialise map at a given lat/lon
 
-        public function init(startlat:Number,startlon:Number,startscale:uint):void {
+        public function init(startlat:Number,startlon:Number,startscale:uint,style:String):void {
 
-			ruleset.load("test.yaml?d="+Math.random());
+			ruleset.load(style);
 //			rules.initExample();		// initialise dummy rules
 
 			//updateSize();
@@ -227,6 +242,7 @@ package net.systemeD.halcyon {
         public function wayMouseEvent(event:MouseEvent, way:Way):void {
             if ( mapController != null )
                 mapController.entityMouseEvent(event, way);
+				
         }
 
 		// ------------------------------------------------------------------------------------------
@@ -270,7 +286,7 @@ package net.systemeD.halcyon {
 		// really needs to take a bbox, and make sure that the image is correctly cropped/resized 
 		// to that area (will probably require creating a new DisplayObject with a different origin
 		// and mask)
-		
+/*		
 		public function export():void {
 			addDebug("size is "+this.width+","+this.height);
 			var jpgSource:BitmapData = new BitmapData(800,800); // (this.width, this.height);
@@ -278,10 +294,10 @@ package net.systemeD.halcyon {
 			var jpgEncoder:JPGEncoder = new JPGEncoder(85);
 			var jpgStream:ByteArray = jpgEncoder.encode(jpgSource);
 			var fileRef:FileReference = new FileReference();
-			fileRef.save(jpgStream,'map.jpeg');
+//			fileRef.save(jpgStream,'map.jpeg');
 		}
 
-
+*/
 
 		// ==========================================================================================
 		// Events
@@ -295,6 +311,7 @@ package net.systemeD.halcyon {
 		}
         
 		public function mouseUpHandler(event:MouseEvent):void {
+addDebug("up");
 			if (!dragging) { return; }
 			dragging=false;
 			updateCoords(x,y);
@@ -318,7 +335,7 @@ package net.systemeD.halcyon {
 			if (event.keyCode==73) { this.zoomIn(); }			// I - zoom in
 			if (event.keyCode==79) { this.zoomOut(); } 			// O - zoom out
 			if (event.keyCode==76) { this.reportPosition(); }	// L - report lat/long
-			if (event.keyCode==69) { this.export(); }			// E - export
+//			if (event.keyCode==69) { this.export(); }			// E - export
 		}
 
 		public function connectionError(err:Object=null): void {
@@ -329,6 +346,8 @@ package net.systemeD.halcyon {
 		// Debugging
 		
 		public function addDebug(text:String):void {
+			if (!Globals.vars.hasOwnProperty('debug')) return;
+			if (!Globals.vars.debug.visible) return;
 			Globals.vars.debug.appendText(text+"\n");
 			Globals.vars.debug.scrollV=Globals.vars.debug.maxScrollV;
 		}

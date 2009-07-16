@@ -69,6 +69,10 @@ package net.systemeD.halcyon.connection {
             return copy;
         }
 
+		public function getType():String {
+			return '';
+		}
+
     }
 
 }

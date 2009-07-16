@@ -32,7 +32,7 @@ package net.systemeD.halcyon.connection {
 		}
 
 		override public function getEnvironment(responder:Responder):void {
-			readConnection.call("getpresets",responder,"en");
+			readConnection.call("getpresets",responder,null,"en");
 		}
 		
 		override public function loadBbox(left:Number,right:Number,

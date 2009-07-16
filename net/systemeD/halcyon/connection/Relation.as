@@ -2,6 +2,7 @@ package net.systemeD.halcyon.connection {
 
     public class Relation extends Entity {
         private var members:Array;
+		public static var entity_type:String = 'relation';
 
         public function Relation(id:Number, version:uint, tags:Object, members:Array) {
             super(id, version, tags);
@@ -32,6 +33,10 @@ package net.systemeD.halcyon.connection {
         public function removeMember(index:uint):void {
             members.splice(index, 1);
         }
+
+		public override function getType():String {
+			return 'relation';
+		}
     }
 
 }

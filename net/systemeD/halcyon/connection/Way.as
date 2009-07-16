@@ -2,6 +2,7 @@ package net.systemeD.halcyon.connection {
 
     public class Way extends Entity {
         private var nodes:Array;
+		public static var entity_type:String = 'way';
 
         public function Way(id:Number, version:uint, tags:Object, nodes:Array) {
             super(id, version, tags);
@@ -36,6 +37,10 @@ package net.systemeD.halcyon.connection {
 
 		public function isArea():Boolean {
 			return (nodes[0].id==nodes[nodes.length-1].id  && nodes.length>2);
+		}
+
+		public override function getType():String {
+			return 'way';
 		}
     }
 

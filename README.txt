@@ -1,8 +1,10 @@
-== Halcyon - ActionScript 3 renderer for Potlatch 2.0 ==
+== Halcyon and Potlatch 2.0 - ActionScript 3 renderer and editor ==
 
-Here's some embryonic unfinished stuff to play with.
+Potlatch 2.0 is the new version of the OpenStreetMap online editor.
 
-This is a live OSM renderer written in AS3 which will one day grow into a beautiful map editor. It's rules-based (like, say, Mapnik) and does dotted lines, text on a path, casing, icons for POIs, all of that.
+Halcyon is its rendering engine. It's rules-based (like, say, Mapnik) and does dotted lines, text on a path, casing, icons for POIs, all of that.
+
+Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex framework.
 
 === What you'll need ===
 
@@ -15,10 +17,14 @@ This is a live OSM renderer written in AS3 which will one day grow into a beauti
 === How to compile and run ===
 
 Compiling:
+
 * fcsh
   - launches the Flex Compiler SHell
-* mxmlc -target-player=10.0.0 -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml 
-  - compile for the first time
+
+* mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml 
+* mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon_viewer.swf /path/to/halcyon_viewer.as
+  - compile Potlatch or Halcyon for the first time
+
 * compile 1 
   - compile each subsequent time (_much_ faster than using mxmlc every time)
 
@@ -26,8 +32,9 @@ Compiling:
   mxmlc -managers=flash.fonts.AFEFontManager -compiler.debug -compiler.verbose-stacktraces -output=halcyon.swf halcyon.mxml
 
 Running:
-* Make sure test.yaml and icons/ are in the same directory as halcyon.swf
-* Open halcyon.swf in your browser
+
+* Move everything from the resources/ directory into the same directory as the SWF
+* Open halcyon.html or potlatch2.html in your browser
 
 === Some other stuff you might need to know ===
 

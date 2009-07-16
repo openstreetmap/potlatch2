@@ -13,7 +13,12 @@ package net.systemeD.halcyon.connection {
         protected static var policyURL:String = "http://127.0.0.1:3000/api/crossdomain.xml";
         protected static var apiBaseURL:String = "http://127.0.0.1:3000/api/0.6/";
 
-        public static function getConnection():Connection {
+        public static function getConnection(api:String,policy:String,conn:String):Connection {
+			
+			policyURL=policy;
+			apiBaseURL=api;
+			CONNECTION_TYPE=conn;
+			
             if ( connectionInstance == null ) {
                 if ( CONNECTION_TYPE == "XML" )
                     connectionInstance = new XMLConnection();
@@ -22,6 +27,10 @@ package net.systemeD.halcyon.connection {
             }
             return connectionInstance;
         }
+
+		public static function getConnectionInstance():Connection {
+            return connectionInstance;
+		}
 
 		public function getEnvironment(responder:Responder):void {}
 
@@ -131,5 +140,4 @@ package net.systemeD.halcyon.connection {
     }
 
 }
-
 

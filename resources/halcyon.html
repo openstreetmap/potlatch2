@@ -1,0 +1,35 @@
+<html>
+
+<!-- Halcyon example embed script -->
+
+<head>
+<title>Halcyon</title>
+<script type="text/javascript" src="swfobject.js"></script>
+</head>
+
+<body>
+
+<div id="map" style="width:800px; height: 600px; border: 1px solid black">
+</div>
+
+<script>
+
+	function respond(event,object,id,attr) {
+		alert (event+": "+object+" "+id+", highway="+attr['highway']);
+	}
+
+	var fo = new SWFObject("halcyon_viewer.swf?d="+Math.round(Math.random()*1000), "map", "100%", "100%", "9", "#FFFFFF");
+	fo.addVariable("lat",51.875);
+	fo.addVariable("lon",-1.482);
+	fo.addVariable("zoom",16);
+	fo.addVariable("api","http://www.openstreetmap.org/api/0.6/");
+	fo.addVariable("policy","http://www.openstreetmap.org/api/crossdomain.xml");
+	fo.addVariable("connection","AMF");
+	fo.addVariable("responder","respond");
+	fo.addVariable("style","test.yaml");
+	fo.write("map");
+
+</script>
+
+</body>
+</html>

@@ -29,8 +29,8 @@ package net.systemeD.halcyon {
 			antiAliasType: AntiAliasType.ADVANCED,
 			gridFitType: GridFitType.NONE
 		};
-		[Embed(source="fonts/DejaVuSans.ttf", fontFamily="DejaVu", fontWeight="normal", mimeType="application/x-font-truetype")]
-		public static var DejaVu:Class;
+//		[Embed(source="fonts/DejaVuSans.ttf", fontFamily="DejaVu", fontWeight="normal", mimeType="application/x-font-truetype")]
+//		public static var DejaVu:Class;
 		public var nameformat:TextFormat;
 
 

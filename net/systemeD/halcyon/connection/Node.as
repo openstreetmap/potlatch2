@@ -39,6 +39,10 @@ package net.systemeD.halcyon.connection {
         public static function lat2latp(lat:Number):Number {
             return 180/Math.PI * Math.log(Math.tan(Math.PI/4+lat*(Math.PI/180)/2));
         }
+
+		public override function getType():String {
+			return 'node';
+		}
     }
 
 }

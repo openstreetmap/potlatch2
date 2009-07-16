@@ -10,7 +10,6 @@
 
       <mx:VBox height="100%" width="25%" horizontalAlign="right">
         <mx:HBox>
-          <mx:Button label="Export" click="theMap.export();"/>
           <mx:Button label="-" click="theMap.zoomOut();"/>
           <mx:Button label="+" click="theMap.zoomIn();"/>
         </mx:HBox>
@@ -48,7 +47,7 @@
 			_root.addChild(b);
 
 			// add map
-			theMap=new Map();
+			theMap=new Map(this.loaderInfo.parameters);
 			theMap.backdrop=b;
 			_root.addChild(theMap);
             theMap.updateSize(w, h);
@@ -87,7 +86,7 @@
 
 			// add debug field
 			var t:TextField=new TextField();
-			t.width=400; t.height=100; t.border=true; 
+			t.width=400; t.height=100; t.border=true;
 			t.multiline=true;
 			_root.addChild(t);
 			Globals.vars.debug=t;
