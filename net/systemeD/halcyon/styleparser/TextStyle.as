@@ -23,7 +23,7 @@ package net.systemeD.halcyon.styleparser {
 		public var sublayer:uint=0;
 
 		public function getTextFormat():TextFormat {
-			return new TextFormat(font_name   ? font_name : "_sans",
+			return new TextFormat(font_name   ? font_name : "DejaVu",
 								  text_size   ? text_size : 8,
 								  text_colour ? text_colour: 0,
 								  font_bold   ? font_bold : false,
@@ -41,7 +41,7 @@ package net.systemeD.halcyon.styleparser {
 			var tf:TextField = new TextField();
 			var n:TextFormat = getTextFormat();
 			n.align = "center";
-//			tf.embedFonts = true;
+			tf.embedFonts = true;
 			tf.defaultTextFormat = n;
 			tf.text = a;
 			if (text_width) {

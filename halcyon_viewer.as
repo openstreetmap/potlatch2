@@ -27,7 +27,7 @@ package {
 			t.multiline=true;
 			addChild(t);
 			Globals.vars.debug=t;
-			t.visible = true;
+			t.visible = false;
 
 			theMap = new Map(this.loaderInfo.parameters);
             theMap.updateSize(stage.stageWidth, stage.stageHeight);

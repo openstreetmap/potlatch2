@@ -18,7 +18,7 @@ package net.systemeD.halcyon {
 		private var iconname:String='';				// name of icon
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
-			embedFonts: true,
+//			embedFonts: true,
 			antiAliasType: AntiAliasType.ADVANCED,
 			gridFitType: GridFitType.NONE
 		};

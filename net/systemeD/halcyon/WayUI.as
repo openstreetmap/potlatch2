@@ -29,8 +29,6 @@ package net.systemeD.halcyon {
 			antiAliasType: AntiAliasType.ADVANCED,
 			gridFitType: GridFitType.NONE
 		};
-//		[Embed(source="fonts/DejaVuSans.ttf", fontFamily="DejaVu", fontWeight="normal", mimeType="application/x-font-truetype")]
-//		public static var DejaVu:Class;
 		public var nameformat:TextFormat;
 
 
@@ -316,10 +314,10 @@ package net.systemeD.halcyon {
 
 		private function rotatedLetter(char:String, t:Number, w:Number, h:Number, a:Number, o:Number):TextField {
 			var tf:TextField = new TextField();
-			tf.embedFonts = true;
             tf.mouseEnabled = false;
             tf.mouseWheelEnabled = false;
 			tf.defaultTextFormat = nameformat;
+			tf.embedFonts = true;
 			tf.text = char;
 			tf.width = tf.textWidth+4;
 			tf.height = tf.textHeight+4;

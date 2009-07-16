@@ -2,11 +2,13 @@ package net.systemeD.halcyon {
 
 	import flash.text.TextField;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.display.Shape;
 	import flash.display.Stage;
 	import flash.display.BitmapData;
 	import flash.display.LoaderInfo;
+	import flash.text.Font;
 	import flash.utils.ByteArray;
 	import flash.events.*;
 	import flash.net.*;
@@ -99,7 +101,6 @@ package net.systemeD.halcyon {
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
             connection.addEventListener(Connection.NEW_POI, newPOICreated);
 			connection.getEnvironment(new Responder(gotEnvironment,connectionError));
-
         }
 
         private function getPaintSprite():Sprite {
@@ -109,6 +110,15 @@ package net.systemeD.halcyon {
         }
 
 		public function gotEnvironment(r:Object):void {
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, gotFont);
+			loader.load(new URLRequest("FontLibrary.swf"));
+		}
+		
+		public function gotFont(r:Event):void {
+			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
+			Font.registerFont(FontLibrary.DejaVu);
+
 			if (initparams.hasOwnProperty('lat')) {
 				// parameters sent from HTML
 				init(initparams['lat'],
@@ -311,7 +321,6 @@ package net.systemeD.halcyon {
 		}
         
 		public function mouseUpHandler(event:MouseEvent):void {
-addDebug("up");
 			if (!dragging) { return; }
 			dragging=false;
 			updateCoords(x,y);
