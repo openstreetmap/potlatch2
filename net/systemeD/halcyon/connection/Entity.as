@@ -6,11 +6,13 @@ package net.systemeD.halcyon.connection {
         private var _id:Number;
         private var _version:uint;
         private var tags:Object = {};
+        private var modified:Boolean = false;
 
         public function Entity(id:Number, version:uint, tags:Object) {
             this._id = id;
             this._version = version;
             this.tags = tags;
+            modified = id < 0;
         }
 
         public function get id():Number {
@@ -38,6 +40,7 @@ package net.systemeD.halcyon.connection {
                     delete tags[key];
                 else
                     tags[key] = value;
+                modified = true;
                 dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, key, key, old, value));
             }
         }
@@ -47,6 +50,7 @@ package net.systemeD.halcyon.connection {
             if ( oldKey != newKey ) {
                 delete tags[oldKey];
                 tags[newKey] = value;
+                modified = true;
                 dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, oldKey, newKey, value, value));
             }
         }
@@ -69,9 +73,21 @@ package net.systemeD.halcyon.connection {
             return copy;
         }
 
-		public function getType():String {
-			return '';
-		}
+        public function get isDirty():Boolean {
+            return modified;
+        }
+
+        public function markClean():void {
+            modified = false;
+        }
+
+        protected function markDirty():void {
+            modified = true;
+        }
+
+        public function getType():String {
+            return '';
+        }
 
     }
 

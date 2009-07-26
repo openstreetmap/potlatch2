@@ -2,9 +2,30 @@
 
 <mapFeatures>
 
+  <!-- Categories -->
+  
+  <category name="Roads" id="roads">
+  </category>
+
+  <category name="Paths" id="paths">
+  </category>
+
+  <category name="Transport" id="transport">
+  </category>
+
+  <category name="Water" id="water">
+  </category>
+
+  <category name="Natural" id="natural">
+  </category>
+
+  <category name="Admin" id="admin">
+  </category>
+
   <!-- Roads -->
 
   <feature name="Motorway">
+    <category>roads</category>
     <icon image="features/highway__motorway.png">
       <font size="16pt"><b>${ref}</b></font><br/>
     </icon>
@@ -14,11 +35,13 @@
   </feature>
 
   <feature name="Motorway link" icon="features/motorway_link.png">
+    <category>roads</category>
     <line/>
     <tag k="highway" v="motorway_link"/>
   </feature>
 
   <feature name="Trunk Road">
+    <category>roads</category>
     <icon image="features/highway__trunk.png">
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
@@ -29,6 +52,7 @@
   </feature>
 
   <feature name="Primary Road">
+    <category>roads</category>
     <icon>
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
@@ -39,6 +63,7 @@
   </feature>
 
   <feature name="Secondary Road">
+    <category>roads</category>
     <icon>
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
@@ -49,6 +74,7 @@
   </feature>
 
   <feature name="Tertiary Road">
+    <category>roads</category>
     <icon>
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="10pt">${ref}</font>
@@ -59,6 +85,7 @@
   </feature>
 
   <feature name="Residential Road">
+    <category>roads</category>
     <icon image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="6pt">${postal_code}</font>
@@ -69,6 +96,7 @@
   </feature>
 
   <feature name="Road">
+    <category>roads</category>
     <icon image="features/highway__unclassified.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -78,6 +106,7 @@
   </feature>
 
   <feature name="Service Road">
+    <category>roads</category>
     <icon image="features/highway__service.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -90,6 +119,7 @@
   </feature>
 
   <feature name="Unknown Road">
+    <category>roads</category>
     <icon>
       <font size="10pt">This road has not been given a specific type. It's a road, and that's all that's known.</font>
     </icon>
@@ -99,6 +129,7 @@
   </feature>
 
   <feature name="Living Street">
+    <category>roads</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -108,6 +139,7 @@
   </feature>
 
   <feature name="Track">
+    <category>roads</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -117,6 +149,7 @@
   </feature>
 
   <feature name="Pedestrian Road">
+    <category>roads</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -130,6 +163,7 @@
   <!-- Paths -->
 
   <feature name="Cycle Path">
+    <category>paths</category>
     <icon>
       ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
@@ -139,6 +173,7 @@
   </feature>
 
   <feature name="Foot Path">
+    <category>paths</category>
     <icon>
       ${name} <i>${ref}</i>
     </icon>
@@ -148,6 +183,7 @@
   </feature>
 
   <feature name="Bridleway">
+    <category>paths</category>
     <icon>
     </icon>
 
@@ -156,6 +192,7 @@
   </feature>
 
   <feature name="Steps">
+    <category>paths</category>
     <icon>
     </icon>
 
@@ -194,6 +231,7 @@
   <!-- Waterway -->
 
   <feature name="Stream">
+    <category>water</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -203,6 +241,7 @@
   </feature>
 
   <feature name="River">
+    <category>water</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -212,6 +251,7 @@
   </feature>
 
   <feature name="Canal">
+    <category>water</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -221,6 +261,7 @@
   </feature>
 
   <feature name="Dam">
+    <category>water</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -233,6 +274,7 @@
   <!-- Railways -->
 
   <feature name="Railway Line">
+    <category>transport</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -242,6 +284,7 @@
   </feature>
 
   <feature name="Tram Line">
+    <category>transport</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -251,21 +294,13 @@
   </feature>
 
   <feature name="Subway Line">
+    <category>transport</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
     <line/>
     <tag k="railway" v="subway"/>
-  </feature>
-
-  <feature name="Tram Line">
-    <icon>
-      <font size="14pt"><b>${name}</b></font>
-    </icon>
-
-    <line/>
-    <tag k="railway" v="tram"/>
   </feature>
 
 

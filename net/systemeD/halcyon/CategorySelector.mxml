@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:halcyon="net.systemeD.halcyon.*">
+
+  <mx:HBox horizontalGap="0"> 
+  <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical"/>
+  <mx:ViewStack id="categoryStack" width="100%" height="100%">
+      <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().categories}">
+          <mx:VBox label="{catRep.currentItem.name}">
+          <mx:TileList dataProvider="{catRep.currentItem.features}"
+                       width="100%" height="100%" change="itemSelected(event);">
+              <mx:itemRenderer>
+                  <mx:Component>
+                      <mx:VBox width="100" height="75"
+                          horizontalScrollPolicy="off" verticalScrollPolicy="off"
+                          horizontalAlign="center" verticalGap="0">
+                          <mx:Image source="{data.image}" height="100%" verticalAlign="middle"/>
+                          <mx:Text text="{data.name}"/>
+                      </mx:VBox>
+                  </mx:Component>
+              </mx:itemRenderer>
+          </mx:TileList>
+          </mx:VBox>
+      </mx:Repeater>
+  </mx:ViewStack>
+  </mx:HBox>
+  
+  <mx:Label id="hoverInfo" text="Hover Info goes here"/>
+  
+  <mx:Script><![CDATA[
+      import net.systemeD.halcyon.connection.*;
+      import net.systemeD.halcyon.mapfeatures.*;
+
+      import mx.controls.*;
+      
+      private var _selectedType:Feature;
+      
+      [Bindable(event="selectedType")]
+      public function get selectedType():Feature {
+          return _selectedType;
+      }
+      
+      private function itemSelected(event:Event):void {
+          _selectedType = Feature(TileList(event.currentTarget).selectedItem);
+          dispatchEvent(new Event("selectedType"));
+      }
+  ]]></mx:Script>
+</mx:VBox>
+
