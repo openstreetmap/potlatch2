@@ -125,7 +125,7 @@
     </icon>
 
     <line/>
-    <tag k="highway" v="tertiary"/>
+    <tag k="highway" v="road"/>
   </feature>
 
   <feature name="Living Street">

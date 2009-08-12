@@ -8,11 +8,13 @@ package net.systemeD.halcyon.mapfeatures {
         private var _name:String;
         private var _id:String;
         private var _features:Array;
+        private var _index:uint;
 
-        public function Category(mapFeatures:MapFeatures, name:String, id:String) {
+        public function Category(mapFeatures:MapFeatures, name:String, id:String, globalIndex:uint) {
             this.mapFeatures = mapFeatures;
             this._name = name;
             this._id = id;
+            this._index = globalIndex;
             
             _features = new Array();
             for each( var feature:Feature in mapFeatures.features ) {
@@ -23,6 +25,10 @@ package net.systemeD.halcyon.mapfeatures {
 
         public function get id():String {
             return _id;
+        }
+        
+        public function get index():uint {
+            return _index;
         }
 
         [Bindable(event="categoryChange")]

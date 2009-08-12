@@ -40,12 +40,12 @@ package net.systemeD.halcyon.mapfeatures {
             
             _features = new Array();
             for each(var feature:XML in xml.feature) {
-                _features.push(new Feature(feature));
+                _features.push(new Feature(this, feature));
             }            
             _categories = new Array();
             for each(var catXML:XML in xml.category) {
                 if ( catXML.child("category").length() == 0 )
-                  _categories.push(new Category(this, catXML.@name, catXML.@id));
+                  _categories.push(new Category(this, catXML.@name, catXML.@id, _categories.length));
             }
             dispatchEvent(new Event("featuresLoaded"));
         }

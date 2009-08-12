@@ -10,7 +10,8 @@ package net.systemeD.halcyon.mapfeatures {
         private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
         private var _tags:Array;
 
-        public function Feature(_xml:XML) {
+        public function Feature(mapFeatures:MapFeatures, _xml:XML) {
+            this.mapFeatures = mapFeatures;
             this._xml = _xml;
             _tags = new Array();
             
@@ -69,6 +70,14 @@ package net.systemeD.halcyon.mapfeatures {
         
         public function get tags():Array {
             return _tags;
+        }
+        
+        public function findFirstCategory():Category {
+            for each( var cat:Category in mapFeatures.categories ) {
+                if ( isInCategory(cat.id) )
+                    return cat;
+            }
+            return null;
         }
     }
 }

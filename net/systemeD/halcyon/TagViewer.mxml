@@ -86,6 +86,7 @@
           var txt:String = feature.htmlDetails(entity);
           iconText.htmlText = txt;
           popupChange.label = feature.name;
+          tw.setSelectedFeature(feature);
       }
 
       private function blankFeatureIcon(entity:Entity):void {
@@ -94,6 +95,7 @@
                "<i>Nothing selected</i>" :
                "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
           popupChange.label = "unknown";
+          tw.setSelectedFeature(null);
       }
 
       private function checkAdvanced():void {
@@ -179,19 +181,22 @@
           if ( selectedEntity == null )
               return;
 
+          var newFeature:Feature = tw.selectedType;
+          
           // remove tags from the current feature
           if ( feature != null ) {
-              for each( var tag:Object in feature.tags ) {
-                  selectedEntity.setTag(tag["k"], null);
+              for each( var oldtag:Object in feature.tags ) {
+                  selectedEntity.setTag(oldtag["k"], null);
               }
           }
           
           // set tags for new feature
-          for each( var tag:Object in tw.selectedType.tags ) {
-              selectedEntity.setTag(tag["k"], tag["v"]);
+          if ( newFeature != null ) {
+              for each( var newtag:Object in newFeature.tags ) {
+                  selectedEntity.setTag(newtag["k"], newtag["v"]);
+              }
           }
           
-          trace("w000t "+tw.selectedType);
           popupChange.close();
       }
   ]]></mx:Script>

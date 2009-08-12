@@ -7,7 +7,7 @@ package net.systemeD.halcyon.connection {
 
 	public class Connection extends EventDispatcher {
 
-        private static var CONNECTION_TYPE:String = "AMF";
+        private static var CONNECTION_TYPE:String = "XML";
         private static var connectionInstance:Connection = null;
 
         protected static var policyURL:String = "http://127.0.0.1:3000/api/crossdomain.xml";
@@ -15,9 +15,12 @@ package net.systemeD.halcyon.connection {
 
         public static function getConnection(api:String,policy:String,conn:String):Connection {
 			
-			policyURL=policy;
-			apiBaseURL=api;
-			CONNECTION_TYPE=conn;
+			if ( policy != null )
+			    policyURL=policy;
+			if ( api != null )
+			    apiBaseURL=api;
+			if ( conn != null )
+			    CONNECTION_TYPE=conn;
 			
             if ( connectionInstance == null ) {
                 if ( CONNECTION_TYPE == "XML" )

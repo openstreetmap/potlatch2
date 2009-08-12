@@ -119,7 +119,7 @@ package net.systemeD.halcyon {
 			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
 			Font.registerFont(FontLibrary.DejaVu);
 
-			if (initparams.hasOwnProperty('lat')) {
+			if (initparams['lat'] != null) {
 				// parameters sent from HTML
 				init(initparams['lat'],
 					 initparams['lon'],

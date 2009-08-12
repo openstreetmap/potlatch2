@@ -5,11 +5,13 @@
 
   <mx:HBox horizontalGap="0"> 
   <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical"/>
-  <mx:ViewStack id="categoryStack" width="100%" height="100%">
+  <mx:ViewStack id="categoryStack" width="100%" height="100%"
+      creationComplete="setSelectedFeature(_selectedType);">
       <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().categories}">
           <mx:VBox label="{catRep.currentItem.name}">
           <mx:TileList dataProvider="{catRep.currentItem.features}"
-                       width="100%" height="100%" change="itemSelected(event);">
+                       width="100%" height="100%" change="itemSelected(event);"
+                       creationComplete="ensureSelection();">
               <mx:itemRenderer>
                   <mx:Component>
                       <mx:VBox width="100" height="75"
@@ -33,7 +35,9 @@
       import net.systemeD.halcyon.mapfeatures.*;
 
       import mx.controls.*;
+      import mx.containers.*;
       
+      private var settingSelection:Boolean = false;
       private var _selectedType:Feature;
       
       [Bindable(event="selectedType")]
@@ -43,8 +47,66 @@
       
       private function itemSelected(event:Event):void {
           _selectedType = Feature(TileList(event.currentTarget).selectedItem);
-          dispatchEvent(new Event("selectedType"));
+          if ( !settingSelection )
+              dispatchEvent(new Event("selectedType"));
       }
+      
+      /**
+       * Set the selected feature displayed in the selector.
+       *
+       * The tab is switched to the first category the feature
+       * is part of.
+       *
+       */
+      public function setSelectedFeature(feature:Feature):void {
+          _selectedType = feature;
+          
+          // check whether stack built yet, if not we get called again when it's made
+          if ( categoryStack == null )
+              return;
+
+          if ( feature != null ) {
+              var primaryCategory:Category = feature.findFirstCategory();
+          
+              // set the tab to the selected item's category
+              categoryStack.selectedIndex = primaryCategory.index;
+          }
+          
+          // finalise the item selection
+          ensureSelection();
+      }
+      
+      /**
+       * Sets the selected feature on each category page to the current
+       * value of _selectedType. If there is no selected feature then all
+       * panels selection will be blanked.
+       *
+       * This function does not change the selected category tab.
+       *
+       * Called both from setSelectedFeature, and category tab completion
+       * (so that newly created tabs work as expected)
+       */   
+      private function ensureSelection():void {
+          settingSelection = true;
+          for (var i:Number = 0; i < categoryStack.numChildren; i++) {
+              var box:Box = Box(categoryStack.getChildAt(i));
+              if ( box == null || box.numChildren == 0 )
+                  continue;
+              var tileList:TileList = TileList(box.getChildAt(0));
+              var category:Category = Category(tileList.getRepeaterItem());
+              var selected:Boolean = false;
+              for each( var catFeature:Feature in category.features ) {
+                  if ( catFeature == _selectedType ) {
+                      tileList.selectedItem = _selectedType;
+                      selected = true;
+                  }
+              }
+              if ( !selected )
+                  tileList.selectedItem = null;
+          }
+          settingSelection = false;
+      }
+      
   ]]></mx:Script>
 </mx:VBox>
 
