@@ -41,7 +41,7 @@
 
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.mapfeatures.*;
+      import net.systemeD.potlatch2.mapfeatures.*;
 
       import mx.collections.*;
       import mx.containers.*;

@@ -2,6 +2,7 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:halcyon="net.systemeD.halcyon.*"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	layout="vertical"
 	horizontalAlign="center" 
 	addedToStage="initApp()">
@@ -13,13 +14,14 @@
           <mx:Button label="-" click="theMap.zoomOut();"/>
           <mx:Button label="+" click="theMap.zoomIn();"/>
         </mx:HBox>
-        <halcyon:TagViewer width="100%" height="100%" id="tagViewer"/>
+        <potlatch2:TagViewer width="100%" height="100%" id="tagViewer"/>
       </mx:VBox>
       <mx:Canvas id="map_area" width="75%" height="100%" resize="onResizeMap()"/>
     </mx:HDividedBox>
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
+		import net.systemeD.potlatch2.*;
 		import flash.system.Security;
 		import flash.net.*;
 		import flash.events.MouseEvent;

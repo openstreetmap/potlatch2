@@ -1,4 +1,6 @@
-package net.systemeD.halcyon {
+package net.systemeD.potlatch2 {
+    import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.MapController;
     import net.systemeD.halcyon.connection.*;
 	import flash.events.*;
 

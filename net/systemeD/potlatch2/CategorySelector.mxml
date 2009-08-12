@@ -32,7 +32,7 @@
   
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.mapfeatures.*;
+      import net.systemeD.potlatch2.mapfeatures.*;
 
       import mx.controls.*;
       import mx.containers.*;

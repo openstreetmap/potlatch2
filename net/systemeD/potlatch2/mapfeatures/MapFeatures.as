@@ -1,4 +1,4 @@
-package net.systemeD.halcyon.mapfeatures {
+package net.systemeD.potlatch2.mapfeatures {
 
     import flash.events.EventDispatcher;
     import flash.events.Event;
