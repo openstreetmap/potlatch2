@@ -7,20 +7,40 @@
 	horizontalAlign="center" 
 	addedToStage="initApp()">
 
+    <mx:Glow id="glowImage" duration="100" 
+        alphaFrom="0.3" alphaTo="1.0" 
+        blurXFrom="0.0" blurXTo="5.0" 
+        blurYFrom="0.0" blurYTo="5.0" 
+        color="0xFF8000"/>
+    <mx:Glow id="unglowImage" duration="100" 
+        alphaFrom="1.0" alphaTo="0.3" 
+        blurXFrom="5.0" blurXTo="0.0" 
+        blurYFrom="5.0" blurYTo="0.0" 
+        color="0xFF8000"/>
+    <mx:WipeLeft id="wipeOut" duration="250"/>
+    <mx:WipeRight id="wipeIn" duration="250"/>
+
     <mx:HDividedBox width="100%" height="100%">
 
       <mx:VBox height="100%" width="25%" horizontalAlign="right">
-        <mx:HBox>
-          <mx:Button label="-" click="theMap.zoomOut();"/>
-          <mx:Button label="+" click="theMap.zoomIn();"/>
-        </mx:HBox>
         <potlatch2:TagViewer width="100%" height="100%" id="tagViewer"/>
       </mx:VBox>
-      <mx:Canvas id="map_area" width="75%" height="100%" resize="onResizeMap()"/>
+      <mx:Canvas width="75%" height="100%">
+        <mx:Canvas id="map_area" resize="onResizeMap()"
+            top="0" left="0" width="100%" height="100%">
+        </mx:Canvas>
+        <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
+            rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
+        <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
+            rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
+        <mx:Label id="dataWorking" text="" right="20" top="3"
+            showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
+      </mx:Canvas>
     </mx:HDividedBox>
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
+		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import flash.system.Security;
 		import flash.net.*;
@@ -96,6 +116,10 @@
 
             var controller:EditController = new EditController(theMap, tagViewer);
             controller.setActive();
+            
+            var conn:Connection = Connection.getConnectionInstance();
+            conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
+            conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
 		}
 
         public function onResizeMap():void {
@@ -103,6 +127,13 @@
                 theMap.updateSize(map_area.width, map_area.height);
         }
 
+        private function onDataStart(event:Event):void {
+            dataWorking.text = event.type == Connection.LOAD_STARTED ? "Loading data..." : "Saving Data...";
+            dataWorking.visible = true;
+        }
+        private function onDataComplete(event:Event):void {
+            dataWorking.visible = false;
+        }
 	]]></mx:Script>
 
 </mx:Application>

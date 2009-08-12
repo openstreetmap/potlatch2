@@ -38,6 +38,7 @@ package net.systemeD.halcyon.connection {
             var mapLoader:URLLoader = new URLLoader();
             mapLoader.addEventListener(Event.COMPLETE, loadedMap);
             mapLoader.load(mapRequest);
+            dispatchEvent(new Event(LOAD_STARTED));
 		}
 
         private function parseTags(tagElements:XMLList):Object {
@@ -48,6 +49,8 @@ package net.systemeD.halcyon.connection {
         }
 
         private function loadedMap(event:Event):void {
+            dispatchEvent(new Event(LOAD_COMPLETED));
+
             var map:XML = new XML(URLLoader(event.target).data);
             var id:Number;
             var version:uint;
