@@ -77,7 +77,9 @@ package net.systemeD.halcyon.connection {
             return modified;
         }
 
-        public function markClean():void {
+        public function markClean(newID:Number, newVersion:uint):void {
+            this._id = newID;
+            this._version = newVersion;
             modified = false;
         }
 

@@ -1,0 +1,17 @@
+
+Application {
+  padding-left: 5;
+  padding-right: 5;
+  padding-top: 5;
+  padding-bottom: 5;
+}
+
+ApplicationControlBar {
+  padding-top: 2;
+  padding-bottom: 2;
+}
+
+.failText {
+  color: red;
+}
+

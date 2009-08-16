@@ -7,23 +7,21 @@ package net.systemeD.halcyon.connection {
 
 	public class Connection extends EventDispatcher {
 
-        private static var CONNECTION_TYPE:String = "XML";
         private static var connectionInstance:Connection = null;
 
-        protected static var policyURL:String = "http://127.0.0.1:3000/api/crossdomain.xml";
-        protected static var apiBaseURL:String = "http://127.0.0.1:3000/api/0.6/";
+        protected static var policyURL:String;
+        protected static var apiBaseURL:String;
+        protected static var params:Object;
 
-        public static function getConnection(api:String,policy:String,conn:String):Connection {
-			
-			if ( policy != null )
-			    policyURL=policy;
-			if ( api != null )
-			    apiBaseURL=api;
-			if ( conn != null )
-			    CONNECTION_TYPE=conn;
-			
+        public static function getConnection(initparams:Object=null):Connection {
             if ( connectionInstance == null ) {
-                if ( CONNECTION_TYPE == "XML" )
+            
+                params = initparams == null ? new Object() : initparams;
+                policyURL = getParam("policy", "http://127.0.0.1:3000/api/crossdomain.xml");
+                apiBaseURL = getParam("api", "http://127.0.0.1:3000/api/0.6/");
+                var connectType:String = getParam("connection", "XML");
+                
+                if ( connectType == "XML" )
                     connectionInstance = new XMLConnection();
                 else
                     connectionInstance = new AMFConnection();
@@ -31,6 +29,18 @@ package net.systemeD.halcyon.connection {
             return connectionInstance;
         }
 
+        public static function getParam(name:String, defaultValue:String):String {
+            return params[name] == null ? defaultValue : params[name];
+        }
+
+        public static function get apiBase():String {
+            return apiBaseURL;
+        }
+
+        public static function get serverName():String {
+            return getParam("serverName", "Localhost");
+        }
+                
 		public static function getConnectionInstance():Connection {
             return connectionInstance;
 		}
@@ -42,6 +52,8 @@ package net.systemeD.halcyon.connection {
         public static var LOAD_COMPLETED:String = "load_completed";
         public static var SAVE_STARTED:String = "save_started";
         public static var SAVE_COMPLETED:String = "save_completed";
+        public static var NEW_CHANGESET:String = "new_changeset";
+        public static var NEW_CHANGESET_ERROR:String = "new_changeset_error";
         public static var NEW_NODE:String = "new_node";
         public static var NEW_WAY:String = "new_way";
         public static var NEW_RELATION:String = "new_relation";
@@ -54,6 +66,7 @@ package net.systemeD.halcyon.connection {
         private var ways:Object = {};
         private var relations:Object = {};
         private var pois:Array = [];
+        private var changeset:Changeset = null;
 
         protected function get nextNegative():Number {
             return negativeID--;
@@ -88,6 +101,11 @@ package net.systemeD.halcyon.connection {
             }
         }
 
+        protected function setActiveChangeset(changeset:Changeset):void {
+            this.changeset = changeset;
+            dispatchEvent(new EntityEvent(NEW_CHANGESET, changeset));
+        }
+        
         public function getNode(id:Number):Node {
             return nodes[id];
         }
@@ -139,11 +157,20 @@ package net.systemeD.halcyon.connection {
             return list;
         }
 
+        public function getActiveChangeset():Changeset {
+            return changeset;
+        }
+        
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
 		public function loadBbox(left:Number, right:Number,
 								top:Number, bottom:Number):void {
 	    }
+	    
+	    public function setAppID(id:Object):void {}
+	    public function setAuthToken(id:Object):void {}
+	    public function createChangeset(tags:Object):void {}
+	    public function uploadChanges():void {}
     }
 
 }

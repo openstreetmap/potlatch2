@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical"
+	horizontalAlign="center" title="Authorisation Required"
+	creationComplete="getRequestToken()"
+	height="250">
+	
+	<mx:ViewStack id="contentStack" width="100%" height="100%">
+	
+	<mx:VBox id="okPanel" width="100%" height="100%">
+	  <mx:Text width="100%" text="{getAuthText()}"/>
+	  <mx:VBox width="100%" id="gotLinkBox" visible="false">
+	    <mx:Text width="100%">
+	      <mx:text>
+	        Click the link below to open a web page where
+	        you will be asked to authorise access to this app.
+	      </mx:text>
+	    </mx:Text>
+	    <mx:LinkButton id="link"
+	        label="http://oauth.dev.openstreetmap.org/oauth/authorize?somekey"
+	        click="openURL(authoriseURL); tryAccessButton.enabled=true;"/>
+	    <mx:Text width="100%">
+	      <mx:text>Once you've authorised the access click the 'Try Access' button below</mx:text>
+	    </mx:Text>
+	    <mx:Text styleName="failText" visible="false" id="deniedLabel">
+	      <mx:text><![CDATA[<b>Access was denied, please check, and try again</b>]]></mx:text>
+	    </mx:Text>
+	  </mx:VBox>
+	</mx:VBox>
+	
+	<mx:VBox id="permFailPanel" width="100%" height="100%">
+	  <mx:Text styleName="failText" width="100%" condenseWhite="true">
+	    <mx:htmlText><![CDATA[
+	      <p>The server refused this application's credentials -- an authorisation link
+	      could not be obtained.
+	      </p><p>
+	      <b>OAuth access will not be possible.</b>
+	      </p><p>
+	      Please contact application vendor to find out what's going on.
+	    ]]></mx:htmlText>
+	  </mx:Text>
+	</mx:VBox>
+	
+	<mx:VBox id="tempFailPanel" width="100%" height="100%">
+	  <mx:Text width="100%">
+	    <mx:text>
+	      There was a problem contacting the server to get authorisation.
+	      This may be a temporary error, try again later.
+	    </mx:text>
+	  </mx:Text>
+	</mx:VBox>
+	
+	</mx:ViewStack>
+	
+	<mx:ControlBar horizontalAlign="right">
+	
+	    <mx:ProgressBar id="progress" label="Contacting server..." labelPlacement="top"
+	        indeterminate="true"/>
+        <mx:Spacer width="100%"/>
+
+	    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);"/>
+	    <mx:Button id="tryAccessButton" label="Try Access" click="getAccessToken()" enabled="false"/>
+	</mx:ControlBar>
+	
+	<mx:Script><![CDATA[
+        import flash.events.Event;
+        import flash.net.*;
+        import mx.managers.PopUpManager;
+        import net.systemeD.halcyon.connection.*;
+        import org.iotashan.oauth.*;
+
+        private var connection:Connection;
+        private var requestToken:OAuthToken;
+        private var _accessToken:OAuthToken;
+        private var authoriseURL:String;
+        private var lastHTTPStatus:int = 0;
+        
+        public static var ACCESS_TOKEN_EVENT:String = "gotAccessToken";
+        
+        private function getAuthText():String {
+            return "To save data you must authorise this application to edit "+
+                    Connection.serverName + " on your behalf.";
+        }
+        
+        private function openURL(url:String):void {
+            var urlRequest:URLRequest = new URLRequest(url);
+            navigateToURL(urlRequest, "_blank");
+        }
+        
+        private function getRequestToken():void {
+            connection = Connection.getConnectionInstance();
+            
+            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
+            var consumer:OAuthConsumer = getConsumer();
+            var url:String = Connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
+            
+            var params:Object = new Object();
+            var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, params, consumer, null);
+            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
+            
+            // build the actual request
+            var urlReq:URLRequest = new URLRequest(String(urlStr));
+            var loader:URLLoader = new URLLoader();
+            loader.addEventListener(Event.COMPLETE, loadedRequestToken);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, requestTokenError);
+            loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, recordStatus);
+            loader.load(urlReq);
+        }
+        
+        private function recordStatus(event:HTTPStatusEvent):void {
+            lastHTTPStatus = event.status;
+        }
+        
+        private function requestTokenError(event:IOErrorEvent):void {
+            trace("error occured... last status was: "+lastHTTPStatus);
+            
+            if ( lastHTTPStatus == 401 ) {
+                // this means authorisation was refused -- refused at this stage
+                // means our consumer token is broken
+                contentStack.selectedChild = permFailPanel;
+            } else {
+                contentStack.selectedChild = tempFailPanel;
+            }
+            progress.visible = false;
+        }
+        
+        private function loadedRequestToken(event:Event):void {
+            trace("Yay! response: "+URLLoader(event.target).data);
+            requestToken = getResponseToken(URLLoader(event.target));
+            
+            var url:String = Connection.getParam("oauth_auth_url", "http://127.0.0.1:3000/oauth/authorize");            
+            link.label = url;
+            authoriseURL = url + "?oauth_token="+requestToken.key;
+            progress.visible = false;
+            gotLinkBox.visible = true;
+        }
+
+        private function getResponseToken(loader:URLLoader):OAuthToken {
+            var vars:URLVariables = new URLVariables(loader.data);
+            
+            // build out request token
+            var token:OAuthToken = new OAuthToken(
+                String(vars["oauth_token"]),
+                String(vars["oauth_token_secret"]));
+            return token;
+        }
+        
+        private function getAccessToken():void {
+            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
+            var consumer:OAuthConsumer = getConsumer();
+            var url:String = Connection.getParam("oauth_access_url", "http://127.0.0.1:3000/oauth/access_token");
+
+            var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, consumer, requestToken);
+            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
+
+            var urlReq:URLRequest = new URLRequest(String(urlStr));
+            var loader:URLLoader = new URLLoader();
+            loader.addEventListener(Event.COMPLETE, loadedAccessToken);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, accessTokenError);
+            loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, recordStatus);
+            loader.load(urlReq);
+            
+            progress.label = "Checking access";
+            progress.visible = true;  
+        }
+        
+        private function loadedAccessToken(event:Event):void {
+            trace("Yay! response: "+URLLoader(event.target).data);
+            progress.label = "Received Access";
+            progress.indeterminate = false;
+            progress.setProgress(100,100);
+            PopUpManager.removePopUp(this);
+            
+            _accessToken = getResponseToken(URLLoader(event.target));
+            dispatchEvent(new Event(ACCESS_TOKEN_EVENT));
+        }
+        
+        public function get accessToken():OAuthToken {
+            return _accessToken;
+        }
+        
+        private function accessTokenError(event:IOErrorEvent):void {
+            if ( lastHTTPStatus == 401 ) {
+                deniedLabel.htmlText = "<b>Access was denied, please check, and try again</b>";
+            } else {
+                deniedLabel.htmlText = "<b>Error occurred</b> ("+lastHTTPStatus+"): please try again";
+            }
+            deniedLabel.visible = true;
+        }
+        
+        private function getConsumer():OAuthConsumer {
+            var key:String = Connection.getParam("oauth_consumer_key", "");
+            var secret:String = Connection.getParam("oauth_consumer_secret", "");
+            return new OAuthConsumer(key, secret);
+        }
+        
+	]]></mx:Script>
+</mx:TitleWindow>
+

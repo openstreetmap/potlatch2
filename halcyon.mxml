@@ -6,6 +6,8 @@
 	layout="vertical"
 	horizontalAlign="center" 
 	addedToStage="initApp()">
+	
+	<mx:Style source="styles/Application.css"/>
 
     <mx:Glow id="glowImage" duration="100" 
         alphaFrom="0.3" alphaTo="1.0" 
@@ -20,6 +22,11 @@
     <mx:WipeLeft id="wipeOut" duration="250"/>
     <mx:WipeRight id="wipeIn" duration="250"/>
 
+    <mx:ApplicationControlBar dock="true">
+        <mx:Spacer width="100%"/>
+        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();"/>
+    </mx:ApplicationControlBar>
+    
     <mx:HDividedBox width="100%" height="100%">
 
       <mx:VBox height="100%" width="25%" horizontalAlign="right">
@@ -42,6 +49,7 @@
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
+		import net.systemeD.potlatch2.save.SaveManager;
 		import flash.system.Security;
 		import flash.net.*;
 		import flash.events.MouseEvent;

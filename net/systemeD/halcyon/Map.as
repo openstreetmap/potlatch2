@@ -97,10 +97,10 @@ package net.systemeD.halcyon {
 			s=getPaintSprite(); addChild(s);			// 12 - shields and POI names
 
 			this.initparams=initparams;
-			connection = Connection.getConnection(initparams['api'],initparams['policy'],initparams['connection']);
+			connection = Connection.getConnection(initparams);
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
             connection.addEventListener(Connection.NEW_POI, newPOICreated);
-			connection.getEnvironment(new Responder(gotEnvironment,connectionError));
+			gotEnvironment(null);
         }
 
         private function getPaintSprite():Sprite {

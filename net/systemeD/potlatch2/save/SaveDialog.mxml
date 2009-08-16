@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical"
+	horizontalAlign="center" title="Save Changes"
+	width="350" height="250" verticalGap="0">
+
+  <mx:ArrayCollection id="changesetTags">
+    <mx:Object k="created_by" v="Potlatch 2"/>
+    <mx:Object k="version" v="x.xx.x"/>
+    <mx:Object k="comment" v=""/>
+  </mx:ArrayCollection>
+  
+  <mx:ViewStack id="processSequence" width="100%" height="100%">
+  
+    <!-- section for entering tags -->
+    <mx:VBox width="100%" height="100%" verticalGap="0">
+      <mx:ViewStack id="tagStack" width="100%" height="100%">
+        <mx:VBox width="100%" height="100%" label="Simple">
+          <mx:Text width="100%">
+            <mx:text>
+               Please enter a description of your edits. This will be used to give other
+               mappers an idea of what changes you are making.
+            </mx:text>
+          </mx:Text>
+          <mx:Label text="Comment:"/>
+          <mx:TextArea id="comment" width="100%" height="100%"/>
+        </mx:VBox>
+        
+        <mx:VBox width="100%" height="100%" label="Advanced">
+          <mx:Label text="Changeset tags:"/>
+          <mx:DataGrid editable="true" width="100%" height="100%" id="advancedTagGrid"
+              dataProvider="{changesetTags}">
+            <mx:columns>
+                <mx:DataGridColumn editable="true" dataField="k" headerText="Key"/>
+                <mx:DataGridColumn editable="true" dataField="v" headerText="Value"/>
+            </mx:columns>
+          </mx:DataGrid>        
+        </mx:VBox>
+      </mx:ViewStack>
+      <mx:LinkBar dataProvider="{tagStack}"/>
+    </mx:VBox>
+    
+    <mx:VBox width="100%" height="100%" id="createChangesetTab">
+      <mx:VBox width="100%" height="100%" id="infoBox"/>
+      <mx:Spacer height="100%"/>
+      <mx:ProgressBar label="Creating changeset" labelPlacement="bottom" width="100%"
+          indeterminate="true" id="saveProgress"/>
+    </mx:VBox>
+    
+    <mx:VBox width="100%" height="100%" id="failureTab">
+      <mx:Text width="100%" styleName="failText" text="{failureText}"/>
+    </mx:VBox>
+
+    <mx:VBox width="100%" height="100%" id="successTab">
+      <mx:Text width="100%">
+        <mx:htmlText><![CDATA[<b>All data uploaded!</b>]]></mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+  </mx:ViewStack>
+
+  <mx:ControlBar>
+    <mx:Spacer width="100%"/>
+    <mx:Button label="Cancel" click="close();"/>
+    <mx:Button id="saveButton" label="Save >" click="startSave();"/>
+  </mx:ControlBar>
+  
+  <mx:Script><![CDATA[
+  
+    import mx.controls.*;
+    import mx.managers.PopUpManager;
+    
+    import net.systemeD.halcyon.connection.*;
+    
+    private var conn:Connection = Connection.getConnectionInstance();
+    
+    [Bindable]
+    private var failureText:String = "";
+    
+    private function startSave():void {
+    
+        // move to next sequence
+        processSequence.selectedChild = createChangesetTab;
+        saveButton.enabled = false;
+        
+        var tags:Object = new Object();
+        for each (var tag:Object in changesetTags) {
+           tags[tag['k']] = tag['v'];
+        }
+        
+        // add the listeners
+        conn.addEventListener(Connection.NEW_CHANGESET, changesetCreated);
+        conn.addEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
+        conn.createChangeset(tags);
+    }
+    
+    private function changesetCreated(event:EntityEvent):void {
+        var changeset:Changeset = conn.getActiveChangeset();
+        addStatus("Changeset created (id: "+changeset.id+")");
+        
+        saveProgress.label = "Uploading changes";
+        conn.addEventListener(Connection.SAVE_COMPLETED, saveCompleted);
+        conn.uploadChanges();
+    }
+    
+    private function changesetError(event:Event):void {
+        fail("Error creating changeset");
+    }
+    
+    private function saveCompleted(event:SaveCompleteEvent):void {
+        if ( event.saveOK )
+            succeed("All Data Saved!");
+        else
+            fail("Failure when uploading data");
+    }
+    
+    private function addStatus(text:String):void {
+        var label:Text = new Text();
+        label.text = text;
+        
+        infoBox.addChild(label);
+    }
+    
+    private function succeed(text:String):void {
+        processSequence.selectedChild = successTab;
+    }
+    
+    private function fail(text:String):void {
+        processSequence.selectedChild = failureTab;
+        failureText = text;
+    }
+    
+    private function close():void {
+        conn.removeEventListener(Connection.NEW_CHANGESET, changesetCreated);
+        conn.removeEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
+        conn.removeEventListener(Connection.SAVE_COMPLETED, saveCompleted);
+        PopUpManager.removePopUp(this);
+    }
+  ]]></mx:Script>
+</mx:TitleWindow>
+
