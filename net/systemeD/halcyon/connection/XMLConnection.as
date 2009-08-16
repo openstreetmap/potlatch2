@@ -15,6 +15,11 @@ package net.systemeD.halcyon.connection {
 
 			if (Connection.policyURL!='')
                 Security.loadPolicyFile(Connection.policyURL);
+            var oauthPolicy:String = Connection.getParam("oauth_policy", "");
+            if ( oauthPolicy != "" ) {
+                trace(oauthPolicy);
+                Security.loadPolicyFile(oauthPolicy);
+            }
 		}
 		
 		override public function loadBbox(left:Number,right:Number,
