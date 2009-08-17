@@ -113,8 +113,8 @@ package net.systemeD.halcyon.connection {
             // make an OAuth query
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var url:String = Connection.apiBaseURL+"changeset/create";
-            var params:Object = { _method: "PUT" };
-            var oauthRequest:OAuthRequest = new OAuthRequest("POST", url, params, appID, authToken);
+            //var params:Object = { _method: "PUT" };
+            var oauthRequest:OAuthRequest = new OAuthRequest("PUT", url, null, appID, authToken);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
 
             // build the actual request
@@ -122,6 +122,7 @@ package net.systemeD.halcyon.connection {
             urlReq.method = "POST";
             urlReq.data = changesetXML.toXMLString();
             urlReq.contentType = "application/xml";
+            urlReq.requestHeaders = new Array(new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"));
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, changesetCreateComplete);
             loader.addEventListener(IOErrorEvent.IO_ERROR, changesetCreateError);
