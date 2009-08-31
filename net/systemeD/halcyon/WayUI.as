@@ -22,7 +22,9 @@ package net.systemeD.halcyon {
 		public var layer:int=0;						// map layer
 		public var map:Map;							// reference to parent map
 		public var sprites:Array=new Array();		// instances in display list
+		private var stateClasses:Object = new Object();
         private var hitzone:Sprite;
+        private var listenSprite:Sprite;
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
 			embedFonts: true,
@@ -37,9 +39,15 @@ package net.systemeD.halcyon {
 			this.map = map;
             init();
             way.addEventListener(Connection.TAG_CHANGE, wayTagChanged);
+            for (var i:uint = 0; i < way.length; i++ ) {
+                way.getNode(i).addEventListener(Connection.NODE_MOVED, nodeMoved);
+            }
 		}
 		
         private function wayTagChanged(event:TagEvent):void {
+            redraw();
+        }
+        private function nodeMoved(event:NodeMovedEvent):void {
             redraw();
         }
 
@@ -91,6 +99,12 @@ package net.systemeD.halcyon {
 
 		public function redraw():void {
             var tags:Object = way.getTagsCopy();
+            // add states to the tags -- we should probably treat these
+            // more explicitly, but if Richard is still playing with styles
+            // this will work for now
+            for ( var stateKey:String in stateClasses ) {
+                tags["__state__"+stateKey] = stateKey;
+            }
 
 			// remove all currently existing sprites
 			while (sprites.length>0) {
@@ -164,28 +178,53 @@ package net.systemeD.halcyon {
                 solidLine(def.graphics);
                 addToLayer(def, 1);
             }
+            
+            if ( stateClasses["showNodes"] != null ) {
+                var nodes:Sprite = new Sprite();
+                drawNodes(nodes.graphics);
+                addToLayer(nodes, 2);
+            }
 
             // create a generic "way" hitzone sprite
             hitzone = new Sprite();
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
             solidLine(hitzone.graphics);
-            addToLayer(hitzone, 2);
+            addToLayer(hitzone, 3);
             hitzone.visible = false;
 
-            var listenSprite:Sprite = new Sprite();
+            if ( listenSprite == null ) {
+                listenSprite = new Sprite();
+                listenSprite.addEventListener(MouseEvent.CLICK, mouseEvent);
+                listenSprite.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
+                listenSprite.addEventListener(MouseEvent.MOUSE_OVER, mouseEvent);
+                listenSprite.addEventListener(MouseEvent.MOUSE_OUT, mouseEvent);
+                listenSprite.addEventListener(MouseEvent.MOUSE_DOWN, mouseEvent);
+                listenSprite.addEventListener(MouseEvent.MOUSE_UP, mouseEvent);
+                listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
+            }
             listenSprite.hitArea = hitzone;
-            addToLayer(listenSprite, 2);
+            addToLayer(listenSprite, 3);
             listenSprite.buttonMode = true;
             listenSprite.mouseEnabled = true;
-            listenSprite.addEventListener(MouseEvent.CLICK, mouseEvent);
-            listenSprite.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
-            listenSprite.addEventListener(MouseEvent.MOUSE_OVER, mouseEvent);
-            listenSprite.addEventListener(MouseEvent.MOUSE_OUT, mouseEvent);
 
 		}
 		
 		// ------------------------------------------------------------------------------------------
 		// Drawing support functions
+
+		private function drawNodes(g:Graphics):void {
+            g.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
+			for (var i:uint = 0; i < way.length; i++) {
+                var node:Node = way.getNode(i);
+                var x:Number = map.lon2coord(node.lon);
+                var y:Number = map.latp2coord(node.latp);
+                g.moveTo(x-2, y-2);
+                g.lineTo(x+2, y-2);
+                g.lineTo(x+2, y+2);
+                g.lineTo(x-2, y+2);
+                g.lineTo(x-2, y-2);
+			}
+		}
 
 		// Draw solid polyline
 		
@@ -340,15 +379,40 @@ package net.systemeD.halcyon {
 			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
 			Sprite(o).addChild(s);
 			sprites.push(s);
-            if ( s is Sprite ) Sprite(s).mouseEnabled = false;
+            if ( s is Sprite ) {
+                Sprite(s).mouseEnabled = false;
+                Sprite(s).mouseChildren = false;
+            }
+		}
+
+		public function getNodeAt(x:Number, y:Number):Node {
+			for (var i:uint = 0; i < way.length; i++) {
+                var node:Node = way.getNode(i);
+                var nodeX:Number = map.lon2coord(node.lon);
+                var nodeY:Number = map.latp2coord(node.latp);
+                if ( nodeX >= x-2 && nodeX <= x+2 &&
+                     nodeY >= y-2 && nodeY <= y+2 )
+                    return node;
+            }
+            return null;
 		}
 
         private function mouseEvent(event:MouseEvent):void {
-            map.wayMouseEvent(event, way);
+            var node:Node = getNodeAt(event.localX, event.localY);
+            if ( node == null )
+                map.entityMouseEvent(event, way);
+            else
+                map.entityMouseEvent(event, node);
         }
 
-        public function setHighlight(highlight:Boolean):void {
-            hitzone.visible = highlight;
+        public function setHighlight(stateType:String, isOn:Boolean):void {
+            if ( isOn && stateClasses[stateType] == null ) {
+                stateClasses[stateType] = true;
+                redraw();
+            } else if ( !isOn && stateClasses[stateType] != null ) {
+                delete stateClasses[stateType];
+                redraw();
+            }
         }
 	}
 }

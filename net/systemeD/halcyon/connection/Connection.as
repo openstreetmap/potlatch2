@@ -30,6 +30,7 @@ package net.systemeD.halcyon.connection {
         }
 
         public static function getParam(name:String, defaultValue:String):String {
+            trace("Returning param "+name+" as "+(params[name] == null ? defaultValue : params[name]));
             return params[name] == null ? defaultValue : params[name];
         }
 
@@ -59,6 +60,7 @@ package net.systemeD.halcyon.connection {
         public static var NEW_RELATION:String = "new_relation";
         public static var NEW_POI:String = "new_poi";
         public static var TAG_CHANGE:String = "tag_change";
+        public static var NODE_MOVED:String = "node_moved";
 
         // store the data we download
         private var negativeID:Number = -1;

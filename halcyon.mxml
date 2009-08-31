@@ -101,8 +101,8 @@
 
 			// mouse-up handler attached to stage, so the user can release outside the map
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
-			theMap.backdrop.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
-			theMap.backdrop.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
+			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
+			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
@@ -120,7 +120,7 @@
 			t.multiline=true;
 			_root.addChild(t);
 			Globals.vars.debug=t;
-            t.visible = true;
+            t.visible = loaderInfo.parameters["show_debug"] == 'true';
 
             var controller:EditController = new EditController(theMap, tagViewer);
             controller.setActive();

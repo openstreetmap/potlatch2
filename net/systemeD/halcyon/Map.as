@@ -83,7 +83,7 @@ package net.systemeD.halcyon {
 			// [layer][0]			- fill
 
 			for (var l:int=0; l<13; l++) {				// 11 layers (10 is +5, 0 is -5)
-				var s:Sprite = getPaintSprite();		//  |
+				var s:Sprite = getHitSprite();      	//  |
 				s.addChild(getPaintSprite());			//	| 0 fill
 				var t:Sprite = getPaintSprite();		//  | 1 stroke
 				for (var j:int=0; j<11; j++) {			//	|  | ten sublayers
@@ -91,10 +91,11 @@ package net.systemeD.halcyon {
 				}										//  |  |  |
 				s.addChild(t);							//  |  |
 				s.addChild(getPaintSprite());			//	| 2 names
+				s.addChild(getHitSprite());			    //	| 3 entity hit tests
 				addChild(s);							//  |
 			}
-			s=getPaintSprite(); addChild(s);			// 11 - POIs
-			s=getPaintSprite(); addChild(s);			// 12 - shields and POI names
+			addChild(getPaintSprite());     			// 11 - POIs
+			addChild(getPaintSprite());     			// 12 - shields and POI names
 
 			this.initparams=initparams;
 			connection = Connection.getConnection(initparams);
@@ -106,6 +107,12 @@ package net.systemeD.halcyon {
         private function getPaintSprite():Sprite {
             var s:Sprite = new Sprite();
             s.mouseEnabled = false;
+            s.mouseChildren = false;
+            return s;
+        }
+
+        private function getHitSprite():Sprite {
+            var s:Sprite = new Sprite();
             return s;
         }
 
@@ -234,11 +241,11 @@ package net.systemeD.halcyon {
             pois[node.id] = new POI(node, this);
         }
 
-        public function setHighlight(entity:Entity, highlight:Boolean):void {
+        public function setHighlight(entity:Entity, stateType:String, isOn:Boolean):void {
             if ( entity is Way ) {
                 var wayUI:WayUI = ways[entity.id];
                 if ( wayUI != null )
-                    wayUI.setHighlight(highlight);
+                    wayUI.setHighlight(stateType, isOn);
             }
         }
 
@@ -249,9 +256,9 @@ package net.systemeD.halcyon {
             this.mapController = controller;
         }
 
-        public function wayMouseEvent(event:MouseEvent, way:Way):void {
+        public function entityMouseEvent(event:MouseEvent, entity:Entity):void {
             if ( mapController != null )
-                mapController.entityMouseEvent(event, way);
+                mapController.entityMouseEvent(event, entity);
 				
         }
 

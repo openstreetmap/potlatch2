@@ -40,7 +40,7 @@ package net.systemeD.halcyon.connection {
                     delete tags[key];
                 else
                     tags[key] = value;
-                modified = true;
+                markDirty();
                 dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, key, key, old, value));
             }
         }
@@ -50,7 +50,7 @@ package net.systemeD.halcyon.connection {
             if ( oldKey != newKey ) {
                 delete tags[oldKey];
                 tags[newKey] = value;
-                modified = true;
+                markDirty();
                 dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, oldKey, newKey, value, value));
             }
         }

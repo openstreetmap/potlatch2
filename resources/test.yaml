@@ -2,6 +2,66 @@
 # Motorways
 # ====================================================
 
+# selected line style
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 12
+  isAnd: true
+  breaker: false
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: set
+      params: ['__state__hover']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: set
+      params: ['__state__selected']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 50
+    stroke_width: 20
+    stroke_colour: 0xffff00
+
+# selected line style
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 12
+  isAnd: true
+  breaker: false
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: set
+      params: ['__state__selected']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: unset
+      params: ['__state__hover']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 50
+    stroke_width: 20
+    stroke_colour: 0xffb000
+
+# selected line style
+- !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
+  minScale: 18
+  maxScale: 12
+  isAnd: true
+  breaker: false
+  conditions:
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: set
+      params: ['__state__hover']
+    - !actionscript/object:net.systemeD.halcyon.styleparser.Condition
+      type: unset
+      params: ['__state__selected']
+  shapeStyle: !actionscript/object:net.systemeD.halcyon.styleparser.ShapeStyle
+    isFilled: false
+    isStroked: true
+    stroke_opacity: 50
+    stroke_width: 20
+    stroke_colour: 0x00ff00
+
 # Zoom levels 13-14 (originally not in tunnels)
 
 - !actionscript/object:net.systemeD.halcyon.styleparser.ShapeRule
@@ -4663,3 +4723,5 @@
     stroke_opacity: 100
     stroke_width: 2
     stroke_colour: 10066329
+    
+    
