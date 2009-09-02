@@ -1,12 +1,14 @@
 package net.systemeD.halcyon.connection {
 
     import flash.events.EventDispatcher;
+    import flash.utils.Dictionary;
 
     public class Entity extends EventDispatcher {
         private var _id:Number;
         private var _version:uint;
         private var tags:Object = {};
         private var modified:Boolean = false;
+		private var parents:Dictionary = new Dictionary();
 
         public function Entity(id:Number, version:uint, tags:Object) {
             this._id = id;
@@ -22,6 +24,8 @@ package net.systemeD.halcyon.connection {
         public function get version():uint {
             return _version;
         }
+
+		// Tag-handling methods
 
         public function hasTags():Boolean {
             for (var key:String in tags)
@@ -66,12 +70,20 @@ package net.systemeD.halcyon.connection {
             return copy;
         }
 
+		public function getTagsHash():Object {
+			// hm, not sure we should be doing this, but for read-only purposes
+			// it's faster than using getTagsCopy
+			return tags;
+		}
+
         public function getTagArray():Array {
             var copy:Array = [];
             for (var key:String in tags )
                 copy.push(new Tag(this, key, tags[key]));
             return copy;
         }
+
+		// Clean/dirty methods
 
         public function get isDirty():Boolean {
             return modified;
@@ -86,6 +98,40 @@ package net.systemeD.halcyon.connection {
         protected function markDirty():void {
             modified = true;
         }
+
+		// Parent handling
+		
+		public function addParent(parent:Entity):void {
+			parents[parent]=true;
+		}
+
+		public function removeParent(parent:Entity):void {
+			delete parents[parent];
+		}
+		
+		public function get parentWays():Array {
+			var a:Array=[];
+			for (var o:Object in parents) {
+				if (o is Way) { a.push(o); }
+			}
+			return a;
+		}
+		
+		public function get parentRelations():Array {
+			var a:Array=[];
+			for (var o:Object in parents) {
+				if (o is Relation) { a.push(o); }
+			}
+			return a;
+		}
+		
+		public function get parentObjects():Array {
+			var a:Array=[];
+			for (var o:Object in parents) { a.push(o); }
+			return a;
+		}
+
+		// To be overridden
 
         public function getType():String {
             return '';

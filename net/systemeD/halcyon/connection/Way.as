@@ -7,8 +7,7 @@ package net.systemeD.halcyon.connection {
         public function Way(id:Number, version:uint, tags:Object, nodes:Array) {
             super(id, version, tags);
             this.nodes = nodes;
-            for each(var node:Node in nodes)
-                node.registerAddedToWay(this);
+			for each (var node:Node in nodes) { node.addParent(this); }
         }
 
         public function get length():uint {
@@ -20,19 +19,19 @@ package net.systemeD.halcyon.connection {
         }
 
         public function insertNode(index:uint, node:Node):void {
+			node.addParent(this);
             nodes.splice(index, 0, node);
-            node.registerAddedToWay(this);
         }
 
         public function appendNode(node:Node):uint {
+			node.addParent(this);
             nodes.push(node);
-            node.registerAddedToWay(this);
             return nodes.length;
         }
 
         public function removeNode(index:uint):void {
-            var splicedNodes:Array = nodes.splice(index, 1);
-            splicedNodes[0].registerRemovedFromWay(this);
+            var removed:Array=nodes.splice(index, 1);
+			removed[0].removeParent(this);
         }
 
         public override function toString():String {
