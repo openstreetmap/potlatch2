@@ -98,85 +98,107 @@ package net.systemeD.halcyon {
 		// Redraw
 
 		public function redraw():void {
+            // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();
-            // add states to the tags -- we should probably treat these
-            // more explicitly, but if Richard is still playing with styles
-            // this will work for now
-            for ( var stateKey:String in stateClasses ) {
-                tags["__state__"+stateKey] = stateKey;
+            for (var stateKey:String in stateClasses) {
+                tags[":"+stateKey] = stateKey;
             }
 
-			// remove all currently existing sprites
+			// Remove all currently existing sprites
 			while (sprites.length>0) {
 				var d:DisplayObject=sprites.pop(); d.parent.removeChild(d);
 			}
 
-			// which layer?
+			// Which layer?
 			layer=5;
 			if ( tags['layer'] )
                 layer=Math.min(Math.max(tags['layer']+5,-5),5)+5;
 
-			// set style
-			var styles:Array=map.ruleset.getStyles(false, tags, map.scale);
-			for each (var s:* in styles) {
-
-				if (s is ShapeStyle) {
+			// Iterate through each sublayer, drawing any styles on that layer
+			var sl:StyleList=map.ruleset.getStyles(this.way, tags);
+			var drawn:Boolean=false;
+			for (var sublayer:uint=0; sublayer<11; sublayer++) {
+				if (sl.shapeStyles[sublayer]) {
+Globals.vars.root.addDebug("adding shapestyle on "+sublayer); 
+					var s:ShapeStyle=sl.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, roadname:Sprite, f:Graphics, g:Graphics;
-					var doStroke:Boolean=false, doDashed:Boolean=false;
-					var doFill:Boolean=false, fill_colour:uint, fill_opacity:Number;
-					var doCasing:Boolean=false, doDashedCasing:Boolean=false;
 
 					// Set stroke style
-					if (s.isStroked)  {
-						stroke=new Shape(); addToLayer(stroke,1,s.sublayer); g=stroke.graphics;
+					if (s.width)  {
+						stroke=new Shape(); addToLayer(stroke,1,sublayer); g=stroke.graphics;
 		                g.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
-						g.lineStyle(s.stroke_width, s.stroke_colour, s.stroke_opacity/100,
-									false, "normal", s.stroke_linecap, s.stroke_linejoin);
+						g.lineStyle(s.width,
+									s.color ? s.color : 0,
+									s.opacity ? s.opacity : 1,
+									false, "normal",
+									s.linecap  ? s.linecap : "none",
+									s.linejoin ? s.linejoin : "round");
 					}
 
 					// Set fill and casing style
-					if (s.isFilled || s.isCased) {
+					if (s.fill_color || s.casing_width) {
 						fill=new Shape(); addToLayer(fill,0); f=fill.graphics;
 		                f.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
-						if (s.isCased)  { f.lineStyle(s.casing_width, s.casing_colour, s.casing_opacity/100,
-										  false, "normal", s.stroke_linecap, s.stroke_linejoin); }
-						if (s.isFilled) { f.beginFill(s.fill_colour,s.fill_opacity/100); }
+						if (s.casing_width)  {
+							f.lineStyle(s.casing_width,
+										s.casing_color   ? s.casing_color : 0,
+										s.casing_opacity ? s.casing_opacity : 1,
+										false, "normal",
+										s.linecap  ? s.linecap : "none",
+										s.linejoin ? s.linejoin : "round");
+						}
+						if (s.fill_color) {
+							f.beginFill(s.fill_color,
+										s.fill_opacity ? s.fill_opacity : 1);
+						}
 					}
 
 					// Draw stroke
-					if (s.stroke_dashArray.length>0) { dashedLine(g,s.stroke_dashArray); }
-							   else if (s.isStroked) { solidLine(g); }
+					if (s.dashes && s.dashes.length>0) {
+						dashedLine(g,s.dashes); drawn=true;
+					} else if (s.width) { 
+						solidLine(g); drawn=true;
+					}
 			
 					// Draw fill and casing
-					if (s.casing_dashArray.length>0) { dashedLine(f,s.casing_dashArray); f.lineStyle(); }
-					if (s.isFilled)					 { f.beginFill(s.fill_colour,s.fill_opacity/100); 
-													   solidLine(f); f.endFill(); }
-					else if (s.isCased && s.casing_dashArray.length==0) { solidLine(f); }
-
-
-				} else if (s is TextStyle && s.tag && tags[s.tag]) {
-					roadname=new Sprite(); addToLayer(roadname,2);
-					nameformat = s.getTextFormat();
-					var a:String=tags[s.tag]; if (s.font_caps) { a=a.toUpperCase(); }
-					if (s.isLine) {
-						writeNameOnPath(roadname,a,s.text_offset ? s.text_offset : 0);
-						if (s.pullout_radius>0) { roadname.filters=s.getPulloutFilter(); }
-					} else if (centroid_x) {
-						s.writeNameLabel(roadname,tags[s.tag],centroid_x,centroid_y);
+					if (s.casing_dashes && s.casing_dashes.length>0) {
+						dashedLine(f,s.casing_dashes); f.lineStyle(); drawn=true;
+					}
+					if (s.fill_color) {
+						f.beginFill(s.fill_color,s.fill_opacity); 
+						solidLine(f); f.endFill(); drawn=true;
+					} else if (s.casing_width && (!s.casing_dashes || s.casing_dashes.length==0)) {
+						solidLine(f); drawn=true;
 					}
 
 
-				} else if (s is ShieldStyle) {
-					// ** to do
 				}
+				
+				if (sl.textStyles[sublayer]) {
+					var t:TextStyle=sl.textStyles[sublayer];
+					roadname=new Sprite(); addToLayer(roadname,2);
+					nameformat = t.getTextFormat();
+					var a:String=tags[t.text]; if (t.font_caps) { a=a.toUpperCase(); }
+					if (t.text_onpath) {
+						writeNameOnPath(roadname,a,t.text_offset ? t.text_offset : 0);
+						if (t.text_halo_radius>0) { roadname.filters=t.getHaloFilter(); }
+					} else if (centroid_x) {
+						t.writeNameLabel(roadname,tags[t.text],centroid_x,centroid_y);
+					}
+
+
+				}
+				
+				// ** ShieldStyle to do
 			}
 
-            if ( styles.length == 0 ) {
-                // there's no styles... so add a thin trace
+			// No styles, so add a thin trace
+            if (!drawn && map.showall) {
                 var def:Sprite = new Sprite();
                 def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
                 solidLine(def.graphics);
                 addToLayer(def, 1);
+				drawn=true;
             }
             
             if ( stateClasses["showNodes"] != null ) {
@@ -185,6 +207,8 @@ package net.systemeD.halcyon {
                 addToLayer(nodes, 2);
             }
 
+			if (!drawn) { return; }
+			
             // create a generic "way" hitzone sprite
             hitzone = new Sprite();
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);

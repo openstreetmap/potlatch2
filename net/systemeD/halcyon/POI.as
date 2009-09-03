@@ -33,32 +33,39 @@ package net.systemeD.halcyon {
 		
 		public function redraw():void {
 			var tags:Object = node.getTagsCopy();
-			var styles:Array=map.ruleset.getStyles(true,tags,map.scale);
+			var sl:StyleList=map.ruleset.getStyles(this.node,map.scale);
 			var r:Boolean=false;	// ** rendered
-			for each (var s:* in styles) {
-				if ((s is PointStyle) && s.icon && s.icon!="") {
+			for (var sublayer:uint=0; sublayer<10; sublayer++) {
+
+				if (sl.pointStyles[sublayer]) {
+					var s:PointStyle=sl.pointStyles[sublayer];
+//					if ((s is PointStyle) && s.icon && s.icon!="") 
 					r=true;
-					if (s.icon!=iconname) {
+					if (s.icon_image!=iconname) {
 						// 'load' icon (actually just from library)
-						if (map.ruleset.images[s.icon]) {
+						if (map.ruleset.images[s.icon_image]) {
 							var loader:Loader = new Loader();
 							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon);
-							loader.loadBytes(map.ruleset.images[s.icon]);
-							iconname=s.icon;
+							loader.loadBytes(map.ruleset.images[s.icon_image]);
+							iconname=s.icon_image;
 						}
 					} else {
 						// already loaded, so just reposition
 						updatePosition();
-						iconname=s.icon;
+						iconname=s.icon_image;
 					}
-				} else if ((s is TextStyle) && s.tag && tags[s.tag]) {
+				}
+
+				if (sl.textStyles[sublayer]) {
+					var t:TextStyle=sl.textStyles[sublayer];
+//					if ((s is TextStyle) && s.tag && tags[s.tag])
 					// create name sprite
 					if (!name) {
 						name=new Sprite();
 						var c:DisplayObject=map.getChildAt(12);
 						Sprite(c).addChild(name);
 					}
-					s.writeNameLabel(name,tags[s.tag],map.lon2coord(node.lon),map.latp2coord(node.latp));
+					t.writeNameLabel(name,tags[t.text],map.lon2coord(node.lon),map.latp2coord(node.latp));
 				}
 			}
 			if (!r && iconname!='') {

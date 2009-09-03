@@ -1,12 +1,16 @@
 package net.systemeD.halcyon.styleparser {
 
-	public class PointStyle {
+	public class PointStyle extends Style {
 
-		public var icon:String;
-		public var width:uint;
-		public var height:uint;
-		public var sublayer:uint=0;
+		public var icon_image:String;
+		public var icon_width:uint;
+		public var icon_height:uint;
 
+		override public function get properties():Array {
+			return [
+				'icon_image','icon_width','icon_height'
+			];
+		}
 	}
 
 }

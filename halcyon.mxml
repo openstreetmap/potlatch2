@@ -121,6 +121,7 @@
 			_root.addChild(t);
 			Globals.vars.debug=t;
             t.visible = loaderInfo.parameters["show_debug"] == 'true';
+			Globals.vars.root=theMap;	// just for the addDebug function
 
             var controller:EditController = new EditController(theMap, tagViewer);
             controller.setActive();

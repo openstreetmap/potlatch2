@@ -1,0 +1,9 @@
+way[name=~/Brown/] { set .highlighted; }
+way[highway=secondary] { color: green; width: 5; }
+way[highway=unclassified] { color: blue; width: 3; }
+way[highway=residential] { color: blue; width: 2; }
+way[highway=primary] { color: red; width: 5; }
+way[highway=trunk] { color: green; width: 7; }
+way .highlighted { color: pink; }
+way :hover	{ z-index: 2; width: 8; color: gray; }
+way :selected { z-index: 2; width: 8; color: yellow; }

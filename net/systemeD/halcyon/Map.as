@@ -28,7 +28,7 @@ package net.systemeD.halcyon {
 		public const MINSCALE:uint=13;					// don't zoom out past this
 		public const MAXSCALE:uint=19;					// don't zoom in past this
 
-		public var ruleset:RuleSet=new RuleSet(redrawPOIs);	// rules
+		public var ruleset:RuleSet;						// rules
 		
 		public var ways:Object=new Object();			// geodata
 		public var nodes:Object=new Object();			//  |
@@ -69,6 +69,7 @@ package net.systemeD.halcyon {
 		public var initparams:Object;					// object containing 
 
 		public var backdrop:Object;						// reference to backdrop sprite
+		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
 		public var connection:Connection;				// server connection
 
@@ -143,10 +144,8 @@ package net.systemeD.halcyon {
 		// Initialise map at a given lat/lon
 
         public function init(startlat:Number,startlon:Number,startscale:uint,style:String):void {
-
-			ruleset.load(style);
-//			rules.initExample();		// initialise dummy rules
-
+			ruleset=new RuleSet(this,redrawPOIs);
+			ruleset.loadFromCSS("test.css?"+Math.random());		// ** test for MapCSS
 			//updateSize();
 
 			scale=startscale;

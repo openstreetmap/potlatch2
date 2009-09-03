@@ -1,16 +1,22 @@
 package net.systemeD.halcyon.styleparser {
 
+    import net.systemeD.halcyon.connection.*;
+
 	public class Rule {
 
-		public var conditions:Array;
-		public var breaker:Boolean = true;
+		public var conditions:Array = [];
 		public var isAnd:Boolean = true;
-		public var minScale:uint = 19;
-		public var maxScale:uint = 13;
-		public var hasTags:Boolean = false;
-		public var setTags:Object = {};
+		public var minZoom:uint = 13;
+		public var maxZoom:uint = 19;
+		public var subject:String='';			// "", "way", "node" or "relation"
 		
-		public function test(tags:Object):Boolean {
+		public function Rule(s:String=''):void {
+			subject=s;
+		}
+		
+		public function test(obj:Entity,tags:Object):Boolean {
+			if (subject!='' && obj.getType()!=subject) { return false; }
+			
 			var v:Boolean; var i:uint=0;
 			for each (var condition:Condition in conditions) {
 				var r:Boolean=condition.test(tags);
@@ -20,6 +26,10 @@ package net.systemeD.halcyon.styleparser {
 				i++;
 			}
 			return v;
+		}
+		
+		public function toString():String {
+			return subject+" z"+minZoom+"-"+maxZoom+": "+conditions;
 		}
 	}
 }

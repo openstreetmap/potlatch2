@@ -6,34 +6,42 @@ package net.systemeD.halcyon.styleparser {
 	import flash.filters.BitmapFilter;
 	import flash.filters.GlowFilter;
 
-	public class TextStyle {
+	public class TextStyle extends Style {
 
-		public var font_name:String;
+		public var font_family:String;
 		public var font_bold:Boolean;
 		public var font_italic:Boolean;
 		public var font_caps:Boolean;
-		public var text_size:uint;
-		public var text_colour:uint;
-		public var text_offset:Number;	// Y offset - i.e. within or outside casing?
-		public var text_width:Number;	// maximum width of label
-		public var tag:String;
-		public var pullout_colour:uint;
-		public var pullout_radius:uint=0;
-		public var isLine:Boolean;
-		public var sublayer:uint=0;
+		public var font_size:uint;
+		public var text_color:uint;
+		public var text_offset:Number;		// Y offset - i.e. within or outside casing?
+		public var max_width:Number;		// maximum width of label
+		public var text:String;
+		public var text_halo_color:uint;
+		public var text_halo_radius:uint=0;
+		public var text_onpath:Boolean;		// true if on line
 
+		override public function get properties():Array {
+			return [
+				'font_family','font_bold','font_italic','font_caps','font_size',
+				'text_color','text_offset','max_width',
+				'text','text_halo_color','text_halo_radius','text_onpath'
+			];
+		}
+
+		
 		public function getTextFormat():TextFormat {
-			return new TextFormat(font_name   ? font_name : "DejaVu",
-								  text_size   ? text_size : 8,
-								  text_colour ? text_colour: 0,
-								  font_bold   ? font_bold : false,
+			return new TextFormat(font_family ? font_family: "DejaVu",
+								  font_size   ? font_size  : 8,
+								  text_color  ? text_color : 0,
+								  font_bold   ? font_bold  : false,
 								  font_italic ? font_italic: false);
 		}
 	
-		public function getPulloutFilter():Array {
-			var filter:BitmapFilter=new GlowFilter(pullout_colour ? pullout_colour : 0xFFFFFF,1,
-												   pullout_radius ? pullout_radius: 2,
-												   pullout_radius ? pullout_radius: 2,255);
+		public function getHaloFilter():Array {
+			var filter:BitmapFilter=new GlowFilter(text_halo_color  ? text_halo_color  : 0xFFFFFF,1,
+												   text_halo_radius ? text_halo_radius: 2,
+												   text_halo_radius ? text_halo_radius: 2,255);
 			return [filter];
 		}
 		
@@ -44,15 +52,15 @@ package net.systemeD.halcyon.styleparser {
 			tf.embedFonts = true;
 			tf.defaultTextFormat = n;
 			tf.text = a;
-			if (text_width) {
-				tf.width=text_width;
+			if (max_width) {
+				tf.width=max_width;
 				tf.wordWrap=true;
 				tf.height=tf.textHeight+4;
 			} else {
 				tf.width = tf.textWidth+4;
 				tf.height = tf.textHeight+4;
 			}
-			if (pullout_radius>0) { tf.filters=getPulloutFilter(); }
+			if (text_halo_radius>0) { tf.filters=getHaloFilter(); }
 			d.x=x-tf.width/2;
 			d.y=y+(text_offset ? text_offset : 0);
 			d.addChild(tf);

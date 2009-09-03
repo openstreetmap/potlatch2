@@ -22,6 +22,7 @@ package net.systemeD.halcyon.styleparser {
 		public function test(tags:Object):Boolean {
 			switch (type) {
 				case 'eq':		return (tags[params[0]]==params[1]); break;
+				case 'ne':		return (tags[params[0]]!=params[1]); break;
 				case 'regex':	var r:RegExp=new RegExp(params[1],"i");
 								return (r.test(tags[params[0]])); break;
 				case 'true':	return (tags[params[0]]=='true' || tags[params[0]]=='yes' || tags[params[0]]=='1'); break;
@@ -35,6 +36,12 @@ package net.systemeD.halcyon.styleparser {
 			}
 			return false;
 		}
+
+        public function toString():String {
+            return "Condition("+type+":"+params+")";
+        }
+
+
 	}
 
 }
