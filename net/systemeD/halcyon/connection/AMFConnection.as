@@ -145,19 +145,19 @@ package net.systemeD.halcyon.connection {
                     var lat:Number = Number(p[1]);
                     var nodeTags:Object = p[3];
                     node = new Node(nodeID, nodeVersion, nodeTags, true, lat, lon);
-                    setNode(node);
                 } else if (!node.loaded) {
 					node.update(nodeVersion, nodeTags, true, lat, lon);
 				}
+                setNode(node);
                 nodes.push(node);
 			}
 
 			if (way==null) {
             	way = new Way(id, version, tags, true, nodes);
-            	setWay(way);
 			} else {
 				way.update(version, tags, true, nodes);
 			}
+           	setWay(way);
 			gotRequest(id+"way");
 		}
 
@@ -206,10 +206,10 @@ package net.systemeD.halcyon.connection {
 			}
 			if (relation==null) {
 	            relation = new Relation(id, version, tags, true, members);
-	            setRelation(relation);
 			} else {
 				relation.update(version,tags,true,members);
 			}
+            setRelation(relation);
 			gotRequest(id+"rel");
 		}
 		

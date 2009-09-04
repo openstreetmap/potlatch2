@@ -136,7 +136,7 @@ package net.systemeD.halcyon {
 
 			} else {
 				// somewhere innocuous
-				init(53.09465,-2.56495,17,"test.yaml?d="+Math.random());
+				init(53.09465,-2.56495,17,"test.css?d="+Math.random());
 			}
 		}
 
@@ -145,7 +145,7 @@ package net.systemeD.halcyon {
 
         public function init(startlat:Number,startlon:Number,startscale:uint,style:String):void {
 			ruleset=new RuleSet(this,redrawPOIs);
-			ruleset.loadFromCSS("test.css?"+Math.random());		// ** test for MapCSS
+			ruleset.loadFromCSS(style);
 			//updateSize();
 
 			scale=startscale;

@@ -76,17 +76,17 @@ package net.systemeD.halcyon.connection {
 
         protected function setNode(node:Node):void {
             nodes[node.id] = node;
-            sendEvent(new EntityEvent(NEW_NODE, node));
+            if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node)); }
         }
 
         protected function setWay(way:Way):void {
             ways[way.id] = way;
-            sendEvent(new EntityEvent(NEW_WAY, way));
+            if (way.loaded) { sendEvent(new EntityEvent(NEW_WAY, way)); }
         }
 
         protected function setRelation(relation:Relation):void {
             relations[relation.id] = relation;
-            sendEvent(new EntityEvent(NEW_RELATION, relation));
+            if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation)); }
         }
 
 		public function sendEvent(e:*):void {
