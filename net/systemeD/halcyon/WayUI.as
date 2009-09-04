@@ -116,58 +116,46 @@ package net.systemeD.halcyon {
 
 			// Iterate through each sublayer, drawing any styles on that layer
 			var sl:StyleList=map.ruleset.getStyles(this.way, tags);
-			var drawn:Boolean=false;
+			var drawn:Boolean;
 			for (var sublayer:uint=0; sublayer<11; sublayer++) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
-					var stroke:Shape, fill:Shape, roadname:Sprite, f:Graphics, g:Graphics;
+					var stroke:Shape, fill:Shape, roadname:Sprite, lower:Graphics, upper:Graphics;
+					var casedrawn:Boolean;
+					var x0:Number=map.lon2coord(way.getNode(0).lon);
+					var y0:Number=map.latp2coord(way.getNode(0).latp);
 
-					// Set stroke style
+					// Create stroke object
 					if (s.width)  {
-						stroke=new Shape(); addToLayer(stroke,1,sublayer); g=stroke.graphics;
-		                g.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
-						g.lineStyle(s.width,
-									s.color ? s.color : 0,
-									s.opacity ? s.opacity : 1,
-									false, "normal",
-									s.linecap  ? s.linecap : "none",
-									s.linejoin ? s.linejoin : "round");
+						stroke=new Shape(); addToLayer(stroke,1,sublayer);
+						upper=stroke.graphics; upper.moveTo(x0,y0);
+						s.applyStrokeStyle(upper);
 					}
 
 					// Set fill and casing style
-					if (s.fill_color || s.casing_width) {
-						fill=new Shape(); addToLayer(fill,0); f=fill.graphics;
-		                f.moveTo(map.lon2coord(way.getNode(0).lon), map.latp2coord(way.getNode(0).latp));
-						if (s.casing_width)  {
-							f.lineStyle(s.casing_width,
-										s.casing_color   ? s.casing_color : 0,
-										s.casing_opacity ? s.casing_opacity : 1,
-										false, "normal",
-										s.linecap  ? s.linecap : "none",
-										s.linejoin ? s.linejoin : "round");
-						}
-						if (s.fill_color) {
-							f.beginFill(s.fill_color,
-										s.fill_opacity ? s.fill_opacity : 1);
-						}
+					if (s.fill_color || s.fill_image || s.casing_width) {
+						fill=new Shape(); addToLayer(fill,0);
+						lower=fill.graphics; lower.moveTo(x0,y0);
+						if (s.casing_width) { s.applyCasingStyle(lower); }
 					}
 
-					// Draw stroke
-					if (s.dashes && s.dashes.length>0) {
-						dashedLine(g,s.dashes); drawn=true;
-					} else if (s.width) { 
-						solidLine(g); drawn=true;
-					}
-			
-					// Draw fill and casing
+					// Draw stroke (dashed or solid)
+					if (s.dashes && s.dashes.length>0) { dashedLine(upper,s.dashes); drawn=true; }
+					else if (s.width) { solidLine(upper); drawn=true; }
+
+					// Draw dashed casing
 					if (s.casing_dashes && s.casing_dashes.length>0) {
-						dashedLine(f,s.casing_dashes); f.lineStyle(); drawn=true;
+						dashedLine(lower,s.casing_dashes); lower.lineStyle(); drawn=true; casedrawn=true;
 					}
-					if (s.fill_color) {
-						f.beginFill(s.fill_color,s.fill_opacity); 
-						solidLine(f); f.endFill(); drawn=true;
-					} else if (s.casing_width && (!s.casing_dashes || s.casing_dashes.length==0)) {
-						solidLine(f); drawn=true;
+
+					// Draw fill and solid casing
+					if (s.fill_image) {
+						new WayBitmapFiller(this,lower,s);
+					} else if (s.fill_color) {
+						s.applyFill(lower);
+						solidLine(lower); lower.endFill(); drawn=true;
+					} else if (s.casing_width && !casedrawn) {
+						solidLine(lower); drawn=true;
 					}
 
 
@@ -252,7 +240,7 @@ package net.systemeD.halcyon {
 
 		// Draw solid polyline
 		
-		private function solidLine(g:Graphics):void {
+		public function solidLine(g:Graphics):void {
             var node:Node = way.getNode(0);
  			g.moveTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
 			for (var i:uint = 1; i < way.length; i++) {

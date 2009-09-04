@@ -18,7 +18,7 @@ package net.systemeD.halcyon.styleparser {
 		private var choosers:Array;
 
 		private static const WHITESPACE:RegExp	=/^ \s+ /sx;
-		private static const COMMENT:RegExp		=/^ \/* .+? *\/ \s* /sx;	/* */
+		private static const COMMENT:RegExp		=/^ \/\* .+? \*\/ \s* /sx;	/* */
 		private static const CLASS:RegExp		=/^ ([\.:]\w+) \s* /sx;
 		private static const ZOOM:RegExp		=/^ \| \s* z([\d\-]+) \s* /isx;
 		private static const GROUP:RegExp		=/^ , \s* /isx;

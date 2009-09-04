@@ -11,6 +11,9 @@ way .highlighted { color: pink; }
 way :hover	{ z-index: 2; width: 8; color: gray; }
 way :selected { z-index: 2; width: 8; color: yellow; }
 
+way[leisure=pitch],way[leisure=park] { fill-image: fills/grass.jpg; }
+/* fill-color: forestgreen; */
+
 relation[type=route] way { z-index: 1; width: 17; color: blue; opacity: 0.4; }
 
 node[amenity=pub] { icon-image: icons/pub.png; font-family: DejaVu; text: name; font-size: 9; }
