@@ -6,7 +6,7 @@ package net.systemeD.halcyon.styleparser {
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.Entity;
-	import bustin.dev.Inspector;
+//	import bustin.dev.Inspector;
 	
 	public class RuleSet {
 
@@ -52,8 +52,8 @@ package net.systemeD.halcyon.styleparser {
 		private function loadedCSS(event:Event):void {
 			var css:MapCSS=new MapCSS(map);
 			choosers=css.parse(event.target.data);
-			Inspector.getInstance().show();
-			Inspector.getInstance().shelf('Choosers', choosers);
+//			Inspector.getInstance().show();
+//			Inspector.getInstance().shelf('Choosers', choosers);
 			loadImages();
 		}
 
