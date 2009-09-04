@@ -8,12 +8,14 @@ package net.systemeD.halcyon.connection {
         private var _version:uint;
         private var tags:Object = {};
         private var modified:Boolean = false;
+		private var _loaded:Boolean = true;
 		private var parents:Dictionary = new Dictionary();
 
-        public function Entity(id:Number, version:uint, tags:Object) {
+        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean) {
             this._id = id;
             this._version = version;
             this.tags = tags;
+			this._loaded = loaded;
             modified = id < 0;
         }
 
@@ -24,6 +26,14 @@ package net.systemeD.halcyon.connection {
         public function get version():uint {
             return _version;
         }
+
+        public function get loaded():Boolean {
+            return _loaded;
+        }
+
+		public function updateEntityProperties(v:uint,t:Object,l:Boolean):void {
+			_version=v; tags=t; _loaded=l;
+		}
 
 		// Tag-handling methods
 

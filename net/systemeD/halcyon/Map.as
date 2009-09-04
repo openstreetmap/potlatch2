@@ -232,6 +232,7 @@ package net.systemeD.halcyon {
 
         private function newWayCreated(event:EntityEvent):void {
             var way:Way = event.entity as Way;
+			if (!way.loaded) { return; }
             ways[way.id] = new WayUI(way, this);
         }
 

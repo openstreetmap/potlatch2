@@ -119,7 +119,6 @@ package net.systemeD.halcyon {
 			var drawn:Boolean=false;
 			for (var sublayer:uint=0; sublayer<11; sublayer++) {
 				if (sl.shapeStyles[sublayer]) {
-Globals.vars.root.addDebug("adding shapestyle on "+sublayer); 
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, roadname:Sprite, f:Graphics, g:Graphics;
 
@@ -178,15 +177,16 @@ Globals.vars.root.addDebug("adding shapestyle on "+sublayer);
 					var t:TextStyle=sl.textStyles[sublayer];
 					roadname=new Sprite(); addToLayer(roadname,2);
 					nameformat = t.getTextFormat();
-					var a:String=tags[t.text]; if (t.font_caps) { a=a.toUpperCase(); }
-					if (t.text_onpath) {
-						writeNameOnPath(roadname,a,t.text_offset ? t.text_offset : 0);
+					var a:String=tags[t.text];
+					if (a) {
+						if (t.font_caps) { a=a.toUpperCase(); }
+						if (t.text_center && centroid_x) {
+							t.writeNameLabel(roadname,tags[t.text],centroid_x,centroid_y);
+						} else {
+							writeNameOnPath(roadname,a,t.text_offset ? t.text_offset : 0);
+						}
 						if (t.text_halo_radius>0) { roadname.filters=t.getHaloFilter(); }
-					} else if (centroid_x) {
-						t.writeNameLabel(roadname,tags[t.text],centroid_x,centroid_y);
 					}
-
-
 				}
 				
 				// ** ShieldStyle to do

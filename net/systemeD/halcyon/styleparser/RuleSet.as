@@ -6,7 +6,7 @@ package net.systemeD.halcyon.styleparser {
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.Entity;
-//	import bustin.dev.Inspector;
+	import bustin.dev.Inspector;
 	
 	public class RuleSet {
 
@@ -52,8 +52,9 @@ package net.systemeD.halcyon.styleparser {
 		private function loadedCSS(event:Event):void {
 			var css:MapCSS=new MapCSS(map);
 			choosers=css.parse(event.target.data);
-//			Inspector.getInstance().show();
-//			Inspector.getInstance().shelf('Choosers', choosers);
+			Inspector.getInstance().show();
+			Inspector.getInstance().shelf('Choosers', choosers);
+			loadImages();
 		}
 
 		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
@@ -63,27 +64,30 @@ package net.systemeD.halcyon.styleparser {
 
 		// ------------------------------------------------------------------------------------------------
 		// Load all referenced images
-		// ** currently only looks in PointRules
 		// ** will duplicate if referenced twice, shouldn't
 		
 		public function loadImages():void {
-			var ps:PointStyle;
-
-			for each (var rule:* in choosers) {
-				// if (!(rule is PointRule)) { continue; }
-				if (!(rule.pointStyle)) { continue; }
-				if (!(rule.pointStyle.icon_image)) { continue; }
+Globals.vars.root.addDebug("entering loadImages");
+			var filename:String;
+			for each (var chooser:StyleChooser in choosers) {
+				for each (var style:Style in chooser.styles) {
+					if      (style is PointStyle  && PointStyle(style).icon_image   ) { filename=PointStyle(style).icon_image; }
+					else if (style is ShapeStyle  && ShapeStyle(style).fill_image   ) { filename=ShapeStyle(style).fill_image; }
+					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
+					else { continue; }
+Globals.vars.root.addDebug("need "+filename);
 				
-				iconsToLoad++;
-				var request:URLRequest=new URLRequest(rule.pointStyle.icon_image);
-				var loader:ImageLoader=new ImageLoader();
-				loader.dataFormat=URLLoaderDataFormat.BINARY;
-				loader.filename=rule.pointStyle.icon_image;
-				loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
-				loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
-				loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
-				loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
-				loader.load(request);
+					iconsToLoad++;
+					var request:URLRequest=new URLRequest(filename);
+					var loader:ImageLoader=new ImageLoader();
+					loader.dataFormat=URLLoaderDataFormat.BINARY;
+					loader.filename=filename;
+					loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
+					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
+					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
+					loader.load(request);
+				}
 			}
 		}
 

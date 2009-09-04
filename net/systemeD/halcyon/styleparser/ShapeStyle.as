@@ -11,7 +11,7 @@ package net.systemeD.halcyon.styleparser {
 		
 		public var fill_color:Number;
 		public var fill_opacity:Number;
-		public var fill_pattern:String;
+		public var fill_image:String;
 		
 		public var casing_width:Number;
 		public var casing_color:Number;
@@ -21,7 +21,7 @@ package net.systemeD.halcyon.styleparser {
 		override public function get properties():Array {
 			return [
 				'width','color','opacity','dashes','linecap','linejoin',
-				'fill_color','fill_opacity','fill_pattern',
+				'fill_color','fill_opacity','fill_image',
 				'casing_width','casing_color','casing_opacity','casing_dashes'
 			];
 		}

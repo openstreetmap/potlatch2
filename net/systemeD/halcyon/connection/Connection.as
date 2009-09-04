@@ -76,23 +76,27 @@ package net.systemeD.halcyon.connection {
 
         protected function setNode(node:Node):void {
             nodes[node.id] = node;
-            dispatchEvent(new EntityEvent(NEW_NODE, node));
+            sendEvent(new EntityEvent(NEW_NODE, node));
         }
 
         protected function setWay(way:Way):void {
             ways[way.id] = way;
-            dispatchEvent(new EntityEvent(NEW_WAY, way));
+            sendEvent(new EntityEvent(NEW_WAY, way));
         }
 
         protected function setRelation(relation:Relation):void {
             relations[relation.id] = relation;
-            dispatchEvent(new EntityEvent(NEW_RELATION, relation));
+            sendEvent(new EntityEvent(NEW_RELATION, relation));
         }
+
+		public function sendEvent(e:*):void {
+			dispatchEvent(e);
+		}
 
         protected function registerPOI(node:Node):void {
             if ( pois.indexOf(node) < 0 ) {
                 pois.push(node);
-                dispatchEvent(new EntityEvent(NEW_POI, node));
+                sendEvent(new EntityEvent(NEW_POI, node));
             }
         }
 
@@ -105,7 +109,7 @@ package net.systemeD.halcyon.connection {
 
         protected function setActiveChangeset(changeset:Changeset):void {
             this.changeset = changeset;
-            dispatchEvent(new EntityEvent(NEW_CHANGESET, changeset));
+            sendEvent(new EntityEvent(NEW_CHANGESET, changeset));
         }
         
         public function getNode(id:Number):Node {
@@ -121,19 +125,19 @@ package net.systemeD.halcyon.connection {
         }
 
         public function createNode(tags:Object, lat:Number, lon:Number):Node {
-            var node:Node = new Node(nextNegative, 0, tags, lat, lon);
+            var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
             setNode(node);
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array):Way {
-            var way:Way = new Way(nextNegative, 0, tags, nodes.concat());
+            var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
             setWay(way);
             return way;
         }
 
         public function createRelation(tags:Object, members:Array):Relation {
-            var relation:Relation = new Relation(nextNegative, 0, tags, members.concat());
+            var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
             setRelation(relation);
             return relation;
         }

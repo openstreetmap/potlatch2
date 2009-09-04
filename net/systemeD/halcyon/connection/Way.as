@@ -4,11 +4,18 @@ package net.systemeD.halcyon.connection {
         private var nodes:Array;
 		public static var entity_type:String = 'way';
 
-        public function Way(id:Number, version:uint, tags:Object, nodes:Array) {
-            super(id, version, tags);
+        public function Way(id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array) {
+            super(id, version, tags, loaded);
             this.nodes = nodes;
 			for each (var node:Node in nodes) { node.addParent(this); }
         }
+
+		public function update(version:uint, tags:Object, loaded:Boolean, nodes:Array):void {
+			var node:Node;
+			for each (node in this.nodes) { node.removeParent(this); }
+			updateEntityProperties(version,tags,loaded); this.nodes=nodes;
+			for each (node in nodes) { node.addParent(this); }
+		}
 
         public function get length():uint {
             return nodes.length;

@@ -1,7 +1,6 @@
 package net.systemeD.halcyon.styleparser {
 
 	import net.systemeD.halcyon.connection.Entity;
-	import net.systemeD.halcyon.Globals;
 
 	public class StyleChooser {
 
@@ -38,7 +37,6 @@ package net.systemeD.halcyon.styleparser {
 			var fulfilled:Boolean=false;
 			for each (var c:Array in ruleChains) {
 				if (testChain(c,-1,obj,tags)) {
-Globals.vars.root.addDebug("object "+obj+", testChain "+c+" returned true"); 
 					fulfilled=true; break;
 				}
 			}
@@ -59,17 +57,14 @@ Globals.vars.root.addDebug("object "+obj+", testChain "+c+" returned true");
 					continue;
 				}
 
-Globals.vars.root.addDebug("style on "+r.sublayer); 
 				if (a[r.sublayer]) {
 					// If there's already a style on this sublayer, then merge them
 					// (making a deep copy if necessary to avoid altering the root style)
 					if (!a[r.sublayer].merged) { a[r.sublayer]=a[r.sublayer].deepCopy(); }
 					a[r.sublayer].mergeWith(r);
-Globals.vars.root.addDebug("merging style on sl"+r.sublayer); 
 				} else {
 					// Otherwise, just assign it
 					a[r.sublayer]=r;
-Globals.vars.root.addDebug("assigning style on sl"+r.sublayer); 
 				}
 			}
 		}
@@ -90,8 +85,9 @@ Globals.vars.root.addDebug("assigning style on sl"+r.sublayer);
 			if (!r.test(obj, tags)) { return false; }
 			if (pos==0) { return true; }
 			
-			for each (var p:Entity in obj.parentObjects) {
-				if (testChain(chain.slice(0), pos-1, p, p.getTagsHash() )) { return true; }
+			var o:Array=obj.parentObjects;
+			for each (var p:Entity in o) {
+				if (testChain(chain, pos-1, p, p.getTagsHash() )) { return true; }
 			}
 			return false;
 		}
@@ -102,7 +98,6 @@ Globals.vars.root.addDebug("assigning style on sl"+r.sublayer);
 		
 		// newGroup		<- starts a new ruleChain in this.ruleChains
 		public function newGroup():void {
-Globals.vars.root.addDebug("* newGroup");
 			if (ruleChains[rcpos].length>0) {
 				ruleChains[++rcpos]=[];
 			}
@@ -110,27 +105,22 @@ Globals.vars.root.addDebug("* newGroup");
 
 		// newObject	<- adds into the current ruleChain (starting a new Rule)
 		public function newObject(e:String=''):void {
-Globals.vars.root.addDebug("* newObject");
 			ruleChains[rcpos].push(new Rule(e));
 		}
 
 		// addZoom		<- adds into the current ruleChain (existing Rule)
 		public function addZoom(z1:uint,z2:uint):void {
-Globals.vars.root.addDebug("* addZoom");
 			ruleChains[rcpos][ruleChains[rcpos].length-1].minZoom=z1;
 			ruleChains[rcpos][ruleChains[rcpos].length-1].minZoom=z2;
 		}
 		
 		// addCondition	<- adds into the current ruleChain (existing Rule)
 		public function addCondition(c:Condition):void {
-Globals.vars.root.addDebug("* addCondition");
 			ruleChains[rcpos][ruleChains[rcpos].length-1].conditions.push(c);
-Globals.vars.root.addDebug("    now "+ruleChains[rcpos][ruleChains[rcpos].length-1].conditions);
 		}
 
 		// addStyles	<- adds to this.styles
 		public function addStyles(a:Array):void {
-Globals.vars.root.addDebug("* Styles ("+ruleChains[0][0].conditions+")");
 			styles=styles.concat(a);
 		}
 		

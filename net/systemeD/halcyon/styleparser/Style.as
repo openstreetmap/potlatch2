@@ -2,7 +2,6 @@ package net.systemeD.halcyon.styleparser {
 
 	import flash.utils.ByteArray;
 	import flash.net.*;
-	import net.systemeD.halcyon.Globals;
 
 	public class Style {
 
@@ -49,6 +48,9 @@ package net.systemeD.halcyon.styleparser {
 			// ** almost certainly need to do more here, e.g. true|1|yes=Boolean true
 			switch (typeof(this[k])) {
 				case "number":	this[k]=Number(v) ; edited=true; return true;
+				case "object":	// **for some reason, typeof(string class variables) returns "object".
+								// We'll probably need to fix this in future if we have more complex
+								// properties
 				case "string":	this[k]=String(v) ; edited=true; return true;
 				case "boolean":	this[k]=Boolean(v); edited=true; return true;
 			}

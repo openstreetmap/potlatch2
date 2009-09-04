@@ -60,8 +60,9 @@ package net.systemeD.halcyon.styleparser {
 		private static const BOLD:RegExp=/^bold$/i;
 		private static const ITALIC:RegExp=/^italic|oblique$/i;
 		private static const CAPS:RegExp=/^uppercase$/i;
-		private static const LINE:RegExp=/^line$/i;
+		private static const CENTER:RegExp=/^center$/i;
 
+		private static const HEX:RegExp=/^#([0-9a-f]+)$/i;
 		private static const CSSCOLORS:Object = {
 			aliceblue:0xf0f8ff,
 			antiquewhite:0xfaebd7,
@@ -232,7 +233,6 @@ package net.systemeD.halcyon.styleparser {
 					css=css.replace(CLASS,'');
 					sc.addCondition(new Condition('set',o[1]));
 					previous=oCONDITION;
-					Globals.vars.root.addDebug("class: "+o[1]);
 
 				// Zoom
 				} else if ((o=ZOOM.exec(css))) {
@@ -241,14 +241,12 @@ package net.systemeD.halcyon.styleparser {
 					css=css.replace(ZOOM,'');
 					var z:Array=parseZoom(o[1]);
 					sc.addZoom(z[0],z[1]);
-					Globals.vars.root.addDebug("zoom: "+o[1]+"->"+parseZoom(o[1]));
 					previous=oZOOM;
 
 				// Grouping - just a comma
 				} else if ((o=GROUP.exec(css))) {
 					css=css.replace(GROUP,'');
 					sc.newGroup();
-					Globals.vars.root.addDebug("group");
 					previous=oGROUP;
 
 				// Condition - [highway=primary]
@@ -258,7 +256,6 @@ package net.systemeD.halcyon.styleparser {
 
 					css=css.replace(CONDITION,'');
 					sc.addCondition(parseCondition(o[1]) as Condition);
-					Globals.vars.root.addDebug("condition: "+o[1]+'->'+parseCondition(o[1]));
 					previous=oCONDITION;
 
 				// Object - way, node, relation
@@ -267,13 +264,11 @@ package net.systemeD.halcyon.styleparser {
 
 					css=css.replace(OBJECT,'');
 					sc.newObject(o[1]);
-					Globals.vars.root.addDebug("object: "+o[1]);
 					previous=oOBJECT;
 
 				// Declaration - {...}
 				} else if ((o=DECLARATION.exec(css))) {
 					css=css.replace(DECLARATION,'');
-					Globals.vars.root.addDebug("declaration: "+o[1]);
 					sc.addStyles(parseDeclaration(o[1]));
 					previous=oDECLARATION;
 				
@@ -293,14 +288,12 @@ package net.systemeD.halcyon.styleparser {
 		}
 		
 		private function saveChooser(sc:StyleChooser):void {
-Globals.vars.root.addDebug("+ saveChooser [rc="+sc.ruleChains[0][0]+"]");
 			choosers.push(sc);
 		};
 
 		// Parse declaration string into list of styles
 
 		private function parseDeclaration(s:String):Array {
-			Globals.vars.root.addDebug("entering parseDeclaration with "+s); 
 			var styles:Array=[];
 			var t:Object=new Object();
 			var o:Object=new Object();
@@ -319,7 +312,6 @@ Globals.vars.root.addDebug("+ saveChooser [rc="+sc.ruleChains[0][0]+"]");
 				else if ((o=SET_TAG_TRUE.exec(a))) { xs.addSetTag(o[1],true); }
 				else if ((o=EXIT.exec(a))) { xs.setPropertyFromString('breaker',true); }
 			}
-if (xs.edited) { Globals.vars.root.addDebug("xs.set_tags is *"+xs.set_tags+"*");  }
 
 			// Find sublayer
 			var sub:uint=5;
@@ -328,10 +320,13 @@ if (xs.edited) { Globals.vars.root.addDebug("xs.set_tags is *"+xs.set_tags+"*");
 			xs.sublayer=10;
 
 			// Munge special values
-			if (t['font_weight']   ) { if (t['font_weight'].match(BOLD)   ) { t['font_bold']=true;   } else { t['font_bold']=false;   } }
-			if (t['font_style']    ) { if (t['font_style'].match(ITALIC)  ) { t['font_italic']=true; } else { t['font_italic']=false; } }
-			if (t['text_transform']) { if (t['text_transform'].match(CAPS)) { t['font_caps']=true;   } else { t['font_caps']=false;   } }
-			if (t['text_position'] ) { if (t['text_position'].match(LINE) ) { t['text_onpath']=true; } else { t['text_onpath']=false; } }
+			if (t['font_weight']   ) { t['font_bold'  ] = t['font_weight'  ].match(BOLD  ) ? true : false; }
+			if (t['font_style']    ) { t['font_italic'] = t['font_style'   ].match(ITALIC) ? true : false; }
+			if (t['text_position'] ) { t['text_center'] = t['text_position'].match(CENTER) ? true : false; }
+			if (t['text_transform']) {
+				// ** needs other transformations, e.g. lower-case, sentence-case
+				if (t['text_transform'].match(CAPS)) { t['font_caps']=true; } else { t['font_caps']=false; }
+			}
 
 			// ** Do compound settings (e.g. line: 5px dotted blue;)
 
@@ -339,20 +334,21 @@ if (xs.edited) { Globals.vars.root.addDebug("xs.set_tags is *"+xs.set_tags+"*");
 			for (a in t) {
 				// Parse properties
 				// ** also do units, e.g. px/pt
-				// ** convert # colours to 0x numbers
-Globals.vars.root.addDebug("looking at property *"+a+"*"); 
-				if (a.match(COLOR) && CSSCOLORS[t[a].toLowerCase()]) { t[a]=CSSCOLORS[t[a].toLowerCase()]; }
+				if (a.match(COLOR)) {
+					if (CSSCOLORS[t[a].toLowerCase()]) { t[a]=CSSCOLORS[t[a].toLowerCase()]; }
+					else if ((o=HEX.exec(t[a]))) { t[a]=Number("0x"+o[1]); }
+				}
 				
 				// Set in styles
-				if      (ss.hasOwnProperty(a)) { ss.setPropertyFromString(a,t[a]); Globals.vars.root.addDebug("added "+a+" to ShapeStyle"); }
-				else if (ps.hasOwnProperty(a)) { ps.setPropertyFromString(a,t[a]); Globals.vars.root.addDebug("added "+a+" to PointStyle"); }
-				else if (ts.hasOwnProperty(a)) { ts.setPropertyFromString(a,t[a]); Globals.vars.root.addDebug("added "+a+" to TextStyle"); }
-				else if (hs.hasOwnProperty(a)) { hs.setPropertyFromString(a,t[a]); Globals.vars.root.addDebug("added "+a+" to ShieldStyle"); }
+				if      (ss.hasOwnProperty(a)) { ss.setPropertyFromString(a,t[a]); }
+				else if (ps.hasOwnProperty(a)) { ps.setPropertyFromString(a,t[a]); }
+				else if (ts.hasOwnProperty(a)) { ts.setPropertyFromString(a,t[a]); }
+				else if (hs.hasOwnProperty(a)) { hs.setPropertyFromString(a,t[a]); }
 			}
 
 			// Add each style to list
-			if (ss.edited) { styles.push(ss); Globals.vars.root.addDebug("added ShapeStyle"); }
-			if (ps.edited) { styles.push(ps); Globals.vars.root.addDebug("added PointStyle"); }
+			if (ss.edited) { styles.push(ss); }
+			if (ps.edited) { styles.push(ps); }
 			if (ts.edited) { styles.push(ts); }
 			if (hs.edited) { styles.push(hs); }
 			if (xs.edited) { styles.push(xs); }

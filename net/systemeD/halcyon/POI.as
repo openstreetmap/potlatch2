@@ -33,7 +33,8 @@ package net.systemeD.halcyon {
 		
 		public function redraw():void {
 			var tags:Object = node.getTagsCopy();
-			var sl:StyleList=map.ruleset.getStyles(this.node,map.scale);
+			// ** apply :hover etc.
+			var sl:StyleList=map.ruleset.getStyles(this.node,tags);
 			var r:Boolean=false;	// ** rendered
 			for (var sublayer:uint=0; sublayer<10; sublayer++) {
 

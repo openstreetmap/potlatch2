@@ -17,7 +17,7 @@ package net.systemeD.halcyon.styleparser {
 		public function test(obj:Entity,tags:Object):Boolean {
 			if (subject!='' && obj.getType()!=subject) { return false; }
 			
-			var v:Boolean; var i:uint=0;
+			var v:Boolean=true; var i:uint=0;
 			for each (var condition:Condition in conditions) {
 				var r:Boolean=condition.test(tags);
 				if (i==0) { v=r; }

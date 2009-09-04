@@ -13,6 +13,9 @@ package net.systemeD.halcyon.connection {
 		public var writeConnection:NetConnection;
 		private var mapLoader:URLLoader;
 
+		private var eventTarget:AMFCounter;
+		private var bboxrequests:Array=new Array();
+
 		// ------------------------------------------------------------
 		// Constructor for new AMFConnection
 
@@ -39,9 +42,13 @@ package net.systemeD.halcyon.connection {
 								top:Number,bottom:Number):void {
 			readConnection.call("whichways",new Responder(gotBbox, error),left,bottom,right,top);
 		}
+		
+		override public function sendEvent(e:*):void {
+			eventTarget.addEvent(e);
+		}
 
         private function gotBbox(r:Object):void {
-			var code:uint         =r.shift();
+			var code:uint=r.shift();
             if (code) {
                 error(new Array(r.shift()));
                 return;
@@ -52,6 +59,21 @@ package net.systemeD.halcyon.connection {
 			var pointlist:Array   =r[1];
 			var relationlist:Array=r[2];
 			var id:Number, version:uint;
+			var requests:AMFCounter=new AMFCounter(this);
+			eventTarget=requests;
+
+			// Load relations
+
+			for each (var a:Array in relationlist) {
+				id=Number(a[0]);
+                version=uint(a[1]);
+
+                var relation:Relation = getRelation(id);
+                if ( relation == null || !relation.loaded  ) {
+                    loadRelation(id);
+					requests.addRelationRequest(id);
+                }
+			}
 
 			// Load ways
 
@@ -60,8 +82,9 @@ package net.systemeD.halcyon.connection {
                 version=uint(w[1]);
 
                 var way:Way = getWay(id);
-                if ( way == null ) {
+                if ( way == null || !way.loaded ) {
                     loadWay(id);
+					requests.addWayRequest(id);
                 }
 			}
 
@@ -72,15 +95,17 @@ package net.systemeD.halcyon.connection {
                 version = uint(p[4]);
 
                 var node:Node = getNode(id);
-                if ( node == null ) {
+                if ( node == null || !node.loaded ) {
                     var lat:Number = Number(p[2]);
                     var lon:Number = Number(p[1]);
                     var tags:Object = p[3];
-                    node = new Node(id, version, tags, lat, lon);
+                    node = new Node(id, version, tags, true, lat, lon);
                     setNode(node);
                 }
                 registerPOI(node);
 			}
+
+ 			bboxrequests.push(requests);
         }
 
         private function error(r:Object):void {}
@@ -101,8 +126,10 @@ package net.systemeD.halcyon.connection {
 			var version:uint = uint(r[3]);
 
             var way:Way = getWay(id);
-            if ( way != null )
+            if ( way != null && way.loaded ) {
+				gotRequest(id+"way");
                 return;
+			}
 
             var nodesAMF:Array = r[1];
 			var tags:Object = r[2];
@@ -117,15 +144,82 @@ package net.systemeD.halcyon.connection {
                     var lon:Number = Number(p[0]);
                     var lat:Number = Number(p[1]);
                     var nodeTags:Object = p[3];
-                    node = new Node(nodeID, nodeVersion, nodeTags, lat, lon);
+                    node = new Node(nodeID, nodeVersion, nodeTags, true, lat, lon);
                     setNode(node);
-                }
+                } else if (!node.loaded) {
+					node.update(nodeVersion, nodeTags, true, lat, lon);
+				}
                 nodes.push(node);
 			}
 
-            way = new Way(id, version, tags, nodes);
-            setWay(way);
+			if (way==null) {
+            	way = new Way(id, version, tags, true, nodes);
+            	setWay(way);
+			} else {
+				way.update(version, tags, true, nodes);
+			}
+			gotRequest(id+"way");
 		}
 
+
+		private function loadRelation(id:uint):void {
+			readConnection.call("getrelation",new Responder(gotRelation, error),id);
+		}
+
+		private function gotRelation(r:Object):void {
+			var code:uint = r.shift();
+            if (code) { error(new Array(r.shift())); return; }
+			var message:String=r.shift();
+
+            var id:Number = Number(r[0]);
+			var version:uint = uint(r[3]);
+
+            var relation:Relation = getRelation(id);
+            if ( relation != null && relation.loaded ) {
+				gotRequest(id+"rel");
+				return;
+			}
+
+			var tags:Object = r[1];
+            var membersAMF:Array = r[2];
+			var members:Array = [];
+			for each (var p:Array in membersAMF) {
+				var type:String=p[0];
+				var memid:Number=p[1];
+				var role:String=p[2];
+				var e:Entity;
+				switch (type) {
+					case 'Node':
+						e=getNode(memid);
+						if (e==null) { e=new Node(memid,0,{},false,0,0); setNode(Node(e)); }
+						break;
+					case 'Way':
+						e=getWay(memid);
+						if (e==null) { e=new Way(memid,0,{},false,[]); setWay(Way(e)); }
+						break;
+					case 'Relation':
+						e=getRelation(memid);
+						if (e==null) { e=new Relation(memid,0,{},false,[]); setRelation(Relation(e)); }
+						break;
+				}
+				members.push(new RelationMember(e,role));
+			}
+			if (relation==null) {
+	            relation = new Relation(id, version, tags, true, members);
+	            setRelation(relation);
+			} else {
+				relation.update(version,tags,true,members);
+			}
+			gotRequest(id+"rel");
+		}
+		
+		private function gotRequest(n:String):void {
+			for each (var c:AMFCounter in bboxrequests) {
+				if (c.removeRequest(n)) { break; }
+			}
+			while (bboxrequests.length>0 && bboxrequests[0].count==0) {
+				bboxrequests.shift();
+			}
+		}
 	}
 }

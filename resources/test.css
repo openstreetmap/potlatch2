@@ -1,9 +1,16 @@
 way[name=~/Brown/] { set .highlighted; }
-way[highway=secondary] { color: green; width: 5; }
-way[highway=unclassified] { color: blue; width: 3; }
-way[highway=residential] { color: blue; width: 2; }
+
+way[highway=secondary] { color: orange; width: 9; casing-width: 11; text: name; text-color: black; font-size: 9; text-position: line; }
+way[highway=tertiary],way[highway=unclassified] { color: yellow; width: 7; casing-width: 9; text: name; text-color: black; font-size: 7; text-position: line; }
+way[highway=residential] { color: #DDDDDD; casing-color: gray; width: 5; casing-width: 7; }
 way[highway=primary] { color: red; width: 5; }
 way[highway=trunk] { color: green; width: 7; }
+
 way .highlighted { color: pink; }
+
 way :hover	{ z-index: 2; width: 8; color: gray; }
 way :selected { z-index: 2; width: 8; color: yellow; }
+
+relation[type=route] way { z-index: 1; width: 17; color: blue; opacity: 0.4; }
+
+node[amenity=pub] { icon-image: icons/pub.png; font-family: DejaVu; text: name; font-size: 9; }

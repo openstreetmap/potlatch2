@@ -19,13 +19,13 @@ package net.systemeD.halcyon.styleparser {
 		public var text:String;
 		public var text_halo_color:uint;
 		public var text_halo_radius:uint=0;
-		public var text_onpath:Boolean;		// true if on line
+		public var text_center:Boolean;
 
 		override public function get properties():Array {
 			return [
 				'font_family','font_bold','font_italic','font_caps','font_size',
 				'text_color','text_offset','max_width',
-				'text','text_halo_color','text_halo_radius','text_onpath'
+				'text','text_halo_color','text_halo_radius','text_center'
 			];
 		}
 
