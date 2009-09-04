@@ -8,7 +8,7 @@ package {
 	import flash.events.MouseEvent;
 	import flash.display.*;
 	import flash.text.TextField;
-	import bustin.dev.Inspector;
+//	import bustin.dev.Inspector;
 
 	public class halcyon_viewer extends Sprite {
 
@@ -35,10 +35,10 @@ package {
 			addChild(theMap);
 			Globals.vars.root=theMap;
 
-//			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
-//			stage.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
-//			stage.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
-			Inspector.getInstance().init(stage);
+			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
+//			Inspector.getInstance().init(stage);
 
 			var z1:Sprite=new Sprite();
 			z1.graphics.beginFill(0x0000FF); z1.graphics.drawRoundRect(0,0,20,20,5); z1.graphics.endFill();
