@@ -61,6 +61,8 @@ package net.systemeD.halcyon.connection {
         public static var NEW_POI:String = "new_poi";
         public static var TAG_CHANGE:String = "tag_change";
         public static var NODE_MOVED:String = "node_moved";
+        public static var WAY_NODE_ADDED:String = "way_node_added";
+        public static var WAY_NODE_REMOVED:String = "way_node_removed";
 
         // store the data we download
         private var negativeID:Number = -1;
@@ -87,6 +89,21 @@ package net.systemeD.halcyon.connection {
         protected function setRelation(relation:Relation):void {
             relations[relation.id] = relation;
             if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation)); }
+        }
+
+        protected function renumberNode(oldID:Number, node:Node):void {
+            nodes[node.id] = node;
+            delete nodes[oldID];
+        }
+
+        protected function renumberWay(oldID:Number, way:Way):void {
+            ways[way.id] = way;
+            delete ways[oldID];
+        }
+
+        protected function renumberRelation(oldID:Number, relation:Relation):void {
+            relations[relation.id] = relation;
+            delete relations[oldID];
         }
 
 		public function sendEvent(e:*):void {

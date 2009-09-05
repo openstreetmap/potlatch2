@@ -7,8 +7,9 @@ package net.systemeD.halcyon.connection {
 
         public function Node(id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number) {
             super(id, version, tags, loaded);
-            this.lat = lat;
-            this.lon = lon;
+            this._lat = lat;
+            this._latproj = lat2latp(lat);
+            this._lon = lon;
         }
 
 		public function update(version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number):void {
@@ -36,13 +37,19 @@ package net.systemeD.halcyon.connection {
         }
 
         public function set latp(latproj:Number):void {
+            var oldLat:Number = this._lat;
             this._latproj = latproj;
             this._lat = latp2lat(lat);
-        }
+            markDirty();
+            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, oldLat, _lon));
+         }
 
         public function set lon(lon:Number):void {
+            var oldLon:Number = this._lon;
             this._lon = lon;
-        }
+            markDirty();
+            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, _lat, oldLon));
+         }
 
         public override function toString():String {
             return "Node("+id+"@"+version+"): "+lat+","+lon+" "+getTagList();

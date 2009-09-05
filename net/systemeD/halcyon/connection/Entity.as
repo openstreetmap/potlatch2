@@ -31,8 +31,8 @@ package net.systemeD.halcyon.connection {
             return _loaded;
         }
 
-		public function updateEntityProperties(v:uint,t:Object,l:Boolean):void {
-			_version=v; tags=t; _loaded=l;
+		public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean):void {
+			_version=version; this.tags=tags; _loaded=loaded;
 		}
 
 		// Tag-handling methods
@@ -140,7 +140,11 @@ package net.systemeD.halcyon.connection {
 			for (var o:Object in parents) { a.push(o); }
 			return a;
 		}
-
+		
+		public function hasParent(entity:Entity):Boolean {
+            return parents[entity] == true;
+        }
+        
 		// To be overridden
 
         public function getType():String {

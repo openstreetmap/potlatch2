@@ -61,7 +61,8 @@
               if ( selectedEntity != null )
                   selectedEntity.removeEventListener(Connection.TAG_CHANGE, tagChanged);
               selectedEntity = entity;
-              selectedEntity.addEventListener(Connection.TAG_CHANGE, tagChanged);
+              if ( selectedEntity != null )
+                  selectedEntity.addEventListener(Connection.TAG_CHANGE, tagChanged);
           }
 
           if ( advancedID != null )
@@ -71,7 +72,7 @@
       }
 
       private function refreshFeatureIcon():void {
-          feature = mapFeatures.findMatchingFeature(selectedEntity);
+          feature = selectedEntity == null ? null : mapFeatures.findMatchingFeature(selectedEntity);
           if ( feature != null )
               setFeatureIcon(selectedEntity, feature);
           else
@@ -104,26 +105,27 @@
       }
 
       private function setupAdvanced(entity:Entity):void {
-          var entityText:String = "xx";
-          if ( entity is Node ) entityText = "Node";
-          else if ( entity is Way ) entityText = "Way";
-          else if ( entity is Relation ) entityText = "Relation";
-
-          advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
-
           if ( collection == null ) {
               collection = new ArrayCollection();
-              //var sort:Sort = new Sort();
-              //sort.fields = [new SortField("key", true)];
-              //collection.sort = sort;
-              //collection.refresh();
               advancedTagGrid.dataProvider = collection;
           }
+
           collection.removeAll();
-          var tags:Array = entity.getTagArray();
-          tags.sortOn("key");
-          for each(var tag:Tag in tags)
-              collection.addItem(tag);
+          
+          if ( entity == null ) {
+              advancedID.htmlText = "";
+          } else {
+              var entityText:String = "xx";
+              if ( entity is Node ) entityText = "Node";
+              else if ( entity is Way ) entityText = "Way";
+              else if ( entity is Relation ) entityText = "Relation";
+              advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
+
+              var tags:Array = entity.getTagArray();
+              tags.sortOn("key");
+              for each(var tag:Tag in tags)
+                  collection.addItem(tag);
+          }
       }
 
       private function tagChanged(event:TagEvent):void {

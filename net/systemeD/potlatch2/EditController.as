@@ -2,64 +2,102 @@ package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.MapController;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.potlatch2.controller.*;
 	import flash.events.*;
 	import flash.geom.*;
 
     public class EditController implements MapController {
 
-        private var map:Map;
+        private var _map:Map;
         private var tagViewer:TagViewer;
-        private var selectedEntity:Entity;
+        private var selectedWay:Way;
+        private var selectedNode:Node;
         
         private var draggingNode:Node = null;
         
+        private var state:ControllerState;
+        private var _connection:Connection;
+        
 
         public function EditController(map:Map, tagViewer:TagViewer) {
-            this.map = map;
+            this._map = map;
             this.tagViewer = tagViewer;
+            setState(new NoSelection());
             
             map.parent.addEventListener(MouseEvent.MOUSE_MOVE, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_DOWN, mapMouseEvent);
+            map.parent.addEventListener(MouseEvent.CLICK, mapMouseEvent);
         }
 
         public function setActive():void {
             map.setController(this);
+            _connection = map.connection;
         }
 
+        public function get map():Map {
+            return _map;
+        }
+        
+        public function get connection():Connection {
+            return _connection;
+        }
+        
+        public function setTagViewer(entity:Entity):void {
+            tagViewer.setEntity(entity);
+        }
+        
         private function mapMouseEvent(event:MouseEvent):void {
-            if ( draggingNode != null ) {
-                var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
-                event.localX = mapLoc.x;
-                event.localY = mapLoc.y;
+            var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
+            event.localX = mapLoc.x;
+            event.localY = mapLoc.y;
 
-                processNodeEvent(event, null);
+            var newState:ControllerState = state.processMouseEvent(event, null);
+            setState(newState);
+            if ( draggingNode != null ) {
             }
         }
         
         public function entityMouseEvent(event:MouseEvent, entity:Entity):void {
-            if ( event.type == MouseEvent.MOUSE_DOWN )
+            //if ( event.type == MouseEvent.MOUSE_DOWN )
                 event.stopPropagation();
+                
+            var newState:ControllerState = state.processMouseEvent(event, entity);
+            setState(newState);
 
+            /*
             if ( entity is Node || draggingNode != null ) {
                 processNodeEvent(event, entity);
-                return;
+            } else if ( enity is Way ) {
+                processWayEvent(event, entity);
             }
             
             if ( event.type == MouseEvent.CLICK ) {
-                if ( selectedEntity != null ) {
-                    map.setHighlight(selectedEntity, "selected", false);
-                    map.setHighlight(selectedEntity, "showNodes", false);
+                if ( selectedWay != null ) {
+                    map.setHighlight(selectedWay, "selected", false);
+                    map.setHighlight(selectedWay, "showNodes", false);
                 }
                 tagViewer.setEntity(entity);
                 map.setHighlight(entity, "selected", true);
                 map.setHighlight(entity, "showNodes", true);
-                selectedEntity = entity;
+                selectedWay = entity;
             } else if ( event.type == MouseEvent.MOUSE_OVER )
                 map.setHighlight(entity, "hover", true);
             else if ( event.type == MouseEvent.MOUSE_OUT )
                 map.setHighlight(entity, "hover", false);
-
+            */
+        }
+        
+        private function setState(newState:ControllerState):void {
+            if ( newState == state )
+                return;
+                
+            if ( state != null )
+                state.exitState();
+            newState.setController(this);
+            newState.setPreviousState(state);
+            state = newState;
+            state.enterState();
         }
 
         private function processNodeEvent(event:MouseEvent, entity:Entity):void {
@@ -77,5 +115,6 @@ package net.systemeD.potlatch2 {
         
     }
 
+    
 }
 

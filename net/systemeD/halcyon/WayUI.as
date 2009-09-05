@@ -39,11 +39,27 @@ package net.systemeD.halcyon {
 			this.map = map;
             init();
             way.addEventListener(Connection.TAG_CHANGE, wayTagChanged);
+            way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
+            way.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
+            attachNodeListeners();
+		}
+		
+		private function attachNodeListeners():void {
             for (var i:uint = 0; i < way.length; i++ ) {
                 way.getNode(i).addEventListener(Connection.NODE_MOVED, nodeMoved);
             }
 		}
 		
+		private function wayNodeAdded(event:WayNodeEvent):void {
+		    event.node.addEventListener(Connection.NODE_MOVED, nodeMoved);
+		    redraw();
+		}
+		    
+		private function wayNodeRemoved(event:WayNodeEvent):void {
+		    event.node.removeEventListener(Connection.NODE_MOVED, nodeMoved);
+		    redraw();
+		}
+		    
         private function wayTagChanged(event:TagEvent):void {
             redraw();
         }
@@ -402,8 +418,8 @@ package net.systemeD.halcyon {
                 var node:Node = way.getNode(i);
                 var nodeX:Number = map.lon2coord(node.lon);
                 var nodeY:Number = map.latp2coord(node.latp);
-                if ( nodeX >= x-2 && nodeX <= x+2 &&
-                     nodeY >= y-2 && nodeY <= y+2 )
+                if ( nodeX >= x-3 && nodeX <= x+3 &&
+                     nodeY >= y-3 && nodeY <= y+3 )
                     return node;
             }
             return null;

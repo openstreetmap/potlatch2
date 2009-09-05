@@ -151,7 +151,7 @@ package net.systemeD.halcyon.connection {
             upload.appendChild(addModified(changeset, getAllNodeIDs, getNode, serialiseNode));
             upload.appendChild(addModified(changeset, getAllWayIDs, getWay, serialiseWay));
             upload.appendChild(addModified(changeset, getAllRelationIDs, getRelation, serialiseRelation));
-            
+
             // *** TODO *** deleting items
             
             // now actually upload them
@@ -191,7 +191,12 @@ package net.systemeD.halcyon.connection {
                 else if ( type == "relation" ) entity = getRelation(oldID);
                 entity.markClean(newID, version);
                 
-                // *** TODO *** handle renumbering of creates, and deleting
+                if ( oldID != newID ) {
+                    if ( type == "node" ) renumberNode(oldID, entity as Node);
+                    else if ( type == "way" ) renumberWay(oldID, entity as Way);
+                    else if ( type == "relation" ) renumberRelation(oldID, entity as Relation);
+                }
+                // *** TODO *** handle deleting
             }
 
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
