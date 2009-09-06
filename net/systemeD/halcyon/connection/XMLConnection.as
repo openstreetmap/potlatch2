@@ -77,6 +77,16 @@ package net.systemeD.halcyon.connection {
                     setWay(new Way(id, version, tags,true,  nodes));
                 }
             }
+            
+            registerPOINodes();
+        }
+        
+        protected function registerPOINodes():void {
+            for each (var nodeID:Number in getAllNodeIDs()) {
+                var node:Node = getNode(nodeID);
+                if ( node.parentWays.length == 0 )
+                    registerPOI(node);
+            }
         }
 
         protected var appID:OAuthConsumer;

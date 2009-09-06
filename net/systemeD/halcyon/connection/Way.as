@@ -40,6 +40,10 @@ package net.systemeD.halcyon.connection {
             dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, this, nodes.length - 1));
             return nodes.length;
         }
+        
+        public function indexOfNode(node:Node):uint {
+            return nodes.indexOf(node);
+        }
 
         public function removeNode(index:uint):void {
             var removed:Array=nodes.splice(index, 1);

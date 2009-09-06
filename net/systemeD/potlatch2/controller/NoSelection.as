@@ -14,6 +14,8 @@ package net.systemeD.potlatch2.controller {
                     return new SelectedWay(focus as Way);
                 else if ( focus is Node )
                     trace("select poi");
+                else if ( focus == null )
+                    return new CreateWay(event);
             else if ( event.type == MouseEvent.MOUSE_OVER )
                 controller.map.setHighlight(focus, "hover", true);
             else if ( event.type == MouseEvent.MOUSE_OUT )

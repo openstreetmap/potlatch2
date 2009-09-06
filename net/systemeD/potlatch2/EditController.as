@@ -28,6 +28,7 @@ package net.systemeD.potlatch2 {
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_DOWN, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.CLICK, mapMouseEvent);
+            map.parent.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
         }
 
         public function setActive():void {
@@ -47,45 +48,30 @@ package net.systemeD.potlatch2 {
             tagViewer.setEntity(entity);
         }
         
+        private function keyUpHandler(event:KeyboardEvent):void {
+            trace("key code "+event.keyCode);
+            var newState:ControllerState = state.processKeyboardEvent(event);
+            setState(newState);            
+		}
+
         private function mapMouseEvent(event:MouseEvent):void {
+            map.stage.focus = map.parent;
+            
             var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
             event.localX = mapLoc.x;
             event.localY = mapLoc.y;
 
             var newState:ControllerState = state.processMouseEvent(event, null);
             setState(newState);
-            if ( draggingNode != null ) {
-            }
         }
         
         public function entityMouseEvent(event:MouseEvent, entity:Entity):void {
+            map.stage.focus = map.parent;
             //if ( event.type == MouseEvent.MOUSE_DOWN )
-                event.stopPropagation();
+            event.stopPropagation();
                 
             var newState:ControllerState = state.processMouseEvent(event, entity);
             setState(newState);
-
-            /*
-            if ( entity is Node || draggingNode != null ) {
-                processNodeEvent(event, entity);
-            } else if ( enity is Way ) {
-                processWayEvent(event, entity);
-            }
-            
-            if ( event.type == MouseEvent.CLICK ) {
-                if ( selectedWay != null ) {
-                    map.setHighlight(selectedWay, "selected", false);
-                    map.setHighlight(selectedWay, "showNodes", false);
-                }
-                tagViewer.setEntity(entity);
-                map.setHighlight(entity, "selected", true);
-                map.setHighlight(entity, "showNodes", true);
-                selectedWay = entity;
-            } else if ( event.type == MouseEvent.MOUSE_OVER )
-                map.setHighlight(entity, "hover", true);
-            else if ( event.type == MouseEvent.MOUSE_OUT )
-                map.setHighlight(entity, "hover", false);
-            */
         }
         
         private function setState(newState:ControllerState):void {

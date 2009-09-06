@@ -23,6 +23,10 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
         
+        public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+            return this;
+        }
+        
         public function enterState():void {}
         public function exitState():void {}
 

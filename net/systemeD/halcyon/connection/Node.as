@@ -59,7 +59,7 @@ package net.systemeD.halcyon.connection {
             return 180/Math.PI * Math.log(Math.tan(Math.PI/4+lat*(Math.PI/180)/2));
         }
 
-		public function latp2lat(a:Number):Number {
+		public static function latp2lat(a:Number):Number {
 		    return 180/Math.PI * (2 * Math.atan(Math.exp(a*Math.PI/180)) - Math.PI/2);
 		}
 		

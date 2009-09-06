@@ -4,8 +4,9 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.*;
 
     public class SelectedWay extends ControllerState {
-        private var selectedWay:Way;
-        private var initWay:Way;
+        protected var selectedWay:Way;
+        protected var selectedNode:Node;
+        protected var initWay:Way;
         
         public function SelectedWay(way:Way) {
             initWay = way;
@@ -22,7 +23,24 @@ package net.systemeD.potlatch2.controller {
             selectedWay = way;
             initWay = way;
         }
-        
+
+        protected function selectNode(node:Node):void {
+            if ( node == selectedNode )
+                return;
+            
+            clearSelectedNode();
+            controller.setTagViewer(node);
+            controller.map.setHighlight(node, "selected", true);
+            selectedNode = node;
+        }
+                
+        protected function clearSelectedNode():void {
+            if ( selectedNode != null ) {
+                controller.map.setHighlight(selectedNode, "selected", false);
+                controller.setTagViewer(selectedWay);
+                selectedNode = null;
+            }
+        }
         protected function clearSelection():void {
             if ( selectedWay != null ) {
                 controller.map.setHighlight(selectedWay, "selected", false);
@@ -42,7 +60,7 @@ package net.systemeD.potlatch2.controller {
                 else if ( focus is Node )
                     trace("select poi");
                 else if ( focus == null )
-                    return previousState;
+                    return new NoSelection();
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
                 if ( entity is Node && entity.hasParent(selectedWay) )
                     return new DragWayNode(selectedWay, Node(entity), event);
@@ -58,14 +76,23 @@ package net.systemeD.potlatch2.controller {
                 else
                     trace("start new way");
             } else {
-                if ( entity is Node )
-                    trace("select way node");
+                if ( entity is Node ) {
+                    if ( selectedNode == entity ) {
+                        var i:uint = selectedWay.indexOfNode(selectedNode);
+                        if ( i == 0 )
+                            return new DrawWay(selectedWay, false);
+                        else if ( i == selectedWay.length - 1 )
+                            return new DrawWay(selectedWay, true);
+                    } else {
+                        selectNode(entity as Node);
+                    }
+                }
             }
             
             return this;
         }
         
-        public function addNode(event:MouseEvent):void {
+        private function addNode(event:MouseEvent):void {
             trace("add node");
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
