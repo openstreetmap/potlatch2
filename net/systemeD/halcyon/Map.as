@@ -79,20 +79,22 @@ package net.systemeD.halcyon {
         public function Map(initparams:Object) {
 
 			// Set up layering
-			// [layer][2]			- names
-			// [layer][1][sublayer]	- stroke
+			// [layer][3]			- names
+			// [layer][2][sublayer]	- stroke
+			// [layer][1]			- casing
 			// [layer][0]			- fill
 
 			for (var l:int=0; l<13; l++) {				// 11 layers (10 is +5, 0 is -5)
 				var s:Sprite = getHitSprite();      	//  |
 				s.addChild(getPaintSprite());			//	| 0 fill
-				var t:Sprite = getPaintSprite();		//  | 1 stroke
+				s.addChild(getPaintSprite());			//	| 1 casing
+				var t:Sprite = getPaintSprite();		//  | 2 stroke
 				for (var j:int=0; j<11; j++) {			//	|  | ten sublayers
 					t.addChild(getPaintSprite());		//  |  |  |
 				}										//  |  |  |
 				s.addChild(t);							//  |  |
-				s.addChild(getPaintSprite());			//	| 2 names
-				s.addChild(getHitSprite());			    //	| 3 entity hit tests
+				s.addChild(getPaintSprite());			//	| 3 names
+				s.addChild(getHitSprite());			    //	| 4 entity hit tests
 				addChild(s);							//  |
 			}
 			addChild(getPaintSprite());     			// 11 - POIs

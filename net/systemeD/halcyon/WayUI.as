@@ -136,50 +136,45 @@ package net.systemeD.halcyon {
 			for (var sublayer:uint=0; sublayer<11; sublayer++) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
-					var stroke:Shape, fill:Shape, roadname:Sprite, lower:Graphics, upper:Graphics;
-					var casedrawn:Boolean;
+					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
 					var x0:Number=map.lon2coord(way.getNode(0).lon);
 					var y0:Number=map.latp2coord(way.getNode(0).latp);
 
-					// Create stroke object
+					// Stroke
 					if (s.width)  {
-						stroke=new Shape(); addToLayer(stroke,1,sublayer);
-						upper=stroke.graphics; upper.moveTo(x0,y0);
-						s.applyStrokeStyle(upper);
+						stroke=new Shape(); addToLayer(stroke,2,sublayer);
+						stroke.graphics.moveTo(x0,y0);
+						s.applyStrokeStyle(stroke.graphics);
+						if (s.dashes && s.dashes.length>0) { dashedLine(stroke.graphics,s.dashes); }
+													  else { solidLine(stroke.graphics); }
+						drawn=true;
 					}
 
-					// Set fill and casing style
-					if (s.fill_color || s.fill_image || s.casing_width) {
+					// Fill
+					if (s.fill_color || s.fill_image) {
 						fill=new Shape(); addToLayer(fill,0);
-						lower=fill.graphics; lower.moveTo(x0,y0);
-						if (s.casing_width) { s.applyCasingStyle(lower); }
+						fill.graphics.moveTo(x0,y0);
+						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
+									 else { s.applyFill(fill.graphics); }
+						solidLine(fill.graphics);
+						fill.graphics.endFill();
+						drawn=true;
 					}
 
-					// Draw stroke (dashed or solid)
-					if (s.dashes && s.dashes.length>0) { dashedLine(upper,s.dashes); drawn=true; }
-					else if (s.width) { solidLine(upper); drawn=true; }
-
-					// Draw dashed casing
-					if (s.casing_dashes && s.casing_dashes.length>0) {
-						dashedLine(lower,s.casing_dashes); lower.lineStyle(); drawn=true; casedrawn=true;
+					// Casing
+					if (s.casing_width) { 
+						casing=new Shape(); addToLayer(casing,1);
+						casing.graphics.moveTo(x0,y0);
+						s.applyCasingStyle(casing.graphics);
+						if (s.casing_dashes && s.casing_dashes.length>0) { dashedLine(casing.graphics,s.casing_dashes); }
+																	else { solidLine(casing.graphics); }
+						drawn=true;
 					}
-
-					// Draw fill and solid casing
-					if (s.fill_image) {
-						new WayBitmapFiller(this,lower,s);
-					} else if (s.fill_color) {
-						s.applyFill(lower);
-						solidLine(lower); lower.endFill(); drawn=true;
-					} else if (s.casing_width && !casedrawn) {
-						solidLine(lower); drawn=true;
-					}
-
-
 				}
 				
 				if (sl.textStyles[sublayer]) {
 					var t:TextStyle=sl.textStyles[sublayer];
-					roadname=new Sprite(); addToLayer(roadname,2);
+					roadname=new Sprite(); addToLayer(roadname,3);
 					nameformat = t.getTextFormat();
 					var a:String=tags[t.text];
 					if (a) {
@@ -201,14 +196,14 @@ package net.systemeD.halcyon {
                 var def:Sprite = new Sprite();
                 def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
                 solidLine(def.graphics);
-                addToLayer(def, 1);
+                addToLayer(def, 2);
 				drawn=true;
             }
             
             if ( stateClasses["showNodes"] != null ) {
                 var nodes:Sprite = new Sprite();
                 drawNodes(nodes.graphics);
-                addToLayer(nodes, 2);
+                addToLayer(nodes, 3);
             }
 
 			if (!drawn) { return; }
@@ -217,7 +212,7 @@ package net.systemeD.halcyon {
             hitzone = new Sprite();
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
             solidLine(hitzone.graphics);
-            addToLayer(hitzone, 3);
+            addToLayer(hitzone, 4);
             hitzone.visible = false;
 
             if ( listenSprite == null ) {
@@ -231,7 +226,7 @@ package net.systemeD.halcyon {
                 listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
             }
             listenSprite.hitArea = hitzone;
-            addToLayer(listenSprite, 3);
+            addToLayer(listenSprite, 4);
             listenSprite.buttonMode = true;
             listenSprite.mouseEnabled = true;
 

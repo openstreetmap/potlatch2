@@ -61,12 +61,12 @@ package net.systemeD.halcyon {
 			// Create stroke object
 			var stroke:Shape = new Shape();
             stroke.graphics.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
-			addToLayer(stroke,2);
+			addToLayer(stroke,3);
 			dashedLine(stroke.graphics, [2,2]);
 			
 			var nodes:Sprite = new Sprite();
             drawNodes(nodes.graphics);
-            addToLayer(nodes, 2);
+            addToLayer(nodes, 3);
 
 		}
 		
