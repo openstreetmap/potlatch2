@@ -9,10 +9,16 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _xml:XML;
         private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
         private var _tags:Array;
+        private var _editors:Array;
 
         public function Feature(mapFeatures:MapFeatures, _xml:XML) {
             this.mapFeatures = mapFeatures;
             this._xml = _xml;
+            parseTags();
+            parseEditors();
+        }
+        
+        private function parseTags():void {
             _tags = new Array();
             
             for each(var tag:XML in definition.tag) {
@@ -21,7 +27,28 @@ package net.systemeD.potlatch2.mapfeatures {
                 tagObj["v"] = tag.@v;
                 _tags.push(tagObj);
             }
-
+        }
+        
+        private function parseEditors():void {
+            _editors = new Array();
+            
+            for each(var inputXML:XML in definition.input) {
+                var inputType:String = inputXML.@type;
+                var presenceStr:String = inputXML.@presence;
+                var sortOrderStr:String = inputXML.@priority;
+                var editor:EditorFactory = EditorFactory.createFactory(inputType, inputXML);
+                if ( editor != null ) {
+                    editor.presence = Presence.getPresence(presenceStr);
+                    editor.sortOrder = EditorFactory.getPriority(sortOrderStr);
+                    _editors.push(editor);
+                }
+            }
+            
+            _editors.sortOn(["sortOrder", "name"], [Array.DESCENDING | Array.NUMERIC, Array.CASEINSENSITIVE]);
+        }
+        
+        public function get editors():Array {
+            return _editors;
         }
         
         public function get definition():XML {

@@ -15,6 +15,7 @@
         </mx:VBox>
         <mx:LinkButton label="?" click="openDescription()" id="helpLabel"/>
     </mx:HBox>
+    <mx:VBox width="100%" id="editorBox" paddingLeft="2" paddingRight="2"/>
   </mx:VBox>
 
   <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
@@ -72,7 +73,11 @@
       }
 
       private function refreshFeatureIcon():void {
+          var oldFeature:Feature = feature;
           feature = selectedEntity == null ? null : mapFeatures.findMatchingFeature(selectedEntity);
+          if ( feature != oldFeature )
+              initialiseEditors();
+
           if ( feature != null )
               setFeatureIcon(selectedEntity, feature);
           else
@@ -80,7 +85,7 @@
       }
 
       private function setFeatureIcon(entity:Entity, feature:Feature):void {
-          blankFeatureIcon(entity);
+          //blankFeatureIcon(entity);
           
           iconImage.source = feature.image;
 
@@ -99,6 +104,18 @@
           tw.setSelectedFeature(null);
       }
 
+      private function initialiseEditors():void {
+          editorBox.removeAllChildren();
+          if ( selectedEntity == null || feature == null )
+              return;
+              
+          for each (var factory:EditorFactory in feature.editors) {
+              var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
+              if ( editor != null )
+                 editorBox.addChild(editor);
+          }
+      }
+      
       private function checkAdvanced():void {
           if ( selectedEntity != null )
              setupAdvanced(selectedEntity);

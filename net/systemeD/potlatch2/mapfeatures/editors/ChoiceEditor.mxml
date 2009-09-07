@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edit:SingleTagEditor
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	verticalGap="0"
+	width="100%"
+	toolTip="{fieldDescription}">
+
+  <mx:Label text="{fieldName}:"/>
+  <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
+      width="100%" change="value = inputBox.selectedItem.value"
+      open="inputBox.dropdown.variableRowHeight = true">
+      <edit:itemRenderer>
+        <mx:Component>
+        <mx:HBox toolTip="{data.description}">
+          <mx:Image source="{data.icon}"/>
+          <mx:Label text="{data.label}"/>
+        </mx:HBox>
+        </mx:Component>
+      </edit:itemRenderer>
+  </edit:ChoiceComboBox>
+
+  <mx:Script><![CDATA[
+
+      [Bindable(event="factory_set")]
+      private function get choices():Array {
+          return ChoiceEditorFactory(_factory).choices;
+      }
+      
+      [Bindable(event="tag_changed")]
+      private function get selectFromTag():Object {
+          var tagValue:String = value;
+          for each(var choice:Object in choices) {
+              if ( choice.value == tagValue )
+                  return choice;
+          }
+          
+          inputBox.prompt = tagValue == null ? "" : tagValue;
+          return null;
+      }
+      
+  ]]></mx:Script>
+</edit:SingleTagEditor>
+

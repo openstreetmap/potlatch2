@@ -49,6 +49,30 @@
 
     <line/>
     <tag k="highway" v="trunk"/>
+    
+    <input type="freetext" presence="always"
+        name="Name" category="Naming" priority="highest"
+        key="name" description="The most common name for this road"/>
+    <input type="freetext" presence="always"
+        name="Reference" category="Naming" priority="high"
+        key="ref" description="The official reference number for this road"/>
+    <input type="choice" presence="always"
+        name="Surface" category="Physical" description="Type of road surface"
+        key="surface">
+      <choice value="unpaved" text="Unpaved" description="Road surface is unsealed"/>
+      <choice value="paved" text="Paved" description="Road surface is sealed"/>
+    </input>
+    <input type="choice" presence="onTagMatch"
+        name="Oneway" category="Restrictions" description="Oneway roads"
+        key="oneway">
+      <choice value="yes" match="yes|true|1" text="One way"
+        description="Road can only be travelled in direction of way" icon="features/oneway__yes.png"/>
+      <choice value="no" match="no|false|0" text="Two way"
+        description="Road can be travelled in both directions" icon="features/oneway__no.png"/>
+      <choice value="-1" match="-1|reverse" text="One way reverse"
+        description="Road can be travelled in opposite direction to way" icon="features/oneway__-1.png"/>
+    </input>
+        
   </feature>
 
   <feature name="Primary Road">
