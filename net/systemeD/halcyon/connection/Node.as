@@ -39,7 +39,7 @@ package net.systemeD.halcyon.connection {
         public function set latp(latproj:Number):void {
             var oldLat:Number = this._lat;
             this._latproj = latproj;
-            this._lat = latp2lat(lat);
+            this._lat = latp2lat(latproj);
             markDirty();
             dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, oldLat, _lon));
          }
