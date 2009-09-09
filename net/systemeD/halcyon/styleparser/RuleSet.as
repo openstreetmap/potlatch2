@@ -1,6 +1,5 @@
 package net.systemeD.halcyon.styleparser {
 
-	import org.as3yaml.*;
 	import flash.events.*;
 	import flash.net.*;
 	import net.systemeD.halcyon.Globals;
