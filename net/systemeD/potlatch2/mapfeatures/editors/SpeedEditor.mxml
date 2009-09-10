@@ -8,16 +8,10 @@
 
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
+      dropdownFactory="mx.controls.TileList"
       width="100%" change="value = inputBox.selectedItem.value"
-      open="inputBox.dropdown.variableRowHeight = true">
-      <edit:itemRenderer>
-        <mx:Component>
-        <mx:HBox toolTip="{data.description}">
-          <mx:Image source="{data.icon}"/>
-          <mx:Label htmlText="{data.label}"/>
-        </mx:HBox>
-        </mx:Component>
-      </edit:itemRenderer>
+      open="inputBox.dropdown.variableRowHeight = true"
+      itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.RestrictionRenderer">
   </edit:ChoiceComboBox>
 
   <mx:Script><![CDATA[
@@ -26,13 +20,16 @@
       import net.systemeD.potlatch2.mapfeatures.Feature;
       
       private var _choices:ArrayCollection = null;
-      private var _unknownChoice:Choice = null;
+      private var _unknownChoice:SpeedChoice = null;
 
       [Bindable(event="factory_set")]
       private function get choices():ArrayCollection {
           if ( _choices == null ) {
-              _choices = new ArrayCollection(ChoiceEditorFactory(_factory).choices);
-              _choices.addItem(createUnsetChoice());
+              _choices = new ArrayCollection();
+              for each(var sp:String in
+                  ["5mph", "10mph", "15mph", "20mph", "30mph", "40mph", "50mph", "60mph","70mph",
+                   "10", "20", "50", "60", "90", "100", "110", "130"])
+                  _choices.addItem(new SpeedChoice(sp));
           }
           return _choices;
       }
@@ -40,19 +37,16 @@
       [Bindable(event="tag_changed")]
       private function get selectFromTag():Object {
           var tagValue:String = value;
-          for each(var choice:Choice in choices) {
+          for each(var choice:SpeedChoice in choices) {
               if ( choice.isTagMatch(tagValue) )
                   return choice;
           }
           
           // set up the unknown choice
           if ( _unknownChoice == null ) {
-              _unknownChoice = new Choice();
-              _unknownChoice.description = "Unknown value";
+              _unknownChoice = new SpeedChoice(tagValue);
               _choices.addItem(_unknownChoice);
           }
-          _unknownChoice.label = "<i>Unknown:</i> "+Feature.htmlEscape(tagValue);
-          _unknownChoice.icon = null;
           _unknownChoice.value = tagValue;
           
           return _unknownChoice;

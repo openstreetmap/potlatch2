@@ -17,6 +17,7 @@ package net.systemeD.potlatch2.mapfeatures {
             
             case "freetext": return new FreeTextEditorFactory(inputXML);
             case "choice": return new ChoiceEditorFactory(inputXML);
+            case "speed": return new SpeedEditorFactory(inputXML);
             
             }
             

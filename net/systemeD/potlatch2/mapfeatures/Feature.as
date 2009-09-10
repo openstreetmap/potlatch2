@@ -78,12 +78,22 @@ package net.systemeD.potlatch2.mapfeatures {
             var txt:String = icon.children().toXMLString();
             var replaceTag:Function = function():String {
                 var value:String = entity.getTag(arguments[1]);
-                return value == null ? "" : value;
+                return value == null ? "" : htmlEscape(value);
             };
             txt = txt.replace(variablesPattern, replaceTag);
             return txt;
         }
         
+        public static function htmlEscape(str:String):String {
+            var newStr:String = str.replace(/&/g, "&amp;");
+            newStr = newStr.replace(/</g, "&lt;");
+            newStr = newStr.replace(/>/g, "&gt;");
+            newStr = newStr.replace(/"/g, "&quot;");
+            newStr = newStr.replace(/'/g, "&apos;");
+            return newStr;
+        }
+      
+
         public function isInCategory(category:String):Boolean {
             var cats:XMLList = _xml.category;
             if ( cats.length() == 0 )

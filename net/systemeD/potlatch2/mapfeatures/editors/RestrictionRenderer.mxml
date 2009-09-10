@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	width="50" height="50"
+	toolTip="{data.description}" enabled="{data.value != null}"
+	mouseEnabled="false" mouseChildren="false">
+
+    <mx:Image x="0" y="0" source="@Embed('../../../../../embedded/restriction.svg')" />
+    
+    <mx:TextInput id="valueText" text="{data.value==null ? '--' : data.scalar}" editable="{data.isEditable}"
+        backgroundAlpha="0"
+        fontWeight="bold" fontSize="16" textAlign="center" borderStyle="none"
+        width="50" x="0" y="7" />
+    
+    <mx:Label id="unitText" text="{data.unit}"
+        x="0" y="{height - unitText.height - 6}" width="50" textAlign="center" />
+    
+</mx:Canvas>
+

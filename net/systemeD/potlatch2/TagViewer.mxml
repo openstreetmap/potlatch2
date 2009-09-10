@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:halcyon="net.systemeD.halcyon.*"
     backgroundColor="white"
     creationComplete="loadFeatures()">
 
@@ -165,6 +164,8 @@
                   if ( event.newValue == null ) {
                       collection.removeItemAt(i-1);
                       collection.refresh();
+                  } else {
+                      collection.itemUpdated(tag, "value");
                   }
               }
           }

@@ -72,7 +72,9 @@
       <choice value="-1" match="-1|reverse" text="One way reverse"
         description="Road can be travelled in opposite direction to way" icon="features/oneway__-1.png"/>
     </input>
-        
+    <input type="speed" presence="onTagMatch"
+        name="Speed Limit" category="Restrictions" description="Maximum permitted speed on this road"
+        key="maxspeed"/>
   </feature>
 
   <feature name="Primary Road">

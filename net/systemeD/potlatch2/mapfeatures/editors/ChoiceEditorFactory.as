@@ -12,11 +12,12 @@ package net.systemeD.potlatch2.mapfeatures.editors {
             
             choices = [];
             for each( var choiceXML:XML in inputXML.choice ) {
-                var choice:Object = {};
-                choice["value"] = String(choiceXML.@value);
-                choice["description"] = String(choiceXML.@description);
-                choice["label"] = String(choiceXML.@text);
-                choice["icon"] = choiceXML.hasOwnProperty("@icon") ? String(choiceXML.@icon) : null;
+                var choice:Choice = new Choice();
+                choice.value = String(choiceXML.@value);
+                choice.description = String(choiceXML.@description);
+                choice.label = String(choiceXML.@text);
+                choice.icon = choiceXML.hasOwnProperty("@icon") ? String(choiceXML.@icon) : null;
+                choice.match = String(choiceXML.@match);
                 choices.push(choice);
             }
         }
