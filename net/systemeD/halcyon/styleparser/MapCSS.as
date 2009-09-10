@@ -44,9 +44,11 @@ package net.systemeD.halcyon.styleparser {
 		private static const CONDITION_LE:RegExp	=/^ \s* (\w+) \s* <= \s* (.+) \s* $/sx;
 		private static const CONDITION_REGEX:RegExp	=/^ \s* (\w+) \s* =~\/ \s* (.+) \/ \s* $/sx;
 
-		private static const ASSIGNMENT:RegExp		=/^ \s* (\S+) \s* \: \s* (.+?) \s* $/sx;
-		private static const SET_TAG:RegExp			=/^ \s* set \s+(\S+)\s* = \s* (.+?) \s* $/sx;
-		private static const SET_TAG_TRUE:RegExp	=/^ \s* set \s+(\S+)\s* $/sx;
+		private static const ASSIGNMENT_EVAL:RegExp	=/^ \s* (\S+) \s* \:      \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
+		private static const ASSIGNMENT:RegExp		=/^ \s* (\S+) \s* \:      \s*          (.+?) \s*                   $/sx;
+		private static const SET_TAG_EVAL:RegExp	=/^ \s* set \s+(\S+)\s* = \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
+		private static const SET_TAG:RegExp			=/^ \s* set \s+(\S+)\s* = \s*          (.+?) \s*                   $/isx;
+		private static const SET_TAG_TRUE:RegExp	=/^ \s* set \s+(\S+)\s* $/isx;
 		private static const EXIT:RegExp			=/^ \s* exit \s* $/isx;
 
 		private static const oZOOM:uint=2;
@@ -297,7 +299,7 @@ package net.systemeD.halcyon.styleparser {
 			var styles:Array=[];
 			var t:Object=new Object();
 			var o:Object=new Object();
-			var a:String;
+			var a:String, k:String;
 
 			// Create styles
 			var ss:ShapeStyle =new ShapeStyle() ;
@@ -307,8 +309,10 @@ package net.systemeD.halcyon.styleparser {
 			var xs:InstructionStyle=new InstructionStyle(); 
 
 			for each (a in s.split(';')) {
-				if ((o=ASSIGNMENT.exec(a))) { t[o[1].replace(DASH,'_')]=o[2]; }
-				else if ((o=SET_TAG.exec(a))) { xs.addSetTag(o[1],o[2]); }
+				if ((o=ASSIGNMENT_EVAL.exec(a)))   { t[o[1].replace(DASH,'_')]=new Eval(o[2]); }
+				else if ((o=ASSIGNMENT.exec(a)))   { t[o[1].replace(DASH,'_')]=o[2]; }
+				else if ((o=SET_TAG_EVAL.exec(a))) { xs.addSetTag(o[1],new Eval(o[2])); }
+				else if ((o=SET_TAG.exec(a)))      { xs.addSetTag(o[1],o[2]); }
 				else if ((o=SET_TAG_TRUE.exec(a))) { xs.addSetTag(o[1],true); }
 				else if ((o=EXIT.exec(a))) { xs.setPropertyFromString('breaker',true); }
 			}

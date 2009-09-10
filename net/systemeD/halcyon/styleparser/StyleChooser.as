@@ -57,6 +57,7 @@ package net.systemeD.halcyon.styleparser {
 					continue;
 				}
 
+				r.runEvals(tags);
 				if (a[r.sublayer]) {
 					// If there's already a style on this sublayer, then merge them
 					// (making a deep copy if necessary to avoid altering the root style)
