@@ -23,19 +23,23 @@
       private var _unknownChoice:SpeedChoice = null;
 
       [Bindable(event="factory_set")]
-      private function get choices():ArrayCollection {
+      protected function get choices():ArrayCollection {
           if ( _choices == null ) {
               _choices = new ArrayCollection();
               for each(var sp:String in
                   ["5mph", "10mph", "15mph", "20mph", "30mph", "40mph", "50mph", "60mph","70mph",
                    "10", "20", "50", "60", "90", "100", "110", "130"])
                   _choices.addItem(new SpeedChoice(sp));
+              _choices.addItem(new SpeedChoice(null));
           }
           return _choices;
       }
       
       [Bindable(event="tag_changed")]
-      private function get selectFromTag():Object {
+      protected function get selectFromTag():Object {
+          if ( _entity == null )
+              return new SpeedChoice(null);
+          
           var tagValue:String = value;
           for each(var choice:SpeedChoice in choices) {
               if ( choice.isTagMatch(tagValue) )

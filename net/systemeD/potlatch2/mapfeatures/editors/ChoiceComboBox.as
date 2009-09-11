@@ -22,7 +22,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
                                 //create a new itemRenderer to use in place of the text input
                                 textInputReplacement = itemRenderer.newInstance();
-                                IDataRenderer(textInputReplacement).data = {text: "banana"};
+                                IDataRenderer(textInputReplacement).data = selectedItem;
                                 textInputReplacement.mouseChildren = false;
                                 textInputReplacement.mouseEnabled = false;
                                 addChild(textInputReplacement);

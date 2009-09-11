@@ -29,16 +29,18 @@
       private var _unknownChoice:Choice = null;
 
       [Bindable(event="factory_set")]
-      private function get choices():ArrayCollection {
+      protected function get choices():ArrayCollection {
           if ( _choices == null ) {
-              _choices = new ArrayCollection(ChoiceEditorFactory(_factory).choices);
+              _choices = new ArrayCollection();
+              for each ( var choice:Choice in ChoiceEditorFactory(_factory).choices )
+                  _choices.addItem(choice);
               _choices.addItem(createUnsetChoice());
           }
           return _choices;
       }
       
       [Bindable(event="tag_changed")]
-      private function get selectFromTag():Object {
+      protected function get selectFromTag():Object {
           var tagValue:String = value;
           for each(var choice:Choice in choices) {
               if ( choice.isTagMatch(tagValue) )
