@@ -2,12 +2,21 @@
 <edit:SingleTagEditor
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
 	width="100%"
 	toolTip="{fieldDescription}">
 
   <mx:Label text="{fieldName}:"/>
-  <mx:TextInput id="inputBox" text="{value}" width="100%" change="value = inputBox.text"/>
+  <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" change="value = inputBox.text"/>
 
+  <mx:Script><![CDATA[
+  
+      [Bindable(event="factory_set")]
+      protected function get prompt():String {
+          return _factory == null ? null : FreeTextEditorFactory(_factory).notPresentText;
+      }
+      
+  ]]></mx:Script>
 </edit:SingleTagEditor>
 

@@ -5,15 +5,19 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import flash.display.*;
 
 	public class FreeTextEditorFactory extends SingleTagEditorFactory {
-	    private var notPresentText:String;
+	    private var _notPresentText:String;
         
         public function FreeTextEditorFactory(inputXML:XML) {
             super(inputXML);
-            notPresentText = inputXML.@absenceHTMLText;
+            _notPresentText = inputXML.hasOwnProperty("@absenceText") ? String(inputXML.@absenceText) : "Unset";
         }
         
         override protected function createSingleTagEditor():SingleTagEditor {
             return new FreeTextEditor();
+        }
+        
+        public function get notPresentText():String {
+            return _notPresentText;
         }
     }
 

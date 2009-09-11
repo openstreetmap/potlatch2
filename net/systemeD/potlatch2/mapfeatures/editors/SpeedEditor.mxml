@@ -2,16 +2,16 @@
 <edit:SingleTagEditor
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
-	verticalGap="0"
-	width="100%"
-	toolTip="{fieldDescription}">
+	toolTip="{fieldDescription}"
+	verticalGap="0">
 
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
       dropdownFactory="mx.controls.TileList"
-      width="100%" change="value = inputBox.selectedItem.value"
-      open="inputBox.dropdown.variableRowHeight = true"
-      itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.RestrictionRenderer">
+      change="value = inputBox.selectedItem.value"
+      itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.RestrictionRenderer"
+      dropdownWidth="250" rowCount="4"
+      fontWeight="normal">
   </edit:ChoiceComboBox>
 
   <mx:Script><![CDATA[

@@ -23,45 +23,78 @@
   </category>
 
   <!-- Roads -->
-
-  <feature name="Motorway">
-    <category>roads</category>
-    <icon image="features/highway__motorway.png">
-      <font size="16pt"><b>${ref}</b></font><br/>
-    </icon>
-
-    <line/>
-    <tag k="highway" v="motorway"/>
-  </feature>
-
-  <feature name="Motorway link" icon="features/motorway_link.png">
-    <category>roads</category>
-    <line/>
-    <tag k="highway" v="motorway_link"/>
-  </feature>
-
-  <feature name="Trunk Road">
-    <category>roads</category>
-    <icon image="features/highway__trunk.png">
-      <font size="16pt"><b>${ref}</b></font><br/>
-      <font size="10pt">${name}</font>
-    </icon>
-
-    <line/>
-    <tag k="highway" v="trunk"/>
-    
+  
+  <inputSet id="majorRoad">
+    <inputSet ref="roadNames"/>
+    <inputSet ref="roadRefs"/>
+    <inputSet ref="roadRestrictions"/>
+    <inputSet ref="roadPhysical"/>
+  </inputSet>
+  
+  <inputSet id="minorRoad">
+    <inputSet ref="roadNames"/>
+    <inputSet ref="roadRestrictions"/>
+    <inputSet ref="roadPhysical"/>
+  </inputSet>
+  
+  <inputSet id="roadNames">
     <input type="freetext" presence="always"
         name="Name" category="Naming" priority="highest"
-        key="name" description="The most common name for this road"/>
+        key="name" description="The most common name"/>
+    <input type="freetext" presence="onTagMatch"
+        name="International Name" category="Naming"
+        key="int_name" description="The internationally recognised name"/>
+    <input type="freetext" presence="onTagMatch"
+        name="Historical Name" category="Naming" priority="low"
+        key="old_name" description="The historic or previous name"/>
+  </inputSet>
+
+  <inputSet id="roadRefs">
     <input type="freetext" presence="always"
         name="Reference" category="Naming" priority="high"
-        key="ref" description="The official reference number for this road"/>
-    <input type="choice" presence="always"
+        key="ref" description="The official reference number"/>
+    <input type="freetext" presence="onTagMatch"
+        name="International Reference" category="Naming"
+        key="int_ref" description="The official international reference number"/>
+    <input type="freetext" presence="onTagMatch"
+        name="Old Reference" category="Naming" priority="low"
+        key="old_ref" description="The historic or previous reference number"/>  
+  </inputSet>
+  
+  <inputSet id="roadPhysical">
+    <input type="slider" presence="onTagMatch"
+        name="Layer" category="Physical" description="Relative vertical positions (-5 lowest, +5 highest)"
+        key="layer" min="-5" max="5" default="0"/>
+    <input type="freetext" presence="onTagMatch"
+        name="Width" category="Physical"
+        key="width" description="Width of the road"/>
+    <input type="choice" presence="onTagMatch"
         name="Surface" category="Physical" description="Type of road surface"
         key="surface">
       <choice value="unpaved" text="Unpaved" description="Road surface is unsealed"/>
       <choice value="paved" text="Paved" description="Road surface is sealed"/>
+      <choice value="asphalt" text="Asphalt"/>
+      <choice value="concrete" text="Concrete"/>
+      <choice value="paving_stones" text="Paving stones"/>
+      <choice value="cobblestone" text="Cobblestone"/>
+      <choice value="sand" text="Sand"/>
+      <choice value="gravel" text="Gravel"/>
     </input>
+    <input type="choice" presence="onTagMatch"
+        name="Bridge" category="Physical" description="Road goes over a bridge"
+        key="bridge">
+      <choice value="yes" text="Generic Bridge" description="Generic bridge -- type unknown"/>
+      <choice value="viaduct" text="Viaduct" description="Viaduct"/>
+      <choice value="suspension" text="Suspension bridge"/>
+    </input>
+    <input type="choice" presence="onTagMatch"
+        name="Tunnel" category="Physical" description="Road goes into a tunnel"
+        key="tunnel">
+      <choice value="yes" text="Tunnel" description="Generic tunnel"/>
+    </input>
+  </inputSet>
+
+  <inputSet id="roadRestrictions">
     <input type="choice" presence="onTagMatch"
         name="Oneway" category="Restrictions" description="Oneway roads"
         key="oneway">
@@ -75,6 +108,39 @@
     <input type="speed" presence="onTagMatch"
         name="Speed Limit" category="Restrictions" description="Maximum permitted speed on this road"
         key="maxspeed"/>
+  </inputSet>
+    
+  <feature name="Motorway">
+    <category>roads</category>
+    <icon image="features/highway__motorway.png">
+      <font size="16pt"><b>${ref}</b></font><br/>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="motorway"/>
+
+    <inputSet ref="majorRoad"/>
+  </feature>
+
+  <feature name="Motorway link" icon="features/motorway_link.png">
+    <category>roads</category>
+    <line/>
+    <tag k="highway" v="motorway_link"/>
+
+    <inputSet ref="majorRoad"/>
+  </feature>
+
+  <feature name="Trunk Road">
+    <category>roads</category>
+    <icon image="features/highway__trunk.png">
+      <font size="16pt"><b>${ref}</b></font><br/>
+      <font size="10pt">${name}</font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="trunk"/>
+    
+    <inputSet ref="majorRoad"/>
   </feature>
 
   <feature name="Primary Road">
@@ -86,6 +152,8 @@
 
     <line/>
     <tag k="highway" v="primary"/>
+
+    <inputSet ref="majorRoad"/>
   </feature>
 
   <feature name="Secondary Road">
@@ -97,6 +165,8 @@
 
     <line/>
     <tag k="highway" v="secondary"/>
+
+    <inputSet ref="majorRoad"/>
   </feature>
 
   <feature name="Tertiary Road">
@@ -108,6 +178,8 @@
 
     <line/>
     <tag k="highway" v="tertiary"/>
+
+    <inputSet ref="majorRoad"/>
   </feature>
 
   <feature name="Residential Road">
@@ -119,6 +191,8 @@
 
     <line/>
     <tag k="highway" v="residential"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Road">
@@ -129,6 +203,8 @@
 
     <line/>
     <tag k="highway" v="unclassified"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Service Road">
@@ -142,6 +218,8 @@
 
     <line/>
     <tag k="highway" v="service"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Unknown Road">
@@ -152,6 +230,8 @@
 
     <line/>
     <tag k="highway" v="road"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Living Street">
@@ -162,6 +242,8 @@
 
     <line/>
     <tag k="highway" v="tertiary"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Track">
@@ -172,6 +254,8 @@
 
     <line/>
     <tag k="highway" v="track"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Pedestrian Road">
@@ -182,6 +266,8 @@
 
     <line/>
     <tag k="highway" v="pedestrian"/>
+
+    <inputSet ref="minorRoad"/>
   </feature>
 
 

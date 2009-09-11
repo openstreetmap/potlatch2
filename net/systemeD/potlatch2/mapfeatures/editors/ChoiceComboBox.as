@@ -55,6 +55,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
             if ( textInputReplacement ) {
                 IDataRenderer(textInputReplacement).data = selectedItem;
+                var prefSize:Object = calculatePreferredSizeFromData(collection.length);
 
                 var arrowWidth:Number = getStyle("arrowButtonWidth");
                 var itemHeight:Number = textInputReplacement.getExplicitOrMeasuredHeight();
@@ -65,13 +66,33 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
                 var bm:EdgeMetrics = borderMetrics;
                 itemHeight += bm.top + bm.bottom;
-                itemWidth += bm.left + bm.right + arrowWidth;
+                itemWidth += bm.left + bm.right + arrowWidth + 8;
+                prefSize.height += bm.top + bm.bottom;
+                prefSize.width += bm.left + bm.right + arrowWidth + 8;
 
-                measuredMinHeight = measuredHeight = Math.max(measuredHeight, itemHeight);
-                measuredMinWidth = measuredWidth = Math.max(measuredWidth, itemWidth);
+                measuredMinHeight = measuredHeight = Math.max(prefSize.height, itemHeight);
+                measuredMinWidth = measuredWidth = Math.max(prefSize.width, itemWidth);
             }
         }
 
+        override protected function calculatePreferredSizeFromData(numItems:int):Object {
+            if ( collection == null ) return { width: 0, height: 0 };
+            
+            var maxWidth:Number = 0;
+            var maxHeight:Number = 0;
+            
+            var test:UIComponent = itemRenderer.newInstance();
+            addChild(test)
+            for ( var i:int = 0; i < numItems; i++ ) {
+                IDataRenderer(test).data = collection[i];
+                test.validateDisplayList();
+                test.validateSize(true);
+                maxWidth = Math.max(maxWidth, test.getExplicitOrMeasuredWidth());
+                maxHeight = Math.max(maxHeight, test.getExplicitOrMeasuredHeight());
+            }
+            removeChild(test);
+            return {width: maxWidth, height: maxHeight};
+        }
     }
 }
 

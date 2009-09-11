@@ -35,6 +35,10 @@ package net.systemeD.potlatch2.mapfeatures {
             loader.load(request);
         }
 
+        internal function get definition():XML {
+            return xml;
+        }
+        
         private function onFeatureLoad(event:Event):void {
             xml = new XML(URLLoader(event.target).data);
             

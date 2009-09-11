@@ -43,8 +43,9 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _description:String;
         
         public function EditorFactory(inputXML:XML) {
-            _name = inputXML.@name;
-            _description = inputXML.@description;
+            _name = String(inputXML.@name);
+            _description = String(inputXML.@description);
+            category = String(inputXML.@category);
         }
         
         public function areTagsMatching(entity:Entity):Boolean {

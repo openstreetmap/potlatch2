@@ -32,21 +32,37 @@ package net.systemeD.potlatch2.mapfeatures {
         private function parseEditors():void {
             _editors = new Array();
             
-            for each(var inputXML:XML in definition.input) {
-                var inputType:String = inputXML.@type;
-                var presenceStr:String = inputXML.@presence;
-                var sortOrderStr:String = inputXML.@priority;
-                var editor:EditorFactory = EditorFactory.createFactory(inputType, inputXML);
-                if ( editor != null ) {
-                    editor.presence = Presence.getPresence(presenceStr);
-                    editor.sortOrder = EditorFactory.getPriority(sortOrderStr);
-                    _editors.push(editor);
-                }
-            }
+            addEditors(definition);
             
             _editors.sortOn(["sortOrder", "name"], [Array.DESCENDING | Array.NUMERIC, Array.CASEINSENSITIVE]);
         }
         
+        private function addEditors(xml:XML):void {
+            var inputXML:XML;
+            
+            for each(var inputSetRef:XML in xml.inputSet) {
+                var setName:String = String(inputSetRef.@ref);
+                for each (inputXML in mapFeatures.definition.inputSet.(@id==setName)) {
+                    addEditors(inputXML);
+                }
+            }
+            
+            for each(inputXML in xml.input) {
+                addEditor(inputXML);
+            }
+        }
+        
+        private function addEditor(inputXML:XML):void {
+            var inputType:String = inputXML.@type;
+            var presenceStr:String = inputXML.@presence;
+            var sortOrderStr:String = inputXML.@priority;
+            var editor:EditorFactory = EditorFactory.createFactory(inputType, inputXML);
+            if ( editor != null ) {
+                editor.presence = Presence.getPresence(presenceStr);
+                editor.sortOrder = EditorFactory.getPriority(sortOrderStr);
+                _editors.push(editor);
+            }
+        }
         public function get editors():Array {
             return _editors;
         }

@@ -2,7 +2,7 @@
 <mx:Canvas
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
-	width="50" height="50"
+	width="50" height="50" maxWidth="50" maxHeight="50" minWidth="50" minHeight="50"
 	toolTip="{data.description}" enabled="{data.value != null}"
 	mouseEnabled="false" mouseChildren="false">
 

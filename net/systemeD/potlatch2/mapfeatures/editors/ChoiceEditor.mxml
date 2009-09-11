@@ -3,12 +3,11 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	verticalGap="0"
-	width="100%"
 	toolTip="{fieldDescription}">
 
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
-      width="100%" change="value = inputBox.selectedItem.value"
+      change="value = inputBox.selectedItem.value"
       open="inputBox.dropdown.variableRowHeight = true">
       <edit:itemRenderer>
         <mx:Component>
