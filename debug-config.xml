@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<flex-config>
+   <compiler>
+      <debug>true</debug>
+      <keep-generated-actionscript>true</keep-generated-actionscript>
+      <optimize>false</optimize>
+      <verbose-stacktraces>true</verbose-stacktraces>
+      <incremental>true</incremental>
+   </compiler>
+</flex-config>

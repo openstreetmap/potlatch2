@@ -16,20 +16,40 @@ Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex fram
 
 === How to compile and run ===
 
-Compiling:
+Compiling Potlatch 2:
+
+The following command will compile potlatch2 in optimized configuration
+The result is put at resources/potlatch2.swf
+
+* mxmlc potlatch2.mxml
+
+
+Compiling Halcyon as standalone viewer:
+
+* mxmlc halcyon_viewer.as
+
+
+Compiling during development:
+
+Compiling optimized versions from scratch takes a _long_ time. There are
+several ways to make it faster during development and also add useful
+debug stack traces and enable the commandline debugger (at the expense
+of a much larger swf file.. but we're developing so that doesn't matter!).
 
 * fcsh
-  - launches the Flex Compiler SHell
+  - launches the Flex Compiler SHell -- stops the compiler having to
+    bootstrap itself each time you invoke it. You don't /need/ this, but it
+    does make things slightly faster (about a second a shot for me)
 
-* mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon.swf /path/to/halcyon.mxml 
-* mxmlc -managers=flash.fonts.AFEFontManager -output=/path/to/halcyon_viewer.swf /path/to/halcyon_viewer.as
-  - compile Potlatch or Halcyon for the first time
+* mxmlc -load-config+=debug-config.xml potlatch2.mxml
+  - compile potlatch2 in debug configuration -- build is incremental so you
+    can run it again and mxmlc will only compile changes. Output has debug
+    enabled along with decent stack traces.
+    (you can substitute halcyon_viewer.as in the above to compile that)
 
 * compile 1 
-  - compile each subsequent time (_much_ faster than using mxmlc every time)
+  - when using fcsh recompile the first command
 
-* for nice debug reports compile with the mxmlc command:
-  mxmlc -managers=flash.fonts.AFEFontManager -compiler.debug -compiler.verbose-stacktraces -output=halcyon.swf halcyon.mxml
 
 Running:
 
@@ -39,9 +59,12 @@ Running:
 === Some other stuff you might need to know ===
 
 * The as3yaml library has been patched a bit to actually make it work. It will nonetheless spit out 300 warnings on Flex SDK 3.3.
-* The stuff about -managers=flash.fonts.AFEFontManager is probably only required on OS X.
 * Flex compiler runs at about the speed of a tortoise soaked in molasses which happens also to be dead.
 
 
 Richard Fairhurst
 richard@systemeD.net
+
+Dave Stubbs
+osm@randomjunk.co.uk
+

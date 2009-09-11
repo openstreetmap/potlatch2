@@ -1,0 +1,38 @@
+<html>
+
+<!-- Potlatch 2 script -->
+
+<head>
+<title>Potlatch TWO</title>
+<script type="text/javascript" src="swfobject.js"></script>
+</head>
+
+<body>
+
+<div id="map" style="width:100%; height: 100%; border: 1px solid black">
+</div>
+
+<script>
+	var fo = new SWFObject("potlatch2.swf?d="+Math.round(Math.random()*1000), "map", "100%", "100%", "9", "#FFFFFF");
+	fo.addVariable("lat",51.875);
+	fo.addVariable("lon",-1.492);
+	fo.addVariable("zoom",16);
+	fo.addVariable("api","http://api06.dev.openstreetmap.org/api/0.6/");
+	fo.addVariable("policy","http://api06.dev.openstreetmap.org/api/crossdomain.xml");
+	fo.addVariable("connection","XML");
+	fo.addVariable("oauth_policy", "http://api06.dev.openstreetmap.org/oauth/crossdomain.xml");
+	fo.addVariable("oauth_request_url", "http://api06.dev.openstreetmap.org/oauth/request_token");
+	fo.addVariable("oauth_access_url", "http://api06.dev.openstreetmap.org/oauth/access_token");
+	fo.addVariable("oauth_auth_url", "http://api06.dev.openstreetmap.org/oauth/authorize");
+        fo.addVariable("oauth_consumer_key", "fiM1IoqnKJk4JCfcl63DA");
+        fo.addVariable("oauth_consumer_secret", "7fYgJK9M4vB1CvBZ6jEsPGxYK9UD1hEnI6NqTxNGs");
+        fo.addVariable("serverName", "api06 Test On Dev");
+	fo.addVariable("style","test.css");
+	fo.write("map");
+
+
+</script>
+
+</body>
+</html>
+

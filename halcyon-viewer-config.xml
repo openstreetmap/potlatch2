@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<flex-config>
+   <compiler>
+      <fonts>
+          <managers>
+              <manager-class>flash.fonts.AFEFontManager</manager-class>
+          </managers>
+      </fonts>
+   </compiler>
+
+   <metadata>
+      <title>Halcyon</title>
+      <description>http://wiki.openstreetmap.org/wiki/Halcyon</description>
+   </metadata>
+
+   <output>resources/halcyon_viewer.swf</output>
+</flex-config>
