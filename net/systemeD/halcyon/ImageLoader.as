@@ -1,4 +1,4 @@
-package net.systemeD.halcyon.styleparser {
+package net.systemeD.halcyon {
 
 	/*
 		=== ImageLoader ===
@@ -12,6 +12,7 @@ package net.systemeD.halcyon.styleparser {
 	import flash.net.*;
 
 	public class ImageLoader extends URLLoader {
-		public var filename:String;
+		public var filename:*;
 	}
+
 }

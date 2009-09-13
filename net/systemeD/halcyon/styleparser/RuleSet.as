@@ -4,6 +4,7 @@ package net.systemeD.halcyon.styleparser {
 	import flash.net.*;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.ImageLoader;
     import net.systemeD.halcyon.connection.Entity;
 //	import bustin.dev.Inspector;
 	
@@ -56,17 +57,12 @@ package net.systemeD.halcyon.styleparser {
 			loadImages();
 		}
 
-		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
-		private function securityErrorHandler( event:SecurityErrorEvent ):void { Globals.vars.root.addDebug("securityerrorevent"); }
-		private function ioErrorHandler( event:IOErrorEvent ):void { Globals.vars.root.addDebug("ioerrorevent"); }
-
 
 		// ------------------------------------------------------------------------------------------------
 		// Load all referenced images
 		// ** will duplicate if referenced twice, shouldn't
 		
 		public function loadImages():void {
-Globals.vars.root.addDebug("entering loadImages");
 			var filename:String;
 			for each (var chooser:StyleChooser in choosers) {
 				for each (var style:Style in chooser.styles) {
@@ -74,7 +70,6 @@ Globals.vars.root.addDebug("entering loadImages");
 					else if (style is ShapeStyle  && ShapeStyle(style).fill_image   ) { filename=ShapeStyle(style).fill_image; }
 					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
 					else { continue; }
-Globals.vars.root.addDebug("need "+filename);
 				
 					iconsToLoad++;
 					var request:URLRequest=new URLRequest(filename);
@@ -97,5 +92,10 @@ Globals.vars.root.addDebug("need "+filename);
 			iconsToLoad--;
 			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }
 		}
+
+		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
+		private function securityErrorHandler( event:SecurityErrorEvent ):void { Globals.vars.root.addDebug("securityerrorevent"); }
+		private function ioErrorHandler( event:IOErrorEvent ):void { Globals.vars.root.addDebug("ioerrorevent"); }
+
 	}
 }

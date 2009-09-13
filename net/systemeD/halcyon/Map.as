@@ -69,6 +69,7 @@ package net.systemeD.halcyon {
 		public var initparams:Object;					// object containing 
 
 		public var backdrop:Object;						// reference to backdrop sprite
+		public var tileset:TileSet;						// 900913 tile background
 		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
 		public var connection:Connection;				// server connection
@@ -77,6 +78,10 @@ package net.systemeD.halcyon {
 		// Map constructor function
 
         public function Map(initparams:Object) {
+
+			// Add 900913 tile background
+			tileset=new TileSet(this);
+			addChild(tileset);
 
 			// Set up layering
 			// [layer][3]			- names
