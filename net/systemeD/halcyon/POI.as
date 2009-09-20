@@ -36,6 +36,7 @@ package net.systemeD.halcyon {
 			// ** apply :hover etc.
 			var sl:StyleList=map.ruleset.getStyles(this.node,tags);
 			var r:Boolean=false;	// ** rendered
+			var l:DisplayObject;
 			for (var sublayer:uint=0; sublayer<10; sublayer++) {
 
 				if (sl.pointStyles[sublayer]) {
@@ -45,6 +46,8 @@ package net.systemeD.halcyon {
 					if (s.icon_image!=iconname) {
 						// 'load' icon (actually just from library)
 						if (map.ruleset.images[s.icon_image]) {
+//							l=map.getChildAt(map.POISPRITE);
+//							Sprite(l).addChild(map.ruleset.images[s.icon_image]);
 							var loader:Loader = new Loader();
 							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon);
 							loader.loadBytes(map.ruleset.images[s.icon_image]);
@@ -63,7 +66,7 @@ package net.systemeD.halcyon {
 					// create name sprite
 					if (!name) {
 						name=new Sprite();
-						var c:DisplayObject=map.getChildAt(12);
+						var c:DisplayObject=map.getChildAt(map.NAMESPRITE);
 						Sprite(c).addChild(name);
 					}
 					t.writeNameLabel(name,tags[t.text],map.lon2coord(node.lon),map.latp2coord(node.latp));
@@ -71,7 +74,7 @@ package net.systemeD.halcyon {
 			}
 			if (!r && iconname!='') {
 				// not rendered any more, so remove
-				var l:DisplayObject=map.getChildAt(11);
+				l=map.getChildAt(map.POISPRITE);
 				Sprite(l).removeChild(icon);
 				iconname='';
 			}
@@ -79,7 +82,7 @@ package net.systemeD.halcyon {
 
 		private function loadedIcon(event:Event):void {
 			icon = Bitmap(event.target.content);
-			var l:DisplayObject=map.getChildAt(11);
+			var l:DisplayObject=map.getChildAt(map.POISPRITE);
 			Sprite(l).addChild(icon);
 			updatePosition();
 		}

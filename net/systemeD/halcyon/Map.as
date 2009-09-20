@@ -74,6 +74,11 @@ package net.systemeD.halcyon {
 		
 		public var connection:Connection;				// server connection
 
+		public const TILESPRITE:uint=0;
+		public const WAYSPRITE:uint=1;
+		public const POISPRITE:uint=12;
+		public const NAMESPRITE:uint=13;
+
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function
 
@@ -89,7 +94,7 @@ package net.systemeD.halcyon {
 			// [layer][1]			- casing
 			// [layer][0]			- fill
 
-			for (var l:int=0; l<13; l++) {				// 11 layers (10 is +5, 0 is -5)
+			for (var l:int=0; l<13; l++) {				// 11 layers (11 is +5, 1 is -5)
 				var s:Sprite = getHitSprite();      	//  |
 				s.addChild(getPaintSprite());			//	| 0 fill
 				s.addChild(getPaintSprite());			//	| 1 casing
@@ -102,14 +107,16 @@ package net.systemeD.halcyon {
 				s.addChild(getHitSprite());			    //	| 4 entity hit tests
 				addChild(s);							//  |
 			}
-			addChild(getPaintSprite());     			// 11 - POIs
-			addChild(getPaintSprite());     			// 12 - shields and POI names
+			addChild(getPaintSprite());     			// 12 - POIs
+			addChild(getPaintSprite());     			// 13 - shields and POI names
 
 			this.initparams=initparams;
 			connection = Connection.getConnection(initparams);
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
             connection.addEventListener(Connection.NEW_POI, newPOICreated);
 			gotEnvironment(null);
+
+			addEventListener(Event.ENTER_FRAME, everyFrame);
         }
 
         private function getPaintSprite():Sprite {
@@ -156,7 +163,7 @@ package net.systemeD.halcyon {
 			//updateSize();
 
 			scale=startscale;
-			scalefactor=MASTERSCALE/Math.pow(2,14-scale);
+			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			baselon    =startlon          -(mapwidth /2)/scalefactor;
 			basey      =lat2latp(startlat)+(mapheight/2)/scalefactor;
 			addDebug("Baselon "+baselon+", basey "+basey);
@@ -171,13 +178,14 @@ package net.systemeD.halcyon {
 		public function updateCoords(tx:Number,ty:Number):void {
 			x=tx; y=ty;
 
-			// ** calculate tile_l etc.
 			edge_t=coord2lat(-y          );
 			edge_b=coord2lat(-y+mapheight);
 			edge_l=coord2lon(-x          );
 			edge_r=coord2lon(-x+mapwidth );
 			addDebug("Lon "+edge_l+"-"+edge_r);
 			addDebug("Lat "+edge_b+"-"+edge_t);
+
+			tileset.update();
 		}
 		
 		public function updateCoordsFromLatLon(lat:Number,lon:Number):void {
@@ -348,6 +356,13 @@ package net.systemeD.halcyon {
 			lastxmouse=mouseX; lastymouse=mouseY;
 		}
         
+		// ------------------------------------------------------------------------------------------
+		// Do every frame
+
+		private function everyFrame(event:Event):void {
+			tileset.serviceQueue();
+		}
+
 		// ------------------------------------------------------------------------------------------
 		// Miscellaneous events
 		

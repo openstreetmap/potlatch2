@@ -4,7 +4,7 @@ package net.systemeD.halcyon.styleparser {
 	import flash.net.*;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.Map;
-	import net.systemeD.halcyon.ImageLoader;
+	import net.systemeD.halcyon.ImageURLLoader;
     import net.systemeD.halcyon.connection.Entity;
 //	import bustin.dev.Inspector;
 	
@@ -73,7 +73,7 @@ package net.systemeD.halcyon.styleparser {
 				
 					iconsToLoad++;
 					var request:URLRequest=new URLRequest(filename);
-					var loader:ImageLoader=new ImageLoader();
+					var loader:ImageURLLoader=new ImageURLLoader();
 					loader.dataFormat=URLLoaderDataFormat.BINARY;
 					loader.filename=filename;
 					loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
@@ -88,6 +88,7 @@ package net.systemeD.halcyon.styleparser {
 		// data handler
 
 		private function loadedImage(event:Event):void {
+Globals.vars.root.addDebug("adding image at "+event.target.filename);
 			images[event.target.filename]=event.target.data;
 			iconsToLoad--;
 			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }

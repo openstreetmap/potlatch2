@@ -5,15 +5,15 @@ package net.systemeD.halcyon {
 	//		- double or halve xoffset/yoffset accordingly
 	//		- blank the tile queue
 
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Bitmap;
+	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
 	
-	import net.systemeD.halcyon.ImageLoader;
+	import net.systemeD.halcyon.ImageURLLoader;
 	import net.systemeD.halcyon.Globals;
-
-    public class TileSet extends DisplayObjectContainer {
+	import flash.system.LoaderContext;
+	
+    public class TileSet extends Sprite {
 
 		public var baseurl:String;
 
@@ -22,8 +22,8 @@ package net.systemeD.halcyon {
 		public var tile_b:int;
 		public var tile_t:int;
 
-		public var xoffset:Number;
-		public var yoffset:Number;
+		public var xoffset:Number=0;
+		public var yoffset:Number=0;
 
 		private var requests:Array=[];
 		private var tiles:Object={};		// key is "z,x,y"; value "true" (needed) or reference to sprite
@@ -42,11 +42,10 @@ package net.systemeD.halcyon {
 		// Update bounds - called on every move
 		
 		public function update():void {
-			tile_l=lon2tile(map.coord2lon(-xoffset-map.x));
-			tile_r=lon2tile(map.coord2lon(-xoffset-map.x+map.mapwidth));
-			tile_t=lat2tile(map.coord2lat(-yoffset-map.y));
-			tile_b=lat2tile(map.coord2lat(-yoffset-map.y+map.mapheight));
-
+			tile_l=lon2tile(map.edge_l+xoffset);
+			tile_r=lon2tile(map.edge_r+xoffset);
+			tile_t=lat2tile(map.edge_t+yoffset);
+			tile_b=lat2tile(map.edge_b+yoffset);
 			for (var tx:int=tile_l; tx<=tile_r; tx++) {
 				for (var ty:int=tile_t; ty<=tile_b; ty++) {
 					if (!tiles[map.scale+','+tx+','+ty]) { addRequest(tx,ty); }
@@ -66,50 +65,36 @@ package net.systemeD.halcyon {
 		public function serviceQueue():void {
 			if (waiting==4 || requests.length==0) { return; }
 			var r:Array, tx:int, ty:int, tz:int;
-			var loader:ImageLoader, urlreq:URLRequest;
 
 			for (var i:uint=0; i<Math.min(requests.length, 4-waiting); i++) {
 				r=requests.shift(); tz=r[0]; tx=r[1]; ty=r[2];
 				if (tx>=tile_l && tx<=tile_r && ty>=tile_t && ty<=tile_b) {
 					// Tile is on-screen, so load
-					urlreq=new URLRequest(tileURL(tx,ty));
-					loader=new ImageLoader();
-					loader.dataFormat=URLLoaderDataFormat.BINARY;
-					loader.filename=[tz,tx,ty];
-					loader.addEventListener(Event.COMPLETE, 					loadedTile,				false, 0, true);
-					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
-					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
-					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
-					loader.load(urlreq);
+					var loader:Loader = new Loader();
+					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit);
+					loader.load(new URLRequest(tileURL(tx,ty)), 
+					            new LoaderContext(true));
+					this.addChild(loader);
+					loader.x=map.lon2coord(tile2lon(tx));
+					loader.y=map.lat2coord(tile2lat(ty));
+					loader.alpha=0.5;
 				}
 			}
 		}
 
-		// Tile has loaded, so place on display list
-
-		private function loadedTile(event:Event):void {
-			var r:Array=event.target.filename as Array;
-			var tz:int=r[0]; var tx:int=r[1]; var ty:int=r[2];
-			
-			var image:Bitmap = event.target.content as Bitmap;
-			addChild(image);
-			image.x=map.lon2coord(tile2lon(tx));
-			image.y=map.lat2coord(tile2lat(ty));
-
+		protected function doImgInit(evt:Event):void {
 			waiting--;
+			return;
 		}
 
 		
 		// Assemble tile URL
 		
 		private function tileURL(tx:int,ty:int):String {
-			// ***** to do
-			return '';
+			return "http://npe.openstreetmap.org/"+map.scale+"/"+tx+"/"+ty+".png";
+//			return "http://andy.sandbox.cloudmade.com/tiles/cycle/"+map.scale+"/"+tx+"/"+ty+".png";
 		}
 
-		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
-		private function securityErrorHandler( event:SecurityErrorEvent ):void { Globals.vars.root.addDebug("securityerrorevent"); }
-		private function ioErrorHandler( event:IOErrorEvent ):void { Globals.vars.root.addDebug("ioerrorevent"); }
 
 		
 		// ------------------------------------------------------------------
@@ -119,7 +104,7 @@ package net.systemeD.halcyon {
 			return (Math.floor((lon+180)/360*Math.pow(2,map.scale)));
 		}
 		private function lat2tile(lat:Number):int { 
-			return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,map.scale))); 
+			return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,map.scale)));
 		}
 		private function tile2lon(t:int):Number {
 			return (t/Math.pow(2,map.scale)*360-180);

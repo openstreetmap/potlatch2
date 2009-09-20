@@ -10,8 +10,9 @@ package net.systemeD.halcyon {
 
 	import flash.events.*;
 	import flash.net.*;
+	import flash.display.*;
 
-	public class ImageLoader extends URLLoader {
+	public class ImageURLLoader extends URLLoader {
 		public var filename:*;
 	}
 

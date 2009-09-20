@@ -22,6 +22,11 @@ package {
 	
 		private function init(e:Event):void {
 
+			theMap = new Map(this.loaderInfo.parameters);
+            theMap.updateSize(stage.stageWidth, stage.stageHeight);
+			addChild(theMap);
+			Globals.vars.root=theMap;
+
 			// add debug field
 			var t:TextField=new TextField();
 			t.width=400; t.height=100; t.x=400; t.border=true;
@@ -29,11 +34,6 @@ package {
 			addChild(t);
 			Globals.vars.debug=t;
 			t.visible = true;
-
-			theMap = new Map(this.loaderInfo.parameters);
-            theMap.updateSize(stage.stageWidth, stage.stageHeight);
-			addChild(theMap);
-			Globals.vars.root=theMap;
 
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
