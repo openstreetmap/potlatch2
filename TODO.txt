@@ -33,7 +33,7 @@ Potlatch 2: main outstanding issues
 == Tagging ==
 
 
-== Rendering (Halcyon) ==
+== Rendering (Halcyon) ==
 
 * Shields
 * Complete MapCSS support
