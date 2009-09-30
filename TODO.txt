@@ -1,0 +1,39 @@
+Potlatch 2: main outstanding issues
+(last updated 30th September 2009)
+-----------------------------------
+
+== Core drawing ==
+
+* Branching ways
+* Split and merge ways
+* POI drawing (drag and drop/double-click)
+* Undo/redo
+* Reverse way direction
+
+
+== Other core ==
+
+* GPS tracks
+* Non-900913 projections
+* Yahoo! background
+* Plugin support
+
+
+== Server interaction ==
+
+
+== UI ==
+
+* Relations
+* Keyboard shortcuts
+* Background layer selection
+* CSS style selection
+
+
+== Tagging ==
+
+
+== Rendering (Halcyon) ==
+
+* Shields
+* Complete MapCSS support
