@@ -1,10 +1,5 @@
 package net.systemeD.halcyon {
 
-	// ** Need to support different zoom levels
-	//    When zoom level changes: 
-	//		- double or halve xoffset/yoffset accordingly
-	//		- blank the tile queue
-
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
@@ -13,8 +8,6 @@ package net.systemeD.halcyon {
 	import flash.system.LoaderContext;
 	
     public class TileSet extends Sprite {
-
-		public var baseurl:String;
 
 		public var tile_l:int;
 		public var tile_r:int;
@@ -27,20 +20,42 @@ package net.systemeD.halcyon {
 		private var requests:Array=[];
 		private var tiles:Object={};		// key is "z,x,y"; value "true" (needed) or reference to sprite
 		private var waiting:int=0;			// number of tiles currently being downloaded
+		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
 
 		private var map:Map;
 
 
         public function TileSet(map:Map) {
 			this.map=map;
+			createSprites();
 		}
 	
-		public function init(url:String):void {
+		public function init(url:String=null):void {
+			baseurl=url;
+			tiles={};
+			if (!url) { 
+				while (this.numChildren) { this.removeChildAt(0); }
+				createSprites();
+			}
 		}
 
+		private function createSprites():void {
+			for (var i:uint=map.MINSCALE; i<=map.MAXSCALE; i++) {
+				this.addChild(new Sprite());
+			}
+		}
+
+		public function changeScale(scale:uint):void {
+			for (var i:uint=map.MINSCALE; i<=map.MAXSCALE; i++) {
+				this.getChildAt(i-map.MINSCALE).visible=(scale==i);
+			}
+			// ** Should also double or halve xoffset/yoffset accordingly
+		}
+			
 		// Update bounds - called on every move
 		
 		public function update():void {
+			if (!baseurl) { return; }
 			tile_l=lon2tile(map.edge_l+xoffset);
 			tile_r=lon2tile(map.edge_r+xoffset);
 			tile_t=lat2tile(map.edge_t+yoffset);
@@ -63,7 +78,7 @@ package net.systemeD.halcyon {
 		
 		public function serviceQueue():void {
 			if (waiting==4 || requests.length==0) { return; }
-			var r:Array, tx:int, ty:int, tz:int;
+			var r:Array, tx:int, ty:int, tz:int, l:DisplayObject;
 
 			for (var i:uint=0; i<Math.min(requests.length, 4-waiting); i++) {
 				r=requests.shift(); tz=r[0]; tx=r[1]; ty=r[2];
@@ -75,7 +90,8 @@ package net.systemeD.halcyon {
             		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError);
 					loader.load(new URLRequest(tileURL(tx,ty)), 
 					            new LoaderContext(true));
-					this.addChild(loader);
+					l=this.getChildAt(map.scale-map.MINSCALE);
+					Sprite(l).addChild(loader);
 					loader.x=map.lon2coord(tile2lon(tx));
 					loader.y=map.lat2coord(tile2lat(ty));
 					loader.alpha=0.5;
@@ -97,8 +113,7 @@ package net.systemeD.halcyon {
 		// Assemble tile URL
 		
 		private function tileURL(tx:int,ty:int):String {
-			return "http://npe.openstreetmap.org/"+map.scale+"/"+tx+"/"+ty+".png";
-//			return "http://andy.sandbox.cloudmade.com/tiles/cycle/"+map.scale+"/"+tx+"/"+ty+".png";
+			return baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
 		}
 
 

@@ -88,6 +88,7 @@ package net.systemeD.halcyon {
 			// Add 900913 tile background
 			tileset=new TileSet(this);
 			addChild(tileset);
+			tileset.init("http://npe.openstreetmap.org/$z/$x/$y.png");
 
 			// Set up layering
 			// [layer][3]			- names
@@ -304,8 +305,9 @@ package net.systemeD.halcyon {
 		private function changeScale(newscale:uint):void {
 			addDebug("new scale "+newscale);
 			scale=newscale;
-			scalefactor=MASTERSCALE/Math.pow(2,14-scale);
+			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			updateCoordsFromLatLon((edge_t+edge_b)/2,(edge_l+edge_r)/2);	// recentre
+			tileset.changeScale(scale);
 			download();
 			redraw();
 		}
