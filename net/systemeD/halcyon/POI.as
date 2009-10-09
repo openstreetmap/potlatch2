@@ -41,13 +41,10 @@ package net.systemeD.halcyon {
 
 				if (sl.pointStyles[sublayer]) {
 					var s:PointStyle=sl.pointStyles[sublayer];
-//					if ((s is PointStyle) && s.icon && s.icon!="") 
 					r=true;
 					if (s.icon_image!=iconname) {
 						// 'load' icon (actually just from library)
 						if (map.ruleset.images[s.icon_image]) {
-//							l=map.getChildAt(map.POISPRITE);
-//							Sprite(l).addChild(map.ruleset.images[s.icon_image]);
 							var loader:Loader = new Loader();
 							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon);
 							loader.loadBytes(map.ruleset.images[s.icon_image]);
@@ -62,7 +59,6 @@ package net.systemeD.halcyon {
 
 				if (sl.textStyles[sublayer]) {
 					var t:TextStyle=sl.textStyles[sublayer];
-//					if ((s is TextStyle) && s.tag && tags[s.tag])
 					// create name sprite
 					if (!name) {
 						name=new Sprite();

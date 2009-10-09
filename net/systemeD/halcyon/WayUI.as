@@ -32,6 +32,13 @@ package net.systemeD.halcyon {
 			gridFitType: GridFitType.NONE
 		};
 		public var nameformat:TextFormat;
+		
+		private const FILLSPRITE:uint=0;
+		private const CASINGSPRITE:uint=1;
+		private const STROKESPRITE:uint=2;
+		private const NAMESPRITE:uint=3;
+		private const NODESPRITE:uint=4;
+		private const CLICKSPRITE:uint=5;
 
 
 		public function WayUI(way:Way, map:Map) {
@@ -119,6 +126,7 @@ package net.systemeD.halcyon {
             for (var stateKey:String in stateClasses) {
                 tags[":"+stateKey] = stateKey;
             }
+			if (way.isArea()) { tags[':area']='yes'; }
 
 			// Remove all currently existing sprites
 			while (sprites.length>0) {
@@ -142,7 +150,7 @@ package net.systemeD.halcyon {
 
 					// Stroke
 					if (s.width)  {
-						stroke=new Shape(); addToLayer(stroke,2,sublayer);
+						stroke=new Shape(); addToLayer(stroke,STROKESPRITE,sublayer);
 						stroke.graphics.moveTo(x0,y0);
 						s.applyStrokeStyle(stroke.graphics);
 						if (s.dashes && s.dashes.length>0) { dashedLine(stroke.graphics,s.dashes); }
@@ -152,7 +160,7 @@ package net.systemeD.halcyon {
 
 					// Fill
 					if (s.fill_color || s.fill_image) {
-						fill=new Shape(); addToLayer(fill,0);
+						fill=new Shape(); addToLayer(fill,FILLSPRITE);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
 									 else { s.applyFill(fill.graphics); }
@@ -163,7 +171,7 @@ package net.systemeD.halcyon {
 
 					// Casing
 					if (s.casing_width) { 
-						casing=new Shape(); addToLayer(casing,1);
+						casing=new Shape(); addToLayer(casing,CASINGSPRITE);
 						casing.graphics.moveTo(x0,y0);
 						s.applyCasingStyle(casing.graphics);
 						if (s.casing_dashes && s.casing_dashes.length>0) { dashedLine(casing.graphics,s.casing_dashes); }
@@ -174,7 +182,7 @@ package net.systemeD.halcyon {
 				
 				if (sl.textStyles[sublayer]) {
 					var t:TextStyle=sl.textStyles[sublayer];
-					roadname=new Sprite(); addToLayer(roadname,3);
+					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);
 					nameformat = t.getTextFormat();
 					var a:String=tags[t.text];
 					if (a) {
@@ -188,6 +196,15 @@ package net.systemeD.halcyon {
 					}
 				}
 				
+				// ** draw icons
+				for (var i:uint = 0; i < way.length; i++) {
+	                var node:Node = way.getNode(i);
+					if (node.hasTags()) {
+						map.connection.registerPOI(node);
+					}
+				}
+				
+				
 				// ** ShieldStyle to do
 			}
 
@@ -196,14 +213,14 @@ package net.systemeD.halcyon {
                 var def:Sprite = new Sprite();
                 def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
                 solidLine(def.graphics);
-                addToLayer(def, 2);
+                addToLayer(def, STROKESPRITE);		// ** this probably needs a sublayer
 				drawn=true;
             }
             
             if ( stateClasses["showNodes"] != null ) {
                 var nodes:Sprite = new Sprite();
                 drawNodes(nodes.graphics);
-                addToLayer(nodes, 3);
+                addToLayer(nodes, NODESPRITE);
             }
 
 			if (!drawn) { return; }
@@ -212,7 +229,7 @@ package net.systemeD.halcyon {
             hitzone = new Sprite();
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
             solidLine(hitzone.graphics);
-            addToLayer(hitzone, 4);
+            addToLayer(hitzone, CLICKSPRITE);
             hitzone.visible = false;
 
             if ( listenSprite == null ) {
@@ -226,7 +243,7 @@ package net.systemeD.halcyon {
                 listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
             }
             listenSprite.hitArea = hitzone;
-            addToLayer(listenSprite, 4);
+            addToLayer(listenSprite, CLICKSPRITE);
             listenSprite.buttonMode = true;
             listenSprite.mouseEnabled = true;
 
@@ -333,7 +350,6 @@ package net.systemeD.halcyon {
 
 		// Draw name along path
 		// based on code by Tom Carden
-		// ** needs styling
 		
 		private function writeNameOnPath(s:Sprite,a:String,textOffset:Number=0):void {
 

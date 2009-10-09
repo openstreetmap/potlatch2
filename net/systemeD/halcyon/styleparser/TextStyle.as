@@ -11,6 +11,7 @@ package net.systemeD.halcyon.styleparser {
 		public var font_family:String;
 		public var font_bold:Boolean;
 		public var font_italic:Boolean;
+		public var font_underline:Boolean;
 		public var font_caps:Boolean;
 		public var font_size:uint;
 		public var text_color:uint;
@@ -20,22 +21,27 @@ package net.systemeD.halcyon.styleparser {
 		public var text_halo_color:uint;
 		public var text_halo_radius:uint=0;
 		public var text_center:Boolean;
+		public var letter_spacing:uint;
 
 		override public function get properties():Array {
 			return [
 				'font_family','font_bold','font_italic','font_caps','font_size',
 				'text_color','text_offset','max_width',
-				'text','text_halo_color','text_halo_radius','text_center'
+				'text','text_halo_color','text_halo_radius','text_center',
+				'letter_spacing'
 			];
 		}
 
 		
 		public function getTextFormat():TextFormat {
-			return new TextFormat(font_family ? font_family: "DejaVu",
-								  font_size   ? font_size  : 8,
-								  text_color  ? text_color : 0,
-								  font_bold   ? font_bold  : false,
-								  font_italic ? font_italic: false);
+			var tf:TextFormat=new TextFormat(font_family    ? font_family   : "DejaVu",
+			                                 font_size      ? font_size     : 8,
+			                                 text_color     ? text_color    : 0,
+			                                 font_bold      ? font_bold     : false,
+			                                 font_italic    ? font_italic   : false,
+			                                 font_underline ? font_underline: false);
+			tf.letterSpacing=(letter_spacing ? letter_spacing : 0);
+			return tf;
 		}
 	
 		public function getHaloFilter():Array {

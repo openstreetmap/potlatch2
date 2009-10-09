@@ -61,6 +61,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const COLOR:RegExp=/color$/;
 		private static const BOLD:RegExp=/^bold$/i;
 		private static const ITALIC:RegExp=/^italic|oblique$/i;
+		private static const UNDERLINE:RegExp=/^underline$/i;
 		private static const CAPS:RegExp=/^uppercase$/i;
 		private static const CENTER:RegExp=/^center$/i;
 
@@ -324,9 +325,10 @@ package net.systemeD.halcyon.styleparser {
 			xs.sublayer=10;
 
 			// Munge special values
-			if (t['font_weight']   ) { t['font_bold'  ] = t['font_weight'  ].match(BOLD  ) ? true : false; }
-			if (t['font_style']    ) { t['font_italic'] = t['font_style'   ].match(ITALIC) ? true : false; }
-			if (t['text_position'] ) { t['text_center'] = t['text_position'].match(CENTER) ? true : false; }
+			if (t['font_weight']    ) { t['font_bold'  ]    = t['font_weight'    ].match(BOLD  )    ? true : false; }
+			if (t['font_style']     ) { t['font_italic']    = t['font_style'     ].match(ITALIC)    ? true : false; }
+			if (t['text_decoration']) { t['font_underline'] = t['text_decoration'].match(UNDERLINE) ? true : false; }
+			if (t['text_position']  ) { t['text_center']    = t['text_position'  ].match(CENTER)    ? true : false; }
 			if (t['text_transform']) {
 				// ** needs other transformations, e.g. lower-case, sentence-case
 				if (t['text_transform'].match(CAPS)) { t['font_caps']=true; } else { t['font_caps']=false; }

@@ -75,9 +75,10 @@ package net.systemeD.halcyon {
 		public var connection:Connection;				// server connection
 
 		public const TILESPRITE:uint=0;
-		public const WAYSPRITE:uint=1;
-		public const POISPRITE:uint=12;
-		public const NAMESPRITE:uint=13;
+		public const GPSSPRITE:uint=1;
+		public const WAYSPRITE:uint=2;
+		public const POISPRITE:uint=13;
+		public const NAMESPRITE:uint=14;
 
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function
@@ -104,7 +105,8 @@ package net.systemeD.halcyon {
 				}										//  |  |  |
 				s.addChild(t);							//  |  |
 				s.addChild(getPaintSprite());			//	| 3 names
-				s.addChild(getHitSprite());			    //	| 4 entity hit tests
+				s.addChild(getPaintSprite());			//	| 4 nodes
+				s.addChild(getHitSprite());			    //	| 5 entity hit tests
 				addChild(s);							//  |
 			}
 			addChild(getPaintSprite());     			// 12 - POIs

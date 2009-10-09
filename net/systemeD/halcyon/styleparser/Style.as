@@ -2,6 +2,7 @@ package net.systemeD.halcyon.styleparser {
 
 	import flash.utils.ByteArray;
 	import flash.net.*;
+	import net.systemeD.halcyon.Globals;
 
 	public class Style {
 
@@ -62,9 +63,20 @@ package net.systemeD.halcyon.styleparser {
 		public function setPropertyFromString(k:String,v:*):Boolean {
 			if (!this.hasOwnProperty(k)) { return false; }
 			if (v is Eval) { evals[k]=v; v=1; }
+
+			// Arrays don't return a proper typeof, so check manually
+			// Note that undefined class variables always have typeof=object,
+			// so we need to declare them as empty arrays (cf ShapeStyle)
+			if (this[k] is Array) {
+				// Split comma-separated array and coerce as numbers
+				this[k]=v.split(',').map(function(el:Object,index:int,array:Array):Number { return Number(el); });
+				edited=true; return true;
+			}
+
+			// Check for other object types
 			switch (typeof(this[k])) {
 				case "number":	this[k]=Number(v) ; edited=true; return true;
-				case "object":	// **for some reason, typeof(string class variables) returns "object".
+				case "object":	// **for now, just assume objects are undefined strings
 								// We'll probably need to fix this in future if we have more complex
 								// properties
 				case "string":	this[k]=String(v) ; edited=true; return true;

@@ -110,7 +110,7 @@ package net.systemeD.halcyon.connection {
 			dispatchEvent(e);
 		}
 
-        protected function registerPOI(node:Node):void {
+        public function registerPOI(node:Node):void {
             if ( pois.indexOf(node) < 0 ) {
                 pois.push(node);
                 sendEvent(new EntityEvent(NEW_POI, node));

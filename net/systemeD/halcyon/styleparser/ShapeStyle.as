@@ -7,7 +7,7 @@ package net.systemeD.halcyon.styleparser {
 		public var width:Number;
 		public var color:Number;
 		public var opacity:Number;
-		public var dashes:Array;
+		public var dashes:Array=[];
 		public var linecap:String;
 		public var linejoin:String;
 		
@@ -18,7 +18,7 @@ package net.systemeD.halcyon.styleparser {
 		public var casing_width:Number;
 		public var casing_color:Number;
 		public var casing_opacity:Number;
-		public var casing_dashes:Array;
+		public var casing_dashes:Array=[];
 		
 		override public function get properties():Array {
 			return [
