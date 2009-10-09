@@ -8,6 +8,7 @@ package {
 	import flash.events.MouseEvent;
 	import flash.display.*;
 	import flash.text.TextField;
+	import flash.external.*;
 //	import bustin.dev.Inspector;
 
 	public class halcyon_viewer extends Sprite {
@@ -33,7 +34,7 @@ package {
 			t.multiline=true;
 			addChild(t);
 			Globals.vars.debug=t;
-			t.visible = true;
+            t.visible = loaderInfo.parameters["show_debug"] == 'true';
 
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
@@ -61,9 +62,22 @@ package {
             	var controller:JSController = new JSController(theMap, loaderInfo.parameters['responder']);
 				controller.setActive();
 			}
+
+			ExternalInterface.addCallback('refreshCSS', onRefreshCSS);
+			ExternalInterface.addCallback('jumpTo', onJumpTo);
 		}
-		
+
+		private function onRefreshCSS(str:String):void {
+			theMap.ruleset.loadFromCSS(str);
+			theMap.redraw();
+		}		
+		private function onJumpTo(lat:Number,lon:Number):void {
+			theMap.init(lat,lon);
+		}
+
 		private function zoomInHandler(e:MouseEvent):void  { e.stopPropagation(); theMap.zoomIn(); }
 		private function zoomOutHandler(e:MouseEvent):void { e.stopPropagation(); theMap.zoomOut(); }
+
+
 	}
 }

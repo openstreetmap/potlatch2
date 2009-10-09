@@ -84,17 +84,25 @@ package net.systemeD.halcyon {
 		// Map constructor function
 
         public function Map(initparams:Object) {
+			this.initparams=initparams;
+			connection = Connection.getConnection(initparams);
+            connection.addEventListener(Connection.NEW_WAY, newWayCreated);
+            connection.addEventListener(Connection.NEW_POI, newPOICreated);
+			gotEnvironment(null);
 
-			// Add 900913 tile background
-			tileset=new TileSet(this);
-			addChild(tileset);
-			tileset.init("http://npe.openstreetmap.org/$z/$x/$y.png");
+			addEventListener(Event.ENTER_FRAME, everyFrame);
+        }
 
-			// Set up layering
-			// [layer][3]			- names
-			// [layer][2][sublayer]	- stroke
-			// [layer][1]			- casing
-			// [layer][0]			- fill
+		// Set up layering
+		// [layer][3]			- names
+		// [layer][2][sublayer]	- stroke
+		// [layer][1]			- casing
+		// [layer][0]			- fill
+
+		private function createSprites():void {
+			tileset=new TileSet(this);					// 900913 background
+			addChild(tileset);							//  |
+			addChild(new Sprite());						// GPS
 
 			for (var l:int=0; l<13; l++) {				// 11 layers (11 is +5, 1 is -5)
 				var s:Sprite = getHitSprite();      	//  |
@@ -112,15 +120,11 @@ package net.systemeD.halcyon {
 			}
 			addChild(getPaintSprite());     			// 12 - POIs
 			addChild(getPaintSprite());     			// 13 - shields and POI names
-
-			this.initparams=initparams;
-			connection = Connection.getConnection(initparams);
-            connection.addEventListener(Connection.NEW_WAY, newWayCreated);
-            connection.addEventListener(Connection.NEW_POI, newPOICreated);
-			gotEnvironment(null);
-
-			addEventListener(Event.ENTER_FRAME, everyFrame);
-        }
+		}
+		
+		private function removeSprites():void {
+			while (numChildren) { removeChildAt(0); }
+		}
 
         private function getPaintSprite():Sprite {
             var s:Sprite = new Sprite();
@@ -149,23 +153,29 @@ package net.systemeD.halcyon {
 				init(initparams['lat'],
 					 initparams['lon'],
 					 initparams['zoom'],
-					 initparams['style']);
+					 initparams['style'],
+					 initparams['tileurl']);
 
 			} else {
 				// somewhere innocuous
-				init(53.09465,-2.56495,17,"test.css?d="+Math.random());
+				init(53.09465,-2.56495,17,"test.css?d="+Math.random(),"");
 			}
 		}
 
 		// ------------------------------------------------------------------------------------------
 		// Initialise map at a given lat/lon
 
-        public function init(startlat:Number,startlon:Number,startscale:uint,style:String):void {
-			ruleset=new RuleSet(this,redrawPOIs);
-			ruleset.loadFromCSS(style);
-			//updateSize();
+        public function init(startlat:Number,startlon:Number,startscale:uint=0,style:String=null,tileurl:String=''):void {
+			removeSprites();
+			createSprites();
+			tileset.init(tileurl);
 
-			scale=startscale;
+			if (style) {
+				ruleset=new RuleSet(this,redrawPOIs);
+				ruleset.loadFromCSS(style);
+			}
+			if (startscale>0) { scale=startscale; }
+
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			baselon    =startlon          -(mapwidth /2)/scalefactor;
 			basey      =lat2latp(startlat)+(mapheight/2)/scalefactor;
@@ -364,7 +374,7 @@ package net.systemeD.halcyon {
 		// Do every frame
 
 		private function everyFrame(event:Event):void {
-			tileset.serviceQueue();
+			if (tileset) { tileset.serviceQueue(); }
 		}
 
 		// ------------------------------------------------------------------------------------------

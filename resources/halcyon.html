@@ -9,7 +9,7 @@
 
 <body>
 
-<div id="map" style="width:800px; height: 600px; border: 1px solid black">
+<div id="map" style="width:800px; height: 600px; border: 1px solid black; float:left; margin-right: 10px">
 </div>
 
 <script>
@@ -18,19 +18,43 @@
 		alert (event+": "+object+" "+id+", highway="+attr['highway']);
 	}
 
-	var fo = new SWFObject("halcyon_viewer.swf?d="+Math.round(Math.random()*1000), "map", "100%", "100%", "9", "#FFFFFF");
+	var fo = new SWFObject("halcyon_viewer.swf?d="+Math.round(Math.random()*1000), "mapswf", "100%", "100%", "9", "#FFFFFF");
 	fo.addVariable("lat",51.875);
 	fo.addVariable("lon",-1.482);
-	fo.addVariable("zoom",16);
+	fo.addVariable("zoom",14);
 	fo.addVariable("api","http://www.openstreetmap.org/api/0.6/");
 	fo.addVariable("policy","http://www.openstreetmap.org/api/crossdomain.xml");
 	fo.addVariable("connection","AMF");
 	fo.addVariable("responder","respond");
-	fo.addVariable("style","test.css");
+	fo.addVariable("tileurl","http://npe.openstreetmap.org/$z/$x/$y.png");
+	fo.addVariable("style","test.css?d="+Math.round(Math.random()*1000));
 	fo.addVariable("show_debug","false");
 	fo.write("map");
 
+	function refreshCSS() {
+		if (document.getElementById("mapswf")) { 
+			document.getElementById("mapswf").refreshCSS(document.getElementById("mapcss").value);
+		}
+	}
+
+	function jumpTo() {
+		if (document.getElementById("mapswf")) { 
+			document.getElementById("mapswf").jumpTo(document.getElementById("lat").value,document.getElementById("lon").value);
+		}
+	}
+	
 </script>
+
+<div id="ui">
+<p>Lat: <input id='lat' value='51.875' size='6'> Lon: <input id='lon' value='-1.482' size='6'>
+<input type='button' onClick='javascript:jumpTo();' value=" Go ">
+<p>
+<input type='button' onClick='javascript:refreshCSS();' value=" Refresh CSS ">
+<textarea cols=40 rows=40 id='mapcss'>
+/* Type MapCSS here */
+</textarea>
+</p>
+</div>
 
 </body>
 </html>

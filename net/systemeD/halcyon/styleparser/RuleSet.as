@@ -36,8 +36,10 @@ package net.systemeD.halcyon.styleparser {
 		// ---------------------------------------------------------------------------------------------------------
 		// Loading stylesheet
 
-		public function loadFromCSS(url:String):void {
-			var request:URLRequest=new URLRequest(url);
+		public function loadFromCSS(str:String):void {
+			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); return; }
+
+			var request:URLRequest=new URLRequest(str);
 			var loader:URLLoader=new URLLoader();
 
 			request.method=URLRequestMethod.GET;
@@ -50,8 +52,12 @@ package net.systemeD.halcyon.styleparser {
 		}
 
 		private function loadedCSS(event:Event):void {
+			parseCSS(event.target.data);
+		}
+		
+		private function parseCSS(str:String):void {
 			var css:MapCSS=new MapCSS(map);
-			choosers=css.parse(event.target.data);
+			choosers=css.parse(str);
 //			Inspector.getInstance().show();
 //			Inspector.getInstance().shelf('Choosers', choosers);
 			loadImages();

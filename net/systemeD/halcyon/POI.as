@@ -36,7 +36,7 @@ package net.systemeD.halcyon {
 			var tags:Object = node.getTagsCopy();
 			// ** apply :hover etc.
 			if (!sl) { sl=map.ruleset.getStyles(this.node,tags); }
-			if (!sl.hasStyles()) { return false; }
+			if (!sl.hasStyles() && iconname=='') { return false; }
 			
 			var r:Boolean=false;	// ** rendered
 			var l:DisplayObject;
@@ -84,13 +84,13 @@ package net.systemeD.halcyon {
 			icon.addChild(Bitmap(event.target.content));
 			var l:DisplayObject=map.getChildAt(map.POISPRITE);
 			Sprite(l).addChild(icon);
+			loaded=true;
 			updatePosition();
 
             icon.addEventListener(MouseEvent.CLICK, mouseEvent);
             icon.buttonMode = true;
             icon.mouseEnabled = true;
 
-			loaded=true;
 		}
 
         private function mouseEvent(event:MouseEvent):void {
@@ -98,6 +98,7 @@ package net.systemeD.halcyon {
         }
 
 		private function updatePosition():void {
+			if (!loaded) { return; }
 			icon.x=map.lon2coord(node.lon)-icon.width/2;
 			icon.y=map.latp2coord(node.latp)-icon.height/2;
 		}
