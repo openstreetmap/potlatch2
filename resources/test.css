@@ -1,19 +1,65 @@
+/*
+
+	MapCSS demonstration stylesheet
+	Richard Fairhurst, October 2009
+	
+*/
+
+/* We can reassign tags on the fly - here, we set "highlighted" to "yes" (the default)
+   if the road name contains the word Brown. */
+
 way[name=~/Brown/] { set .highlighted; }
 
-way[highway=secondary] { color: orange; width: 9; casing-width: 11; text: name; text-color: black; font-size: 9; text-position: line; }
-way[highway=tertiary],way[highway=unclassified] { color: yellow; width: 7; casing-width: 9; text: name; text-color: black; font-size: 7; text-position: line; }
+/* This rule applies to all areas (closed ways). Note that rules are applied in the order
+   they appear in the file, so later rules may replace this one for some ways. */
+
+way :area { fill-color: gray; fill-opacity: 0.5; }
+
+/* A set of fairly standard rules.
+   We use z-index to make sure high-priority roads appear above minor ones. */
+
+way[highway=trunk] { z-index: 9; color: green; width: 11; casing-color: black; casing-width: 13; }
+way[highway=primary] { z-index: 8; color: red; width: 9; casing-color: black; casing-width: 11; }
+way[highway=secondary] { z-index: 7; color: orange; width: 9; casing-width: 11; text: name; text-color: black; font-size: 9; text-position: line; }
+way[highway=tertiary],way[highway=unclassified] { z-index: 6; color: yellow; width: 7; casing-width: 9; text: name; text-color: black; font-size: 7; text-position: line; }
 way[highway=residential] { color: #DDDDDD; casing-color: gray; width: 5; casing-width: 7; }
-way[highway=primary] { color: red; width: 5; }
-way[highway=trunk] { color: green; width: 7; }
+way[highway=service] { color: white; width: 3; casing-width: 5; }
+
+way[highway=footway] { color: green; width: 2; dashes: 2, 2; }
+way[highway=bridleway] { color: green; width: 2; dashes: 4, 2, 2, 2; }
+way[highway=track] { color: green; width: 2; dashes: 4, 2; }
+way[highway=path] { color: lightgreen; width: 2; dashes: 2, 2; }
+
+way[waterway=river], way[waterway=canal] { color: lightblue; width: 2; }
+
+/* Fills can be solid colour or bitmap images */
+
+way[leisure=pitch],way[leisure=park] { fill-image: fills/grass.jpg; }
+
+/* POIs, too, can have bitmap icons - they can even be transparent */
+
+node[amenity=pub] { icon-image: icons/pub.png; text-offset: 7; font-family: DejaVu; text: name; font-size: 9; }
+node[place] { icon-image: icons/place.png; text-offset: 10; font-family: DejaVu; text: name; font-size: 9; font-weight: bold; text-decoration: underline; }
+way node[barrier=gate], way node[highway=gate] { icon-image: icons/gate.png; }
+	
+/* We can stack styles at different z-index (depth) */
+
+way[railway=rail]
+	{ z-index: 4; color: black; width: 4; }
+	{ z-index: 5; color: white; width: 3; dashes: 6,6; }
+
+/* Change the road colour based on dynamically set "highlighted" tag (see earlier) */
 
 way .highlighted { color: pink; }
+
+/* Interactive editors may choose different behaviour when a user mouses-over or selects
+   an object. Potlatch 2 supports these but the stand-alone Halcyon viewer does not */
 
 way :hover	{ z-index: 2; width: 8; color: gray; }
 way :selected { z-index: 2; width: 8; color: yellow; }
 
-way[leisure=pitch],way[leisure=park] { fill-image: fills/grass.jpg; }
-/* fill-color: forestgreen; */
+/* Descendant selectors provide an easy way to style relations: this example means "any way
+   which is part of a relation whose type=route". */
 
-relation[type=route] way { z-index: 1; width: 17; color: blue; opacity: 0.4; }
+relation[type=route] way { z-index: 1; width: 17; color: blue; opacity: 0.3; }
 
-node[amenity=pub] { icon-image: icons/pub.png; font-family: DejaVu; text: name; font-size: 9; }
