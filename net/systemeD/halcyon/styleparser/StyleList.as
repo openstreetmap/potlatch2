@@ -16,5 +16,8 @@ package net.systemeD.halcyon.styleparser {
 		public var pointStyles:Array=[];
 		public var shieldStyles:Array=[];
 
+		public function hasStyles():Boolean {
+			return ( (shapeStyles.length + textStyles.length + pointStyles.length + shieldStyles.length) > 0 );
+		}
 	}
 }

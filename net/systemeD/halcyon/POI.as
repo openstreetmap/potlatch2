@@ -13,9 +13,10 @@ package net.systemeD.halcyon {
 		
         private var node:Node;
 		public var map:Map;							// reference to parent map
-		public var icon:Bitmap;						// instance in display list
+		public var icon:Sprite;						// instance in display list
 		public var name:Sprite;						//  |
 		private var iconname:String='';				// name of icon
+		public var loaded:Boolean=false;
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
 //			embedFonts: true,
@@ -25,16 +26,18 @@ package net.systemeD.halcyon {
 //		[Embed(source="fonts/DejaVuSans.ttf", fontFamily="DejaVu", fontWeight="normal", mimeType="application/x-font-truetype")]
 //		public static var DejaVu:Class;
 
-		public function POI(node:Node, map:Map) {
+		public function POI(node:Node, map:Map, sl:StyleList=null) {
 			this.map = map;
 			this.node = node;
-			redraw();
+			redraw(sl);
 		}
 		
-		public function redraw():void {
+		public function redraw(sl:StyleList=null):Boolean {
 			var tags:Object = node.getTagsCopy();
 			// ** apply :hover etc.
-			var sl:StyleList=map.ruleset.getStyles(this.node,tags);
+			if (!sl) { sl=map.ruleset.getStyles(this.node,tags); }
+			if (!sl.hasStyles()) { return false; }
+			
 			var r:Boolean=false;	// ** rendered
 			var l:DisplayObject;
 			for (var sublayer:uint=0; sublayer<10; sublayer++) {
@@ -53,7 +56,6 @@ package net.systemeD.halcyon {
 					} else {
 						// already loaded, so just reposition
 						updatePosition();
-						iconname=s.icon_image;
 					}
 				}
 
@@ -74,14 +76,26 @@ package net.systemeD.halcyon {
 				Sprite(l).removeChild(icon);
 				iconname='';
 			}
+			return true;
 		}
 
 		private function loadedIcon(event:Event):void {
-			icon = Bitmap(event.target.content);
+			icon = new Sprite();
+			icon.addChild(Bitmap(event.target.content));
 			var l:DisplayObject=map.getChildAt(map.POISPRITE);
 			Sprite(l).addChild(icon);
 			updatePosition();
+
+            icon.addEventListener(MouseEvent.CLICK, mouseEvent);
+            icon.buttonMode = true;
+            icon.mouseEnabled = true;
+
+			loaded=true;
 		}
+
+        private function mouseEvent(event:MouseEvent):void {
+			map.entityMouseEvent(event, node);
+        }
 
 		private function updatePosition():void {
 			icon.x=map.lon2coord(node.lon)-icon.width/2;

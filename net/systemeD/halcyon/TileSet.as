@@ -10,7 +10,6 @@ package net.systemeD.halcyon {
 	import flash.net.*;
 	
 	import net.systemeD.halcyon.ImageURLLoader;
-	import net.systemeD.halcyon.Globals;
 	import flash.system.LoaderContext;
 	
     public class TileSet extends Sprite {
@@ -70,8 +69,10 @@ package net.systemeD.halcyon {
 				r=requests.shift(); tz=r[0]; tx=r[1]; ty=r[2];
 				if (tx>=tile_l && tx<=tile_r && ty>=tile_t && ty<=tile_b) {
 					// Tile is on-screen, so load
+					waiting++;
 					var loader:Loader = new Loader();
 					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit);
+            		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError);
 					loader.load(new URLRequest(tileURL(tx,ty)), 
 					            new LoaderContext(true));
 					this.addChild(loader);
@@ -82,7 +83,12 @@ package net.systemeD.halcyon {
 			}
 		}
 
-		protected function doImgInit(evt:Event):void {
+        private function missingTileError(event:Event):void {
+			waiting--;
+			return;
+		}
+
+		protected function doImgInit(event:Event):void {
 			waiting--;
 			return;
 		}

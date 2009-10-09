@@ -88,7 +88,6 @@ package net.systemeD.halcyon.styleparser {
 		// data handler
 
 		private function loadedImage(event:Event):void {
-Globals.vars.root.addDebug("adding image at "+event.target.filename);
 			images[event.target.filename]=event.target.data;
 			iconsToLoad--;
 			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }

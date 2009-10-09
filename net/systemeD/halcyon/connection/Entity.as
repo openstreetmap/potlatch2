@@ -43,6 +43,8 @@ package net.systemeD.halcyon.connection {
             return false;
         }
 
+		// ** we could do with hasInterestingTags - don't bother with source, created_by, any TIGER tags, etc.
+
         public function getTag(key:String):String {
             return tags[key];
         }

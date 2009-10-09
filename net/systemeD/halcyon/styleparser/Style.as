@@ -2,7 +2,6 @@ package net.systemeD.halcyon.styleparser {
 
 	import flash.utils.ByteArray;
 	import flash.net.*;
-	import net.systemeD.halcyon.Globals;
 
 	public class Style {
 

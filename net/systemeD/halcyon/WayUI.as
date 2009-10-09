@@ -196,17 +196,28 @@ package net.systemeD.halcyon {
 					}
 				}
 				
-				// ** draw icons
-				for (var i:uint = 0; i < way.length; i++) {
-	                var node:Node = way.getNode(i);
-					if (node.hasTags()) {
-						map.connection.registerPOI(node);
-					}
-				}
-				
-				
 				// ** ShieldStyle to do
 			}
+
+			// ** draw icons
+			for (var i:uint = 0; i < way.length; i++) {
+                var node:Node = way.getNode(i);
+	            if (map.pois[node.id]) {
+					if (map.pois[node.id].loaded) {
+						map.pois[node.id].redraw();
+					}
+				} else if (node.hasTags()) {
+					sl=map.ruleset.getStyles(node,node.getTagsHash());
+					if (sl.hasStyles()) {
+						map.pois[node.id]=new POI(node,map,sl);
+						// ** this should be done via the registerPOI/event listener mechanism,
+						//    but that needs a bit of reworking so we can pass in a styleList
+						//    (otherwise we end up computing the styles twice which is expensive)
+					}
+				}
+			}
+			
+			
 
 			// No styles, so add a thin trace
             if (!drawn && map.showall) {
