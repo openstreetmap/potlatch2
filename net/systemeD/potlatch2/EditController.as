@@ -70,6 +70,10 @@ package net.systemeD.potlatch2 {
             //if ( event.type == MouseEvent.MOUSE_DOWN )
             event.stopPropagation();
                 
+            var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
+            event.localX = mapLoc.x;
+            event.localY = mapLoc.y;
+
             var newState:ControllerState = state.processMouseEvent(event, entity);
             setState(newState);
         }

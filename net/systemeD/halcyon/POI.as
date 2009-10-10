@@ -7,6 +7,7 @@ package net.systemeD.halcyon {
 	import flash.text.TextField;
 	import flash.text.TextFormat;
     import net.systemeD.halcyon.connection.Node;
+    import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.halcyon.styleparser.*;
 	
 	public class POI extends Object {
@@ -30,6 +31,11 @@ package net.systemeD.halcyon {
 			this.map = map;
 			this.node = node;
 			redraw(sl);
+			node.addEventListener(Connection.NODE_MOVED, nodeMoved);
+		}
+		
+		public function nodeMoved(event:Event):void {
+		    updatePosition();
 		}
 		
 		public function redraw(sl:StyleList=null):Boolean {
@@ -88,6 +94,12 @@ package net.systemeD.halcyon {
 			updatePosition();
 
             icon.addEventListener(MouseEvent.CLICK, mouseEvent);
+            icon.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
+            icon.addEventListener(MouseEvent.MOUSE_OVER, mouseEvent);
+            icon.addEventListener(MouseEvent.MOUSE_OUT, mouseEvent);
+            icon.addEventListener(MouseEvent.MOUSE_DOWN, mouseEvent);
+            icon.addEventListener(MouseEvent.MOUSE_UP, mouseEvent);
+            icon.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
             icon.buttonMode = true;
             icon.mouseEnabled = true;
 
