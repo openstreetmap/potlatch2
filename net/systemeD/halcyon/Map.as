@@ -56,6 +56,8 @@ package net.systemeD.halcyon {
 		public var edge_r:Number;						//  |
 		public var edge_t:Number;						//  |
 		public var edge_b:Number;						//  |
+		public var centre_lat:Number;					// centre lat/lon
+		public var centre_lon:Number;					//  |
 
 		public var baselon:Number;						// urllon-xradius/masterscale;
 		public var basey:Number;						// lat2lat2p(urllat)+yradius/masterscale;
@@ -195,6 +197,7 @@ package net.systemeD.halcyon {
 			edge_b=coord2lat(-y+mapheight);
 			edge_l=coord2lon(-x          );
 			edge_r=coord2lon(-x+mapwidth );
+			setCentre();
 			addDebug("Lon "+edge_l+"-"+edge_r);
 			addDebug("Lat "+edge_b+"-"+edge_t);
 
@@ -206,7 +209,12 @@ package net.systemeD.halcyon {
 			var cx:Number=-(lon2coord(lon)-mapwidth/2);
 			updateCoords(cx,cy);
 		}
-
+		
+		private function setCentre():void {
+			centre_lat=coord2lat(-y+mapheight/2);
+			centre_lon=coord2lon(-x+mapwidth/2);
+			this.dispatchEvent(new MapEvent(MapEvent.MOVE, {lat:centre_lat, lon:centre_lon, scale:scale}));
+		}
 
 		// Co-ordinate conversion functions
 
@@ -229,6 +237,8 @@ package net.systemeD.halcyon {
 		// Resize map size based on current stage and height
 
 		public function updateSize(w:uint, h:uint):void {
+			this.dispatchEvent(new MapEvent(MapEvent.RESIZE, {width:w, height:h}));
+			
 			mapwidth = w;
 			mapheight= h;
             if ( backdrop != null ) {
@@ -246,7 +256,7 @@ package net.systemeD.halcyon {
 		// (typically from whichways, but will want to add more connections)
 
 		public function download():void {
-			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD,edge_l,edge_r,edge_t,edge_b));
+			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			
 			if (edge_l>=bigedge_l && edge_r<=bigedge_r &&
 				edge_b>=bigedge_b && edge_t<=bigedge_t) { return; } 	// we have already loaded this area, so ignore
@@ -368,6 +378,7 @@ package net.systemeD.halcyon {
 			x+=mouseX-lastxmouse;
 			y+=mouseY-lastymouse;
 			lastxmouse=mouseX; lastymouse=mouseY;
+			setCentre();
 		}
         
 		// ------------------------------------------------------------------------------------------

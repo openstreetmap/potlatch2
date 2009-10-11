@@ -5,14 +5,14 @@ package net.systemeD.halcyon {
     public class MapEvent extends Event {
 
 		public static const DOWNLOAD:String = "download";
-		public var minlon:Number, maxlon:Number, maxlat:Number, minlat:Number;
+		public static const RESIZE:String = "resize";
+		public static const MOVE:String = "move";
 
-        public function MapEvent(eventname:String, minlon:Number, maxlon:Number, maxlat:Number, minlat:Number) {
+		public var params:Object;
+
+        public function MapEvent(eventname:String, params:Object) {
             super(eventname);
-            this.minlat = minlat;
-            this.minlon = minlon;
-            this.maxlat = maxlat;
-            this.maxlon = maxlon;
+            this.params=params;
         }
     }
 

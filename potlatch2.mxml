@@ -57,6 +57,9 @@
 		import mx.core.IChildList;
         import mx.containers.Canvas;
 		import mx.core.Application;
+		import com.yahoo.maps.api.YahooMap;
+		import com.yahoo.maps.api.YahooMapEvent;
+		import com.yahoo.maps.api.core.location.LatLon;
 
         public var theMap:Map;
 
@@ -75,6 +78,31 @@
             b.graphics.drawRect(0,0,w,h); 
             b.graphics.endFill();
 			_root.addChild(b);
+
+			// Add Yahoo! background
+			var yahoo:YahooMap = new YahooMap(); 
+			yahoo.init("f0a.sejV34HnhgIbNSmVHmndXFpijgGeun0fSIMG9428hW_ifF3pYKwbV6r9iaXojl1lU_dakekR", w, h);  
+			yahoo.mapType="satellite";
+			_root.addChild(yahoo);
+
+			// Yahoo! listeners
+			var yahooListener:Object = new Object();
+			yahooListener.yahooInit=function(event:YahooMapEvent):void {
+				yahoo.zoomLevel = 18-theMap.scale;
+				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
+
+				yahooListener.moveHandler=function(event:MapEvent):void {
+					yahoo.zoomLevel=18-event.params.scale;
+					yahoo.centerLatLon=new LatLon(event.params.lat, event.params.lon);
+				};
+				theMap.addEventListener(MapEvent.MOVE, yahooListener.moveHandler);
+
+				yahooListener.resizeHandler=function(event:MapEvent):void {
+					yahoo.setSize(event.params.width, event.params.height);
+				};
+				theMap.addEventListener(MapEvent.RESIZE, yahooListener.resizeHandler);
+			}
+			yahoo.addEventListener(YahooMapEvent.MAP_INITIALIZE, yahooListener.yahooInit);
 
 			// add map
 			theMap=new Map(this.loaderInfo.parameters);
@@ -110,13 +138,13 @@
 			// example listener event
 			var myListenerObj:Object = new Object();
 			myListenerObj.mapHandler=function(event:MapEvent):void {
-				Globals.vars.debug.appendText("Download event fired - "+event.minlat+","+event.minlon+"\n");
+				Globals.vars.debug.appendText("Download event fired - "+event.params.minlat+","+event.params.minlon+"\n");
 			};
 			theMap.addEventListener(MapEvent.DOWNLOAD, myListenerObj.mapHandler);
 
 			// add debug field
 			var t:TextField=new TextField();
-			t.width=400; t.height=100; t.border=true;
+			t.width=500; t.height=100; t.border=true;
 			t.multiline=true;
 			_root.addChild(t);
 			Globals.vars.debug=t;
