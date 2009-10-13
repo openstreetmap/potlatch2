@@ -239,7 +239,7 @@ package net.systemeD.halcyon.styleparser {
 
 				// Zoom
 				} else if ((o=ZOOM.exec(css))) {
-					if (previous!=oOBJECT) { sc.newObject(); }
+					if (previous!=oOBJECT && previous!=oCONDITION) { sc.newObject(); }
 
 					css=css.replace(ZOOM,'');
 					var z:Array=parseZoom(o[1]);
@@ -255,8 +255,7 @@ package net.systemeD.halcyon.styleparser {
 				// Condition - [highway=primary]
 				} else if ((o=CONDITION.exec(css))) {
 					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
-					if (previous!=oOBJECT && previous!=oZOOM) { sc.newObject(); }
-
+					if (previous!=oOBJECT && previous!=oZOOM && previous!=oCONDITION) { sc.newObject(); }
 					css=css.replace(CONDITION,'');
 					sc.addCondition(parseCondition(o[1]) as Condition);
 					previous=oCONDITION;

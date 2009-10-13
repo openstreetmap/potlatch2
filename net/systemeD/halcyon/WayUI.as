@@ -188,7 +188,7 @@ package net.systemeD.halcyon {
 					if (a) {
 						if (t.font_caps) { a=a.toUpperCase(); }
 						if (t.text_center && centroid_x) {
-							t.writeNameLabel(roadname,tags[t.text],centroid_x,centroid_y);
+							t.writeNameLabel(roadname,a,centroid_x,centroid_y);
 						} else {
 							writeNameOnPath(roadname,a,t.text_offset ? t.text_offset : 0);
 						}

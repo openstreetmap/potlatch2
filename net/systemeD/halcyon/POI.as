@@ -65,15 +65,20 @@ package net.systemeD.halcyon {
 					}
 				}
 
+				// name sprite
+				var a:String, t:TextStyle;
 				if (sl.textStyles[sublayer]) {
-					var t:TextStyle=sl.textStyles[sublayer];
-					// create name sprite
-					if (!name) {
-						name=new Sprite();
-						var c:DisplayObject=map.getChildAt(map.NAMESPRITE);
-						Sprite(c).addChild(name);
-					}
-					t.writeNameLabel(name,tags[t.text],map.lon2coord(node.lon),map.latp2coord(node.latp));
+					t=sl.textStyles[sublayer];
+					a=tags[t.text];
+				}
+
+				var c:DisplayObject=map.getChildAt(map.NAMESPRITE);
+				if (a) { 
+					if (!name) { name=new Sprite(); Sprite(c).addChild(name); }
+					t.writeNameLabel(name,a,map.lon2coord(node.lon),map.latp2coord(node.latp));
+				} else if (name) {
+					Sprite(c).removeChild(name);
+					name=null;
 				}
 			}
 			if (!r && iconname!='') {
