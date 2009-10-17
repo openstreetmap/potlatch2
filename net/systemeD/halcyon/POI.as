@@ -6,6 +6,8 @@ package net.systemeD.halcyon {
 	import flash.text.GridFitType;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
+	import flash.geom.Matrix;
+	import flash.geom.Point;
     import net.systemeD.halcyon.connection.Node;
     import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.halcyon.styleparser.*;
@@ -17,6 +19,8 @@ package net.systemeD.halcyon {
 		public var icon:Sprite;						// instance in display list
 		public var name:Sprite;						//  |
 		private var iconname:String='';				// name of icon
+		private var heading:Number=0;				// heading within way
+		private var rotation:Number=0;				// rotation applied to this POI
 		public var loaded:Boolean=false;
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
@@ -27,9 +31,10 @@ package net.systemeD.halcyon {
 //		[Embed(source="fonts/DejaVuSans.ttf", fontFamily="DejaVu", fontWeight="normal", mimeType="application/x-font-truetype")]
 //		public static var DejaVu:Class;
 
-		public function POI(node:Node, map:Map, sl:StyleList=null) {
+		public function POI(node:Node, map:Map, sl:StyleList=null, rotation:Number=0) {
 			this.map = map;
 			this.node = node;
+			this.rotation = rotation;
 			redraw(sl);
 			node.addEventListener(Connection.NODE_MOVED, nodeMoved);
 		}
@@ -40,6 +45,7 @@ package net.systemeD.halcyon {
 		
 		public function redraw(sl:StyleList=null):Boolean {
 			var tags:Object = node.getTagsCopy();
+			tags['_heading']=heading;
 			// ** apply :hover etc.
 			if (!sl) { sl=map.ruleset.getStyles(this.node,tags); }
 			if (!sl.hasStyles() && iconname=='') { return false; }
@@ -51,6 +57,7 @@ package net.systemeD.halcyon {
 				if (sl.pointStyles[sublayer]) {
 					var s:PointStyle=sl.pointStyles[sublayer];
 					r=true;
+					if (s.rotation) { rotation=s.rotation; }
 					if (s.icon_image!=iconname) {
 						// 'load' icon (actually just from library)
 						if (map.ruleset.images[s.icon_image]) {
@@ -116,8 +123,14 @@ package net.systemeD.halcyon {
 
 		private function updatePosition():void {
 			if (!loaded) { return; }
-			icon.x=map.lon2coord(node.lon)-icon.width/2;
-			icon.y=map.latp2coord(node.latp)-icon.height/2;
+			icon.x=0; icon.y=0; icon.rotation=0;
+
+			var m:Matrix=new Matrix();
+//			m.identity();
+			m.translate(-icon.width/2,-icon.height/2);
+			m.rotate(rotation);
+			m.translate(map.lon2coord(node.lon),map.latp2coord(node.latp));
+			icon.transform.matrix=m;
 		}
 
 	}

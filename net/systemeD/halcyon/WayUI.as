@@ -22,6 +22,7 @@ package net.systemeD.halcyon {
 		public var layer:int=0;						// map layer
 		public var map:Map;							// reference to parent map
 		public var sprites:Array=new Array();		// instances in display list
+		public var heading:Array=new Array();		// angle at each node
 		private var stateClasses:Object = new Object();
         private var hitzone:Sprite;
         private var listenSprite:Sprite;
@@ -87,6 +88,7 @@ package net.systemeD.halcyon {
 		
 		public function recalculate():void {
 			var lx:Number, ly:Number, sc:Number;
+			var node:Node, latp:Number, lon:Number;
 			var cx:Number=0, cy:Number=0;
 			pathlength=0;
 			patharea=0;
@@ -94,16 +96,23 @@ package net.systemeD.halcyon {
 			lx = way.getNode(way.length-1).lon;
 			ly = way.getNode(way.length-1).latp;
 			for ( var i:uint = 0; i < way.length; i++ ) {
-                var node:Node = way.getNode(i);
-                var latp:Number = node.latp;
-                var lon:Number  = node.lon;
+                node = way.getNode(i);
+                latp = node.latp;
+                lon  = node.lon;
+
+				// length and area
 				if ( i>0 ) { pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(latp-ly,2) ); }
 				sc = (lx*latp-lon*ly)*map.scalefactor;
 				cx += (lx+lon)*sc;
 				cy += (ly+latp)*sc;
 				patharea += sc;
+				
+				// heading
+				if (i>0) { heading[i-1]=Math.atan2((lon-lx),(latp-ly)); }
+
 				lx=lon; ly=latp;
 			}
+			heading[way.length-1]=heading[way.length-2];
 
 			pathlength*=map.scalefactor;
 			patharea/=2;
@@ -200,6 +209,7 @@ package net.systemeD.halcyon {
 			}
 
 			// ** draw icons
+			var r:Number;
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
 	            if (map.pois[node.id]) {
@@ -209,7 +219,9 @@ package net.systemeD.halcyon {
 				} else if (node.hasTags()) {
 					sl=map.ruleset.getStyles(node,node.getTagsHash());
 					if (sl.hasStyles()) {
-						map.pois[node.id]=new POI(node,map,sl);
+						if (i==0) { r= heading[i]; }
+						     else { r=(heading[i]+heading[i-1])/2; }
+						map.pois[node.id]=new POI(node,map,sl,r);
 						// ** this should be done via the registerPOI/event listener mechanism,
 						//    but that needs a bit of reworking so we can pass in a styleList
 						//    (otherwise we end up computing the styles twice which is expensive)
