@@ -13,8 +13,6 @@ Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex fram
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
-* Yahoo! Maps API - http://developer.yahoo.com/flash/maps/
-  (copy the .swc to your Flex SDK frameworks/libs folder)
 
 === How to compile and run ===
 
