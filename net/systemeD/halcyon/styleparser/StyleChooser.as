@@ -56,6 +56,8 @@ package net.systemeD.halcyon.styleparser {
 					}
 					continue;
 				}
+				if (a.width) { tags['stroked']='yes'; }
+				if (a.width || a.fill_color || a.fill_image || a.casing_width) { tags['drawn']='yes'; }
 
 				r.runEvals(tags);
 				if (a[r.sublayer]) {

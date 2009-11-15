@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
 
     public class DragWayNode extends ControllerState {
         private var selectedWay:Way;
@@ -18,16 +19,21 @@ package net.systemeD.potlatch2.controller {
         }
  
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
-            if ( event.type == MouseEvent.MOUSE_UP )
+            if ( event.type == MouseEvent.MOUSE_UP ) {
+				Globals.vars.root.addDebug("dragwaynode - mouse-up");
                 return endDrag();
-
-            if ( !isDragging(event) )
-                return this;
+			}
             
-            if ( event.type == MouseEvent.MOUSE_MOVE )
-                return dragTo(event);
-            else   
+            if ( !isDragging(event) ) {
+				Globals.vars.root.addDebug("dragwaynode - not dragging");
                 return this;
+			}
+
+            if ( event.type == MouseEvent.MOUSE_MOVE ) {
+                return dragTo(event);
+			} else {
+                return this;
+			}
         }
 
         private function isDragging(event:MouseEvent):Boolean {

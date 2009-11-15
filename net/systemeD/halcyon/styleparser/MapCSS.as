@@ -20,6 +20,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const WHITESPACE:RegExp	=/^ \s+ /sx;
 		private static const COMMENT:RegExp		=/^ \/\* .+? \*\/ \s* /sx;	/* */
 		private static const CLASS:RegExp		=/^ ([\.:]\w+) \s* /sx;
+		private static const NOT_CLASS:RegExp	=/^ !([\.:]\w+) \s* /sx;
 		private static const ZOOM:RegExp		=/^ \| \s* z([\d\-]+) \s* /isx;
 		private static const GROUP:RegExp		=/^ , \s* /isx;
 		private static const CONDITION:RegExp	=/^ \[(.+?)\] \s* /sx;
@@ -33,7 +34,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const ZOOM_SINGLE:RegExp	=/^        (\d+) $/sx;
 
 		private static const CONDITION_TRUE:RegExp	=/^ \s* (\w+) \s* = \s* yes \s*  $/isx;
-		private static const CONDITION_FALSE:RegExp	=/^ \s* (\w+) \s* = \s* no  \s*  $/isx;
+		private static const CONDITION_FALSE:RegExp	=/^ \s* (:\w+) \s* = \s* no  \s*  $/isx;
 		private static const CONDITION_SET:RegExp	=/^ \s* (\w+) \s* $/sx;
 		private static const CONDITION_UNSET:RegExp	=/^ \s* !(\w+) \s* $/sx;
 		private static const CONDITION_EQ:RegExp	=/^ \s* (\w+) \s* =  \s* (.+) \s* $/sx;
@@ -235,6 +236,14 @@ package net.systemeD.halcyon.styleparser {
 
 					css=css.replace(CLASS,'');
 					sc.addCondition(new Condition('set',o[1]));
+					previous=oCONDITION;
+
+				// Not class - !.motorway, !.builtup, !:hover
+				} else if ((o=NOT_CLASS.exec(css))) {
+					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
+
+					css=css.replace(NOT_CLASS,'');
+					sc.addCondition(new Condition('unset',o[1]));
 					previous=oCONDITION;
 
 				// Zoom

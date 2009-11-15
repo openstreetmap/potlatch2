@@ -11,8 +11,9 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.Node;
     import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.halcyon.styleparser.*;
+	import net.systemeD.halcyon.Globals;
 	
-	public class POI extends Object {
+	public class NodeUI extends Object {
 		
         private var node:Node;
 		public var map:Map;							// reference to parent map
@@ -31,11 +32,10 @@ package net.systemeD.halcyon {
 //		[Embed(source="fonts/DejaVuSans.ttf", fontFamily="DejaVu", fontWeight="normal", mimeType="application/x-font-truetype")]
 //		public static var DejaVu:Class;
 
-		public function POI(node:Node, map:Map, sl:StyleList=null, rotation:Number=0) {
+		public function NodeUI(node:Node, map:Map, rotation:Number=0) {
 			this.map = map;
 			this.node = node;
 			this.rotation = rotation;
-			redraw(sl);
 			node.addEventListener(Connection.NODE_MOVED, nodeMoved);
 		}
 		
@@ -43,15 +43,57 @@ package net.systemeD.halcyon {
 		    updatePosition();
 		}
 		
-		public function redraw(sl:StyleList=null):Boolean {
+		public function redraw(sl:StyleList=null,forceDraw:Boolean=false):Boolean {
 			var tags:Object = node.getTagsCopy();
 			tags['_heading']=heading;
 			// ** apply :hover etc.
 			if (!sl) { sl=map.ruleset.getStyles(this.node,tags); }
-			if (!sl.hasStyles() && iconname=='') { return false; }
+
+			var inWay:Boolean=node.hasParentWays;
+			var hasStyles:Boolean=sl.hasStyles();
 			
+			removePrevious();
+			if (!hasStyles && !inWay) {
+				// No styles, not in way; usually return, but render as green circle if showall set
+				if (!map.showall) { return false; }
+				return renderAsCircle();
+			} else if (!hasStyles && inWay) {
+				// No styles, in way; so render as highlight
+				// *** needs to be blue/red depending on mouse-over
+				if (forceDraw) {
+					return renderAsSquare();
+				} else {
+					return false;
+				}
+			} else {
+				// Styled, so render properly
+				return renderFromStyle(sl,tags);
+			}
+		}
+
+		private function renderAsSquare():Boolean {
+			createIcon();
+			icon.graphics.beginFill(0xFF0000);
+			icon.graphics.drawRect(0,0,6,6);	// ** NODESIZE
+			loaded=true;
+			updatePosition();
+			iconname='_square';
+			return true;
+		}
+		
+		private function renderAsCircle():Boolean {
+			createIcon();
+			icon.graphics.lineStyle(1,0,1);
+			icon.graphics.beginFill(0x00FF00);
+			icon.graphics.drawCircle(4,4,4);	// ** NODESIZE
+			loaded=true;
+			updatePosition();
+			iconname='_circle';
+			return true;
+		}
+		
+		private function renderFromStyle(sl:StyleList,tags:Object):Boolean {
 			var r:Boolean=false;	// ** rendered
-			var l:DisplayObject;
 			for (var sublayer:uint=0; sublayer<10; sublayer++) {
 
 				if (sl.pointStyles[sublayer]) {
@@ -79,32 +121,42 @@ package net.systemeD.halcyon {
 					a=tags[t.text];
 				}
 
-				var c:DisplayObject=map.getChildAt(map.NAMESPRITE);
 				if (a) { 
-					if (!name) { name=new Sprite(); Sprite(c).addChild(name); }
+					var l:DisplayObject=map.getChildAt(map.NAMESPRITE);
+					if (!name) { name=new Sprite(); Sprite(l).addChild(name); }
 					t.writeNameLabel(name,a,map.lon2coord(node.lon),map.latp2coord(node.latp));
-				} else if (name) {
-					Sprite(c).removeChild(name);
-					name=null;
 				}
 			}
-			if (!r && iconname!='') {
-				// not rendered any more, so remove
+			return r;
+		}
+
+		private function removePrevious():void {
+			var l:DisplayObject;
+			
+			if (icon) {
 				l=map.getChildAt(map.POISPRITE);
 				Sprite(l).removeChild(icon);
+				icon=null;
 				iconname='';
 			}
-			return true;
+			if (name) {
+				l=map.getChildAt(map.NAMESPRITE);
+				Sprite(l).removeChild(name);
+				name=null;
+			}
 		}
 
 		private function loadedIcon(event:Event):void {
-			icon = new Sprite();
+			createIcon();
 			icon.addChild(Bitmap(event.target.content));
-			var l:DisplayObject=map.getChildAt(map.POISPRITE);
-			Sprite(l).addChild(icon);
 			loaded=true;
 			updatePosition();
+		}
 
+		private function createIcon():void {
+			icon = new Sprite();
+			var l:DisplayObject=map.getChildAt(map.POISPRITE);
+			Sprite(l).addChild(icon);
             icon.addEventListener(MouseEvent.CLICK, mouseEvent);
             icon.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
             icon.addEventListener(MouseEvent.MOUSE_OVER, mouseEvent);
@@ -114,7 +166,6 @@ package net.systemeD.halcyon {
             icon.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
             icon.buttonMode = true;
             icon.mouseEnabled = true;
-
 		}
 
         private function mouseEvent(event:MouseEvent):void {
@@ -122,7 +173,7 @@ package net.systemeD.halcyon {
         }
 
 		private function updatePosition():void {
-			if (!loaded) { return; }
+			if (!loaded || !icon) { return; }
 			icon.x=0; icon.y=0; icon.rotation=0;
 
 			var m:Matrix=new Matrix();

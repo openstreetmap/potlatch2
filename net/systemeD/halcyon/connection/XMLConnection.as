@@ -84,7 +84,7 @@ package net.systemeD.halcyon.connection {
         protected function registerPOINodes():void {
             for each (var nodeID:Number in getAllNodeIDs()) {
                 var node:Node = getNode(nodeID);
-                if ( node.parentWays.length == 0 )
+                if (!node.hasParentWays)
                     registerPOI(node);
             }
         }

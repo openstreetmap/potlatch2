@@ -67,6 +67,8 @@ package net.systemeD.halcyon {
 		private var dragging:Boolean=false;				// dragging map?
 		private var lastxmouse:Number;					//  |
 		private var lastymouse:Number;					//  |
+		private var firstxmouse:Number;					//  |
+		private var firstymouse:Number;					//  |
 		
 		public var initparams:Object;					// object containing 
 
@@ -198,8 +200,8 @@ package net.systemeD.halcyon {
 			edge_l=coord2lon(-x          );
 			edge_r=coord2lon(-x+mapwidth );
 			setCentre();
-			addDebug("Lon "+edge_l+"-"+edge_r);
-			addDebug("Lat "+edge_b+"-"+edge_t);
+//			addDebug("Lon "+edge_l+"-"+edge_r);
+//			addDebug("Lat "+edge_b+"-"+edge_t);
 
 			tileset.update();
 		}
@@ -262,7 +264,7 @@ package net.systemeD.halcyon {
 				edge_b>=bigedge_b && edge_t<=bigedge_t) { return; } 	// we have already loaded this area, so ignore
 			bigedge_l=edge_l; bigedge_r=edge_r;
 			bigedge_b=edge_b; bigedge_t=edge_t;
-			addDebug("Calling with "+edge_l+"-"+edge_r+", "+edge_t+"-"+edge_b);
+			addDebug("Calling download with "+edge_l+"-"+edge_r+", "+edge_t+"-"+edge_b);
 			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 		}
 
@@ -276,7 +278,8 @@ package net.systemeD.halcyon {
 
         private function newPOICreated(event:EntityEvent):void {
             var node:Node = event.entity as Node;
-            pois[node.id] = new POI(node, this);
+            pois[node.id] = new NodeUI(node, this);
+			pois[node.id].redraw();
         }
 
         public function setHighlight(entity:Entity, stateType:String, isOn:Boolean):void {
@@ -305,11 +308,11 @@ package net.systemeD.halcyon {
 		
 		public function redraw():void {
 			for each (var w:WayUI in ways) { w.recalculate(); w.redraw(); }
-			for each (var p:POI in pois) { p.redraw(); }
+			for each (var p:NodeUI in pois) { p.redraw(); }
 		}
 
 		public function redrawPOIs():void {
-			for each (var p:POI in pois) { p.redraw(); }
+			for each (var p:NodeUI in pois) { p.redraw(); }
 		}
 
 		public function zoomIn():void {
@@ -363,14 +366,17 @@ package net.systemeD.halcyon {
 		
 		public function mouseDownHandler(event:MouseEvent):void {
 			dragging=true;
-			lastxmouse=mouseX; lastymouse=mouseY;
+			lastxmouse=firstxmouse=mouseX;
+			lastymouse=firstymouse=mouseY;
 		}
         
 		public function mouseUpHandler(event:MouseEvent):void {
 			if (!dragging) { return; }
 			dragging=false;
 			updateCoords(x,y);
-			download();
+			if (Math.abs(firstxmouse-mouseX)>4 || Math.abs(firstymouse-mouseY)>4) {
+				download();
+			}
 		}
         
 		public function mouseMoveHandler(event:MouseEvent):void {

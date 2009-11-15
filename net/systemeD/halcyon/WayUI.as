@@ -11,6 +11,7 @@ package net.systemeD.halcyon {
 	import flash.events.*;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
 
 	public class WayUI {
         private var way:Way;
@@ -41,6 +42,7 @@ package net.systemeD.halcyon {
 		private const NODESPRITE:uint=4;
 		private const CLICKSPRITE:uint=5;
 
+		private const NODESIZE:uint=6;
 
 		public function WayUI(way:Way, map:Map) {
 			this.way = way;
@@ -209,42 +211,46 @@ package net.systemeD.halcyon {
 			}
 
 			// ** draw icons
+			// ** this looks like it needs reworking
 			var r:Number;
+			var highlight:Boolean=stateClasses["showNodes"] !=null;
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
 	            if (map.pois[node.id]) {
 					if (map.pois[node.id].loaded) {
-						map.pois[node.id].redraw();
+						map.pois[node.id].redraw(null, highlight);
 					}
 				} else if (node.hasTags()) {
 					sl=map.ruleset.getStyles(node,node.getTagsHash());
 					if (sl.hasStyles()) {
 						if (i==0) { r= heading[i]; }
 						     else { r=(heading[i]+heading[i-1])/2; }
-						map.pois[node.id]=new POI(node,map,sl,r);
+						map.pois[node.id]=new NodeUI(node,map,r);
+						map.pois[node.id].redraw(sl);
 						// ** this should be done via the registerPOI/event listener mechanism,
 						//    but that needs a bit of reworking so we can pass in a styleList
 						//    (otherwise we end up computing the styles twice which is expensive)
 					}
+				} else if (highlight) {
+					map.pois[node.id]=new NodeUI(node,map);
+					map.pois[node.id].redraw(null, true);
 				}
 			}
 			
-			
-
-			// No styles, so add a thin trace
-            if (!drawn && map.showall) {
-                var def:Sprite = new Sprite();
-                def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
-                solidLine(def.graphics);
-                addToLayer(def, STROKESPRITE);		// ** this probably needs a sublayer
-				drawn=true;
-            }
+//			// No styles, so add a thin trace
+//			if (!drawn && map.showall) {
+//				var def:Sprite = new Sprite();
+//				def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
+//				solidLine(def.graphics);
+//				addToLayer(def, STROKESPRITE, 10);
+//				drawn=true;
+//			}
             
-            if ( stateClasses["showNodes"] != null ) {
-                var nodes:Sprite = new Sprite();
-                drawNodes(nodes.graphics);
-                addToLayer(nodes, NODESPRITE);
-            }
+//            if ( stateClasses["showNodes"] != null ) {
+//                var nodes:Sprite = new Sprite();
+//                drawNodes(nodes.graphics);
+//                addToLayer(nodes, NODESPRITE);
+//            }
 
 			if (!drawn) { return; }
 			
@@ -276,16 +282,18 @@ package net.systemeD.halcyon {
 		// Drawing support functions
 
 		private function drawNodes(g:Graphics):void {
-            g.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
+// ***** these should be discreet anchorpoints (NodeUI?), not just sprites
+//          g.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
+			g.beginFill(0xFF0000);
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
                 var x:Number = map.lon2coord(node.lon);
                 var y:Number = map.latp2coord(node.latp);
-                g.moveTo(x-2, y-2);
-                g.lineTo(x+2, y-2);
-                g.lineTo(x+2, y+2);
-                g.lineTo(x-2, y+2);
-                g.lineTo(x-2, y-2);
+                g.moveTo(x-NODESIZE, y-NODESIZE);
+                g.lineTo(x+NODESIZE, y-NODESIZE);
+                g.lineTo(x+NODESIZE, y+NODESIZE);
+                g.lineTo(x-NODESIZE, y+NODESIZE);
+                g.lineTo(x-NODESIZE, y-NODESIZE);
 			}
 		}
 
@@ -452,8 +460,8 @@ package net.systemeD.halcyon {
                 var node:Node = way.getNode(i);
                 var nodeX:Number = map.lon2coord(node.lon);
                 var nodeY:Number = map.latp2coord(node.latp);
-                if ( nodeX >= x-3 && nodeX <= x+3 &&
-                     nodeY >= y-3 && nodeY <= y+3 )
+                if ( nodeX >= x-NODESIZE && nodeX <= x+NODESIZE &&
+                     nodeY >= y-NODESIZE && nodeY <= y+NODESIZE )
                     return node;
             }
             return null;

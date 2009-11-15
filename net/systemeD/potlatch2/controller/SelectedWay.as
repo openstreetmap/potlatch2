@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
 
     public class SelectedWay extends ControllerState {
         protected var selectedWay:Way;
@@ -51,30 +52,48 @@ package net.systemeD.potlatch2.controller {
         }
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
+			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.MOUSE_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
+
             var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
+			if (entity) {
+				Globals.vars.root.addDebug("entered SelectedWay pme "+event.type+":"+entity.getType());
+			} else {
+				Globals.vars.root.addDebug("entered SelectedWay pme "+event.type+":null");
+			}
+			
             if ( event.type == MouseEvent.CLICK ) {
-                if ( (entity is Node && entity.hasParent(selectedWay)) || focus == selectedWay )
+				Globals.vars.root.addDebug("- is click");
+				if ( entity is Node && event.shiftKey ) {
+					Globals.vars.root.addDebug("- start new way");
+                    var way:Way = controller.connection.createWay({}, [entity, entity]);
+                    return new DrawWay(way, true);
+				} else if ( (entity is Node && entity.hasParent(selectedWay)) || focus == selectedWay ) {
+					Globals.vars.root.addDebug("- clicked on place within way");
                     return clickOnWay(event, entity);
-                else if ( focus is Way )
+                } else if ( focus is Way ) {
+					Globals.vars.root.addDebug("- selected way");
                     selectWay(focus as Way);
-                else if ( focus is Node )
+                } else if ( focus is Node ) {
+					Globals.vars.root.addDebug("- selected POI");
                     trace("select poi");
-                else if ( focus == null )
+                } else if ( focus == null ) {
+					Globals.vars.root.addDebug("- no selection");
                     return new NoSelection();
+				}
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-                if ( entity is Node && entity.hasParent(selectedWay) )
+				Globals.vars.root.addDebug("- is mousedown");
+                if ( entity is Node && entity.hasParent(selectedWay) ) {
+					Globals.vars.root.addDebug("- started dragging");
                     return new DragWayNode(selectedWay, Node(entity), event);
+				}
             }
 
             return this;
         }
 
         public function clickOnWay(event:MouseEvent, entity:Entity):ControllerState {
-            if ( event.shiftKey ) {
-                if ( entity is Way )
-                    addNode(event);
-                else
-                    trace("start new way");
+            if ( entity is Way && event.shiftKey ) {
+                addNode(event);
             } else {
                 if ( entity is Node ) {
                     if ( selectedNode == entity ) {

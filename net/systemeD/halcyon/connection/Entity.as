@@ -129,6 +129,13 @@ package net.systemeD.halcyon.connection {
 			return a;
 		}
 		
+		public function get hasParentWays():Boolean {
+			for (var o:Object in parents) {
+				if (o is Way) { return true; }
+			}
+			return false;
+		}
+		
 		public function get parentRelations():Array {
 			var a:Array=[];
 			for (var o:Object in parents) {
