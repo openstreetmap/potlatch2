@@ -60,7 +60,7 @@ package net.systemeD.halcyon.connection {
                     var lat:Number = Number(nodeData.@lat);
                     var lon:Number = Number(nodeData.@lon);
                     tags = parseTags(nodeData.tag);
-                    setNode(new Node(id, version, tags, true, lat, lon));
+                    setNode(new Node(id, version, tags, true, lat, lon),false);
                 }
             }
 
@@ -74,7 +74,7 @@ package net.systemeD.halcyon.connection {
                     for each(var nd:XML in data.nd)
                         nodes.push(getNode(Number(nd.@ref)));
                     tags = parseTags(data.tag);
-                    setWay(new Way(id, version, tags,true,  nodes));
+                    setWay(new Way(id, version, tags,true,  nodes),false);
                 }
             }
             

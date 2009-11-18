@@ -60,5 +60,9 @@ package net.systemeD.potlatch2.controller {
             elastic.removeSprites();
             elastic = null;
         }
+
+        override public function toString():String {
+            return "CreateWay";
+        }
     }
 }

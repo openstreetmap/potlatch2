@@ -64,11 +64,14 @@ package net.systemeD.halcyon {
 		public var mapwidth:uint;						// width (Flash pixels)
 		public var mapheight:uint;						// height (Flash pixels)
 
-		private var dragging:Boolean=false;				// dragging map?
+		public var dragstate:uint=NOT_DRAGGING;			// dragging map
 		private var lastxmouse:Number;					//  |
 		private var lastymouse:Number;					//  |
-		private var firstxmouse:Number;					//  |
-		private var firstymouse:Number;					//  |
+		private var downX:Number;						//  |
+		private var downY:Number;						//  |
+		public const NOT_DRAGGING:uint=0;				//  |
+		public const NOT_MOVED:uint=1;					//  |
+		public const DRAGGING:uint=2;					//  |
 		
 		public var initparams:Object;					// object containing 
 
@@ -83,7 +86,7 @@ package net.systemeD.halcyon {
 		public const WAYSPRITE:uint=2;
 		public const POISPRITE:uint=13;
 		public const NAMESPRITE:uint=14;
-
+		
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function
 
@@ -365,22 +368,29 @@ package net.systemeD.halcyon {
 		// Mouse events
 		
 		public function mouseDownHandler(event:MouseEvent):void {
-			dragging=true;
-			lastxmouse=firstxmouse=mouseX;
-			lastymouse=firstymouse=mouseY;
+			dragstate=NOT_MOVED;
+			lastxmouse=downX=mouseX;
+			lastymouse=downY=mouseY;
 		}
         
 		public function mouseUpHandler(event:MouseEvent):void {
-			if (!dragging) { return; }
-			dragging=false;
-			updateCoords(x,y);
-			if (Math.abs(firstxmouse-mouseX)>4 || Math.abs(firstymouse-mouseY)>4) {
+			if (dragstate==DRAGGING) {
+				updateCoords(x,y);
 				download();
 			}
+			dragstate=NOT_DRAGGING;
 		}
         
 		public function mouseMoveHandler(event:MouseEvent):void {
-			if (!dragging) { return; }
+			if (dragstate==NOT_DRAGGING) {
+				return;
+			}
+			
+			if (dragstate==NOT_MOVED && Math.abs(downX - mouseX) < 3 && Math.abs(downY - mouseY) < 3) {
+				return;
+			}
+			
+			dragstate=DRAGGING;
 			x+=mouseX-lastxmouse;
 			y+=mouseY-lastymouse;
 			lastxmouse=mouseX; lastymouse=mouseY;

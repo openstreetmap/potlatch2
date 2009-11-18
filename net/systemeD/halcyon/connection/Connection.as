@@ -76,19 +76,19 @@ package net.systemeD.halcyon.connection {
             return negativeID--;
         }
 
-        protected function setNode(node:Node):void {
+        protected function setNode(node:Node,queue:Boolean):void {
             nodes[node.id] = node;
-            if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node)); }
+            if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node),queue); }
         }
 
-        protected function setWay(way:Way):void {
+        protected function setWay(way:Way,queue:Boolean):void {
             ways[way.id] = way;
-            if (way.loaded) { sendEvent(new EntityEvent(NEW_WAY, way)); }
+            if (way.loaded) { sendEvent(new EntityEvent(NEW_WAY, way),queue); }
         }
 
-        protected function setRelation(relation:Relation):void {
+        protected function setRelation(relation:Relation,queue:Boolean):void {
             relations[relation.id] = relation;
-            if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation)); }
+            if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation),queue); }
         }
 
         protected function renumberNode(oldID:Number, node:Node):void {
@@ -106,14 +106,15 @@ package net.systemeD.halcyon.connection {
             delete relations[oldID];
         }
 
-		public function sendEvent(e:*):void {
+		public function sendEvent(e:*,queue:Boolean):void {
+			// queue is only used for AMFConnection
 			dispatchEvent(e);
 		}
 
         public function registerPOI(node:Node):void {
             if ( pois.indexOf(node) < 0 ) {
                 pois.push(node);
-                sendEvent(new EntityEvent(NEW_POI, node));
+                sendEvent(new EntityEvent(NEW_POI, node),false);
             }
         }
 
@@ -126,7 +127,7 @@ package net.systemeD.halcyon.connection {
 
         protected function setActiveChangeset(changeset:Changeset):void {
             this.changeset = changeset;
-            sendEvent(new EntityEvent(NEW_CHANGESET, changeset));
+            sendEvent(new EntityEvent(NEW_CHANGESET, changeset),false);
         }
         
         public function getNode(id:Number):Node {
@@ -143,19 +144,19 @@ package net.systemeD.halcyon.connection {
 
         public function createNode(tags:Object, lat:Number, lon:Number):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
-            setNode(node);
+            setNode(node,false);
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array):Way {
             var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
-            setWay(way);
+            setWay(way,false);
             return way;
         }
 
         public function createRelation(tags:Object, members:Array):Relation {
             var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
-            setRelation(relation);
+            setRelation(relation,false);
             return relation;
         }
 

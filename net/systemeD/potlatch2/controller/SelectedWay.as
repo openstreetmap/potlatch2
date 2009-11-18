@@ -53,37 +53,36 @@ package net.systemeD.potlatch2.controller {
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.MOUSE_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
-
             var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
-			if (entity) {
-				Globals.vars.root.addDebug("entered SelectedWay pme "+event.type+":"+entity.getType());
-			} else {
-				Globals.vars.root.addDebug("entered SelectedWay pme "+event.type+":null");
-			}
-			
-            if ( event.type == MouseEvent.CLICK ) {
-				Globals.vars.root.addDebug("- is click");
+
+            if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Node && event.shiftKey ) {
+					// start new way
 					Globals.vars.root.addDebug("- start new way");
                     var way:Way = controller.connection.createWay({}, [entity, entity]);
                     return new DrawWay(way, true);
-				} else if ( (entity is Node && entity.hasParent(selectedWay)) || focus == selectedWay ) {
+				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
+					// select node within way
 					Globals.vars.root.addDebug("- clicked on place within way");
                     return clickOnWay(event, entity);
                 } else if ( focus is Way ) {
+					// select way
 					Globals.vars.root.addDebug("- selected way");
                     selectWay(focus as Way);
                 } else if ( focus is Node ) {
+					// *** select node
 					Globals.vars.root.addDebug("- selected POI");
                     trace("select poi");
-                } else if ( focus == null ) {
-					Globals.vars.root.addDebug("- no selection");
+                } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
                     return new NoSelection();
 				}
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				Globals.vars.root.addDebug("- is mousedown");
-                if ( entity is Node && entity.hasParent(selectedWay) ) {
-					Globals.vars.root.addDebug("- started dragging");
+				if ( entity is Way && focus==selectedWay && event.shiftKey) {
+					// insert node within way (shift-click)
+                    var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event);
+					d.forceDragStart();
+					return d;
+				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
                     return new DragWayNode(selectedWay, Node(entity), event);
 				}
             }
@@ -92,31 +91,28 @@ package net.systemeD.potlatch2.controller {
         }
 
         public function clickOnWay(event:MouseEvent, entity:Entity):ControllerState {
-            if ( entity is Way && event.shiftKey ) {
-                addNode(event);
-            } else {
-                if ( entity is Node ) {
-                    if ( selectedNode == entity ) {
-                        var i:uint = selectedWay.indexOfNode(selectedNode);
-                        if ( i == 0 )
-                            return new DrawWay(selectedWay, false);
-                        else if ( i == selectedWay.length - 1 )
-                            return new DrawWay(selectedWay, true);
-                    } else {
-                        selectNode(entity as Node);
-                    }
+            if ( entity is Node ) {
+                if ( selectedNode == entity ) {
+                    var i:uint = selectedWay.indexOfNode(selectedNode);
+                    if ( i == 0 )
+                        return new DrawWay(selectedWay, false);
+                    else if ( i == selectedWay.length - 1 )
+                        return new DrawWay(selectedWay, true);
+                } else {
+                    selectNode(entity as Node);
                 }
             }
             
             return this;
         }
         
-        private function addNode(event:MouseEvent):void {
+        private function addNode(event:MouseEvent):Node {
             trace("add node");
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var node:Node = controller.connection.createNode({}, lat, lon);
             selectedWay.insertNodeAtClosestPosition(node, true);
+			return node;
         }
         
         override public function enterState():void {
@@ -125,5 +121,10 @@ package net.systemeD.potlatch2.controller {
         override public function exitState():void {
             clearSelection();
         }
+
+        override public function toString():String {
+            return "SelectedWay";
+        }
+
     }
 }

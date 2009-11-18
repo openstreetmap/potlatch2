@@ -43,8 +43,9 @@ package net.systemeD.halcyon.connection {
 			readConnection.call("whichways",new Responder(gotBbox, error),left,bottom,right,top);
 		}
 		
-		override public function sendEvent(e:*):void {
-			eventTarget.addEvent(e);
+		override public function sendEvent(e:*,queue:Boolean):void {
+			if (queue) { eventTarget.addEvent(e); }
+			      else { dispatchEvent(e); }
 		}
 
         private function gotBbox(r:Object):void {
@@ -100,7 +101,7 @@ package net.systemeD.halcyon.connection {
                     var lon:Number = Number(p[1]);
                     var tags:Object = p[3];
                     node = new Node(id, version, tags, true, lat, lon);
-                    setNode(node);
+                    setNode(node,true);
                 }
                 registerPOI(node);
 			}
@@ -148,7 +149,7 @@ package net.systemeD.halcyon.connection {
                 } else if (!node.loaded) {
 					node.update(nodeVersion, nodeTags, true, lat, lon);
 				}
-                setNode(node);
+                setNode(node,true);
                 nodes.push(node);
 			}
 
@@ -157,7 +158,7 @@ package net.systemeD.halcyon.connection {
 			} else {
 				way.update(version, tags, true, nodes);
 			}
-           	setWay(way);
+           	setWay(way,true);
 			gotRequest(id+"way");
 		}
 
@@ -191,15 +192,15 @@ package net.systemeD.halcyon.connection {
 				switch (type) {
 					case 'Node':
 						e=getNode(memid);
-						if (e==null) { e=new Node(memid,0,{},false,0,0); setNode(Node(e)); }
+						if (e==null) { e=new Node(memid,0,{},false,0,0); setNode(Node(e),true); }
 						break;
 					case 'Way':
 						e=getWay(memid);
-						if (e==null) { e=new Way(memid,0,{},false,[]); setWay(Way(e)); }
+						if (e==null) { e=new Way(memid,0,{},false,[]); setWay(Way(e),true); }
 						break;
 					case 'Relation':
 						e=getRelation(memid);
-						if (e==null) { e=new Relation(memid,0,{},false,[]); setRelation(Relation(e)); }
+						if (e==null) { e=new Relation(memid,0,{},false,[]); setRelation(Relation(e),true); }
 						break;
 				}
 				members.push(new RelationMember(e,role));
@@ -209,7 +210,7 @@ package net.systemeD.halcyon.connection {
 			} else {
 				relation.update(version,tags,true,members);
 			}
-            setRelation(relation);
+            setRelation(relation,true);
 			gotRequest(id+"rel");
 		}
 		

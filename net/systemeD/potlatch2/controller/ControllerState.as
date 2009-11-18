@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+    import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.EditController;
 
@@ -26,9 +27,17 @@ package net.systemeD.potlatch2.controller {
         public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
             return this;
         }
-        
+
+		public function get map():Map {
+			return controller.map;
+		}
+
         public function enterState():void {}
         public function exitState():void {}
+
+		public function toString():String {
+			return "(No state)";
+		}
 
     }
 }

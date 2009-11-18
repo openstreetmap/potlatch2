@@ -11,7 +11,6 @@ package net.systemeD.halcyon {
 	import flash.events.*;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
 
 	public class WayUI {
         private var way:Way;
