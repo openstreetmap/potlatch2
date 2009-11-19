@@ -276,7 +276,7 @@
 
   <feature name="Cycle Path">
     <category>paths</category>
-    <icon>
+    <icon image="features/paths__unknown.png">
       ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
 
@@ -286,7 +286,7 @@
 
   <feature name="Foot Path">
     <category>paths</category>
-    <icon>
+    <icon image="features/paths__footway.png">
       ${name} <i>${ref}</i>
     </icon>
 
@@ -296,7 +296,7 @@
 
   <feature name="Bridleway">
     <category>paths</category>
-    <icon>
+    <icon image="features/paths__bridleway.png">
     </icon>
 
     <line/>
@@ -305,7 +305,7 @@
 
   <feature name="Steps">
     <category>paths</category>
-    <icon>
+    <icon image="features/paths__unknown.png">
     </icon>
 
     <line/>
