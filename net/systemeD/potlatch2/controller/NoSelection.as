@@ -24,9 +24,9 @@ package net.systemeD.potlatch2.controller {
 				map.dragstate=map.NOT_DRAGGING;
 				return new CreateWay(event);
 			} else if ( event.type == MouseEvent.MOUSE_OVER ) {
-				controller.map.setHighlight(focus, "hover", true);
+				controller.map.setHighlight(focus, { hover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
-				controller.map.setHighlight(focus, "hover", false);
+				controller.map.setHighlight(focus, { hover: false });
 			} else if ( event.type == MouseEvent.MOUSE_DOWN ) {
 			}
 			return this;

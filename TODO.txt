@@ -1,10 +1,15 @@
 Potlatch 2: main outstanding issues
-(last updated 30th September 2009)
+(last updated 19th November 2009)
 -----------------------------------
+
+== Current issues ==
+
+* Deselecting a way often doesn't remove the nodes (if you've dragged a node, for example)
+* Highlights don't work on nodes
+
 
 == Core drawing ==
 
-* Branching ways
 * Split and merge ways
 * POI drawing (drag and drop/double-click)
 * Undo/redo

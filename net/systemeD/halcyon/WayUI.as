@@ -4,46 +4,28 @@ package net.systemeD.halcyon {
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.text.AntiAliasType;
-	import flash.text.GridFitType;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.events.*;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
 
-	public class WayUI {
+	public class WayUI extends EntityUI {
+
         private var way:Way;
-
 		public var pathlength:Number;				// length of path
 		public var patharea:Number;					// area of path
 		public var centroid_x:Number;				// centroid
 		public var centroid_y:Number;				//  |
-		public var layer:int=0;						// map layer
-		public var map:Map;							// reference to parent map
-		public var sprites:Array=new Array();		// instances in display list
 		public var heading:Array=new Array();		// angle at each node
-		private var stateClasses:Object = new Object();
         private var hitzone:Sprite;
-        private var listenSprite:Sprite;
-
-		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
-			embedFonts: true,
-			antiAliasType: AntiAliasType.ADVANCED,
-			gridFitType: GridFitType.NONE
-		};
 		public var nameformat:TextFormat;
-		
-		private const FILLSPRITE:uint=0;
-		private const CASINGSPRITE:uint=1;
-		private const STROKESPRITE:uint=2;
-		private const NAMESPRITE:uint=3;
-		private const NODESPRITE:uint=4;
-		private const CLICKSPRITE:uint=5;
 
 		private const NODESIZE:uint=6;
 
 		public function WayUI(way:Way, map:Map) {
+			super();
 			this.way = way;
 			this.map = map;
             init();
@@ -131,17 +113,14 @@ package net.systemeD.halcyon {
 		// Redraw
 
 		public function redraw():void {
+			removeSprites();
+
             // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();
             for (var stateKey:String in stateClasses) {
                 tags[":"+stateKey] = stateKey;
             }
 			if (way.isArea()) { tags[':area']='yes'; }
-
-			// Remove all currently existing sprites
-			while (sprites.length>0) {
-				var d:DisplayObject=sprites.pop(); d.parent.removeChild(d);
-			}
 
 			// Which layer?
 			layer=5;
@@ -151,7 +130,7 @@ package net.systemeD.halcyon {
 			// Iterate through each sublayer, drawing any styles on that layer
 			var sl:StyleList=map.ruleset.getStyles(this.way, tags);
 			var drawn:Boolean;
-			for (var sublayer:uint=0; sublayer<11; sublayer++) {
+			for (var sublayer:int=10; sublayer>=0; sublayer--) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
@@ -209,48 +188,29 @@ package net.systemeD.halcyon {
 				// ** ShieldStyle to do
 			}
 
-			// ** draw icons
-			// ** this looks like it needs reworking
+			// Draw icons
+			// ** there should be huge potential to optimise this - at present we're
+			//    running getStyles for every node in the way on every redraw
 			var r:Number;
-			var highlight:Boolean=stateClasses["showNodes"] !=null;
+			var nodetags:Object;
+			var highlight:Boolean=stateClasses["showNodes"]; // !=null
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
-	            if (map.pois[node.id]) {
-					if (map.pois[node.id].loaded) {
-						map.pois[node.id].redraw(null, highlight);
-					}
-				} else if (node.hasTags()) {
-					sl=map.ruleset.getStyles(node,node.getTagsHash());
-					if (sl.hasStyles()) {
-						if (i==0) { r= heading[i]; }
-						     else { r=(heading[i]+heading[i-1])/2; }
-						map.pois[node.id]=new NodeUI(node,map,r);
-						map.pois[node.id].redraw(sl);
-						// ** this should be done via the registerPOI/event listener mechanism,
-						//    but that needs a bit of reworking so we can pass in a styleList
-						//    (otherwise we end up computing the styles twice which is expensive)
-					}
-				} else if (highlight) {
-					map.pois[node.id]=new NodeUI(node,map);
-					map.pois[node.id].redraw(null, true);
+				nodetags=node.getTagsCopy();
+				if (i==0) { nodetags['_heading']= heading[i]; }
+				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
+				if (highlight) { nodetags[':selectedway']='yes'; }
+				sl=map.ruleset.getStyles(node,nodetags);
+				if (sl.hasStyles()) {
+					map.pois[node.id]=new NodeUI(node,map,r);
+					map.pois[node.id].redraw(sl);
+					// ** this should be done via the registerPOI/event listener mechanism,
+					//    but that needs a bit of reworking so we can pass in a styleList
+					//    (otherwise we end up computing the styles twice which is expensive)
+				} else if (map.pois[node.id]) {
+					map.pois[node.id].removeSprites();
 				}
 			}
-			
-//			// No styles, so add a thin trace
-//			if (!drawn && map.showall) {
-//				var def:Sprite = new Sprite();
-//				def.graphics.lineStyle(0.5, 0x808080, 1, false, "normal");
-//				solidLine(def.graphics);
-//				addToLayer(def, STROKESPRITE, 10);
-//				drawn=true;
-//			}
-            
-//            if ( stateClasses["showNodes"] != null ) {
-//                var nodes:Sprite = new Sprite();
-//                drawNodes(nodes.graphics);
-//                addToLayer(nodes, NODESPRITE);
-//            }
-
 			if (!drawn) { return; }
 			
             // create a generic "way" hitzone sprite
@@ -259,21 +219,7 @@ package net.systemeD.halcyon {
             solidLine(hitzone.graphics);
             addToLayer(hitzone, CLICKSPRITE);
             hitzone.visible = false;
-
-            if ( listenSprite == null ) {
-                listenSprite = new Sprite();
-                listenSprite.addEventListener(MouseEvent.CLICK, mouseEvent);
-                listenSprite.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
-                listenSprite.addEventListener(MouseEvent.MOUSE_OVER, mouseEvent);
-                listenSprite.addEventListener(MouseEvent.MOUSE_OUT, mouseEvent);
-                listenSprite.addEventListener(MouseEvent.MOUSE_DOWN, mouseEvent);
-                listenSprite.addEventListener(MouseEvent.MOUSE_UP, mouseEvent);
-                listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
-            }
-            listenSprite.hitArea = hitzone;
-            addToLayer(listenSprite, CLICKSPRITE);
-            listenSprite.buttonMode = true;
-            listenSprite.mouseEnabled = true;
+			createListenSprite(hitzone);
 
 		}
 		
@@ -440,20 +386,6 @@ package net.systemeD.halcyon {
 			return tf;
 		}
 		
-		// Add object (stroke/fill/roadname) to layer sprite
-		
-		private function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
-			var l:DisplayObject=Map(map).getChildAt(map.WAYSPRITE+layer);
-			var o:DisplayObject=Sprite(l).getChildAt(t);
-			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
-			Sprite(o).addChild(s);
-			sprites.push(s);
-            if ( s is Sprite ) {
-                Sprite(s).mouseEnabled = false;
-                Sprite(s).mouseChildren = false;
-            }
-		}
-
 		public function getNodeAt(x:Number, y:Number):Node {
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
@@ -466,7 +398,7 @@ package net.systemeD.halcyon {
             return null;
 		}
 
-        private function mouseEvent(event:MouseEvent):void {
+        override protected function mouseEvent(event:MouseEvent):void {
             var node:Node = getNodeAt(event.localX, event.localY);
             if ( node == null )
                 map.entityMouseEvent(event, way);
@@ -474,14 +406,5 @@ package net.systemeD.halcyon {
                 map.entityMouseEvent(event, node);
         }
 
-        public function setHighlight(stateType:String, isOn:Boolean):void {
-            if ( isOn && stateClasses[stateType] == null ) {
-                stateClasses[stateType] = true;
-                redraw();
-            } else if ( !isOn && stateClasses[stateType] != null ) {
-                delete stateClasses[stateType];
-                redraw();
-            }
-        }
 	}
 }

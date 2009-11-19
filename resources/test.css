@@ -18,7 +18,7 @@ way :area { fill-color: gray; fill-opacity: 0.5; }
 /* A set of fairly standard rules.
    We use z-index to make sure high-priority roads appear above minor ones. */
 
-way[highway=trunk] { z-index: 9; color: green; width: 5; casing-color: black; casing-width: 7; }
+way[highway=trunk] { z-index: 8; color: green; width: 5; casing-color: black; casing-width: 7; }
 way[highway=primary] { z-index: 8; color: red; width: 5; casing-color: black; casing-width: 7; }
 way[highway=secondary] { z-index: 7; color: orange; width: 5; casing-width: 7; text: name; text-color: black; font-size: 9; text-position: line; }
 way[highway=tertiary],way[highway=unclassified] { z-index: 6; color: yellow; width: 5; casing-width: 7; text: name; text-color: black; font-size: 7; text-position: line; }
@@ -58,6 +58,11 @@ way .highlighted { color: pink; }
 way :hover	{ z-index: 2; width: 8; color: gray; }
 way :selected { z-index: 2; width: 8; color: yellow; }
 way !:drawn { z-index: 5; width: 0.5; color: gray; }
+
+node :hover			{ z-index: 2;  icon-image: square; icon-width: 10; color: gray; }
+node :selected		{ z-index: 2;  icon-image: square; icon-width: 10; color: yellow; }
+node :selectedway	{ z-index: 9;  icon-image: square; icon-width: 7;  color: red; }
+node !:drawn :poi	{ z-index: 5;  icon-image: circle; icon-width: 4; color: green; casing-color: black; }
 
 /* Descendant selectors provide an easy way to style relations: this example means "any way
    which is part of a relation whose type=route". */

@@ -2,10 +2,12 @@ package net.systemeD.halcyon.styleparser {
 
 	import flash.events.*;
 	import flash.net.*;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.ImageURLLoader;
     import net.systemeD.halcyon.connection.Entity;
+
+    import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
 //	import bustin.dev.Inspector;
 	
 	public class RuleSet {
@@ -76,6 +78,7 @@ package net.systemeD.halcyon.styleparser {
 					else if (style is ShapeStyle  && ShapeStyle(style).fill_image   ) { filename=ShapeStyle(style).fill_image; }
 					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
 					else { continue; }
+					if (filename=='square' || filename=='circle') { continue; }
 				
 					iconsToLoad++;
 					var request:URLRequest=new URLRequest(filename);

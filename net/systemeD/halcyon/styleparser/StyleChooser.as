@@ -31,7 +31,6 @@ package net.systemeD.halcyon.styleparser {
 		// Update the current StyleList from this StyleChooser
 
 		public function updateStyles(obj:Entity, tags:Object, sl:StyleList):void {
-
 			// Are any of the ruleChains fulfilled?
 			// ** needs to cope with min/max zoom
 			var fulfilled:Boolean=false;
@@ -57,7 +56,7 @@ package net.systemeD.halcyon.styleparser {
 					continue;
 				}
 				if (a.width) { tags['stroked']='yes'; }
-				if (a.width || a.fill_color || a.fill_image || a.casing_width) { tags['drawn']='yes'; }
+				if (a.width || a.fill_color || a.fill_image || a.casing_width || a.icon_image) { tags['drawn']='yes'; }
 
 				r.runEvals(tags);
 				if (a[r.sublayer]) {

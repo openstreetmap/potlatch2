@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
 
     public class DragWayNode extends ControllerState {
         private var selectedWay:Way;
@@ -27,16 +28,17 @@ package net.systemeD.potlatch2.controller {
             if (event.type==MouseEvent.MOUSE_UP) {
  				if (dragstate==DRAGGING) {
 					// mouse-up while dragging, so end drag
-	                return endDrag();
+                	return new SelectedWayNode(selectedWay,draggingNode);
+//	                return endDrag();
 				} else if (event.shiftKey) {
 					// start new way
 					var way:Way = controller.connection.createWay({}, [entity, entity]);
 					return new DrawWay(way, true);
 				} else {
 					// select node
-					// *** haven't done node selection code yet!
+					Globals.vars.root.addDebug("- select node from DragWayNode");
 					dragstate=NOT_DRAGGING;
-                	return new NoSelection();
+                	return new SelectedWayNode(selectedWay,draggingNode);
 				}
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
@@ -70,10 +72,10 @@ package net.systemeD.potlatch2.controller {
 		}
 
         override public function enterState():void {
-            controller.map.setHighlight(selectedWay, "showNodes", true);
+            controller.map.setHighlight(selectedWay, {showNodes: true } );
         }
         override public function exitState():void {
-            controller.map.setHighlight(selectedWay, "showNodes", false);
+            controller.map.setHighlight(selectedWay, {showNodes: false } );
         }
         override public function toString():String {
             return "DragWayNode";

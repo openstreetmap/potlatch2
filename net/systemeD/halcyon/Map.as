@@ -84,8 +84,7 @@ package net.systemeD.halcyon {
 		public const TILESPRITE:uint=0;
 		public const GPSSPRITE:uint=1;
 		public const WAYSPRITE:uint=2;
-		public const POISPRITE:uint=13;
-		public const NAMESPRITE:uint=14;
+		public const NAMESPRITE:uint=13;
 		
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function
@@ -107,11 +106,11 @@ package net.systemeD.halcyon {
 		// [layer][0]			- fill
 
 		private function createSprites():void {
-			tileset=new TileSet(this);					// 900913 background
-			addChild(tileset);							//  |
-			addChild(new Sprite());						// GPS
+			tileset=new TileSet(this);					// 0 - 900913 background
+			addChild(tileset);							//      |
+			addChild(new Sprite());						// 1 - GPS
 
-			for (var l:int=0; l<13; l++) {				// 11 layers (11 is +5, 1 is -5)
+			for (var l:int=0; l<13; l++) {				// 11 layers (12 is +5, 2 is -5)
 				var s:Sprite = getHitSprite();      	//  |
 				s.addChild(getPaintSprite());			//	| 0 fill
 				s.addChild(getPaintSprite());			//	| 1 casing
@@ -125,8 +124,7 @@ package net.systemeD.halcyon {
 				s.addChild(getHitSprite());			    //	| 5 entity hit tests
 				addChild(s);							//  |
 			}
-			addChild(getPaintSprite());     			// 12 - POIs
-			addChild(getPaintSprite());     			// 13 - shields and POI names
+			addChild(getPaintSprite());     			// 13 - name sprite
 		}
 		
 		private function removeSprites():void {
@@ -285,12 +283,23 @@ package net.systemeD.halcyon {
 			pois[node.id].redraw();
         }
 
-        public function setHighlight(entity:Entity, stateType:String, isOn:Boolean):void {
+        public function setHighlight(entity:Entity, settings:Object):void {
+			var stateType:String;
             if ( entity is Way ) {
                 var wayUI:WayUI = ways[entity.id];
-                if ( wayUI != null )
-                    wayUI.setHighlight(stateType, isOn);
-            }
+                if (wayUI==null) { return; }
+				for (stateType in settings) {
+                   	wayUI.setHighlight(stateType, settings[stateType]);
+				}
+				wayUI.redraw();
+            } else if (entity is Node) {
+				var nodeUI:NodeUI = nodes[entity.id];
+                if (nodeUI==null) { return; }
+				for (stateType in settings) {
+                   	nodeUI.setHighlight(stateType, settings[stateType]);
+				}
+				nodeUI.redraw();
+			}
         }
 
         // Handle mouse events on ways/nodes

@@ -79,7 +79,7 @@
             b.graphics.endFill();
 			_root.addChild(b);
 
-			// Add Yahoo! background
+/*			// Add Yahoo! background
 			var yahoo:YahooMap = new YahooMap(); 
 			yahoo.init("f0a.sejV34HnhgIbNSmVHmndXFpijgGeun0fSIMG9428hW_ifF3pYKwbV6r9iaXojl1lU_dakekR", w, h);  
 			yahoo.mapType="satellite";
@@ -103,7 +103,7 @@
 				theMap.addEventListener(MapEvent.RESIZE, yahooListener.resizeHandler);
 			}
 			yahoo.addEventListener(YahooMapEvent.MAP_INITIALIZE, yahooListener.yahooInit);
-
+*/
 			// add map
 			theMap=new Map(this.loaderInfo.parameters);
 			theMap.backdrop=b;
@@ -144,7 +144,7 @@
 
 			// add debug field
 			var t:TextField=new TextField();
-			t.width=500; t.height=100; t.border=true;
+			t.width=500; t.height=150; t.border=true;
 			t.multiline=true;
 			_root.addChild(t);
 			Globals.vars.debug=t;
