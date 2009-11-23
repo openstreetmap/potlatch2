@@ -36,7 +36,7 @@ way[highway=bridleway] { z-index:9; color: #996644; width: 2; dashes: 4, 2, 2, 2
 way[highway=track]     { color: #996644; width: 2; dashes: 4, 2; }
 way[highway=path]      { color: lightgreen; width: 2; dashes: 2, 2; }
 
-way[waterway=river], way[waterway=canal] { color: lightblue; width: 2; text:name; text-color:blue; font-size:7; text-position: offset; }
+way[waterway=river], way[waterway=canal] { color: lightblue; width: 2; text:name; text-color:blue; font-size:7; text-position: offset; text-offset: 7;}
 
 /* Fills can be solid colour or bitmap images */
 
