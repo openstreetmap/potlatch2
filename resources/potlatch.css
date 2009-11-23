@@ -50,6 +50,7 @@ way[amenity=parking] :area { fill-color: gray; fill-opacity: 0.2; }
 
 node[amenity=pub] { icon-image: icons/pub.png; text-offset: 7; font-family: DejaVu; text: name; font-size: 9; }
 node[place] { icon-image: icons/place.png; text-offset: 10; font-family: DejaVu; text: name; font-size: 9; font-weight: bold; text-decoration: underline; }
+node[railway=station] { icon-image: icons/station.png; text-offset: 10; font-family: DejaVu; text: name; font-size: 9; font-weight: bold; }
 way node[barrier=gate], way node[highway=gate] { icon-image: icons/gate.png; }
 	
 /* We can stack styles at different z-index (depth) */
@@ -71,7 +72,7 @@ way :selected { z-index: 2; width: 8; color: yellow; }
 way !:drawn { z-index:10; width: 0.5; color: gray; } 
 
 node :selectedway { z-index: 9; icon-image: square; icon-width: 7; color: red; }
-node !:drawn :poi { z-index: 5; icon-image: circle; icon-width: 4; color: green; casing-color: black; }
+node !:drawn :poi { z-index: 2; icon-image: circle; icon-width: 4; color: green; casing-color: black; }
 
 /* Descendant selectors provide an easy way to style relations: this example means "any way
    which is part of a relation whose type=route". */
