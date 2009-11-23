@@ -12,10 +12,12 @@
 /* This rule applies to all areas (closed ways). Note that rules are applied in the order
    they appear in the file, so later rules may replace this one for some ways. */
 
-way :area { fill-color: gray; fill-opacity: 0.5; }
+way :area { fill-color: red; fill-opacity: 0.5; }
 
 /* A set of fairly standard rules.
-   We use z-index to make sure high-priority roads appear above minor ones. */
+  We use z-index to make sure high-priority roads appear above minor ones.
+  The default z-index is 5. If an object matches multiple rules with the same
+  z-index then the rules are "merged" (but individual properties become one or the other)  */
 
 way[highway=motorway],way[highway=motorway_link],
 way[highway=trunk],way[highway=trunk_link],
@@ -30,15 +32,19 @@ way[highway=residential]                            { z-index: 5; color: #E8E8E8
 way[highway=service]                                { color: white; width: 3; casing-width: 5; }
 
 way[highway=footway]   { color: #FF6644; width: 2; dashes: 6, 3 }
-way[highway=bridleway] { color: #996644; width: 2; dashes: 4, 2, 2, 2; }
+way[highway=bridleway] { z-index:9; color: #996644; width: 2; dashes: 4, 2, 2, 2; }
 way[highway=track]     { color: #996644; width: 2; dashes: 4, 2; }
 way[highway=path]      { color: lightgreen; width: 2; dashes: 2, 2; }
 
-way[waterway=river], way[waterway=canal] { color: lightblue; width: 2; }
+way[waterway=river], way[waterway=canal] { color: lightblue; width: 2; text:name; text-color:blue; font-size:7; text-position: offset; }
 
 /* Fills can be solid colour or bitmap images */
 
+way[natural] :area { fill-color: blue; fill-opacity: 0.2; }
+way[landuse] :area { fill-color: #444444; fill-opacity: 0.2; }
+way[landuse=forest] :area { fill-color: green; fill-opacity: 0.2; }
 way[leisure=pitch],way[leisure=park] { fill-image: fills/grass.jpg; }
+way[amenity=parking] :area { fill-color: gray; fill-opacity: 0.2; }
 
 /* POIs, too, can have bitmap icons - they can even be transparent */
 
@@ -49,9 +55,9 @@ way node[barrier=gate], way node[highway=gate] { icon-image: icons/gate.png; }
 /* We can stack styles at different z-index (depth) */
 
 way[railway=rail]
-	{ z-index: 4; color: black; width: 4; }
+	{ z-index: 8; color: black; width: 4; } 
 way[railway=rail]
-	{ z-index: 5; color: white; width: 3; dashes: 6,6; }
+	{ z-index:1; color: green; width: 8; }
 
 /* Change the road colour based on dynamically set "highlighted" tag (see earlier) */
 
@@ -62,7 +68,7 @@ way .highlighted { color: pink; }
 
 way :hover	{ z-index: 2; width: 8; color: gray; }
 way :selected { z-index: 2; width: 8; color: yellow; }
-way !:drawn { z-index: 5; width: 0.5; color: gray; }
+way !:drawn { z-index:10; width: 0.5; color: gray; } 
 
 node :selectedway { z-index: 9; icon-image: square; icon-width: 7; color: red; }
 node !:drawn :poi { z-index: 5; icon-image: circle; icon-width: 4; color: green; casing-color: black; }
