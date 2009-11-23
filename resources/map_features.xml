@@ -109,7 +109,14 @@
         name="Speed Limit" category="Restrictions" description="Maximum permitted speed on this road"
         key="maxspeed"/>
   </inputSet>
-    
+  
+  <inputSet id="buildingAddress">
+    <input type="freetext" presence="onTagMatch" category="Address" description="The number of the house, e.g. 156 or 10-12" name="House Number" key="addr:housenumber"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="name"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The Street Name (optional)" name="Street Name" key="addr:street"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
+  </inputSet> 
+  
   <feature name="Motorway">
     <category>roads</category>
     <icon image="features/highway__motorway.png">
@@ -186,7 +193,8 @@
     <category>roads</category>
     <icon image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font><br/>
-      <font size="6pt">${postal_code}</font>
+      <font size="8pt">${postal_code}</font><br/>
+      <font size="8pt"><i>A residential road is one surrounded by houses, and that isn't a higher classification.</i></font>
     </icon>
 
     <line/>
@@ -344,7 +352,7 @@
 
   <feature name="Stream">
     <category>water</category>
-    <icon>
+    <icon image="features/waterway__stream.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -354,7 +362,7 @@
 
   <feature name="River">
     <category>water</category>
-    <icon>
+    <icon image="features/waterway__river.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -364,7 +372,7 @@
 
   <feature name="Canal">
     <category>water</category>
-    <icon>
+    <icon image="features/waterway__canal.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -374,7 +382,7 @@
 
   <feature name="Dam">
     <category>water</category>
-    <icon>
+    <icon image="features/waterway__dam.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -387,7 +395,7 @@
 
   <feature name="Railway Line">
     <category>transport</category>
-    <icon>
+    <icon image="features/transport__railway.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -397,7 +405,7 @@
 
   <feature name="Tram Line">
     <category>transport</category>
-    <icon>
+    <icon image="features/transport__tram.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -407,7 +415,7 @@
 
   <feature name="Subway Line">
     <category>transport</category>
-    <icon>
+    <icon image="features/transport__subway.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -426,8 +434,26 @@
 
     <line/>
     <tag k="building" v="*"/>
+    <inputSet ref="buildingAddress" />
   </feature>
 
+  <feature name="Park">
+    <icon>
+      <b>${name}</b><br/>
+    </icon>
+
+    <line/>
+    <tag k="leisure" v="park"/>
+  </feature>
+  
+  <feature name="Forest">
+    <icon>
+      <b>${name}</b><br/>
+    </icon>
+
+    <line/>
+    <tag k="landuse" v="forest"/>
+  </feature>
 
 </mapFeatures>
 
