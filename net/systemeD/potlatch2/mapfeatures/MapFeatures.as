@@ -29,7 +29,7 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _categories:Array = null;
 
         protected function loadFeatures():void {
-            var request:URLRequest = new URLRequest("map_features.xml");
+            var request:URLRequest = new URLRequest("map_features.xml?"+Math.random());
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, onFeatureLoad);
             loader.load(request);
