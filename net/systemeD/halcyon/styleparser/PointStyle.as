@@ -12,6 +12,10 @@ package net.systemeD.halcyon.styleparser {
 				'icon_image','icon_width','icon_height','rotation'
 			];
 		}
+		
+		override public function get drawn():Boolean {
+			return (icon_image!=null);
+		}
 	}
 
 }

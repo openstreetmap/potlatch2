@@ -1,6 +1,7 @@
 package net.systemeD.halcyon.styleparser {
 
 	import net.systemeD.halcyon.connection.Entity;
+	import net.systemeD.halcyon.Globals;
 
 	public class StyleChooser {
 
@@ -55,9 +56,8 @@ package net.systemeD.halcyon.styleparser {
 					}
 					continue;
 				}
-				if (a.width) { tags['stroked']='yes'; }
-				if (a.width || a.fill_color || a.fill_image || a.casing_width || a.icon_image) { tags['drawn']='yes'; }
-
+				if (r.drawn) { tags[':drawn']='yes'; }
+				
 				r.runEvals(tags);
 				if (a[r.sublayer]) {
 					// If there's already a style on this sublayer, then merge them

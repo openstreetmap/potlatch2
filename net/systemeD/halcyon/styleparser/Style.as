@@ -37,10 +37,14 @@ package net.systemeD.halcyon.styleparser {
 			this.merged=true;
 		}
 
-		// Getter (to be overridden) for property list
+		// Getters (to be overridden)
 
 		public function get properties():Array {
 			return [];
+		}
+		
+		public function get drawn():Boolean {
+			return false;
 		}
 		
 		// Eval handling

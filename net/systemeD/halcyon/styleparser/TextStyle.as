@@ -32,7 +32,10 @@ package net.systemeD.halcyon.styleparser {
 			];
 		}
 
-		
+		override public function get drawn():Boolean {
+			return (text!=null);
+		}
+
 		public function getTextFormat():TextFormat {
 			var tf:TextFormat=new TextFormat(font_family    ? font_family   : "DejaVu",
 			                                 font_size      ? font_size     : 8,

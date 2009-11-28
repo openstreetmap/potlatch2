@@ -12,5 +12,10 @@ package net.systemeD.halcyon.styleparser {
 				'shield_image','shield_width','shield_height'
 			];
 		}
+		
+		override public function get drawn():Boolean {
+			return (shield_image!=null);
+		}
+
 	}
 }
