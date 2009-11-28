@@ -286,11 +286,6 @@ package net.systemeD.halcyon {
 
         public function setHighlight(entity:Entity, settings:Object):void {
 			var stateType:String;
-var s:String="";
-for (stateType in settings) {
-	s+=stateType+"="+settings[stateType]+" ";
-}
-Globals.vars.root.addDebug("       setHighlight ("+s+"): "+entity);
             if ( entity is Way ) {
                 var wayUI:WayUI = ways[entity.id];
                 if (wayUI==null) { return; }
