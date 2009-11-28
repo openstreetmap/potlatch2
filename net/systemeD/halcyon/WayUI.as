@@ -118,7 +118,7 @@ package net.systemeD.halcyon {
             // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();
             for (var stateKey:String in stateClasses) {
-                tags[":"+stateKey] = stateKey;
+                tags[":"+stateKey] = 'yes';
             }
 			if (way.isArea()) { tags[':area']='yes'; }
 
@@ -202,7 +202,7 @@ package net.systemeD.halcyon {
 				if (highlight) { nodetags[':selectedway']='yes'; }
 				sl=map.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
-					map.pois[node.id]=new NodeUI(node,map,r);
+					if (!map.pois[node.id]) { map.pois[node.id]=new NodeUI(node,map,r); }
 					map.pois[node.id].redraw(sl);
 					// ** this should be done via the registerPOI/event listener mechanism,
 					//    but that needs a bit of reworking so we can pass in a styleList

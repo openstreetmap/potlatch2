@@ -16,6 +16,7 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
+	import net.systemeD.halcyon.Globals;
 
 //	for experimental export function:
 //	import flash.net.FileReference;
@@ -285,6 +286,11 @@ package net.systemeD.halcyon {
 
         public function setHighlight(entity:Entity, settings:Object):void {
 			var stateType:String;
+var s:String="";
+for (stateType in settings) {
+	s+=stateType+"="+settings[stateType]+" ";
+}
+Globals.vars.root.addDebug("       setHighlight ("+s+"): "+entity);
             if ( entity is Way ) {
                 var wayUI:WayUI = ways[entity.id];
                 if (wayUI==null) { return; }
