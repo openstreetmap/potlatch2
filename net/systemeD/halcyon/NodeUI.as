@@ -35,7 +35,6 @@ package net.systemeD.halcyon {
 		
 		public function redraw(sl:StyleList=null,forceDraw:Boolean=false):Boolean {
 			// *** forcedraw can be removed
-
 			var tags:Object = node.getTagsCopy();
 
 			// special tags

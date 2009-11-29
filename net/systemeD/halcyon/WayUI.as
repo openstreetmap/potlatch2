@@ -401,11 +401,11 @@ package net.systemeD.halcyon {
 		}
 
         override protected function mouseEvent(event:MouseEvent):void {
-            var node:Node = getNodeAt(event.localX, event.localY);
-            if ( node == null )
+//            var node:Node = getNodeAt(event.localX, event.localY);
+//            if ( node == null )
                 map.entityMouseEvent(event, way);
-            else
-                map.entityMouseEvent(event, node);
+//            else
+//                map.entityMouseEvent(event, node);
         }
 
 	}
