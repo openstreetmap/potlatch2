@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -12,9 +13,10 @@
    height="16px"
    id="svg2383"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.47pre4 r22446"
    sodipodi:docname="zoomIn.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.1">
   <defs
      id="defs2385">
     <inkscape:perspective
@@ -39,10 +41,11 @@
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1014"
-     inkscape:window-height="723"
+     inkscape:window-width="1024"
+     inkscape:window-height="576"
      inkscape:window-x="0"
-     inkscape:window-y="24">
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid2393" />
@@ -66,16 +69,14 @@
        style="fill:#000000;fill-opacity:0.47186148;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 7.1875 0.4375 C 3.5583203 0.68135784 0.6403418 2.5439031 0.09375 4.90625 L 0 4.90625 L 0 9.3125 L 0 10.59375 L 0 12.6875 C 0 14.5157 1.4843 16 3.3125 16 L 12.6875 16 C 14.5157 16 16 14.5157 16 12.6875 L 16 10.59375 L 16 9.3125 L 16 4.90625 L 15.90625 4.90625 C 15.31917 2.3689146 12.002 0.43750001 8 0.4375 C 7.724 0.4375 7.4563281 0.41943646 7.1875 0.4375 z "
        id="rect2395" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="1.296875"
-       y="13.015625"
-       id="text3172"><tspan
-         sodipodi:role="line"
-         id="tspan3174"
-         x="1.296875"
-         y="13.015625"
-         style="font-size:16px;fill:#ffffff;fill-opacity:1">+</tspan></text>
+    <g
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       id="text3172"
+       transform="translate(-0.6953125,0.3515625)">
+      <path
+         d="m 9.359375,2.96875 0,4.3515625 4.351563,0 0,1.328125 -4.351563,0 0,4.3515625 -1.3125,0 0,-4.3515625 -4.3515625,0 0,-1.328125 4.3515625,0 0,-4.3515625 1.3125,0"
+         style="font-size:16px;fill:#ffffff"
+         id="path2952" />
+    </g>
   </g>
 </svg>
