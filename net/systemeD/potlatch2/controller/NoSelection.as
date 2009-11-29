@@ -18,11 +18,16 @@ package net.systemeD.potlatch2.controller {
 					return new SelectedWay(focus as Way);
 				} else if ( focus is Node ) {
 					// *** select node
-					Globals.vars.root.addDebug("- selected POI");
+					Globals.vars.root.addDebug("- selected POI from NoSelection");
 				}
 			} else if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
-				return new CreateWay(event);
+				var startNode:Node = controller.connection.createNode(
+					{}, 
+					controller.map.coord2lat(event.localY),
+					controller.map.coord2lon(event.localX));
+				var way:Way = controller.connection.createWay({}, [startNode]);
+				return new DrawWay(way, true);
 			} else if ( event.type == MouseEvent.MOUSE_OVER ) {
 				controller.map.setHighlight(focus, { hover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {

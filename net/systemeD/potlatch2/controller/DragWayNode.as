@@ -34,7 +34,7 @@ package net.systemeD.potlatch2.controller {
 //	                return endDrag();
 				} else if (event.shiftKey && !isNew) {
 					// start new way
-					var way:Way = controller.connection.createWay({}, [entity, entity]);
+					var way:Way = controller.connection.createWay({}, [entity]);
 					return new DrawWay(way, true);
 				} else if (event.shiftKey && isNew) {
                 	return new SelectedWayNode(selectedWay,draggingNode);

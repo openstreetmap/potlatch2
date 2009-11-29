@@ -193,14 +193,14 @@ package net.systemeD.halcyon {
 			//    running getStyles for every node in the way on every redraw
 			var r:Number;
 			var nodetags:Object;
-			var highlight:Boolean=stateClasses["showNodes"]; // !=null
 			var nodeSelected:int=stateClasses["nodeSelected"];
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
 				nodetags=node.getTagsCopy();
 				if (i==0) { nodetags['_heading']= heading[i]; }
 				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
-				if (highlight) { nodetags[':selectedway']='yes'; }
+				if (stateClasses["showNodes"]) { nodetags[':selectedway']='yes'; }
+				if (stateClasses["showNodesHover"]) { nodetags[':hoverway']='yes'; }
 				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
 				sl=map.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
@@ -227,22 +227,6 @@ package net.systemeD.halcyon {
 		
 		// ------------------------------------------------------------------------------------------
 		// Drawing support functions
-
-		private function drawNodes(g:Graphics):void {
-// ***** these should be discreet anchorpoints (NodeUI?), not just sprites
-//          g.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
-			g.beginFill(0xFF0000);
-			for (var i:uint = 0; i < way.length; i++) {
-                var node:Node = way.getNode(i);
-                var x:Number = map.lon2coord(node.lon);
-                var y:Number = map.latp2coord(node.latp);
-                g.moveTo(x-NODESIZE, y-NODESIZE);
-                g.lineTo(x+NODESIZE, y-NODESIZE);
-                g.lineTo(x+NODESIZE, y+NODESIZE);
-                g.lineTo(x-NODESIZE, y+NODESIZE);
-                g.lineTo(x-NODESIZE, y-NODESIZE);
-			}
-		}
 
 		// Draw solid polyline
 		
@@ -401,11 +385,7 @@ package net.systemeD.halcyon {
 		}
 
         override protected function mouseEvent(event:MouseEvent):void {
-//            var node:Node = getNodeAt(event.localX, event.localY);
-//            if ( node == null )
-                map.entityMouseEvent(event, way);
-//            else
-//                map.entityMouseEvent(event, node);
+			map.entityMouseEvent(event, way);
         }
 
 	}

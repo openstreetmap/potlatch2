@@ -63,29 +63,10 @@ package net.systemeD.halcyon {
             stroke.graphics.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 			addToLayer(stroke,3);
 			dashedLine(stroke.graphics, [2,2]);
-			
-			var nodes:Sprite = new Sprite();
-            drawNodes(nodes.graphics);
-            addToLayer(nodes, 3);
-
 		}
 		
 		// ------------------------------------------------------------------------------------------
 		// Drawing support functions
-
-		private function drawNodes(g:Graphics):void {
-            g.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
-			for (var i:uint = 0; i < 1; i++) {
-                var p:Point = i == 0 ? start : end;
-                var x:Number = map.lon2coord(p.x);
-                var y:Number = map.latp2coord(p.y);
-                g.moveTo(x-2, y-2);
-                g.lineTo(x+2, y-2);
-                g.lineTo(x+2, y+2);
-                g.lineTo(x-2, y+2);
-                g.lineTo(x-2, y-2);
-			}
-		}
 
 		// Draw dashed polyline
 		

@@ -38,14 +38,14 @@ package net.systemeD.potlatch2.controller {
             if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
-                    var way:Way = controller.connection.createWay({}, [entity, entity]);
+                    var way:Way = controller.connection.createWay({}, [entity]);
                     return new DrawWay(way, true);
 				} else if ( entity is Way ) {
 					// select way
                     selectWay(entity as Way);
                 } else if ( entity is Node ) {
 					// *** select node
-					Globals.vars.root.addDebug("- selected POI");
+					Globals.vars.root.addDebug("- selected POI from SelectedWay");
                     trace("select poi");
                 } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
                     return new NoSelection();

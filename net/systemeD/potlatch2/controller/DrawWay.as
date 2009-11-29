@@ -18,6 +18,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var mouse:Point;
 			var node:Node;
+			var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity == null ) {
@@ -25,6 +26,8 @@ package net.systemeD.potlatch2.controller {
 					resetElastic(node);
 				} else if ( entity is Node ) {
 					appendNode(entity as Node);
+					controller.map.setHighlight(focus, { showNodesHover: false });
+					controller.map.setHighlight(selectedWay, { showNodes: true });
 					resetElastic(entity as Node);
 				} else if ( entity is Way ) {
 					node = createAndAddNode(event);
@@ -36,6 +39,18 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2lon(event.localX),
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
+			} else if ( event.type == MouseEvent.MOUSE_OVER && focus!=selectedWay) {
+				controller.map.setHighlight(focus, { showNodesHover: true });
+			} else if ( event.type == MouseEvent.MOUSE_OUT  && focus!=selectedWay) {
+				controller.map.setHighlight(focus, { showNodesHover: false });
+				controller.map.setHighlight(selectedWay, { showNodes: true });
+				// ** this call to setHighlight(selectedWay) is necessary in case the hovered way (blue nodes)
+				// shares any nodes with the selected way (red nodes): if they do, they'll be wiped out by the
+				// first call.
+				// Ultimately we should fix this by referring to 'way :selected nodes' instead of 'nodes :selectedway'.
+				// But this will do for now.
+				// We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
+				// useful optimisation.
 			}
 
 			return this;
