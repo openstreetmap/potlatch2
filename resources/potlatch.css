@@ -10,9 +10,11 @@
 */
 
 /* This rule applies to all areas (closed ways). Note that rules are applied in the order
-   they appear in the file, so later rules may replace this one for some ways. */
+  they appear in the file, so later rules may replace this one for some ways.
+  This is used as a debugger for finding unstyled areas; it's obviously oversimplistic since
+  it picks up closed-loop highways. */
 
-way :area { fill-color: red; fill-opacity: 0.5; }
+way :area { color: red; width: 1; fill-color: red; fill-opacity: 0.5; }
 
 /* A set of fairly standard rules.
   We use z-index to make sure high-priority roads appear above minor ones.
@@ -38,13 +40,25 @@ way[highway=path]      { color: lightgreen; width: 2; dashes: 2, 2; }
 
 way[waterway=river], way[waterway=canal] { color: lightblue; width: 2; text:name; text-color:blue; font-size:7; text-position: offset; text-offset: 7;}
 
+way[barrier] {color: #000000; width: 1}
+
 /* Fills can be solid colour or bitmap images */
 
-way[natural] :area { fill-color: blue; fill-opacity: 0.2; }
-way[landuse] :area { fill-color: #444444; fill-opacity: 0.2; }
-way[landuse=forest] :area { fill-color: green; fill-opacity: 0.2; }
-way[leisure=pitch],way[leisure=park] { fill-image: fills/grass.jpg; }
-way[amenity=parking] :area { fill-color: gray; fill-opacity: 0.2; }
+
+way[natural] :area                          { color: #ADD6A5; width: 1; fill-color: #ADD6A5; fill-opacity: 0.2; }
+way[landuse] :area                          { color: #444444; width: 2; fill-color: #444444; fill-opacity: 0.3; }
+way[amenity],way[shop] :area                { color: #ADCEB5; width: 1; fill-color: #ADCEB5; fill-opacity: 0.2; }
+way[leisure],way[sport] :area               { color: #8CD6B5; width: 1; fill-color: #8CD6B5; fill-opacity: 0.2; }
+way[tourism] :area                          { color: #F7CECE; width: 1; fill-color: #F7CECE; fill-opacity: 0.2; }
+way[historic],way[ruins] :area              { color: #F7F7DE; width: 1; fill-color: #F7F7DE; fill-opacity: 0.2; }
+way[military] :area                         { color: #D6D6D6; width: 1; fill-color: #D6D6D6; fill-opacity: 0.2; }
+way[building] :area                         { color: #ff6ec7; width: 1; fill-color: #ff6ec7; fill-opacity: 0.2; }
+way[natural=water],
+way[waterway] :area               { color: blue;    width: 2; fill-color: blue;    fill-opacity: 0.2; }
+way[landuse=forest],way[natural=wood] :area { color: green;   width: 2; fill-color: green;   fill-opacity: 0.2; }
+way[leisure=pitch],way[leisure=park]        { color: #44ff44; width: 1; fill-color: #44ff44; fill-opacity: 0.2; }
+way[amenity=parking] :area                  { color: gray;    width: 1; fill-color: gray;    fill-opacity: 0.2; }
+way[public_transport=pay_scale_area] :area  { color: gray;    width: 1; fill-color: gray;    fill-opacity: 0.1; }
 
 /* POIs, too, can have bitmap icons - they can even be transparent */
 
