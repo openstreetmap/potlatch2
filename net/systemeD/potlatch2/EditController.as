@@ -10,10 +10,6 @@ package net.systemeD.potlatch2 {
 
         private var _map:Map;
         private var tagViewer:TagViewer;
-        private var selectedWay:Way;
-        private var selectedNode:Node;
-        
-        private var draggingNode:Node = null;
         
         private var state:ControllerState;
         private var _connection:Connection;
@@ -88,19 +84,6 @@ package net.systemeD.potlatch2 {
             newState.setPreviousState(state);
             state = newState;
             state.enterState();
-        }
-
-        private function processNodeEvent(event:MouseEvent, entity:Entity):void {
-            if ( draggingNode != null ) {
-                if ( event.type == MouseEvent.MOUSE_UP ) {
-                    draggingNode = null;
-                } else if ( event.type == MouseEvent.MOUSE_MOVE ) {
-                    draggingNode.lat = map.coord2lat(event.localY);
-                    draggingNode.lon = map.coord2lon(event.localX);
-                }
-            } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-                draggingNode = entity as Node;
-            }
         }
         
     }

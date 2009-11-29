@@ -18,16 +18,17 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var mouse:Point;
 			var node:Node;
-			var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
-			if ( event.type == MouseEvent.CLICK ) {
-				if ( focus == null ) {
+
+			if ( event.type == MouseEvent.MOUSE_UP ) {
+				if ( entity == null ) {
 					node = createAndAddNode(event);
 					resetElastic(node);
-				} else if ( focus is Node ) {
-					appendNode(focus as Node);
-				} else if ( focus is Way ) {
+				} else if ( entity is Node ) {
+					appendNode(entity as Node);
+					resetElastic(entity as Node);
+				} else if ( entity is Way ) {
 					node = createAndAddNode(event);
-					Way(focus).insertNodeAtClosestPosition(node, true);
+					Way(entity).insertNodeAtClosestPosition(node, true);
 					resetElastic(node);
 				}
 			} else if ( event.type == MouseEvent.MOUSE_MOVE ) {

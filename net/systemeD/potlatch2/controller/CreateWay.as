@@ -18,7 +18,7 @@ package net.systemeD.potlatch2.controller {
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
             var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
-            if ( event.type == MouseEvent.CLICK ) {
+            if ( event.type == MouseEvent.MOUSE_UP ) {
                 if ( focus == null ) {
                     var lat:Number = controller.map.coord2lat(event.localY);
                     var lon:Number = controller.map.coord2lon(event.localX);
