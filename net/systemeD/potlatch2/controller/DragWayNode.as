@@ -35,13 +35,13 @@ package net.systemeD.potlatch2.controller {
 				} else if (event.shiftKey && !isNew) {
 					// start new way
 					var way:Way = controller.connection.createWay({}, [entity]);
-					return new DrawWay(way, true);
+					return new DrawWay(way, true, false);
 				} else if (event.shiftKey && isNew) {
                 	return new SelectedWayNode(selectedWay,draggingNode);
 				} else {
 					// select node
 					dragstate=NOT_DRAGGING;
-                	return new SelectedWayNode(selectedWay,draggingNode);
+                	return SelectedWayNode.selectOrEdit(selectedWay, draggingNode);
 				}
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {

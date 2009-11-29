@@ -4,7 +4,6 @@ Potlatch 2: main outstanding issues
 
 == Current issues ==
 
-* Can't extend already-drawn way
 * Drag POI nodes (DragPOINode) and select them
 * Needs some sort of _width attribute so we can draw highlights 2px wider than the largest stroke (difficult because styles are decided before drawing)
 

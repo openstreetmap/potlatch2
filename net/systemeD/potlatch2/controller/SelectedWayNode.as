@@ -41,10 +41,10 @@ package net.systemeD.potlatch2.controller {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
                     var way:Way = controller.connection.createWay({}, [entity]);
-                    return new DrawWay(way, true);
-				} else if ( entity is Node ) {
+                    return new DrawWay(way, true, false);
+				} else if ( entity is Node && focus == selectedWay ) {
 					// select node within way
-					return new SelectedWayNode(selectedWay,Node(entity));
+					return selectOrEdit(selectedWay, Node(entity));
                 } else if ( entity is Way ) {
 					// select way
 					return new SelectedWay(Way(entity));
@@ -78,5 +78,15 @@ package net.systemeD.potlatch2.controller {
             return "SelectedWayNode";
         }
 
+        public static function selectOrEdit(selectedWay:Way, entity:Node):ControllerState {
+        	var isFirst:Boolean = false;
+			var isLast:Boolean = false;
+			isFirst = selectedWay.getNode(0) == entity;
+			isLast = selectedWay.getNode(selectedWay.length - 1) == entity;
+			if ( isFirst == isLast )    // both == looped, none == central node 
+			    return new SelectedWayNode(selectedWay, entity);
+			else
+			    return new DrawWay(selectedWay, isLast, true);
+        }
     }
 }

@@ -39,7 +39,7 @@ package net.systemeD.potlatch2.controller {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
                     var way:Way = controller.connection.createWay({}, [entity]);
-                    return new DrawWay(way, true);
+                    return new DrawWay(way, true, false);
 				} else if ( entity is Way ) {
 					// select way
                     selectWay(entity as Way);

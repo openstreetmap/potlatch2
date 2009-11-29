@@ -9,10 +9,12 @@ package net.systemeD.potlatch2.controller {
 	public class DrawWay extends SelectedWay {
 		private var elastic:Elastic;
 		private var editEnd:Boolean;
+		private var leaveNodeSelected:Boolean;
 		
-		public function DrawWay(way:Way, editEnd:Boolean) {
+		public function DrawWay(way:Way, editEnd:Boolean, leaveNodeSelected:Boolean) {
 			super(way);
 			this.editEnd = editEnd;
+			this.leaveNodeSelected = leaveNodeSelected;
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
@@ -63,8 +65,12 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if ( event.keyCode == 13 || event.keyCode == 27 )
-				return new SelectedWay(selectedWay);
+			if ( event.keyCode == 13 || event.keyCode == 27 ) {
+				if ( leaveNodeSelected ) 
+				    return new SelectedWayNode(selectedWay, selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0));
+				else
+				    return new SelectedWay(selectedWay);
+			}
 			return this;
 		}
 
