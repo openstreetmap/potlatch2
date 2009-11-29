@@ -4,9 +4,9 @@ Potlatch 2: main outstanding issues
 
 == Current issues ==
 
-* Deselecting a way often doesn't remove the nodes (if you've dragged a node, for example)
-* Highlights don't work on nodes
-
+* Can't extend already-drawn way
+* Drag POI nodes (DragPOINode) and select them
+* Needs some sort of _width attribute so we can draw highlights 2px wider than the largest stroke (difficult because styles are decided before drawing)
 
 == Core drawing ==
 
@@ -20,7 +20,6 @@ Potlatch 2: main outstanding issues
 
 * GPS tracks
 * Non-900913 projections
-* Yahoo! background
 * Plugin support
 
 
