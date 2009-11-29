@@ -38,12 +38,10 @@ package net.systemeD.potlatch2.controller {
             if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
-					Globals.vars.root.addDebug("- start new way");
                     var way:Way = controller.connection.createWay({}, [entity, entity]);
                     return new DrawWay(way, true);
 				} else if ( entity is Way ) {
 					// select way
-					Globals.vars.root.addDebug("- selected way");
                     selectWay(entity as Way);
                 } else if ( entity is Node ) {
 					// *** select node
@@ -55,11 +53,11 @@ package net.systemeD.potlatch2.controller {
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
 				if ( entity is Way && focus==selectedWay && event.shiftKey) {
 					// insert node within way (shift-click)
-                    var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event);
+                    var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
 					d.forceDragStart();
 					return d;
 				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
-                    return new DragWayNode(selectedWay, Node(entity), event);
+                    return new DragWayNode(selectedWay, Node(entity), event, false);
 				}
             }
 
@@ -77,9 +75,11 @@ package net.systemeD.potlatch2.controller {
         
         override public function enterState():void {
             selectWay(initWay);
+			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState():void {
             clearSelection();
+			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

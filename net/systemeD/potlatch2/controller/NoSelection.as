@@ -45,6 +45,12 @@ package net.systemeD.potlatch2.controller {
 			}
 		}
 
+        override public function enterState():void {
+			Globals.vars.root.addDebug("**** -> "+this);
+        }
+        override public function exitState():void {
+			Globals.vars.root.addDebug("**** <- "+this);
+        }
 		override public function toString():String {
 			return "NoSelection";
 		}

@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.Elastic;
+	import net.systemeD.halcyon.Globals;
 
     public class CreateWay extends ControllerState {
         private var start:Point;
@@ -54,11 +55,13 @@ package net.systemeD.potlatch2.controller {
             mouse.y = controller.map.coord2latp(mouse.y);
             
             elastic = new Elastic(controller.map, start, mouse);
+			Globals.vars.root.addDebug("**** -> "+this);
         }
         
         override public function exitState():void {
             elastic.removeSprites();
             elastic = null;
+			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

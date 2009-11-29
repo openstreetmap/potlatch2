@@ -41,7 +41,7 @@ package net.systemeD.halcyon {
 			// special tags
 			if (!node.hasParentWays) { tags[':poi']='yes'; }
             for (var stateKey:String in stateClasses) {
-                tags[":"+stateKey] = stateKey;
+                tags[":"+stateKey] = 'yes';
             }
 
 			if (!sl) { sl=map.ruleset.getStyles(this.node,tags); }

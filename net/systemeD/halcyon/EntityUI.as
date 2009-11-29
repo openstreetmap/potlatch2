@@ -4,6 +4,7 @@ package net.systemeD.halcyon {
 	import flash.events.MouseEvent;
 	import flash.text.AntiAliasType;
 	import flash.text.GridFitType;
+	import net.systemeD.halcyon.Globals;
 
 	public class EntityUI {
 
@@ -45,7 +46,8 @@ package net.systemeD.halcyon {
 		
 		public function removeSprites():void {
 			while (sprites.length>0) {
-				var d:DisplayObject=sprites.pop(); d.parent.removeChild(d);
+				var d:DisplayObject=sprites.pop();
+				if (d.parent) { d.parent.removeChild(d); }
 			}
 		}
 
@@ -69,9 +71,9 @@ package net.systemeD.halcyon {
         protected function mouseEvent(event:MouseEvent):void {
         }
 
-        public function setHighlight(stateType:String, isOn:Boolean):void {
+        public function setHighlight(stateType:String, isOn:*):void {
             if ( isOn && stateClasses[stateType] == null ) {
-                stateClasses[stateType] = true;
+                stateClasses[stateType] = isOn;
             } else if ( !isOn && stateClasses[stateType] != null ) {
                 delete stateClasses[stateType];
             }

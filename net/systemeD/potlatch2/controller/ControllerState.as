@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.EditController;
+	import net.systemeD.halcyon.Globals;
 
     public class ControllerState {
 

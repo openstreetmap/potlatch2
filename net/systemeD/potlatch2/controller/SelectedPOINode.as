@@ -75,9 +75,11 @@ package net.systemeD.potlatch2.controller {
 */      
         override public function enterState():void {
             selectNode(initNode);
+			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState():void {
             clearSelection();
+			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

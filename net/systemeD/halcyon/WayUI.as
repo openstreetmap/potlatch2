@@ -194,12 +194,14 @@ package net.systemeD.halcyon {
 			var r:Number;
 			var nodetags:Object;
 			var highlight:Boolean=stateClasses["showNodes"]; // !=null
+			var nodeSelected:int=stateClasses["nodeSelected"];
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
 				nodetags=node.getTagsCopy();
 				if (i==0) { nodetags['_heading']= heading[i]; }
 				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
 				if (highlight) { nodetags[':selectedway']='yes'; }
+				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
 				sl=map.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
 					if (!map.pois[node.id]) { map.pois[node.id]=new NodeUI(node,map,r); }

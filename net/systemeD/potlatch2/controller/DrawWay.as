@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Elastic;
+	import net.systemeD.halcyon.Globals;
 
 	public class DrawWay extends SelectedWay {
 		private var elastic:Elastic;
@@ -72,11 +73,13 @@ package net.systemeD.potlatch2.controller {
 			var node:Node = selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0);
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
+			Globals.vars.root.addDebug("**** -> "+this);
 		}
 		override public function exitState():void {
 			super.exitState();
 			elastic.removeSprites();
 			elastic = null;
+			Globals.vars.root.addDebug("**** <- "+this);
 		}
 		override public function toString():String {
 			return "DrawWay";

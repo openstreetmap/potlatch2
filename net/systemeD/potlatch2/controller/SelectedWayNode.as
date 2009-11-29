@@ -9,28 +9,24 @@ package net.systemeD.potlatch2.controller {
         protected var initNode:Node;
         
         public function SelectedWayNode(way:Way,node:Node) {
-			Globals.vars.root.addDebug("- SelectedWayNode: constructor");
 			super (way);
             initNode = node;
         }
  
         protected function selectNode(way:Way,node:Node):void {
-			Globals.vars.root.addDebug("- SelectedWayNode: selectNode");
             if ( way == selectedWay && node == selectedNode )
                 return;
 
             clearSelection();
             controller.setTagViewer(node);
-            controller.map.setHighlight(node, { selected: true });
-            controller.map.setHighlight(way, { showNodes: true });
+            controller.map.setHighlight(way, { showNodes: true, nodeSelected: node.id });
             selectedWay = way;   initWay  = way;
             selectedNode = node; initNode = node;
         }
                 
         override protected function clearSelection():void {
             if ( selectedNode != null ) {
-                controller.map.setHighlight(selectedNode, { selected: false });
-            	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false });
+            	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false, nodeSelected: null });
                 controller.setTagViewer(null);
                 selectedNode = null;
 				selectedWay = null;
@@ -44,30 +40,25 @@ package net.systemeD.potlatch2.controller {
             if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
-					Globals.vars.root.addDebug("- SelectedWayNode: start new way");
                     var way:Way = controller.connection.createWay({}, [entity, entity]);
                     return new DrawWay(way, true);
 				} else if ( entity is Node ) {
 					// select node within way
-					Globals.vars.root.addDebug("- SelectedWayNode: select other node");
 					return new SelectedWayNode(selectedWay,Node(entity));
                 } else if ( entity is Way ) {
 					// select way
-					Globals.vars.root.addDebug("- SelectedWayNode: select way");
 					return new SelectedWay(selectedWay);
                 } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
-					Globals.vars.root.addDebug("- SelectedWayNode: deselect");
                     return new NoSelection();
 				}
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
 				if ( entity is Way && focus==selectedWay && event.shiftKey) {
 					// insert node within way (shift-click)
-              		var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event);
+              		var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
 					d.forceDragStart();
 					return d;
 				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
-					Globals.vars.root.addDebug("- SelectedWayNode: dragwaynode");
-                    return new DragWayNode(selectedWay, Node(entity), event);
+                    return new DragWayNode(selectedWay, Node(entity), event, false);
 				}
             }
 
@@ -76,6 +67,11 @@ package net.systemeD.potlatch2.controller {
 
 		override public function enterState():void {
             selectNode(initWay,initNode);
+			Globals.vars.root.addDebug("**** -> "+this);
+        }
+		override public function exitState():void {
+            clearSelection();
+			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {
