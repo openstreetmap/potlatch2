@@ -286,7 +286,15 @@ package net.systemeD.halcyon {
 
         public function setHighlight(entity:Entity, settings:Object):void {
 			var stateType:String;
-            if ( entity is Way ) {
+			var ui:EntityUI=null;
+			if      ( entity is Way  ) { ui = ways[entity.id]; }
+			else if ( entity is Node ) { ui = pois[entity.id]; }
+			if (ui==null) { return; }
+			for (stateType in settings) {
+				ui.setHighlight(stateType, settings[stateType]);
+			}
+			ui.redraw();
+/*            if ( entity is Way ) {
                 var wayUI:WayUI = ways[entity.id];
                 if (wayUI==null) { return; }
 				for (stateType in settings) {
@@ -294,13 +302,14 @@ package net.systemeD.halcyon {
 				}
 				wayUI.redraw();
             } else if (entity is Node) {
-				var nodeUI:NodeUI = nodes[entity.id];
+				var nodeUI:NodeUI = pois[entity.id];
                 if (nodeUI==null) { return; }
 				for (stateType in settings) {
                    	nodeUI.setHighlight(stateType, settings[stateType]);
 				}
 				nodeUI.redraw();
 			}
+*/
         }
 
         // Handle mouse events on ways/nodes

@@ -33,16 +33,10 @@ package net.systemeD.halcyon {
 		    updatePosition();
 		}
 		
-		public function redraw(sl:StyleList=null,forceDraw:Boolean=false):Boolean {
-			// *** forcedraw can be removed
+		override public function redraw(sl:StyleList=null):Boolean {
 			var tags:Object = node.getTagsCopy();
-
-			// special tags
+			tags=applyStateClasses(tags);
 			if (!node.hasParentWays) { tags[':poi']='yes'; }
-            for (var stateKey:String in stateClasses) {
-                tags[":"+stateKey] = 'yes';
-            }
-
 			if (!sl) { sl=map.ruleset.getStyles(this.node,tags); }
 
 			var inWay:Boolean=node.hasParentWays;

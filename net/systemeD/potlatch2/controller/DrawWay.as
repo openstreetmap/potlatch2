@@ -10,6 +10,8 @@ package net.systemeD.potlatch2.controller {
 		private var elastic:Elastic;
 		private var editEnd:Boolean;
 		private var leaveNodeSelected:Boolean;
+		private var lastClick:Entity=null;
+		private var lastClickTime:Date;
 		
 		public function DrawWay(way:Way, editEnd:Boolean, leaveNodeSelected:Boolean) {
 			super(way);
@@ -26,16 +28,24 @@ package net.systemeD.potlatch2.controller {
 				if ( entity == null ) {
 					node = createAndAddNode(event);
 					resetElastic(node);
+					lastClick=node;
 				} else if ( entity is Node ) {
-					appendNode(entity as Node);
-					controller.map.setHighlight(focus, { showNodesHover: false });
-					controller.map.setHighlight(selectedWay, { showNodes: true });
-					resetElastic(entity as Node);
+					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
+						return stopDrawing();
+					} else {
+						appendNode(entity as Node);
+						controller.map.setHighlight(focus, { showNodesHover: false });
+						controller.map.setHighlight(selectedWay, { showNodes: true });
+						resetElastic(entity as Node);
+						lastClick=entity;
+					}
 				} else if ( entity is Way ) {
 					node = createAndAddNode(event);
 					Way(entity).insertNodeAtClosestPosition(node, true);
 					resetElastic(node);
+					lastClick=node;
 				}
+				lastClickTime=new Date();
 			} else if ( event.type == MouseEvent.MOUSE_MOVE ) {
 				mouse = new Point(
 						  controller.map.coord2lon(event.localX),
@@ -65,11 +75,20 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if ( event.keyCode == 13 || event.keyCode == 27 ) {
-				if ( leaveNodeSelected ) 
-				    return new SelectedWayNode(selectedWay, selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0));
-				else
-				    return new SelectedWay(selectedWay);
+			if ( event.keyCode == 13 || event.keyCode == 27 ) { return stopDrawing(); }
+			return this;
+		}
+		
+		protected function stopDrawing():ControllerState {
+			if ( selectedWay.length<2) {
+				// ** probably needs to call a proper 'delete way' method
+				controller.map.setHighlight(selectedWay, { showNodes: false });
+				delete controller.map.ways[selectedWay.id];
+				return new NoSelection();
+			} else if ( leaveNodeSelected ) {
+			    return new SelectedWayNode(selectedWay, selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0));
+			} else {
+			    return new SelectedWay(selectedWay);
 			}
 			return this;
 		}

@@ -18,14 +18,14 @@ package net.systemeD.potlatch2.controller {
 
             clearSelection();
             controller.setTagViewer(way);
-            controller.map.setHighlight(way, { selected: true, showNodes: true });
+            controller.map.setHighlight(way, { selected: true, showNodes: true, hover: false });
             selectedWay = way;
             initWay = way;
         }
 
         protected function clearSelection():void {
             if ( selectedWay != null ) {
-            	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false });
+            	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false, hover: false });
                 controller.setTagViewer(null);
                 selectedWay = null;
             }
@@ -43,10 +43,6 @@ package net.systemeD.potlatch2.controller {
 				} else if ( entity is Way ) {
 					// select way
                     selectWay(entity as Way);
-                } else if ( entity is Node ) {
-					// *** select node
-					Globals.vars.root.addDebug("- selected POI from SelectedWay");
-                    trace("select poi");
                 } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
                     return new NoSelection();
 				}
@@ -57,7 +53,14 @@ package net.systemeD.potlatch2.controller {
 					d.forceDragStart();
 					return d;
 				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
+					// select node within this way
                     return new DragWayNode(selectedWay, Node(entity), event, false);
+                } else if ( focus is Node ) {
+					// select POI node
+					return new DragPOINode(entity as Node,event,false);
+                } else if ( entity is Node && focus is Way ) {
+					// select way node
+					return new DragWayNode(focus as Way,entity as Node,event,false);
 				}
             }
 

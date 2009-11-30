@@ -4,8 +4,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
 
-	/* **** this is largely unfinished **** */
-
     public class SelectedPOINode extends ControllerState {
         protected var selectedNode:Node;
         protected var initNode:Node;
@@ -35,10 +33,12 @@ package net.systemeD.potlatch2.controller {
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.MOUSE_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
+            var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
 
             if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Way ) {
-                    return new SelectedWay(Way(entity));
+                    return new SelectedWay(entity as Way);
+				// ** do we need 'entity is Node && focus is Way' for POIs in ways?
                 } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
                     return new NoSelection();
 				}
@@ -49,30 +49,16 @@ package net.systemeD.potlatch2.controller {
 //					d.forceDragStart();
 //					return d;
 //				} else
-				if ( entity is Node && entity.hasParent(selectedWay) ) {
-                    return new DragWayNode(selectedWay, Node(entity), event);
+                if ( focus is Node ) {
+					return new DragPOINode(entity as Node,event,false);
+                } else if ( entity is Node && focus is Way ) {
+					return new DragWayNode(focus as Way,entity as Node,event,false);
 				}
             }
 
             return this;
         }
 
-/*      public function clickOnWay(event:MouseEvent, entity:Entity):ControllerState {
-            if ( entity is Node ) {
-                if ( selectedNode == entity ) {
-                    var i:uint = selectedWay.indexOfNode(selectedNode);
-                    if ( i == 0 )
-                        return new DrawWay(selectedWay, false);
-                    else if ( i == selectedWay.length - 1 )
-                        return new DrawWay(selectedWay, true);
-                } else {
-                    selectNode(entity as Node);
-                }
-            }
-            
-            return this;
-        }
-*/      
         override public function enterState():void {
             selectNode(initNode);
 			Globals.vars.root.addDebug("**** -> "+this);
@@ -83,7 +69,7 @@ package net.systemeD.potlatch2.controller {
         }
 
         override public function toString():String {
-            return "SelectedNode";
+            return "SelectedPOINode";
         }
 
     }

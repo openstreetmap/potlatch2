@@ -13,12 +13,13 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if ( event.type == MouseEvent.CLICK ) {
-				if ( focus is Way ) {
+			if ( event.type == MouseEvent.MOUSE_DOWN ) {
+				if ( entity is Way ) {
 					return new SelectedWay(focus as Way);
-				} else if ( focus is Node ) {
-					// *** select node
-					Globals.vars.root.addDebug("- selected POI from NoSelection");
+                } else if ( focus is Node ) {
+					return new DragPOINode(entity as Node,event,false);
+                } else if ( entity is Node && focus is Way ) {
+					return new DragWayNode(focus as Way,entity as Node,event,false);
 				}
 			} else if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;

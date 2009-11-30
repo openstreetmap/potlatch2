@@ -112,14 +112,12 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Redraw
 
-		public function redraw():void {
+		override public function redraw(sl:StyleList=null):Boolean {
 			removeSprites();
 
             // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();
-            for (var stateKey:String in stateClasses) {
-                tags[":"+stateKey] = 'yes';
-            }
+			tags=applyStateClasses(tags);
 			if (way.isArea()) { tags[':area']='yes'; }
 
 			// Which layer?
@@ -128,7 +126,7 @@ package net.systemeD.halcyon {
                 layer=Math.min(Math.max(tags['layer']+5,-5),5)+5;
 
 			// Iterate through each sublayer, drawing any styles on that layer
-			var sl:StyleList=map.ruleset.getStyles(this.way, tags);
+			if (!sl) { sl=map.ruleset.getStyles(this.way, tags); }
 			var drawn:Boolean;
 			for (var sublayer:int=10; sublayer>=0; sublayer--) {
 				if (sl.shapeStyles[sublayer]) {
@@ -213,7 +211,7 @@ package net.systemeD.halcyon {
 					map.pois[node.id].removeSprites();
 				}
 			}
-			if (!drawn) { return; }
+			if (!drawn) { return false; }
 			
             // create a generic "way" hitzone sprite
             hitzone = new Sprite();
@@ -223,6 +221,7 @@ package net.systemeD.halcyon {
             hitzone.visible = false;
 			createListenSprite(hitzone);
 
+			return true;
 		}
 		
 		// ------------------------------------------------------------------------------------------

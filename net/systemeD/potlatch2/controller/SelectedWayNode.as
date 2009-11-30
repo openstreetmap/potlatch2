@@ -59,6 +59,8 @@ package net.systemeD.potlatch2.controller {
 					return d;
 				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
                     return new DragWayNode(selectedWay, Node(entity), event, false);
+				} else if ( focus is Node ) {
+					return new DragPOINode(entity as Node,event,false);
 				}
             }
 

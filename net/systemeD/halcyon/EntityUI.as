@@ -5,6 +5,7 @@ package net.systemeD.halcyon {
 	import flash.text.AntiAliasType;
 	import flash.text.GridFitType;
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.styleparser.StyleList;
 
 	public class EntityUI {
 
@@ -78,6 +79,17 @@ package net.systemeD.halcyon {
                 delete stateClasses[stateType];
             }
         }
+
+		protected function applyStateClasses(tags:Object):Object {
+            for (var stateKey:String in stateClasses) {
+                tags[":"+stateKey] = 'yes';
+            }
+			return tags;
+		}
+		
+		public function redraw(sl:StyleList=null):Boolean {
+			return false;
+		}
 
 	}
 
