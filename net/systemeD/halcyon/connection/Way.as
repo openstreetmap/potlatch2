@@ -17,7 +17,7 @@ package net.systemeD.halcyon.connection {
 			updateEntityProperties(version,tags,loaded); this.nodes=nodes;
 			for each (node in nodes) { node.addParent(this); }
 		}
-
+		
         public function get length():uint {
             return nodes.length;
         }
@@ -51,6 +51,20 @@ package net.systemeD.halcyon.connection {
 			markDirty();
             dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], this, index));
         }
+
+		public function removeAllNodes():void {
+			var node:Node;
+			while (nodes.length) { 
+				node=nodes.pop();
+				dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, this, 0));
+				// ** the event mechanism calls redraw once per wayNodeRemoved, which isn't too efficient
+				//    so we should probably add a 'redraw' flag to WayNodeEvent
+				node.removeParent(this);
+			}
+			// ** we should send an event to delete the entire way
+		}
+
+
 
         /**
          * Finds the 1st way segment which intersects the projected

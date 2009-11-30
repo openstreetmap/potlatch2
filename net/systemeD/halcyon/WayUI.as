@@ -114,6 +114,7 @@ package net.systemeD.halcyon {
 
 		override public function redraw(sl:StyleList=null):Boolean {
 			removeSprites();
+			if (way.length==0) { return false; }
 
             // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();

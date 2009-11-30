@@ -17,6 +17,11 @@ package net.systemeD.potlatch2.controller {
 			super(way);
 			this.editEnd = editEnd;
 			this.leaveNodeSelected = leaveNodeSelected;
+			if (way.length==1 && way.getNode(0).parentWays.length==1) {
+				// drawing new way, so keep track of click in case creating a POI
+				lastClick=way.getNode(0);
+				lastClickTime=new Date();
+			}
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
@@ -31,7 +36,16 @@ package net.systemeD.potlatch2.controller {
 					lastClick=node;
 				} else if ( entity is Node ) {
 					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
-						return stopDrawing();
+						if (selectedWay.length==1 && selectedWay.getNode(0).parentWays.length==1) {
+							// double-click to create new POI
+							node=selectedWay.getNode(0);
+							stopDrawing();
+							controller.connection.registerPOI(node);
+							return new SelectedPOINode(node);
+						} else {
+							// double-click at end of way
+							return stopDrawing();
+						}
 					} else {
 						appendNode(entity as Node);
 						controller.map.setHighlight(focus, { showNodesHover: false });
@@ -83,6 +97,7 @@ package net.systemeD.potlatch2.controller {
 			if ( selectedWay.length<2) {
 				// ** probably needs to call a proper 'delete way' method
 				controller.map.setHighlight(selectedWay, { showNodes: false });
+				selectedWay.removeAllNodes();
 				delete controller.map.ways[selectedWay.id];
 				return new NoSelection();
 			} else if ( leaveNodeSelected ) {

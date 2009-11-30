@@ -12,7 +12,7 @@ Potlatch 2: main outstanding issues
 
 * Delete points and ways
 * Split and merge ways
-* POI drawing (drag and drop/double-click)
+* Drag-and-drop POIs
 * Undo/redo
 * Reverse way direction
 
