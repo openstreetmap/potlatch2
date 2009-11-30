@@ -70,9 +70,10 @@ package net.systemeD.halcyon.styleparser {
 				tf.height = tf.textHeight+4;
 			}
 			if (text_halo_radius>0) { tf.filters=getHaloFilter(); }
-			d.x=x-tf.width/2;
-			d.y=y+(text_offset ? text_offset : 0);
+			d.x=x;
+			d.y=y; tf.y=(text_offset ? text_offset : 0);
 			d.addChild(tf);
+
 			return tf;
 		}
 

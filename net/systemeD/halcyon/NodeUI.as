@@ -116,12 +116,10 @@ package net.systemeD.halcyon {
 			if (sl.shapeStyles[sublayer]) {
 				var s:ShapeStyle=sl.shapeStyles[sublayer];
 				if (s.color) { icon.graphics.beginFill(s.color); }
-				if (s.casing_width || s.casing_color!=false) {
+				if (s.casing_width || !isNaN(s.casing_color)) {
 					icon.graphics.lineStyle(s.casing_width ? s.casing_width : 1,
 											s.casing_color ? s.casing_color : 0,
 											s.casing_opacity ? s.casing_opacity : 1);
-					// ** this appears to give casing to things that shouldn't have it
-					// Globals.vars.root.addDebug("casing: "+(s.casing_width ? s.casing_width : 1)+","+(s.casing_color ? s.casing_color : 0)+","+(s.casing_opacity ? s.casing_opacity : 1)); 
 				}
 			}
 
@@ -155,8 +153,6 @@ package net.systemeD.halcyon {
 		private function updatePosition():void {
 			if (!loaded) { return; }
 
-			// ** this won't work with text objects. They have a different .x and .y
-			//    and (obviously) don't need to be rotated. Needs fixing
 			for (var i:uint=0; i<sprites.length; i++) {
 				var d:DisplayObject=sprites[i];
 				d.x=0; d.y=0; d.rotation=0;
