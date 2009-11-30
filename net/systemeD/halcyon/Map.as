@@ -294,22 +294,6 @@ package net.systemeD.halcyon {
 				ui.setHighlight(stateType, settings[stateType]);
 			}
 			ui.redraw();
-/*            if ( entity is Way ) {
-                var wayUI:WayUI = ways[entity.id];
-                if (wayUI==null) { return; }
-				for (stateType in settings) {
-                   	wayUI.setHighlight(stateType, settings[stateType]);
-				}
-				wayUI.redraw();
-            } else if (entity is Node) {
-				var nodeUI:NodeUI = pois[entity.id];
-                if (nodeUI==null) { return; }
-				for (stateType in settings) {
-                   	nodeUI.setHighlight(stateType, settings[stateType]);
-				}
-				nodeUI.redraw();
-			}
-*/
         }
 
         // Handle mouse events on ways/nodes
