@@ -1,14 +1,16 @@
 Potlatch 2: main outstanding issues
-(last updated 19th November 2009)
+(last updated 30th November 2009)
 -----------------------------------
 
-== Current issues ==
+== Code tidying ==
 
-* Drag POI nodes (DragPOINode) and select them
-* Needs some sort of _width attribute so we can draw highlights 2px wider than the largest stroke (difficult because styles are decided before drawing)
+* A fair amount of the mouse-handling in each ControllerState is shared with others - 
+  and some probably should be (e.g. unhovering). Can we refactor?
 
-== Core drawing ==
 
+== Core geometry ==
+
+* Delete points and ways
 * Split and merge ways
 * POI drawing (drag and drop/double-click)
 * Undo/redo
@@ -38,5 +40,7 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
+* Needs some sort of _width attribute so we can draw highlights 2px wider than the largest stroke 
+  (difficult because styles are decided before drawing)
 * Shields
 * Complete MapCSS support
