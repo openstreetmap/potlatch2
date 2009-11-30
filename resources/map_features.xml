@@ -423,7 +423,15 @@
     <tag k="railway" v="subway"/>
   </feature>
 
-
+  <feature name="Railway Station">
+    <icon image="features/transport__railway.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+    
+    <line/>
+    <tag k="railway" v="station"/>
+  </feature>
+  
   <!-- building -->
 
   <feature name="Building">
