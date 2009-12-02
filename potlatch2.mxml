@@ -40,7 +40,8 @@
             rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
         <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
-        <mx:Label id="dataWorking" text="" right="20" top="3"
+        <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
+            enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
       </mx:Canvas>
     </mx:HDividedBox>
