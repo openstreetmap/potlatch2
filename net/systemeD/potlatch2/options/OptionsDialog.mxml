@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        layout="vertical" showCloseButton="true"
+        horizontalAlign="center" title="Help"
+        width="350" height="250" verticalGap="0">
+  <mx:Script><![CDATA[
+    import mx.managers.PopUpManager;
+    import mx.events.CloseEvent;
+    import mx.core.Application;
+    
+    public function init():void {
+        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.centerPopUp(this);
+        this.addEventListener(CloseEvent.CLOSE, optionsDialog_close);
+    }
+    
+    private function optionsDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+    }
+
+              ]]>
+  </mx:Script>
+  <mx:Text>
+    <mx:text>
+      You can take the red pill, or the blue pill.
+    </mx:text>
+  </mx:Text>
+  <mx:ControlBar>
+    <mx:Spacer width="100%"/>
+    <mx:Button label="Red Pill" click="PopUpManager.removePopUp(this);"/>
+    <mx:Button label="Blue Pill" click="PopUpManager.removePopUp(this);"/>
+  </mx:ControlBar>
+
+</mx:TitleWindow>
