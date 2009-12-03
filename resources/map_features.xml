@@ -272,9 +272,16 @@
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
-    <line/>
     <tag k="highway" v="pedestrian"/>
-
+    <!-- pedestrian roads can be lines or areas, with different tags -->
+    <!-- TODO - implement this! -->
+    <line>
+      <tag k="highway" v="pedestrian"/>
+    </line>
+    <area>
+      <tag k="highway" v="pedestrian"/>
+      <tag k="area" v="yes"/>
+    </area>
     <inputSet ref="minorRoad"/>
   </feature>
 
@@ -428,7 +435,7 @@
       <font size="14pt"><b>${name}</b></font>
     </icon>
     
-    <line/>
+    <point/>
     <tag k="railway" v="station"/>
   </feature>
   
@@ -440,7 +447,7 @@
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
 
-    <line/>
+    <area/>
     <tag k="building" v="*"/>
     <inputSet ref="buildingAddress" />
   </feature>
@@ -450,7 +457,7 @@
       <b>${name}</b><br/>
     </icon>
 
-    <line/>
+    <area/>
     <tag k="leisure" v="park"/>
   </feature>
   
@@ -459,7 +466,7 @@
       <b>${name}</b><br/>
     </icon>
 
-    <line/>
+    <area/>
     <tag k="landuse" v="forest"/>
   </feature>
 
