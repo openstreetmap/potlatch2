@@ -85,7 +85,7 @@ way .highlighted { color: pink; }
 /* Interactive editors may choose different behaviour when a user mouses-over or selects
    an object. Potlatch 2 supports these but the stand-alone Halcyon viewer does not */
 
-way :hover	{ z-index: 2; width: 8; color: gray; }
+way :hover	{ z-index: 2; width: 8; color: #ffff99; }
 way :selected { z-index: 2; width: 8; color: yellow; }
 way !:drawn { z-index:10; width: 0.5; color: gray; } 
 
