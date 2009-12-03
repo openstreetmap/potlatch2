@@ -33,17 +33,17 @@ package net.systemeD.halcyon.styleparser {
 		private static const ZOOM_MAX:RegExp	=/^      \-(\d+) $/sx;
 		private static const ZOOM_SINGLE:RegExp	=/^        (\d+) $/sx;
 
-		private static const CONDITION_TRUE:RegExp	=/^ \s* (\w+) \s* = \s* yes \s*  $/isx;
-		private static const CONDITION_FALSE:RegExp	=/^ \s* (:\w+) \s* = \s* no  \s*  $/isx;
-		private static const CONDITION_SET:RegExp	=/^ \s* (\w+) \s* $/sx;
-		private static const CONDITION_UNSET:RegExp	=/^ \s* !(\w+) \s* $/sx;
-		private static const CONDITION_EQ:RegExp	=/^ \s* (\w+) \s* =  \s* (.+) \s* $/sx;
-		private static const CONDITION_NE:RegExp	=/^ \s* (\w+) \s* != \s* (.+) \s* $/sx;
-		private static const CONDITION_GT:RegExp	=/^ \s* (\w+) \s* >  \s* (.+) \s* $/sx;
-		private static const CONDITION_GE:RegExp	=/^ \s* (\w+) \s* >= \s* (.+) \s* $/sx;
-		private static const CONDITION_LT:RegExp	=/^ \s* (\w+) \s* <  \s* (.+) \s* $/sx;
-		private static const CONDITION_LE:RegExp	=/^ \s* (\w+) \s* <= \s* (.+) \s* $/sx;
-		private static const CONDITION_REGEX:RegExp	=/^ \s* (\w+) \s* =~\/ \s* (.+) \/ \s* $/sx;
+                private static const CONDITION_TRUE:RegExp      =/^ \s* ([:\w]+) \s* = \s* yes \s*  $/isx;
+                private static const CONDITION_FALSE:RegExp     =/^ \s* ([:\w]+) \s* = \s* no  \s*  $/isx;
+                private static const CONDITION_SET:RegExp       =/^ \s* ([:\w]+) \s* $/sx;
+                private static const CONDITION_UNSET:RegExp     =/^ \s* !([:\w]+) \s* $/sx;
+                private static const CONDITION_EQ:RegExp        =/^ \s* ([:\w]+) \s* =  \s* (.+) \s* $/sx;
+                private static const CONDITION_NE:RegExp        =/^ \s* ([:\w]+) \s* != \s* (.+) \s* $/sx;
+                private static const CONDITION_GT:RegExp        =/^ \s* ([:\w]+) \s* >  \s* (.+) \s* $/sx;
+                private static const CONDITION_GE:RegExp        =/^ \s* ([:\w]+) \s* >= \s* (.+) \s* $/sx;
+                private static const CONDITION_LT:RegExp        =/^ \s* ([:\w]+) \s* <  \s* (.+) \s* $/sx;
+                private static const CONDITION_LE:RegExp        =/^ \s* ([:\w]+) \s* <= \s* (.+) \s* $/sx;
+                private static const CONDITION_REGEX:RegExp     =/^ \s* ([:\w]+) \s* =~\/ \s* (.+) \/ \s* $/sx;
 
 		private static const ASSIGNMENT_EVAL:RegExp	=/^ \s* (\S+) \s* \:      \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
 		private static const ASSIGNMENT:RegExp		=/^ \s* (\S+) \s* \:      \s*          (.+?) \s*                   $/sx;
