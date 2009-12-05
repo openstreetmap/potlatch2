@@ -27,6 +27,7 @@ package net.systemeD.halcyon {
 
         public function TileSet(map:Map) {
 			this.map=map;
+			alpha=0.5;
 			createSprites();
 		}
 	
@@ -42,6 +43,10 @@ package net.systemeD.halcyon {
 			for (var i:uint=map.MINSCALE; i<=map.MAXSCALE; i++) {
 				this.addChild(new Sprite());
 			}
+		}
+
+		public function setDimming(dim:Boolean):void {
+			alpha=dim ? 0.5 : 1;
 		}
 
 		public function changeScale(scale:uint):void {
@@ -93,7 +98,7 @@ package net.systemeD.halcyon {
 					Sprite(l).addChild(loader);
 					loader.x=map.lon2coord(tile2lon(tx));
 					loader.y=map.lat2coord(tile2lat(ty));
-					loader.alpha=0.5;
+//					loader.alpha=0.5;
 				}
 			}
 		}
