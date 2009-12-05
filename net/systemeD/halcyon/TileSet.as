@@ -3,9 +3,9 @@ package net.systemeD.halcyon {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.net.*;
+	import flash.system.LoaderContext;
 	
 	import net.systemeD.halcyon.ImageURLLoader;
-	import flash.system.LoaderContext;
 	
     public class TileSet extends Sprite {
 
@@ -30,13 +30,12 @@ package net.systemeD.halcyon {
 			createSprites();
 		}
 	
-		public function init(url:String=null):void {
+		public function init(url:String=null, update:Boolean=false):void {
 			baseurl=url;
 			tiles={};
-			if (!url) { 
-				while (this.numChildren) { this.removeChildAt(0); }
-				createSprites();
-			}
+			while (numChildren) { removeChildAt(0); }
+			createSprites();
+			if (update) { this.update(); }
 		}
 
 		private function createSprites():void {

@@ -31,9 +31,41 @@
     
     <mx:HDividedBox width="100%" height="100%">
 
-      <mx:VBox height="100%" width="25%" horizontalAlign="right">
-        <potlatch2:TagViewer width="100%" height="100%" id="tagViewer"/>
-      </mx:VBox>
+	<!-- The left-hand accordion is to give access to a small number of options that the user 
+	     may want to change rapidly: tags, of course; stylesheet; and background layer. Lesser-
+	     used options should go in the options dialogue. Tools (e.g. split ways) should probably 
+	     go in a floating palette or somesuch, so that there is access no matter which accordion 
+	     pane is open. -->
+
+	<mx:Accordion height="100%" width="25%" headerStyleName="header">
+
+		<!-- Tag viewer -->
+		<mx:VBox height="100%" width="100%" horizontalAlign="right" label="Tags">
+			<potlatch2:TagViewer width="100%" height="100%" id="tagViewer"/>
+		</mx:VBox>
+
+		<!-- Stylesheet -->
+		<!-- should be pretty much the same as the background selector below, with the
+		     added ability to enter your own stylesheet URL -->
+		<mx:VBox label="Map style" width="100%">
+		</mx:VBox>
+
+		<!-- Background -->
+		<mx:VBox label="Background" width="100%">
+		<!-- Needs a dimming checkbox control -->
+	    <mx:List width="100%" height="100%" id="background" change="updateBackground();"> 
+			<!-- This should be pulled in from an XML file rather than sitting in the source -->
+	        <mx:dataProvider>
+	            <mx:Object label="None" data="" />
+	            <mx:Object label="Yahoo!" data="yahoo" />
+	            <mx:Object label="New Popular Edition" data="http://npe.openstreetmap.org/$z/$x/$y.png" />
+	            <mx:Object label="OpenCycleMap" data="http://andy.sandbox.cloudmade.com/tiles/cycle/$z/$x/$y.png" />
+	        </mx:dataProvider>
+	    </mx:List>
+		</mx:VBox>
+
+	</mx:Accordion>
+
       <mx:Canvas width="75%" height="100%">
         <mx:Canvas id="map_area" resize="onResizeMap()"
             top="0" left="0" width="100%" height="100%">
@@ -53,9 +85,9 @@
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.save.SaveManager;
-                import net.systemeD.potlatch2.help.*;
-                import net.systemeD.potlatch2.options.*;
-                import mx.managers.PopUpManager;
+		import net.systemeD.potlatch2.help.*;
+		import net.systemeD.potlatch2.options.*;
+		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
 		import flash.events.MouseEvent;
@@ -68,6 +100,8 @@
 		import com.yahoo.maps.api.core.location.LatLon;
 
         public var theMap:Map;
+		public var yahooListener:Object = new Object();
+		public var yahoo:YahooMap = new YahooMap(); 
 
 		private function initApp():void {
 
@@ -85,19 +119,19 @@
             b.graphics.endFill();
 			_root.addChild(b);
 
-/*			// Add Yahoo! background
-			var yahoo:YahooMap = new YahooMap(); 
+			// Add Yahoo! background
 			yahoo.init("f0a.sejV34HnhgIbNSmVHmndXFpijgGeun0fSIMG9428hW_ifF3pYKwbV6r9iaXojl1lU_dakekR", w, h);  
 			yahoo.mapType="satellite";
 			_root.addChild(yahoo);
+			yahoo.visible=false;
 
 			// Yahoo! listeners
-			var yahooListener:Object = new Object();
 			yahooListener.yahooInit=function(event:YahooMapEvent):void {
 				yahoo.zoomLevel = 18-theMap.scale;
 				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
 
 				yahooListener.moveHandler=function(event:MapEvent):void {
+					if (!yahoo.visible) { return; }
 					yahoo.zoomLevel=18-event.params.scale;
 					yahoo.centerLatLon=new LatLon(event.params.lat, event.params.lon);
 				};
@@ -109,7 +143,7 @@
 				theMap.addEventListener(MapEvent.RESIZE, yahooListener.resizeHandler);
 			}
 			yahoo.addEventListener(YahooMapEvent.MAP_INITIALIZE, yahooListener.yahooInit);
-*/
+
 			// add map
 			theMap=new Map(this.loaderInfo.parameters);
 			theMap.backdrop=b;
@@ -177,6 +211,20 @@
         private function onDataComplete(event:Event):void {
             dataWorking.visible = false;
         }
+
+		private function updateBackground():void {
+			var bg:String=background.selectedItem.data;
+			if (bg=='yahoo') {
+				theMap.tileset.init('',false);
+				yahoo.visible=true;
+				yahoo.zoomLevel = 18-theMap.scale;
+				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
+			} else {
+				theMap.tileset.init(background.selectedItem.data,true);
+				yahoo.visible=false;
+			}
+		}
+		
 	]]></mx:Script>
 
 </mx:Application>

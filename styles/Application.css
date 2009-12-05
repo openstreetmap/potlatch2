@@ -15,3 +15,9 @@ ApplicationControlBar {
   color: red;
 }
 
+.header {
+		fillColors: haloSilver, x222222;
+		fillAlphas: 1.0, 1.0;
+		selectedFillColors: haloBlue, black;
+		color: white;
+}
