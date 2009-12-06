@@ -102,6 +102,9 @@ way node[barrier=gate], way node[highway=gate] { icon-image: icons/gate.png; }
 way[railway=rail]
 	{ z-index: 3; color: black; width: 5; } 
 	{ z-index: 4; color: white; width: 3; dashes: 12,12; }
+way[railway=subway]
+        { z-index: 3; color: #444444; width: 5; }
+        { z-index: 4; color: white; width: 3; dashes: 8,8; }
 
 /* Change the road colour based on dynamically set "highlighted" tag (see earlier) */
 

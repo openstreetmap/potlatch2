@@ -117,6 +117,30 @@
     <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
   </inputSet> 
   
+  <inputSet id="naptan">
+    <input type="freetext" presence="onTagMatch" category="Naptan" description="12 character internal Naptan ID" name="Atco Code" key="naptan:AtcoCode" />
+    <input type="choice" presence="onTagMatch" category="Naptan" description="The eight-point compass bearning" name="Naptan Bearing" key="naptan:Bearing" >
+      <choice value="N"  match="N"  text="N"  description=""/>
+      <choice value="NE" match="NE" text="NE" description=""/>
+      <choice value="E"  match="E"  text="E"  description=""/>
+      <choice value="SE" match="SE" text="SE" description=""/>
+      <choice value="S"  match="S"  text="S"  description=""/>
+      <choice value="SW" match="SW" text="SW" description=""/>
+      <choice value="W"  match="W"  text="W"  description=""/>
+      <choice value="NW" match="NW" text="NW" description=""/>
+    </input>
+    <input type="freetext" presence="onTagMatch" category="Naptan" description="The naptan common name" name="Naptan Common Name (read-only)" key="naptan:CommonName" />
+    <input type="freetext" presence="onTagMatch" category="Naptan" description="" name="Naptan Indicator (read-only)" key="naptan:Indicator" />
+    <input type="freetext" presence="onTagMatch" category="Naptan" description="" name="Naptan Street (read-only)" key="naptan:Street" />
+    <input type="freetext" presence="onTagMatch" category="Naptan" description="Delete this when the details have been verified on-the-ground" name="Naptan Verified?" key="naptan:verified" />
+  </inputSet>
+  
+  <inputSet id="buses">
+    <input type="freetext" presence="always" category="Bus Stop" name="Stop Name" key="name" description="The name of the bus stop" />
+    <input type="freetext" presence="always" category="Bus Stop" name="Local Ref" key="local_ref" description="The local reference of the stop, e.g. L, BX" />
+    <inputSet ref="naptan" />
+  </inputSet>
+  
   <feature name="Motorway">
     <category>roads</category>
     <icon image="features/highway__motorway.png">
@@ -439,7 +463,7 @@
     <tag k="railway" v="station"/>
   </feature>
   
-  <!-- building -->
+  <!-- areas -->
 
   <feature name="Building">
     <icon>
@@ -469,6 +493,15 @@
     <area/>
     <tag k="landuse" v="forest"/>
   </feature>
-
+  
+  <!-- POI -->
+  <feature name="Bus Stop">
+    <icon>
+      ${name} ${local_ref}
+    </icon>
+    <point />
+    <tag k="highway" v="bus_stop"/>
+    <inputSet ref="buses" />
+  </feature>
 </mapFeatures>
 
