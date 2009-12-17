@@ -17,7 +17,7 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
 	import net.systemeD.halcyon.Globals;
-
+	
 //	for experimental export function:
 //	import flash.net.FileReference;
 //	import com.adobe.images.JPGEncoder;

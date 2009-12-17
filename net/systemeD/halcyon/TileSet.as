@@ -5,8 +5,6 @@ package net.systemeD.halcyon {
 	import flash.net.*;
 	import flash.system.LoaderContext;
 	
-	import net.systemeD.halcyon.ImageURLLoader;
-	
     public class TileSet extends Sprite {
 
 		public var tile_l:int;

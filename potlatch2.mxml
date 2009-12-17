@@ -87,6 +87,7 @@
 		import net.systemeD.potlatch2.save.SaveManager;
 		import net.systemeD.potlatch2.help.*;
 		import net.systemeD.potlatch2.options.*;
+		import net.systemeD.potlatch2.utils.*;
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
@@ -198,6 +199,9 @@
             var conn:Connection = Connection.getConnectionInstance();
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
             conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
+
+			// and to import a shapefile...
+//			var importer:ShpImporter = new ShpImporter(theMap, ["http://127.0.0.1/~richard/shp/wildrnp020.shp","http://127.0.0.1/~richard/shp/wildrnp020.shx","http://127.0.0.1/~richard/shp/wildrnp020.dbf"]);
 		}
 
         public function onResizeMap():void {

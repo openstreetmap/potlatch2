@@ -3,7 +3,7 @@ package net.systemeD.halcyon.styleparser {
 	import flash.events.*;
 	import flash.net.*;
 	import net.systemeD.halcyon.Map;
-	import net.systemeD.halcyon.ImageURLLoader;
+	import net.systemeD.halcyon.ExtendedURLLoader;
     import net.systemeD.halcyon.connection.Entity;
 
     import net.systemeD.halcyon.connection.*;
@@ -82,9 +82,9 @@ package net.systemeD.halcyon.styleparser {
 				
 					iconsToLoad++;
 					var request:URLRequest=new URLRequest(filename);
-					var loader:ImageURLLoader=new ImageURLLoader();
+					var loader:ExtendedURLLoader=new ExtendedURLLoader();
 					loader.dataFormat=URLLoaderDataFormat.BINARY;
-					loader.filename=filename;
+					loader.info['filename']=filename;
 					loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
 					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
@@ -97,7 +97,7 @@ package net.systemeD.halcyon.styleparser {
 		// data handler
 
 		private function loadedImage(event:Event):void {
-			images[event.target.filename]=event.target.data;
+			images[event.target.info['filename']]=event.target.data;
 			iconsToLoad--;
 			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }
 		}
