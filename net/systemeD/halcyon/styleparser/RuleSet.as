@@ -20,9 +20,9 @@ package net.systemeD.halcyon.styleparser {
 
 		// variables for name, author etc.
 
-		public function RuleSet(m:Map,f:Function=null):void {
-			map=m;
-			iconCallback=f;
+		public function RuleSet(m:Map,iconLoadedCallback:Function=null):void {
+			map = m;
+			iconCallback = iconLoadedCallback;
 		}
 
 		// Get styles for an object
@@ -63,6 +63,7 @@ package net.systemeD.halcyon.styleparser {
 //			Inspector.getInstance().show();
 //			Inspector.getInstance().shelf('Choosers', choosers);
 			loadImages();
+			map.redraw();
 		}
 
 

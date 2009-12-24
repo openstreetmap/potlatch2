@@ -28,7 +28,7 @@
   </mx:ViewStack>
   </mx:HBox>
   
-  <mx:Label id="hoverInfo" text="Hover Info goes here"/>
+  <!-- mx:Label id="hoverInfo" text="Hover Info goes here"/>-->
   
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;

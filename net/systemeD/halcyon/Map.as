@@ -344,6 +344,13 @@ package net.systemeD.halcyon {
 		private function reportPosition():void {
 			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
+		
+		public function setStyle(style:String):void {
+			if (style) {
+				ruleset=new RuleSet(this,redrawPOIs);
+				ruleset.loadFromCSS(style);
+			}
+        }
 
 		// ------------------------------------------------------------------------------------------
 		// Export (experimental)

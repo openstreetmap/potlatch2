@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
+	horizontalAlign="left" backgroundColor="white" >
+	
+	<mx:List width="100%" height="100%" id="background" change="updateBackground();"> 
+	    <!-- This should be pulled in from an XML file rather than sitting in the source -->
+	    <mx:dataProvider>
+	        <mx:Object label="None" data="" />
+	        <mx:Object label="Yahoo!" data="yahoo" />
+	        <mx:Object label="New Popular Edition" data="http://npe.openstreetmap.org/$z/$x/$y.png" />
+	        <mx:Object label="OpenCycleMap" data="http://andy.sandbox.cloudmade.com/tiles/cycle/$z/$x/$y.png" />
+	    </mx:dataProvider>
+	</mx:List>
+	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
+	    change="Globals.vars.root.tileset.setDimming(dim.selected); Globals.vars.yahoo.alpha = dim.selected ? 0.5 : 1" />
+
+	<mx:Script><![CDATA[
+		import net.systemeD.halcyon.*;
+		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.potlatch2.*;
+		import com.yahoo.maps.api.YahooMap;
+		import com.yahoo.maps.api.YahooMapEvent;
+		import com.yahoo.maps.api.core.location.LatLon;
+
+		private function updateBackground():void {
+            var theMap:Map = Globals.vars.root;
+            var yahoo:YahooMap = Globals.vars.yahoo;
+			var bg:String=background.selectedItem.data;
+			if (bg=='yahoo') {
+				theMap.tileset.init('',false);
+				yahoo.visible=true;
+				yahoo.zoomLevel = 18-theMap.scale;
+				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
+			} else {
+				theMap.tileset.init(background.selectedItem.data,true);
+				yahoo.visible=false;
+			}
+		}
+
+    ]]></mx:Script>	
+</mx:VBox>
+

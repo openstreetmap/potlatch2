@@ -23,6 +23,10 @@
     <mx:WipeRight id="wipeIn" duration="250"/>
 
     <mx:ApplicationControlBar dock="true">
+        <mx:PopUpButton id="bgButton" label="Background" openAlways="true"
+            creationComplete="bgButton.popUp = new BackgroundSelector();"/>
+        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
+            creationComplete="styleButton.popUp = new StyleSelector();"/>
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
         <mx:Button label="Options" click="new OptionsDialog().init();" />
@@ -31,40 +35,8 @@
     
     <mx:HDividedBox width="100%" height="100%">
 
-	<!-- The left-hand accordion is to give access to a small number of options that the user 
-	     may want to change rapidly: tags, of course; stylesheet; and background layer. Lesser-
-	     used options should go in the options dialogue. Tools (e.g. split ways) should probably 
-	     go in a floating palette or somesuch, so that there is access no matter which accordion 
-	     pane is open. -->
-
-	<mx:Accordion height="100%" width="25%" headerStyleName="header">
-
-		<!-- Tag viewer -->
-		<mx:VBox height="100%" width="100%" horizontalAlign="right" label="Tags">
-			<potlatch2:TagViewer width="100%" height="100%" id="tagViewer"/>
-		</mx:VBox>
-
-		<!-- Stylesheet -->
-		<!-- should be pretty much the same as the background selector below, with the
-		     added ability to enter your own stylesheet URL -->
-		<mx:VBox label="Map style" width="100%">
-		</mx:VBox>
-
-		<!-- Background -->
-		<mx:VBox label="Background" width="100%">
-	    <mx:List width="100%" height="100%" id="background" change="updateBackground();"> 
-			<!-- This should be pulled in from an XML file rather than sitting in the source -->
-	        <mx:dataProvider>
-	            <mx:Object label="None" data="" />
-	            <mx:Object label="Yahoo!" data="yahoo" />
-	            <mx:Object label="New Popular Edition" data="http://npe.openstreetmap.org/$z/$x/$y.png" />
-	            <mx:Object label="OpenCycleMap" data="http://andy.sandbox.cloudmade.com/tiles/cycle/$z/$x/$y.png" />
-	        </mx:dataProvider>
-	    </mx:List>
-		<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim" change="theMap.tileset.setDimming(dim.selected); yahoo.alpha = dim.selected ? 0.5 : 1" />
-		</mx:VBox>
-
-	</mx:Accordion>
+	  <!-- Tag viewer -->
+	  <potlatch2:TagViewer width="25%" height="100%" id="tagViewer"/>
 
       <mx:Canvas width="75%" height="100%">
         <mx:Canvas id="map_area" resize="onResizeMap()"
@@ -106,9 +78,10 @@
 
 		private function initApp():void {
 
-			Globals.vars.map_area=map_area;
-			Globals.vars.root=map_area.rawChildren;			// set up global reference to root level
-			var _root:IChildList=map_area.rawChildren;		// convenient local shorthand
+			Globals.vars.map_area = map_area;
+			Globals.vars.yahoo = yahoo;
+			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
+			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
 
 			// map backdrop object
             var w:uint = map_area.width;
@@ -216,20 +189,6 @@
         private function onDataComplete(event:Event):void {
             dataWorking.visible = false;
         }
-
-		private function updateBackground():void {
-			var bg:String=background.selectedItem.data;
-			if (bg=='yahoo') {
-				theMap.tileset.init('',false);
-				yahoo.visible=true;
-				yahoo.zoomLevel = 18-theMap.scale;
-				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
-			} else {
-				theMap.tileset.init(background.selectedItem.data,true);
-				yahoo.visible=false;
-			}
-		}
-		
 	]]></mx:Script>
 
 </mx:Application>
