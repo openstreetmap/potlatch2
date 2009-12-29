@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="flexlib.containers.*"
     backgroundColor="white"
-    creationComplete="loadFeatures()">
+    initialize="loadFeatures()">
 
   <mx:ViewStack id="stack" width="100%" height="100%">
   <mx:VBox width="100%" height="100%" label="Simple">
@@ -25,7 +25,7 @@
       <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
     </mx:Label>
 
-    <mx:DataGrid editable="true" width="100%" height="100%" id="advancedTagGrid">
+    <mx:DataGrid editable="true" width="100%" height="75%" id="advancedTagGrid">
             <mx:columns>
                 <mx:DataGridColumn editable="true" dataField="key" headerText="Key"/>
                 <mx:DataGridColumn editable="true" dataField="value" headerText="Value"/>
@@ -36,6 +36,22 @@
       <mx:LinkButton label="Delete" click="removeTag()"/>
       <mx:LinkButton label="Add" click="addNewTag()"/>
     </mx:HBox>
+    
+    <mx:DataGrid editable="true" width="100%" height="25%" id="relationsGrid"
+        doubleClickEnabled="true"
+        itemDoubleClick="editRelation(ListEvent(event).rowIndex)">
+        <mx:columns>
+            <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
+            <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
+            <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+    <mx:HBox horizontalAlign="right" width="100%">
+      <mx:LinkButton label="Remove from" click="removeFromRelation()"/>
+      <mx:LinkButton label="Add to" click="addToRelation()"/>
+    </mx:HBox>
+
   </mx:VBox>
 
   </mx:ViewStack>
@@ -55,7 +71,7 @@
       
       private var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
-      private var collection:ArrayCollection;
+      private var tagDataProvider:ArrayCollection;
       private var tw:CategorySelector = null;
       private var feature:Feature = null;
 
@@ -150,12 +166,12 @@
       }
 
       private function setupAdvanced(entity:Entity):void {
-          if ( collection == null ) {
-              collection = new ArrayCollection();
-              advancedTagGrid.dataProvider = collection;
+          if ( tagDataProvider == null ) {
+              tagDataProvider = new ArrayCollection();
+              advancedTagGrid.dataProvider = tagDataProvider;
           }
 
-          collection.removeAll();
+          tagDataProvider.removeAll();
           
           if ( entity == null ) {
               advancedID.htmlText = "";
@@ -169,32 +185,69 @@
               var tags:Array = entity.getTagArray();
               tags.sortOn("key");
               for each(var tag:Tag in tags)
-                  collection.addItem(tag);
+                  tagDataProvider.addItem(tag);
+          }
+          
+          if ( entity == null ) {
+              relationsGrid.dataProvider = null;
+          } else {
+              var relations:Array = [];
+              for each( var rel:Relation in entity.parentRelations ) {
+                  var props:Object = {};
+                  props["relation"] = rel;
+                  props["id"] = rel.id;
+                  var memberIndex:uint = rel.findEntityMemberIndex(entity);
+                  props["role"] = rel.getMember(memberIndex).role;
+                  
+                  var desc:String = "";
+                  var relTags:Object = rel.getTagsHash();
+                  if ( relTags["type"] ) {
+                      desc = relTags["type"];
+                      if ( relTags[desc] )
+                          desc += " " + relTags[desc];
+                  }
+                  if ( relTags["ref"] )
+                      desc += " " + relTags["ref"];
+                  if ( relTags["name"] )
+                      desc += " " + relTags["name"];
+                  props["description"] = desc;
+                  
+                  relations.push(props);
+              }
+              relationsGrid.dataProvider = relations;
           }
       }
 
+      private function editRelation(index:uint):void {
+          trace("edit relation "+index+" "+selectedEntity.parentRelations[index]);
+          var panel:RelationEditorPanel = RelationEditorPanel(
+              PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+          panel.setRelation(selectedEntity.parentRelations[index]);
+          PopUpManager.centerPopUp(panel);
+      }
+      
       private function tagChanged(event:TagEvent):void {
           refreshFeatureIcon();
           
-          if ( collection != null ) {
+          if ( tagDataProvider != null ) {
               // check to see if the key is already in our list
               var exists:Boolean = false;
               var tag:Tag = null;
               var i:uint;
-              for ( i = 0; i < collection.length && !exists; i++ ) {
-                  tag = Tag(collection.getItemAt(i));
+              for ( i = 0; i < tagDataProvider.length && !exists; i++ ) {
+                  tag = Tag(tagDataProvider.getItemAt(i));
                   exists = tag.key == event.key;
               }
               if ( !exists ) {
                   tag = new Tag(selectedEntity, event.key, event.newValue);
-                  collection.addItem(tag);
-                  collection.refresh();
+                  tagDataProvider.addItem(tag);
+                  tagDataProvider.refresh();
               } else {
                   if ( event.newValue == null ) {
-                      collection.removeItemAt(i-1);
-                      collection.refresh();
+                      tagDataProvider.removeItemAt(i-1);
+                      tagDataProvider.refresh();
                   } else {
-                      collection.itemUpdated(tag, "value");
+                      tagDataProvider.itemUpdated(tag, "value");
                   }
               }
           }
@@ -211,13 +264,19 @@
       public function addNewTag():void {
           var newKey:String = "(new tag)";
           var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
-          collection.addItem(newTag);
-          advancedTagGrid.editedItemPosition = {rowIndex: collection.getItemIndex(newTag), columnIndex: 0};
+          tagDataProvider.addItem(newTag);
+          advancedTagGrid.editedItemPosition = {rowIndex: tagDataProvider.getItemIndex(newTag), columnIndex: 0};
       }
 
       public function removeTag():void {
           var k:String = advancedTagGrid.selectedItem.key;
           selectedEntity.setTag(k, null);
+      }
+      
+      public function addToRelation():void {
+      }
+      
+      public function removeFromRelation():void {
       }
       
       public function initFeatureBox():void {

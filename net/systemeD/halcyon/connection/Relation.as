@@ -21,6 +21,15 @@ package net.systemeD.halcyon.connection {
             return members.length;
         }
 
+        public function findEntityMemberIndex(entity:Entity):int {
+            for (var index:uint = 0; index < members.length; index++) {
+                var member:RelationMember = members[index];
+                if ( member.entity == entity )
+                    return index;
+            }
+            return -1;
+        }
+        
         public function getMember(index:uint):RelationMember {
             return members[index];
         }
@@ -49,6 +58,11 @@ package net.systemeD.halcyon.connection {
 		public override function getType():String {
 			return 'relation';
 		}
+		
+		public override function toString():String {
+            return "Relation("+id+"@"+version+"): "+members.length+" members "+getTagList();
+        }
+
     }
 
 }

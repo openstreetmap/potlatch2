@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3"
+	backgroundColor="{bg}" color="{fg}" backgroundAlpha="1.0">
+	
+	<mx:Image source="{iconImage}"/>
+    <mx:Text condenseWhite="true" width="100%" htmlText="{iconHTML}" selectable="false"/>
+    
+    <mx:Script><![CDATA[
+    import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.styleparser.MapCSS;
+    import net.systemeD.potlatch2.mapfeatures.*;
+    import flash.events.*;
+
+    private var _iconImage:String = null;
+    private var _iconHTML:String = "";
+    private var _bg:String = "white";
+    private var _fg:String = "black";
+         
+    public function setRoute(relation:Relation, icon:XMLList):void {   
+        _iconHTML = Feature.makeHTMLIcon(icon, relation);
+
+        if ( icon.length() > 0 ) {
+            if (icon[0].hasOwnProperty("@image"))
+                _iconImage = icon[0].@image;
+            if (icon[0].hasOwnProperty("@foreground"))
+                _fg = icon[0].@foreground;
+            if (icon[0].hasOwnProperty("@background"))
+                _bg = icon[0].@background;
+        }    
+
+        dispatchEvent(new Event("route_changed"));
+    }
+    
+    [Bindable(event="route_changed")]
+    private function get iconImage():String {
+        return _iconImage;
+    }
+    
+    [Bindable(event="route_changed")]
+    private function get iconHTML():String {
+        return _iconHTML;
+    }
+
+    [Bindable(event="route_changed")]
+    private function get fg():uint {
+        return MapCSS.parseCSSColor(_fg);
+    }
+
+    [Bindable(event="route_changed")]
+    private function get bg():uint {
+        return MapCSS.parseCSSColor(_bg);
+    }
+    ]]></mx:Script>
+</mx:HBox>
+

@@ -63,6 +63,7 @@ package net.systemeD.potlatch2.mapfeatures {
                 _editors.push(editor);
             }
         }
+        
         public function get editors():Array {
             return _editors;
         }
@@ -88,9 +89,13 @@ package net.systemeD.potlatch2.mapfeatures {
         
         public function htmlDetails(entity:Entity):String {
             var icon:XMLList = _xml.icon;
+            return makeHTMLIcon(icon, entity);
+        }   
+
+        public static function makeHTMLIcon(icon:XMLList, entity:Entity):String {
             if ( icon == null )
                 return "";
-
+            
             var txt:String = icon.children().toXMLString();
             var replaceTag:Function = function():String {
                 var value:String = entity.getTag(arguments[1]);

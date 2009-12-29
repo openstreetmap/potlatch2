@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edit:RelationMemberEditor
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	verticalGap="0"
+	width="100%"
+	toolTip="{fieldDescription}"
+	initialize="addRoutes()">
+
+  <mx:Label text="{fieldName}:"/>
+  <mx:VBox verticalGap="0" width="100%" id="routeIcons"/>
+  <mx:LinkButton label="Add to route"/>
+
+  <mx:Script><![CDATA[
+    import net.systemeD.halcyon.connection.*;
+    import net.systemeD.potlatch2.*;
+    import mx.managers.PopUpManager;
+    import mx.core.*;
+   
+    public function addRoutes():void {
+        for each(var relation:Relation in matchedRelations) {
+            var icon:RouteIcon = new RouteIcon();
+            icon.setRoute(relation, RouteEditorFactory(_factory).icon);
+            
+            icon.addEventListener(MouseEvent.CLICK, function(event:Event):void {
+                trace(relation+" is clicked");
+                var panel:RelationEditorPanel = RelationEditorPanel(
+                    PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+                panel.setRelation(relation);
+                PopUpManager.centerPopUp(panel);
+            });
+            routeIcons.addChild(icon);
+        }
+    }
+    
+  ]]></mx:Script>
+</edit:RelationMemberEditor>
+

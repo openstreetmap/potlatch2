@@ -349,8 +349,7 @@ package net.systemeD.halcyon.styleparser {
 				// Parse properties
 				// ** also do units, e.g. px/pt
 				if (a.match(COLOR)) {
-					if (CSSCOLORS[t[a].toLowerCase()]) { t[a]=CSSCOLORS[t[a].toLowerCase()]; }
-					else if ((o=HEX.exec(t[a]))) { t[a]=Number("0x"+o[1]); }
+					t[a] = parseCSSColor(t[a]);
 				}
 				
 				// Set in styles
@@ -394,5 +393,16 @@ package net.systemeD.halcyon.styleparser {
 			return null;
 		}
 
+        public static function parseCSSColor(colorStr:String):uint {
+            colorStr = colorStr.toLowerCase();
+            if (CSSCOLORS[colorStr])
+                return CSSCOLORS[colorStr];
+            else {
+                var match:Object = HEX.exec(colorStr);
+                if ( match )
+                    return Number("0x"+match[1]);
+            }
+            return 0;
+        }
 	}
 }

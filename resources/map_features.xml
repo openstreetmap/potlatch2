@@ -35,6 +35,7 @@
     <inputSet ref="roadNames"/>
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
+    <inputSet ref="cycle"/>
   </inputSet>
   
   <inputSet id="roadNames">
@@ -141,6 +142,39 @@
     <inputSet ref="naptan" />
   </inputSet>
   
+  <inputSet id="cycle">
+    <input type="route" name="National Cycle Route" description="National cycle route" category="Cycle" priority="normal">
+       <match k="type" v="route"/>
+       <match k="network" v="ncn"/>
+       <icon image="features/cycle__ncn.png" background="red" foreground="white">
+         <font size="14pt"><b>${ref}</b></font><br />
+         <font size="12pt">${name}</font>
+       </icon>
+    </input>
+    <input type="route" name="Regional Cycle Route" description="Regional cycle route" category="Cycle" priority="low">
+       <match k="type" v="route"/>
+       <match k="network" v="rcn"/>
+       <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
+         <font size="14pt"><b>${ref}</b></font><br />
+         <font size="12pt">${name}</font>
+       </icon>
+    </input>
+    <input type="route" name="Local Cycle Route" description="Local cycle route" category="Cycle" priority="lowest">
+       <match k="type" v="route"/>
+       <match k="network" v="lcn"/>
+       <icon image="features/cycle__lcn.png" background="blue" foreground="white">
+         <font size="14pt"><b>${ref}</b></font><br />
+         <font size="12pt">${name}</font>
+       </icon>
+    </input>
+  </inputSet>
+  
+  <inputSet id="cycle-route">
+    <inputSet ref="roadNames"/>
+    <inputSet ref="roadRefs"/>
+  </inputSet>
+  
+  
   <feature name="Motorway">
     <category>roads</category>
     <icon image="features/highway__motorway.png">
@@ -218,7 +252,6 @@
     <icon image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="8pt">${postal_code}</font><br/>
-      <font size="8pt"><i>A residential road is one surrounded by houses, and that isn't a higher classification.</i></font>
     </icon>
 
     <line/>
@@ -503,5 +536,49 @@
     <tag k="highway" v="bus_stop"/>
     <inputSet ref="buses" />
   </feature>
+
+  <!-- cycle stuff -->
+  <feature name="National Cycle Network">
+    <category>paths</category>
+    <icon image="features/cycle__ncn.png" background="red" foreground="white">
+      <font size="14pt"><b>${ref}</b></font><br />
+      <font size="12pt">${name}</font>
+    </icon>
+
+    <relation/>
+    <tag k="type" v="route"/>
+    <tag k="network" v="ncn"/>
+      
+    <inputSet ref="cycle-route"/>
+  </feature>
+  
+  <feature name="Regional Cycle Network">
+    <category>paths</category>
+    <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
+      <font size="14pt"><b>${ref}</b></font><br />
+      <font size="12pt">${name}</font>
+    </icon>
+
+    <relation/>
+    <tag k="type" v="route"/>
+    <tag k="network" v="rcn"/>
+      
+    <inputSet ref="cycle-route"/>
+  </feature>
+
+  <feature name="Local Cycle Network">
+    <category>paths</category>
+    <icon image="features/cycle__lcn.png" background="blue" foreground="white">
+      <font size="14pt"><b>${ref}</b></font><br />
+      <font size="12pt">${name}</font>
+    </icon>
+
+    <relation/>
+    <tag k="type" v="route"/>
+    <tag k="network" v="lcn"/>
+      
+    <inputSet ref="cycle-route"/>
+  </feature>
+
 </mapFeatures>
 

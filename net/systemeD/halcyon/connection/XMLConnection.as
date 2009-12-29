@@ -32,6 +32,8 @@ package net.systemeD.halcyon.connection {
 
             var mapLoader:URLLoader = new URLLoader();
             mapLoader.addEventListener(Event.COMPLETE, loadedMap);
+            mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
+            mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
             mapLoader.load(mapRequest);
             dispatchEvent(new Event(LOAD_STARTED));
 		}
@@ -43,6 +45,13 @@ package net.systemeD.halcyon.connection {
             return tags;
         }
 
+        private function errorOnMapLoad(event:Event):void {
+            trace("error loading map");
+        }
+        private function mapLoadStatus(event:HTTPStatusEvent):void {
+            trace("loading map status = "+event.status);
+        }
+        
         private function loadedMap(event:Event):void {
             dispatchEvent(new Event(LOAD_COMPLETED));
 
@@ -56,11 +65,14 @@ package net.systemeD.halcyon.connection {
                 version = uint(nodeData.@version);
 
                 var node:Node = getNode(id);
-                if ( node == null ) {
+                if ( node == null || !node.loaded ) {
                     var lat:Number = Number(nodeData.@lat);
                     var lon:Number = Number(nodeData.@lon);
                     tags = parseTags(nodeData.tag);
-                    setNode(new Node(id, version, tags, true, lat, lon),false);
+                    if ( node == null )
+                        setNode(new Node(id, version, tags, true, lat, lon),false);
+                    else
+                        node.update(version, tags, true, lat, lon);
                 }
             }
 
@@ -69,12 +81,59 @@ package net.systemeD.halcyon.connection {
                 version = uint(data.@version);
 
                 var way:Way = getWay(id);
-                if ( way == null ) {
+                if ( way == null || !way.loaded ) {
                     var nodes:Array = [];
                     for each(var nd:XML in data.nd)
                         nodes.push(getNode(Number(nd.@ref)));
                     tags = parseTags(data.tag);
-                    setWay(new Way(id, version, tags,true,  nodes),false);
+                    if ( way == null )
+                        setWay(new Way(id, version, tags, true, nodes),false);
+                    else
+                        way.update(version, tags, true, nodes);
+                }
+            }
+            
+            for each(var relData:XML in map.relation) {
+                id = Number(relData.@id);
+                version = uint(relData.@version);
+                
+                var rel:Relation = getRelation(id);
+                if ( rel == null || !rel.loaded ) {
+                    tags = parseTags(relData.tag);
+                    var members:Array = [];
+                    for each(var memberXML:XML in relData.member) {
+                        var type:String = memberXML.@type.toLowerCase();
+                        var role:String = memberXML.@role;
+                        var memberID:Number = Number(memberXML.@ref);
+                        var member:Entity = null;
+                        if ( type == "node" ) {
+                            member = getNode(memberID);
+                            if ( member == null ) {
+                                member = new Node(memberID,0,{},false,0,0);
+                                setNode(Node(member),true);
+                            }
+                        } else if ( type == "way" ) {
+                            member = getWay(memberID);
+                            if (member == null) {
+                                member = new Way(memberID,0,{},false,[]);
+                                setWay(Way(member),true);
+                            }
+                        } else if ( type == "relation" ) {
+                            member = getRelation(memberID);
+                            if (member == null) {
+                                member = new Relation(memberID,0,{},false,[]);
+                                setRelation(Relation(member),true);
+                            }
+                        }
+                        
+                        if ( member != null )
+                            members.push(new RelationMember(member, role));
+                    }
+                    
+                    if ( rel == null )
+                        setRelation(new Relation(id, version, tags, true, members), false);
+                    else
+                        rel.update(version,tags,true,members);
                 }
             }
             

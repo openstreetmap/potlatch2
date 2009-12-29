@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
+	title="Edit Relation" width="350" height="400"
+	showCloseButton="true" close="PopUpManager.removePopUp(this);">
+	
+	<potlatch2:TagViewer width="100%" height="100%" id="tagViewer"
+	    creationComplete="checkRelation()"/>
+	
+	<mx:Script><![CDATA[
+		import net.systemeD.halcyon.*;
+		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.potlatch2.*;
+		import mx.managers.PopUpManager;
+
+        private var _relation:Relation;
+        
+		public function setRelation(relation:Relation):void {
+            _relation = relation;
+//            if ( tagViewer != null )
+//                tagViewer.setEntity(_relation);
+		}
+
+        public function checkRelation():void {
+            if ( _relation != null )
+                tagViewer.setEntity(_relation);
+        }
+    ]]></mx:Script>	
+</mx:TitleWindow>
+
