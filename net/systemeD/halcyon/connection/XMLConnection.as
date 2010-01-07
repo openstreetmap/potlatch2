@@ -71,8 +71,10 @@ package net.systemeD.halcyon.connection {
                     tags = parseTags(nodeData.tag);
                     if ( node == null )
                         setNode(new Node(id, version, tags, true, lat, lon),false);
-                    else
+                    else {
                         node.update(version, tags, true, lat, lon);
+                        sendEvent(new EntityEvent(NEW_NODE, node), false);
+                    }
                 }
             }
 
@@ -88,8 +90,10 @@ package net.systemeD.halcyon.connection {
                     tags = parseTags(data.tag);
                     if ( way == null )
                         setWay(new Way(id, version, tags, true, nodes),false);
-                    else
+                    else {
                         way.update(version, tags, true, nodes);
+                        sendEvent(new EntityEvent(NEW_WAY, way), false);
+                    }
                 }
             }
             
@@ -132,8 +136,10 @@ package net.systemeD.halcyon.connection {
                     
                     if ( rel == null )
                         setRelation(new Relation(id, version, tags, true, members), false);
-                    else
+                    else {
                         rel.update(version,tags,true,members);
+                        sendEvent(new EntityEvent(NEW_RELATION, rel), false);
+                    }
                 }
             }
             

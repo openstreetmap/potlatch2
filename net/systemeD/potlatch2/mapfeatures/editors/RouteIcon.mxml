@@ -19,8 +19,10 @@
     private var _iconHTML:String = "";
     private var _bg:String = "white";
     private var _fg:String = "black";
+    private var _relation:Relation;
          
     public function setRoute(relation:Relation, icon:XMLList):void {   
+        _relation = relation;
         _iconHTML = Feature.makeHTMLIcon(icon, relation);
 
         if ( icon.length() > 0 ) {
@@ -53,6 +55,10 @@
     [Bindable(event="route_changed")]
     private function get bg():uint {
         return MapCSS.parseCSSColor(_bg);
+    }
+    
+    public function get route():Relation {
+        return _relation;
     }
     ]]></mx:Script>
 </mx:HBox>

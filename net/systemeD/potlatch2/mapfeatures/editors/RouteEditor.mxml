@@ -23,15 +23,18 @@
             var icon:RouteIcon = new RouteIcon();
             icon.setRoute(relation, RouteEditorFactory(_factory).icon);
             
-            icon.addEventListener(MouseEvent.CLICK, function(event:Event):void {
-                trace(relation+" is clicked");
-                var panel:RelationEditorPanel = RelationEditorPanel(
-                    PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-                panel.setRelation(relation);
-                PopUpManager.centerPopUp(panel);
-            });
+            icon.addEventListener(MouseEvent.CLICK, routeClicked);
             routeIcons.addChild(icon);
         }
+    }
+    
+    public function routeClicked(event:Event):void {
+        var relation:Relation = RouteIcon(event.currentTarget).route;
+        trace(relation+" is clicked");
+        var panel:RelationEditorPanel = RelationEditorPanel(
+            PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+        panel.setRelation(relation);
+        PopUpManager.centerPopUp(panel);
     }
     
   ]]></mx:Script>

@@ -29,6 +29,8 @@
     <inputSet ref="roadRefs"/>
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
+    <inputSet ref="cycle"/>
+    <inputSet ref="bus-route"/>
   </inputSet>
   
   <inputSet id="minorRoad">
@@ -36,6 +38,7 @@
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
+    <inputSet ref="bus-route"/>
   </inputSet>
   
   <inputSet id="roadNames">
@@ -142,6 +145,16 @@
     <inputSet ref="naptan" />
   </inputSet>
   
+  <inputSet id="bus-route">
+    <input type="route" name="Bus Route" description="Bus route" category="Transport" priority="low" presence="onTagMatch">
+      <match k="type" v="route"/>
+      <match k="route" v="bus"/>
+      <icon image="features/transport__bus.png">
+        <font size="12pt">${operator} <b>${ref}</b></font>
+      </icon>
+    </input>
+  </inputSet>
+  
   <inputSet id="cycle">
     <input type="route" name="National Cycle Route" description="National cycle route" category="Cycle" priority="normal">
        <match k="type" v="route"/>
@@ -169,7 +182,7 @@
     </input>
   </inputSet>
   
-  <inputSet id="cycle-route">
+  <inputSet id="route">
     <inputSet ref="roadNames"/>
     <inputSet ref="roadRefs"/>
   </inputSet>
@@ -549,7 +562,7 @@
     <tag k="type" v="route"/>
     <tag k="network" v="ncn"/>
       
-    <inputSet ref="cycle-route"/>
+    <inputSet ref="route"/>
   </feature>
   
   <feature name="Regional Cycle Network">
@@ -563,7 +576,7 @@
     <tag k="type" v="route"/>
     <tag k="network" v="rcn"/>
       
-    <inputSet ref="cycle-route"/>
+    <inputSet ref="route"/>
   </feature>
 
   <feature name="Local Cycle Network">
@@ -577,8 +590,40 @@
     <tag k="type" v="route"/>
     <tag k="network" v="lcn"/>
       
-    <inputSet ref="cycle-route"/>
+    <inputSet ref="route"/>
   </feature>
 
+
+  <!-- paths -->
+  <feature name="Long Distance Path">
+    <category>paths</category>
+    <icon image="features/paths__footway.png" background="green" foreground="white">
+      <font size="14pt"><b>${ref}</b></font><br />
+      <font size="12pt">${name}</font>
+    </icon>
+
+    <relation/>
+    <tag k="type" v="route"/>
+    <tag k="route" v="foot"/>
+      
+    <inputSet ref="route"/>
+  </feature>
+
+
+  <!-- bus routes -->
+  <feature name="Bus Route">
+    <category>transport</category>
+    <icon image="features/transport__bus.png">
+      <font size="12pt">${operator} <b>${ref}</b></font>
+    </icon>
+
+    <relation/>
+    <tag k="type" v="route"/>
+    <tag k="route" v="bus"/>
+      
+    <inputSet ref="route"/>
+  </feature>
+  
+  
 </mapFeatures>
 
