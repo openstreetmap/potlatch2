@@ -2,7 +2,7 @@
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
-	horizontalAlign="left" backgroundColor="white" >
+	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
 	<mx:List width="100%" height="100%" id="mapStyle" change="updateMapStyle();"> 
 	    <!-- This should be pulled in from an XML file rather than sitting in the source -->

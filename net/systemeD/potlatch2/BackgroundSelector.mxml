@@ -2,15 +2,21 @@
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
-	horizontalAlign="left" backgroundColor="white" >
+	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
-	<mx:List width="100%" height="100%" id="background" change="updateBackground();"> 
+	<mx:List width="100%" height="100%" id="background" change="updateBackground();" verticalScrollPolicy="on"> 
 	    <!-- This should be pulled in from an XML file rather than sitting in the source -->
 	    <mx:dataProvider>
 	        <mx:Object label="None" data="" />
 	        <mx:Object label="Yahoo!" data="yahoo" />
-	        <mx:Object label="New Popular Edition" data="http://npe.openstreetmap.org/$z/$x/$y.png" />
-	        <mx:Object label="OpenCycleMap" data="http://andy.sandbox.cloudmade.com/tiles/cycle/$z/$x/$y.png" />
+            <mx:Object label="OSM - Mapnik" data="http://tile.openstreetmap.org/$z/$x/$y.png" />
+            <mx:Object label="OSM - Osmarender" data="http://tah.openstreetmap.org/Tiles/tile/$z/$x/$y.png" />
+            <mx:Object label="OSM - Maplint (errors)" data="http://tah.openstreetmap.org/Tiles/maplint/$z/$x/$y.png" />
+            <mx:Object label="OpenCycleMap" data="http://andy.sandbox.cloudmade.com/tiles/cycle/$z/$x/$y.png" />
+            <mx:Object label="UK historic: 1:25k" data="http://ooc.openstreetmap.org/os1/$z/$x/$y.png" />
+            <mx:Object label="UK historic: 7th" data="http://ooc.openstreetmap.org/os7/$z/$x/$y.png" />
+            <mx:Object label="UK historic: NPE" data="http://ooc.openstreetmap.org/npe/$z/$x/$y.png" />
+            <mx:Object label="Australia: NearMap" data="http://www.nearmap.com/maps/nml=Vert&amp;zxy=$z,$x,$y" />
 	    </mx:dataProvider>
 	</mx:List>
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
