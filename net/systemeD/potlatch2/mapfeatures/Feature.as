@@ -142,6 +142,13 @@ package net.systemeD.potlatch2.mapfeatures {
             return _xml.elements(type).length() > 0;
         }
         
+        public function hasHelpURL():Boolean {
+            return _xml.help.length() > 0;
+        }
+        
+        public function get helpURL():String {
+            return _xml.help;
+        }
     }
 }
 

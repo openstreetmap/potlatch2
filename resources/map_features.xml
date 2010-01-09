@@ -193,6 +193,7 @@
     <icon image="features/highway__motorway.png">
       <font size="16pt"><b>${ref}</b></font><br/>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dmotorway</help>
 
     <line/>
     <tag k="highway" v="motorway"/>
@@ -214,6 +215,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dtrunk</help>
 
     <line/>
     <tag k="highway" v="trunk"/>
@@ -227,6 +229,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dprimary</help>
 
     <line/>
     <tag k="highway" v="primary"/>
@@ -240,6 +243,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsecondary</help>
 
     <line/>
     <tag k="highway" v="secondary"/>
@@ -253,6 +257,7 @@
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="10pt">${ref}</font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dtertiary</help>
 
     <line/>
     <tag k="highway" v="tertiary"/>
@@ -266,6 +271,7 @@
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="8pt">${postal_code}</font><br/>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dresidential</help>
 
     <line/>
     <tag k="highway" v="residential"/>
@@ -278,6 +284,7 @@
     <icon image="features/highway__unclassified.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dunclassified</help>
 
     <line/>
     <tag k="highway" v="unclassified"/>
@@ -290,6 +297,7 @@
     <icon image="features/highway__service.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dservice</help>
     <description>
       Access roads
     </description>

@@ -68,6 +68,7 @@
       import mx.core.*;
       import mx.managers.PopUpManager;
       import flash.geom.Point;
+      import flash.net.*;
       
       private var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
@@ -112,6 +113,7 @@
           popupChange.label = feature.name;
           setLimitTypes(entity);
           tw.setSelectedFeature(feature);
+          helpLabel.visible = feature.hasHelpURL();
       }
       
       private function setLimitTypes(entity:Entity):void {
@@ -133,6 +135,7 @@
           popupChange.label = "unknown";
           setLimitTypes(entity);
           tw.setSelectedFeature(null);
+          helpLabel.visible = false;
       }
 
       private function initialiseEditors():void {
@@ -272,6 +275,8 @@
 
       public function openDescription():void {
           trace("open description here");
+          if ( feature != null && feature.hasHelpURL() )
+              navigateToURL(new URLRequest(feature.helpURL), "potlatch_help");
       }
 
       public function addNewTag():void {
