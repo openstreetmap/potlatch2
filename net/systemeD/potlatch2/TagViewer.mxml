@@ -110,7 +110,19 @@
           var txt:String = feature.htmlDetails(entity);
           iconText.htmlText = txt;
           popupChange.label = feature.name;
+          setLimitTypes(entity);
           tw.setSelectedFeature(feature);
+      }
+      
+      private function setLimitTypes(entity:Entity):void {
+          var type:String = null;
+          if ( entity is Node )
+              type = "point";
+          else if ( entity is Way )
+              type = Way(entity).isArea() ? "area" : "line";
+          else if ( entity is Relation )
+              type = "relation";
+          tw.setLimitTypes(type);
       }
 
       private function blankFeatureIcon(entity:Entity):void {
@@ -119,6 +131,7 @@
                "<i>Nothing selected</i>" :
                "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
           popupChange.label = "unknown";
+          setLimitTypes(entity);
           tw.setSelectedFeature(null);
       }
 

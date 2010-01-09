@@ -137,6 +137,11 @@ package net.systemeD.potlatch2.mapfeatures {
             }
             return null;
         }
+        
+        public function isType(type:String):Boolean {
+            return _xml.elements(type).length() > 0;
+        }
+        
     }
 }
 

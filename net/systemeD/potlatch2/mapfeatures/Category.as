@@ -40,6 +40,20 @@ package net.systemeD.potlatch2.mapfeatures {
         public function get features():Array {
             return _features;
         }
+        
+        [Bindable(event="featuresChanged")]
+        public function getFeaturesForType(type:String):Array {
+            if ( type == null || type == "" )
+                return _features;
+                
+            var filteredFeatures:Array = new Array();
+            for each( var feature:Feature in _features ) {
+                if ( feature.isType(type) )
+                    filteredFeatures.push(feature);
+            }
+            return filteredFeatures;
+        }
+        
     }
 }
 

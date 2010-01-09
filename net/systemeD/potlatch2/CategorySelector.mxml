@@ -7,9 +7,9 @@
   <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical"/>
   <mx:ViewStack id="categoryStack" width="100%" height="100%"
       creationComplete="setSelectedFeature(_selectedType);">
-      <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().categories}">
+      <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType(limit)}">
           <mx:VBox label="{catRep.currentItem.name}">
-          <mx:TileList dataProvider="{catRep.currentItem.features}"
+          <mx:TileList dataProvider="{catRep.currentItem.getFeaturesForType(limit)}"
                        width="100%" height="100%" change="itemSelected(event);"
                        creationComplete="ensureSelection();">
               <mx:itemRenderer>
@@ -39,16 +39,27 @@
       
       private var settingSelection:Boolean = false;
       private var _selectedType:Feature;
+      private var _limit:String;
       
       [Bindable(event="selectedType")]
       public function get selectedType():Feature {
           return _selectedType;
       }
       
+      [Bindable(event="limitChanged")]
+      public function get limit():String {
+          return _limit;
+      }
+      
       private function itemSelected(event:Event):void {
           _selectedType = Feature(TileList(event.currentTarget).selectedItem);
           if ( !settingSelection )
               dispatchEvent(new Event("selectedType"));
+      }
+      
+      public function setLimitTypes(type:String):void {
+          _limit = type;
+          dispatchEvent(new Event("limitChanged"));
       }
       
       /**
@@ -69,7 +80,8 @@
               var primaryCategory:Category = feature.findFirstCategory();
           
               // set the tab to the selected item's category
-              categoryStack.selectedIndex = primaryCategory.index;
+              var index:int = MapFeatures.getInstance().getCategoriesForType(limit).indexOf(primaryCategory);
+              categoryStack.selectedIndex = index;
           }
           
           // finalise the item selection

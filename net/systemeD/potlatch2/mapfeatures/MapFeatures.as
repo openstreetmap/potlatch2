@@ -79,8 +79,23 @@ package net.systemeD.potlatch2.mapfeatures {
         [Bindable(event="featuresLoaded")]
         public function get categories():Array {
             if ( xml == null )
-                return null;            
+                return null;        
             return _categories;
+        }
+
+        [Bindable(event="featuresLoaded")]
+        public function getCategoriesForType(type:String):Array {
+            if ( xml == null )
+                return null;
+            if ( type == null || type == "" )  
+                return _categories;
+                
+            var filteredCategories:Array = new Array();
+            for each( var cat:Category in _categories ) {
+                if ( cat.getFeaturesForType(type).length > 0 )
+                    filteredCategories.push(cat);
+            }
+            return filteredCategories;
         }
 
         [Bindable(event="featuresLoaded")]
