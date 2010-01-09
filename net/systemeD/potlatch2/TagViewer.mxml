@@ -214,19 +214,7 @@
                   props["id"] = rel.id;
                   var memberIndex:uint = rel.findEntityMemberIndex(entity);
                   props["role"] = rel.getMember(memberIndex).role;
-                  
-                  var desc:String = "";
-                  var relTags:Object = rel.getTagsHash();
-                  if ( relTags["type"] ) {
-                      desc = relTags["type"];
-                      if ( relTags[desc] )
-                          desc += " " + relTags[desc];
-                  }
-                  if ( relTags["ref"] )
-                      desc += " " + relTags["ref"];
-                  if ( relTags["name"] )
-                      desc += " " + relTags["name"];
-                  props["description"] = desc;
+                  props["description"] = rel.getDescription();
                   
                   relations.push(props);
               }
@@ -292,6 +280,7 @@
       }
       
       public function addToRelation():void {
+          new RelationSelectPanel().init(selectedEntity);        
       }
       
       public function removeFromRelation():void {

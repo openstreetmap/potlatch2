@@ -55,6 +55,21 @@ package net.systemeD.halcyon.connection {
 			removed[0].entity.removeParent(this);
         }
 
+        public function getDescription():String {
+            var desc:String = "";
+            var relTags:Object = getTagsHash();
+            if ( relTags["type"] ) {
+                desc = relTags["type"];
+                if ( relTags[desc] )
+                    desc += " " + relTags[desc];
+            }
+            if ( relTags["ref"] )
+                desc += " " + relTags["ref"];
+            if ( relTags["name"] )
+                desc += " " + relTags["name"];
+            return desc;
+        }
+
 		public override function getType():String {
 			return 'relation';
 		}
