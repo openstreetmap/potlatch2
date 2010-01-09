@@ -1,5 +1,6 @@
 package net.systemeD.halcyon.connection {
     import flash.geom.Point;
+	import net.systemeD.halcyon.Globals;
 
     public class Way extends Entity {
         private var nodes:Array;
@@ -26,6 +27,10 @@ package net.systemeD.halcyon.connection {
             return nodes[index];
         }
 
+		public function getLastNode():Node {
+			return nodes[nodes.length-1];
+		}
+
         public function insertNode(index:uint, node:Node):void {
 			node.addParent(this);
             nodes.splice(index, 0, node);
@@ -41,13 +46,31 @@ package net.systemeD.halcyon.connection {
             return nodes.length;
         }
         
+        public function prependNode(node:Node):uint {
+			node.addParent(this);
+            nodes.unshift(node);
+            markDirty();
+            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, this, 0));
+            return nodes.length;
+        }
+        
         public function indexOfNode(node:Node):uint {
             return nodes.indexOf(node);
         }
 
-        public function removeNode(index:uint):void {
+		public function removeNode(node:Node):void {
+			var i:int;
+			while ((i=nodes.indexOf(i))>-1) {
+				nodes.splice(i,1);
+            	dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, this, i));
+			}
+			node.removeParent(this);
+			markDirty();
+		}
+
+        public function removeNodeByIndex(index:uint):void {
             var removed:Array=nodes.splice(index, 1);
-			removed[0].removeParent(this);
+			if (nodes.indexOf(removed[0])==-1) { removed[0].removeParent(this); }
 			markDirty();
             dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], this, index));
         }
@@ -71,6 +94,49 @@ package net.systemeD.halcyon.connection {
 		public function deleteNodesFrom(start:int):void {
 			nodes.splice(start);
 		}
+
+		public function mergeWith(way:Way,topos:int,frompos:int):void {
+			var i:int;
+			Globals.vars.root.addDebug("way "+id+", merging with "+way.id+", adding to "+topos+" , from "+frompos);
+
+			// merge relations
+			for each (var r:Relation in way.parentRelations) {
+				// ** needs to copy roles as well
+				if (r.findEntityMemberIndex(this)==-1) {
+					r.appendMember(new RelationMember(this, ''));
+				}
+			}
+
+			// merge tags
+			var t:Object=way.getTagsHash();
+			for (var k:String in t) {
+				if (getTag(k) && getTag(k)!=t[k]) {
+					setTag(k,getTag(k)+"; "+t[k]);
+					// ** send a warning about tags not matching
+				} else {
+					setTag(k,t[k]);
+				}
+			}
+
+			// merge nodes
+			if (frompos==0) { for (i=0; i<way.length;    i++) { addToEnd(topos,way.getNode(i)); } }
+					   else { for (i=way.length-1; i>=0; i--) { addToEnd(topos,way.getNode(i)); } }
+
+			// delete way
+			
+		}
+		
+		private function addToEnd(topos:int,node:Node):void {
+			Globals.vars.root.addDebug("adding "+node.id+" at "+topos);
+			if (topos==0) {
+				if (nodes[0]==node) { return; }
+				prependNode(node);
+			} else {
+				if (nodes[nodes.length-1]==node) { return; }
+				appendNode(node);
+			}
+		}
+
 
 
         /**
@@ -125,6 +191,21 @@ package net.systemeD.halcyon.connection {
 
 		public function isArea():Boolean {
 			return (nodes[0].id==nodes[nodes.length-1].id && nodes.length>2);
+		}
+		
+		public override function remove():void {
+			removeFromParents();
+			for each (var node:Node in nodes) {
+				node.removeParent(this);
+				if (!node.hasParentWays) { node.remove(); }
+			}
+			nodes=[];
+			deleted=true;
+            dispatchEvent(new EntityEvent(Connection.WAY_DELETED, this));
+		}
+
+		internal override function isEmpty():Boolean {
+			return (deleted || (nodes.length==0));
 		}
 
 		public override function getType():String {

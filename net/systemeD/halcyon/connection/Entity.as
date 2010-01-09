@@ -11,6 +11,7 @@ package net.systemeD.halcyon.connection {
 		private var _loaded:Boolean = true;
 		private var parents:Dictionary = new Dictionary();
 		private var locked:Boolean = false;
+		protected var deleted:Boolean = false;
 
         public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean) {
             this._id = id;
@@ -112,6 +113,24 @@ package net.systemeD.halcyon.connection {
             modified = true;
         }
 
+		// Delete entity
+		
+		public function remove():void {
+			// to be overridden
+		}
+		
+		internal function isEmpty():Boolean {
+			return false;	// to be overridden
+		}
+
+		protected function removeFromParents():void {
+			for each (var o:Entity in parents) {
+				if (o is Relation) { Relation(o).removeMember(this); }
+				else if (o is Way) { Way(o).removeNode(Node(this)); }
+				if (o.isEmpty()) { o.remove(); }
+			}
+		}
+
 		// Parent handling
 		
 		public function addParent(parent:Entity):void {
@@ -128,6 +147,11 @@ package net.systemeD.halcyon.connection {
 				if (o is Way) { a.push(o); }
 			}
 			return a;
+		}
+
+		public function get hasParents():Boolean {
+			for (var o:Object in parents) { return true; }
+			return false;
 		}
 		
 		public function get hasParentWays():Boolean {

@@ -37,23 +37,49 @@ package net.systemeD.halcyon.connection {
         public function setMember(index:uint, member:RelationMember):void {
  			member.entity.addParent(this);
 			members.splice(index, 1, member);
+			markDirty();
         }
 
         public function insertMember(index:uint, member:RelationMember):void {
  			member.entity.addParent(this);
             members.splice(index, 0, member);
+			markDirty();
         }
 
         public function appendMember(member:RelationMember):uint {
  			member.entity.addParent(this);
             members.push(member);
+			markDirty();
             return members.length;
         }
 
-        public function removeMember(index:uint):void {
+		public function removeMember(entity:Entity):void {
+			var i:int;
+			while ((i=findEntityMemberIndex(entity))>-1) {
+				members.splice(i, 1);
+			}
+			entity.removeParent(this);
+			markDirty();
+		}
+
+        public function removeMemberByIndex(index:uint):void {
             var removed:Array=members.splice(index, 1);
-			removed[0].entity.removeParent(this);
+			var entity:Entity=removed[0].entity;
+			if (findEntityMemberIndex(entity)==-1) { entity.removeParent(this); }
+			markDirty();
         }
+
+		public override function remove():void {
+			removeFromParents();
+			for each (var member:RelationMember in members) { member.entity.removeParent(this); }
+			members=[];
+			deleted=true;
+            dispatchEvent(new EntityEvent(Connection.RELATION_DELETED, this));
+		}
+
+		internal override function isEmpty():Boolean {
+			return (deleted || (members.length==0));
+		}
 
         public function getDescription():String {
             var desc:String = "";

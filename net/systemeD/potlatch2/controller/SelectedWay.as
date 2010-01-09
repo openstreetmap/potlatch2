@@ -40,6 +40,9 @@ package net.systemeD.potlatch2.controller {
 					// start new way
                     var way:Way = controller.connection.createWay({}, [entity]);
                     return new DrawWay(way, true, false);
+				} else if ( entity is Way && event.ctrlKey ) {
+					// merge way
+					mergeWith(entity as Way);
 				} else if ( entity is Way ) {
 					// select way
                     selectWay(entity as Way);
@@ -75,6 +78,18 @@ package net.systemeD.potlatch2.controller {
             selectedWay.insertNodeAtClosestPosition(node, true);
 			return node;
         }
+
+		protected function mergeWith(way:Way):Boolean {
+			Globals.vars.root.addDebug("merge with "+way.id);
+
+			// ** needs to prefer positive to negative IDs
+			// find common point
+			if      (selectedWay.getNode(0)   ==way.getNode(0)   ) { selectedWay.mergeWith(way,0,0); }
+			else if (selectedWay.getNode(0)   ==way.getLastNode()) { selectedWay.mergeWith(way,0,way.length-1); }
+			else if (selectedWay.getLastNode()==way.getNode(0)   ) { selectedWay.mergeWith(way,selectedWay.length-1,0); }
+			else if (selectedWay.getLastNode()==way.getLastNode()) { selectedWay.mergeWith(way,selectedWay.length-1,way.length-1); }
+			return true;
+		}
         
         override public function enterState():void {
             selectWay(initWay);

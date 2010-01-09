@@ -63,6 +63,9 @@ package net.systemeD.halcyon.connection {
         public static var NODE_MOVED:String = "node_moved";
         public static var WAY_NODE_ADDED:String = "way_node_added";
         public static var WAY_NODE_REMOVED:String = "way_node_removed";
+		public static var NODE_DELETED:String = "node_deleted";
+		public static var WAY_DELETED:String = "way_deleted";
+		public static var RELATION_DELETED:String = "relation_deleted";
 
         // store the data we download
         private var negativeID:Number = -1;
@@ -105,6 +108,7 @@ package net.systemeD.halcyon.connection {
             relations[relation.id] = relation;
             delete relations[oldID];
         }
+
 
 		public function sendEvent(e:*,queue:Boolean):void {
 			// queue is only used for AMFConnection
