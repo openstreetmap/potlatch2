@@ -1,5 +1,4 @@
 Potlatch 2: main outstanding issues
-(last updated 30th November 2009)
 -----------------------------------
 
 == Code tidying ==
@@ -11,7 +10,7 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * Delete points and ways
-* Split and merge ways
+* Merge ways
 * Drag-and-drop POIs
 * Undo/redo
 * Reverse way direction
@@ -25,6 +24,8 @@ Potlatch 2: main outstanding issues
 
 
 == Server interaction ==
+
+* Should redraw members of a relation when the relation is loaded
 
 
 == UI ==
@@ -44,3 +45,4 @@ Potlatch 2: main outstanding issues
   (difficult because styles are decided before drawing)
 * Shields
 * Complete MapCSS support
+* Would be useful to be able to 'suspend' redrawing

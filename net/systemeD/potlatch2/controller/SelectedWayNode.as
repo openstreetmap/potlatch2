@@ -67,6 +67,13 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			switch (event.keyCode) {
+				case 88:	return splitWay();
+			}
+			return this;
+		}
+		
 		override public function enterState():void {
             selectNode(initWay,initNode);
 			Globals.vars.root.addDebug("**** -> "+this);
@@ -90,5 +97,28 @@ package net.systemeD.potlatch2.controller {
 			else
 			    return new DrawWay(selectedWay, isLast, true);
         }
+
+		public function splitWay():ControllerState {
+			// abort if start or end
+			if (selectedWay.getNode(0                   ) == selectedNode) { return this; }
+			if (selectedWay.getNode(selectedWay.length-1) == selectedNode) { return this; }
+			Globals.vars.root.addDebug("splitting way at "+selectedWay.indexOfNode(selectedNode));
+
+			// create new way
+			var newWay:Way = controller.connection.createWay(
+				selectedWay.getTagsCopy(), 
+				selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length));
+			selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1);
+			
+			// copy relations
+			for each (var r:Relation in selectedWay.parentRelations) {
+				// ** needs to copy roles as well
+				r.appendMember(new RelationMember(newWay, ''));
+			}
+			controller.map.ways[newWay.id].redraw();
+
+			return new SelectedWay(selectedWay);
+		}
+
     }
 }

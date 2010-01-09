@@ -64,6 +64,13 @@ package net.systemeD.halcyon.connection {
 			// ** we should send an event to delete the entire way
 		}
 
+		public function sliceNodes(start:int,end:int):Array {
+			return nodes.slice(start,end);
+		}
+
+		public function deleteNodesFrom(start:int):void {
+			nodes.splice(start);
+		}
 
 
         /**
