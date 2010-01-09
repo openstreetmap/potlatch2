@@ -29,6 +29,16 @@ package net.systemeD.halcyon.connection {
             }
             return -1;
         }
+
+        public function findEntityMemberIndexes(entity:Entity):Array {
+            var indexes:Array = [];
+            for (var index:uint = 0; index < members.length; index++) {
+                var member:RelationMember = members[index];
+                if ( member.entity == entity )
+                    indexes.push(index);
+            }
+            return indexes;
+        }
         
         public function getMember(index:uint):RelationMember {
             return members[index];

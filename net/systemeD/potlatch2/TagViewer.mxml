@@ -33,7 +33,7 @@
     </mx:DataGrid>
 
     <mx:HBox horizontalAlign="right" width="100%">
-      <mx:LinkButton label="Delete" click="removeTag()"/>
+      <mx:LinkButton label="Delete" click="removeTag()" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
       <mx:LinkButton label="Add" click="addNewTag()"/>
     </mx:HBox>
     
@@ -48,7 +48,8 @@
     </mx:DataGrid>
 
     <mx:HBox horizontalAlign="right" width="100%">
-      <mx:LinkButton label="Remove from" click="removeFromRelation()"/>
+      <mx:LinkButton label="Remove from" click="removeFromRelation(relationsGrid.selectedItem.id, relationsGrid.selectedItem.index)" 
+                      enabled="{relationsGrid.selectedItem != null? true : false}"/>
       <mx:LinkButton label="Add to" click="addToRelation()"/>
     </mx:HBox>
 
@@ -209,14 +210,16 @@
           } else {
               var relations:Array = [];
               for each( var rel:Relation in entity.parentRelations ) {
-                  var props:Object = {};
-                  props["relation"] = rel;
-                  props["id"] = rel.id;
-                  var memberIndex:uint = rel.findEntityMemberIndex(entity);
-                  props["role"] = rel.getMember(memberIndex).role;
-                  props["description"] = rel.getDescription();
-                  
-                  relations.push(props);
+                  for each( var memberIndex:int in rel.findEntityMemberIndexes(entity)) {
+                    var props:Object = {};
+                    props["relation"] = rel;
+                    props["id"] = rel.id;
+                    props["index"] = memberIndex;
+                    props["role"] = rel.getMember(memberIndex).role;
+                    props["description"] = rel.getDescription();
+                    
+                    relations.push(props);
+                  }
               }
               relationsGrid.dataProvider = relations;
           }
@@ -283,7 +286,8 @@
           new RelationSelectPanel().init(selectedEntity);        
       }
       
-      public function removeFromRelation():void {
+      public function removeFromRelation(id:Number, index:int):void {
+          Connection.getConnectionInstance().getRelation(id).removeMemberByIndex(index);
       }
       
       public function initFeatureBox():void {
