@@ -34,8 +34,17 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                   if ( relVal != relationTags[k] )
                       addable = false;
               }
-              if (addable)
-                  matched.push(relation);
+              if (addable) {
+                  for each( var memberIndex:int in relation.findEntityMemberIndexes(_entity)) {
+                      var props:Object = {};
+                      props["relation"] = relation;
+                      props["id"] = relation.id;
+                      props["index"] = memberIndex;
+                      props["role"] = relation.getMember(memberIndex).role;
+                      props["entity"] = _entity;
+                      matched.push(props);
+                  }
+              }
           }
           return matched;
       }

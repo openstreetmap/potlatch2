@@ -45,6 +45,9 @@ package net.systemeD.halcyon.connection {
         }
 
         public function setMember(index:uint, member:RelationMember):void {
+            var oldMember:RelationMember = getMember(index);
+            oldMember.entity.removeParent(this);
+            
  			member.entity.addParent(this);
 			members.splice(index, 1, member);
 			markDirty();

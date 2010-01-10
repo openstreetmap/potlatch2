@@ -8,6 +8,9 @@
 	
 	<mx:Image source="{iconImage}"/>
     <mx:Text condenseWhite="true" width="100%" htmlText="{iconHTML}" selectable="false"/>
+    <mx:ComboBox id="dir" color="black" dataProvider="{routeDirs}" selectedItem="{findSelected(role)}"
+        click="event.stopPropagation()"
+        change="setRole(dir.selectedItem.data)" />
     
     <mx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
@@ -15,14 +18,31 @@
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.events.*;
 
+    import mx.collections.ArrayCollection;
+
+    [Bindable]
+    public var routeDirs:ArrayCollection = new ArrayCollection(
+        [ {label:">>", data:"forward"}, 
+          {label:"<<", data:"backward"}, 
+          {label:"<>", data:""} ]);
+
     private var _iconImage:String = null;
     private var _iconHTML:String = "";
     private var _bg:String = "white";
     private var _fg:String = "black";
-    private var _relation:Relation;
+    private var _route:Object;
+    
+    private function findSelected(role:String):Object {
+        for each ( var item:Object in routeDirs ) {
+            if ( item.data == role )
+                return item;
+        }
+        return routeDirs[2];
+    }
          
-    public function setRoute(relation:Relation, icon:XMLList):void {   
-        _relation = relation;
+    public function setRoute(route:Object, icon:XMLList):void {   
+        _route = route;
+        var relation:Relation = route["relation"];
         _iconHTML = Feature.makeHTMLIcon(icon, relation);
 
         if ( icon.length() > 0 ) {
@@ -48,6 +68,11 @@
     }
 
     [Bindable(event="route_changed")]
+    private function get role():String {
+        return _route["role"];
+    }
+
+    [Bindable(event="route_changed")]
     private function get fg():uint {
         return MapCSS.parseCSSColor(_fg);
     }
@@ -57,9 +82,15 @@
         return MapCSS.parseCSSColor(_bg);
     }
     
-    public function get route():Relation {
-        return _relation;
+    public function get route():Object {
+        return _route;
     }
+    
+    private function setRole(role:String):void {
+        var member:RelationMember = new RelationMember(_route["entity"], role);
+        _route["relation"].setMember(_route["index"], member);
+    }
+    
     ]]></mx:Script>
 </mx:HBox>
 

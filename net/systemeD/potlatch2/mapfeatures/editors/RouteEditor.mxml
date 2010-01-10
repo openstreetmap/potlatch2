@@ -19,7 +19,7 @@
     import mx.core.*;
    
     public function addRoutes():void {
-        for each(var relation:Relation in matchedRelations) {
+        for each(var relation:Object in matchedRelations) {
             var icon:RouteIcon = new RouteIcon();
             icon.setRoute(relation, RouteEditorFactory(_factory).icon);
             
@@ -29,11 +29,11 @@
     }
     
     public function routeClicked(event:Event):void {
-        var relation:Relation = RouteIcon(event.currentTarget).route;
+        var relation:Object = RouteIcon(event.currentTarget).route;
         trace(relation+" is clicked");
         var panel:RelationEditorPanel = RelationEditorPanel(
             PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-        panel.setRelation(relation);
+        panel.setRelation(relation["relation"]);
         PopUpManager.centerPopUp(panel);
     }
     
