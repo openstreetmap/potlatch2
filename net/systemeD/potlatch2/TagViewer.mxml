@@ -42,7 +42,7 @@
         itemDoubleClick="editRelation(ListEvent(event).rowIndex)">
         <mx:columns>
             <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
-            <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
+            <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
             <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
         </mx:columns>
     </mx:DataGrid>
@@ -217,6 +217,7 @@
                     props["index"] = memberIndex;
                     props["role"] = rel.getMember(memberIndex).role;
                     props["description"] = rel.getDescription();
+                    props["id_idx"] = rel.id + "/"+memberIndex;
                     
                     relations.push(props);
                   }
