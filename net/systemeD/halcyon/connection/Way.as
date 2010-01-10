@@ -97,7 +97,6 @@ package net.systemeD.halcyon.connection {
 
 		public function mergeWith(way:Way,topos:int,frompos:int):void {
 			var i:int;
-			Globals.vars.root.addDebug("way "+id+", merging with "+way.id+", adding to "+topos+" , from "+frompos);
 
 			// merge relations
 			for each (var r:Relation in way.parentRelations) {
@@ -123,11 +122,10 @@ package net.systemeD.halcyon.connection {
 					   else { for (i=way.length-1; i>=0; i--) { addToEnd(topos,way.getNode(i)); } }
 
 			// delete way
-			
+			way.remove();
 		}
 		
 		private function addToEnd(topos:int,node:Node):void {
-			Globals.vars.root.addDebug("adding "+node.id+" at "+topos);
 			if (topos==0) {
 				if (nodes[0]==node) { return; }
 				prependNode(node);

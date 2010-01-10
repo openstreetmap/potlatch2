@@ -32,6 +32,7 @@ package net.systemeD.halcyon {
             way.addEventListener(Connection.TAG_CHANGE, wayTagChanged);
             way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             way.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
+			way.addEventListener(Connection.WAY_DELETED, wayDeleted);
             attachNodeListeners();
 		}
 		
@@ -57,6 +58,10 @@ package net.systemeD.halcyon {
         private function nodeMoved(event:NodeMovedEvent):void {
             redraw();
         }
+		private function wayDeleted(event:EntityEvent):void {
+			Globals.vars.root.addDebug("waydeleted fired on "+way.length+":"+event.entity);
+			redraw();
+		}
 
 		private function init():void {
 			recalculate();
@@ -75,6 +80,7 @@ package net.systemeD.halcyon {
 			var cx:Number=0, cy:Number=0;
 			pathlength=0;
 			patharea=0;
+			if (way.length==0) { return; }
 			
 			lx = way.getNode(way.length-1).lon;
 			ly = way.getNode(way.length-1).latp;
@@ -190,6 +196,7 @@ package net.systemeD.halcyon {
 			// Draw icons
 			// ** there should be huge potential to optimise this - at present we're
 			//    running getStyles for every node in the way on every redraw
+			// ** fix r/heading behaviour - that doesn't look right
 			var r:Number;
 			var nodetags:Object;
 			var nodeSelected:int=stateClasses["nodeSelected"];

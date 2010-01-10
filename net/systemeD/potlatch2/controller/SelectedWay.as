@@ -84,6 +84,7 @@ package net.systemeD.potlatch2.controller {
 
 			// ** needs to prefer positive to negative IDs
 			// find common point
+			if (way==selectedWay) { return false; }
 			if      (selectedWay.getNode(0)   ==way.getNode(0)   ) { selectedWay.mergeWith(way,0,0); }
 			else if (selectedWay.getNode(0)   ==way.getLastNode()) { selectedWay.mergeWith(way,0,way.length-1); }
 			else if (selectedWay.getLastNode()==way.getNode(0)   ) { selectedWay.mergeWith(way,selectedWay.length-1,0); }
