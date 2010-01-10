@@ -57,9 +57,10 @@
 
   <mx:VBox width="100%" height="100%" label="Members" id="membersVBox" initialize="checkMembers()" verticalGap="1">
     <mx:Label id="membersText" text="Relation Members"/>
-    <mx:DataGrid editable="true" width="100%" height="100%" id="membersGrid">
+    <mx:DataGrid editable="true" width="100%" height="100%" id="membersGrid"
+                  dragEnabled="true" dragMoveEnabled="true" dropEnabled="true">
       <mx:columns>
-        <mx:DataGridColumn editable="false" dataField="typeDesc" headerText="Type"/>
+        <mx:DataGridColumn editable="false" dataField="type" headerText="Type"/>
         <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
         <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
       </mx:columns>
@@ -265,12 +266,44 @@
             var props:Object = {};
             var member:RelationMember = rel.getMember(i);
             props["id"] = member.entity.id;
-            props["typeDesc"] = member.entity.getType();
+            props["type"] = member.entity.getType();
             props["role"] = member.role;
             
             members.push(props);
           }
           membersGrid.dataProvider = members;
+          membersGrid.dataProvider.addEventListener('collectionChange', membersChange); 
+      }
+      
+      private function membersChange(event:Event):void {
+          // Dropping all the members and re-adding them isn't exactly optimal
+          // but is at least robust for any kind of change.
+          // Figuring out a better way is someone else's FIXME
+          
+          var conn:Connection = Connection.getConnectionInstance();
+          var rel:Relation = selectedEntity as Relation
+          
+          // drop members
+          trace("Dropping "+rel.length+" members");
+          for (var i:int=rel.length-1 ; i>=0; i--) {
+            rel.removeMemberByIndex(i);
+          }
+          
+          // add members in new order
+          for each(var memberObject:Object in membersGrid.dataProvider) {
+            var e:Entity;
+            var id:int = memberObject.id;
+            if(memberObject.type == 'node') {
+              e = conn.getNode(id);
+            } else if (memberObject.type == 'way') {
+              e = conn.getWay(id);
+            } else if (memberObject.type == 'relation') {
+              e = conn.getRelation(id);
+            }
+            rel.appendMember(new RelationMember(e, memberObject.role));
+            trace("added member "+memberObject.type+" "+id+" in role "+memberObject.role);
+          }
+          trace("complete: relation "+rel.id+" now has "+rel.length+" members");
       }
       
       private function editRelation(id:uint):void {
