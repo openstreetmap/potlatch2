@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.potlatch2.tools.Quadrilateralise;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
 
@@ -70,6 +71,17 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
         
+	override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+	  if (event.keyCode == 81) { // 'q' or 'Q'
+	    var success:Boolean = Quadrilateralise.quadrilateralise(selectedWay);
+	    if (!success) {
+	      trace("Quadrilateralise failed.");
+	    }
+	  }
+
+	  return this;
+	}
+
         protected function addNode(event:MouseEvent):Node {
             trace("add node");
             var lat:Number = controller.map.coord2lat(event.localY);
