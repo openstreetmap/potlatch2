@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:halcyon="net.systemeD.halcyon.*">
+	xmlns:halcyon="net.systemeD.halcyon.*"
+	backgroundColor="white" borderStyle="inset">
 
   <mx:HBox horizontalGap="0"> 
   <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical"/>

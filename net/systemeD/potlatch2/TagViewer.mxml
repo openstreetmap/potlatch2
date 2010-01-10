@@ -17,7 +17,7 @@
     </mx:HBox>
     <flexlib:SuperTabNavigator id="editorStack" width="100%" height="100%" paddingLeft="2" paddingRight="2"
         allowTabSqueezing="false" minTabWidth="10" closePolicy="close_never"
-        scrollSpeed="20"/>
+        scrollSpeed="20" change="ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox)"/>
   </mx:VBox>
 
   <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
@@ -139,6 +139,8 @@
           helpLabel.visible = false;
       }
 
+      private var tabComponents:Object = {};
+      
       private function initialiseEditors():void {
           editorStack.removeAllChildren();
           if ( selectedEntity == null || feature == null )
@@ -149,6 +151,7 @@
           editorStack.addChild(editorBox);
           
           var tabs:Object = {};
+          tabComponents = {};
           
           for each (var factory:EditorFactory in feature.editors) {
               if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
@@ -163,10 +166,12 @@
                   tab.label = category;
                   editorStack.addChild(tab);
                   tabs[category] = tab;
+                  tabComponents[tab] = [];
               }
               var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
               if ( catEditor != null )
-                  tab.addChild(catEditor);
+                  tabComponents[tab].push(catEditor);
+              //    tab.addChild(catEditor);
           }
       }
       
@@ -177,6 +182,15 @@
           return box;
       }
 
+      private function ensureEditorsPopulated(tab:VBox):void {
+          var components:Array = tabComponents[tab];
+          if ( components == null || tab == null || tab.numChildren >= components.length )
+              return;
+          for each (var component:DisplayObject in components ) {
+              tab.addChild(component);
+          }
+      }
+      
       private function checkAdvanced():void {
           if ( selectedEntity != null )
              setupAdvanced(selectedEntity);
