@@ -59,7 +59,6 @@ package net.systemeD.halcyon {
             redraw();
         }
 		private function wayDeleted(event:EntityEvent):void {
-			Globals.vars.root.addDebug("waydeleted fired on "+way.length+":"+event.entity);
 			redraw();
 		}
 
@@ -210,13 +209,13 @@ package net.systemeD.halcyon {
 				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
 				sl=map.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
-					if (!map.pois[node.id]) { map.pois[node.id]=new NodeUI(node,map,r); }
+					if (!map.pois[node.id]) {
+						map.pois[node.id]=new NodeUI(node,map,r);
+					}
 					map.pois[node.id].redraw(sl);
-					// ** this should be done via the registerPOI/event listener mechanism,
-					//    but that needs a bit of reworking so we can pass in a styleList
-					//    (otherwise we end up computing the styles twice which is expensive)
 				} else if (map.pois[node.id]) {
 					map.pois[node.id].removeSprites();
+					delete map.pois[node.id];
 				}
 			}
 			if (!drawn) { return false; }

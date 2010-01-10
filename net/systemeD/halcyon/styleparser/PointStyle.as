@@ -3,7 +3,7 @@ package net.systemeD.halcyon.styleparser {
 	public class PointStyle extends Style {
 
 		public var icon_image:String;
-		public var icon_width:uint;
+		public var icon_width:uint=0;
 		public var icon_height:uint;
 		public var rotation:Number;
 

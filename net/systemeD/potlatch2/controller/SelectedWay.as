@@ -92,8 +92,6 @@ package net.systemeD.potlatch2.controller {
         }
 
 		protected function mergeWith(way:Way):Boolean {
-			Globals.vars.root.addDebug("merge with "+way.id);
-
 			// ** needs to prefer positive to negative IDs
 			// find common point
 			if (way==selectedWay) { return false; }

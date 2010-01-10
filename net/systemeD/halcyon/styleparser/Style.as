@@ -58,6 +58,9 @@ package net.systemeD.halcyon.styleparser {
 			for (var k:String in evals) {
 				// ** Do we need to do typing here?
 				this[k]=evals[k].exec(tags);
+				
+				// ** If the stylesheet has width=eval('_width+2'), then this will set Style.width to 7 (say).
+				//    
 			}
 		}
 

@@ -50,6 +50,7 @@ package net.systemeD.halcyon {
 				var d:DisplayObject=sprites.pop();
 				if (d.parent) { d.parent.removeChild(d); }
 			}
+			listenSprite=null;
 		}
 
 		protected function createListenSprite(hitzone:Sprite):void {

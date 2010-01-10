@@ -4,7 +4,7 @@ package net.systemeD.halcyon.styleparser {
 	
 	public class ShapeStyle extends Style {
 
-		public var width:Number;
+		public var width:Number=0;
 		public var color:Number;
 		public var opacity:Number;
 		public var dashes:Array=[];

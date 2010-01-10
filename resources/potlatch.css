@@ -113,14 +113,14 @@ way .highlighted { color: pink; }
 /* Interactive editors may choose different behaviour when a user mouses-over or selects
    an object. Potlatch 2 supports these but the stand-alone Halcyon viewer does not */
 
-way :hover	{ z-index: 2; width: 8; color: #ffff99; }
-way :selected { z-index: 2; width: 8; color: yellow; }
+way :hover	{ z-index: 2; width: eval('_width+10'); color: #ffff99; }
+way :selected { z-index: 2; width: eval('_width+10'); color: yellow; opacity: 0.7;}
 way !:drawn { z-index:10; width: 0.5; color: gray; } 
 
 node :selectedway { z-index: 9; icon-image: square; icon-width: 7; color: red; }
 node :hoverway { z-index: 9; icon-image: square; icon-width: 7; color: blue; }
 node !:drawn :poi { z-index: 2; icon-image: circle; icon-width: 4; color: green; casing-color: black; casing-width: 1; }
-node :selected { z-index: 1; icon-image: square; icon-width: 15; color: yellow; }
+node :selected { z-index: 1; icon-image: square; icon-width: eval('_width+10'); color: yellow; }
 
 /* Descendant selectors provide an easy way to style relations: this example means "any way
    which is part of a relation whose type=route". */

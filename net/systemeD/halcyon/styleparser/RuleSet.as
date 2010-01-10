@@ -3,6 +3,7 @@ package net.systemeD.halcyon.styleparser {
 	import flash.events.*;
 	import flash.net.*;
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.ExtendedLoader;
 	import net.systemeD.halcyon.ExtendedURLLoader;
     import net.systemeD.halcyon.connection.Entity;
 
@@ -13,10 +14,11 @@ package net.systemeD.halcyon.styleparser {
 	public class RuleSet {
 
 		private var map:Map;
-		public var choosers:Array=new Array();	// list of StyleChoosers
-		public var images:Object=new Object();	// loaded images
-		private var iconCallback:Function=null;	// function to call when all icons loaded
-		private var iconsToLoad:uint=0;			// number of icons left to load (fire callback when ==0)
+		public var choosers:Array=new Array();		// list of StyleChoosers
+		public var images:Object=new Object();		// loaded images
+		public var imageWidths:Object=new Object();	// width of each bitmap image
+		private var iconCallback:Function=null;		// function to call when all icons loaded
+		private var iconsToLoad:uint=0;				// number of icons left to load (fire callback when ==0)
 
 		// variables for name, author etc.
 
@@ -30,7 +32,7 @@ package net.systemeD.halcyon.styleparser {
 		public function getStyles(obj:Entity,tags:Object):StyleList {
 			var sl:StyleList=new StyleList();
 			for each (var sc:StyleChooser in choosers) {
-				sc.updateStyles(obj,tags,sl);
+				sc.updateStyles(obj,tags,sl,imageWidths);
 			}
 			return sl;
 		}
@@ -98,7 +100,20 @@ package net.systemeD.halcyon.styleparser {
 		// data handler
 
 		private function loadedImage(event:Event):void {
-			images[event.target.info['filename']]=event.target.data;
+			var fn:String=event.target.info['filename'];
+			images[fn]=event.target.data;
+
+			var loader:ExtendedLoader = new ExtendedLoader();
+			loader.info['filename']=fn;
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, measureWidth);
+			loader.loadBytes(map.ruleset.images[fn]);
+		}
+		
+		private function measureWidth(event:Event):void {
+			var fn:String=event.target.loader.info['filename'];
+			imageWidths[fn]=event.target.width;
+			// ** do we need to explicitly remove the loader object now?
+
 			iconsToLoad--;
 			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }
 		}

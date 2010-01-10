@@ -15,6 +15,7 @@ package net.systemeD.halcyon.styleparser {
 		public var textStyles:Array=[];
 		public var pointStyles:Array=[];
 		public var shieldStyles:Array=[];
+		public var maxwidth:Number=0;
 
 		public function hasStyles():Boolean {
 			return ( (shapeStyles.length + textStyles.length + pointStyles.length + shieldStyles.length) > 0 );

@@ -102,7 +102,6 @@ package net.systemeD.potlatch2.controller {
 			// abort if start or end
 			if (selectedWay.getNode(0                   ) == selectedNode) { return this; }
 			if (selectedWay.getNode(selectedWay.length-1) == selectedNode) { return this; }
-			Globals.vars.root.addDebug("splitting way at "+selectedWay.indexOfNode(selectedNode));
 
 			// create new way
 			var newWay:Way = controller.connection.createWay(

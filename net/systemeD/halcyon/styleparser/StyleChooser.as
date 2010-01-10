@@ -31,9 +31,10 @@ package net.systemeD.halcyon.styleparser {
 
 		// Update the current StyleList from this StyleChooser
 
-		public function updateStyles(obj:Entity, tags:Object, sl:StyleList):void {
+		public function updateStyles(obj:Entity, tags:Object, sl:StyleList, imageWidths:Object):void {
 			// Are any of the ruleChains fulfilled?
 			// ** needs to cope with min/max zoom
+			var w:Number;
 			var fulfilled:Boolean=false;
 			for each (var c:Array in ruleChains) {
 				if (testChain(c,-1,obj,tags)) {
@@ -45,11 +46,23 @@ package net.systemeD.halcyon.styleparser {
 			// Update StyleList
 			for each (var r:Style in styles) {
 				var a:*;
-				if      (r is ShapeStyle ) { a=sl.shapeStyles; }
-				else if (r is ShieldStyle) { a=sl.shieldStyles; }
-				else if (r is TextStyle  ) { a=sl.textStyles;  }
-				else if (r is PointStyle ) { a=sl.pointStyles; }
-				else if (r is InstructionStyle) {
+				if (r is ShapeStyle) {
+					a=sl.shapeStyles;
+					if (ShapeStyle(r).width>sl.maxwidth && !r.evals['width']) { sl.maxwidth=ShapeStyle(r).width; }
+				} else if (r is ShieldStyle) {
+					a=sl.shieldStyles;
+				} else if (r is TextStyle) { 
+					a=sl.textStyles;
+				} else if (r is PointStyle) { 
+					a=sl.pointStyles;
+					w=0;
+					if (PointStyle(r).icon_width && !PointStyle(r).evals['icon_width']) {
+						w=PointStyle(r).icon_width;
+					} else if (PointStyle(r).icon_image && imageWidths[PointStyle(r).icon_image]) {
+						w=imageWidths[PointStyle(r).icon_image];
+					}
+					if (w>sl.maxwidth) { sl.maxwidth=w; }
+				} else if (r is InstructionStyle) {
 					if (InstructionStyle(r).breaker) { return; }
 					if (InstructionStyle(r).set_tags) {
 						for (var k:String in InstructionStyle(r).set_tags) { tags[k]=InstructionStyle(r).set_tags[k]; }
@@ -57,6 +70,7 @@ package net.systemeD.halcyon.styleparser {
 					continue;
 				}
 				if (r.drawn) { tags[':drawn']='yes'; }
+				tags['_width']=sl.maxwidth;
 				
 				r.runEvals(tags);
 				if (a[r.sublayer]) {

@@ -124,7 +124,7 @@ package net.systemeD.halcyon.connection {
 		}
 
 		protected function removeFromParents():void {
-			for each (var o:Entity in parents) {
+			for (var o:Object in parents) {
 				if (o is Relation) { Relation(o).removeMember(this); }
 				else if (o is Way) { Way(o).removeNode(Node(this)); }
 				if (o.isEmpty()) { o.remove(); }
