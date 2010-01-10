@@ -39,7 +39,7 @@
     
     <mx:DataGrid editable="true" width="100%" height="25%" id="relationsGrid"
         doubleClickEnabled="true"
-        itemDoubleClick="editRelation(ListEvent(event).rowIndex)">
+        itemDoubleClick="editRelation(relationsGrid.selectedItem.id)">
         <mx:columns>
             <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
             <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
@@ -55,6 +55,17 @@
 
   </mx:VBox>
 
+  <mx:VBox width="100%" height="100%" label="Members" id="membersVBox" initialize="checkMembers()" verticalGap="1">
+    <mx:Label id="membersText" text="Relation Members"/>
+    <mx:DataGrid editable="true" width="100%" height="100%" id="membersGrid">
+      <mx:columns>
+        <mx:DataGridColumn editable="false" dataField="typeDesc" headerText="Type"/>
+        <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
+        <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
+      </mx:columns>
+    </mx:DataGrid>
+  </mx:VBox>
+  
   </mx:ViewStack>
 
   <mx:LinkBar dataProvider="{stack}"/>
@@ -88,7 +99,9 @@
 
           if ( advancedID != null )
               setupAdvanced(entity);
-
+          if (entity is Relation) {
+              stack.addChild(membersVBox);
+          }
           refreshFeatureIcon();
       }
 
@@ -239,12 +252,32 @@
               relationsGrid.dataProvider = relations;
           }
       }
-
-      private function editRelation(index:uint):void {
-          trace("edit relation "+index+" "+selectedEntity.parentRelations[index]);
+      
+      private function checkMembers():void {
+          if (selectedEntity is Relation) {
+            setupMembers(selectedEntity as Relation);
+          }
+      }
+      
+      private function setupMembers(rel:Relation):void {
+          var members:Array = [];
+          for (var i:int=0 ; i<rel.length; i++) {
+            var props:Object = {};
+            var member:RelationMember = rel.getMember(i);
+            props["id"] = member.entity.id;
+            props["typeDesc"] = member.entity.getType();
+            props["role"] = member.role;
+            
+            members.push(props);
+          }
+          membersGrid.dataProvider = members;
+      }
+      
+      private function editRelation(id:uint):void {
+          trace("edit relation "+id);
           var panel:RelationEditorPanel = RelationEditorPanel(
               PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-          panel.setRelation(selectedEntity.parentRelations[index]);
+          panel.setRelation(Connection.getConnectionInstance().getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
       
@@ -277,6 +310,7 @@
 
       public function loadFeatures():void {
           mapFeatures = MapFeatures.getInstance();
+          stack.removeChild(membersVBox); // remove by default, will be added if relation
       }
 
       public function openDescription():void {
