@@ -21,6 +21,9 @@
 
   <category name="Admin" id="admin">
   </category>
+  
+  <category name="Buildings" id="buildings">
+  </category>
 
   <!-- Roads -->
   
@@ -187,6 +190,10 @@
     <inputSet ref="roadRefs"/>
   </inputSet>
   
+  <inputSet id="rivers">
+    <input type="freetext" presence="always" name="Name" category="Naming" key="name" description="The name" />
+    <input type="freetext" presence="always" name="Width" category="Properties" key="width" description="The width in metres" />
+  </inputSet>
   
   <feature name="Motorway">
     <category>roads</category>
@@ -409,6 +416,7 @@
   <!-- Barriers -->
 
   <feature name="Fence">
+    <category>natural</category>
     <icon>
     </icon>
 
@@ -417,6 +425,7 @@
   </feature>
 
   <feature name="Hedge">
+    <category>natural</category>
     <icon>
     </icon>
 
@@ -425,6 +434,7 @@
   </feature>
 
   <feature name="Wall">
+    <category>natural</category>
     <icon>
     </icon>
 
@@ -453,6 +463,7 @@
 
     <line/>
     <tag k="waterway" v="river"/>
+    <inputSet ref="rivers" />
   </feature>
 
   <feature name="Canal">
@@ -509,6 +520,7 @@
   </feature>
 
   <feature name="Railway Station">
+    <category>transport</category>
     <icon image="features/transport__railway.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
@@ -517,9 +529,20 @@
     <tag k="railway" v="station"/>
   </feature>
   
+  <feature name="Railway Station">
+    <category>buildings</category>
+    <icon image="features/transport__railway.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+    
+    <area/>
+    <tag k="building" v="station"/>
+  </feature>
+  
   <!-- areas -->
 
   <feature name="Building">
+    <category>buildings</category>
     <icon>
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
@@ -531,6 +554,7 @@
   </feature>
 
   <feature name="Park">
+    <category>natural</category>
     <icon>
       <b>${name}</b><br/>
     </icon>
@@ -540,6 +564,7 @@
   </feature>
   
   <feature name="Forest">
+    <category>natural</category>
     <icon>
       <b>${name}</b><br/>
     </icon>
@@ -550,7 +575,8 @@
   
   <!-- POI -->
   <feature name="Bus Stop">
-    <icon>
+    <category>transport</category>
+    <icon image="features/transport__bus.png">
       ${name} ${local_ref}
     </icon>
     <point />
