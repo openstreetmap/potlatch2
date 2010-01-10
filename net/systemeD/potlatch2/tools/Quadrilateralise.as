@@ -4,8 +4,8 @@ package net.systemeD.potlatch2.tools {
   import flash.geom.Point;
 
   public class Quadrilateralise {
-    const NUM_STEPS:uint = 1000;
-    const TOLERANCE:Number = 1.0e-8;
+    private static const NUM_STEPS:uint = 1000;
+    private static const TOLERANCE:Number = 1.0e-8;
 
     /**
      * Attempts to make all corners of a way right angles. Returns true if it
