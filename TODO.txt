@@ -10,7 +10,7 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * Delete points and ways
-* Merge ways
+* Merge ways (almost there)
 * Drag-and-drop POIs
 * Undo/redo
 * Reverse way direction
@@ -30,10 +30,9 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
-* Relations
+* UI for geometry operations
 * Keyboard shortcuts
-* Background layer selection
-* CSS style selection
+* CSS editing
 
 
 == Tagging ==
@@ -41,8 +40,7 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
-* Needs some sort of _width attribute so we can draw highlights 2px wider than the largest stroke 
-  (difficult because styles are decided before drawing)
 * Shields
 * Complete MapCSS support
 * Would be useful to be able to 'suspend' redrawing
+* [_] for junction nodes
