@@ -207,6 +207,7 @@ package net.systemeD.halcyon {
 				if (stateClasses["showNodes"]) { nodetags[':selectedway']='yes'; }
 				if (stateClasses["showNodesHover"]) { nodetags[':hoverway']='yes'; }
 				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
+				if (node.numParentWays>1) { nodetags[':junction']='yes'; }
 				sl=map.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
 					if (!map.pois[node.id]) {

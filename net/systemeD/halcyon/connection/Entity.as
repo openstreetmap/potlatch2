@@ -161,6 +161,14 @@ package net.systemeD.halcyon.connection {
 			return false;
 		}
 		
+		public function get numParentWays():uint {
+			var i:uint=0;
+			for (var o:Object in parents) {
+				if (o is Way) { i++; }
+			}
+			return i;
+		}
+		
 		public function get parentRelations():Array {
 			var a:Array=[];
 			for (var o:Object in parents) {
