@@ -33,6 +33,8 @@ Potlatch 2: main outstanding issues
 * UI for geometry operations
 * Keyboard shortcuts
 * CSS editing
+* "New relations" panel
+* Direct click-to-edit of relation role should actually work
 
 
 == Tagging ==
@@ -43,4 +45,3 @@ Potlatch 2: main outstanding issues
 * Shields
 * Complete MapCSS support
 * Would be useful to be able to 'suspend' redrawing
-* [_] for junction nodes
