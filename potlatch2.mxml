@@ -27,6 +27,9 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
+        <mx:Image id="pub" source="@Embed('resources/icons/pub.png')" mouseMove="dragPOI(event, [['amenity','pub']])" />
+        <mx:Image id="station" source="@Embed('resources/icons/station.png')"
+            mouseMove="dragPOI(event, [['railway', 'station'],['name','Charbury International']])" />
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
         <mx:Button label="Options" click="new OptionsDialog().init();" />
@@ -40,7 +43,7 @@
 
       <mx:Canvas width="75%" height="100%">
         <mx:Canvas id="map_area" resize="onResizeMap()"
-            top="0" left="0" width="100%" height="100%">
+            top="0" left="0" width="100%" height="100%" dragEnter="dragEnterHandler(event);" dragDrop="dragDropHandler(event);">
         </mx:Canvas>
         <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
@@ -71,6 +74,9 @@
 		import com.yahoo.maps.api.YahooMap;
 		import com.yahoo.maps.api.YahooMapEvent;
 		import com.yahoo.maps.api.core.location.LatLon;
+        import mx.events.DragEvent;
+        import mx.managers.DragManager;
+        import mx.core.DragSource;
 
         public var theMap:Map;
 		public var yahooListener:Object = new Object();
@@ -189,6 +195,43 @@
         private function onDataComplete(event:Event):void {
             dataWorking.visible = false;
         }
+        
+        private function dragPOI(event:MouseEvent, tags:Array):void {
+            // Get the drag initiator component from the event object.
+            var dragInitiator:Image = event.currentTarget as Image;
+            var dragSource:DragSource = new DragSource();
+            dragSource.addData(tags, 'tags');
+            
+            var dragProxy:Image = new Image();
+            dragProxy.source = event.currentTarget.source;
+            
+            DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
+        }
+        
+        private function dragEnterHandler(event:DragEvent):void {
+            // Get the drop target component from the event object.
+            var dropTarget:Canvas=event.currentTarget as Canvas;
+            // Accept the drag only if the user is dragging poi with tags
+            if (event.dragSource.hasFormat('tags')) 
+            {
+                DragManager.acceptDragDrop(dropTarget);
+            }
+        }
+        
+        private function dragDropHandler(event:DragEvent):void {
+            // Get the data identified by the color format from the drag source.
+            // Blame http://www.adobe.com/devnet/flex/quickstart/adding_drag_and_drop/#manual
+            // for whatever horrid abuse of "color format" this is doing
+            var tags:Array = event.dragSource.dataForFormat('tags') as Array;
+            var mapLoc:Point = Globals.vars.root.globalToLocal(new Point(event.stageX, event.stageY));
+            var lat:Number = Globals.vars.root.coord2lat(mapLoc.y);
+            var lon:Number = Globals.vars.root.coord2lon(mapLoc.x);
+            var node:Node = Connection.getConnectionInstance().createNode({}, lat, lon);
+            for each( var tag:Array in tags ) {
+              node.setTag(tag[0],tag[1]);
+            }
+        }
+
 	]]></mx:Script>
 
 </mx:Application>
