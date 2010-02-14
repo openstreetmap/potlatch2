@@ -33,8 +33,8 @@ Potlatch 2: main outstanding issues
 * UI for geometry operations
 * Keyboard shortcuts
 * CSS editing
-* "New relations" panel
 * Direct click-to-edit of relation role should actually work
+* Relation member changes should update TagViewer automatically
 
 
 == Tagging ==

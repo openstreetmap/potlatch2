@@ -42,12 +42,23 @@
           relation.appendMember(new RelationMember(entity, ''));
           PopUpManager.removePopUp(this);
         }
+        
+        public function closeAndNewRelation():void {
+          var relation:Relation = conn.createRelation({}, [new RelationMember(entity, '')])
+          PopUpManager.removePopUp(this);
+          trace("edit relation "+id);
+          var panel:RelationEditorPanel = RelationEditorPanel(
+              PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+          panel.setRelation(relation);
+          PopUpManager.centerPopUp(panel);
+        }
+        
     ]]></mx:Script> 
     <mx:Text id="warning" text="" />
     <mx:List width="100%" height="100%" id="relationSelector" verticalScrollPolicy="on"> 
     </mx:List>
     <mx:ControlBar>
-      <mx:Button label="New Relation..." enabled="false"/>
+      <mx:Button label="New Relation..." click="closeAndNewRelation();"/>
       <mx:Spacer width="100%"/>
       <mx:Button label="Select" click="updateEntityAndClose();" enabled="{relationSelector.selectedItem != null? true : false}"/>
     </mx:ControlBar>
