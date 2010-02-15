@@ -230,6 +230,7 @@
             for each( var tag:Array in tags ) {
               node.setTag(tag[0],tag[1]);
             }
+			Connection.getConnectionInstance().registerPOI(node);
         }
 
 	]]></mx:Script>
