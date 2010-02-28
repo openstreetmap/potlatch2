@@ -2,7 +2,11 @@ package net.systemeD.potlatch2.mapfeatures {
 
     import flash.events.EventDispatcher;
     import flash.events.Event;
+    import flash.net.*;
+    import flash.utils.ByteArray;
+    
     import net.systemeD.halcyon.connection.Entity;
+    import net.systemeD.potlatch2.utils.CachedDataLoader;
 
 	public class Feature extends EventDispatcher {
         private var mapFeatures:MapFeatures;
@@ -78,13 +82,21 @@ package net.systemeD.potlatch2.mapfeatures {
         }
     
         [Bindable(event="imageChanged")]
-        public function get image():String {
+        public function get image():ByteArray {
             var icon:XMLList = _xml.icon;
+            var imageURL:String = null;
 
             if ( icon.length() > 0 && icon[0].hasOwnProperty("@image") )
-                return icon[0].@image;
-            else
-                return null;
+                imageURL = icon[0].@image;
+            
+            if ( imageURL != null ) {
+                return CachedDataLoader.loadData(imageURL, imageLoaded);
+            }
+            return null;
+        }
+        
+        private function imageLoaded(url:String, data:ByteArray):void {
+            dispatchEvent(new Event("imageChanged"));
         }
         
         public function htmlDetails(entity:Entity):String {

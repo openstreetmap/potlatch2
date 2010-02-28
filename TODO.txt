@@ -22,18 +22,12 @@ Potlatch 2: main outstanding issues
 * Plugin support
 
 
-== Server interaction ==
-
-* Should redraw members of a relation when the relation is loaded
-
-
 == UI ==
 
 * UI for geometry operations
 * Keyboard shortcuts
 * CSS editing
 * Direct click-to-edit of relation role should actually work
-* Relation member changes should update TagViewer automatically
 
 
 == Tagging ==

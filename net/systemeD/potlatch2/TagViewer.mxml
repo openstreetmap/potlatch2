@@ -151,8 +151,13 @@
       private function refreshFeatureIcon():void {
           var oldFeature:Feature = feature;
           feature = selectedEntity == null ? null : mapFeatures.findMatchingFeature(selectedEntity);
-          if ( feature != oldFeature )
+          if ( feature != oldFeature ) {
+              if ( oldFeature != null )
+                  oldFeature.removeEventListener("imageChanged", featureImageChanged);
+              if ( feature != null )
+                  feature.addEventListener("imageChanged", featureImageChanged);
               initialiseEditors();
+          }
 
           if ( feature != null )
               setFeatureIcon(selectedEntity, feature);
@@ -160,6 +165,10 @@
               blankFeatureIcon(selectedEntity);
       }
 
+      private function featureImageChanged(event:Event):void {
+          setFeatureIcon(selectedEntity, feature);
+      }
+      
       private function setFeatureIcon(entity:Entity, feature:Feature):void {
           //blankFeatureIcon(entity);
           

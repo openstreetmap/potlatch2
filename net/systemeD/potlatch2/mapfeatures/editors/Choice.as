@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.mapfeatures.editors {
 
     import flash.events.*;
+    import flash.utils.ByteArray;
 
 	public class Choice extends EventDispatcher {
 
@@ -10,8 +11,8 @@ package net.systemeD.potlatch2.mapfeatures.editors {
         public var description:String = "";
         [Bindable]
         public var value:String = null;
-        [Bindable]
-        public var icon:String = null;
+        [Bindable("iconLoaded")]
+        public var icon:ByteArray = null;
 
         private var _match:RegExp = null;
         
@@ -25,6 +26,11 @@ package net.systemeD.potlatch2.mapfeatures.editors {
             if ( matchStr != null && matchStr != "" ) {
                 _match = new RegExp("^("+matchStr+")$");
             }
+        }
+        
+        public function imageLoaded(url:String, data:ByteArray):void {
+            icon = data;
+            dispatchEvent(new Event("iconLoaded"));
         }
     }
 
