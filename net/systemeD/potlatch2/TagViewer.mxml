@@ -24,8 +24,9 @@
                   dragSource.addData(tags, 'tags');
                   
                   var dragProxy:Image = new Image();
-                  dragProxy.source = event.currentTarget.source;
-                  trace(dragProxy.source);
+                  dragProxy.source = dragInitiator.source;
+                  dragProxy.width = dragInitiator.width;   // must set width and height explicitly
+                  dragProxy.height = dragInitiator.height; // for non-embedded images
                   DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
               }
             ]]></mx:Script>
