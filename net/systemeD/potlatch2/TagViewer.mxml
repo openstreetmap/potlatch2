@@ -5,71 +5,81 @@
     backgroundColor="white"
     initialize="loadFeatures()">
 
-  <mx:ViewStack id="stack" width="100%" height="100%">
-  <mx:VBox width="100%" height="100%" label="Simple">
-    <mx:HBox borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3" id="iconContainer">
-        <mx:Image id="iconImage"/>
-        <mx:VBox width="100%" verticalGap="1">
-          <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%"/>
-          <mx:Text condenseWhite="true" width="100%" id="iconText"/>
-        </mx:VBox>
-        <mx:LinkButton label="?" click="openDescription()" id="helpLabel"/>
-    </mx:HBox>
-    <flexlib:SuperTabNavigator id="editorStack" width="100%" height="100%" paddingLeft="2" paddingRight="2"
-        allowTabSqueezing="false" minTabWidth="10" closePolicy="close_never"
-        scrollSpeed="20" change="ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox)"/>
-  </mx:VBox>
-
-  <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
-    <mx:Label id="advancedID">
-      <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
-    </mx:Label>
-
-    <mx:DataGrid editable="true" width="100%" height="75%" id="advancedTagGrid">
-            <mx:columns>
-                <mx:DataGridColumn editable="true" dataField="key" headerText="Key"/>
-                <mx:DataGridColumn editable="true" dataField="value" headerText="Value"/>
-            </mx:columns>
-    </mx:DataGrid>
-
-    <mx:HBox horizontalAlign="right" width="100%">
-      <mx:LinkButton label="Delete" click="removeTag()" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
-      <mx:LinkButton label="Add" click="addNewTag()"/>
-    </mx:HBox>
-    
-    <mx:DataGrid editable="true" width="100%" height="25%" id="relationsGrid"
-        doubleClickEnabled="true"
-        itemDoubleClick="editRelation(relationsGrid.selectedItem.id)">
-        <mx:columns>
-            <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
-            <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
-            <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
-        </mx:columns>
-    </mx:DataGrid>
-
-    <mx:HBox horizontalAlign="right" width="100%">
-      <mx:LinkButton label="Remove from" click="removeFromRelation(relationsGrid.selectedItem.id, relationsGrid.selectedItem.index)" 
-                      enabled="{relationsGrid.selectedItem != null? true : false}"/>
-      <mx:LinkButton label="Add to" click="addToRelation()"/>
-    </mx:HBox>
-
-  </mx:VBox>
-
-  <mx:VBox width="100%" height="100%" label="Members" id="membersVBox" initialize="checkMembers()" verticalGap="1">
-    <mx:Label id="membersText" text="Relation Members"/>
-    <mx:DataGrid editable="true" width="100%" height="100%" id="membersGrid"
-                  dragEnabled="true" dragMoveEnabled="true" dropEnabled="true">
-      <mx:columns>
-        <mx:DataGridColumn editable="false" dataField="type" headerText="Type"/>
-        <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
-        <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
-      </mx:columns>
-    </mx:DataGrid>
+<mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
+  <mx:VBox id="dndPanel" width="100%" height="100%">
+    <mx:Text text="Drag and Drop Points of Interest" />
+    <mx:Image id="pub" source="@Embed('../../../resources/icons/pub.png')" mouseMove="dragPOI(event, [['amenity','pub']])" />
+    <mx:Image id="station" source="@Embed('../../../resources/icons/station.png')"
+      mouseMove="dragPOI(event, [['railway', 'station'],['name','Charbury International']])" />
   </mx:VBox>
   
-  </mx:ViewStack>
+  <mx:VBox id="tagsPanel" width="100%" height="100%">
+    <mx:ViewStack id="stack" width="100%" height="100%">
+      <mx:VBox width="100%" height="100%" label="Simple">
+        <mx:HBox borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3" id="iconContainer">
+            <mx:Image id="iconImage"/>
+            <mx:VBox width="100%" verticalGap="1">
+              <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%"/>
+              <mx:Text condenseWhite="true" width="100%" id="iconText"/>
+            </mx:VBox>
+            <mx:LinkButton label="?" click="openDescription()" id="helpLabel"/>
+        </mx:HBox>
+        <flexlib:SuperTabNavigator id="editorStack" width="100%" height="100%" paddingLeft="2" paddingRight="2"
+            allowTabSqueezing="false" minTabWidth="10" closePolicy="close_never"
+            scrollSpeed="20" change="ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox)"/>
+      </mx:VBox>
 
-  <mx:LinkBar dataProvider="{stack}"/>
+      <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
+        <mx:Label id="advancedID">
+          <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
+        </mx:Label>
+
+        <mx:DataGrid editable="true" width="100%" height="75%" id="advancedTagGrid">
+                <mx:columns>
+                    <mx:DataGridColumn editable="true" dataField="key" headerText="Key"/>
+                    <mx:DataGridColumn editable="true" dataField="value" headerText="Value"/>
+                </mx:columns>
+        </mx:DataGrid>
+
+        <mx:HBox horizontalAlign="right" width="100%">
+          <mx:LinkButton label="Delete" click="removeTag()" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
+          <mx:LinkButton label="Add" click="addNewTag()"/>
+        </mx:HBox>
+        
+        <mx:DataGrid editable="true" width="100%" height="25%" id="relationsGrid"
+            doubleClickEnabled="true"
+            itemDoubleClick="editRelation(relationsGrid.selectedItem.id)">
+            <mx:columns>
+                <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
+                <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
+                <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+        <mx:HBox horizontalAlign="right" width="100%">
+          <mx:LinkButton label="Remove from" click="removeFromRelation(relationsGrid.selectedItem.id, relationsGrid.selectedItem.index)" 
+                          enabled="{relationsGrid.selectedItem != null? true : false}"/>
+          <mx:LinkButton label="Add to" click="addToRelation()"/>
+        </mx:HBox>
+
+      </mx:VBox>
+
+      <mx:VBox width="100%" height="100%" label="Members" id="membersVBox" initialize="checkMembers()" verticalGap="1">
+        <mx:Label id="membersText" text="Relation Members"/>
+        <mx:DataGrid editable="true" width="100%" height="100%" id="membersGrid"
+                      dragEnabled="true" dragMoveEnabled="true" dropEnabled="true">
+          <mx:columns>
+            <mx:DataGridColumn editable="false" dataField="type" headerText="Type"/>
+            <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
+            <mx:DataGridColumn editable="true" dataField="role" headerText="Role"/>
+          </mx:columns>
+        </mx:DataGrid>
+      </mx:VBox>
+      
+      </mx:ViewStack>
+    <mx:LinkBar dataProvider="{stack}"/>
+  </mx:VBox>
+</mx:ViewStack>
 
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
@@ -82,6 +92,9 @@
       import mx.managers.PopUpManager;
       import flash.geom.Point;
       import flash.net.*;
+      import mx.events.DragEvent;
+      import mx.managers.DragManager;
+      import mx.core.DragSource;
       
       private var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
@@ -103,7 +116,13 @@
           if (entity is Relation) {
               stack.addChild(membersVBox);
           }
-          refreshFeatureIcon();
+          refreshFeatureIcon(); 
+          
+          if (selectedEntity == null) {
+            sidebar.selectedChild = dndPanel;
+          } else {
+            sidebar.selectedChild = tagsPanel;
+          }
       }
 
       private function refreshFeatureIcon():void {
@@ -399,6 +418,18 @@
           }
           
           popupChange.close();
+      }
+      
+      private function dragPOI(event:MouseEvent, tags:Array):void {
+          // Get the drag initiator component from the event object.
+          var dragInitiator:Image = event.currentTarget as Image;
+          var dragSource:DragSource = new DragSource();
+          dragSource.addData(tags, 'tags');
+          
+          var dragProxy:Image = new Image();
+          dragProxy.source = event.currentTarget.source;
+          
+          DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
       }
   ]]></mx:Script>
 </mx:VBox>

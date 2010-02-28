@@ -27,9 +27,6 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-        <mx:Image id="pub" source="@Embed('resources/icons/pub.png')" mouseMove="dragPOI(event, [['amenity','pub']])" />
-        <mx:Image id="station" source="@Embed('resources/icons/station.png')"
-            mouseMove="dragPOI(event, [['railway', 'station'],['name','Charbury International']])" />
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
         <mx:Button label="Options" click="new OptionsDialog().init();" />
@@ -196,17 +193,7 @@
             dataWorking.visible = false;
         }
         
-        private function dragPOI(event:MouseEvent, tags:Array):void {
-            // Get the drag initiator component from the event object.
-            var dragInitiator:Image = event.currentTarget as Image;
-            var dragSource:DragSource = new DragSource();
-            dragSource.addData(tags, 'tags');
-            
-            var dragProxy:Image = new Image();
-            dragProxy.source = event.currentTarget.source;
-            
-            DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
-        }
+
         
         private function dragEnterHandler(event:DragEvent):void {
             // Get the drop target component from the event object.
