@@ -105,6 +105,19 @@ package net.systemeD.potlatch2.mapfeatures {
             return _features;
         }
 
+        [Bindable(event="featuresLoaded")]
+        public function get pois():Array {
+            if (xml == null )
+                return null;
+            var pois:Array = [];
+            var counter:int = 0;
+            for each ( var feature:Feature in _features ) {
+              if (feature.isType("point")) {
+                pois.push(feature);
+              }
+            }
+            return pois;
+        }
     }
 
 }

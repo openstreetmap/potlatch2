@@ -8,9 +8,32 @@
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
   <mx:VBox id="dndPanel" width="100%" height="100%">
     <mx:Text text="Drag and Drop Points of Interest" />
-    <mx:Image id="pub" source="@Embed('../../../resources/icons/pub.png')" mouseMove="dragPOI(event, [['amenity','pub']])" />
-    <mx:Image id="station" source="@Embed('../../../resources/icons/station.png')"
-      mouseMove="dragPOI(event, [['railway', 'station'],['name','Charbury International']])" />
+    <mx:TileList id="poiGrid" dataProvider="{MapFeatures.getInstance().pois}" width="100%">
+      <mx:itemRenderer>
+        <mx:Component>
+          <mx:VBox>
+            <mx:Script><![CDATA[
+              import mx.events.DragEvent;
+              import mx.managers.DragManager;
+              import mx.core.DragSource;
+                  
+              private function dragPOI(event:MouseEvent, tags:Array):void {
+                  // Get the drag initiator component from the event object.
+                  var dragInitiator:Image = event.currentTarget as Image;
+                  var dragSource:DragSource = new DragSource();
+                  dragSource.addData(tags, 'tags');
+                  
+                  var dragProxy:Image = new Image();
+                  dragProxy.source = event.currentTarget.source;
+                  trace(dragProxy.source);
+                  DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
+              }
+            ]]></mx:Script>
+            <mx:Image id="foo" source="{data.image}" height="25" width="25" mouseMove="dragPOI(event, data.tags)"/>
+          </mx:VBox>
+        </mx:Component>
+      </mx:itemRenderer>
+    </mx:TileList>
   </mx:VBox>
   
   <mx:VBox id="tagsPanel" width="100%" height="100%">

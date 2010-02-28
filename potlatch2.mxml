@@ -214,8 +214,8 @@
             var lat:Number = Globals.vars.root.coord2lat(mapLoc.y);
             var lon:Number = Globals.vars.root.coord2lon(mapLoc.x);
             var node:Node = Connection.getConnectionInstance().createNode({}, lat, lon);
-            for each( var tag:Array in tags ) {
-              node.setTag(tag[0],tag[1]);
+            for each ( var tag:Object in tags ) {
+              node.setTag(tag.k, tag.v);
             }
 			Connection.getConnectionInstance().registerPOI(node);
         }
