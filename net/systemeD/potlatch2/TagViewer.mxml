@@ -229,6 +229,8 @@
              setupAdvanced(selectedEntity);
       }
 
+      private var listeningToRelations:Array = [];
+      
       private function setupAdvanced(entity:Entity):void {
           if ( tagDataProvider == null ) {
               tagDataProvider = new ArrayCollection();
@@ -251,26 +253,69 @@
               for each(var tag:Tag in tags)
                   tagDataProvider.addItem(tag);
           }
+                    
+          removeRelationListeners();
+          if ( selectedEntity != null ) {
+              selectedEntity.removeEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
+              selectedEntity.removeEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
+          }
           
           if ( entity == null ) {
               relationsGrid.dataProvider = null;
           } else {
-              var relations:Array = [];
-              for each( var rel:Relation in entity.parentRelations ) {
-                  for each( var memberIndex:int in rel.findEntityMemberIndexes(entity)) {
-                    var props:Object = {};
-                    props["relation"] = rel;
-                    props["id"] = rel.id;
-                    props["index"] = memberIndex;
-                    props["role"] = rel.getMember(memberIndex).role;
-                    props["description"] = rel.getDescription();
-                    props["id_idx"] = rel.id + "/"+memberIndex;
-                    
-                    relations.push(props);
-                  }
-              }
-              relationsGrid.dataProvider = relations;
+              resetRelationsGrid(entity);
+              entity.addEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
+              entity.addEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
           }
+      }
+      
+      private function addedToRelation(event:RelationMemberEvent):void {
+         resetRelationsGrid(selectedEntity);
+      }
+
+      private function removedFromRelation(event:RelationMemberEvent):void {
+         resetRelationsGrid(selectedEntity);
+      }
+
+      private function removeRelationListeners():void {
+          for each( var rel:Relation in listeningToRelations ) {
+              rel.removeEventListener(Connection.TAG_CHANGE, relationTagChanged);
+              rel.removeEventListener(Connection.RELATION_MEMBER_ADDED, entityRelationMemberChanged);
+              rel.removeEventListener(Connection.RELATION_MEMBER_REMOVED, entityRelationMemberChanged);
+          }
+          listeningToRelations = [];
+      }
+            
+      private function resetRelationsGrid(entity:Entity):void {
+          removeRelationListeners();
+          var relations:Array = [];
+          for each( var rel:Relation in entity.parentRelations ) {
+              for each( var memberIndex:int in rel.findEntityMemberIndexes(entity)) {
+                  var props:Object = {};
+                  props["relation"] = rel;
+                  props["id"] = rel.id;
+                  props["index"] = memberIndex;
+                  props["role"] = rel.getMember(memberIndex).role;
+                  props["description"] = rel.getDescription();
+                  props["id_idx"] = rel.id + "/"+memberIndex;
+
+                  relations.push(props);
+              }
+              
+              rel.addEventListener(Connection.TAG_CHANGE, relationTagChanged);
+              rel.addEventListener(Connection.RELATION_MEMBER_ADDED, entityRelationMemberChanged);
+              rel.addEventListener(Connection.RELATION_MEMBER_REMOVED, entityRelationMemberChanged);
+              listeningToRelations.push(rel);
+          }
+          relationsGrid.dataProvider = relations;
+      }
+      
+      private function relationTagChanged(event:TagEvent):void {
+          resetRelationsGrid(selectedEntity);
+      }
+
+      private function entityRelationMemberChanged(event:RelationMemberEvent):void {
+          resetRelationsGrid(selectedEntity);
       }
       
       private function checkMembers():void {

@@ -7,14 +7,19 @@ package net.systemeD.halcyon.connection {
         public function Relation(id:Number, version:uint, tags:Object, loaded:Boolean, members:Array) {
             super(id, version, tags, loaded);
             this.members = members;
-			for each (var member:RelationMember in members) { member.entity.addParent(this); }
+			for each (var member:RelationMember in members)
+			    member.entity.addParent(this);
         }
 
         public function update(version:uint, tags:Object, loaded:Boolean, members:Array):void {
 			var member:RelationMember;
-			for each (member in this.members) { member.entity.removeParent(this); }
-			updateEntityProperties(version,tags,loaded); this.members=members;
-			for each (member in members) { member.entity.addParent(this); }
+			for each (member in this.members)
+			    member.entity.removeParent(this);
+
+			updateEntityProperties(version,tags,loaded);
+			this.members=members;
+			for each (member in members)
+			    member.entity.addParent(this);
 		}
 		
         public function get length():uint {
@@ -46,40 +51,54 @@ package net.systemeD.halcyon.connection {
 
         public function setMember(index:uint, member:RelationMember):void {
             var oldMember:RelationMember = getMember(index);
-            oldMember.entity.removeParent(this);
             
- 			member.entity.addParent(this);
 			members.splice(index, 1, member);
+            oldMember.entity.removeParent(this);
+ 			member.entity.addParent(this);
 			markDirty();
         }
 
         public function insertMember(index:uint, member:RelationMember):void {
- 			member.entity.addParent(this);
             members.splice(index, 0, member);
+ 			member.entity.addParent(this);
 			markDirty();
+			
+			dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_ADDED, member.entity, this, index));
         }
 
         public function appendMember(member:RelationMember):uint {
- 			member.entity.addParent(this);
             members.push(member);
+ 			member.entity.addParent(this);
 			markDirty();
+
+			dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_ADDED, member.entity, this, members.length-1));
             return members.length;
         }
 
 		public function removeMember(entity:Entity):void {
 			var i:int;
+			var lastRemoved:int = -1;
 			while ((i=findEntityMemberIndex(entity))>-1) {
 				members.splice(i, 1);
+				lastRemoved = i;
 			}
 			entity.removeParent(this);
 			markDirty();
+			
+			if ( lastRemoved >= 0 )
+			    dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, entity, this, lastRemoved));
 		}
 
         public function removeMemberByIndex(index:uint):void {
             var removed:Array=members.splice(index, 1);
 			var entity:Entity=removed[0].entity;
-			if (findEntityMemberIndex(entity)==-1) { entity.removeParent(this); }
+			
+			// only remove as parent if this was only reference
+			if (findEntityMemberIndex(entity)==-1)
+			    entity.removeParent(this);
+			    
 			markDirty();
+            dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, entity, this, index));
         }
 
 		public override function remove():void {

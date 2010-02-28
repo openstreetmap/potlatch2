@@ -135,10 +135,16 @@ package net.systemeD.halcyon.connection {
 		
 		public function addParent(parent:Entity):void {
 			parents[parent]=true;
+			
+			if ( parent is Relation )
+			    dispatchEvent(new RelationMemberEvent(Connection.ADDED_TO_RELATION, this, parent as Relation, -1));
 		}
 
 		public function removeParent(parent:Entity):void {
 			delete parents[parent];
+
+			if ( parent is Relation )
+			    dispatchEvent(new RelationMemberEvent(Connection.REMOVED_FROM_RELATION, this, parent as Relation, -1));
 		}
 		
 		public function get parentWays():Array {

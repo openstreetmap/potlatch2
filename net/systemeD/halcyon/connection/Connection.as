@@ -66,6 +66,10 @@ package net.systemeD.halcyon.connection {
 		public static var NODE_DELETED:String = "node_deleted";
 		public static var WAY_DELETED:String = "way_deleted";
 		public static var RELATION_DELETED:String = "relation_deleted";
+		public static var RELATION_MEMBER_ADDED:String = "relation_member_added";
+		public static var RELATION_MEMBER_REMOVED:String = "relation_member_deleted";
+		public static var ADDED_TO_RELATION:String = "added_to_relation";
+		public static var REMOVED_FROM_RELATION:String = "removed_from_relation";
 
         // store the data we download
         private var negativeID:Number = -1;

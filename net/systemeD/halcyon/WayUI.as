@@ -33,13 +33,33 @@ package net.systemeD.halcyon {
             way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             way.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
 			way.addEventListener(Connection.WAY_DELETED, wayDeleted);
+			way.addEventListener(Connection.ADDED_TO_RELATION, wayRelationAdded);
+			way.addEventListener(Connection.REMOVED_FROM_RELATION, wayRelationRemoved);
             attachNodeListeners();
+            attachRelationListeners();
 		}
 		
 		private function attachNodeListeners():void {
             for (var i:uint = 0; i < way.length; i++ ) {
                 way.getNode(i).addEventListener(Connection.NODE_MOVED, nodeMoved);
             }
+		}
+
+		private function attachRelationListeners():void {
+		    var relations:Array = way.parentRelations;
+            for each(var relation:Relation in relations ) {
+                relation.addEventListener(Connection.TAG_CHANGE, relationTagChanged);
+            }
+		}
+		
+		private function wayRelationAdded(event:RelationMemberEvent):void {
+		    event.relation.addEventListener(Connection.TAG_CHANGE, relationTagChanged);
+		    redraw();
+		}
+		
+		private function wayRelationRemoved(event:RelationMemberEvent):void {
+		    event.relation.removeEventListener(Connection.TAG_CHANGE, relationTagChanged);
+		    redraw();
 		}
 		
 		private function wayNodeAdded(event:WayNodeEvent):void {
@@ -53,6 +73,9 @@ package net.systemeD.halcyon {
 		}
 		    
         private function wayTagChanged(event:TagEvent):void {
+            redraw();
+        }
+        private function relationTagChanged(event:TagEvent):void {
             redraw();
         }
         private function nodeMoved(event:NodeMovedEvent):void {
