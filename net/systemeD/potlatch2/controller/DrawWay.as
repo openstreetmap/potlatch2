@@ -95,10 +95,9 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function stopDrawing():ControllerState {
 			if ( selectedWay.length<2) {
-				// ** probably needs to call a proper 'delete way' method
 				controller.map.setHighlight(selectedWay, { showNodes: false });
-				selectedWay.removeAllNodes();
-				delete controller.map.ways[selectedWay.id];
+				selectedWay.remove();
+				// delete controller.map.ways[selectedWay.id];
 				return new NoSelection();
 			} else if ( leaveNodeSelected ) {
 			    return new SelectedWayNode(selectedWay, selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0));

@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.potlatch2.tools.Quadrilateralise;
     import net.systemeD.halcyon.connection.*;
@@ -71,16 +72,14 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
         
-	override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-	  if (event.keyCode == 81) { // 'q' or 'Q'
-	    var success:Boolean = Quadrilateralise.quadrilateralise(selectedWay);
-	    if (!success) {
-	      trace("Quadrilateralise failed.");
-	    }
-	  }
-
-	  return this;
-	}
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			switch (event.keyCode) {
+				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
+				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
+				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
+			}
+			return this;
+		}
 
         protected function addNode(event:MouseEvent):Node {
             trace("add node");
@@ -102,6 +101,11 @@ package net.systemeD.potlatch2.controller {
 			return true;
 		}
         
+		public function deleteWay():ControllerState {
+			selectedWay.remove();
+			return new NoSelection();
+		}
+
         override public function enterState():void {
             selectWay(initWay);
 			Globals.vars.root.addDebug("**** -> "+this);

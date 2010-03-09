@@ -75,18 +75,6 @@ package net.systemeD.halcyon.connection {
             dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], this, index));
         }
 
-		public function removeAllNodes():void {
-			var node:Node;
-			while (nodes.length) { 
-				node=nodes.pop();
-				dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, this, 0));
-				// ** the event mechanism calls redraw once per wayNodeRemoved, which isn't too efficient
-				//    so we should probably add a 'redraw' flag to WayNodeEvent
-				node.removeParent(this);
-			}
-			// ** we should send an event to delete the entire way
-		}
-
 		public function sliceNodes(start:int,end:int):Array {
 			return nodes.slice(start,end);
 		}
@@ -192,12 +180,16 @@ package net.systemeD.halcyon.connection {
 		}
 		
 		public override function remove():void {
+			var node:Node;
 			removeFromParents();
-			for each (var node:Node in nodes) {
+			while (nodes.length) { 
+				node=nodes.pop();
+				dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, this, 0));
+				// ** the event mechanism calls redraw once per wayNodeRemoved, which isn't too efficient
+				//    so we should probably add a 'redraw' flag to WayNodeEvent
 				node.removeParent(this);
-				if (!node.hasParentWays) { node.remove(); }
+				if (!node.hasParents) { node.remove(); }
 			}
-			nodes=[];
 			deleted=true;
             dispatchEvent(new EntityEvent(Connection.WAY_DELETED, this));
 		}
