@@ -9,7 +9,7 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-* Delete points and ways
+* Delete POIs and ways
 * Merge ways (almost there)
 * Undo/redo
 * Reverse way direction

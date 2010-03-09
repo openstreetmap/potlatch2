@@ -60,7 +60,7 @@ package net.systemeD.halcyon.connection {
 
 		public function removeNode(node:Node):void {
 			var i:int;
-			while ((i=nodes.indexOf(i))>-1) {
+			while ((i=nodes.indexOf(node))>-1) {
 				nodes.splice(i,1);
             	dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, this, i));
 			}

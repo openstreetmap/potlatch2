@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
@@ -69,7 +70,9 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 88:	return splitWay();
+				case 88:					return splitWay();
+				case Keyboard.BACKSPACE:	return deleteNode();
+				case Keyboard.DELETE:		return deleteNode();
 			}
 			return this;
 		}
@@ -116,6 +119,11 @@ package net.systemeD.potlatch2.controller {
 			}
 			controller.map.ways[newWay.id].redraw();
 
+			return new SelectedWay(selectedWay);
+		}
+		
+		public function deleteNode():ControllerState {
+			selectedNode.remove();
 			return new SelectedWay(selectedWay);
 		}
 

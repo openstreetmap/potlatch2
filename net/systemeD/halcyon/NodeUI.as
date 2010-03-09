@@ -27,10 +27,15 @@ package net.systemeD.halcyon {
 			this.node = node;
 			this.heading = heading;
 			node.addEventListener(Connection.NODE_MOVED, nodeMoved);
+			node.addEventListener(Connection.NODE_DELETED, nodeDeleted);
 		}
 		
 		public function nodeMoved(event:Event):void {
 		    updatePosition();
+		}
+
+		public function nodeDeleted(event:Event):void {
+			removeSprites();
 		}
 		
 		override public function redraw(sl:StyleList=null):Boolean {
