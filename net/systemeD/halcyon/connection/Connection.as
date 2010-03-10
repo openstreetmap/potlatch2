@@ -59,7 +59,7 @@ package net.systemeD.halcyon.connection {
         public static var NEW_WAY:String = "new_way";
         public static var NEW_RELATION:String = "new_relation";
         public static var NEW_POI:String = "new_poi";
-        public static var TAG_CHANGE:String = "tag_change";
+        public static var TAG_CHANGED:String = "tag_change";
         public static var NODE_MOVED:String = "node_moved";
         public static var WAY_NODE_ADDED:String = "way_node_added";
         public static var WAY_NODE_REMOVED:String = "way_node_removed";
@@ -70,6 +70,8 @@ package net.systemeD.halcyon.connection {
 		public static var RELATION_MEMBER_REMOVED:String = "relation_member_deleted";
 		public static var ADDED_TO_RELATION:String = "added_to_relation";
 		public static var REMOVED_FROM_RELATION:String = "removed_from_relation";
+		public static var SUSPEND_REDRAW:String = "suspend_redraw";
+		public static var RESUME_REDRAW:String = "resume_redraw";
 
         // store the data we download
         private var negativeID:Number = -1;

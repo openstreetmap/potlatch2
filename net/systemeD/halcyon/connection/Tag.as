@@ -7,7 +7,7 @@ package net.systemeD.halcyon.connection {
 
         public function Tag(entity:Entity, key:String, value:String) {
             this.entity = entity;
-            entity.addEventListener(Connection.TAG_CHANGE, tagChanged, false, 0, true);
+            entity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
             this._key = key;
             this._value = value;
         }

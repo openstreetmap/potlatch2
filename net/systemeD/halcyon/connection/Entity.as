@@ -59,7 +59,7 @@ package net.systemeD.halcyon.connection {
                 else
                     tags[key] = value;
                 markDirty();
-                dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, key, key, old, value));
+                dispatchEvent(new TagEvent(Connection.TAG_CHANGED, this, key, key, old, value));
             }
         }
 
@@ -69,7 +69,7 @@ package net.systemeD.halcyon.connection {
                 delete tags[oldKey];
                 tags[newKey] = value;
                 markDirty();
-                dispatchEvent(new TagEvent(Connection.TAG_CHANGE, this, oldKey, newKey, value, value));
+                dispatchEvent(new TagEvent(Connection.TAG_CHANGED, this, oldKey, newKey, value, value));
             }
         }
 
@@ -192,7 +192,17 @@ package net.systemeD.halcyon.connection {
 		public function hasParent(entity:Entity):Boolean {
             return parents[entity] == true;
         }
-        
+
+		// Resume/suspend redraw
+		
+		public function suspend():void {
+			dispatchEvent(new EntityEvent(Connection.SUSPEND_REDRAW, this));
+		}
+		
+		public function resume():void {
+			dispatchEvent(new EntityEvent(Connection.RESUME_REDRAW, this));
+		}
+
 		// To be overridden
 
         public function getType():String {

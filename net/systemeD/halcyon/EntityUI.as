@@ -6,6 +6,7 @@ package net.systemeD.halcyon {
 	import flash.text.GridFitType;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.StyleList;
+    import net.systemeD.halcyon.connection.EntityEvent;
 
 	public class EntityUI {
 
@@ -13,6 +14,9 @@ package net.systemeD.halcyon {
         protected var listenSprite:Sprite;				// clickable sprite to receive events
 		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
 		protected var layer:int=0;						// map layer
+		protected var suspended:Boolean=false;			// suspend redrawing?
+		protected var redrawDue:Boolean=false;			// redraw called while suspended?
+		protected var redrawStyleList:StyleList;		// stylelist to be used when redrawing?
 		public var map:Map;								// reference to parent map
 
 		protected const FILLSPRITE:uint=0;
@@ -88,8 +92,30 @@ package net.systemeD.halcyon {
 			return tags;
 		}
 		
+		// Redraw control
+		
 		public function redraw(sl:StyleList=null):Boolean {
+			if (suspended) { redrawStyleList=sl; redrawDue=true; return false; }
+			return doRedraw(sl);
+		}
+		
+		public function doRedraw(sl:StyleList):Boolean {
+			// to be overwritten
 			return false;
+		}
+		
+		public function suspendRedraw(event:EntityEvent):void {
+			suspended=true;
+			redrawDue=false;
+		}
+		
+		public function resumeRedraw(event:EntityEvent):void {
+			suspended=false;
+			if (redrawDue) { 
+				doRedraw(redrawStyleList);
+				redrawDue=false;
+				redrawStyleList=null; 
+			}
 		}
 
 	}

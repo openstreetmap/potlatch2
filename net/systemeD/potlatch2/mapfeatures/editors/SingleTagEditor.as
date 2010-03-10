@@ -37,7 +37,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       
       public function set entity(entity:Entity):void {
           _entity = entity;
-          entity.addEventListener(Connection.TAG_CHANGE, tagChanged, false, 0, true);
+          entity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
           dispatchEvent(new Event("tag_changed"));
       }
       

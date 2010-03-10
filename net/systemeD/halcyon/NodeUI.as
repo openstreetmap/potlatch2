@@ -28,6 +28,8 @@ package net.systemeD.halcyon {
 			this.heading = heading;
 			node.addEventListener(Connection.NODE_MOVED, nodeMoved);
 			node.addEventListener(Connection.NODE_DELETED, nodeDeleted);
+			node.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
+			node.addEventListener(Connection.RESUME_REDRAW, resumeRedraw);
 		}
 		
 		public function nodeMoved(event:Event):void {
@@ -38,7 +40,7 @@ package net.systemeD.halcyon {
 			removeSprites();
 		}
 		
-		override public function redraw(sl:StyleList=null):Boolean {
+		override public function doRedraw(sl:StyleList):Boolean {
 			var tags:Object = node.getTagsCopy();
 			tags=applyStateClasses(tags);
 			if (!node.hasParentWays) { tags[':poi']='yes'; }

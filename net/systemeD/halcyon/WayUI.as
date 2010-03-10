@@ -29,12 +29,14 @@ package net.systemeD.halcyon {
 			this.way = way;
 			this.map = map;
             init();
-            way.addEventListener(Connection.TAG_CHANGE, wayTagChanged);
+            way.addEventListener(Connection.TAG_CHANGED, wayTagChanged);
             way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             way.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
 			way.addEventListener(Connection.WAY_DELETED, wayDeleted);
 			way.addEventListener(Connection.ADDED_TO_RELATION, wayRelationAdded);
 			way.addEventListener(Connection.REMOVED_FROM_RELATION, wayRelationRemoved);
+			way.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
+			way.addEventListener(Connection.RESUME_REDRAW, resumeRedraw);
             attachNodeListeners();
             attachRelationListeners();
 		}
@@ -48,17 +50,17 @@ package net.systemeD.halcyon {
 		private function attachRelationListeners():void {
 		    var relations:Array = way.parentRelations;
             for each(var relation:Relation in relations ) {
-                relation.addEventListener(Connection.TAG_CHANGE, relationTagChanged);
+                relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
             }
 		}
 		
 		private function wayRelationAdded(event:RelationMemberEvent):void {
-		    event.relation.addEventListener(Connection.TAG_CHANGE, relationTagChanged);
+		    event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
 		    redraw();
 		}
 		
 		private function wayRelationRemoved(event:RelationMemberEvent):void {
-		    event.relation.removeEventListener(Connection.TAG_CHANGE, relationTagChanged);
+		    event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
 		    redraw();
 		}
 		
@@ -140,7 +142,7 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Redraw
 
-		override public function redraw(sl:StyleList=null):Boolean {
+		override public function doRedraw(sl:StyleList):Boolean {
 			removeSprites();
 			if (way.length==0) { return false; }
 

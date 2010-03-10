@@ -85,6 +85,7 @@ package net.systemeD.halcyon.connection {
 
 		public function mergeWith(way:Way,topos:int,frompos:int):void {
 			var i:int;
+			suspend();
 
 			// merge relations
 			for each (var r:Relation in way.parentRelations) {
@@ -111,6 +112,7 @@ package net.systemeD.halcyon.connection {
 
 			// delete way
 			way.remove();
+			resume();
 		}
 		
 		private function addToEnd(topos:int,node:Node):void {
@@ -181,17 +183,17 @@ package net.systemeD.halcyon.connection {
 		
 		public override function remove():void {
 			var node:Node;
+			suspend();
 			removeFromParents();
 			while (nodes.length) { 
 				node=nodes.pop();
 				dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, this, 0));
-				// ** the event mechanism calls redraw once per wayNodeRemoved, which isn't too efficient
-				//    so we should probably add a 'redraw' flag to WayNodeEvent
 				node.removeParent(this);
 				if (!node.hasParents) { node.remove(); }
 			}
 			deleted=true;
             dispatchEvent(new EntityEvent(Connection.WAY_DELETED, this));
+			resume();
 		}
 
 		internal override function isEmpty():Boolean {
