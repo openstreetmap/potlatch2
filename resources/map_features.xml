@@ -583,6 +583,15 @@
     <tag k="highway" v="bus_stop"/>
     <inputSet ref="buses" />
   </feature>
+  
+  <feature name="Pub">
+    <category>transport</category>
+    <icon image="icons/pub.png">
+      ${name}
+    </icon>
+    <point />
+    <tag k="amenity" v="pub"/>
+  </feature>
 
   <!-- cycle stuff -->
   <feature name="National Cycle Network">
