@@ -61,7 +61,7 @@
 
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
-    <mx:Button label="Cancel" click="close();"/>
+    <mx:Button id="cancelButton" label="Cancel" click="close();"/>
     <mx:Button id="saveButton" label="Save >" click="startSave();"/>
   </mx:ControlBar>
   
@@ -112,6 +112,9 @@
             succeed("All Data Saved!");
         else
             fail("Failure when uploading data");
+
+        saveButton.parent.removeChild(saveButton);
+        cancelButton.label = "Close";
     }
     
     private function addStatus(text:String):void {
