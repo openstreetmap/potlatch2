@@ -24,7 +24,9 @@ way :area { color: red; width: 1; fill-color: red; fill-opacity: 0.5; }
 way[highway=motorway],way[highway=motorway_link],
 way[highway=trunk],way[highway=trunk_link],
 way[highway=primary],way[highway=primary_link],
-way[highway=secondary],way[highway=secondary_link] { text: name; text-color: black; font-size: 7; text-position: line;}
+way[highway=secondary],way[highway=secondary_link],
+way[highway=tertiary],way[highway=tertiary_link],
+way[highway=residential]                             { text: name; text-color: black; font-size: 7; text-position: line;}
 way[highway=motorway],way[highway=motorway_link]    { z-index: 9; color: #809BC0; width: 7; casing-color: black; casing-width: 8; }
 way[highway=trunk],way[highway=trunk_link]          { z-index: 9; color: #7FC97F; width: 5; casing-color: black; casing-width: 7; }
 way[highway=primary],way[highway=primary_link]      { z-index: 8; color: #E46D71; width: 5; casing-color: black; casing-width: 7; }
