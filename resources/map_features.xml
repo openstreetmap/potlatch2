@@ -28,7 +28,7 @@
   <!-- Roads -->
   
   <inputSet id="majorRoad">
-    <inputSet ref="roadNames"/>
+    <inputSet ref="names"/>
     <inputSet ref="roadRefs"/>
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
@@ -37,14 +37,14 @@
   </inputSet>
   
   <inputSet id="minorRoad">
-    <inputSet ref="roadNames"/>
+    <inputSet ref="names"/>
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
     <inputSet ref="bus-route"/>
   </inputSet>
   
-  <inputSet id="roadNames">
+  <inputSet id="names">
     <input type="freetext" presence="always"
         name="Name" category="Naming" priority="highest"
         key="name" description="The most common name"/>
@@ -186,7 +186,7 @@
   </inputSet>
   
   <inputSet id="route">
-    <inputSet ref="roadNames"/>
+    <inputSet ref="names"/>
     <inputSet ref="roadRefs"/>
   </inputSet>
   
@@ -591,6 +591,7 @@
     </icon>
     <point />
     <tag k="amenity" v="pub"/>
+    <inputSet ref="names" />
   </feature>
 
   <!-- cycle stuff -->
@@ -669,4 +670,3 @@
   
   
 </mapFeatures>
-
