@@ -8,11 +8,14 @@ Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex fram
 
 === What you'll need ===
 
-* OSM Rails port installed on your local machine
 * Flex SDK - http://www.adobe.com/products/flex/ (free, OS X/Windows/Linux)
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
+
+You'll only need OSM Rails port installed on your local machine if you are doing hard-core 
+server-communication coding, but if generally you can use the dev server at api06.dev.openstreetmap.org
+for development and testing.
 
 === How to compile and run ===
 
@@ -50,16 +53,22 @@ of a much larger swf file.. but we're developing so that doesn't matter!).
 * compile 1 
   - when using fcsh recompile the first command
 
+* compile 1
+  - type it again to compile again. You'll really wish that up-arrow,enter 
+    worked, but Adobe is going laughing at you RIGHT NOW.
 
 Running:
 
-* Move everything from the resources/ directory into the same directory as the SWF
-* Open halcyon.html or potlatch2.html in your browser
+* Flash security model sucks. If you want to use internet resource (e.g. map calls to the dev
+  server) the binary must have been served from "teh internets". Run resources/server.rb to launch a local 
+  server, then go to http://localhost:3333/potlatch2.html to get started (or if you're already running e.g. 
+  Apache locally, feel free to use that instead.
 
 === Some other stuff you might need to know ===
 
 * Flex compiler runs at about the speed of a tortoise soaked in molasses which happens also to be dead.
-
+* Running the debug player helps when coding, since it'll pop up the runtime errors. You don't see them
+  with the normal player.
 
 Richard Fairhurst
 richard@systemeD.net
