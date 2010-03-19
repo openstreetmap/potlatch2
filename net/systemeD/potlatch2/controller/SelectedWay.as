@@ -34,7 +34,7 @@ package net.systemeD.potlatch2.controller {
         }
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
-			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.MOUSE_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
+			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
             var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
 
             if ( event.type == MouseEvent.MOUSE_UP ) {
@@ -108,7 +108,7 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectWay(initWay);
-			Globals.vars.root.addDebug("**** -> "+this);
+			Globals.vars.root.addDebug("**** -> "+this+" "+selectedWay.id);
         }
         override public function exitState():void {
             clearSelection();

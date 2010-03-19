@@ -24,10 +24,12 @@ package net.systemeD.halcyon {
 
 		private const NODESIZE:uint=6;
 
-		public function WayUI(way:Way, map:Map) {
+		public function WayUI(way:Way, paint:MapPaint, interactive:Boolean=true) {
 			super();
 			this.way = way;
-			this.map = map;
+			this.paint = paint;
+			this.ruleset = ruleset;
+			this.interactive = interactive;
             init();
             way.addEventListener(Connection.TAG_CHANGED, wayTagChanged);
             way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
@@ -115,7 +117,7 @@ package net.systemeD.halcyon {
 
 				// length and area
 				if ( i>0 ) { pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(latp-ly,2) ); }
-				sc = (lx*latp-lon*ly)*map.scalefactor;
+				sc = (lx*latp-lon*ly)*paint.map.scalefactor;
 				cx += (lx+lon)*sc;
 				cy += (ly+latp)*sc;
 				patharea += sc;
@@ -127,11 +129,11 @@ package net.systemeD.halcyon {
 			}
 			heading[way.length-1]=heading[way.length-2];
 
-			pathlength*=map.scalefactor;
+			pathlength*=paint.map.scalefactor;
 			patharea/=2;
 			if (patharea!=0 && way.isArea()) {
-				centroid_x=map.lon2coord(cx/patharea/6);
-				centroid_y=map.latp2coord(cy/patharea/6);
+				centroid_x=paint.map.lon2coord(cx/patharea/6);
+				centroid_y=paint.map.latp2coord(cy/patharea/6);
 			} else if (pathlength>0) {
 				var c:Array=pointAt(0.5);
 				centroid_x=c[0];
@@ -145,6 +147,7 @@ package net.systemeD.halcyon {
 		override public function doRedraw(sl:StyleList):Boolean {
 			removeSprites();
 			if (way.length==0) { return false; }
+			if (!paint.ready) { return false; }
 
             // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();
@@ -152,19 +155,18 @@ package net.systemeD.halcyon {
 			if (way.isArea()) { tags[':area']='yes'; }
 
 			// Which layer?
-			layer=5;
-			if ( tags['layer'] )
-                layer=Math.min(Math.max(tags['layer']+5,-5),5)+5;
+			layer=0;
+			if (tags['layer']) { layer=Math.min(Math.max(tags['layer'],paint.minlayer),paint.maxlayer); }
 
 			// Iterate through each sublayer, drawing any styles on that layer
-			if (!sl) { sl=map.ruleset.getStyles(this.way, tags); }
+			if (!sl) { sl=paint.ruleset.getStyles(this.way, tags); }
 			var drawn:Boolean;
 			for (var sublayer:int=10; sublayer>=0; sublayer--) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
-					var x0:Number=map.lon2coord(way.getNode(0).lon);
-					var y0:Number=map.latp2coord(way.getNode(0).latp);
+					var x0:Number=paint.map.lon2coord(way.getNode(0).lon);
+					var y0:Number=paint.map.latp2coord(way.getNode(0).latp);
 
 					// Stroke
 					if (s.width)  {
@@ -233,15 +235,15 @@ package net.systemeD.halcyon {
 				if (stateClasses["showNodesHover"]) { nodetags[':hoverway']='yes'; }
 				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
 				if (node.numParentWays>1) { nodetags[':junction']='yes'; }
-				sl=map.ruleset.getStyles(node,nodetags);
+				sl=paint.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
-					if (!map.pois[node.id]) {
-						map.pois[node.id]=new NodeUI(node,map,r);
+					if (!paint.nodeuis[node.id]) {
+						paint.nodeuis[node.id]=new NodeUI(node,paint,r);
 					}
-					map.pois[node.id].redraw(sl);
-				} else if (map.pois[node.id]) {
-					map.pois[node.id].removeSprites();
-					delete map.pois[node.id];
+					paint.nodeuis[node.id].redraw(sl);
+				} else if (paint.nodeuis[node.id]) {
+					paint.nodeuis[node.id].removeSprites();
+					delete paint.nodeuis[node.id];
 				}
 			}
 			if (!drawn) { return false; }
@@ -252,7 +254,7 @@ package net.systemeD.halcyon {
             solidLine(hitzone.graphics);
             addToLayer(hitzone, CLICKSPRITE);
             hitzone.visible = false;
-			createListenSprite(hitzone);
+			setListenSprite(hitzone);
 
 			return true;
 		}
@@ -264,10 +266,10 @@ package net.systemeD.halcyon {
 		
 		public function solidLine(g:Graphics):void {
             var node:Node = way.getNode(0);
- 			g.moveTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
+ 			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			for (var i:uint = 1; i < way.length; i++) {
                 node = way.getNode(i);
-				g.lineTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
+				g.lineTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			}
 		}
 
@@ -282,7 +284,7 @@ package net.systemeD.halcyon {
 
             var node:Node = way.getNode(0);
             var nextNode:Node = way.getNode(0);
- 			g.moveTo(map.lon2coord(node.lon), map.latp2coord(node.latp));
+ 			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			while (i < way.length-1 || segleft>0) {
 				if (dashleft<=0) {	// should be ==0
 					if (dc.length==0) { dc=dashes.slice(0); }
@@ -292,10 +294,10 @@ package net.systemeD.halcyon {
 				if (segleft<=0) {	// should be ==0
                     node = way.getNode(i);
                     nextNode = way.getNode(i+1);
-					curx=map.lon2coord(node.lon);
-                    dx=map.lon2coord(nextNode.lon)-curx;
-					cury=map.latp2coord(node.latp);
-                    dy=map.latp2coord(nextNode.latp)-cury;
+					curx=paint.map.lon2coord(node.lon);
+                    dx=paint.map.lon2coord(nextNode.lon)-curx;
+					cury=paint.map.latp2coord(node.latp);
+                    dy=paint.map.latp2coord(nextNode.latp)-cury;
 					a=Math.atan2(dy,dx); xc=Math.cos(a); yc=Math.sin(a);
 					segleft=Math.sqrt(dx*dx+dy*dy);
 					i++;
@@ -331,12 +333,12 @@ package net.systemeD.halcyon {
 			var curlen:Number = 0;
 			var dx:Number, dy:Number, seglen:Number;
 			for (var i:int = 1; i < way.length; i++){
-				dx=map.lon2coord(way.getNode(i).lon)-map.lon2coord(way.getNode(i-1).lon);
-				dy=map.latp2coord(way.getNode(i).latp)-map.latp2coord(way.getNode(i-1).latp);
+				dx=paint.map.lon2coord(way.getNode(i).lon)-paint.map.lon2coord(way.getNode(i-1).lon);
+				dy=paint.map.latp2coord(way.getNode(i).latp)-paint.map.latp2coord(way.getNode(i-1).latp);
 				seglen=Math.sqrt(dx*dx+dy*dy);
 				if (totallen > curlen+seglen) { curlen+=seglen; continue; }
-				return new Array(map.lon2coord(way.getNode(i-1).lon)+(totallen-curlen)/seglen*dx,
-								 map.latp2coord(way.getNode(i-1).latp)+(totallen-curlen)/seglen*dy,
+				return new Array(paint.map.lon2coord(way.getNode(i-1).lon)+(totallen-curlen)/seglen*dx,
+								 paint.map.latp2coord(way.getNode(i-1).latp)+(totallen-curlen)/seglen*dy,
 								 Math.atan2(dy,dx));
 			}
 			return new Array(0, 0, 0);
@@ -407,8 +409,8 @@ package net.systemeD.halcyon {
 		public function getNodeAt(x:Number, y:Number):Node {
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
-                var nodeX:Number = map.lon2coord(node.lon);
-                var nodeY:Number = map.latp2coord(node.latp);
+                var nodeX:Number = paint.map.lon2coord(node.lon);
+                var nodeY:Number = paint.map.latp2coord(node.latp);
                 if ( nodeX >= x-NODESIZE && nodeX <= x+NODESIZE &&
                      nodeY >= y-NODESIZE && nodeY <= y+NODESIZE )
                     return node;
@@ -417,7 +419,7 @@ package net.systemeD.halcyon {
 		}
 
         override protected function mouseEvent(event:MouseEvent):void {
-			map.entityMouseEvent(event, way);
+			paint.map.entityMouseEvent(event, way);
         }
 
 	}

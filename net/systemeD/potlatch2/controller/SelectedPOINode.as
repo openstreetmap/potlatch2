@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
@@ -32,7 +33,7 @@ package net.systemeD.potlatch2.controller {
         }
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
-			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.MOUSE_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
+			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
             var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
 
             if ( event.type == MouseEvent.MOUSE_UP ) {
@@ -43,12 +44,6 @@ package net.systemeD.potlatch2.controller {
                     return new NoSelection();
 				}
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-//				if ( entity is Way && focus==selectedWay && event.shiftKey) {
-//					// insert node within way (shift-click)
-//                  var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event);
-//					d.forceDragStart();
-//					return d;
-//				} else
                 if ( focus is Node ) {
 					return new DragPOINode(entity as Node,event,false);
                 } else if ( entity is Node && focus is Way ) {
@@ -59,6 +54,20 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			switch (event.keyCode) {
+				case Keyboard.BACKSPACE:	return deletePOI();
+				case Keyboard.DELETE:		return deletePOI();
+			}
+			return this;
+		}
+		
+		public function deletePOI():ControllerState {
+			controller.connection.unregisterPOI(selectedNode);
+			selectedNode.remove();
+			return new NoSelection();
+		}
+		
         override public function enterState():void {
             selectNode(initNode);
 			Globals.vars.root.addDebug("**** -> "+this);

@@ -16,8 +16,9 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
+	import net.systemeD.halcyon.vectorlayers.*;
 	import net.systemeD.halcyon.Globals;
-	
+
 //	for experimental export function:
 //	import flash.net.FileReference;
 //	import com.adobe.images.JPGEncoder;
@@ -29,12 +30,8 @@ package net.systemeD.halcyon {
 		public const MINSCALE:uint=13;					// don't zoom out past this
 		public const MAXSCALE:uint=19;					// don't zoom in past this
 
-		public var ruleset:RuleSet;						// rules
-		
-		public var ways:Object=new Object();			// geodata
-		public var nodes:Object=new Object();			//  |
-		public var pois:Object=new Object();			//  |
-		public var relations:Object=new Object();		//  |
+		public var paint:MapPaint;						// sprite for ways and (POI/tagged) nodes in core layer
+		public var vectorbg:Sprite;						// sprite for vector background layers
 
 		public var scale:uint=14;						// map scale
 		public var scalefactor:Number=MASTERSCALE;		// current scaling factor for lon/latp
@@ -74,16 +71,17 @@ package net.systemeD.halcyon {
 		public const NOT_MOVED:uint=1;					//  |
 		public const DRAGGING:uint=2;					//  |
 		
-		public var initparams:Object;					// object containing 
+		public var initparams:Object;					// object containing HTML page parameters
 
 		public var backdrop:Object;						// reference to backdrop sprite
 		public var tileset:TileSet;						// 900913 tile background
 		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
 		public var connection:Connection;				// server connection
+		public var vectorlayers:Array=[];				// VectorLayer objects 
 
 		public const TILESPRITE:uint=0;
-		public const GPSSPRITE:uint=1;
+		public const VECTORSPRITE:uint=1;
 		public const WAYSPRITE:uint=2;
 		public const NAMESPRITE:uint=13;
 		
@@ -91,6 +89,7 @@ package net.systemeD.halcyon {
 		// Map constructor function
 
         public function Map(initparams:Object) {
+
 			this.initparams=initparams;
 			connection = Connection.getConnection(initparams);
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
@@ -98,50 +97,6 @@ package net.systemeD.halcyon {
 			gotEnvironment(null);
 
 			addEventListener(Event.ENTER_FRAME, everyFrame);
-        }
-
-		// Set up layering
-		// [layer][3]			- names
-		// [layer][2][sublayer]	- stroke
-		// [layer][1]			- casing
-		// [layer][0]			- fill
-
-		private function createSprites():void {
-			tileset=new TileSet(this);					// 0 - 900913 background
-			addChild(tileset);							//      |
-			addChild(new Sprite());						// 1 - GPS
-
-			for (var l:int=0; l<13; l++) {				// 11 layers (12 is +5, 2 is -5)
-				var s:Sprite = getHitSprite();      	//  |
-				s.addChild(getPaintSprite());			//	| 0 fill
-				s.addChild(getPaintSprite());			//	| 1 casing
-				var t:Sprite = getPaintSprite();		//  | 2 stroke
-				for (var j:int=0; j<11; j++) {			//	|  | ten sublayers
-					t.addChild(getPaintSprite());		//  |  |  |
-				}										//  |  |  |
-				s.addChild(t);							//  |  |
-				s.addChild(getPaintSprite());			//	| 3 names
-				s.addChild(getPaintSprite());			//	| 4 nodes
-				s.addChild(getHitSprite());			    //	| 5 entity hit tests
-				addChild(s);							//  |
-			}
-			addChild(getPaintSprite());     			// 13 - name sprite
-		}
-		
-		private function removeSprites():void {
-			while (numChildren) { removeChildAt(0); }
-		}
-
-        private function getPaintSprite():Sprite {
-            var s:Sprite = new Sprite();
-            s.mouseEnabled = false;
-            s.mouseChildren = false;
-            return s;
-        }
-
-        private function getHitSprite():Sprite {
-            var s:Sprite = new Sprite();
-            return s;
         }
 
 		public function gotEnvironment(r:Object):void {
@@ -172,13 +127,21 @@ package net.systemeD.halcyon {
 		// Initialise map at a given lat/lon
 
         public function init(startlat:Number,startlon:Number,startscale:uint=0,style:String=null,tileurl:String=''):void {
-			removeSprites();
-			createSprites();
+			while (numChildren) { removeChildAt(0); }
+
+			tileset=new TileSet(this);					// 0 - 900913 background
+			addChild(tileset);							//   |
 			tileset.init(tileurl);
 
+			vectorbg = new Sprite();					// 1 - vector background layers
+			addChild(vectorbg);							//   |
+
+ 			paint = new MapPaint(this,-5,5);			// 2 - core paint object
+			addChild(paint);							//   |
+
 			if (style) {
-				ruleset=new RuleSet(this,redrawPOIs);
-				ruleset.loadFromCSS(style);
+				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
+				paint.ruleset.loadFromCSS(style);
 			}
 			if (startscale>0) { scale=startscale; }
 
@@ -202,8 +165,6 @@ package net.systemeD.halcyon {
 			edge_l=coord2lon(-x          );
 			edge_r=coord2lon(-x+mapwidth );
 			setCentre();
-//			addDebug("Lon "+edge_l+"-"+edge_r);
-//			addDebug("Lat "+edge_b+"-"+edge_t);
 
 			tileset.update();
 		}
@@ -275,20 +236,20 @@ package net.systemeD.halcyon {
         private function newWayCreated(event:EntityEvent):void {
             var way:Way = event.entity as Way;
 			if (!way.loaded) { return; }
-            ways[way.id] = new WayUI(way, this);
+			paint.createWayUI(way);
         }
 
         private function newPOICreated(event:EntityEvent):void {
             var node:Node = event.entity as Node;
-            pois[node.id] = new NodeUI(node, this);
-			pois[node.id].redraw();
+			var nodeui:NodeUI=paint.createNodeUI(node);
+			nodeui.redraw();
         }
 
         public function setHighlight(entity:Entity, settings:Object):void {
 			var stateType:String;
 			var ui:EntityUI=null;
-			if      ( entity is Way  ) { ui = ways[entity.id]; }
-			else if ( entity is Node ) { ui = pois[entity.id]; }
+			if      ( entity is Way  ) { ui = paint.wayuis[entity.id]; }
+			else if ( entity is Node ) { ui = paint.nodeuis[entity.id]; }
 			if (ui==null) { return; }
 			for (stateType in settings) {
 				ui.setHighlight(stateType, settings[stateType]);
@@ -313,14 +274,14 @@ package net.systemeD.halcyon {
 		// Redraw all items, zoom in and out
 		
 		public function redraw():void {
-			for each (var w:WayUI in ways) { w.recalculate(); w.redraw(); }
-			for each (var p:NodeUI in pois) { p.redraw(); }
+			paint.redraw();
+			for each (var v:VectorLayer in vectorlayers) { v.paint.redraw(); }
 		}
-
-		public function redrawPOIs():void {
-			for each (var p:NodeUI in pois) { p.redraw(); }
+		public function redrawPOIs():void { 
+			paint.redrawPOIs();
+			for each (var v:VectorLayer in vectorlayers) { v.paint.redrawPOIs(); }
 		}
-
+		
 		public function zoomIn():void {
 			if (scale==MAXSCALE) { return; }
 			changeScale(scale+1);
@@ -347,8 +308,8 @@ package net.systemeD.halcyon {
 		
 		public function setStyle(style:String):void {
 			if (style) {
-				ruleset=new RuleSet(this,redrawPOIs);
-				ruleset.loadFromCSS(style);
+				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
+				paint.ruleset.loadFromCSS(style);
 			}
         }
 
@@ -418,13 +379,12 @@ package net.systemeD.halcyon {
 		// Miscellaneous events
 		
 		public function keyUpHandler(event:KeyboardEvent):void {
-// addDebug("pressed "+event.keyCode);
-            if ( !event.ctrlKey ) return;
-			if (event.keyCode==82) { this.redraw(); }			// R - redraw
-			if (event.keyCode==73) { this.zoomIn(); }			// I - zoom in
-			if (event.keyCode==79) { this.zoomOut(); } 			// O - zoom out
-			if (event.keyCode==76) { this.reportPosition(); }	// L - report lat/long
-//			if (event.keyCode==69) { this.export(); }			// E - export
+			if ( !event.ctrlKey ) return;
+			addDebug("pressed "+event.keyCode);
+			if (event.keyCode==82) { redraw(); }			// R - redraw
+			if (event.keyCode==73) { zoomIn(); }			// I - zoom in
+			if (event.keyCode==79) { zoomOut(); } 			// O - zoom out
+			if (event.keyCode==76) { reportPosition(); }	// L - report lat/long
 		}
 
 		public function connectionError(err:Object=null): void {
@@ -440,6 +400,6 @@ package net.systemeD.halcyon {
 			Globals.vars.debug.appendText(text+"\n");
 			Globals.vars.debug.scrollV=Globals.vars.debug.maxScrollV;
 		}
-		
+
 	}
 }

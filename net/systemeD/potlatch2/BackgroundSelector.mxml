@@ -22,10 +22,14 @@
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
 	    change="Globals.vars.root.tileset.setDimming(dim.selected); Globals.vars.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
+	<mx:Button label="Load vector file..." click="selectVectorSource();"/>
+
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
+		import mx.core.*;
+		import mx.managers.PopUpManager;
 		import com.yahoo.maps.api.YahooMap;
 		import com.yahoo.maps.api.YahooMapEvent;
 		import com.yahoo.maps.api.core.location.LatLon;
@@ -43,6 +47,12 @@
 				theMap.tileset.init(background.selectedItem.data,true);
 				yahoo.visible=false;
 			}
+		}
+		
+		private function selectVectorSource():void {
+          var panel:VectorSourceDialog = VectorSourceDialog(
+              PopUpManager.createPopUp(Application(Application.application), VectorSourceDialog, true));
+          PopUpManager.centerPopUp(panel);
 		}
 
     ]]></mx:Script>	

@@ -9,12 +9,12 @@ package net.systemeD.halcyon.styleparser {
 	import flash.events.*;
 	import flash.net.*;
 	import net.systemeD.halcyon.Globals;
-	import net.systemeD.halcyon.Map;
 
 	// ** also needs to support @import rules
 
 	public class MapCSS {
-		private var map:Map;
+		private var minscale:uint;
+		private var maxscale:uint;
 		private var choosers:Array;
 
 		private static const WHITESPACE:RegExp	=/^ \s+ /sx;
@@ -33,17 +33,17 @@ package net.systemeD.halcyon.styleparser {
 		private static const ZOOM_MAX:RegExp	=/^      \-(\d+) $/sx;
 		private static const ZOOM_SINGLE:RegExp	=/^        (\d+) $/sx;
 
-                private static const CONDITION_TRUE:RegExp      =/^ \s* ([:\w]+) \s* = \s* yes \s*  $/isx;
-                private static const CONDITION_FALSE:RegExp     =/^ \s* ([:\w]+) \s* = \s* no  \s*  $/isx;
-                private static const CONDITION_SET:RegExp       =/^ \s* ([:\w]+) \s* $/sx;
-                private static const CONDITION_UNSET:RegExp     =/^ \s* !([:\w]+) \s* $/sx;
-                private static const CONDITION_EQ:RegExp        =/^ \s* ([:\w]+) \s* =  \s* (.+) \s* $/sx;
-                private static const CONDITION_NE:RegExp        =/^ \s* ([:\w]+) \s* != \s* (.+) \s* $/sx;
-                private static const CONDITION_GT:RegExp        =/^ \s* ([:\w]+) \s* >  \s* (.+) \s* $/sx;
-                private static const CONDITION_GE:RegExp        =/^ \s* ([:\w]+) \s* >= \s* (.+) \s* $/sx;
-                private static const CONDITION_LT:RegExp        =/^ \s* ([:\w]+) \s* <  \s* (.+) \s* $/sx;
-                private static const CONDITION_LE:RegExp        =/^ \s* ([:\w]+) \s* <= \s* (.+) \s* $/sx;
-                private static const CONDITION_REGEX:RegExp     =/^ \s* ([:\w]+) \s* =~\/ \s* (.+) \/ \s* $/sx;
+		private static const CONDITION_TRUE:RegExp      =/^ \s* ([:\w]+) \s* = \s* yes \s*  $/isx;
+		private static const CONDITION_FALSE:RegExp     =/^ \s* ([:\w]+) \s* = \s* no  \s*  $/isx;
+		private static const CONDITION_SET:RegExp       =/^ \s* ([:\w]+) \s* $/sx;
+		private static const CONDITION_UNSET:RegExp     =/^ \s* !([:\w]+) \s* $/sx;
+		private static const CONDITION_EQ:RegExp        =/^ \s* ([:\w]+) \s* =  \s* (.+) \s* $/sx;
+		private static const CONDITION_NE:RegExp        =/^ \s* ([:\w]+) \s* != \s* (.+) \s* $/sx;
+		private static const CONDITION_GT:RegExp        =/^ \s* ([:\w]+) \s* >  \s* (.+) \s* $/sx;
+		private static const CONDITION_GE:RegExp        =/^ \s* ([:\w]+) \s* >= \s* (.+) \s* $/sx;
+		private static const CONDITION_LT:RegExp        =/^ \s* ([:\w]+) \s* <  \s* (.+) \s* $/sx;
+		private static const CONDITION_LE:RegExp        =/^ \s* ([:\w]+) \s* <= \s* (.+) \s* $/sx;
+		private static const CONDITION_REGEX:RegExp     =/^ \s* ([:\w]+) \s* =~\/ \s* (.+) \/ \s* $/sx;
 
 		private static const ASSIGNMENT_EVAL:RegExp	=/^ \s* (\S+) \s* \:      \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
 		private static const ASSIGNMENT:RegExp		=/^ \s* (\S+) \s* \:      \s*          (.+?) \s*                   $/sx;
@@ -210,8 +210,9 @@ package net.systemeD.halcyon.styleparser {
 			yellowgreen:0x9acd32 };
 
 
-		public function MapCSS(m:Map) {
-			map=m;
+		public function MapCSS(mins:uint,maxs:uint) {
+			minscale=mins;
+			maxscale=maxs;
 		}
 		
 		public function parse(css:String):Array {
@@ -371,8 +372,8 @@ package net.systemeD.halcyon.styleparser {
 		private function parseZoom(s:String):Array {
 			var o:Object=new Object();
 			if ((o=ZOOM_MINMAX.exec(s))) { return [o[1],o[2]]; }
-			else if ((o=ZOOM_MIN.exec(s))) { return [o[1],map.MAXSCALE]; }
-			else if ((o=ZOOM_MAX.exec(s))) { return [map.MINSCALE,o[1]]; }
+			else if ((o=ZOOM_MIN.exec(s))) { return [o[1],maxscale]; }
+			else if ((o=ZOOM_MAX.exec(s))) { return [minscale,o[1]]; }
 			else if ((o=ZOOM_SINGLE.exec(s))) { return [o[1],o[1]]; }
 			return null;
 		}

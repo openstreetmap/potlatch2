@@ -65,7 +65,7 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2lon(event.localX),
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
-			} else if ( event.type == MouseEvent.MOUSE_OVER && focus!=selectedWay) {
+			} else if ( event.type == MouseEvent.ROLL_OVER && focus!=selectedWay) {
 				controller.map.setHighlight(focus, { showNodesHover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT  && focus!=selectedWay) {
 				controller.map.setHighlight(focus, { showNodesHover: false });

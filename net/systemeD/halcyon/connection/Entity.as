@@ -11,7 +11,7 @@ package net.systemeD.halcyon.connection {
 		private var _loaded:Boolean = true;
 		private var parents:Dictionary = new Dictionary();
 		private var locked:Boolean = false;
-		protected var deleted:Boolean = false;
+		public var deleted:Boolean = false;
 
         public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean) {
             this._id = id;

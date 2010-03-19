@@ -2,7 +2,6 @@ package net.systemeD.halcyon.styleparser {
 
 	import flash.events.*;
 	import flash.net.*;
-	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.ExtendedLoader;
 	import net.systemeD.halcyon.ExtendedURLLoader;
     import net.systemeD.halcyon.connection.Entity;
@@ -13,17 +12,22 @@ package net.systemeD.halcyon.styleparser {
 	
 	public class RuleSet {
 
-		private var map:Map;
+		private var minscale:uint;
+		private var maxscale:uint;
+		public var loaded:Boolean=false;			// has it loaded yet?
 		public var choosers:Array=new Array();		// list of StyleChoosers
 		public var images:Object=new Object();		// loaded images
 		public var imageWidths:Object=new Object();	// width of each bitmap image
+		private var redrawCallback:Function=null;	// function to call when CSS loaded
 		private var iconCallback:Function=null;		// function to call when all icons loaded
 		private var iconsToLoad:uint=0;				// number of icons left to load (fire callback when ==0)
 
 		// variables for name, author etc.
 
-		public function RuleSet(m:Map,iconLoadedCallback:Function=null):void {
-			map = m;
+		public function RuleSet(mins:uint,maxs:uint,redrawCall:Function=null,iconLoadedCallback:Function=null):void {
+			minscale = mins;
+			maxscale = maxs;
+			redrawCallback = redrawCall;
 			iconCallback = iconLoadedCallback;
 		}
 
@@ -41,31 +45,33 @@ package net.systemeD.halcyon.styleparser {
 		// Loading stylesheet
 
 		public function loadFromCSS(str:String):void {
-			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); return; }
+			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); redrawCallback(); return; }
 
 			var request:URLRequest=new URLRequest(str);
 			var loader:URLLoader=new URLLoader();
 
 			request.method=URLRequestMethod.GET;
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, 					loadedCSS,				false, 0, true);
-			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
-			loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
+			loader.addEventListener(Event.COMPLETE, 					doRedrawCallback);
+			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
+			loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
 			loader.load(request);
 		}
 
-		private function loadedCSS(event:Event):void {
-			parseCSS(event.target.data);
-		}
-		
 		private function parseCSS(str:String):void {
-			var css:MapCSS=new MapCSS(map);
+			var css:MapCSS=new MapCSS(minscale,maxscale);
 			choosers=css.parse(str);
 //			Inspector.getInstance().show();
 //			Inspector.getInstance().shelf('Choosers', choosers);
 			loadImages();
-			map.redraw();
+//			map.redraw();
+		}
+
+		private function doRedrawCallback(e:Event):void {
+			parseCSS(e.target.data);
+			loaded=true;
+			redrawCallback();
 		}
 
 
@@ -106,7 +112,7 @@ package net.systemeD.halcyon.styleparser {
 			var loader:ExtendedLoader = new ExtendedLoader();
 			loader.info['filename']=fn;
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, measureWidth);
-			loader.loadBytes(map.ruleset.images[fn]);
+			loader.loadBytes(images[fn]);
 		}
 		
 		private function measureWidth(event:Event):void {

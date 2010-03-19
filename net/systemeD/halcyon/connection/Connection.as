@@ -4,6 +4,7 @@ package net.systemeD.halcyon.connection {
 
     import flash.events.EventDispatcher;
     import flash.events.Event;
+	import net.systemeD.halcyon.Globals;
 
 	public class Connection extends EventDispatcher {
 
@@ -128,7 +129,7 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-        protected function unregisterPOI(node:Node):void {
+        public function unregisterPOI(node:Node):void {
             var index:uint = pois.indexOf(node);
             if ( index >= 0 ) {
                 pois.splice(index,1);

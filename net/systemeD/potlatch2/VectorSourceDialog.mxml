@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        layout="vertical" showCloseButton="true"
+        horizontalAlign="center" title="Load vector file"
+        width="350" height="250" verticalGap="0">
+  <mx:Script><![CDATA[
+	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.vectorlayers.*;
+	import net.systemeD.potlatch2.utils.Importer;
+	import net.systemeD.potlatch2.utils.ShpImporter;
+    import mx.managers.PopUpManager;
+    import mx.events.CloseEvent;
+    import mx.core.Application;
+
+    public function init():void {
+        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.centerPopUp(this);
+        this.addEventListener(CloseEvent.CLOSE, vectorDialog_close);
+    }
+    
+    private function vectorDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+    }
+
+	private function loadSHP(url:String):void {
+        PopUpManager.removePopUp(this);
+		var theMap:Map = Globals.vars.root;
+		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(theMap,"potlatch.css");
+		theMap.vectorlayers.push(vectorlayer);
+		theMap.vectorbg.addChild(vectorlayer.paint);
+
+		var re:RegExp=/.shp$/i;
+		url=url.replace(re,'');
+
+		var shp:ShpImporter=new ShpImporter(vectorlayer,
+		                                    vectorlayer.paint,
+		                                    [url+".shp",url+".shx",url+".dbf"]);
+	}
+
+              ]]>
+  </mx:Script>
+  <mx:Text>
+    <mx:text>
+      Input the URL of a shapefile to import.
+    </mx:text>
+  </mx:Text>
+  <mx:TextInput id="src" text="" />
+  <mx:ControlBar>
+    <mx:Spacer width="100%"/>
+    <mx:Button label="Ok" click="loadSHP(src.text);"/>
+  </mx:ControlBar>
+
+</mx:TitleWindow>

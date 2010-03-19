@@ -9,15 +9,19 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-* Delete POIs and ways
-* Merge ways (almost there)
 * Undo/redo
 * Reverse way direction
 
 
+== Vector background layers ==
+
+* Remove existing interaction and add alt-click
+* Import from GPX
+* Import from OSM (is this worth sharing with the XML API stuff?)
+
+
 == Other core ==
 
-* GPS tracks
 * Non-900913 projections
 * Plugin support
 
@@ -38,3 +42,4 @@ Potlatch 2: main outstanding issues
 * Shields
 * Complete MapCSS support
 * Would be useful to be able to 'suspend' redrawing
+* 'Light' version without vectorlayer support etc.

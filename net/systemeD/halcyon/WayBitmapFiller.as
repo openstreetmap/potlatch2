@@ -16,9 +16,9 @@ package net.systemeD.halcyon {
 			this.graphics=graphics;
 			this.style=style;
 			
-			if (wayui.map.ruleset.images[style.fill_image]) {
+			if (wayui.paint.ruleset.images[style.fill_image]) {
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedFill);
-				loader.loadBytes(wayui.map.ruleset.images[style.fill_image]);
+				loader.loadBytes(wayui.paint.ruleset.images[style.fill_image]);
 			}
 		}
 		
