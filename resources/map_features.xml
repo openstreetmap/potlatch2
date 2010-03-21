@@ -132,7 +132,18 @@
     <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="name"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The Street Name (optional)" name="Street Name" key="addr:street"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
-  </inputSet> 
+  </inputSet>
+  
+  <inputSet id="cuisine">
+    <input type="choice" presence="always" name="Cuisine" category="Eating" description="The type of food that they serve" key="cuisine">
+      <choice value="pizza" text="Pizza"/>
+      <choice value="chinese" text="Chinese"/>
+      <choice value="burger" text="Burger"/>
+      <choice value="sea_food" text="Sea Food"/>
+      <choice value="sandwich" text="Sandwich"/>
+      <help>http://wiki.openstreetmap.org/wiki/Key:cuisine</help>
+    </input>
+  </inputSet>
   
   <inputSet id="naptan">
     <input type="freetext" presence="onTagMatch" category="Naptan" description="12 character internal Naptan ID" name="Atco Code" key="naptan:AtcoCode" />
@@ -642,7 +653,21 @@
     <point />
     <tag k="amenity" v="restaurant"/>
     <inputSet ref="names"/>
-    <inputSet ref="buildingAddress" />
+    <inputSet ref="buildingAddress"/>
+    <inputSet ref="cuisine"/>
+  </feature>
+  
+  <feature name="Cafe">
+    <category>entertainment</category>
+    <icon image="icons/cafe.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcafe</help>
+    <point />
+    <tag k="amenity" v="cafe"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
+    <inputSet ref="cuisine"/>
   </feature>
 
   <feature name="Post Box">
