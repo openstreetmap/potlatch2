@@ -32,6 +32,7 @@ Potlatch 2: main outstanding issues
 * Keyboard shortcuts
 * CSS editing
 * Direct click-to-edit of relation role should actually work
+* Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 
 
 == Tagging ==

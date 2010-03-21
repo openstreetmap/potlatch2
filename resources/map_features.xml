@@ -707,6 +707,7 @@
       
     <inputSet ref="route"/>
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the bus service" priority="low"/>
+    <input type="freetext" presence="always" category="Naming" name="Network" key="network" description="The network of the bus service" priority="low"/>
   </feature>
   
   
