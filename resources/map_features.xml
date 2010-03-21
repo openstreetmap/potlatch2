@@ -25,6 +25,12 @@
   <category name="Buildings" id="buildings">
   </category>
 
+  <category name="Entertainment" id="entertainment">
+  </category>
+
+  <category name="Amenity" id="amenity">
+  </category>
+
   <!-- Roads -->
   
   <inputSet id="majorRoad">
@@ -585,13 +591,47 @@
   </feature>
   
   <feature name="Pub">
-    <category>transport</category>
+    <category>entertainment</category>
     <icon image="icons/pub.png">
       ${name}
     </icon>
     <point />
     <tag k="amenity" v="pub"/>
-    <inputSet ref="names" />
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Bar">
+    <category>entertainment</category>
+    <icon image="icons/bar.png">
+      ${name}
+    </icon>
+    <point />
+    <tag k="amenity" v="bar"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Restaurant">
+    <category>entertainment</category>
+    <icon image="icons/restaurant.png">
+      ${name}
+    </icon>
+    <point />
+    <tag k="amenity" v="restaurant"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Post Box">
+    <category>amenity</category>
+    <icon image="icons/post_box.png">
+      ${ref}
+    </icon>
+    <point />
+    <tag k="amenity" v="post_box"/>
+    <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post box" />
+    <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
   </feature>
 
   <!-- cycle stuff -->
