@@ -106,6 +106,10 @@
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
   </inputSet>
+  
+  <inputSet id="fee">
+    <input type="freetext" presence="onTagMatch" category="Restrictions" description="The charge/cost of using this amenity" name="Fee" key="fee"/>
+  </inputSet>
 
   <inputSet id="roadRestrictions">
     <input type="choice" presence="onTagMatch"
@@ -588,6 +592,24 @@
     <point />
     <tag k="highway" v="bus_stop"/>
     <inputSet ref="buses" />
+  </feature>
+  
+  <feature name="Bicycle Parking">
+    <category>transport</category>
+    <icon image="icons/parking_cycle.png">
+      ${name} ${capacity}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking</help>
+    <point />
+    <tag k="amenity" v="bicycle_parking"/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
+    <input type="freetext" presence="always" category="Cycle" name="Capacity" key="capacity" description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
+    <inputSet ref="fee"/>
+    <input type="choice" presence="always" category="Cycle" name="Covered" key="covered" description="Is the cycle parking covered, so that the bikes are kept dry?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
   </feature>
   
   <feature name="Pub">
