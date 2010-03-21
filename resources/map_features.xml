@@ -706,6 +706,7 @@
     <tag k="route" v="bus"/>
       
     <inputSet ref="route"/>
+    <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the bus service" priority="low"/>
   </feature>
   
   
