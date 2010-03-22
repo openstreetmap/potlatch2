@@ -27,6 +27,9 @@
 
   <category name="Entertainment" id="entertainment">
   </category>
+  
+  <category name="Shopping" id="shopping">
+  </category>
 
   <category name="Amenity" id="amenity">
   </category>
@@ -598,6 +601,7 @@
   </feature>
   
   <!-- POI -->
+  <!-- transportation -->
   <feature name="Bus Stop">
     <category>transport</category>
     <icon image="features/transport__bus.png">
@@ -625,6 +629,8 @@
       <choice value="no" text="No"/>
     </input>
   </feature>
+  
+  <!-- eating places/entertainment -->
   
   <feature name="Pub">
     <category>entertainment</category>
@@ -691,10 +697,36 @@
     <icon image="icons/post_box.png">
       ${ref}
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Post_box</help>
     <point />
     <tag k="amenity" v="post_box"/>
     <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post box" />
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
+  </feature>
+  
+  <!-- shops -->
+  <feature name="Small Convience Store">
+    <category>shopping</category>
+    <icon image="icons/convenience.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dconvenience</help>
+    <point />
+    <tag k="shop" v="convenience"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
+  </feature>
+  
+  <feature name="Supermarket">
+    <category>shopping</category>
+    <icon image="icons/supermarket.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dsupermarket</help>
+    <point />
+    <tag k="shop" v="supermarket"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
   </feature>
 
   <!-- cycle stuff -->
