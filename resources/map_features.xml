@@ -136,11 +136,14 @@
   
   <inputSet id="cuisine">
     <input type="choice" presence="always" name="Cuisine" category="Eating" description="The type of food that they serve" key="cuisine">
-      <choice value="pizza" text="Pizza"/>
-      <choice value="chinese" text="Chinese"/>
       <choice value="burger" text="Burger"/>
-      <choice value="sea_food" text="Sea Food"/>
+      <choice value="chicken" text="Chicken"/>
+      <choice value="chinese" text="Chinese"/>
+      <choice value="coffee_shop" text="Coffee Shop"/>
+      <choice value="greek" text="Greek"/>
+      <choice value="pizza" text="Pizza"/>
       <choice value="sandwich" text="Sandwich"/>
+      <choice value="sea_food" text="Sea Food"/>
       <help>http://wiki.openstreetmap.org/wiki/Key:cuisine</help>
     </input>
   </inputSet>
@@ -665,6 +668,19 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcafe</help>
     <point />
     <tag k="amenity" v="cafe"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
+    <inputSet ref="cuisine"/>
+  </feature>
+  
+  <feature name="Fast Food">
+    <category>entertainment</category>
+    <icon image="icons/fast_food.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfast_food</help>
+    <point />
+    <tag k="amenity" v="fast_food"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
     <inputSet ref="cuisine"/>
