@@ -609,6 +609,31 @@
   
   <!-- POI -->
   
+  <feature name="ATM">
+    <category>amenity</category>
+    <icon image="icons/atm.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Atm</help>
+    <point />
+    <tag k="amenity" v="atm"/>
+    <input type="freetext" presence="always" category="Banking" name="Operator" key="operator" description="The organisation that provides this ATM" priority="low"/>
+    <input type="freetext" presence="always" category="Banking" name="Fee" key="fee" description="Is there a charge for using this ATM? If so how much?"/>
+  </feature>
+  
+  <feature name="Bank">
+    <category>amenity</category>
+    <icon image="icons/bank.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbank</help>
+    <point />
+    <tag k="amenity" v="bank"/>
+    <inputSet ref="names"/>
+    <input type="choice" presence="always" category="Bank" name="Public ATM available" key="atm" description="Is there a public ATM available?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>    
+  </feature>
+  
   <feature name="Recycling">
     <category>amenity</category>
     <icon image="icons/recycling.png"/>

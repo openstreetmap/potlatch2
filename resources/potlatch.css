@@ -80,6 +80,7 @@ node[place] { icon-image: icons/place.png; text-offset: 17; font-family: DejaVu;
 node[railway=station] { icon-image: icons/station.png; text-offset: 13; font-family: DejaVu; text: name; font-size: 9; font-weight: bold; }
 node[aeroway=aerodrome] { icon-image: icons/airport.png; text-offset: 13; font-family: DejaVu; text: name; font-size: 10; }
 node[amenity=atm] { icon-image: icons/atm.png; }
+node[amenity=bank] { icon-image: icons/bank.png; text-offset: 15; text: name; }
 node[highway=bus_stop] { icon-image: icons/bus_stop.png; }
 node[amenity=cafe] { icon-image: icons/cafe.png; text-offset: 15; text: name; }
 node[shop=convenience] { icon-image: icons/convenience.png; text-offset:15; text:name; }
