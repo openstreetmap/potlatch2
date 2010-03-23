@@ -132,7 +132,7 @@
   
   <inputSet id="buildingAddress">
     <input type="freetext" presence="onTagMatch" category="Address" description="The number of the house, e.g. 156 or 10-12" name="House Number" key="addr:housenumber"/>
-    <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="name"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="addr:housename"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The Street Name (optional)" name="Street Name" key="addr:street"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
   </inputSet>
@@ -660,7 +660,9 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
     <point />
+    <area />
     <tag k="amenity" v="parking"/>
+    <inputSet ref="names"/>
     <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
     <input type="freetext" presence="always" category="Parking" name="Capacity" key="capacity" description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
     <inputSet ref="fee"/>
@@ -787,6 +789,22 @@
     <tag k="shop" v="supermarket"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
+  </feature>
+  
+  <feature name="Pharmacy">
+    <category>shopping</category>
+    <icon image="icons/pharmacy.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Pharmacy</help>
+    <point />
+    <tag k="amenity" v="pharmacy"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
+    <input type="choice" presence="always" category="Amenity" name="Dispensing" key="dispensing" description="Does this pharmacy sell prescription drugs?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
   </feature>
 
   <!-- cycle stuff -->
