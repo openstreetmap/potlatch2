@@ -171,7 +171,7 @@
   
   <inputSet id="buses">
     <input type="freetext" presence="always" category="Bus Stop" name="Stop Name" key="name" description="The name of the bus stop" />
-    <input type="freetext" presence="always" category="Bus Stop" name="Local Ref" key="local_ref" description="The local reference of the stop, e.g. L, BX" />
+    <input type="freetext" presence="always" category="Bus Stop" name="Local Ref" key="local_ref" description="The local reference of the stop, usually one or two letters above the main flag, used at bus interchanges, e.g. L, BX" />
     <inputSet ref="naptan" />
   </inputSet>
   
@@ -359,9 +359,10 @@
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dliving_street</help>
 
     <line/>
-    <tag k="highway" v="tertiary"/>
+    <tag k="highway" v="living_street"/>
 
     <inputSet ref="minorRoad"/>
   </feature>
@@ -434,9 +435,12 @@
     <category>paths</category>
     <icon image="features/paths__unknown.png">
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsteps</help>
 
     <line/>
     <tag k="highway" v="steps"/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="always" category="Naming" name="Number of steps" key="step_count" description="The number of steps in the way" priority="low"/>
   </feature>
 
 
@@ -554,6 +558,9 @@
     
     <point/>
     <tag k="railway" v="station"/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Reference" key="ref" description="The shortcode/reference for the station" priority="low"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
   </feature>
   
   <feature name="Railway Station">
@@ -601,6 +608,15 @@
   </feature>
   
   <!-- POI -->
+  
+  <feature name="Recycling">
+    <category>amenity</category>
+    <icon image="icons/recycling.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Drecycling</help>
+    <point />
+    <tag k="amenity" v="recycling"/>
+  </feature>
+  
   <!-- transportation -->
   <feature name="Bus Stop">
     <category>transport</category>
@@ -610,6 +626,19 @@
     <point />
     <tag k="highway" v="bus_stop"/>
     <inputSet ref="buses" />
+  </feature>
+  
+  <feature name="Car Parking">
+    <category>transport</category>
+    <icon image="icons/parking.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
+    <point />
+    <tag k="amenity" v="parking"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
+    <input type="freetext" presence="always" category="Parking" name="Capacity" key="capacity" description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
+    <inputSet ref="fee"/>
   </feature>
   
   <feature name="Bicycle Parking">
@@ -637,10 +666,16 @@
     <icon image="icons/pub.png">
       ${name}
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpub</help>
     <point />
     <tag k="amenity" v="pub"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress" />
+    <input type="choice" presence="always" category="Eating" name="Wifi" key="wifi">
+      <choice value="free" text="Free"/>
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
   </feature>
 
   <feature name="Bar">
