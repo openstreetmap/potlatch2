@@ -628,6 +628,7 @@
     <point />
     <tag k="amenity" v="bank"/>
     <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
     <input type="choice" presence="always" category="Bank" name="Public ATM available" key="atm" description="Is there a public ATM available?">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
@@ -640,6 +641,19 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Drecycling</help>
     <point />
     <tag k="amenity" v="recycling"/>
+  </feature>
+  
+  <feature name="School">
+    <category>amenity</category>
+    <icon image="icons/school.png">
+      ${name}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool</help>
+    <point />
+    <area />
+    <tag k="amenity" v="school"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
   </feature>
   
   <!-- transportation -->
