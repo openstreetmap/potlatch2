@@ -74,7 +74,7 @@ package net.systemeD.potlatch2 {
             setState(newState);
         }
         
-        private function setState(newState:ControllerState):void {
+        public function setState(newState:ControllerState):void {
             if ( newState == state )
                 return;
                 

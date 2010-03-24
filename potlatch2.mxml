@@ -57,6 +57,7 @@
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.save.SaveManager;
+		import net.systemeD.potlatch2.controller.*;
 		import net.systemeD.potlatch2.help.*;
 		import net.systemeD.potlatch2.options.*;
 		import net.systemeD.potlatch2.utils.*;
@@ -76,6 +77,7 @@
         import mx.core.DragSource;
 
         public var theMap:Map;
+        public var theController:EditController;
 		public var yahooListener:Object = new Object();
 		public var yahoo:YahooMap = new YahooMap(); 
 
@@ -169,8 +171,8 @@
             t.visible = loaderInfo.parameters["show_debug"] == 'true';
 			Globals.vars.root=theMap;	// just for the addDebug function
 
-            var controller:EditController = new EditController(theMap, tagViewer);
-            controller.setActive();
+            theController = new EditController(theMap, tagViewer);
+            theController.setActive();
             
             var conn:Connection = Connection.getConnectionInstance();
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
@@ -218,6 +220,7 @@
               node.setTag(tag.k, tag.v);
             }
 			Connection.getConnectionInstance().registerPOI(node);
+            theController.setState(new SelectedPOINode(node));
         }
 
 	]]></mx:Script>
