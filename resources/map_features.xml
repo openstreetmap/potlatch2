@@ -34,6 +34,49 @@
   <category name="Amenity" id="amenity">
   </category>
 
+  <!-- Common input sets -->
+  
+  <inputSet id="names">
+    <input type="freetext" presence="always"
+        name="Name" category="Naming" priority="highest"
+        key="name" description="The most common name"/>
+    <input type="freetext" presence="onTagMatch"
+        name="International Name" category="Naming"
+        key="int_name" description="The internationally recognised name"/>
+    <input type="freetext" presence="onTagMatch"
+        name="Historical Name" category="Naming" priority="low"
+        key="old_name" description="The historic or previous name"/>
+  </inputSet>
+
+  <inputSet id="wifi">
+    <input type="choice" presence="always" category="Eating" name="Wifi" key="wifi">
+      <choice value="free" text="Free"/>
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+  </inputSet>
+  
+  <inputSet id="buildingAddress">
+    <input type="freetext" presence="onTagMatch" category="Address" description="The number of the house, e.g. 156 or 10-12" name="House Number" key="addr:housenumber"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="addr:housename"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The Street Name (optional)" name="Street Name" key="addr:street"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
+  </inputSet>
+  
+  <inputSet id="cuisine">
+    <input type="choice" presence="always" name="Cuisine" category="Eating" description="The type of food that they serve" key="cuisine">
+      <choice value="burger" text="Burger"/>
+      <choice value="chicken" text="Chicken"/>
+      <choice value="chinese" text="Chinese"/>
+      <choice value="coffee_shop" text="Coffee Shop"/>
+      <choice value="greek" text="Greek"/>
+      <choice value="pizza" text="Pizza"/>
+      <choice value="sandwich" text="Sandwich"/>
+      <choice value="sea_food" text="Sea Food"/>
+      <help>http://wiki.openstreetmap.org/wiki/Key:cuisine</help>
+    </input>
+  </inputSet>
+
   <!-- Roads -->
   
   <inputSet id="majorRoad">
@@ -51,18 +94,6 @@
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
     <inputSet ref="bus-route"/>
-  </inputSet>
-  
-  <inputSet id="names">
-    <input type="freetext" presence="always"
-        name="Name" category="Naming" priority="highest"
-        key="name" description="The most common name"/>
-    <input type="freetext" presence="onTagMatch"
-        name="International Name" category="Naming"
-        key="int_name" description="The internationally recognised name"/>
-    <input type="freetext" presence="onTagMatch"
-        name="Historical Name" category="Naming" priority="low"
-        key="old_name" description="The historic or previous name"/>
   </inputSet>
 
   <inputSet id="roadRefs">
@@ -128,27 +159,6 @@
     <input type="speed" presence="onTagMatch"
         name="Speed Limit" category="Restrictions" description="Maximum permitted speed on this road"
         key="maxspeed"/>
-  </inputSet>
-  
-  <inputSet id="buildingAddress">
-    <input type="freetext" presence="onTagMatch" category="Address" description="The number of the house, e.g. 156 or 10-12" name="House Number" key="addr:housenumber"/>
-    <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="addr:housename"/>
-    <input type="freetext" presence="onTagMatch" category="Address" description="The Street Name (optional)" name="Street Name" key="addr:street"/>
-    <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
-  </inputSet>
-  
-  <inputSet id="cuisine">
-    <input type="choice" presence="always" name="Cuisine" category="Eating" description="The type of food that they serve" key="cuisine">
-      <choice value="burger" text="Burger"/>
-      <choice value="chicken" text="Chicken"/>
-      <choice value="chinese" text="Chinese"/>
-      <choice value="coffee_shop" text="Coffee Shop"/>
-      <choice value="greek" text="Greek"/>
-      <choice value="pizza" text="Pizza"/>
-      <choice value="sandwich" text="Sandwich"/>
-      <choice value="sea_food" text="Sea Food"/>
-      <help>http://wiki.openstreetmap.org/wiki/Key:cuisine</help>
-    </input>
   </inputSet>
   
   <inputSet id="naptan">
@@ -572,8 +582,36 @@
     <area/>
     <tag k="building" v="station"/>
   </feature>
-  
-  <!-- areas -->
+    
+  <!-- Buildings -->
+
+  <feature name="School">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="school"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="College">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="college"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
 
   <feature name="Building">
     <category>buildings</category>
@@ -584,8 +622,11 @@
 
     <area/>
     <tag k="building" v="*"/>
+    <inputSet ref="names"/>
     <inputSet ref="buildingAddress" />
   </feature>
+
+  <!-- Areas -->
 
   <feature name="Park">
     <category>natural</category>
@@ -712,11 +753,7 @@
     <tag k="amenity" v="pub"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress" />
-    <input type="choice" presence="always" category="Eating" name="Wifi" key="wifi">
-      <choice value="free" text="Free"/>
-      <choice value="yes" text="Yes"/>
-      <choice value="no" text="No"/>
-    </input>
+    <inputSet ref="wifi" />
   </feature>
 
   <feature name="Bar">
@@ -728,6 +765,7 @@
     <tag k="amenity" v="bar"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress" />
+    <inputSet ref="wifi" />
   </feature>
 
   <feature name="Restaurant">
@@ -753,6 +791,7 @@
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
     <inputSet ref="cuisine"/>
+    <inputSet ref="wifi" />
   </feature>
   
   <feature name="Fast Food">
