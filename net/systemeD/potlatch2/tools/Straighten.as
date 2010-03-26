@@ -2,7 +2,6 @@ package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.connection.Node;
-	import net.systemeD.halcyon.Globals;
 
 	public class Straighten {
 
@@ -36,7 +35,6 @@ package net.systemeD.potlatch2.tools {
 					
 				} else {
 					// safe to delete
-					Globals.vars.root.addDebug("removing node "+n);
 					if (todelete.indexOf(n)==-1) { todelete.push(n); }
 				}
 			}
