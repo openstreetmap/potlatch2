@@ -29,9 +29,6 @@ package net.systemeD.potlatch2.tools {
 					             (Math.pow(b.lon-a.lon,2)+Math.pow(b.latp-a.latp,2));
 					n.setLonLatp(a.lon +u*(b.lon -a.lon ),
 					             a.latp+u*(b.latp-a.latp));
-					for each (var o:Way in n.parentWays) {
-						if (todraw.indexOf(o)==-1) { todraw.push(o); }
-					}
 					
 				} else {
 					// safe to delete
