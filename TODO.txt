@@ -3,7 +3,7 @@ Potlatch 2: main outstanding issues
 
 == Code tidying ==
 
-* A fair amount of the mouse-handling in each ControllerState is shared with others - 
+* A fair amount of the mouse-handling in each ControllerState is shared with others -
   and some probably should be (e.g. unhovering). Can we refactor?
 
 
@@ -30,6 +30,7 @@ Potlatch 2: main outstanding issues
 == UI ==
 
 * Keyboard shortcuts
+* Mouse wheel zooming
 * CSS editing
 * Direct click-to-edit of relation role should actually work
 * Toolbox fixes (see comments in file)
@@ -40,6 +41,7 @@ Potlatch 2: main outstanding issues
 
 == Tagging ==
 
+* Remove created_by=* tags from any data touched
 
 == Rendering (Halcyon) ==
 
