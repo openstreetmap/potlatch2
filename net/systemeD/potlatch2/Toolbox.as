@@ -77,5 +77,11 @@ package net.systemeD.potlatch2 {
 			}
 		}
 
+		public function doCircularise():void {
+			if (entity is Way) {
+				Circularise.circularise(Way(entity),controller.map);
+			}
+		}
+
 	}
 }

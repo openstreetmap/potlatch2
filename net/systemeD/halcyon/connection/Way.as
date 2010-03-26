@@ -181,6 +181,29 @@ package net.systemeD.halcyon.connection {
 			return (nodes[0].id==nodes[nodes.length-1].id && nodes.length>2);
 		}
 		
+		public function get clockwise():Boolean {
+			var lowest:uint=0;
+			var xmin:Number=-999999; var ymin:Number=-999999;
+			for (var i:uint=0; i<nodes.length; i++) {
+				if      (nodes[i].latp> ymin) { lowest=i; xmin=nodes[i].lon; ymin=nodes[i].latp; }
+				else if (nodes[i].latp==ymin
+					  && nodes[i].lon > xmin) { lowest=i; xmin=nodes[i].lon; ymin=nodes[i].latp; }
+			}
+			return (this.onLeft(lowest)>0);
+		}
+		
+		private function onLeft(j:uint):Number {
+			var left:Number=0;
+			var i:int, k:int;
+			if (nodes.length>=3) {
+				i=j-1; if (i==-1) { i=nodes.length-2; }
+				k=j+1; if (k==nodes.length) { k=1; }
+				left=((nodes[j].lon-nodes[i].lon) * (nodes[k].latp-nodes[i].latp) -
+					  (nodes[k].lon-nodes[i].lon) * (nodes[j].latp-nodes[i].latp));
+			}
+			return left;
+		}
+
 		public override function remove():void {
 			var node:Node;
 			suspend();
