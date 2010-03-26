@@ -51,6 +51,17 @@ package net.systemeD.halcyon.connection {
             dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, _lat, oldLon));
          }
 
+		public function setLonLatp(lon:Number,latproj:Number):void {
+			// move both lon and latp but only fire one event
+			var oldLon:Number = this._lon;
+			var oldLat:Number = this._lat;
+			this._latproj = latproj;
+			this._lat = latp2lat(latproj);
+			this._lon = lon;
+			markDirty();
+            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, oldLat, oldLon));
+		}
+
         public override function toString():String {
             return "Node("+id+"@"+version+"): "+lat+","+lon+" "+getTagList();
         }

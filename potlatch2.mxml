@@ -63,6 +63,7 @@
 	        <mx:Button icon="@Embed('embedded/direction.svg')" 
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/straighten.svg')" 
+				click='toolbox.doStraighten();' 
 				width="28" height="28" textAlign="left" paddingLeft="5" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/circle.svg')" 
 				width="28" height="28" textAlign="left" paddingLeft="4" paddingRight="0" />

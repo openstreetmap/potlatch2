@@ -5,7 +5,7 @@ package net.systemeD.potlatch2 {
 	import mx.containers.Panel;
 	import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.controller.*;
-    import net.systemeD.potlatch2.tools.Quadrilateralise;
+    import net.systemeD.potlatch2.tools.*;
 
 	/*
 		Floating toolbox palette
@@ -68,6 +68,12 @@ package net.systemeD.potlatch2 {
 		public function doQuadrilateralise():void {
 			if (entity is Way) {
 				Quadrilateralise.quadrilateralise(Way(entity));
+			}
+		}
+
+		public function doStraighten():void {
+			if (entity is Way) {
+				Straighten.straighten(Way(entity),controller.map);
 			}
 		}
 
