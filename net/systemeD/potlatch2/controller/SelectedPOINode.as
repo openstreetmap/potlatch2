@@ -18,7 +18,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection();
-            controller.setTagViewer(node);
+            controller.setSelectedEntity(node);
             controller.map.setHighlight(node, { selected: true });
             selectedNode = node;
             initNode = node;
@@ -27,7 +27,7 @@ package net.systemeD.potlatch2.controller {
         protected function clearSelection():void {
             if ( selectedNode != null ) {
                 controller.map.setHighlight(selectedNode, { selected: false });
-                controller.setTagViewer(null);
+                controller.setSelectedEntity(null);
                 selectedNode = null;
             }
         }

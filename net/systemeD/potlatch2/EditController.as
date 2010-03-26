@@ -10,14 +10,17 @@ package net.systemeD.potlatch2 {
 
         private var _map:Map;
         private var tagViewer:TagViewer;
+		private var toolbox:Toolbox;
         
-        private var state:ControllerState;
+        public var state:ControllerState;
         private var _connection:Connection;
         
 
-        public function EditController(map:Map, tagViewer:TagViewer) {
+        public function EditController(map:Map, tagViewer:TagViewer, toolbox:Toolbox) {
             this._map = map;
             this.tagViewer = tagViewer;
+			this.toolbox = toolbox;
+			this.toolbox.init(this);
             setState(new NoSelection());
             
             map.parent.addEventListener(MouseEvent.MOUSE_MOVE, mapMouseEvent);
@@ -40,8 +43,9 @@ package net.systemeD.potlatch2 {
             return _connection;
         }
         
-        public function setTagViewer(entity:Entity):void {
+        public function setSelectedEntity(entity:Entity):void {
             tagViewer.setEntity(entity);
+			toolbox.setEntity(entity);
         }
         
         private function keyUpHandler(event:KeyboardEvent):void {
@@ -85,7 +89,7 @@ package net.systemeD.potlatch2 {
             state = newState;
             state.enterState();
         }
-        
+
     }
 
     

@@ -49,7 +49,33 @@
         <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
-      </mx:Canvas>
+
+		<potlatch2:Toolbox id="toolbox" 
+			height="46" width="217" 
+			headerHeight="6" headerColors="[black, gray]" 
+			borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
+			paddingLeft="4" paddingTop="4" layout="horizontal"
+			x="10" y="300">
+
+	        <mx:Button icon="@Embed('embedded/delete.svg')"
+				click='toolbox.doDelete();' 
+				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
+	        <mx:Button icon="@Embed('embedded/direction.svg')" 
+				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
+	        <mx:Button icon="@Embed('embedded/straighten.svg')" 
+				width="28" height="28" textAlign="left" paddingLeft="5" paddingRight="0" />
+	        <mx:Button icon="@Embed('embedded/circle.svg')" 
+				width="28" height="28" textAlign="left" paddingLeft="4" paddingRight="0" />
+	        <mx:Button icon="@Embed('embedded/quadrilateralise.svg')" 
+				click='toolbox.doQuadrilateralise();' 
+				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
+	        <mx:Button icon="@Embed('embedded/parallel.svg')" 
+				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
+
+		</potlatch2:Toolbox>
+
+    </mx:Canvas>
+
     </mx:HDividedBox>
 
 	<mx:Script><![CDATA[
@@ -171,7 +197,7 @@
             t.visible = loaderInfo.parameters["show_debug"] == 'true';
 			Globals.vars.root=theMap;	// just for the addDebug function
 
-            theController = new EditController(theMap, tagViewer);
+            theController = new EditController(theMap, tagViewer, toolbox);
             theController.setActive();
             
             var conn:Connection = Connection.getConnectionInstance();

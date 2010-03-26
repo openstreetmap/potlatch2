@@ -7,7 +7,7 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedWay extends ControllerState {
-        protected var selectedWay:Way;
+        public var selectedWay:Way;
         protected var initWay:Way;
         
         public function SelectedWay(way:Way) {
@@ -19,7 +19,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection();
-            controller.setTagViewer(way);
+            controller.setSelectedEntity(way);
             controller.map.setHighlight(way, { selected: true, showNodes: true, hover: false });
             selectedWay = way;
             initWay = way;
@@ -28,7 +28,7 @@ package net.systemeD.potlatch2.controller {
         protected function clearSelection():void {
             if ( selectedWay != null ) {
             	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false, hover: false });
-                controller.setTagViewer(null);
+                controller.setSelectedEntity(null);
                 selectedWay = null;
             }
         }

@@ -52,6 +52,9 @@ package net.systemeD.potlatch2.controller {
 						controller.map.setHighlight(selectedWay, { showNodes: true });
 						resetElastic(entity as Node);
 						lastClick=entity;
+						if (selectedWay.getNode(0)==selectedWay.getNode(selectedWay.length-1)) {
+							return new SelectedWay(selectedWay);
+						}
 					}
 				} else if ( entity is Way ) {
 					node = createAndAddNode(event);
