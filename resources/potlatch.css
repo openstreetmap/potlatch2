@@ -40,7 +40,8 @@ area=yes tag should be filled. The below doesn't yet work as intended. */
 way[highway=pedestrian] !:area { color: #ddddee; width: 5; casing-color: #555555; casing-width: 6; }
 way[highway=pedestrian] :area  { color: #555555; width: 1; fill-color: #ddddee; fill-opacity: 0.8; }
 
-way[highway=footway]   { color: #FF6644; width: 2; dashes: 6, 3 }
+way[highway=steps]     { color: #FF6644; width: 2; dashes: 4, 2; }
+way[highway=footway]   { color: #FF6644; width: 2; dashes: 6, 3; }
 way[highway=bridleway] { z-index:9; color: #996644; width: 2; dashes: 4, 2, 2, 2; }
 way[highway=track]     { color: #996644; width: 2; dashes: 4, 2; }
 way[highway=path]      { color: lightgreen; width: 2; dashes: 2, 2; }

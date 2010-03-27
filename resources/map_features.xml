@@ -443,7 +443,7 @@
 
   <feature name="Steps">
     <category>paths</category>
-    <icon image="features/paths__unknown.png">
+    <icon image="features/paths__steps.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsteps</help>
 
