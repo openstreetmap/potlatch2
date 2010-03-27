@@ -18,6 +18,9 @@
 
   <category name="Natural" id="natural">
   </category>
+  
+  <category name="Barrier" id="barrier">
+  </category>
 
   <category name="Admin" id="admin">
   </category>
@@ -460,6 +463,7 @@
     <category>natural</category>
     <icon>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dfence</help>
 
     <line/>
     <tag k="barrier" v="fence"/>
@@ -469,20 +473,105 @@
     <category>natural</category>
     <icon>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dhedge</help>
 
     <line/>
     <tag k="barrier" v="hedge"/>
   </feature>
 
   <feature name="Wall">
-    <category>natural</category>
+    <category>barrier</category>
     <icon>
     </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dwall</help>
 
     <line/>
     <tag k="barrier" v="wall"/>
   </feature>
 
+  <feature name="Ditch">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dditch</help>
+    
+    <line/>
+    <tag k="barrier" v="ditch"/>
+  </feature>
+  
+  <feature name="Retaining Wall">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dretaining_wall</help>
+    
+    <line/>
+    <tag k="barrier" v="retaining_wall"/>
+  </feature>
+  
+  <feature name="City Wall">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcity_wall</help>
+    
+    <line/>
+    <tag k="barrier" v="city_wall"/>
+  </feature>
+  
+  <!-- node based barriers, most should be of the node in way type -->
+  
+  <feature name="Bollard">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dbollard</help>
+    
+    <point />
+    <tag k="barrier" v="bollard"/>
+  </feature>
+  
+  <feature name="Cycle Barrier">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcycle_barrier</help>
+    
+    <point />
+    <tag k="barrier" v="cycle_barrier"/>
+  </feature>
+  
+  <feature name="Big Concrete Blocks">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dblock</help>
+    
+    <point />
+    <tag k="barrier" v="block"/>
+  </feature>
+  
+  <feature name="Cattle Grid">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcattle_grid</help>
+    
+    <point />
+    <tag k="barrier" v="cattle_grid"/>
+  </feature>
+  
+  <feature name="Toll Booth">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth</help>
+    
+    <point />
+    <tag k="barrier" v="toll_booth"/>
+    <tagSet ref="fee"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the toll" priority="low"/>
+  </feature>
 
   <!-- Waterway -->
 
