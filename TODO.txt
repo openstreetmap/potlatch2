@@ -25,6 +25,7 @@ Potlatch 2: main outstanding issues
 
 * Non-900913 projections
 * Plugin support
+* pressing x to split ways doesn't seem to shorten the original way
 
 
 == UI ==
@@ -40,6 +41,7 @@ Potlatch 2: main outstanding issues
 * It would be useful to have fields that only allow numbers in a non-destructive way, for example for step_count or capacity.
 * The area of pois for dragging on to the map should have a search, with synonyms and also be categorised like the lines are.
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
+* Checkboxes, for example what you can recycle, or whether something is a bridge or tunnel
 
 == Tagging ==
 
@@ -53,3 +55,4 @@ Potlatch 2: main outstanding issues
 * Complete MapCSS support
 * Would be useful to be able to 'suspend' redrawing
 * 'Light' version without vectorlayer support etc.
+* Boost z-indexes to 20
