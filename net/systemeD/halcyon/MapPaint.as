@@ -84,6 +84,18 @@ package net.systemeD.halcyon {
 			nodeuis[node.id].removeSprites();
 			delete nodeuis[node.id];
 		}
+		
+		public function renumberWayUI(way:Way,oldID:int):void {
+			if (!wayuis[oldID]) { return; }
+			wayuis[way.id]=wayuis[oldID];
+			delete wayuis[oldID];
+		}
+
+		public function renumberNodeUI(node:Node,oldID:int):void {
+			if (!nodeuis[oldID]) { return; }
+			nodeuis[node.id]=nodeuis[oldID];
+			delete nodeuis[oldID];
+		}
 
         private function getPaintSprite():Sprite {
             var s:Sprite = new Sprite();

@@ -60,6 +60,9 @@ package net.systemeD.halcyon.connection {
         public static var NEW_WAY:String = "new_way";
         public static var NEW_RELATION:String = "new_relation";
         public static var NEW_POI:String = "new_poi";
+        public static var NODE_RENUMBERED:String = "node_renumbered";
+        public static var WAY_RENUMBERED:String = "way_renumbered";
+        public static var RELATION_RENUMBERED:String = "relation_renumbered";
         public static var TAG_CHANGED:String = "tag_change";
         public static var NODE_MOVED:String = "node_moved";
         public static var WAY_NODE_ADDED:String = "way_node_added";
@@ -86,33 +89,36 @@ package net.systemeD.halcyon.connection {
             return negativeID--;
         }
 
-        protected function setNode(node:Node,queue:Boolean):void {
+        protected function setNode(node:Node, queue:Boolean):void {
             nodes[node.id] = node;
             if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node),queue); }
         }
 
-        protected function setWay(way:Way,queue:Boolean):void {
+        protected function setWay(way:Way, queue:Boolean):void {
             ways[way.id] = way;
             if (way.loaded) { sendEvent(new EntityEvent(NEW_WAY, way),queue); }
         }
 
-        protected function setRelation(relation:Relation,queue:Boolean):void {
+        protected function setRelation(relation:Relation, queue:Boolean):void {
             relations[relation.id] = relation;
             if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation),queue); }
         }
 
-        protected function renumberNode(oldID:Number, node:Node):void {
+        protected function renumberNode(oldID:Number, node:Node, queue:Boolean):void {
             nodes[node.id] = node;
+            if (node.loaded) { sendEvent(new EntityRenumberedEvent(NODE_RENUMBERED, node, oldID),queue); }
             delete nodes[oldID];
         }
 
-        protected function renumberWay(oldID:Number, way:Way):void {
+        protected function renumberWay(oldID:Number, way:Way, queue:Boolean):void {
             ways[way.id] = way;
+            if (way.loaded) { sendEvent(new EntityRenumberedEvent(WAY_RENUMBERED, way, oldID),queue); }
             delete ways[oldID];
         }
 
-        protected function renumberRelation(oldID:Number, relation:Relation):void {
+        protected function renumberRelation(oldID:Number, relation:Relation, queue:Boolean):void {
             relations[relation.id] = relation;
+            if (relation.loaded) { sendEvent(new EntityRenumberedEvent(RELATION_RENUMBERED, relation, oldID),queue); }
             delete relations[oldID];
         }
 

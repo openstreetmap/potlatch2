@@ -110,6 +110,8 @@ package net.systemeD.potlatch2.controller {
 			var newWay:Way = controller.connection.createWay(
 				selectedWay.getTagsCopy(), 
 				selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length));
+			newWay.suspend();
+			selectedWay.suspend();
 			selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1);
 			
 			// copy relations
@@ -117,7 +119,8 @@ package net.systemeD.potlatch2.controller {
 				// ** needs to copy roles as well
 				r.appendMember(new RelationMember(newWay, ''));
 			}
-			controller.map.paint.wayuis[newWay.id].redraw();	// ** should we do this by firing an event?
+			newWay.resume();
+			selectedWay.resume();
 
 			return new SelectedWay(selectedWay);
 		}

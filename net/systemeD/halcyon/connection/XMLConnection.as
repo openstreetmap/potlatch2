@@ -267,9 +267,9 @@ package net.systemeD.halcyon.connection {
                 entity.markClean(newID, version);
                 
                 if ( oldID != newID ) {
-                    if ( type == "node" ) renumberNode(oldID, entity as Node);
-                    else if ( type == "way" ) renumberWay(oldID, entity as Way);
-                    else if ( type == "relation" ) renumberRelation(oldID, entity as Relation);
+                    if ( type == "node" ) renumberNode(oldID, entity as Node, false);
+                    else if ( type == "way" ) renumberWay(oldID, entity as Way, false);
+                    else if ( type == "relation" ) renumberRelation(oldID, entity as Relation, false);
                 }
                 // *** TODO *** handle deleting
             }

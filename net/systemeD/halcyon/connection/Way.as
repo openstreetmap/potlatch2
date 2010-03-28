@@ -80,7 +80,11 @@ package net.systemeD.halcyon.connection {
 		}
 
 		public function deleteNodesFrom(start:int):void {
+			for (var i:int=start; i<nodes.length; i++) {
+				nodes[i].removeParent(this);
+			}
 			nodes.splice(start);
+			markDirty();
 		}
 
 		public function mergeWith(way:Way,topos:int,frompos:int):void {

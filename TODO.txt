@@ -25,7 +25,6 @@ Potlatch 2: main outstanding issues
 
 * Non-900913 projections
 * Plugin support
-* pressing x to split ways doesn't seem to shorten the original way
 
 
 == UI ==
@@ -53,6 +52,6 @@ Potlatch 2: main outstanding issues
 * Shields
 * Arrows (dash-style or something) for oneway et al
 * Complete MapCSS support
-* Would be useful to be able to 'suspend' redrawing
+* Don't redraw stuff that's offscreen
 * 'Light' version without vectorlayer support etc.
-* Boost z-indexes to 20
+* Infinite z-indexes

@@ -94,6 +94,8 @@ package net.systemeD.halcyon {
 			connection = Connection.getConnection(initparams);
             connection.addEventListener(Connection.NEW_WAY, newWayCreated);
             connection.addEventListener(Connection.NEW_POI, newPOICreated);
+            connection.addEventListener(Connection.WAY_RENUMBERED, wayRenumbered);
+            connection.addEventListener(Connection.NODE_RENUMBERED, nodeRenumbered);
 			gotEnvironment(null);
 
 			addEventListener(Event.ENTER_FRAME, everyFrame);
@@ -244,6 +246,16 @@ package net.systemeD.halcyon {
 			var nodeui:NodeUI=paint.createNodeUI(node);
 			nodeui.redraw();
         }
+
+		private function wayRenumbered(event:EntityRenumberedEvent):void {
+            var way:Way = event.entity as Way;
+			paint.renumberWayUI(way,event.oldID);
+		}
+
+		private function nodeRenumbered(event:EntityRenumberedEvent):void {
+            var node:Node = event.entity as Node;
+			paint.renumberNodeUI(node,event.oldID);
+		}
 
         public function setHighlight(entity:Entity, settings:Object):void {
 			var stateType:String;
