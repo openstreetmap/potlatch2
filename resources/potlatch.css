@@ -122,6 +122,10 @@ way[tunnel=yes]
     { z-index: 4; color: white; width: eval('_width+2'); }
     { z-index: 3; color: black; width: eval('_width+6'); dashes: 4,4; }
 
+/* Oneway */
+way[oneway=yes] { z-index: 10; color: #444444; width: 3; dashes: 15,25; line-style: arrows; }
+
+
 /* Change the road colour based on dynamically set "highlighted" tag (see earlier) */
 
 way .highlighted { color: pink; }

@@ -10,6 +10,7 @@ package net.systemeD.halcyon.styleparser {
 		public var dashes:Array=[];
 		public var linecap:String;
 		public var linejoin:String;
+		public var line_style:String;
 		
 		public var fill_color:Number;
 		public var fill_opacity:Number;
@@ -22,7 +23,7 @@ package net.systemeD.halcyon.styleparser {
 		
 		override public function get properties():Array {
 			return [
-				'width','color','opacity','dashes','linecap','linejoin',
+				'width','color','opacity','dashes','linecap','linejoin','line_style',
 				'fill_color','fill_opacity','fill_image',
 				'casing_width','casing_color','casing_opacity','casing_dashes'
 			];
@@ -54,6 +55,7 @@ package net.systemeD.halcyon.styleparser {
 			g.beginFill(fill_color,
 						fill_opacity ? fill_opacity : 1);
 		}
+		
 	}
 
 }

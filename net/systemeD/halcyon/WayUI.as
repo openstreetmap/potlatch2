@@ -173,8 +173,10 @@ package net.systemeD.halcyon {
 						stroke=new Shape(); addToLayer(stroke,STROKESPRITE,sublayer);
 						stroke.graphics.moveTo(x0,y0);
 						s.applyStrokeStyle(stroke.graphics);
-						if (s.dashes && s.dashes.length>0) { dashedLine(stroke.graphics,s.dashes); }
-													  else { solidLine(stroke.graphics); }
+						if (s.dashes && s.dashes.length>0) {
+							var segments:Array=dashedLine(stroke.graphics,s.dashes); 
+							if (s.line_style) { lineDecoration(stroke.graphics,s,segments); }
+						} else { solidLine(stroke.graphics); }
 						drawn=true;
 					}
 
@@ -275,7 +277,8 @@ package net.systemeD.halcyon {
 
 		// Draw dashed polyline
 		
-		private function dashedLine(g:Graphics,dashes:Array):void {
+		private function dashedLine(g:Graphics,dashes:Array):Array {
+			var segments:Array=[];
 			var draw:Boolean=false, dashleft:Number=0, dc:Array=new Array();
 			var a:Number, xc:Number, yc:Number;
 			var curx:Number, cury:Number;
@@ -289,6 +292,7 @@ package net.systemeD.halcyon {
 				if (dashleft<=0) {	// should be ==0
 					if (dc.length==0) { dc=dashes.slice(0); }
 					dashleft=dc.shift();
+					if (draw) { segments.push([curx,cury,dx,dy]); }
 					draw=!draw;
 				}
 				if (segleft<=0) {	// should be ==0
@@ -316,11 +320,40 @@ package net.systemeD.halcyon {
 					segleft-=dashleft; dashleft=0;
 				}
 			}
+			return segments;
 		}
 
 		private function moveLine(g:Graphics,x:Number,y:Number,draw:Boolean):void {
 			if (draw) { g.lineTo(x,y); }
 				 else { g.moveTo(x,y); }
+		}
+
+		// Draw decoration (arrows etc.)
+		
+		private function lineDecoration(g:Graphics,s:ShapeStyle,segments:Array):void {
+			var c:int=s.color ? s.color : 0;
+			switch (s.line_style.toLowerCase()) {
+
+				case 'arrows':
+					var w:Number=s.width*1.5;	// width of arrow
+					var l:Number=s.width*2;		// length of arrow
+					var angle0:Number, angle1:Number, angle2:Number;
+					g.lineStyle(1,c);
+					for each (var seg:Array in segments) {
+						g.beginFill(c);
+						angle0= Math.atan2(seg[3],seg[2]);
+						angle1=-Math.atan2(seg[3],seg[2]);
+						angle2=-Math.atan2(seg[3],seg[2])-Math.PI;
+						g.moveTo(seg[0]+l*Math.cos(angle0),
+						         seg[1]+l*Math.sin(angle0));
+						g.lineTo(seg[0]+w*Math.sin(angle1),
+						         seg[1]+w*Math.cos(angle1));
+						g.lineTo(seg[0]+w*Math.sin(angle2),
+						         seg[1]+w*Math.cos(angle2));
+						g.endFill();
+					}
+					break;
+				}
 		}
 
 		

@@ -55,7 +55,7 @@ Potlatch 2: main outstanding issues
 == Rendering (Halcyon) ==
 
 * Shields
-* Arrows (dash-style or something) for oneway et al
+* More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
 * Complete MapCSS support
 * Don't redraw stuff that's offscreen
 * 'Light' version without vectorlayer support etc.
