@@ -7,6 +7,10 @@
               <manager-class>flash.fonts.AFEFontManager</manager-class>
           </managers>
       </fonts>
+
+      <library-path append="true">
+          <path-element>lib</path-element>
+      </library-path>
    </compiler>
 
    <metadata>
