@@ -45,7 +45,7 @@ package net.systemeD.halcyon.styleparser {
 		// Loading stylesheet
 
 		public function loadFromCSS(str:String):void {
-			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); redrawCallback(); return; }
+			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); loaded=true; redrawCallback(); return; }
 
 			var request:URLRequest=new URLRequest(str);
 			var loader:URLLoader=new URLLoader();
@@ -62,10 +62,7 @@ package net.systemeD.halcyon.styleparser {
 		private function parseCSS(str:String):void {
 			var css:MapCSS=new MapCSS(minscale,maxscale);
 			choosers=css.parse(str);
-//			Inspector.getInstance().show();
-//			Inspector.getInstance().shelf('Choosers', choosers);
 			loadImages();
-//			map.redraw();
 		}
 
 		private function doRedrawCallback(e:Event):void {

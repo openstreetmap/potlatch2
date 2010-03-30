@@ -68,8 +68,7 @@ package {
 		}
 
 		private function onRefreshCSS(str:String):void {
-			theMap.ruleset.loadFromCSS(str);
-			theMap.redraw();
+			theMap.setStyle(str);
 		}		
 		private function onJumpTo(lat:Number,lon:Number):void {
 			theMap.init(lat,lon);
