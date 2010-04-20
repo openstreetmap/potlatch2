@@ -20,11 +20,11 @@ package net.systemeD.halcyon.connection {
             var realVal:String = entity.getTag(oldKey);
             _key = key;
             if ( oldKey != null && realVal != null && realVal != "" )
-                entity.renameTag(oldKey, key);
+                entity.renameTag(oldKey, key, MainUndoStack.getGlobalStack().addAction);
         }
 
         public function set value(value:String):void {
-            entity.setTag(_key, value);
+            entity.setTag(_key, value, MainUndoStack.getGlobalStack().addAction);
         }
 
         private function tagChanged(event:TagEvent):void {

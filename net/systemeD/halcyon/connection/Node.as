@@ -1,5 +1,7 @@
 package net.systemeD.halcyon.connection {
 
+    import net.systemeD.halcyon.connection.actions.*;
+
     public class Node extends Entity {
         private var _lat:Number;
         private var _latproj:Number;
@@ -28,50 +30,40 @@ package net.systemeD.halcyon.connection {
             return _lon;
         }
 
-        public function set lat(lat:Number):void {
-            var oldLat:Number = this._lat;
+        private function setLatLonImmediate(lat:Number, lon:Number):void {
             this._lat = lat;
             this._latproj = lat2latp(lat);
-            markDirty();
-            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, oldLat, _lon));
+            this._lon = lon;
+        }
+        
+        public function set lat(lat:Number):void {
+            MainUndoStack.getGlobalStack().addAction(new MoveNodeAction(this, lat, _lon, setLatLonImmediate));
         }
 
         public function set latp(latproj:Number):void {
-            var oldLat:Number = this._lat;
-            this._latproj = latproj;
-            this._lat = latp2lat(latproj);
-            markDirty();
-            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, oldLat, _lon));
-         }
+            MainUndoStack.getGlobalStack().addAction(new MoveNodeAction(this, latp2lat(latproj), _lon, setLatLonImmediate));
+        }
 
         public function set lon(lon:Number):void {
-            var oldLon:Number = this._lon;
-            this._lon = lon;
-            markDirty();
-            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, _lat, oldLon));
-         }
+            MainUndoStack.getGlobalStack().addAction(new MoveNodeAction(this, _lat, lon, setLatLonImmediate));
+        }
+        
+        public function setLatLon(lat:Number, lon:Number, performAction:Function):void {
+            performAction(new MoveNodeAction(this, lat, lon, setLatLonImmediate));
+        } 
 
-		public function setLonLatp(lon:Number,latproj:Number):void {
-			// move both lon and latp but only fire one event
-			var oldLon:Number = this._lon;
-			var oldLat:Number = this._lat;
-			this._latproj = latproj;
-			this._lat = latp2lat(latproj);
-			this._lon = lon;
-			markDirty();
-            dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, this, oldLat, oldLon));
+		public function setLonLatp(lon:Number,latproj:Number, performAction:Function):void {
+		    performAction(new MoveNodeAction(this, latp2lat(latproj), lon, setLatLonImmediate));
 		}
 
         public override function toString():String {
             return "Node("+id+"@"+version+"): "+lat+","+lon+" "+getTagList();
         }
 
-		public override function remove():void {
-			removeFromParents();
-			deleted=true;
-            dispatchEvent(new EntityEvent(Connection.NODE_DELETED, this));
+		public override function remove(performAction:Function):void {
+			performAction(new DeleteNodeAction(this, setDeletedState));
 		}
-
+		
 		internal override function isEmpty():Boolean {
 			return deleted;
 		}

@@ -2,6 +2,8 @@ package net.systemeD.halcyon.connection {
 
     import flash.events.EventDispatcher;
     import flash.utils.Dictionary;
+    
+    import net.systemeD.halcyon.connection.actions.*;
 
     public class Entity extends EventDispatcher {
         private var _id:Number;
@@ -50,27 +52,13 @@ package net.systemeD.halcyon.connection {
         public function getTag(key:String):String {
             return tags[key];
         }
-
-        public function setTag(key:String, value:String):void {
-            var old:String = tags[key];
-            if ( old != value ) {
-                if ( value == null || value == "" )
-                    delete tags[key];
-                else
-                    tags[key] = value;
-                markDirty();
-                dispatchEvent(new TagEvent(Connection.TAG_CHANGED, this, key, key, old, value));
-            }
+        
+        public function setTag(key:String, value:String, performAction:Function):void {
+            performAction(new SetTagAction(this, key, value));
         }
 
-        public function renameTag(oldKey:String, newKey:String):void {
-            var value:String = tags[oldKey];
-            if ( oldKey != newKey ) {
-                delete tags[oldKey];
-                tags[newKey] = value;
-                markDirty();
-                dispatchEvent(new TagEvent(Connection.TAG_CHANGED, this, oldKey, newKey, value, value));
-            }
+        public function renameTag(oldKey:String, newKey:String, performAction:Function):void {
+            performAction(new SetTagKeyAction(this, oldKey, newKey));
         }
 
         public function getTagList():TagList {
@@ -109,25 +97,33 @@ package net.systemeD.halcyon.connection {
             modified = false;
         }
 
-        protected function markDirty():void {
+        internal function markDirty():void {
             modified = true;
         }
 
 		// Delete entity
 		
-		public function remove():void {
+		public function remove(performAction:Function):void {
 			// to be overridden
+		}
+		
+		public function isDeleted():Boolean {
+		    return deleted;
+		}
+		
+		protected function setDeletedState(isDeleted:Boolean):void {
+		    deleted = isDeleted;
 		}
 		
 		internal function isEmpty():Boolean {
 			return false;	// to be overridden
 		}
 
-		protected function removeFromParents():void {
+		public function removeFromParents(performAction:Function):void {
 			for (var o:Object in parents) {
-				if (o is Relation) { Relation(o).removeMember(this); }
-				else if (o is Way) { Way(o).removeNode(Node(this)); }
-				if (o.isEmpty()) { o.remove(); }
+				if (o is Relation) { Relation(o).removeMember(this, performAction); }
+				else if (o is Way) { Way(o).removeNode(Node(this), performAction); }
+				if (o.isEmpty()) { o.remove(performAction); }
 			}
 		}
 
@@ -212,3 +208,4 @@ package net.systemeD.halcyon.connection {
     }
 
 }
+

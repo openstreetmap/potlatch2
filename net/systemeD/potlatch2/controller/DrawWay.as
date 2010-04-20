@@ -99,7 +99,7 @@ package net.systemeD.potlatch2.controller {
 		protected function stopDrawing():ControllerState {
 			if ( selectedWay.length<2) {
 				controller.map.setHighlight(selectedWay, { showNodes: false });
-				selectedWay.remove();
+				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 				// delete controller.map.ways[selectedWay.id];
 				return new NoSelection();
 			} else if ( leaveNodeSelected ) {

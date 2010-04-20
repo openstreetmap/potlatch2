@@ -1,7 +1,9 @@
 package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.connection.CompositeUndoableAction;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.connection.Node;
+	import net.systemeD.halcyon.connection.MainUndoStack;
 
 	public class Circularise {
 
@@ -38,12 +40,15 @@ package net.systemeD.potlatch2.tools {
 			}
 			d=d/way.length;
 			
+
+			var action:CompositeUndoableAction = new CompositeUndoableAction("Straighten");
+
 			// Move each node
 			for (i=0; i<way.length-1; i++) {
 				n=way.getNode(i);
 				var c:Number=Math.sqrt(Math.pow(n.lon-cx,2)+Math.pow(n.latp-cy,2));
 				n.setLonLatp(cx+(n.lon -cx)/c*d,
-				             cy+(n.latp-cy)/c*d);
+				             cy+(n.latp-cy)/c*d, action.push);
 			}
 
 			// Insert extra nodes to make circle

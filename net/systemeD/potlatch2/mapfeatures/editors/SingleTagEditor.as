@@ -27,7 +27,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       
       public function set value(val:String):void {
           if ( _entity != null )
-              _entity.setTag(_factory.key, val);
+              _entity.setTag(_factory.key, val, MainUndoStack.getGlobalStack().addAction);
       }
 
       public function set factory(factory:SingleTagEditorFactory):void {

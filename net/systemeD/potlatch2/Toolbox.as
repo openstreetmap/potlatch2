@@ -56,7 +56,7 @@ package net.systemeD.potlatch2 {
 
 		public function doDelete():void {
 			if (entity is Node) { controller.connection.unregisterPOI(Node(entity)); }
-			entity.remove();
+			entity.remove(MainUndoStack.getGlobalStack().addAction);
 
 			if (controller.state is SelectedWayNode) {
 				controller.setState(new SelectedWay(SelectedWayNode(controller.state).selectedWay));

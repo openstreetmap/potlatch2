@@ -1,7 +1,9 @@
 package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.connection.CompositeUndoableAction;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.connection.Node;
+	import net.systemeD.halcyon.connection.MainUndoStack;
 
 	public class Straighten {
 
@@ -13,6 +15,8 @@ package net.systemeD.potlatch2.tools {
 			if (a==b) { return; }
 			
 			// ** could potentially do the 'too bendy?' check here as per Potlatch 1
+			
+			var action:CompositeUndoableAction = new CompositeUndoableAction("Straighten");
 			
 			var todelete:Array=[];
 			var n:Node;
@@ -28,14 +32,16 @@ package net.systemeD.potlatch2.tools {
 					              (n.latp-a.latp)*(b.latp-a.latp))/
 					             (Math.pow(b.lon-a.lon,2)+Math.pow(b.latp-a.latp,2));
 					n.setLonLatp(a.lon +u*(b.lon -a.lon ),
-					             a.latp+u*(b.latp-a.latp));
+					             a.latp+u*(b.latp-a.latp), action.push);
 					
 				} else {
 					// safe to delete
 					if (todelete.indexOf(n)==-1) { todelete.push(n); }
 				}
 			}
-			for each (n in todelete) { n.remove(); }
+			for each (n in todelete) { n.remove(action.push); }
+			
+			MainUndoStack.getGlobalStack().addAction(action);
 		}
 	}
 }

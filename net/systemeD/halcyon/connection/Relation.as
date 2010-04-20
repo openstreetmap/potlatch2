@@ -1,5 +1,7 @@
 package net.systemeD.halcyon.connection {
 
+	import net.systemeD.halcyon.connection.actions.*;
+
     public class Relation extends Entity {
         private var members:Array;
 		public static var entity_type:String = 'relation';
@@ -75,18 +77,8 @@ package net.systemeD.halcyon.connection {
             return members.length;
         }
 
-		public function removeMember(entity:Entity):void {
-			var i:int;
-			var lastRemoved:int = -1;
-			while ((i=findEntityMemberIndex(entity))>-1) {
-				members.splice(i, 1);
-				lastRemoved = i;
-			}
-			entity.removeParent(this);
-			markDirty();
-			
-			if ( lastRemoved >= 0 )
-			    dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, entity, this, lastRemoved));
+		public function removeMember(entity:Entity, performAction:Function):void {
+			performAction(new RemoveEntityFromRelationAction(this, entity, members));
 		}
 
         public function removeMemberByIndex(index:uint):void {
@@ -101,12 +93,8 @@ package net.systemeD.halcyon.connection {
             dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, entity, this, index));
         }
 
-		public override function remove():void {
-			removeFromParents();
-			for each (var member:RelationMember in members) { member.entity.removeParent(this); }
-			members=[];
-			deleted=true;
-            dispatchEvent(new EntityEvent(Connection.RELATION_DELETED, this));
+		public override function remove(performAction:Function):void {
+			performAction(new DeleteRelationAction(this, setDeletedState, members));
 		}
 
 		internal override function isEmpty():Boolean {

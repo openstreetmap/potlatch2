@@ -90,19 +90,30 @@ package net.systemeD.potlatch2.controller {
 			return node;
         }
 
-		protected function mergeWith(way:Way):Boolean {
-			// ** needs to prefer positive to negative IDs
+		protected function mergeWith(otherWay:Way):Boolean {
+			var way1:Way;
+			var way2:Way;
+			if ( selectedWay.id < otherWay.id && selectedWay.id >= 0 ) {
+			    way1 = selectedWay;
+			    way2 = otherWay;
+			} else {
+			    way1 = otherWay;
+			    way2 = selectedWay;
+			}
+			
+			var undo:Function = MainUndoStack.getGlobalStack().addAction;
+			
 			// find common point
-			if (way==selectedWay) { return false; }
-			if      (selectedWay.getNode(0)   ==way.getNode(0)   ) { selectedWay.mergeWith(way,0,0); }
-			else if (selectedWay.getNode(0)   ==way.getLastNode()) { selectedWay.mergeWith(way,0,way.length-1); }
-			else if (selectedWay.getLastNode()==way.getNode(0)   ) { selectedWay.mergeWith(way,selectedWay.length-1,0); }
-			else if (selectedWay.getLastNode()==way.getLastNode()) { selectedWay.mergeWith(way,selectedWay.length-1,way.length-1); }
+			if (way1 == way2) { return false; }
+			if      (way1.getNode(0)   ==way2.getNode(0)   ) { way1.mergeWith(way2,0,0,undo); }
+			else if (way1.getNode(0)   ==way2.getLastNode()) { way1.mergeWith(way2,0,way2.length-1,undo); }
+			else if (way1.getLastNode()==way2.getNode(0)   ) { way1.mergeWith(way2,way1.length-1,0,undo); }
+			else if (way1.getLastNode()==way2.getLastNode()) { way1.mergeWith(way2,way1.length-1,way2.length-1,undo); }
 			return true;
 		}
         
 		public function deleteWay():ControllerState {
-			selectedWay.remove();
+			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 

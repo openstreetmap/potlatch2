@@ -458,7 +458,7 @@
 
       public function removeTag():void {
           var k:String = advancedTagGrid.selectedItem.key;
-          selectedEntity.setTag(k, null);
+          selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
       }
       
       public function addToRelation():void {
@@ -480,21 +480,25 @@
               return;
 
           var newFeature:Feature = tw.selectedType;
-          
+          var undoStack:Function = MainUndoStack.getGlobalStack().addAction;
+          var action:CompositeUndoableAction = new CompositeUndoableAction(
+                  "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+feature.name);
+
           // remove tags from the current feature
           if ( feature != null ) {
               for each( var oldtag:Object in feature.tags ) {
-                  selectedEntity.setTag(oldtag["k"], null);
+                  selectedEntity.setTag(oldtag["k"], null, action.push);
               }
           }
           
           // set tags for new feature
           if ( newFeature != null ) {
               for each( var newtag:Object in newFeature.tags ) {
-                  selectedEntity.setTag(newtag["k"], newtag["v"]);
+                  selectedEntity.setTag(newtag["k"], newtag["v"], action.push);
               }
           }
           
+          undoStack(action);
           popupChange.close();
       }
       

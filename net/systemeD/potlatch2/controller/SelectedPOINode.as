@@ -64,7 +64,7 @@ package net.systemeD.potlatch2.controller {
 		
 		public function deletePOI():ControllerState {
 			controller.connection.unregisterPOI(selectedNode);
-			selectedNode.remove();
+			selectedNode.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 		

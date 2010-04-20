@@ -126,7 +126,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function deleteNode():ControllerState {
-			selectedNode.remove();
+			selectedNode.remove(MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(selectedWay);
 		}
 
