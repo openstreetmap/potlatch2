@@ -41,7 +41,7 @@ package net.systemeD.potlatch2.tools {
 			d=d/way.length;
 			
 
-			var action:CompositeUndoableAction = new CompositeUndoableAction("Straighten");
+			var action:CompositeUndoableAction = new CompositeUndoableAction("Circularise");
 
 			// Move each node
 			for (i=0; i<way.length-1; i++) {
@@ -86,6 +86,8 @@ package net.systemeD.potlatch2.tools {
 				}
 				i++;
 			}
+
+			MainUndoStack.getGlobalStack().addAction(action);
 		}
 	}
 }
