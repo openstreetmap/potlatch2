@@ -96,7 +96,9 @@ package net.systemeD.halcyon.connection {
 			}
 		}
 
-
+        public function reverseNodes(performAction:Function):void {
+            performAction(new ReverseNodesAction(this, nodes));
+        }
 
         /**
          * Finds the 1st way segment which intersects the projected

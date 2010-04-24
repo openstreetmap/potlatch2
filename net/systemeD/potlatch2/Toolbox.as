@@ -64,6 +64,12 @@ package net.systemeD.potlatch2 {
 				controller.setState(new NoSelection());
 			}
 		}
+        
+        public function doReverseDirection():void {
+            if (entity is Way) { 
+                Way(entity).reverseNodes(MainUndoStack.getGlobalStack().addAction);
+            }
+        }
 
 		public function doQuadrilateralise():void {
 			if (entity is Way) {

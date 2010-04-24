@@ -34,6 +34,7 @@ package net.systemeD.halcyon {
             way.addEventListener(Connection.TAG_CHANGED, wayTagChanged);
             way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             way.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
+            way.addEventListener(Connection.WAY_REORDERED, wayReordered);
 			way.addEventListener(Connection.WAY_DELETED, wayDeleted);
 			way.addEventListener(Connection.ADDED_TO_RELATION, wayRelationAdded);
 			way.addEventListener(Connection.REMOVED_FROM_RELATION, wayRelationRemoved);
@@ -88,6 +89,10 @@ package net.systemeD.halcyon {
 		private function wayDeleted(event:EntityEvent):void {
 			redraw();
 		}
+        
+        private function wayReordered(event:EntityEvent):void {
+            redraw();
+        }
 
 		private function init():void {
 			recalculate();

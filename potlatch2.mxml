@@ -66,6 +66,7 @@
 				click='toolbox.doDelete();' 
 				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/direction.svg')" 
+                click='toolbox.doReverseDirection();'
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/straighten.svg')" 
 				click='toolbox.doStraighten();' 
