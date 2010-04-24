@@ -482,7 +482,7 @@
           var newFeature:Feature = tw.selectedType;
           var undoStack:Function = MainUndoStack.getGlobalStack().addAction;
           var action:CompositeUndoableAction = new CompositeUndoableAction(
-                  "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+feature.name);
+                  "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+newFeature.name);
 
           // remove tags from the current feature
           if ( feature != null ) {
