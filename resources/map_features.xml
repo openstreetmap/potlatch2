@@ -523,7 +523,7 @@
   
   <feature name="Bollard">
     <category>barrier</category>
-    <icon>
+    <icon image="icons/bollard.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dbollard</help>
     
@@ -531,9 +531,19 @@
     <tag k="barrier" v="bollard"/>
   </feature>
   
+  <feature name="Gate">
+    <category>barrier</category>
+    <icon image="icons/gate.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dgate</help>
+    
+    <point />
+    <tag k="barrier" v="gate"/>
+  </feature>
+  
   <feature name="Cycle Barrier">
     <category>barrier</category>
-    <icon>
+    <icon image="icons/bollard.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcycle_barrier</help>
     
@@ -543,7 +553,7 @@
   
   <feature name="Big Concrete Blocks">
     <category>barrier</category>
-    <icon>
+    <icon image="icons/bollard.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dblock</help>
     
@@ -553,7 +563,7 @@
   
   <feature name="Cattle Grid">
     <category>barrier</category>
-    <icon>
+    <icon image="icons/cattle_grid.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcattle_grid</help>
     
