@@ -788,6 +788,17 @@
     <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
   </feature>
 
+
+ <feature name="Police Station">
+    <category>amenity</category>
+    <icon image="icons/police.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpolice</help>
+    <point />
+    <tag k="amenity" v="police"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
+  </feature>
+
+
  <feature name="Hospital">
     <category>amenity</category>
     <icon image="icons/hospital.png"/>
