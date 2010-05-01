@@ -83,6 +83,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
 				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
+                case 82:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;         
 				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
 			}
