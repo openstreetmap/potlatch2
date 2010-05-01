@@ -7,11 +7,13 @@
 
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
   <mx:VBox id="dndPanel" width="100%" height="100%">
-    <mx:Text text="Drag and Drop Points of Interest" />
+    <!-- FIXME the panel text is repeated below for mouseOut -->
+    <mx:Text id="dndPanelText" text="Drag and Drop Points of Interest" />
     <mx:TileList id="poiGrid" dataProvider="{MapFeatures.getInstance().pois}" width="100%">
       <mx:itemRenderer>
         <mx:Component>
-          <mx:VBox>
+          <mx:VBox mouseOver="parentDocument.dndPanelText.text = data.name"
+                   mouseOut="parentDocument.dndPanelText.text = 'Drag and Drop Points of Interest'">
             <mx:Script><![CDATA[
               import mx.events.DragEvent;
               import mx.managers.DragManager;
