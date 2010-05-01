@@ -54,11 +54,13 @@ package net.systemeD.halcyon.connection {
 			performAction(new RemoveNodeFromWayAction(this, node, nodes));
 		}
 
-        public function removeNodeByIndex(index:uint):void {
+        public function removeNodeByIndex(index:uint,fireEvent:Boolean=true):void {
             var removed:Array=nodes.splice(index, 1);
 			if (nodes.indexOf(removed[0])==-1) { removed[0].removeParent(this); }
 			markDirty();
-            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], this, index));
+			if (fireEvent) {
+	            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], this, index));
+			}
         }
 
 		public function sliceNodes(start:int,end:int):Array {
@@ -142,6 +144,7 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function isArea():Boolean {
+			if (nodes.length==0) { return false; }
 			return (nodes[0].id==nodes[nodes.length-1].id && nodes.length>2);
 		}
 		

@@ -74,7 +74,9 @@ package net.systemeD.halcyon {
 		    
 		private function wayNodeRemoved(event:WayNodeEvent):void {
 		    event.node.removeEventListener(Connection.NODE_MOVED, nodeMoved);
-			paint.nodeuis[event.node.id].redraw();
+			if (paint.nodeuis[event.node.id]) {
+				paint.nodeuis[event.node.id].redraw();
+			}
 		    redraw();
 		}
 		    

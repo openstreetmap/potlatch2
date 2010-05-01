@@ -1,9 +1,11 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.display.DisplayObject;
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.potlatch2.tools.Quadrilateralise;
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedWay extends ControllerState {
@@ -52,8 +54,13 @@ package net.systemeD.potlatch2.controller {
                 } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
                     return new NoSelection();
 				}
+
             } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				if ( entity is Way && focus==selectedWay && event.shiftKey) {
+				var paint:MapPaint = getMapPaint(DisplayObject(event.target));
+				if ( entity is Way && event.altKey && paint.isBackground ) {
+					// pull way out of vector background layer
+					return new SelectedWay(paint.findSource().pullThrough(entity,controller.connection));
+				} else if ( entity is Way && focus==selectedWay && event.shiftKey) {
 					// insert node within way (shift-click)
                     var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
 					d.forceDragStart();

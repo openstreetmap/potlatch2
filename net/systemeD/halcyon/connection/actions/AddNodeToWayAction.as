@@ -1,6 +1,7 @@
 package net.systemeD.halcyon.connection.actions {
 
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
     
     public class AddNodeToWayAction extends UndoableEntityAction {
         private var node:Node;

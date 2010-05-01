@@ -1,20 +1,26 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.display.*;
 	import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.vectorlayers.VectorLayer;
 	import net.systemeD.halcyon.Globals;
 
 	public class NoSelection extends ControllerState {
 
 		public function NoSelection() {
 		}
- 
+
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				if ( entity is Way ) {
+				var paint:MapPaint = getMapPaint(DisplayObject(event.target));
+				if ( entity is Way && event.altKey && paint.isBackground ) {
+					return new SelectedWay(paint.findSource().pullThrough(entity,controller.connection));
+				} else if ( entity is Way ) {
 					return new SelectedWay(focus as Way);
                 } else if ( focus is Node ) {
 					return new DragPOINode(entity as Node,event,false);

@@ -224,14 +224,14 @@ package net.systemeD.halcyon.connection {
             upload.appendChild(addCreated(changeset, getAllNodeIDs, getNode, serialiseNode));
             upload.appendChild(addCreated(changeset, getAllWayIDs, getWay, serialiseWay));
             upload.appendChild(addCreated(changeset, getAllRelationIDs, getRelation, serialiseRelation));
-            upload.appendChild(addDeleted(changeset, getAllRelationIDs, getRelation, serialiseEntityRoot));
-            upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot));
-            upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot));
             upload.appendChild(addModified(changeset, getAllNodeIDs, getNode, serialiseNode));
             upload.appendChild(addModified(changeset, getAllWayIDs, getWay, serialiseWay));
             upload.appendChild(addModified(changeset, getAllRelationIDs, getRelation, serialiseRelation));
+            upload.appendChild(addDeleted(changeset, getAllRelationIDs, getRelation, serialiseEntityRoot));
+            upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot));
+            upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot));
 
-            // *** TODO *** deleting items
+			trace(upload);
             
             // now actually upload them
             // make an OAuth query
@@ -298,7 +298,7 @@ package net.systemeD.halcyon.connection {
         private function addCreated(changeset:Changeset, getIDs:Function, get:Function, serialise:Function):XML {
             var create:XML = <create version="0.6"/>
             for each( var id:Number in getIDs() ) {
-                if ( id >= 0 )
+                if ( id >= 0 || entity.deleted )
                     continue;
                     
                 var entity:Object = get(id);

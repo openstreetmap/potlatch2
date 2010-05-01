@@ -27,7 +27,7 @@
 	private function loadSHP(url:String):void {
         PopUpManager.removePopUp(this);
 		var theMap:Map = Globals.vars.root;
-		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(theMap,"potlatch.css");
+		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(url,theMap,"potlatch.css");
 		theMap.vectorlayers.push(vectorlayer);
 		theMap.vectorbg.addChild(vectorlayer.paint);
 

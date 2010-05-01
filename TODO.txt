@@ -10,11 +10,13 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * Undo/redo: split, draw
+* Drag ways
 
 
 == Vector background layers ==
 
 * Remove existing interaction and add alt-click
+* TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Import from GPX
 * Import from OSM (is this worth sharing with the XML API stuff?)
 

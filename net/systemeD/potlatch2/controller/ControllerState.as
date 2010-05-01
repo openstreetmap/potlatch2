@@ -1,6 +1,8 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.display.*;
     import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.MapPaint;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.Globals;
@@ -38,6 +40,14 @@ package net.systemeD.potlatch2.controller {
 
 		public function toString():String {
 			return "(No state)";
+		}
+		
+		protected function getMapPaint(d:DisplayObject):MapPaint {
+			while (d) {
+				if (d is MapPaint) { return MapPaint(d); }
+				d=d.parent;
+			}
+			return null;
 		}
 
     }

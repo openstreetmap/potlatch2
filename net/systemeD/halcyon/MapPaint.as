@@ -7,6 +7,7 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.styleparser.RuleSet;
+	import net.systemeD.halcyon.vectorlayers.VectorLayer;
 	import net.systemeD.halcyon.Globals;
 
     public class MapPaint extends Sprite {
@@ -17,6 +18,7 @@ package net.systemeD.halcyon {
 		public var ruleset:RuleSet;						// rules
 		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
 		public var nodeuis:Object=new Object();			//  |
+		public var isBackground:Boolean = true;			// is it a background layer or the core paint object?
 
 		// Set up layering
 		// [layer][3]			- names
@@ -117,6 +119,13 @@ package net.systemeD.halcyon {
 		public function redrawPOIs():void {
 			for each (var p:NodeUI in nodeuis) { p.redraw(); }
 		}
-
+		
+		public function findSource():VectorLayer {
+			var v:VectorLayer;
+			for each (v in map.vectorlayers) {
+				if (v.paint==this) { return v; }
+			}
+			return null;
+		}
 	}
 }

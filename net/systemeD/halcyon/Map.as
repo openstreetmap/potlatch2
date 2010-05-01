@@ -140,6 +140,7 @@ package net.systemeD.halcyon {
 
  			paint = new MapPaint(this,-5,5);			// 2 - core paint object
 			addChild(paint);							//   |
+			paint.isBackground=false;					//   |
 
 			if (style) {
 				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
