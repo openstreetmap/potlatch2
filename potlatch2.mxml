@@ -56,7 +56,7 @@
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
 
 		<potlatch2:Toolbox id="toolbox" 
-			height="46" width="217" 
+			height="46" width="253" 
 			headerHeight="6" headerColors="[black, gray]" 
 			borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
 			paddingLeft="4" paddingTop="4" layout="horizontal"
@@ -67,6 +67,9 @@
 				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/direction.svg')" 
                 click='toolbox.doReverseDirection();'
+				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
+	        <mx:Button icon="@Embed('embedded/cut.svg')" 
+                click='toolbox.doSplit();'
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/straighten.svg')" 
 				click='toolbox.doStraighten();' 

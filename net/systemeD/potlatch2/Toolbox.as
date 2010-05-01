@@ -15,7 +15,6 @@ package net.systemeD.potlatch2 {
 		** Should be automatically positioned at bottom-right of canvas on init
 		** Should float above tagViewer, not beneath it
 		** Icons should be disabled depending on what's selected (setEntity can do this)
-		** Straighten, circularise, reverse way direction, parallelise
 		** Remove annoying Illustrator cruft from SVG icons!
 
 	*/
@@ -86,6 +85,12 @@ package net.systemeD.potlatch2 {
 		public function doCircularise():void {
 			if (entity is Way) {
 				Circularise.circularise(Way(entity),controller.map);
+			}
+		}
+		
+		public function doSplit():void {
+			if (entity is Node && controller.state is SelectedWayNode) {
+				controller.setState(SelectedWayNode(controller.state).splitWay());
 			}
 		}
 
