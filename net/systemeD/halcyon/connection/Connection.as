@@ -161,6 +161,18 @@ package net.systemeD.halcyon.connection {
             return relations[id];
         }
 
+		public function killNode(id:Number):void {
+			delete nodes[id];
+		}
+		
+		public function killWay(id:Number):void {
+			delete ways[id];
+		}
+		
+		public function killRelation(id:Number):void {
+			delete relations[id];
+		}
+
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
             performCreate(new CreateEntityAction(node, setNode));

@@ -263,19 +263,27 @@ package net.systemeD.halcyon.connection {
                 var newID:Number = Number(update.@new_id);
                 var version:uint = uint(update.@new_version);
                 var type:String = update.name();
+
+				if (newID==0) {
+					// delete
+	                if ( type == "node" ) killNode(oldID);
+	                else if ( type == "way" ) killWay(oldID);
+	                else if ( type == "relation" ) killRelation(oldID);
+					
+				} else {
+					// create/update
+	                var entity:Entity;
+	                if ( type == "node" ) entity = getNode(oldID);
+	                else if ( type == "way" ) entity = getWay(oldID);
+	                else if ( type == "relation" ) entity = getRelation(oldID);
+	                entity.markClean(newID, version);
                 
-                var entity:Entity;
-                if ( type == "node" ) entity = getNode(oldID);
-                else if ( type == "way" ) entity = getWay(oldID);
-                else if ( type == "relation" ) entity = getRelation(oldID);
-                entity.markClean(newID, version);
-                
-                if ( oldID != newID ) {
-                    if ( type == "node" ) renumberNode(oldID, entity as Node, false);
-                    else if ( type == "way" ) renumberWay(oldID, entity as Way, false);
-                    else if ( type == "relation" ) renumberRelation(oldID, entity as Relation, false);
-                }
-                // *** TODO *** handle deleting
+	                if ( oldID != newID ) {
+	                    if ( type == "node" ) renumberNode(oldID, entity as Node, false);
+	                    else if ( type == "way" ) renumberWay(oldID, entity as Way, false);
+	                    else if ( type == "relation" ) renumberRelation(oldID, entity as Relation, false);
+	                }
+				}
             }
 
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
