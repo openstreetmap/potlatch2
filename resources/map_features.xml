@@ -749,6 +749,91 @@
   
   <!-- POI -->
   
+ <feature name="Aerodrome">
+    <category>aeroway</category>
+    <icon image="icons/airport.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
+    <point />
+    <tag k="aeroway" v="aerodrome"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the aerodrome/airport" priority="low"/>
+  </feature>
+
+
+ <feature name="Cinema">
+    <category>amenity</category>
+    <icon image="icons/cinema.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
+    <point />
+    <tag k="amenity" v="cinema"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the cinema" priority="low"/>
+  </feature>
+
+ <feature name="Ferry Terminal">
+    <category>amenity</category>
+    <icon image="icons/ferry_terminal.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
+    <point />
+    <tag k="amenity" v="ferry_terminal"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the ferry terminal." priority="low"/>
+<input type="freetext" presence="always" category="" name="Operator" key="operator" description="The operator of the ferry terminal." priority="low"/>
+<input type="freetext" presence="always" category="" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
+  </feature>
+
+ <feature name="Fire station">
+    <category>amenity</category>
+    <icon image="icons/fire_station.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfire_station</help>
+    <point />
+    <tag k="amenity" v="fire_station"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
+  </feature>
+
+ <feature name="Hospital">
+    <category>amenity</category>
+    <icon image="icons/hospital.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital</help>
+    <point />
+    <tag k="amenity" v="hospital"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
+  </feature>
+
+ <feature name="Hotel">
+    <category>tourism</category>
+    <icon image="icons/hotel.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
+    <point />
+    <tag k="tourism" v="hotel"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The of it." priority="low"/>
+  </feature>
+
+ <feature name="Museum">
+    <category>tourism</category>
+    <icon image="icons/museum.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
+    <point />
+    <tag k="tourism" v="museum"/>
+    <input type="freetext" presence="always" category="" name="" key="" description="The name of it." priority="low"/>
+  </feature>
+
+ <feature name="Place of Worship">
+    <category>amenity</category>
+    <icon image="icons/place_of_worship.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
+    <point />
+    <tag k="amenity" v="place_of_worship"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of it." priority="low"/>i
+    <input type="freetext" presence="always" category="" name="religion" key="religion" description="The religion worshiped here" priority="low"/>
+   <input type="freetext" presence="always" category="" name="denomination" key="denomination=" description="The denomination of the religion worshiped here." priority="low"/>
+  </feature>
+
+
+
+
+
+
+
+
+
   <feature name="ATM">
     <category>amenity</category>
     <icon image="icons/atm.png"/>
