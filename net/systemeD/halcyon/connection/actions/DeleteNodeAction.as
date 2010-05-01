@@ -30,7 +30,8 @@ package net.systemeD.halcyon.connection.actions {
             setDeleted(false);
             markClean();
             entity.dispatchEvent(new EntityEvent(Connection.NEW_NODE, entity));
-            effects.undoAction();
+            if ( effects != null )
+                effects.undoAction();
             return SUCCESS;
         }
     }
