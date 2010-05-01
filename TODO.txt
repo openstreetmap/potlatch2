@@ -15,7 +15,6 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * Undo/redo: split, draw
-* Deleting a way with junction nodes doesn't redraw them
 
 
 == Vector background layers ==
