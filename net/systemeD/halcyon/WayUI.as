@@ -151,11 +151,9 @@ package net.systemeD.halcyon {
 		// Redraw
 
 		override public function doRedraw(sl:StyleList):Boolean {
-Globals.vars.root.addDebug("redrawing "+way.id);
 			removeSprites();
 			if (way.length==0) { return false; }
 			if (!paint.ready) { return false; }
-Globals.vars.root.addDebug("continuing redraw");
 
             // Copy tags object, and add states
             var tags:Object = way.getTagsCopy();
