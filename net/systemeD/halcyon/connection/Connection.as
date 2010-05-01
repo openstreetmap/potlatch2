@@ -5,6 +5,7 @@ package net.systemeD.halcyon.connection {
     import flash.events.EventDispatcher;
     import flash.events.Event;
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.connection.actions.*;
 
 	public class Connection extends EventDispatcher {
 
@@ -160,21 +161,21 @@ package net.systemeD.halcyon.connection {
             return relations[id];
         }
 
-        public function createNode(tags:Object, lat:Number, lon:Number):Node {
+        public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
-            setNode(node,false);
+            performCreate(new CreateEntityAction(node, setNode));
             return node;
         }
 
-        public function createWay(tags:Object, nodes:Array):Way {
+        public function createWay(tags:Object, nodes:Array, performCreate:Function):Way {
             var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
-            setWay(way,false);
+            performCreate(new CreateEntityAction(way, setWay));
             return way;
         }
 
-        public function createRelation(tags:Object, members:Array):Relation {
+        public function createRelation(tags:Object, members:Array, performCreate:Function):Relation {
             var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
-            setRelation(relation,false);
+            performCreate(new CreateEntityAction(relation, setRelation));
             return relation;
         }
 

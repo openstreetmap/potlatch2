@@ -70,10 +70,10 @@ package net.systemeD.halcyon.connection.actions {
             var i:int;
         	if (fromPos==0) {
         	    for (i = 0; i < way2.length; i++)
-        	        way1.addToEnd(toPos, way2.getNode(i));
+        	        way1.addToEnd(toPos, way2.getNode(i), push);
         	} else {
         	    for (i = way2.length-1; i >= 0; i--)
-        	        way1.addToEnd(toPos, way2.getNode(i));
+        	        way1.addToEnd(toPos, way2.getNode(i), push);
         	}
         }   
     }

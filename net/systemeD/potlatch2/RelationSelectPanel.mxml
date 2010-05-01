@@ -44,7 +44,8 @@
         }
         
         public function closeAndNewRelation():void {
-          var relation:Relation = conn.createRelation({}, [new RelationMember(entity, '')])
+          var relation:Relation = conn.createRelation({}, [new RelationMember(entity, '')],
+              MainUndoStack.getGlobalStack().addAction)
           PopUpManager.removePopUp(this);
           trace("edit relation "+id);
           var panel:RelationEditorPanel = RelationEditorPanel(

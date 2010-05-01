@@ -40,7 +40,8 @@ package net.systemeD.potlatch2.controller {
             if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
-                    var way:Way = controller.connection.createWay({}, [entity]);
+                    var way:Way = controller.connection.createWay({}, [entity],
+                        MainUndoStack.getGlobalStack().addAction);
                     return new DrawWay(way, true, false);
 				} else if ( entity is Way && event.ctrlKey ) {
 					// merge way
@@ -85,8 +86,10 @@ package net.systemeD.potlatch2.controller {
             trace("add node");
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
-            var node:Node = controller.connection.createNode({}, lat, lon);
-            selectedWay.insertNodeAtClosestPosition(node, true);
+            var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+            var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
+            selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
+            MainUndoStack.getGlobalStack().addAction(undo);
 			return node;
         }
 

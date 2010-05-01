@@ -255,7 +255,7 @@
             
             var createAction:CompositeUndoableAction = new CompositeUndoableAction("Create POI");
             
-            var node:Node = Connection.getConnectionInstance().createNode({}, lat, lon);
+            var node:Node = Connection.getConnectionInstance().createNode({}, lat, lon, createAction.push);
             for each ( var tag:Object in tags ) {
                 node.setTag(tag.k, tag.v, createAction.push);
             }

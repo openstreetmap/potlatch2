@@ -41,7 +41,8 @@ package net.systemeD.potlatch2.controller {
             if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity is Node && event.shiftKey ) {
 					// start new way
-                    var way:Way = controller.connection.createWay({}, [entity]);
+                    var way:Way = controller.connection.createWay({}, [entity],
+                        MainUndoStack.getGlobalStack().addAction);
                     return new DrawWay(way, true, false);
 				} else if ( entity is Node && focus == selectedWay ) {
 					// select node within way
@@ -109,7 +110,8 @@ package net.systemeD.potlatch2.controller {
 			// create new way
 			var newWay:Way = controller.connection.createWay(
 				selectedWay.getTagsCopy(), 
-				selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length));
+				selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
+				MainUndoStack.getGlobalStack().addAction);
 			newWay.suspend();
 			selectedWay.suspend();
 			selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1);

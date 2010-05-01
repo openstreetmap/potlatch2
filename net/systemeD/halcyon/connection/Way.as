@@ -32,27 +32,18 @@ package net.systemeD.halcyon.connection {
 			return nodes[nodes.length-1];
 		}
 
-        public function insertNode(index:uint, node:Node):void {
-			node.addParent(this);
-            nodes.splice(index, 0, node);
-            markDirty();
-            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, this, index));
+        public function insertNode(index:uint, node:Node, performAction:Function):void {
+			performAction(new AddNodeToWayAction(this, node, nodes, index));
         }
 
-        public function appendNode(node:Node):uint {
-			node.addParent(this);
-            nodes.push(node);
-            markDirty();
-            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, this, nodes.length - 1));
-            return nodes.length;
+        public function appendNode(node:Node, performAction:Function):uint {
+			performAction(new AddNodeToWayAction(this, node, nodes, -1));
+            return nodes.length + 1;
         }
         
-        public function prependNode(node:Node):uint {
-			node.addParent(this);
-            nodes.unshift(node);
-            markDirty();
-            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, this, 0));
-            return nodes.length;
+        public function prependNode(node:Node, performAction:Function):uint {
+			performAction(new AddNodeToWayAction(this, node, nodes, 0));
+            return nodes.length + 1;
         }
         
         public function indexOfNode(node:Node):uint {
@@ -86,13 +77,13 @@ package net.systemeD.halcyon.connection {
 			performAction(new MergeWaysAction(this, way, topos, frompos));
 		}
 		
-		public function addToEnd(topos:int,node:Node):void {
+		public function addToEnd(topos:int,node:Node, performAction:Function):void {
 			if (topos==0) {
 				if (nodes[0]==node) { return; }
-				prependNode(node);
+				prependNode(node, performAction);
 			} else {
 				if (nodes[nodes.length-1]==node) { return; }
-				appendNode(node);
+				appendNode(node, performAction);
 			}
 		}
 
@@ -106,7 +97,7 @@ package net.systemeD.halcyon.connection {
          * specified then the node is moved to exactly bisect the
          * segment.
          */
-        public function insertNodeAtClosestPosition(newNode:Node, isSnap:Boolean):int {
+        public function insertNodeAtClosestPosition(newNode:Node, isSnap:Boolean, performAction:Function):int {
             var closestProportion:Number = 1;
             var newIndex:uint = 0;
             var nP:Point = new Point(newNode.lon, newNode.latp);
@@ -134,7 +125,7 @@ package net.systemeD.halcyon.connection {
                 newNode.latp = snapped.y;
                 newNode.lon = snapped.x;
             }
-            insertNode(newIndex, newNode);
+            insertNode(newIndex, newNode, performAction);
             return newIndex;
         }
         

@@ -47,7 +47,7 @@ package net.systemeD.potlatch2.controller {
 							return stopDrawing();
 						}
 					} else {
-						appendNode(entity as Node);
+						appendNode(entity as Node, MainUndoStack.getGlobalStack().addAction);
 						controller.map.setHighlight(focus, { showNodesHover: false });
 						controller.map.setHighlight(selectedWay, { showNodes: true });
 						resetElastic(entity as Node);
@@ -58,7 +58,8 @@ package net.systemeD.potlatch2.controller {
 					}
 				} else if ( entity is Way ) {
 					node = createAndAddNode(event);
-					Way(entity).insertNodeAtClosestPosition(node, true);
+					Way(entity).insertNodeAtClosestPosition(node, true,
+					    MainUndoStack.getGlobalStack().addAction);
 					resetElastic(node);
 					lastClick=node;
 				}
@@ -111,18 +112,22 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		public function createAndAddNode(event:MouseEvent):Node {
+		    var undo:CompositeUndoableAction = new CompositeUndoableAction("Add node");
+		    
 			var lat:Number = controller.map.coord2lat(event.localY);
 			var lon:Number = controller.map.coord2lon(event.localX);
-			var node:Node = controller.connection.createNode({}, lat, lon);
-			appendNode(node);
+			var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
+			appendNode(node, undo.push);
+			
+			MainUndoStack.getGlobalStack().addAction(undo);
 			return node;
 		}
 		
-		protected function appendNode(node:Node):void {
+		protected function appendNode(node:Node, performAction:Function):void {
 			if ( editEnd )
-				selectedWay.appendNode(node);
+				selectedWay.appendNode(node, performAction);
 			else
-				selectedWay.insertNode(0, node);
+				selectedWay.insertNode(0, node, performAction);
 		}
 		
 		override public function enterState():void {

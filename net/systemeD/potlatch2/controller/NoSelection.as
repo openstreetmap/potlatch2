@@ -23,11 +23,13 @@ package net.systemeD.potlatch2.controller {
 				}
 			} else if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Begin way");
 				var startNode:Node = controller.connection.createNode(
 					{}, 
 					controller.map.coord2lat(event.localY),
-					controller.map.coord2lon(event.localX));
-				var way:Way = controller.connection.createWay({}, [startNode]);
+					controller.map.coord2lon(event.localX), undo.push);
+				var way:Way = controller.connection.createWay({}, [startNode], undo.push);
+				MainUndoStack.getGlobalStack().addAction(undo);
 				return new DrawWay(way, true, false);
 			} else if ( event.type == MouseEvent.ROLL_OVER ) {
 				controller.map.setHighlight(focus, { hover: true });
