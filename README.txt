@@ -8,7 +8,7 @@ Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex fram
 
 === What you'll need ===
 
-* Flex SDK - http://www.adobe.com/products/flex/ (free, OS X/Windows/Linux)
+* Flex SDK - http://www.adobe.com/products/flex/ (free, OS X/Windows/Linux) (Use version 3 and NOT version 4 as there is a compatibility issue)
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
