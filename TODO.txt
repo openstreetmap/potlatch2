@@ -7,11 +7,6 @@ Potlatch 2: main outstanding issues
   and some probably should be (e.g. unhovering). Can we refactor?
 
 
-== Server communication ==
-
-* Deletes (both write and read)
-
-
 == Core geometry ==
 
 * Undo/redo: split, draw

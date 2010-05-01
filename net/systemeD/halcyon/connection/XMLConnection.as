@@ -6,6 +6,7 @@ package net.systemeD.halcyon.connection {
 	import flash.net.*;
     import org.iotashan.oauth.*;
 
+	import net.systemeD.halcyon.Globals;
 
 	public class XMLConnection extends Connection {
 
@@ -223,6 +224,9 @@ package net.systemeD.halcyon.connection {
             upload.appendChild(addCreated(changeset, getAllNodeIDs, getNode, serialiseNode));
             upload.appendChild(addCreated(changeset, getAllWayIDs, getWay, serialiseWay));
             upload.appendChild(addCreated(changeset, getAllRelationIDs, getRelation, serialiseRelation));
+            upload.appendChild(addDeleted(changeset, getAllRelationIDs, getRelation, serialiseEntityRoot));
+            upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot));
+            upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot));
             upload.appendChild(addModified(changeset, getAllNodeIDs, getNode, serialiseNode));
             upload.appendChild(addModified(changeset, getAllWayIDs, getWay, serialiseWay));
             upload.appendChild(addModified(changeset, getAllRelationIDs, getRelation, serialiseRelation));
@@ -297,12 +301,27 @@ package net.systemeD.halcyon.connection {
             return create.hasComplexContent() ? create : <!-- blank create section -->;
         }
 
+		private function addDeleted(changeset:Changeset, getIDs:Function, get:Function, serialise:Function):XML {
+            var del:XML = <delete version="0.6"/>
+            for each( var id:Number in getIDs() ) {
+                var entity:Entity = get(id);
+                // creates are already included
+                if ( id < 0 || !entity.deleted )
+                    continue;
+                    
+                var xml:XML = serialise(entity);
+                xml.@changeset = changeset.id;
+                del.appendChild(xml);
+            }
+            return del.hasComplexContent() ? del : <!-- blank delete section -->;
+		}
+
         private function addModified(changeset:Changeset, getIDs:Function, get:Function, serialise:Function):XML {
             var modify:XML = <modify version="0.6"/>
             for each( var id:Number in getIDs() ) {
                 var entity:Entity = get(id);
-                // creates are already included
-                if ( id < 0 || !entity.isDirty )
+                // creates and deletes are already included
+                if ( id < 0 || entity.deleted || !entity.isDirty )
                     continue;
                     
                 var xml:XML = serialise(entity);
@@ -313,16 +332,16 @@ package net.systemeD.halcyon.connection {
         }
 
         private function serialiseNode(node:Node):XML {
-            var xml:XML = <node/>
-            serialiseEntity(node, xml);
+            var xml:XML = serialiseEntityRoot(node); //<node/>
+            serialiseEntityTags(node, xml);
             xml.@lat = node.lat;
             xml.@lon = node.lon;
             return xml;
         }
 
         private function serialiseWay(way:Way):XML {
-            var xml:XML = <way/>
-            serialiseEntity(way, xml);
+            var xml:XML = serialiseEntityRoot(way); //<node/>
+            serialiseEntityTags(way, xml);
             for ( var i:uint = 0; i < way.length; i++ ) {
                 var nd:XML = <nd/>
                 nd.@ref = way.getNode(i).id;
@@ -332,8 +351,8 @@ package net.systemeD.halcyon.connection {
         }
 
         private function serialiseRelation(relation:Relation):XML {
-            var xml:XML = <relation/>
-            serialiseEntity(relation, xml);
+            var xml:XML = serialiseEntityRoot(Relation); //<node/>
+            serialiseEntityTags(relation, xml);
             for ( var i:uint = 0; i < relation.length; i++ ) {
                 var relMember:RelationMember = relation.getMember(i);
                 var member:XML = <member/>
@@ -345,7 +364,17 @@ package net.systemeD.halcyon.connection {
             return xml;
         }
         
-        private function serialiseEntity(entity:Entity, xml:XML):void {
+		private function serialiseEntityRoot(entity:Object):XML {
+			var xml:XML;
+			if      (entity is Way     ) { xml = <way/> }
+			else if (entity is Node    ) { xml = <node/> }
+			else if (entity is Relation) { xml = <relation/> }
+			xml.@id = entity.id;
+			xml.@version = entity.version;
+			return xml;
+		}
+
+        private function serialiseEntityTags(entity:Entity, xml:XML):void {
             xml.@id = entity.id;
             xml.@version = entity.version;
             for each( var tag:Tag in entity.getTagArray() ) {
@@ -355,5 +384,6 @@ package net.systemeD.halcyon.connection {
               xml.appendChild(tagXML);
             }
         }
+
 	}
 }
