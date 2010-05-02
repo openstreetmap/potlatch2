@@ -24,9 +24,14 @@ package net.systemeD.halcyon.connection.actions {
               selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
               
               // copy relations
-              // TODO make this reversible
+              // FIXME make this reversible
+              // FIXME needs to copy roles as well
+              // FIXME needs to insert the new way in the correct position in 
+              //        the relation, in order to not destroy ordered route relations.
+              //        This will either be before, or after, the selectedWay, depending
+              //        on the relative sequence of the relation members compared to the 
+              //        direction of selectedWay.
               for each (var r:Relation in selectedWay.parentRelations) {
-                  // ** needs to copy roles as well
                   r.appendMember(new RelationMember(newWay, ''));
               }
             }
