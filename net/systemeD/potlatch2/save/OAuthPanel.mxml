@@ -4,7 +4,7 @@
 	layout="vertical"
 	horizontalAlign="center" title="Authorisation Required"
 	creationComplete="getRequestToken()"
-	height="250">
+	height="290">
 	
 	<mx:ViewStack id="contentStack" width="100%" height="100%">
 	
@@ -26,6 +26,9 @@
 	    <mx:Text styleName="failText" visible="false" id="deniedLabel">
 	      <mx:text><![CDATA[<b>Access was denied, please check, and try again</b>]]></mx:text>
 	    </mx:Text>
+	    <mx:HBox width="100%" horizontalAlign="right">
+	      <mx:CheckBox id="rememberMe" label="Remember authorisation" selected="true"/>
+	    </mx:HBox>
 	  </mx:VBox>
 	</mx:VBox>
 	
@@ -178,6 +181,10 @@
         
         public function get accessToken():OAuthToken {
             return _accessToken;
+        }
+        
+        public function get shouldRemember():Boolean {
+            return rememberMe.selected;
         }
         
         private function accessTokenError(event:IOErrorEvent):void {
