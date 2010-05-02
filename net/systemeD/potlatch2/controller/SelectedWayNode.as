@@ -6,7 +6,6 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedWayNode extends SelectedWay {
-        protected var selectedNode:Node;
         protected var initNode:Node;
         
         public function SelectedWayNode(way:Way,node:Node) {
@@ -36,37 +35,25 @@ package net.systemeD.potlatch2.controller {
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
-            var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
+            var focus:Entity = getTopLevelFocusEntity(entity);
 
-            if ( event.type == MouseEvent.MOUSE_UP ) {
-				if ( entity is Node && event.shiftKey ) {
-					// start new way
-                    var way:Way = controller.connection.createWay({}, [entity],
-                        MainUndoStack.getGlobalStack().addAction);
-                    return new DrawWay(way, true, false);
-				} else if ( entity is Node && focus == selectedWay ) {
-					// select node within way
-					return selectOrEdit(selectedWay, Node(entity));
-                } else if ( entity is Way ) {
-					// select way
-					return new SelectedWay(Way(entity));
-                } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
-                    return new NoSelection();
-				}
-            } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				if ( entity is Way && focus==selectedWay && event.shiftKey) {
-					// insert node within way (shift-click)
-              		var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
-					d.forceDragStart();
-					return d;
-				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
-                    return new DragWayNode(selectedWay, Node(entity), event, false);
-				} else if ( focus is Node ) {
-					return new DragPOINode(entity as Node,event,false);
-				}
-            }
-
-            return this;
+            if ( event.type == MouseEvent.MOUSE_UP && entity is Node && event.shiftKey ) {
+				// start new way
+                var way:Way = controller.connection.createWay({}, [entity],
+                    MainUndoStack.getGlobalStack().addAction);
+                return new DrawWay(way, true, false);
+			} else if ( event.type == MouseEvent.MOUSE_UP && entity is Node && focus == selectedWay ) {
+				// select node within way
+				return selectOrEdit(selectedWay, Node(entity));
+            } else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==selectedWay && event.shiftKey) {
+				// insert node within way (shift-click)
+          		var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
+				d.forceDragStart();
+				return d;
+			}
+			var cs:ControllerState = sharedMouseEvents(event, entity);
+			if (cs) return cs;
+			return this;
         }
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {

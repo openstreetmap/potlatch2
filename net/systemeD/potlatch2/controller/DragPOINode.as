@@ -5,7 +5,6 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.Globals;
 
     public class DragPOINode extends ControllerState {
-        private var selectedNode:Node;
         private var isDraggingStarted:Boolean = false;
 		private var isNew:Boolean = false;
 

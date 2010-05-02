@@ -6,7 +6,6 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedPOINode extends ControllerState {
-        protected var selectedNode:Node;
         protected var initNode:Node;
         
         public function SelectedPOINode(node:Node) {
@@ -33,24 +32,9 @@ package net.systemeD.potlatch2.controller {
         }
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
-			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
-            var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
-
-            if ( event.type == MouseEvent.MOUSE_UP ) {
-				if ( entity is Way ) {
-                    return new SelectedWay(entity as Way);
-				// ** do we need 'entity is Node && focus is Way' for POIs in ways?
-                } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
-                    return new NoSelection();
-				}
-            } else if ( event.type == MouseEvent.MOUSE_DOWN ) {
-                if ( focus is Node ) {
-					return new DragPOINode(entity as Node,event,false);
-                } else if ( entity is Node && focus is Way ) {
-					return new DragWayNode(focus as Way,entity as Node,event,false);
-				}
-            }
-
+			if (event.type==MouseEvent.MOUSE_MOVE) { return this; }
+			var cs:ControllerState = sharedMouseEvents(event, entity);
+			if (cs) return cs;
             return this;
         }
 

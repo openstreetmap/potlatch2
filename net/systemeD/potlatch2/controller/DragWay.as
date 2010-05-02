@@ -5,7 +5,6 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.Globals;
 
     public class DragWay extends ControllerState {
-        private var selectedWay:Way;
         private var isDraggingStarted:Boolean = false;
 		private var enterTime:Number;
 

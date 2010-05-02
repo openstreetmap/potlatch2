@@ -27,7 +27,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var mouse:Point;
 			var node:Node;
-			var focus:Entity = NoSelection.getTopLevelFocusEntity(entity);
+			var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity == null ) {

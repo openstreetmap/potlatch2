@@ -16,18 +16,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				var paint:MapPaint = getMapPaint(DisplayObject(event.target));
-				if ( entity is Way && event.altKey && paint.isBackground ) {
-					return new SelectedWay(paint.findSource().pullThrough(entity,controller.connection));
-				} else if ( entity is Way ) {
-					return new DragWay(focus as Way,event);
-                } else if ( focus is Node ) {
-					return new DragPOINode(entity as Node,event,false);
-                } else if ( entity is Node && focus is Way ) {
-					return new DragWayNode(focus as Way,entity as Node,event,false);
-				}
-			} else if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
+			if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
 				var undo:CompositeUndoableAction = new CompositeUndoableAction("Begin way");
 				var startNode:Node = controller.connection.createNode(
@@ -37,28 +26,12 @@ package net.systemeD.potlatch2.controller {
 				var way:Way = controller.connection.createWay({}, [startNode], undo.push);
 				MainUndoStack.getGlobalStack().addAction(undo);
 				return new DrawWay(way, true, false);
-			} else if ( event.type == MouseEvent.ROLL_OVER ) {
-				controller.map.setHighlight(focus, { hover: true });
-			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
-				controller.map.setHighlight(focus, { hover: false });
-			} else if ( event.type == MouseEvent.MOUSE_DOWN ) {
 			}
+			var cs:ControllerState = sharedMouseEvents(event, entity);
+			if (cs) return cs;
 			return this;
 		}
 		
-		public static function getTopLevelFocusEntity(entity:Entity):Entity {
-			if ( entity is Node ) {
-				for each (var parent:Entity in entity.parentWays) {
-					return parent;
-				}
-				return entity;
-			} else if ( entity is Way ) {
-				return entity;
-			} else {
-				return null;
-			}
-		}
-
         override public function enterState():void {
 			Globals.vars.root.addDebug("**** -> "+this);
         }
