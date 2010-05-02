@@ -20,8 +20,8 @@ package net.systemeD.halcyon.connection.actions {
             // subactions are added to the composite list -- we then
             // execute them all at the bottom. Doing it this way gives
             // us an automatic undo
-            
-   			way1.suspend();
+            super.clearActions();
+            way1.suspend();
 
             mergeRelations();
         	mergeTags();
