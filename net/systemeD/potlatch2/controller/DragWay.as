@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
 
     public class DragWay extends ControllerState {
@@ -25,8 +26,11 @@ package net.systemeD.potlatch2.controller {
        override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 
             if (event.type==MouseEvent.MOUSE_UP) {
-				if (dragstate==DRAGGING) { moveWay(event.localX, event.localY); }
-               	return new SelectedWay(selectedWay);
+                if (dragstate==DRAGGING) { 
+                  MainUndoStack.getGlobalStack().addAction(
+                          new MoveWayAction(selectedWay, downX, downY, event.localX, event.localY, controller.map)); 
+                }
+                return new SelectedWay(selectedWay);
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
 				// dragging
@@ -68,20 +72,6 @@ package net.systemeD.potlatch2.controller {
             return "DragWay";
         }
 
-		private function moveWay(x:Number, y:Number):void {
-			var lonDelta:Number = controller.map.coord2lon(downX)-controller.map.coord2lon(x);
-			var latDelta:Number = controller.map.coord2lat(downY)-controller.map.coord2lat(y);
-			var moved:Object = {};
-			selectedWay.suspend();
-			selectedWay.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, selectedWay, 0, 0));
-			for (var i:uint=0; i<selectedWay.length; i++) {
-				var n:Node=selectedWay.getNode(i);
-				if (!moved[n.id]) {
-					n.setLatLon(n.lat-latDelta, n.lon-lonDelta);
-					moved[n.id]=true;
-				}
-			}
-			selectedWay.resume();
-		}
+
     }
 }

@@ -65,7 +65,9 @@ package net.systemeD.potlatch2.controller {
         }
         
         private function dragTo(event:MouseEvent):ControllerState {
-			draggingNode.setLatLon( controller.map.coord2lat(event.localY), controller.map.coord2lon(event.localX) );
+			draggingNode.setLatLon( controller.map.coord2lat(event.localY),
+                                    controller.map.coord2lon(event.localX),
+                                    MainUndoStack.getGlobalStack().addAction );
             return this;
         }
         

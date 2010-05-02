@@ -48,8 +48,8 @@ package net.systemeD.halcyon.connection {
             MainUndoStack.getGlobalStack().addAction(new MoveNodeAction(this, _lat, lon, setLatLonImmediate));
         }
         
-        public function setLatLon(lat:Number, lon:Number):void {
-            MainUndoStack.getGlobalStack().addAction(new MoveNodeAction(this, lat, lon, setLatLonImmediate));
+        public function setLatLon(lat:Number, lon:Number, performAction:Function):void {
+            performAction(new MoveNodeAction(this, lat, lon, setLatLonImmediate));
         } 
 
 		public function setLonLatp(lon:Number,latproj:Number, performAction:Function):void {
