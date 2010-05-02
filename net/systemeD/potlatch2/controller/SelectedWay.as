@@ -48,9 +48,6 @@ package net.systemeD.potlatch2.controller {
 				} else if ( entity is Way && event.ctrlKey ) {
 					// merge way
 					mergeWith(entity as Way);
-				} else if ( entity is Way ) {
-					// select way
-                    selectWay(entity as Way);
                 } else if ( focus == null && map.dragstate!=map.DRAGGING ) {
                     return new NoSelection();
 				}
@@ -65,6 +62,8 @@ package net.systemeD.potlatch2.controller {
                     var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
 					d.forceDragStart();
 					return d;
+				} else if ( entity is Way ) {
+					return new DragWay(focus as Way, event);
 				} else if ( entity is Node && entity.hasParent(selectedWay) ) {
 					// select node within this way
                     return new DragWayNode(selectedWay, Node(entity), event, false);

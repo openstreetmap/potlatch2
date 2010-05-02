@@ -21,7 +21,7 @@ package net.systemeD.potlatch2.controller {
 				if ( entity is Way && event.altKey && paint.isBackground ) {
 					return new SelectedWay(paint.findSource().pullThrough(entity,controller.connection));
 				} else if ( entity is Way ) {
-					return new SelectedWay(focus as Way);
+					return new DragWay(focus as Way,event);
                 } else if ( focus is Node ) {
 					return new DragPOINode(entity as Node,event,false);
                 } else if ( entity is Node && focus is Way ) {

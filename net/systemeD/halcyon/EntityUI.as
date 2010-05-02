@@ -68,6 +68,12 @@ package net.systemeD.halcyon {
 			listenSprite.hitArea=null;
 		}
 
+		protected function offsetSprites(x:Number, y:Number):void {
+			for each (var d:DisplayObject in sprites) {
+				d.x=x; d.y=y;
+			}
+		}
+
 		protected function setListenSprite(hitzone:Sprite):void {
 			if (!listenSprite.parent) { addToLayer(listenSprite, CLICKSPRITE); }
             listenSprite.hitArea = hitzone;
