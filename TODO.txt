@@ -12,6 +12,7 @@ Potlatch 2: main outstanding issues
 * Undo/redo: split, drag
 * Remove node from this way only
 * Backspace
+* Not messing up relations when splitting ways
 
 
 == Vector background layers ==
