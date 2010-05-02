@@ -22,7 +22,7 @@
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
 	    change="Globals.vars.root.tileset.setDimming(dim.selected); Globals.vars.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
-	<mx:Button label="Load vector file..." click="selectVectorSource();"/>
+	<mx:Button label="Load vector file..." click="new VectorSourceDialog().init();"/>
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
@@ -49,11 +49,6 @@
 			}
 		}
 		
-		private function selectVectorSource():void {
-          var panel:VectorSourceDialog = VectorSourceDialog(
-              PopUpManager.createPopUp(Application(Application.application), VectorSourceDialog, true));
-          PopUpManager.centerPopUp(panel);
-		}
 
     ]]></mx:Script>	
 </mx:VBox>
