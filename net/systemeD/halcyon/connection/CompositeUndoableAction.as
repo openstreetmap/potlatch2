@@ -14,6 +14,10 @@ package net.systemeD.halcyon.connection {
             actions.push(action);
         }
         
+        public function clearActions():void {
+            actions = [];
+        }
+        
         public override function doAction():uint {
             if ( actionsDone )
                 return UndoableAction.FAIL;

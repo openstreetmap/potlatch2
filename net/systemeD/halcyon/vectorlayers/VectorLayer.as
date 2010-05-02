@@ -55,7 +55,7 @@ package net.systemeD.halcyon.vectorlayers {
 				// delete this way
 				while (oldWay.length) { 
 					var id:int=oldWay.getNode(0).id;
-					oldWay.removeNodeByIndex(0,false);
+					oldWay.removeNodeByIndex(0,MainUndoStack.getGlobalStack().addAction,false);
 					delete nodes[id];
 				}
 				paint.wayuis[oldWay.id].redraw();

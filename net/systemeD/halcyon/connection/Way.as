@@ -54,26 +54,20 @@ package net.systemeD.halcyon.connection {
 			performAction(new RemoveNodeFromWayAction(this, node, nodes));
 		}
 
-        public function removeNodeByIndex(index:uint,fireEvent:Boolean=true):void {
-            var removed:Array=nodes.splice(index, 1);
-			if (nodes.indexOf(removed[0])==-1) { removed[0].removeParent(this); }
-			markDirty();
-			if (fireEvent) {
-	            dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], this, index));
-			}
+        public function removeNodeByIndex(index:uint, performAction:Function, fireEvent:Boolean=true):void {
+            performAction(new RemoveNodeByIndexAction(this, nodes, index, fireEvent));
         }
 
 		public function sliceNodes(start:int,end:int):Array {
 			return nodes.slice(start,end);
 		}
 
-		public function deleteNodesFrom(start:int):void {
-			for (var i:int=start; i<nodes.length; i++) {
-				nodes[i].removeParent(this);
-			}
-			nodes.splice(start);
-			markDirty();
-		}
+        public function deleteNodesFrom(start:int, performAction:Function):void {
+            for (var i:int=nodes.length-1; i>=start; i--) {
+              performAction(new RemoveNodeByIndexAction(this, nodes, i));
+            }
+            markDirty();
+        }
 
 		public function mergeWith(way:Way,topos:int,frompos:int, performAction:Function):void {
 			performAction(new MergeWaysAction(this, way, topos, frompos));

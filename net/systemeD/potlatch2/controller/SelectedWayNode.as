@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedWayNode extends SelectedWay {
@@ -94,22 +95,7 @@ package net.systemeD.potlatch2.controller {
 			if (selectedWay.getNode(0                   ) == selectedNode) { return this; }
 			if (selectedWay.getNode(selectedWay.length-1) == selectedNode) { return this; }
 
-			// create new way
-			var newWay:Way = controller.connection.createWay(
-				selectedWay.getTagsCopy(), 
-				selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
-				MainUndoStack.getGlobalStack().addAction);
-			newWay.suspend();
-			selectedWay.suspend();
-			selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1);
-			
-			// copy relations
-			for each (var r:Relation in selectedWay.parentRelations) {
-				// ** needs to copy roles as well
-				r.appendMember(new RelationMember(newWay, ''));
-			}
-			newWay.resume();
-			selectedWay.resume();
+            MainUndoStack.getGlobalStack().addAction(new SplitWayAction(selectedWay, selectedNode));
 
 			return new SelectedWay(selectedWay);
 		}
