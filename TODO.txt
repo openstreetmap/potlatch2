@@ -46,6 +46,7 @@ Potlatch 2: main outstanding issues
 * Mouse wheel zooming
 * CSS editing
 * Toolbox fixes (see comments in file)
+* Quick-search on add-relations-to-way dialog (RelationSelectPanel)
 
 
 == Miscellaneous data model ==
