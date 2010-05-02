@@ -55,7 +55,7 @@
   <mx:RadioButton groupName="{filetype}" value="gpx" id="gpx" label="GPX" />
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
-    <mx:Button label="Ok" click="loadFiles(src.text, shp.selected?'shp':'gpx');"/>
+    <mx:Button label="Load" click="loadFiles(src.text, shp.selected?'shp':'gpx');" enabled="{src.text == '' ? false : true}"/>
   </mx:ControlBar>
 
 </mx:TitleWindow>
