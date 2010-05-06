@@ -230,11 +230,12 @@ package net.systemeD.halcyon {
 				edge_b>=bigedge_b && edge_t<=bigedge_t) { return; } 	// we have already loaded this area, so ignore
 			bigedge_l=edge_l; bigedge_r=edge_r;
 			bigedge_b=edge_b; bigedge_t=edge_t;
+			if (connection.waycount>1000) {
+				connection.purgeOutside(edge_l,edge_r,edge_t,edge_b);
+			}
 			addDebug("Calling download with "+edge_l+"-"+edge_r+", "+edge_t+"-"+edge_b);
 			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 		}
-
-
 
         private function newWayCreated(event:EntityEvent):void {
             var way:Way = event.entity as Way;

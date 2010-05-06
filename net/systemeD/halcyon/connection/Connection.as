@@ -87,22 +87,28 @@ package net.systemeD.halcyon.connection {
         private var relations:Object = {};
         private var pois:Array = [];
         private var changeset:Changeset = null;
+		public var nodecount:int=0;
+		public var waycount:int=0;
+		public var relationcount:int=0;
 
         protected function get nextNegative():Number {
             return negativeID--;
         }
 
         protected function setNode(node:Node, queue:Boolean):void {
+			if (!nodes[node.id]) { nodecount++; }
             nodes[node.id] = node;
             if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node),queue); }
         }
 
         protected function setWay(way:Way, queue:Boolean):void {
+			if (!ways[way.id]) { waycount++; }
             ways[way.id] = way;
             if (way.loaded) { sendEvent(new EntityEvent(NEW_WAY, way),queue); }
         }
 
         protected function setRelation(relation:Relation, queue:Boolean):void {
+			if (!relations[relation.id]) { relationcount++; }
             relations[relation.id] = relation;
             if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation),queue); }
         }
@@ -162,17 +168,60 @@ package net.systemeD.halcyon.connection {
             return relations[id];
         }
 
-		public function killNode(id:Number):void {
-			delete nodes[id];
+		// Remove data from Connection
+		// These functions are used only internally to stop redundant data hanging around
+		// (either because it's been deleted on the server, or because we have panned away
+		//  and need to reduce memory usage)
+
+		protected function killNode(id:Number):void {
+			if (!nodes[id]) return;
+            nodes[id].dispatchEvent(new EntityEvent(Connection.NODE_DELETED, nodes[id]));
+			if (nodes[id].parentRelations.length>0) {
+				nodes[id]=new Node(id,0,{},false,0,0);
+			} else {
+				delete nodes[id];
+			}
+			nodecount--;
+		}
+
+		protected function killWay(id:Number):void {
+			if (!ways[id]) return;
+            ways[id].dispatchEvent(new EntityEvent(Connection.WAY_DELETED, ways[id]));
+			if (ways[id].parentRelations.length>0) {
+				ways[id]=new Way(id,0,{},false,[]);
+			} else {
+				delete ways[id];
+			}
+			waycount--;
+		}
+
+		protected function killRelation(id:Number):void {
+			if (!relations[id]) return;
+            relations[id].dispatchEvent(new EntityEvent(Connection.RELATION_DELETED, relations[id]));
+			if (relations[id].parentRelations.length>0) {
+				relations[id]=new Relation(id,0,{},false,[]);
+			} else {
+				delete relations[id];
+			}
+			relationcount--;
+		}
+
+		protected function killWayWithNodes(id:Number):void {
+			var way:Way=ways[id];
+			var node:Node;
+			for (var i:uint=0; i<way.length; i++) {
+				node=way.getNode(i);
+				if (node.isDirty) { continue; }
+				if (node.parentWays.length>1) {
+					node.removeParent(way);
+				} else {
+					killNode(node.id);
+				}
+			}
+			killWay(id);
 		}
 		
-		public function killWay(id:Number):void {
-			delete ways[id];
-		}
-		
-		public function killRelation(id:Number):void {
-			delete relations[id];
-		}
+
 
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
@@ -217,6 +266,15 @@ package net.systemeD.halcyon.connection {
             return changeset;
         }
         
+		public function purgeOutside(left:Number, right:Number, top:Number, bottom:Number):void {
+			for each (var way:Way in ways) {
+				if (!way.intersectsBbox(left,right,top,bottom) && !way.isDirty) {
+					killWayWithNodes(way.id);
+				}
+			}
+			// ** should purge POIs and relations too
+		}
+
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
 		public function loadBbox(left:Number, right:Number,

@@ -34,6 +34,9 @@ package net.systemeD.halcyon.connection {
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;
+			for each (var way:Way in this.parentWays) {
+				way.expandBbox(this);
+			}
         }
         
         public function set lat(lat:Number):void {

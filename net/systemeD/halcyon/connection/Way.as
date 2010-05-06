@@ -5,12 +5,17 @@ package net.systemeD.halcyon.connection {
 
     public class Way extends Entity {
         private var nodes:Array;
+		private var edge_l:Number;
+		private var edge_r:Number;
+		private var edge_t:Number;
+		private var edge_b:Number;
 		public static var entity_type:String = 'way';
 
         public function Way(id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array) {
             super(id, version, tags, loaded);
             this.nodes = nodes;
 			for each (var node:Node in nodes) { node.addParent(this); }
+			calculateBbox();
         }
 
 		public function update(version:uint, tags:Object, loaded:Boolean, nodes:Array):void {
@@ -18,11 +23,33 @@ package net.systemeD.halcyon.connection {
 			for each (node in this.nodes) { node.removeParent(this); }
 			updateEntityProperties(version,tags,loaded); this.nodes=nodes;
 			for each (node in nodes) { node.addParent(this); }
+			calculateBbox();
 		}
 		
         public function get length():uint {
             return nodes.length;
         }
+
+		private function calculateBbox():void {
+			edge_l=999999; edge_r=-999999;
+			edge_b=999999; edge_t=-999999;
+			for each (var node:Node in nodes) { expandBbox(node); }
+		}
+
+		public function expandBbox(node:Node):void {
+			edge_l=Math.min(edge_l,node.lon);
+			edge_r=Math.max(edge_r,node.lon);
+			edge_b=Math.min(edge_b,node.lat);
+			edge_t=Math.max(edge_t,node.lat);
+		}
+		
+		public function intersectsBbox(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+			if ((edge_l<left   && edge_r<left  ) ||
+			    (edge_l>right  && edge_r>right ) ||
+			    (edge_b<bottom && edge_t<bottom) ||
+			    (edge_b>top    && edge_b>top   )) { return false; }
+			return true;
+		}
         
         public function getNode(index:uint):Node {
             return nodes[index];
