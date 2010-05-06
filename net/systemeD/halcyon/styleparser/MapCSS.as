@@ -334,13 +334,14 @@ package net.systemeD.halcyon.styleparser {
 			xs.sublayer=10;
 
 			// Munge special values
-			if (t['font_weight']    ) { t['font_bold'  ]    = t['font_weight'    ].match(BOLD  )    ? true : false; }
-			if (t['font_style']     ) { t['font_italic']    = t['font_style'     ].match(ITALIC)    ? true : false; }
-			if (t['text_decoration']) { t['font_underline'] = t['text_decoration'].match(UNDERLINE) ? true : false; }
-			if (t['text_position']  ) { t['text_center']    = t['text_position'  ].match(CENTER)    ? true : false; }
+			if (t['font_weight']    ) { t['font_bold'  ]    = t['font_weight'    ].match(BOLD  )    ? true : false; delete t['font_weight']; }
+			if (t['font_style']     ) { t['font_italic']    = t['font_style'     ].match(ITALIC)    ? true : false; delete t['font_style']; }
+			if (t['text_decoration']) { t['font_underline'] = t['text_decoration'].match(UNDERLINE) ? true : false; delete t['text_decoration']; }
+			if (t['text_position']  ) { t['text_center']    = t['text_position'  ].match(CENTER)    ? true : false; delete t['text_position']; }
 			if (t['text_transform']) {
 				// ** needs other transformations, e.g. lower-case, sentence-case
 				if (t['text_transform'].match(CAPS)) { t['font_caps']=true; } else { t['font_caps']=false; }
+				delete t['text_transform'];
 			}
 
 			// ** Do compound settings (e.g. line: 5px dotted blue;)
