@@ -139,11 +139,11 @@ package net.systemeD.halcyon.connection {
 			for each (var p:Array in nodesAMF) {
                 var nodeID:Number = Number(p[2]);
                 var nodeVersion:uint = uint(p[4]);
+                var lon:Number = Number(p[0]);
+                var lat:Number = Number(p[1]);
 
                 var node:Node = getNode(nodeID);
                 if ( node == null ) {
-                    var lon:Number = Number(p[0]);
-                    var lat:Number = Number(p[1]);
                     var nodeTags:Object = p[3];
                     node = new Node(nodeID, nodeVersion, nodeTags, true, lat, lon);
                 } else if (!node.loaded) {
