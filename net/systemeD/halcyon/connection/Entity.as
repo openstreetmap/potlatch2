@@ -189,6 +189,20 @@ package net.systemeD.halcyon.connection {
             return parents[entity] == true;
         }
 
+		public function get memberships():Array {
+			var list:Array=[];
+			for (var o:Object in parents) {
+				if (o is Relation) {
+					for (var i:uint=0; i<o.length; i++) {
+						if (o.getMember(i).entity==this) {
+							list.push( { relation:o, position:i, role: o.getMember(i).role } );
+						}
+					}
+				}
+			}
+			return list;
+		}
+
 		// Resume/suspend redraw
 		
 		public function suspend():void {

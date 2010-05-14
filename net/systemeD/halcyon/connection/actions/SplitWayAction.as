@@ -1,6 +1,7 @@
 package net.systemeD.halcyon.connection.actions {
 
     import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.Globals;
     
     public class SplitWayAction extends CompositeUndoableAction {
     
@@ -16,24 +17,25 @@ package net.systemeD.halcyon.connection.actions {
     
         public override function doAction():uint {
             if (newWay==null) {
-              newWay = Connection.getConnection().createWay(
-                  selectedWay.getTagsCopy(), 
-                  selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
-                  push);
+				newWay = Connection.getConnection().createWay(
+					selectedWay.getTagsCopy(), 
+					selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
+					push);
 
-              selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
-              
-              // copy relations
-              // FIXME make this reversible
-              // FIXME needs to copy roles as well
-              // FIXME needs to insert the new way in the correct position in 
-              //        the relation, in order to not destroy ordered route relations.
-              //        This will either be before, or after, the selectedWay, depending
-              //        on the relative sequence of the relation members compared to the 
-              //        direction of selectedWay.
-              for each (var r:Relation in selectedWay.parentRelations) {
-                  r.appendMember(new RelationMember(newWay, ''));
-              }
+				selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
+
+				// copy relations
+				// FIXME make this reversible
+				// FIXME should be more clever about the position (for ordered relations).
+				//        It should either be before, or after, the selectedWay, depending
+				//        on the relative sequence of the relation members compared to the 
+				//        direction of selectedWay.
+				// FIXME if we insert twice into the same relation, the position may become
+				//        boggled (i.e. "10th position" is no longer valid if we previously
+				//        inserted something earlier).
+				for each (var o:Object in selectedWay.memberships) {
+					o.relation.insertMember(o.position, new RelationMember(newWay, o.role));
+				}
             }
             newWay.suspend();
             selectedWay.suspend();
