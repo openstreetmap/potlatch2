@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.potlatch2.tools.Quadrilateralise;
+    import net.systemeD.potlatch2.tools.Simplify;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.Globals;
@@ -61,6 +62,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
                 case 82:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;         
+                case 89:                    Simplify.simplify(selectedWay, controller.map, true); return this;         
 				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
 			}
