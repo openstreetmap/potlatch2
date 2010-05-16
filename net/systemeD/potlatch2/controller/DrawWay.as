@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	import flash.geom.*;
+	import flash.ui.Keyboard;
 	import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Elastic;
@@ -94,6 +95,7 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if ( event.keyCode == 13 || event.keyCode == 27 ) { return stopDrawing(); }
+			else if (event.keyCode == Keyboard.BACKSPACE) { return backspaceNode(MainUndoStack.getGlobalStack().addAction); }
 			return this;
 		}
 		
@@ -128,6 +130,34 @@ package net.systemeD.potlatch2.controller {
 				selectedWay.appendNode(node, performAction);
 			else
 				selectedWay.insertNode(0, node, performAction);
+		}
+		
+		protected function backspaceNode(performAction:Function):ControllerState {
+			var node:Node;
+			var undo:CompositeUndoableAction = new CompositeUndoableAction("Remove node");
+			var newDraw:int;
+			if (editEnd) {
+				node=selectedWay.getNode(selectedWay.length-1);
+				selectedWay.removeNodeByIndex(selectedWay.length-1, undo.push);
+				newDraw=selectedWay.length-2;
+			} else {
+				node=selectedWay.getNode(0);
+				selectedWay.removeNodeByIndex(0, undo.push);
+				newDraw=0;
+			}
+			if (node.numParentWays==1) {
+				controller.connection.unregisterPOI(node);
+				node.remove(undo.push);
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+
+			if (newDraw>=0 && newDraw<=selectedWay.length-1) {
+				var mouse:Point = new Point(selectedWay.getNode(newDraw).lon, selectedWay.getNode(newDraw).latp);
+				elastic.start = mouse;
+				return this;
+			} else {
+				return new NoSelection();
+			}
 		}
 		
 		override public function enterState():void {
