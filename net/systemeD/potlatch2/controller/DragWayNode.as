@@ -6,6 +6,7 @@ package net.systemeD.potlatch2.controller {
 
     public class DragWayNode extends ControllerState {
         private var draggingNode:Node;
+		private var draggingIndex:int;
         private var isDraggingStarted:Boolean = false;
 		private var isNew:Boolean = false;
 
@@ -16,9 +17,10 @@ package net.systemeD.potlatch2.controller {
 		private const NOT_MOVED:uint=1;
 		private const DRAGGING:uint=2;
         
-        public function DragWayNode(way:Way, node:Node, event:MouseEvent, newNode:Boolean) {
+        public function DragWayNode(way:Way, index:int, event:MouseEvent, newNode:Boolean) {
             selectedWay = way;
-            draggingNode = node;
+			draggingIndex = index;
+            draggingNode = way.getNode(index);
             downX = event.localX;
             downY = event.localY;
 			isNew = newNode;
@@ -29,7 +31,7 @@ package net.systemeD.potlatch2.controller {
             if (event.type==MouseEvent.MOUSE_UP) {
  				if (dragstate==DRAGGING) {
 					// mouse-up while dragging, so end drag
-                	return new SelectedWayNode(selectedWay,draggingNode);
+                	return new SelectedWayNode(selectedWay,draggingIndex);
 //	                return endDrag();
 				} else if (event.shiftKey && !isNew) {
 					// start new way
@@ -37,11 +39,11 @@ package net.systemeD.potlatch2.controller {
 					    MainUndoStack.getGlobalStack().addAction);
 					return new DrawWay(way, true, false);
 				} else if (event.shiftKey && isNew) {
-                	return new SelectedWayNode(selectedWay,draggingNode);
+                	return new SelectedWayNode(selectedWay,draggingIndex);
 				} else {
 					// select node
 					dragstate=NOT_DRAGGING;
-                	return SelectedWayNode.selectOrEdit(selectedWay, draggingNode);
+                	return SelectedWayNode.selectOrEdit(selectedWay, draggingIndex);
 				}
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {

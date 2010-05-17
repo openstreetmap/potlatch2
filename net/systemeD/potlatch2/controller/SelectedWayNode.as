@@ -7,22 +7,25 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedWayNode extends SelectedWay {
-        protected var initNode:Node;
+		protected var selectedIndex:int;
+		protected var initIndex:int;
         
-        public function SelectedWayNode(way:Way,node:Node) {
+        public function SelectedWayNode(way:Way,index:int) {
 			super (way);
-            initNode = node;
+			initIndex = index;
         }
  
-        protected function selectNode(way:Way,node:Node):void {
+        protected function selectNode(way:Way,index:int):void {
+			var node:Node=way.getNode(index);
             if ( way == selectedWay && node == selectedNode )
                 return;
 
             clearSelection();
             controller.setSelectedEntity(node);
             controller.map.setHighlight(way, { showNodes: true, nodeSelected: node.id });
-            selectedWay = way;   initWay  = way;
-            selectedNode = node; initNode = node;
+            selectedWay = way; initWay = way;
+			selectedIndex = index; initIndex = index;
+            selectedNode = node;
         }
                 
         override protected function clearSelection():void {
@@ -45,7 +48,7 @@ package net.systemeD.potlatch2.controller {
                 return new DrawWay(way, true, false);
 			} else if ( event.type == MouseEvent.MOUSE_UP && entity is Node && focus == selectedWay ) {
 				// select node within way
-				return selectOrEdit(selectedWay, Node(entity));
+				return selectOrEdit(selectedWay, getNodeIndex(selectedWay,Node(entity)));
             } else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==selectedWay && event.shiftKey) {
 				// insert node within way (shift-click)
           		var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
@@ -59,7 +62,8 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 88:					return splitWay();
+				case 189:					return removeNode();	// '-'
+				case 88:					return splitWay();		// 'X'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
 			}
@@ -67,7 +71,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		override public function enterState():void {
-            selectNode(initWay,initNode);
+            selectNode(initWay,initIndex);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
 		override public function exitState():void {
@@ -79,13 +83,14 @@ package net.systemeD.potlatch2.controller {
             return "SelectedWayNode";
         }
 
-        public static function selectOrEdit(selectedWay:Way, entity:Node):ControllerState {
+        public static function selectOrEdit(selectedWay:Way, index:int):ControllerState {
         	var isFirst:Boolean = false;
 			var isLast:Boolean = false;
-			isFirst = selectedWay.getNode(0) == entity;
-			isLast = selectedWay.getNode(selectedWay.length - 1) == entity;
+			var node:Node = selectedWay.getNode(index);
+			isFirst = selectedWay.getNode(0) == node;
+			isLast = selectedWay.getNode(selectedWay.length - 1) == node;
 			if ( isFirst == isLast )    // both == looped, none == central node 
-			    return new SelectedWayNode(selectedWay, entity);
+			    return new SelectedWayNode(selectedWay, index);
 			else
 			    return new DrawWay(selectedWay, isLast, true);
         }
@@ -97,6 +102,12 @@ package net.systemeD.potlatch2.controller {
 
             MainUndoStack.getGlobalStack().addAction(new SplitWayAction(selectedWay, selectedNode));
 
+			return new SelectedWay(selectedWay);
+		}
+		
+		public function removeNode():ControllerState {
+			if (selectedNode.numParentWays==1) { return deleteNode(); }
+			selectedWay.removeNodeByIndex(selectedIndex, MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(selectedWay);
 		}
 		

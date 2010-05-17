@@ -43,10 +43,9 @@ package net.systemeD.potlatch2.controller {
 				// start new way
 				var way:Way = controller.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
 				return new DrawWay(way, true, false);
-			} else if ( event.type == MouseEvent.MOUSE_UP && entity is Way && event.ctrlKey ) {
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && event.ctrlKey ) {
 				// merge way
-				mergeWith(entity as Way);
-				return this;
+				return mergeWith(entity as Way);
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==selectedWay && event.shiftKey) {
 				// insert node within way (shift-click)
                 var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
@@ -69,18 +68,18 @@ package net.systemeD.potlatch2.controller {
 			return this;
 		}
 
-        protected function addNode(event:MouseEvent):Node {
+        protected function addNode(event:MouseEvent):int {
             trace("add node");
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
             var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
-            selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
+            var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
             MainUndoStack.getGlobalStack().addAction(undo);
-			return node;
+			return index;
         }
 
-		protected function mergeWith(otherWay:Way):Boolean {
+		protected function mergeWith(otherWay:Way):ControllerState {
 			var way1:Way;
 			var way2:Way;
 			if ( selectedWay.id < otherWay.id && selectedWay.id >= 0 ) {
@@ -94,12 +93,12 @@ package net.systemeD.potlatch2.controller {
 			var undo:Function = MainUndoStack.getGlobalStack().addAction;
 			
 			// find common point
-			if (way1 == way2) { return false; }
+			if (way1 == way2) { return this; }
 			if      (way1.getNode(0)   ==way2.getNode(0)   ) { way1.mergeWith(way2,0,0,undo); }
 			else if (way1.getNode(0)   ==way2.getLastNode()) { way1.mergeWith(way2,0,way2.length-1,undo); }
 			else if (way1.getLastNode()==way2.getNode(0)   ) { way1.mergeWith(way2,way1.length-1,0,undo); }
 			else if (way1.getLastNode()==way2.getLastNode()) { way1.mergeWith(way2,way1.length-1,way2.length-1,undo); }
-			return true;
+			return new SelectedWay(way1);
 		}
         
 		public function deleteWay():ControllerState {

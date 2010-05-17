@@ -59,12 +59,12 @@ package net.systemeD.potlatch2.controller {
 				} else if ( focus is Node ) {
 					// select POI node
 					return new DragPOINode(entity as Node,event,false);
-//				} else if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
-//					// select node within this way
-//                  return new DragWayNode(selectedWay, Node(entity), event, false);
+				} else if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
+					// select node within this way
+                	return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
 				} else if ( entity is Node && focus is Way ) {
 					// select way node
-					return new DragWayNode(focus as Way,entity as Node,event,false);
+					return new DragWayNode(focus as Way, getNodeIndex(focus as Way,entity as Node), event, false);
 				}
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING ) {
 				return new NoSelection();
@@ -93,6 +93,13 @@ package net.systemeD.potlatch2.controller {
 			while (d) {
 				if (d is MapPaint) { return MapPaint(d); }
 				d=d.parent;
+			}
+			return null;
+		}
+		
+		protected function getNodeIndex(way:Way,node:Node):uint {
+			for (var i:uint=0; i<way.length; i++) {
+				if (way.getNode(i)==node) { return i; }
 			}
 			return null;
 		}

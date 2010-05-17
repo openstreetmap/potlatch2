@@ -106,7 +106,7 @@ package net.systemeD.potlatch2.controller {
 				// delete controller.map.ways[selectedWay.id];
 				return new NoSelection();
 			} else if ( leaveNodeSelected ) {
-			    return new SelectedWayNode(selectedWay, selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0));
+			    return new SelectedWayNode(selectedWay, editEnd ? selectedWay.length - 1 : 0);
 			} else {
 			    return new SelectedWay(selectedWay);
 			}

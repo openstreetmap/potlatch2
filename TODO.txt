@@ -4,7 +4,6 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * Undo/redo: split
-* Remove node from this way only (will require SelectedWayNode to become aware of currently selected index)
 * Bit more work required on relations when splitting ways
 
 
@@ -40,8 +39,6 @@ Potlatch 2: main outstanding issues
 * CSS editing
 * Toolbox fixes (see comments in file)
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
-* Bug: when drawing a way, delete should delete the previous node ("unzipping" way)
-* Bug: when way highlighted, then junction node clicked, sometimes other way is selected (lowest osm_id?)
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * Mouse icon should indicate when a join is being made (blue nodes might not be visible)
 * Bug: when joining way to existing, a blue node is shown until mouse moves
