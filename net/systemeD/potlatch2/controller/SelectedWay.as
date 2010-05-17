@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.display.DisplayObject;
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.potlatch2.tools.Parallelise;
     import net.systemeD.potlatch2.tools.Quadrilateralise;
     import net.systemeD.potlatch2.tools.Simplify;
     import net.systemeD.halcyon.connection.*;
@@ -59,6 +60,8 @@ package net.systemeD.potlatch2.controller {
         
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
+				case 80:					return new SelectedParallelWay(selectedWay);
+//				var p:Parallelise=new Parallelise(selectedWay); p.draw(0.001); return this;
 				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
                 case 82:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;         
                 case 89:                    Simplify.simplify(selectedWay, controller.map, true); return this;         

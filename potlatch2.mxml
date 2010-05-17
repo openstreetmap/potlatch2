@@ -81,6 +81,7 @@
 				click='toolbox.doQuadrilateralise();' 
 				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/parallel.svg')" 
+				click='toolbox.doParallelise();' 
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 
 		</potlatch2:Toolbox>

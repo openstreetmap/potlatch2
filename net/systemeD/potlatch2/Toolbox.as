@@ -16,6 +16,7 @@ package net.systemeD.potlatch2 {
 		** Should float above tagViewer, not beneath it
 		** Icons should be disabled depending on what's selected (setEntity can do this)
 		** Remove annoying Illustrator cruft from SVG icons!
+		** Tooltips
 
 	*/
 
@@ -91,6 +92,12 @@ package net.systemeD.potlatch2 {
 		public function doSplit():void {
 			if (entity is Node && controller.state is SelectedWayNode) {
 				controller.setState(SelectedWayNode(controller.state).splitWay());
+			}
+		}
+		
+		public function doParallelise():void {
+			if (entity is Way) {
+				controller.setState(new SelectedParallelWay(Way(entity)));
 			}
 		}
 
