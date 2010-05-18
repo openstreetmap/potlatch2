@@ -32,6 +32,7 @@ Potlatch 2: main outstanding issues
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
 * Checkboxes, for example what you can recycle, or whether something is a bridge or tunnel
 * Ability to specify that a node should be a point in a way, for example for crossings
+* Ability to say that it's unlikely/impossible to have a way that is a bridge and a tunnel at the same time.
 
 
 == UI ==

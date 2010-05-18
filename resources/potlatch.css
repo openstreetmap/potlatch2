@@ -110,12 +110,13 @@ node[barrier=cattle_grid] { icon-image: icons/cattle_grid.png; }
 way[railway=rail]
 	{ z-index: 6; color: black; width: 5; } 
 	{ z-index: 7; color: white; width: 3; dashes: 12,12; }
+way[railway=platform] { color:black; width: 2; }
 way[railway=subway]
         { z-index: 6; color: #444444; width: 5; }
         { z-index: 7; color: white; width: 3; dashes: 8,8; }
 
 /* Bridge */
-way[bridge=yes]
+way[bridge=yes], way[bridge=viaduct], way[bridge=suspension]
     { z-index: 4; color: white; width: eval('_width+3'); }
     { z-index: 3; color: black; width: eval('_width+6'); }
     
