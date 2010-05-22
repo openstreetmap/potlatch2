@@ -63,6 +63,8 @@ package net.systemeD.potlatch2.controller {
 					    MainUndoStack.getGlobalStack().addAction);
 					resetElastic(node);
 					lastClick=node;
+					controller.map.setHighlight(entity, { showNodesHover: false });
+					controller.map.setHighlight(selectedWay, { showNodes: true });
 				}
 				lastClickTime=new Date();
 			} else if ( event.type == MouseEvent.MOUSE_MOVE ) {
