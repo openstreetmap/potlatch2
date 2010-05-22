@@ -462,9 +462,17 @@ package net.systemeD.halcyon {
             return null;
 		}
 
+		// ------------------------------------------------------------------------------------------
+		// Interaction
+
         override protected function mouseEvent(event:MouseEvent):void {
 			paint.map.entityMouseEvent(event, way);
         }
+
+		public function hitTest(x:Number, y:Number):Way {
+			if (hitzone.hitTestPoint(x,y,true)) { return way; }
+			return null;
+		}
 
 	}
 }

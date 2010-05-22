@@ -8,6 +8,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.tools.Simplify;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedWay extends ControllerState {
@@ -60,7 +61,6 @@ package net.systemeD.potlatch2.controller {
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
 				case 80:					return new SelectedParallelWay(selectedWay);
-//				var p:Parallelise=new Parallelise(selectedWay); p.draw(0.001); return this;
 				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
                 case 82:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;         
                 case 89:                    Simplify.simplify(selectedWay, controller.map, true); return this;         
@@ -72,12 +72,19 @@ package net.systemeD.potlatch2.controller {
 		}
 
         protected function addNode(event:MouseEvent):int {
-            trace("add node");
+			// find which other ways are under the mouse
+			var ways:Array=[]; var w:Way;
+			for each (var wayui:WayUI in controller.map.paint.wayuis) {
+				w=wayui.hitTest(event.stageX, event.stageY);
+				if (w && w!=selectedWay) { ways.push(w); }
+			}
+
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
             var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
             var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
+			for each (w in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
             MainUndoStack.getGlobalStack().addAction(undo);
 			return index;
         }
