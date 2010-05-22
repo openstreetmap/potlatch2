@@ -45,6 +45,13 @@ package net.systemeD.potlatch2.controller {
 			return "(No state)";
 		}
 		
+		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
+			switch (event.keyCode) {
+				case 90:	MainUndoStack.getGlobalStack().undo(); return null;		// Z
+			}
+			return null;
+		}
+		
 		protected function sharedMouseEvents(event:MouseEvent, entity:Entity):ControllerState {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);

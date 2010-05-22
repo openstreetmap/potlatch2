@@ -54,8 +54,7 @@ package net.systemeD.potlatch2.controller {
 				return d;
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
-			if (cs) return cs;
-			return this;
+			return cs ? cs : this;
         }
         
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
@@ -68,7 +67,8 @@ package net.systemeD.potlatch2.controller {
 				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
 			}
-			return this;
+			var cs:ControllerState = sharedKeyboardEvents(event);
+			return cs ? cs : this;
 		}
 
         protected function addNode(event:MouseEvent):int {

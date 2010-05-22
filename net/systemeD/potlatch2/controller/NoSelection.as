@@ -28,8 +28,12 @@ package net.systemeD.potlatch2.controller {
 				return new DrawWay(way, true, false);
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
-			if (cs) return cs;
-			return this;
+			return cs ? cs : this;
+		}
+		
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			var cs:ControllerState = sharedKeyboardEvents(event);
+			return cs ? cs : this;
 		}
 		
         override public function enterState():void {

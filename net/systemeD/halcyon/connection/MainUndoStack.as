@@ -68,6 +68,7 @@ package net.systemeD.halcyon.connection {
         }
         
         public function undo():void {
+			if (!undoActions.length) { return; }
             var action:UndoableAction = undoActions.pop();
             trace("undoing "+action);
             action.undoAction();
@@ -77,6 +78,7 @@ package net.systemeD.halcyon.connection {
         }
         
         public function redo():void {
+			if (!redoActions.length) { return; }
             var action:UndoableAction = redoActions.pop();
             trace("redoing "+action);
             action.doAction();

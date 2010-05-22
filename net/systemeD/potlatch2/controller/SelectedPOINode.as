@@ -34,8 +34,7 @@ package net.systemeD.potlatch2.controller {
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE) { return this; }
 			var cs:ControllerState = sharedMouseEvents(event, entity);
-			if (cs) return cs;
-            return this;
+			return cs ? cs : this;
         }
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
@@ -43,7 +42,8 @@ package net.systemeD.potlatch2.controller {
 				case Keyboard.BACKSPACE:	return deletePOI();
 				case Keyboard.DELETE:		return deletePOI();
 			}
-			return this;
+			var cs:ControllerState = sharedKeyboardEvents(event);
+			return cs ? cs : this;
 		}
 		
 		public function deletePOI():ControllerState {
