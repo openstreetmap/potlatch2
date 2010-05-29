@@ -3,7 +3,6 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-* Bit more work required on relations when splitting ways
 * Make parallelise properly undoable
 
 

@@ -60,12 +60,8 @@ package net.systemeD.halcyon.connection {
 			markDirty();
         }
 
-        public function insertMember(index:uint, member:RelationMember):void {
-            members.splice(index, 0, member);
- 			member.entity.addParent(this);
-			markDirty();
-			
-			dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_ADDED, member.entity, this, index));
+        public function insertMember(index:uint, member:RelationMember, performAction:Function):void {
+            performAction(new AddMemberToRelationAction(this, index, member, members));
         }
 
         public function appendMember(member:RelationMember):uint {

@@ -22,9 +22,6 @@ package net.systemeD.halcyon.connection.actions {
 					selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
 					push);
 
-				// copy relations
-				// FIXME make this reversible
-
                 // we reverse the list, which is already sorted by position. This way positions aren't affected
                 // for previous inserts when all the inserts are eventually executed
                 for each (var o:Object in selectedWay.memberships.reverse()) {
@@ -60,9 +57,9 @@ package net.systemeD.halcyon.connection.actions {
                     offset++;
                   }
                   if (backwards) {
-                    o.relation.insertMember(o.position, new RelationMember(newWay, o.role)); //insert newWay before selectedWay
+                    o.relation.insertMember(o.position, new RelationMember(newWay, o.role), push); //insert newWay before selectedWay
                   } else {
-                    o.relation.insertMember(o.position + 1, new RelationMember(newWay, o.role)); // insert after
+                    o.relation.insertMember(o.position + 1, new RelationMember(newWay, o.role), push); // insert after
                   }
                 }
                 
