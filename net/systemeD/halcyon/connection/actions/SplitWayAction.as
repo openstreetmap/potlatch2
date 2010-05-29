@@ -22,20 +22,52 @@ package net.systemeD.halcyon.connection.actions {
 					selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
 					push);
 
-				selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
-
 				// copy relations
 				// FIXME make this reversible
-				// FIXME should be more clever about the position (for ordered relations).
-				//        It should either be before, or after, the selectedWay, depending
-				//        on the relative sequence of the relation members compared to the 
-				//        direction of selectedWay.
-				// FIXME if we insert twice into the same relation, the position may become
-				//        boggled (i.e. "10th position" is no longer valid if we previously
-				//        inserted something earlier).
-				for each (var o:Object in selectedWay.memberships) {
-					o.relation.insertMember(o.position, new RelationMember(newWay, o.role));
-				}
+
+                // we reverse the list, which is already sorted by position. This way positions aren't affected
+                // for previous inserts when all the inserts are eventually executed
+                for each (var o:Object in selectedWay.memberships.reverse()) {
+                  // newWay should be added immediately after the selectedWay, unless the setup
+                  // is arse-backwards. By that I mean either:
+                  // a) The first node (0) of selectedWay is in the subsequentWay, or
+                  // b) The last node (N) of selectedWay is in the preceedingWay
+                  // Note that the code above means newWay is the tail of selectedWay S-->.-->N
+                  // i.e. preceedingWay x--x--x--x                             P-1   ↓
+                  //      selectedWay            N<--.<--S<--.<--0             P     ↓ relation members list
+                  //      subsequentWay                           x--x--x--x   P+1   ↓
+                  // There are some edge cases:
+                  // 1) If the immediately adjacent member isn't a way - handled fine
+                  // 2) If the selectedWay shares first/last node with non-adjacent ways - phooey
+                  
+                  var backwards:Boolean = false;
+                  // note that backwards is actually a ternary of 'true', 'false', and 'itdoesntmatter' (== 'false')
+                  
+                  var offset:int = 1; //work from o.position outwards along the length of the relationmembers
+                  while ((o.position - offset) >= 0 || (o.position + offset < o.relation.length)) {
+                    if ((o.position - offset >= 0) && o.relation.getMember(o.position - offset).entity is Way)  {
+                      var preceedingWay:Way = o.relation.getMember(o.position - offset).entity as Way;
+                      if(preceedingWay.indexOfNode(selectedWay.getLastNode()) >= 0) {
+                        backwards = true;
+                      }
+                    }
+                    if ((o.position + offset < o.relation.length) && o.relation.getMember(o.position + offset).entity is Way) {
+                      var subsequentWay:Way = o.relation.getMember(o.position + offset).entity as Way;
+                      if(subsequentWay.indexOfNode(selectedWay.getNode(0)) >= 0) {
+                        backwards = true;
+                      }
+                    }
+                    offset++;
+                  }
+                  if (backwards) {
+                    o.relation.insertMember(o.position, new RelationMember(newWay, o.role)); //insert newWay before selectedWay
+                  } else {
+                    o.relation.insertMember(o.position + 1, new RelationMember(newWay, o.role)); // insert after
+                  }
+                }
+                
+                // now that we're done with the selectedWay, remove the nodes
+                selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
             }
             newWay.suspend();
             selectedWay.suspend();

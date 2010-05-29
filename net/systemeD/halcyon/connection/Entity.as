@@ -200,7 +200,9 @@ package net.systemeD.halcyon.connection {
 					}
 				}
 			}
-			return list;
+            // it's useful to return in a sorted order, even if the relations are interleaved
+            // e.g. [{r0 p1},{r1 p1},{r0 p4}]
+			return list.sortOn("position"); 
 		}
 
 		// Resume/suspend redraw
