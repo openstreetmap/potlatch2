@@ -298,10 +298,10 @@ package net.systemeD.halcyon.connection {
         private function addCreated(changeset:Changeset, getIDs:Function, get:Function, serialise:Function):XML {
             var create:XML = <create version="0.6"/>
             for each( var id:Number in getIDs() ) {
+                var entity:Entity = get(id);
                 if ( id >= 0 || entity.deleted )
                     continue;
                     
-                var entity:Object = get(id);
                 var xml:XML = serialise(entity);
                 xml.@changeset = changeset.id;
                 create.appendChild(xml);
