@@ -73,7 +73,8 @@ package net.systemeD.halcyon.connection {
             return nodes.length + 1;
         }
         
-        public function indexOfNode(node:Node):uint {
+        // return the index of the Node, or -1 if not found
+        public function indexOfNode(node:Node):int {
             return nodes.indexOf(node);
         }
 
