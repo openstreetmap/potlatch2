@@ -5,6 +5,7 @@ Potlatch 2: main outstanding issues
 
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
+* Splitway + undo leaves way marked dirty
 
 == Vector background layers ==
 
