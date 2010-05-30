@@ -4,19 +4,24 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * Make parallelise properly undoable
-
+* Make Quadralatalawhatsit properly undoable
 
 == Vector background layers ==
 
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Import from OSM (is this worth sharing with the XML API stuff?)
 
-
 == Other core ==
 
 * Non-900913 projections
 * Plugin support
 
+== Saving ==
+
+* Comment and advanced -> "comment" should show the same thing
+* Save should be deactivated until there's things to change
+* Should be able to reuse changesets
+* Shouldn't be able to change created_by and version on changeset
 
 == Tag editing ==
 
@@ -45,7 +50,7 @@ Potlatch 2: main outstanding issues
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * Mouse icon should indicate when a join is being made (blue nodes might not be visible)
 * Yahoo! layer can't handle z18+, (Bug:) and continues to show z17 when zoomed in
-
+* i18n
 
 
 == Miscellaneous data model ==
