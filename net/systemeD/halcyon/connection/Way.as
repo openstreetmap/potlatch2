@@ -43,7 +43,7 @@ package net.systemeD.halcyon.connection {
 			edge_t=Math.max(edge_t,node.lat);
 		}
 		
-		public function intersectsBbox(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+		public override function within(left:Number,right:Number,top:Number,bottom:Number):Boolean {
 			if ((edge_l<left   && edge_r<left  ) ||
 			    (edge_l>right  && edge_r>right ) ||
 			    (edge_b<bottom && edge_t<bottom) ||

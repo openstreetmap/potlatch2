@@ -38,6 +38,7 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function enterState():void {
+			controller.map.paint.createWayUI(selectedWay);
 			startlon =controller.map.coord2lon(controller.map.mouseX);
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
 			Globals.vars.root.addDebug("**** -> "+this);

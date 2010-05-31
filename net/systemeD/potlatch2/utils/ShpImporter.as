@@ -5,11 +5,13 @@ package net.systemeD.potlatch2.utils {
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.Node;
+	import net.systemeD.halcyon.connection.Way;
+	import net.systemeD.potlatch2.tools.Simplify;
 
 	public class ShpImporter extends Importer {
 
-		public function ShpImporter(container:*, paint:MapPaint, filenames:Array) {
-			super(container,paint,filenames);
+		public function ShpImporter(container:*, paint:MapPaint, filenames:Array, simplify:Boolean=false) {
+			super(container,paint,filenames,simplify);
 		}
 
 		override protected function doImport(): void {
@@ -29,6 +31,7 @@ package net.systemeD.potlatch2.utils {
 
 					// Do each ring in turn, then each point in the ring
 					for (var j:int=0; j < polyArray[i].shape.rings.length; j++) {
+						var way:Way;
 						var nodestring:Array=[];
 						var points:Array = polyArray[i].shape.rings[j];
 						if (points!=null) {
@@ -38,7 +41,8 @@ package net.systemeD.potlatch2.utils {
 							}
 						}
 						if (nodestring.length>0) {
-							paint.createWayUI(container.createWay({}, nodestring));
+							way=container.createWay({}, nodestring);
+							if (simplify) { Simplify.simplify(way, paint.map, false); }
 						}
 					}
 				}

@@ -40,16 +40,6 @@ package net.systemeD.halcyon {
 		public var bigedge_b:Number= 999999;			//  |
 		public var bigedge_t:Number=-999999;			//  |
 
-		public var waycount:uint=0;						// ways:		number currently loaded
-		public var waysrequested:uint=0;				// 				total number requested
-		public var waysreceived:uint=0;					// 				total number received
-		public var relcount:uint=0;						// relations:	number currently loaded
-		public var relsrequested:uint=0;				// 				total number requested
-		public var relsreceived:uint=0;					// 				total number received
-		public var poicount:uint=0;						// POIs:		number currently loaded
-		public var whichrequested:uint=0;				// whichways:	total number requested
-		public var whichreceived:uint=0;				// 				total number received
-
 		public var edge_l:Number;						// current bounding box
 		public var edge_r:Number;						//  |
 		public var edge_t:Number;						//  |
@@ -239,12 +229,13 @@ package net.systemeD.halcyon {
 
         private function newWayCreated(event:EntityEvent):void {
             var way:Way = event.entity as Way;
-			if (!way.loaded) { return; }
+			if (!way.loaded || !way.within(edge_l,edge_r,edge_t,edge_b)) { return; }
 			paint.createWayUI(way);
         }
 
         private function newPOICreated(event:EntityEvent):void {
             var node:Node = event.entity as Node;
+			if (!node.within(edge_l,edge_r,edge_t,edge_b)) { return; }
 			var nodeui:NodeUI=paint.createNodeUI(node);
 			nodeui.redraw();
         }
@@ -287,6 +278,12 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out
 		
+		public function updateEntityUIs(redraw:Boolean,remove:Boolean):void {
+			paint.updateEntityUIs(connection.getObjectsByBbox(edge_l, edge_r, edge_t, edge_b), redraw, remove);
+			for each (var v:VectorLayer in vectorlayers) {
+				v.paint.updateEntityUIs(v.getObjectsByBbox(edge_l, edge_r, edge_t, edge_b), redraw, remove);
+			}
+		}
 		public function redraw():void {
 			paint.redraw();
 			for each (var v:VectorLayer in vectorlayers) { v.paint.redraw(); }
@@ -312,8 +309,8 @@ package net.systemeD.halcyon {
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			updateCoordsFromLatLon((edge_t+edge_b)/2,(edge_l+edge_r)/2);	// recentre
 			tileset.changeScale(scale);
+			updateEntityUIs(true,true);
 			download();
-			redraw();
 		}
 
 		private function reportPosition():void {
@@ -361,6 +358,7 @@ package net.systemeD.halcyon {
 		public function mouseUpHandler(event:MouseEvent):void {
 			if (dragstate==DRAGGING) {
 				updateCoords(x,y);
+				updateEntityUIs(false, false);
 				download();
 			}
 			dragstate=NOT_DRAGGING;
@@ -395,7 +393,6 @@ package net.systemeD.halcyon {
 		public function keyUpHandler(event:KeyboardEvent):void {
 			if ( !event.ctrlKey ) return;
 			addDebug("pressed "+event.keyCode);
-			if (event.keyCode==82) { redraw(); }			// R - redraw
 			if (event.keyCode==73) { zoomIn(); }			// I - zoom in
 			if (event.keyCode==79) { zoomOut(); } 			// O - zoom out
 			if (event.keyCode==76) { reportPosition(); }	// L - report lat/long

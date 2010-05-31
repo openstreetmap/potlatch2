@@ -18,14 +18,16 @@ package net.systemeD.potlatch2.utils {
 		protected var filenames:Array;
 		protected var filesloaded:uint=0;
 		protected var callback:Function;
+		protected var simplify:Boolean;
 
-		public function Importer(container:*, paint:MapPaint, filenames:Array) {
+		public function Importer(container:*, paint:MapPaint, filenames:Array, simplify:Boolean) {
 			Globals.vars.root.addDebug("starting importer"); 
 			Globals.vars.root.addDebug("container is "+container);
 			Globals.vars.root.addDebug("paint is "+paint);
 			this.container = container;
 			this.paint = paint;
 			this.filenames=filenames;
+			this.simplify=simplify;
 
 			var sp:uint=0;
 			for each (var fn:String in filenames) {
@@ -47,7 +49,10 @@ package net.systemeD.potlatch2.utils {
 			Globals.vars.root.addDebug("loaded file "+e.target.info['file']); 
 			files[e.target.info['file']]=e.target.data;
 			filesloaded++;
-			if (filesloaded==filenames.length) { doImport(); }
+			if (filesloaded==filenames.length) { 
+				doImport();
+				paint.updateEntityUIs(container.getObjectsByBbox(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b), false, false);
+			}
 		}
 		
 		protected function doImport():void {

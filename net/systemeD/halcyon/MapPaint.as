@@ -67,22 +67,44 @@ package net.systemeD.halcyon {
 		}
 */
 
+		public function updateEntityUIs(o:Object, redraw:Boolean, remove:Boolean):void {
+			var way:Way, node:Node;
+
+			for each (way in o.waysInside) {
+				if (!wayuis[way.id]) { createWayUI(way); }
+				else if (redraw) { wayuis[way.id].recalculate(); wayuis[way.id].redraw(); }
+			}
+			if (remove) {
+				for each (way in o.waysOutside) { deleteWayUI(way); }
+			}
+
+			for each (node in o.poisInside) {
+				if (!nodeuis[node.id]) { createNodeUI(node); }
+				else if (redraw) { nodeuis[node.id].redraw(); }
+			}
+			if (remove) {
+				for each (node in o.poisOutside) { deleteNodeUI(node); }
+			}
+		}
+
 		public function createWayUI(way:Way):WayUI {
-			wayuis[way.id]=new WayUI(way,this,false);
+			if (!wayuis[way.id]) { wayuis[way.id]=new WayUI(way,this,false); }
 			return wayuis[way.id];
 		}
 
 		public function createNodeUI(node:Node):NodeUI {
-			nodeuis[node.id]=new NodeUI(node,this,0,false);
+			if (!nodeuis[node.id]) { nodeuis[node.id]=new NodeUI(node,this,0,false); }
 			return nodeuis[node.id];
 		}
 
 		public function deleteWayUI(way:Way):void {
+			if (!wayuis[way.id]) { return; }
 			wayuis[way.id].removeSprites();
 			delete wayuis[way.id];
 		}
 
 		public function deleteNodeUI(node:Node):void {
+			if (!nodeuis[node.id]) { return; }
 			nodeuis[node.id].removeSprites();
 			delete nodeuis[node.id];
 		}

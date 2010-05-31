@@ -25,7 +25,7 @@
         PopUpManager.removePopUp(this);
     }
 
-	private function loadFiles(url:String,filetype:String):void {
+	private function loadFiles(url:String,filetype:String,simplify:Boolean):void {
         PopUpManager.removePopUp(this);
 		var theMap:Map = Globals.vars.root;
 		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(url,theMap,"potlatch.css");
@@ -33,12 +33,12 @@
 		theMap.vectorbg.addChild(vectorlayer.paint);
 
 		if (filetype=='gpx') {
-			var gpx:GpxImporter=new GpxImporter(vectorlayer,vectorlayer.paint,[url]);
+			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], simplify);
 		} else {
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
 			var shp:ShpImporter=new ShpImporter(vectorlayer,
 			                                    vectorlayer.paint,
-			                                    [url+".shp",url+".shx",url+".dbf"]);
+			                                    [url+".shp",url+".shx",url+".dbf"], simplify);
 		}
 	}
 
@@ -49,13 +49,14 @@
       Input the URL of a file to import.
     </mx:text>
   </mx:Text>
-  <mx:TextInput id="src" text="" />
+  <mx:TextInput width="100%" id="src" text="" />
   <mx:RadioButtonGroup id="filetype" />
-  <mx:RadioButton groupName="{filetype}" value="shp" id="shp" label="Shapefile" selected="true" />
-  <mx:RadioButton groupName="{filetype}" value="gpx" id="gpx" label="GPX" />
+  <mx:RadioButton width="100%" groupName="{filetype}" value="shp" id="shp" label="Shapefile" selected="true" />
+  <mx:RadioButton width="100%" groupName="{filetype}" value="gpx" id="gpx" label="GPX" />
+  <mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
-    <mx:Button label="Load" click="loadFiles(src.text, shp.selected?'shp':'gpx');" enabled="{src.text == '' ? false : true}"/>
+    <mx:Button label="Load" click="loadFiles(src.text, shp.selected?'shp':'gpx', simplify.selected);" enabled="{src.text == '' ? false : true}"/>
   </mx:ControlBar>
 
 </mx:TitleWindow>

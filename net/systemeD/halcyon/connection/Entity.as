@@ -118,6 +118,10 @@ package net.systemeD.halcyon.connection {
 		internal function isEmpty():Boolean {
 			return false;	// to be overridden
 		}
+		
+		public function within(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+			return true;	// to be overridden
+		}
 
 		public function removeFromParents(performAction:Function):void {
 			for (var o:Object in parents) {

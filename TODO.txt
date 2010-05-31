@@ -42,6 +42,7 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
+* Parallelise should use the distance from the way, not from the first click (needs someone good at maths to fix this)
 * Potlatch 1-style "floaty warnings"
 * Keyboard shortcuts
 * Mouse wheel zooming
@@ -65,6 +66,5 @@ Potlatch 2: main outstanding issues
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
 * Complete MapCSS support
-* Don't redraw stuff that's offscreen
 * 'Light' version without vectorlayer support etc.
 * Infinite z-indexes
