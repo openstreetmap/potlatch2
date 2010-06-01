@@ -47,7 +47,8 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 90:	MainUndoStack.getGlobalStack().undo(); return null;		// Z
+				case 68:	controller.map.paint.alpha=1.3-controller.map.paint.alpha; return null;	// D
+				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z
 			}
 			return null;
 		}
@@ -72,6 +73,9 @@ package net.systemeD.potlatch2.controller {
 				} else if ( entity is Node && focus is Way ) {
 					// select way node
 					return new DragWayNode(focus as Way, getNodeIndex(focus as Way,entity as Node), event, false);
+				} else if ( controller.keyDown(32) ) {
+					// drag map
+					return new DragBackground(event);
 				}
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING ) {
 				return new NoSelection();

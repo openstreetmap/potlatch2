@@ -15,6 +15,7 @@ package net.systemeD.potlatch2 {
         public var state:ControllerState;
         private var _connection:Connection;
         
+		private var keys:Object={};
 
         public function EditController(map:Map, tagViewer:TagViewer, toolbox:Toolbox) {
             this._map = map;
@@ -27,6 +28,7 @@ package net.systemeD.potlatch2 {
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_DOWN, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.CLICK, mapMouseEvent);
+            map.parent.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
             map.parent.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
         }
 
@@ -48,10 +50,19 @@ package net.systemeD.potlatch2 {
 			toolbox.setEntity(entity);
         }
         
+        private function keyDownHandler(event:KeyboardEvent):void {
+			keys[event.keyCode]=true;
+		}
+
         private function keyUpHandler(event:KeyboardEvent):void {
             trace("key code "+event.keyCode);
+			if (keys[event.keyCode]) { delete keys[event.keyCode]; }
             var newState:ControllerState = state.processKeyboardEvent(event);
             setState(newState);            
+		}
+
+		public function keyDown(key:Number):Boolean {
+			return Boolean(keys[key]);
 		}
 
         private function mapMouseEvent(event:MouseEvent):void {

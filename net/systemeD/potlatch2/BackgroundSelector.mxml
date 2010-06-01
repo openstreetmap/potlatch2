@@ -13,6 +13,7 @@
             <mx:Object label="OSM - Osmarender" data="http://tah.openstreetmap.org/Tiles/tile/$z/$x/$y.png" />
             <mx:Object label="OSM - Maplint (errors)" data="http://tah.openstreetmap.org/Tiles/maplint/$z/$x/$y.png" />
             <mx:Object label="OpenCycleMap" data="http://andy.sandbox.cloudmade.com/tiles/cycle/$z/$x/$y.png" />
+			<mx:Object label="UK: OS StreetView" data="http://os.openstreetmap.org/sv/$z/$x/$y.png" />
             <mx:Object label="UK historic: 1:25k" data="http://ooc.openstreetmap.org/os1/$z/$x/$y.png" />
             <mx:Object label="UK historic: 7th" data="http://ooc.openstreetmap.org/os7/$z/$x/$y.png" />
             <mx:Object label="UK historic: NPE" data="http://ooc.openstreetmap.org/npe/$z/$x/$y.png" />

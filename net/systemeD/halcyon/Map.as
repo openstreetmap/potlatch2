@@ -53,6 +53,7 @@ package net.systemeD.halcyon {
 		public var mapheight:uint;						// height (Flash pixels)
 
 		public var dragstate:uint=NOT_DRAGGING;			// dragging map
+		private var _draggable:Boolean=true;			//  |
 		private var lastxmouse:Number;					//  |
 		private var lastymouse:Number;					//  |
 		private var downX:Number;						//  |
@@ -172,6 +173,10 @@ package net.systemeD.halcyon {
 			centre_lat=coord2lat(-y+mapheight/2);
 			centre_lon=coord2lon(-x+mapwidth/2);
 			this.dispatchEvent(new MapEvent(MapEvent.MOVE, {lat:centre_lat, lon:centre_lon, scale:scale}));
+		}
+		
+		public function nudgeBackground(x:Number,y:Number):void {
+			this.dispatchEvent(new MapEvent(MapEvent.NUDGE_BACKGROUND, { x: x, y: y }));
 		}
 
 		// Co-ordinate conversion functions
@@ -349,7 +354,13 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Mouse events
 		
+		public function set draggable(draggable:Boolean):void {
+			_draggable=draggable;
+			dragstate=NOT_DRAGGING;
+		}
+
 		public function mouseDownHandler(event:MouseEvent):void {
+			if (!_draggable) { return; }
 			dragstate=NOT_MOVED;
 			lastxmouse=downX=mouseX;
 			lastymouse=downY=mouseY;
@@ -365,9 +376,8 @@ package net.systemeD.halcyon {
 		}
         
 		public function mouseMoveHandler(event:MouseEvent):void {
-			if (dragstate==NOT_DRAGGING) {
-				return;
-			}
+			if (!_draggable) { return; }
+			if (dragstate==NOT_DRAGGING) { return; }
 			
 			if (dragstate==NOT_MOVED && Math.abs(downX - mouseX) < 3 && Math.abs(downY - mouseY) < 3) {
 				return;

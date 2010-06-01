@@ -8,6 +8,7 @@ package net.systemeD.halcyon {
 		public static const RESIZE:String = "resize";
 		public static const MOVE:String = "move";
 		public static const CLICK:String = "click";
+		public static const NUDGE_BACKGROUND:String = "nudge_background";
 
 		public var params:Object;
 

@@ -4,6 +4,7 @@ package net.systemeD.halcyon {
 	import flash.events.*;
 	import flash.net.*;
 	import flash.system.LoaderContext;
+	import net.systemeD.halcyon.MapEvent;
 	
     public class TileSet extends Sprite {
 
@@ -12,8 +13,8 @@ package net.systemeD.halcyon {
 		public var tile_b:int;
 		public var tile_t:int;
 
-		public var xoffset:Number=0;
-		public var yoffset:Number=0;
+		private var offset_lon:Number=0;
+		private var offset_lat:Number=0;
 
 		private var requests:Array=[];
 		private var tiles:Object={};		// key is "z,x,y"; value "true" (needed) or reference to sprite
@@ -27,11 +28,13 @@ package net.systemeD.halcyon {
 			this.map=map;
 			alpha=0.5;
 			createSprites();
+			map.addEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
 	
 		public function init(url:String=null, update:Boolean=false):void {
 			baseurl=url;
 			tiles={};
+			offset_lon=offset_lat=x=y=0;
 			while (numChildren) { removeChildAt(0); }
 			createSprites();
 			if (update) { this.update(); }
@@ -51,17 +54,18 @@ package net.systemeD.halcyon {
 			for (var i:uint=map.MINSCALE; i<=map.MAXSCALE; i++) {
 				this.getChildAt(i-map.MINSCALE).visible=(scale==i);
 			}
-			// ** Should also double or halve xoffset/yoffset accordingly
+			x=map.lon2coord(map.centre_lon+offset_lon)-map.lon2coord(map.centre_lon);
+			y=map.lat2coord(map.centre_lat+offset_lat)-map.lat2coord(map.centre_lat);
 		}
 			
 		// Update bounds - called on every move
 		
 		public function update():void {
 			if (!baseurl) { return; }
-			tile_l=lon2tile(map.edge_l+xoffset);
-			tile_r=lon2tile(map.edge_r+xoffset);
-			tile_t=lat2tile(map.edge_t+yoffset);
-			tile_b=lat2tile(map.edge_b+yoffset);
+			tile_l=lon2tile(map.edge_l-offset_lon);
+			tile_r=lon2tile(map.edge_r-offset_lon);
+			tile_t=lat2tile(map.edge_t-offset_lat);
+			tile_b=lat2tile(map.edge_b-offset_lat);
 			for (var tx:int=tile_l; tx<=tile_r; tx++) {
 				for (var ty:int=tile_t; ty<=tile_b; ty++) {
 					if (!tiles[map.scale+','+tx+','+ty]) { addRequest(tx,ty); }
@@ -118,6 +122,16 @@ package net.systemeD.halcyon {
 			return baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
 		}
 
+
+		// Update offset
+		
+		public function nudgeHandler(event:MapEvent):void {
+			if (!baseurl) { return; }
+			this.x+=event.params.x; this.y+=event.params.y;
+			offset_lat=map.centre_lat-map.coord2lat(map.lat2coord(map.centre_lat)-this.y);
+			offset_lon=map.centre_lon-map.coord2lon(map.lon2coord(map.centre_lon)-this.x);
+			update();
+		}
 
 		
 		// ------------------------------------------------------------------
