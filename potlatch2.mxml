@@ -107,22 +107,16 @@
 		import mx.core.IChildList;
         import mx.containers.Canvas;
 		import mx.core.Application;
-		import com.yahoo.maps.api.YahooMap;
-		import com.yahoo.maps.api.YahooMapEvent;
-		import com.yahoo.maps.api.core.location.LatLon;
         import mx.events.DragEvent;
         import mx.managers.DragManager;
         import mx.core.DragSource;
 
         public var theMap:Map;
         public var theController:EditController;
-		public var yahooListener:Object = new Object();
-		public var yahoo:YahooMap = new YahooMap(); 
 
 		private function initApp():void {
 
 			Globals.vars.map_area = map_area;
-			Globals.vars.yahoo = yahoo;
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
 			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
 
@@ -136,37 +130,15 @@
             b.graphics.endFill();
 			_root.addChild(b);
 
-			// Add Yahoo! background
-			yahoo.init("f0a.sejV34HnhgIbNSmVHmndXFpijgGeun0fSIMG9428hW_ifF3pYKwbV6r9iaXojl1lU_dakekR", w, h);  
-			yahoo.mapType="satellite";
-			_root.addChild(yahoo);
-			yahoo.visible=false;
-			yahoo.alpha=0.5;
-
-			// Yahoo! listeners
-			yahooListener.yahooInit=function(event:YahooMapEvent):void {
-				yahoo.zoomLevel = 18-theMap.scale;
-				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
-
-				yahooListener.moveHandler=function(event:MapEvent):void {
-					if (!yahoo.visible) { return; }
-					yahoo.zoomLevel=18-event.params.scale;
-					yahoo.centerLatLon=new LatLon(event.params.lat, event.params.lon);
-				};
-				theMap.addEventListener(MapEvent.MOVE, yahooListener.moveHandler);
-
-				yahooListener.resizeHandler=function(event:MapEvent):void {
-					yahoo.setSize(event.params.width, event.params.height);
-				};
-				theMap.addEventListener(MapEvent.RESIZE, yahooListener.resizeHandler);
-			}
-			yahoo.addEventListener(YahooMapEvent.MAP_INITIALIZE, yahooListener.yahooInit);
-
-			// add map
+			// create map and Yahoo
 			theMap=new Map(this.loaderInfo.parameters);
 			theMap.backdrop=b;
+			var yahoo:Yahoo=new Yahoo(w,h,theMap);
+			yahoo.hide();
+			Globals.vars.yahoo = yahoo;
+			_root.addChild(yahoo);
 			_root.addChild(theMap);
-            theMap.updateSize(w, h);
+            theMap.updateSize(w,h);
 
 			// add mask for map
 			var s:Sprite=new Sprite();
