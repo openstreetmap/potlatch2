@@ -35,7 +35,7 @@ package net.systemeD.potlatch2.save {
             var secret:String = Connection.getParam("oauth_token_secret", null);
             
             if ( key == null || secret == null ) {
-                var data:Object = SharedObject.getLocal("access_token", "/potlatch2.swf").data;
+                var data:Object = SharedObject.getLocal("access_token").data;
                 key = data["oauth_token"];
                 secret = data["oauth_token_secret"];
             }
@@ -64,7 +64,7 @@ package net.systemeD.potlatch2.save {
             var listener:Function = function(event:Event):void {
                 accessToken = oauthPanel.accessToken;
                 if ( oauthPanel.shouldRemember ) {
-                    var obj:SharedObject = SharedObject.getLocal("access_token", "/potlatch2.swf");
+                    var obj:SharedObject = SharedObject.getLocal("access_token");
                     obj.setProperty("oauth_token", accessToken.key);
                     obj.setProperty("oauth_token_secret", accessToken.secret);
                     obj.flush();
