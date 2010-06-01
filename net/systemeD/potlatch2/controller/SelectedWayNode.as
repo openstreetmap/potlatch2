@@ -61,8 +61,9 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 189:					return removeNode();	// '-'
-				case 88:					return splitWay();		// 'X'
+				case 189:					return removeNode();					// '-'
+				case 88:					return splitWay();						// 'X'
+				case 82:					repeatTags(selectedNode); return this;	// 'R'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
 			}
@@ -75,6 +76,7 @@ package net.systemeD.potlatch2.controller {
 			Globals.vars.root.addDebug("**** -> "+this);
         }
 		override public function exitState():void {
+			controller.clipboards['node']=selectedNode.getTagsCopy();
             clearSelection();
 			Globals.vars.root.addDebug("**** <- "+this);
         }

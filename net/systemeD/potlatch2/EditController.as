@@ -16,6 +16,7 @@ package net.systemeD.potlatch2 {
         private var _connection:Connection;
         
 		private var keys:Object={};
+		public var clipboards:Object={};
 
         public function EditController(map:Map, tagViewer:TagViewer, toolbox:Toolbox) {
             this._map = map;

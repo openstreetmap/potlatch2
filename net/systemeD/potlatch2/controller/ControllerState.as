@@ -115,6 +115,17 @@ package net.systemeD.potlatch2.controller {
 			return null;
 		}
 		
+		protected function repeatTags(object:Entity):void {
+			if (!controller.clipboards[object.getType()]) { return; }
+			object.suspend();
 
+		    var undo:CompositeUndoableAction = new CompositeUndoableAction("Repeat tags");
+			for (var k:String in controller.clipboards[object.getType()]) {
+				object.setTag(k, controller.clipboards[object.getType()][k], undo.push)
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+
+			object.resume();
+		}
     }
 }

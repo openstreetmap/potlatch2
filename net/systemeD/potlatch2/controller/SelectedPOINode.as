@@ -41,6 +41,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case Keyboard.BACKSPACE:	return deletePOI();
 				case Keyboard.DELETE:		return deletePOI();
+				case 82:					repeatTags(selectedNode); return this;	// 'R'
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
@@ -51,12 +52,13 @@ package net.systemeD.potlatch2.controller {
 			selectedNode.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
-		
+
         override public function enterState():void {
             selectNode(initNode);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState():void {
+			controller.clipboards['node']=selectedNode.getTagsCopy();
             clearSelection();
 			Globals.vars.root.addDebug("**** <- "+this);
         }

@@ -96,8 +96,12 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if ( event.keyCode == 13 || event.keyCode == 27 ) { return stopDrawing(); }
-			else if (event.keyCode == Keyboard.BACKSPACE) { return backspaceNode(MainUndoStack.getGlobalStack().addAction); }
+			switch (event.keyCode) {
+				case 13:					return stopDrawing();
+				case 27:					return stopDrawing();
+				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				case 82:					repeatTags(selectedWay); return this;
+			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}

@@ -62,7 +62,8 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 80:					return new SelectedParallelWay(selectedWay);
 				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
-                case 82:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;         
+				case 82:					repeatTags(selectedWay); return this;
+                case 86:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
                 case 89:                    Simplify.simplify(selectedWay, controller.map, true); return this;         
 				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
@@ -121,6 +122,7 @@ package net.systemeD.potlatch2.controller {
 			Globals.vars.root.addDebug("**** -> "+this+" "+selectedWay.id);
         }
         override public function exitState():void {
+			controller.clipboards['way']=selectedWay.getTagsCopy();
             clearSelection();
 			Globals.vars.root.addDebug("**** <- "+this);
         }
