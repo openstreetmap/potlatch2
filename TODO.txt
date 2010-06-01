@@ -6,6 +6,8 @@ Potlatch 2: main outstanding issues
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
 * Splitway + undo leaves way marked dirty
+* Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?)
+* Doesn't show untagged nodes not part of a way
 
 == Vector background layers ==
 
