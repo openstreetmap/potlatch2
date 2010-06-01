@@ -30,22 +30,16 @@
 		import net.systemeD.potlatch2.*;
 		import mx.core.*;
 		import mx.managers.PopUpManager;
-		import com.yahoo.maps.api.YahooMap;
-		import com.yahoo.maps.api.YahooMapEvent;
-		import com.yahoo.maps.api.core.location.LatLon;
 
 		private function updateBackground():void {
             var theMap:Map = Globals.vars.root;
-            var yahoo:YahooMap = Globals.vars.yahoo;
 			var bg:String=background.selectedItem.data;
 			if (bg=='yahoo') {
 				theMap.tileset.init('',false);
-				yahoo.visible=true;
-				yahoo.zoomLevel = 18-theMap.scale;
-				yahoo.centerLatLon = new LatLon(theMap.centre_lat, theMap.centre_lon);
+				Globals.vars.yahoo.show();
 			} else {
 				theMap.tileset.init(background.selectedItem.data,true);
-				yahoo.visible=false;
+				Globals.vars.yahoo.hide();
 			}
 		}
 		

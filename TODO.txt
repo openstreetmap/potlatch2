@@ -51,7 +51,6 @@ Potlatch 2: main outstanding issues
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * Mouse icon should indicate when a join is being made (blue nodes might not be visible)
-* Yahoo! layer can't handle z18+, (Bug:) and continues to show z17 when zoomed in
 * i18n
 
 
