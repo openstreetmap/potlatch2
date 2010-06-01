@@ -22,6 +22,7 @@ package net.systemeD.halcyon.connection.actions {
             node.addParent(way);
             nodeList.splice(index, 0, node);
             markDirty();
+			way.expandBbox(node);
             way.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, way, index));
             
             return SUCCESS;
