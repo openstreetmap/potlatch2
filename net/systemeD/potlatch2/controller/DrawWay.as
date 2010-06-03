@@ -13,6 +13,9 @@ package net.systemeD.potlatch2.controller {
 		private var leaveNodeSelected:Boolean;
 		private var lastClick:Entity=null;
 		private var lastClickTime:Date;
+		private var hoverEntity:Entity;			// keep track of the currently rolled-over object, because
+												// Flash can fire a mouseDown from the map even if you
+												// haven't rolled out of the way
 		
 		public function DrawWay(way:Way, editEnd:Boolean, leaveNodeSelected:Boolean) {
 			super(way);
@@ -28,6 +31,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var mouse:Point;
 			var node:Node;
+			if (entity == null && hoverEntity) { entity=hoverEntity; }
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
@@ -73,8 +77,10 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
 			} else if ( event.type == MouseEvent.ROLL_OVER && focus!=selectedWay) {
+				hoverEntity=focus;
 				controller.map.setHighlight(focus, { showNodesHover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT  && focus!=selectedWay) {
+				hoverEntity=null;
 				controller.map.setHighlight(focus, { showNodesHover: false });
 				controller.map.setHighlight(selectedWay, { showNodes: true });
 				// ** this call to setHighlight(selectedWay) is necessary in case the hovered way (blue nodes)
