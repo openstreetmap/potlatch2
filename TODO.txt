@@ -53,7 +53,11 @@ Potlatch 2: main outstanding issues
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * Mouse icon should indicate when a join is being made (blue nodes might not be visible)
 * i18n
-
+* Should remember which background imagery layer you had previously selected
+* Background imagery layers should match those of p1
+* Dialog for adding custom imagery url
+* Draggin a node under the toolbox and then mouseuping doesn't get passed to the map, so you end up with a node "stuck" to the pointer
+* Toolbox icons should be deactivated when not in correct state
 
 == Miscellaneous data model ==
 
