@@ -111,7 +111,7 @@ package net.systemeD.halcyon.connection {
 		    return deleted;
 		}
 		
-		protected function setDeletedState(isDeleted:Boolean):void {
+		public function setDeletedState(isDeleted:Boolean):void {
 		    deleted = isDeleted;
 		}
 		

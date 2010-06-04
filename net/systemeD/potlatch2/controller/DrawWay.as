@@ -45,6 +45,7 @@ package net.systemeD.potlatch2.controller {
 							// double-click to create new POI
 							node=selectedWay.getNode(0);
 							stopDrawing();
+							node.setDeletedState(false);	// has just been deleted by stopDrawing
 							controller.connection.registerPOI(node);
 							return new SelectedPOINode(node);
 						} else {
