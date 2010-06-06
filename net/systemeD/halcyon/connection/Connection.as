@@ -25,6 +25,8 @@ package net.systemeD.halcyon.connection {
                 
                 if ( connectType == "XML" )
                     connectionInstance = new XMLConnection();
+                else if ( connectType == "OSM" )
+                    connectionInstance = new OSMConnection();
                 else
                     connectionInstance = new AMFConnection();
             }
