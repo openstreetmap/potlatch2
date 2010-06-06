@@ -64,24 +64,38 @@
 
 	        <mx:Button icon="@Embed('embedded/delete.svg')"
 				click='toolbox.doDelete();' 
+				enabled="{toolbox.canDo('delete')}" 
+				alpha="{toolbox.getAlpha('delete')}" 
 				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/direction.svg')" 
                 click='toolbox.doReverseDirection();'
+				enabled="{toolbox.canDo('reverseDirection')}" 
+				alpha="{toolbox.getAlpha('reverseDirection')}" 
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/cut.svg')" 
                 click='toolbox.doSplit();'
+				enabled="{toolbox.canDo('split')}" 
+				alpha="{toolbox.getAlpha('split')}" 
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/straighten.svg')" 
 				click='toolbox.doStraighten();' 
+				enabled="{toolbox.canDo('straighten')}" 
+				alpha="{toolbox.getAlpha('straighten')}" 
 				width="28" height="28" textAlign="left" paddingLeft="5" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/circle.svg')" 
 				click='toolbox.doCircularise();' 
+				enabled="{toolbox.canDo('circularise')}" 
+				alpha="{toolbox.getAlpha('circularise')}" 
 				width="28" height="28" textAlign="left" paddingLeft="4" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/quadrilateralise.svg')" 
 				click='toolbox.doQuadrilateralise();' 
+				enabled="{toolbox.canDo('quadrilateralise')}" 
+				alpha="{toolbox.getAlpha('quadrilateralise')}" 
 				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
 	        <mx:Button icon="@Embed('embedded/parallel.svg')" 
 				click='toolbox.doParallelise();' 
+				enabled="{toolbox.canDo('parallelise')}" 
+				alpha="{toolbox.getAlpha('parallelise')}" 
 				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
 
 		</potlatch2:Toolbox>

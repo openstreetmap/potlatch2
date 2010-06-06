@@ -14,7 +14,6 @@ package net.systemeD.potlatch2 {
 		** Should have a close box, and be able to be activated from the top bar
 		** Should be automatically positioned at bottom-right of canvas on init
 		** Should float above tagViewer, not beneath it
-		** Icons should be disabled depending on what's selected (setEntity can do this)
 		** Remove annoying Illustrator cruft from SVG icons!
 		** Tooltips
 
@@ -41,6 +40,8 @@ package net.systemeD.potlatch2 {
 
 		public function setEntity(entity:Entity):void {
 			this.entity=entity;
+			dispatchEvent(new Event("updateSkin"));
+			dispatchEvent(new Event("updateAlpha"));
 		}
 
 		private function handleDown(e:Event):void {
@@ -50,6 +51,32 @@ package net.systemeD.potlatch2 {
 		private function handleUp(e:Event):void {
 			this.stopDrag();
 		}
+		
+		// --------------------------------------------------------------------------------
+		// Enable/disable toolbox buttons
+		// (ideally we'd use CSS to set alpha in disabled state, but Flex's CSS
+		//  capabilities aren't up to it)
+		
+        [Bindable(event="updateSkin")]
+		public function canDo(op:String):Boolean {
+			switch (op) {
+				case 'delete':				return (entity is Way || entity is Node);
+				case 'reverseDirection':	return (entity is Way);
+				case 'quadrilateralise':	return (entity is Way && Way(entity).isArea());
+				case 'straighten':			return (entity is Way && !Way(entity).isArea());
+				case 'circularise':			return (entity is Way && Way(entity).isArea());
+				case 'split':				return (entity is Node && controller.state is SelectedWayNode);
+				case 'parallelise':			return (entity is Way);
+			}
+			return false;
+		}
+
+        [Bindable(event="updateAlpha")]
+		public function getAlpha(op:String):Number {
+			if (canDo(op)) { return 1; }
+			return 0.5;
+		}
+        
 
 		// --------------------------------------------------------------------------------
 		// Individual toolbox actions
@@ -64,7 +91,7 @@ package net.systemeD.potlatch2 {
 				controller.setState(new NoSelection());
 			}
 		}
-        
+
         public function doReverseDirection():void {
             if (entity is Way) { 
                 Way(entity).reverseNodes(MainUndoStack.getGlobalStack().addAction);
@@ -88,7 +115,7 @@ package net.systemeD.potlatch2 {
 				Circularise.circularise(Way(entity),controller.map);
 			}
 		}
-		
+
 		public function doSplit():void {
 			if (entity is Node && controller.state is SelectedWayNode) {
 				controller.setState(SelectedWayNode(controller.state).splitWay());
