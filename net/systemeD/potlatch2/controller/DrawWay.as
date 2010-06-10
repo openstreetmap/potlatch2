@@ -77,20 +77,33 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2lon(event.localX),
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
-			} else if ( event.type == MouseEvent.ROLL_OVER && focus!=selectedWay) {
-				hoverEntity=focus;
-				controller.map.setHighlight(focus, { showNodesHover: true });
-			} else if ( event.type == MouseEvent.MOUSE_OUT  && focus!=selectedWay) {
-				hoverEntity=null;
-				controller.map.setHighlight(focus, { showNodesHover: false });
-				controller.map.setHighlight(selectedWay, { showNodes: true });
-				// ** this call to setHighlight(selectedWay) is necessary in case the hovered way (blue nodes)
-				// shares any nodes with the selected way (red nodes): if they do, they'll be wiped out by the
-				// first call.
-				// Ultimately we should fix this by referring to 'way :selected nodes' instead of 'nodes :selectedway'.
-				// But this will do for now.
-				// We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
-				// useful optimisation.
+			} else if ( event.type == MouseEvent.ROLL_OVER ) {
+				if (focus!=selectedWay) {
+					hoverEntity=focus;
+					controller.map.setHighlight(focus, { showNodesHover: true });
+				}
+				if (entity is Node && Way(focus).endsWith(Node(entity))) {
+					if (focus==selectedWay) { controller.setCursor(controller.pen_so); }
+					                   else { controller.setCursor(controller.pen_o); }
+				} else if (entity is Node) {
+					controller.setCursor(controller.pen_x);
+				} else {
+					controller.setCursor(controller.pen_plus);
+				}
+			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
+				if (focus!=selectedWay) {
+					hoverEntity=null;
+					controller.map.setHighlight(focus, { showNodesHover: false });
+					controller.map.setHighlight(selectedWay, { showNodes: true });
+					// ** this call to setHighlight(selectedWay) is necessary in case the hovered way (blue nodes)
+					// shares any nodes with the selected way (red nodes): if they do, they'll be wiped out by the
+					// first call.
+					// Ultimately we should fix this by referring to 'way :selected nodes' instead of 'nodes :selectedway'.
+					// But this will do for now.
+					// We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
+					// useful optimisation.
+				}
+				controller.setCursor(controller.pen);
 			}
 
 			return this;
@@ -180,10 +193,12 @@ package net.systemeD.potlatch2.controller {
 			var node:Node = selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0);
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
+			controller.setCursor(controller.pen);
 			Globals.vars.root.addDebug("**** -> "+this);
 		}
 		override public function exitState():void {
 			super.exitState();
+			controller.setCursor(null);
 			elastic.removeSprites();
 			elastic = null;
 			Globals.vars.root.addDebug("**** <- "+this);

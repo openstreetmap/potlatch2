@@ -3,6 +3,7 @@ package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.MapController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.controller.*;
+	import mx.managers.CursorManager;
 	import flash.events.*;
 	import flash.geom.*;
 
@@ -18,6 +19,12 @@ package net.systemeD.potlatch2 {
 		private var keys:Object={};
 		public var clipboards:Object={};
 
+		[Embed(source="../../../embedded/pen.png")] 		public var pen:Class;
+		[Embed(source="../../../embedded/pen_x.png")] 		public var pen_x:Class;
+		[Embed(source="../../../embedded/pen_o.png")] 		public var pen_o:Class;
+		[Embed(source="../../../embedded/pen_so.png")] 		public var pen_so:Class;
+		[Embed(source="../../../embedded/pen_plus.png")] 	public var pen_plus:Class;
+		
         public function EditController(map:Map, tagViewer:TagViewer, toolbox:Toolbox) {
             this._map = map;
             this.tagViewer = tagViewer;
@@ -101,6 +108,11 @@ package net.systemeD.potlatch2 {
             state = newState;
             state.enterState();
         }
+
+		public function setCursor(cursor:Class):void {
+			CursorManager.removeAllCursors();
+			if (cursor) { CursorManager.setCursor(cursor); }
+		}
 
     }
 

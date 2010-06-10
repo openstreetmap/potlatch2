@@ -1,12 +1,13 @@
 Potlatch 2: main outstanding issues
 -----------------------------------
+** = required before P2 goes live
 
 == Core geometry ==
 
+** Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?)
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
 * Splitway + undo leaves way marked dirty
-* Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?)
 
 == Vector background layers ==
 
@@ -20,16 +21,16 @@ Potlatch 2: main outstanding issues
 
 == Saving ==
 
-* Comment and advanced -> "comment" should show the same thing
+** Comment and advanced -> "comment" should show the same thing
 * Save should be deactivated until there's things to change
 * Should be able to reuse changesets
 * Shouldn't be able to change created_by and version on changeset
 
 == Tag editing ==
 
-* Doesn't always update selected tab when you select a new entity
-* 'Add to route' in relations doesn't work
-* Direct click-to-edit of relation role should actually work
+** Doesn't always update selected tab when you select a new entity
+** 'Add to route' in relations doesn't work
+** Direct click-to-edit of relation role should actually work
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
@@ -43,21 +44,19 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
-* Parallelise should use the distance from the way, not from the first click (needs someone good at maths to fix this)
-* Potlatch 1-style "floaty warnings"
-* Keyboard shortcuts
+** Parallelise should use the distance from the way, not from the first click (needs someone good at maths to fix this)
+** Potlatch 1-style "floaty warnings"
+** Toolbox fixes (see comments in file)
+** Should remember which background imagery layer you had previously selected
+** Background imagery layers should match those of p1
+** Dialog for adding custom imagery url
+** Dragging a node under the toolbox and then mouseuping doesn't get passed to the map, so you end up with a node "stuck" to the pointer
+** onDataComplete fires the first time a map call has returned - but multiple calls might have been made, so really we should count them and only reset dataWorking when it's back to 0 again
 * Mouse wheel zooming
 * CSS editing
-* Toolbox fixes (see comments in file)
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
-* Mouse icon should indicate when a join is being made (blue nodes might not be visible)
 * i18n
-* Should remember which background imagery layer you had previously selected
-* Background imagery layers should match those of p1
-* Dialog for adding custom imagery url
-* Draggin a node under the toolbox and then mouseuping doesn't get passed to the map, so you end up with a node "stuck" to the pointer
-* onDataComplete fires the first time a map call has returned - but multiple calls might have been made, so really we should count them and only reset dataWorking when it's back to 0 again
 
 == Miscellaneous data model ==
 
@@ -66,9 +65,10 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
-* Changing style, and then back again, doesn't redraw everything
+** Changing style, and then back again, doesn't redraw everything
+** Centred area text isn't really centred (bottom left remains constant)
+** Infinite z-indexes
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
 * Complete MapCSS support
 * 'Light' version without vectorlayer support etc.
-* Infinite z-indexes

@@ -170,6 +170,10 @@ package net.systemeD.halcyon.connection {
 			return (nodes[0].id==nodes[nodes.length-1].id && nodes.length>2);
 		}
 		
+		public function endsWith(node:Node):Boolean {
+			return (nodes[0]==node || nodes[nodes.length-1]==node);
+		}
+		
 		public override function remove(performAction:Function):void {
 			performAction(new DeleteWayAction(this, setDeletedState, nodes));
 		}
