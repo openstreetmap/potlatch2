@@ -34,7 +34,6 @@
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
-        <mx:Button label="Options" click="new OptionsDialog().init();" />
         <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();"/>
     </mx:ApplicationControlBar>
     
