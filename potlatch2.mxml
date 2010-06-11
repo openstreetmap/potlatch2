@@ -60,6 +60,7 @@
 			headerHeight="6" headerColors="[black, gray]" 
 			borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
 			paddingLeft="4" paddingTop="4" layout="horizontal"
+			includeInLayout="false" 
 			x="10" y="300">
 
 	        <mx:Button icon="@Embed('embedded/delete.svg')"

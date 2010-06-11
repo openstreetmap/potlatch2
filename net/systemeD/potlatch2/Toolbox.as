@@ -11,15 +11,14 @@ package net.systemeD.potlatch2 {
 		Floating toolbox palette
 
 		Still to do:
-		** Should have a close box, and be able to be activated from the top bar
+		** Should have close and minimise boxes, and be able to be activated from the top bar
 		** Should be automatically positioned at bottom-right of canvas on init
-		** Should float above tagViewer, not beneath it
 		** Remove annoying Illustrator cruft from SVG icons!
 		** Tooltips
 
 	*/
 
-	public class Toolbox extends Panel{
+	public class Toolbox extends TitleWindow {
 		
 		private var entity:Entity;
 		private var controller:EditController;
