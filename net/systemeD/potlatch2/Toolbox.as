@@ -18,7 +18,7 @@ package net.systemeD.potlatch2 {
 
 	*/
 
-	public class Toolbox extends TitleWindow {
+	public class Toolbox extends Panel {
 		
 		private var entity:Entity;
 		private var controller:EditController;
