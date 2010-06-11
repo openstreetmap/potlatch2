@@ -22,9 +22,11 @@
               ]]>
   </mx:Script>
   <mx:Text>
-    <mx:text>
-      There is no spoon.
-    </mx:text>
+    <mx:htmlText>
+		<![CDATA[
+For Potlatch 2 help, see the <u><a href="http://wiki.openstreetmap.org/wiki/Potlatch_2" target="_blank">OpenStreetMap wiki</a></u>.
+		]]>
+    </mx:htmlText>
   </mx:Text>
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
