@@ -15,17 +15,19 @@
         private var conn:Connection;
         private var relationList:Array;
         private var entity:Entity;
+		private var tags:Object;
 
-        public function init(e:Entity):void {
+        public function init(e:Entity, t:Object):void {
           entity = e;
+		  tags = t;
           PopUpManager.addPopUp(this, Application(Application.application), true);
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
           conn = Connection.getConnectionInstance();
-          relationList = conn.getAllRelationIDs();
+          relationList = conn.getMatchingRelationIDs(tags);
           if (relationList.length == 0) {
-            warning.text = "No relations loaded";
+            warning.text = "No relations available";
           } else {
             warning.text = "These relations are available:";
           }
@@ -44,7 +46,7 @@
         }
         
         public function closeAndNewRelation():void {
-          var relation:Relation = conn.createRelation({}, [new RelationMember(entity, '')],
+          var relation:Relation = conn.createRelation(tags, [new RelationMember(entity, '')],
               MainUndoStack.getGlobalStack().addAction)
           PopUpManager.removePopUp(this);
           trace("edit relation "+id);

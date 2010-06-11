@@ -29,7 +29,7 @@ Potlatch 2: main outstanding issues
 == Tag editing ==
 
 ** Doesn't always update selected tab when you select a new entity
-** 'Add to route' in relations doesn't work
+** Doesn't update selected tab when you change the relations on an entity
 ** Direct click-to-edit of relation role should actually work
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop

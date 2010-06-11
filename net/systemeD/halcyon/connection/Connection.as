@@ -264,6 +264,19 @@ package net.systemeD.halcyon.connection {
             return list;
         }
 
+        public function getMatchingRelationIDs(match:Object):Array {
+            var list:Array = [];
+			var ok:Boolean;
+            for each (var relation:Relation in relations) {
+				ok=true;
+				for (var k:String in match) {
+					if (!relation.getTagsHash()[k] || relation.getTagsHash()[k]!=match[k]) { ok=false; }
+				}
+				if (ok) { list.push(relation.id); }
+			}
+            return list;
+        }
+
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
 			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [] };
 			for each (var way:Way in ways) {

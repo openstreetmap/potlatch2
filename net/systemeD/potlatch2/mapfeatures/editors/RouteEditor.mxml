@@ -10,7 +10,7 @@
 
   <mx:Label text="{fieldName}:"/>
   <mx:VBox verticalGap="0" width="100%" id="routeIcons"/>
-  <mx:LinkButton label="Add to route"/>
+  <mx:LinkButton label="Add to route" click="addToRelation()" />
 
   <mx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
@@ -36,6 +36,11 @@
         panel.setRelation(relation["relation"]);
         PopUpManager.centerPopUp(panel);
     }
+
+      public function addToRelation():void {
+          new RelationSelectPanel().init(_entity, _factory.relationTags);        
+      }
+      
     
   ]]></mx:Script>
 </edit:RelationMemberEditor>

@@ -464,7 +464,7 @@
       }
       
       public function addToRelation():void {
-          new RelationSelectPanel().init(selectedEntity);        
+          new RelationSelectPanel().init(selectedEntity,new Object());
       }
       
       public function removeFromRelation(id:Number, index:int):void {
