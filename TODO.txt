@@ -41,15 +41,14 @@ Potlatch 2: main outstanding issues
 * Ability to specify that a node should be a point in a way, for example for crossings
 * Ability to say that it's unlikely/impossible to have a way that is a bridge and a tunnel at the same time.
 
-
 == UI ==
 
 ** Potlatch 1-style "floaty warnings"
 ** Toolbox fixes (see comments in file)
 ** Should remember which background imagery layer you had previously selected
-** Background imagery layers should match those of p1
 ** Dialog for adding custom imagery url
-** onDataComplete fires the first time a map call has returned - but multiple calls might have been made, so really we should count them and only reset dataWorking when it's back to 0 again
+* B keypress for background source tag
+* Bbox-sensitive menu for background imagery
 * Mouse wheel zooming
 * CSS editing
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
@@ -59,7 +58,6 @@ Potlatch 2: main outstanding issues
 == Miscellaneous data model ==
 
 * Remove created_by=* tags from any data touched
-
 
 == Rendering (Halcyon) ==
 

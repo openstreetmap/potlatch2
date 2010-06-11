@@ -129,6 +129,9 @@
         public var theMap:Map;
         public var theController:EditController;
 
+		private var savecount:uint=0;
+		private var loadcount:uint=0;
+
 		private function initApp():void {
 
 			Globals.vars.map_area = map_area;
@@ -163,15 +166,6 @@
 			_root.addChild(s);
 			theMap.mask=s;
 
-			// add crosshair
-			/*s=new Sprite();
-			s.graphics.lineStyle(2,0);
-			s.graphics.moveTo(stage.stageWidth/2-20,stage.stageHeight/2);
-			s.graphics.lineTo(stage.stageWidth/2+20,stage.stageHeight/2);
-			s.graphics.moveTo(stage.stageWidth/2,stage.stageHeight/2-20);
-			s.graphics.lineTo(stage.stageWidth/2,stage.stageHeight/2+20);
-			_root.addChild(s);*/
-
 			// mouse-up handler attached to stage, so the user can release outside the map
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
@@ -180,12 +174,11 @@
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
 
-			// example listener event
-			var myListenerObj:Object = new Object();
-			myListenerObj.mapHandler=function(event:MapEvent):void {
-				Globals.vars.debug.appendText("Download event fired - "+event.params.minlat+","+event.params.minlon+"\n");
-			};
-			theMap.addEventListener(MapEvent.DOWNLOAD, myListenerObj.mapHandler);
+			// load imagery XML
+	        var request:URLRequest = new URLRequest("imagery.xml?"+Math.random());
+	        var loader:URLLoader = new URLLoader();
+	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
+	        loader.load(request);
 
 			// add debug field
 			var t:TextField=new TextField();
@@ -202,9 +195,8 @@
             var conn:Connection = Connection.getConnectionInstance();
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
             conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
-
-			// and to import a shapefile...
-//			var importer:ShpImporter = new ShpImporter(theMap, ["http://127.0.0.1/~richard/shp/wildrnp020.shp","http://127.0.0.1/~richard/shp/wildrnp020.shx","http://127.0.0.1/~richard/shp/wildrnp020.dbf"]);
+            conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
+            conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
 		}
 
         public function onResizeMap():void {
@@ -213,13 +205,31 @@
         }
 
         private function onDataStart(event:Event):void {
-            dataWorking.text = event.type == Connection.LOAD_STARTED ? "Loading data..." : "Saving Data...";
-            dataWorking.visible = true;
+			switch (event.type) {
+				case Connection.LOAD_STARTED:	loadcount++; break;
+				case Connection.SAVE_STARTED:	savecount++; break;
+			}
+			updateDataWorking();
         }
         private function onDataComplete(event:Event):void {
-            dataWorking.visible = false;
+			switch (event.type) {
+				case Connection.LOAD_COMPLETED:	loadcount--; break;
+				case Connection.SAVE_COMPLETED:	savecount--; break;
+			}
+            updateDataWorking();
         }
+		private function updateDataWorking():void {
+			if (loadcount>0 && savecount>0) { dataWorking.text="Loading/saving..."; }
+			else if (loadcount>0)           { dataWorking.text="Loading data..."; }
+			else if (savecount>0)           { dataWorking.text="Saving data..."; }
+			else                            { dataWorking.text=""; }
+			dataWorking.visible=(dataWorking.text!="");
+		}
         
+        private function onImageryLoad(event:Event):void {
+			var imagery:XML = new XML(URLLoader(event.target).data);
+			BackgroundSelector(bgButton.popUp).populate(imagery);
+		}
 
         
         private function dragEnterHandler(event:DragEvent):void {
