@@ -12,9 +12,7 @@ package net.systemeD.potlatch2 {
 
 		Still to do:
 		** Should have close and minimise boxes, and be able to be activated from the top bar
-		** Should be automatically positioned at bottom-right of canvas on init
 		** Remove annoying Illustrator cruft from SVG icons!
-		** Tooltips
 
 	*/
 

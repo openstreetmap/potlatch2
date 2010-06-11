@@ -121,8 +121,8 @@ package net.systemeD.potlatch2.mapfeatures {
             var newStr:String = str.replace(/&/g, "&amp;");
             newStr = newStr.replace(/</g, "&lt;");
             newStr = newStr.replace(/>/g, "&gt;");
-            newStr = newStr.replace(/"/g, "&quot;");
-            newStr = newStr.replace(/'/g, "&apos;");
+            newStr = newStr.replace(/"/g, "&quot;");	// "
+            newStr = newStr.replace(/'/g, "&apos;");	// '
             return newStr;
         }
       
