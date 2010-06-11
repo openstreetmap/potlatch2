@@ -66,6 +66,7 @@ package net.systemeD.potlatch2.tools {
 					parallelWay.appendNode(nodes[i], undo.push);
 				}
 			}
+			if (originalWay.isArea()) { parallelWay.appendNode(nodes[0],undo.push); }
 			parallelWay.resume();
 			MainUndoStack.getGlobalStack().addAction(undo);
 		}

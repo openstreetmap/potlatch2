@@ -415,6 +415,11 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Debugging
 		
+		public function clearDebug():void {
+			if (!Globals.vars.hasOwnProperty('debug')) return;
+			Globals.vars.debug.text='';
+		}
+			
 		public function addDebug(text:String):void {
 			if (!Globals.vars.hasOwnProperty('debug')) return;
 			if (!Globals.vars.debug.visible) return;

@@ -44,7 +44,6 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
-** Parallelise should use the distance from the way, not from the first click (needs someone good at maths to fix this)
 ** Potlatch 1-style "floaty warnings"
 ** Toolbox fixes (see comments in file)
 ** Should remember which background imagery layer you had previously selected
@@ -72,3 +71,4 @@ Potlatch 2: main outstanding issues
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
 * Complete MapCSS support
 * 'Light' version without vectorlayer support etc.
+* .gz support for OSMConnection
