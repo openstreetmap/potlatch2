@@ -61,7 +61,6 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
-** Changing style, and then back again, doesn't redraw everything
 ** Centred area text isn't really centred (bottom left remains constant)
 ** Infinite z-indexes
 * Shields
