@@ -2,7 +2,7 @@
 <mx:TitleWindow
         xmlns:mx="http://www.adobe.com/2006/mxml" 
         layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="Help"
+        horizontalAlign="center" title="Options"
         width="350" height="250" verticalGap="0">
   <mx:Script><![CDATA[
     import mx.managers.PopUpManager;
@@ -13,6 +13,7 @@
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, optionsDialog_close);
+		tbcheck.selected=Application.application.toolbox.visible;
     }
     
     private function optionsDialog_close(evt:CloseEvent):void {
@@ -21,15 +22,12 @@
 
               ]]>
   </mx:Script>
-  <mx:Text>
-    <mx:text>
-      You can take the red pill, or the blue pill.
-    </mx:text>
-  </mx:Text>
+	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
+	    change="Application.application.toolbox.toggle()" />
+
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
-    <mx:Button label="Red Pill" click="PopUpManager.removePopUp(this);"/>
-    <mx:Button label="Blue Pill" click="PopUpManager.removePopUp(this);"/>
+    <mx:Button label="Ok" click="PopUpManager.removePopUp(this);"/>
   </mx:ControlBar>
 
 </mx:TitleWindow>

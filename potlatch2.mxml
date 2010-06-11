@@ -34,6 +34,7 @@
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
+        <mx:Button label="Options" click="new OptionsDialog().init();" /> 
         <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();"/>
     </mx:ApplicationControlBar>
     
@@ -61,7 +62,11 @@
 			headerHeight="6" headerColors="[black, gray]" 
 			borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
 			paddingLeft="4" paddingTop="4" layout="horizontal"
-			includeInLayout="false" >
+			includeInLayout="false" 
+			creationComplete="toolboxClose.y=-6; toolboxClose.x=239;">
+
+			<mx:Image data="@Embed('embedded/close_small.png')"
+			    includeInLayout="false" id="toolboxClose" click="toolbox.toggle();" />
 
 	        <mx:Button icon="@Embed('embedded/delete.svg')"
 				click='toolbox.doDelete();' 

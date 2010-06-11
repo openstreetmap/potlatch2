@@ -30,7 +30,7 @@ For Potlatch 2 help, see the <u><a href="http://wiki.openstreetmap.org/wiki/Potl
   </mx:Text>
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
-    <mx:Button label="Exit" click="PopUpManager.removePopUp(this);"/>
+    <mx:Button label="Ok" click="PopUpManager.removePopUp(this);"/>
   </mx:ControlBar>
 
 </mx:TitleWindow>

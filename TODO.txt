@@ -44,7 +44,6 @@ Potlatch 2: main outstanding issues
 == UI ==
 
 ** Potlatch 1-style "floaty warnings"
-** Toolbox fixes (see comments in file)
 ** Should remember which background imagery layer you had previously selected
 ** Dialog for adding custom imagery url
 * B keypress for background source tag

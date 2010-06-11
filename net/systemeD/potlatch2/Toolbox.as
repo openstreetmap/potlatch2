@@ -9,11 +9,6 @@ package net.systemeD.potlatch2 {
 
 	/*
 		Floating toolbox palette
-
-		Still to do:
-		** Should have close and minimise boxes, and be able to be activated from the top bar
-		** Remove annoying Illustrator cruft from SVG icons!
-
 	*/
 
 	public class Toolbox extends Panel {
@@ -47,6 +42,10 @@ package net.systemeD.potlatch2 {
 
 		private function handleUp(e:Event):void {
 			this.stopDrag();
+		}
+		
+		public function toggle():void {
+			this.visible=!this.visible;
 		}
 		
 		// --------------------------------------------------------------------------------
