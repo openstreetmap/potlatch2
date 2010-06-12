@@ -250,7 +250,7 @@ package net.systemeD.halcyon.connection {
         }
 
         private function serialiseRelation(relation:Relation):XML {
-            var xml:XML = serialiseEntityRoot(Relation); //<node/>
+            var xml:XML = serialiseEntityRoot(relation); //<node/>
             serialiseEntityTags(relation, xml);
             for ( var i:uint = 0; i < relation.length; i++ ) {
                 var relMember:RelationMember = relation.getMember(i);
