@@ -72,3 +72,4 @@ Potlatch 2: main outstanding issues
 * 'Light' version without vectorlayer support etc.
 * .gz support for OSMConnection
 * Multipolygon rendering for dashedLine, lineDecoration, and WayBitmapFiller
+* Multipolygons should take their tags from the relation, not the way
