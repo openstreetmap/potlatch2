@@ -319,6 +319,7 @@
               rel.removeEventListener(Connection.RELATION_MEMBER_REMOVED, entityRelationMemberChanged);
           }
           listeningToRelations = [];
+          relationsGrid.removeEventListener(DataGridEvent.ITEM_EDIT_END, relationRoleChanged);
       }
             
       private function resetRelationsGrid(entity:Entity):void {
@@ -343,8 +344,22 @@
               listeningToRelations.push(rel);
           }
           relationsGrid.dataProvider = relations;
+          relationsGrid.addEventListener(DataGridEvent.ITEM_EDIT_END, relationRoleChanged, false, -100);
       }
       
+      private function relationRoleChanged(event:DataGridEvent):void {
+		if (event.dataField != 'role') { return; }	// shouldn't really happen
+
+		var relations:Array=event.currentTarget.dataProvider.toArray();
+		var props:Object=relations[event.rowIndex];
+
+		var relation:Relation=props['relation'];
+		var index:uint=props['index'];
+		var newRole:String=event.itemRenderer.data['role'];
+
+		relation.setMember(index, new RelationMember(selectedEntity,newRole));
+      }
+
       private function relationTagChanged(event:TagEvent):void {
           resetRelationsGrid(selectedEntity);
       }
