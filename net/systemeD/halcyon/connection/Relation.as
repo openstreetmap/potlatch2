@@ -60,6 +60,14 @@ package net.systemeD.halcyon.connection {
 			markDirty();
         }
 
+		public function findMembersByRole(role:String):Array {
+			var a:Array=[];
+            for (var index:uint = 0; index < members.length; index++) {
+                if (members[index].role==role) { a.push(members[index].entity); }
+            }
+			return a;
+		}
+
         public function insertMember(index:uint, member:RelationMember, performAction:Function):void {
             performAction(new AddMemberToRelationAction(this, index, member, members));
         }

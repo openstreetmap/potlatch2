@@ -26,7 +26,7 @@ package net.systemeD.halcyon {
 			var image:BitmapData = new BitmapData(loader.width, loader.height, false);
 			image.draw(loader);
 			graphics.beginBitmapFill(image);
-			wayui.solidLine(graphics);
+			wayui.solidLines(graphics,[]);
 			graphics.endFill();
 		}
 	}

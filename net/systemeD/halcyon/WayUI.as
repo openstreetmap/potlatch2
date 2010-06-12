@@ -172,6 +172,11 @@ package net.systemeD.halcyon {
 			// Iterate through each sublayer, drawing any styles on that layer
 			if (!sl) { sl=paint.ruleset.getStyles(this.way, tags); }
 			var drawn:Boolean;
+			var multis:Array=way.findParentRelationsOfType('multipolygon','outer');
+			var inners:Array=[];
+			for each (var m:Relation in multis) {
+				inners=inners.concat(m.findMembersByRole('inner'));
+			}
 			for (var sublayer:int=10; sublayer>=0; sublayer--) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
@@ -187,17 +192,17 @@ package net.systemeD.halcyon {
 						if (s.dashes && s.dashes.length>0) {
 							var segments:Array=dashedLine(stroke.graphics,s.dashes); 
 							if (s.line_style) { lineDecoration(stroke.graphics,s,segments); }
-						} else { solidLine(stroke.graphics); }
+						} else { solidLines(stroke.graphics,inners); }
 						drawn=true;
 					}
 
 					// Fill
-					if (s.fill_color || s.fill_image) {
+					if ((s.fill_color || s.fill_image) && way.findParentRelationsOfType('multipolygon','inner').length==0) {
 						fill=new Shape(); addToLayer(fill,FILLSPRITE);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
 									 else { s.applyFill(fill.graphics); }
-						solidLine(fill.graphics);
+						solidLines(fill.graphics,inners);
 						fill.graphics.endFill();
 						drawn=true;
 					}
@@ -208,7 +213,7 @@ package net.systemeD.halcyon {
 						casing.graphics.moveTo(x0,y0);
 						s.applyCasingStyle(casing.graphics);
 						if (s.casing_dashes && s.casing_dashes.length>0) { dashedLine(casing.graphics,s.casing_dashes); }
-																	else { solidLine(casing.graphics); }
+																	else { solidLines(casing.graphics,inners); }
 						drawn=true;
 					}
 				}
@@ -264,7 +269,7 @@ package net.systemeD.halcyon {
             // create a generic "way" hitzone sprite
             hitzone = new Sprite();
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
-            solidLine(hitzone.graphics);
+            solidLines(hitzone.graphics,[]);
             addToLayer(hitzone, CLICKSPRITE);
             hitzone.visible = false;
 			setListenSprite(hitzone);
@@ -277,11 +282,16 @@ package net.systemeD.halcyon {
 
 		// Draw solid polyline
 		
-		public function solidLine(g:Graphics):void {
-            var node:Node = way.getNode(0);
+		public function solidLines(g:Graphics,inners:Array):void {
+			solidLine(g,this.way);
+			for each (var w:Way in inners) { solidLine(g,w); }
+		}
+
+		private function solidLine(g:Graphics,w:Way):void {
+            var node:Node = w.getNode(0);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			for (var i:uint = 1; i < way.length; i++) {
-                node = way.getNode(i);
+                node = w.getNode(i);
 				g.lineTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			}
 		}

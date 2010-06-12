@@ -52,6 +52,11 @@ package net.systemeD.halcyon.connection {
         public function getTag(key:String):String {
             return tags[key];
         }
+
+		public function tagIs(key:String,value:String):Boolean {
+			if (!tags[key]) { return false; }
+			return tags[key]==value;
+		}
         
         public function setTag(key:String, value:String, performAction:Function):void {
             performAction(new SetTagAction(this, key, value));
@@ -179,6 +184,20 @@ package net.systemeD.halcyon.connection {
 			var a:Array=[];
 			for (var o:Object in parents) {
 				if (o is Relation) { a.push(o); }
+			}
+			return a;
+		}
+		
+		public function findParentRelationsOfType(type:String, role:String=""):Array {
+			var a:Array=[];
+			for (var o:Object in parents) {
+				if (o is Relation && Relation(o).tagIs('type',type)) { 
+					for (var i:uint=0; i<o.length; i++) {
+						if (o.getMember(i).entity==this && o.getMember(i).role==role) {
+							a.push(o);
+						}
+					}
+				}
 			}
 			return a;
 		}

@@ -13,6 +13,7 @@ Potlatch 2: main outstanding issues
 
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Import from OSM (is this worth sharing with the XML API stuff?)
+* Load GPX from API
 
 == Other core ==
 
@@ -31,6 +32,7 @@ Potlatch 2: main outstanding issues
 ** Doesn't always update selected tab when you select a new entity
 ** Doesn't update selected tab when you change the relations on an entity
 ** Direct click-to-edit of relation role should actually work
+** Double-clicking a relation to edit it comes up with the POIs!
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
@@ -46,6 +48,7 @@ Potlatch 2: main outstanding issues
 ** Potlatch 1-style "floaty warnings"
 ** Should remember which background imagery layer you had previously selected
 ** Dialog for adding custom imagery url
+* Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * B keypress for background source tag
 * Bbox-sensitive menu for background imagery
 * Mouse wheel zooming
@@ -53,6 +56,7 @@ Potlatch 2: main outstanding issues
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * i18n
+* Multiple selection
 
 == Miscellaneous data model ==
 
@@ -67,3 +71,4 @@ Potlatch 2: main outstanding issues
 * Complete MapCSS support
 * 'Light' version without vectorlayer support etc.
 * .gz support for OSMConnection
+* Multipolygon rendering for dashedLine, lineDecoration, and WayBitmapFiller
