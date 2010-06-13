@@ -241,10 +241,14 @@
 		}
         
         private function onImageryLoad(event:Event):void {
-			var imagery:XML = new XML(URLLoader(event.target).data);
-			BackgroundSelector(bgButton.popUp).populate(imagery);
+			var xml:XML = new XML(URLLoader(event.target).data);
+            theController.imagery=new Array(
+				{ label: "None", data: "" },
+				{ label: "Yahoo", data: "yahoo" } );
+			for each(var set:XML in xml.set) {
+                theController.imagery.push({ label:set.child("name"), data:set.child("url") });
+			}
 		}
-
         
         private function dragEnterHandler(event:DragEvent):void {
             // Get the drop target component from the event object.

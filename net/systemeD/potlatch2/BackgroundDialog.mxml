@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        layout="vertical" showCloseButton="true"
+        horizontalAlign="center" title="Background imagery"
+        width="500" height="300" verticalGap="0">
+
+  <mx:DataGrid editable="true" width="100%" height="100%" id="imageryGrid">
+    <mx:columns>
+        <mx:DataGridColumn editable="true" dataField="label" headerText="Name"/>
+        <mx:DataGridColumn editable="true" dataField="data" headerText="URL"/>
+    </mx:columns>
+  </mx:DataGrid>        
+
+  <mx:HBox horizontalAlign="right" width="100%">
+    <mx:LinkButton label="Delete" click="removeSource()" enabled="{imageryGrid.selectedItem != null? true : false}"/>
+    <mx:LinkButton label="Add" click="addNewSource()"/>
+  </mx:HBox>
+
+  <mx:Script><![CDATA[
+
+	/*
+		Still to do:
+		- editable hotkeys for each layer
+		- editable source tag for each layer
+		- editable bbox for each layer
+		- ability to use this dialogue to select as well as edit
+		- automatically select imagery once you've edited it (i.e. itemEditEnd)
+		- save/load imagery sets into OSM preferences
+	*/
+
+    import mx.managers.PopUpManager;
+    import mx.events.CloseEvent;
+    import mx.core.Application;
+	import mx.collections.ArrayCollection;
+	import mx.controls.List;
+
+	public var imageryCollection:ArrayCollection = new ArrayCollection(Application.application.theController.imagery);
+	private var menu:List;
+
+    public function init(menu:List):void {
+		this.menu=menu;
+        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.centerPopUp(this);
+        this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
+		imageryGrid.dataProvider=imageryCollection;
+    }
+    
+    private function backgroundDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+		if (menu) { menu.invalidateList(); }
+    }
+
+	private function addNewSource():void {
+		imageryCollection.addItemAt( {label:'(new name)',data:'(new URL)'} , imageryCollection.length);
+		imageryGrid.validateNow();
+		imageryGrid.verticalScrollPosition=imageryGrid.maxVerticalScrollPosition;
+		imageryGrid.editedItemPosition = {rowIndex: imageryCollection.length-1, columnIndex: 0};
+	}
+	private function removeSource():void {
+		imageryCollection.removeItemAt(imageryGrid.selectedIndex);
+	}
+
+  ]]>
+  </mx:Script>
+
+</mx:TitleWindow>

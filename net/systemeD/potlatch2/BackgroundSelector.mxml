@@ -5,11 +5,14 @@
 	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
 	<mx:List width="100%" height="100%" id="background" change="updateBackground();" verticalScrollPolicy="on" 
-	         dataProvider="{_layers}" />
+	         dataProvider="{Application.application.theController.imagery}" />
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
 	    change="Globals.vars.root.tileset.setDimming(dim.selected); Globals.vars.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
-	<mx:Button label="Load vector file..." click="new VectorSourceDialog().init();"/>
+	<mx:HBox>
+	<mx:Button label="Edit..." click="new BackgroundDialog().init(background);" />
+	<mx:Button label="Vector file" click="new VectorSourceDialog().init();" />
+	</mx:HBox>
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
@@ -19,16 +22,6 @@
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
 		import net.systemeD.halcyon.Globals;
-
-		[Bindable] private var _layers:Array=new Array(
-			{ label: "None", data: "" },
-			{ label: "Yahoo", data: "yahoo" } );
-
-		public function populate(xml:XML):void {
-            for each(var set:XML in xml.set) {
-                _layers.push({ label:set.child("name"), data:set.child("url") });
-            }           
-		}
 
 		private function updateBackground():void {
             var theMap:Map = Globals.vars.root;

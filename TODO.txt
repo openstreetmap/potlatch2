@@ -46,7 +46,7 @@ Potlatch 2: main outstanding issues
 
 ** Potlatch 1-style "floaty warnings"
 ** Should remember which background imagery layer you had previously selected
-** Dialog for adding custom imagery url
+* Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * B keypress for background source tag
 * Bbox-sensitive menu for background imagery

@@ -18,6 +18,7 @@ package net.systemeD.potlatch2 {
         
 		private var keys:Object={};
 		public var clipboards:Object={};
+		public var imagery:Array=[];
 
 		[Embed(source="../../../embedded/pen.png")] 		public var pen:Class;
 		[Embed(source="../../../embedded/pen_x.png")] 		public var pen_x:Class;
