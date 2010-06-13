@@ -290,7 +290,7 @@ package net.systemeD.halcyon {
 		private function solidLine(g:Graphics,w:Way):void {
             var node:Node = w.getNode(0);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
-			for (var i:uint = 1; i < way.length; i++) {
+			for (var i:uint = 1; i < w.length; i++) {
                 node = w.getNode(i);
 				g.lineTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			}
