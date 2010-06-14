@@ -61,7 +61,6 @@ Potlatch 2: main outstanding issues
 == Rendering (Halcyon) ==
 
 ** Infinite z-indexes
-* Point labels are now centred wrongly!
 * { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied

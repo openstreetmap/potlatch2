@@ -104,7 +104,7 @@ package net.systemeD.halcyon {
 				}
 
 				// name sprite
-				var a:String, t:TextStyle;
+				var a:String='', t:TextStyle;
 				if (sl.textStyles[sublayer]) {
 					t=sl.textStyles[sublayer];
 					a=tags[t.text];
@@ -113,7 +113,7 @@ package net.systemeD.halcyon {
 				if (a) { 
 					var name:Sprite=new Sprite();
 					addToLayer(name,NAMESPRITE);
-					t.writeNameLabel(name,a,paint.map.lon2coord(node.lon),paint.map.latp2coord(node.latp));
+					t.writeNameLabel(name,a,0,0);
 				}
 			}
 			return r;
