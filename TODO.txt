@@ -23,7 +23,6 @@ Potlatch 2: main outstanding issues
 
 == Saving ==
 
-* Save should be deactivated until there's things to change
 * Should be able to reuse changesets
 * Shouldn't be able to change created_by and version on changeset
 
@@ -63,6 +62,8 @@ Potlatch 2: main outstanding issues
 == Rendering (Halcyon) ==
 
 ** Infinite z-indexes
+* Point labels are now centred wrongly!
+* { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
 * Complete MapCSS support

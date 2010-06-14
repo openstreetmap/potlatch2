@@ -35,7 +35,8 @@
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
         <mx:Button label="Options" click="new OptionsDialog().init();" /> 
-        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();"/>
+        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();"
+			enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
     </mx:ApplicationControlBar>
     
     <mx:HDividedBox width="100%" height="100%">
