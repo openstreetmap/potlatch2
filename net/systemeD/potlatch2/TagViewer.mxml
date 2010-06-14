@@ -406,7 +406,7 @@
           // add members in new order
           for each(var memberObject:Object in membersGrid.dataProvider) {
             var e:Entity;
-            var id:int = memberObject.id;
+            var id:Number = memberObject.id;
             if(memberObject.type == 'node') {
               e = conn.getNode(id);
             } else if (memberObject.type == 'way') {
@@ -420,8 +420,7 @@
           trace("complete: relation "+rel.id+" now has "+rel.length+" members");
       }
       
-      private function editRelation(id:uint):void {
-          trace("edit relation "+id);
+      private function editRelation(id:Number):void {
           var panel:RelationEditorPanel = RelationEditorPanel(
               PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
           panel.setRelation(Connection.getConnectionInstance().getRelation(id));

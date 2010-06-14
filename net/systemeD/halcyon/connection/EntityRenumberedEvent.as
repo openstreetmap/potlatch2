@@ -5,7 +5,7 @@ package net.systemeD.halcyon.connection {
     public class EntityRenumberedEvent extends EntityEvent {
         private var _oldID:Number;
 
-        public function EntityRenumberedEvent(type:String, item:Entity, oldID:int) {
+        public function EntityRenumberedEvent(type:String, item:Entity, oldID:Number) {
             super(type, item);
             this._oldID = oldID;
         }

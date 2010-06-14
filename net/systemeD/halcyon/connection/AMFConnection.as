@@ -111,7 +111,7 @@ package net.systemeD.halcyon.connection {
 
         private function error(r:Object):void {}
 
-		private function loadWay(id:uint):void {
+		private function loadWay(id:Number):void {
 			readConnection.call("getway",new Responder(gotWay, error),id);
 		}
 
@@ -163,7 +163,7 @@ package net.systemeD.halcyon.connection {
 		}
 
 
-		private function loadRelation(id:uint):void {
+		private function loadRelation(id:Number):void {
 			readConnection.call("getrelation",new Responder(gotRelation, error),id);
 		}
 

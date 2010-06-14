@@ -109,13 +109,13 @@ package net.systemeD.halcyon {
 			delete nodeuis[node.id];
 		}
 		
-		public function renumberWayUI(way:Way,oldID:int):void {
+		public function renumberWayUI(way:Way,oldID:Number):void {
 			if (!wayuis[oldID]) { return; }
 			wayuis[way.id]=wayuis[oldID];
 			delete wayuis[oldID];
 		}
 
-		public function renumberNodeUI(node:Node,oldID:int):void {
+		public function renumberNodeUI(node:Node,oldID:Number):void {
 			if (!nodeuis[oldID]) { return; }
 			nodeuis[node.id]=nodeuis[oldID];
 			delete nodeuis[oldID];

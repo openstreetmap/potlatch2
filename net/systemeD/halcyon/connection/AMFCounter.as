@@ -20,10 +20,10 @@ package net.systemeD.halcyon.connection {
 			eventList.push(e);
 		}
 		
-		public function addRelationRequest(id:uint):void {
+		public function addRelationRequest(id:Number):void {
 			addRequest(id+"rel");
 		}
-		public function addWayRequest(id:uint):void {
+		public function addWayRequest(id:Number):void {
 			addRequest(id+"way");
 		}
 		private function addRequest(n:String):Boolean {
