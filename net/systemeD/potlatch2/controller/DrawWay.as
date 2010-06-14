@@ -82,7 +82,7 @@ package net.systemeD.potlatch2.controller {
 					hoverEntity=focus;
 					controller.map.setHighlight(focus, { showNodesHover: true });
 				}
-				if (entity is Node && Way(focus).endsWith(Node(entity))) {
+				if (entity is Node && focus is Way && Way(focus).endsWith(Node(entity))) {
 					if (focus==selectedWay) { controller.setCursor(controller.pen_so); }
 					                   else { controller.setCursor(controller.pen_o); }
 				} else if (entity is Node) {
