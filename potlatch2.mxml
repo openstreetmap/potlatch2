@@ -141,6 +141,8 @@
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
+		
+		public var version:String="(Foxbase) Alpha";			// mxml won't read it if it's a const. Go figure
 
 		private function initApp():void {
 

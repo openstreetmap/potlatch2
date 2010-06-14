@@ -5,6 +5,7 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 ** Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?)
+* Dragging multipolygons (or constituent nodes) doesn't force redraw of all ways - need to hook something up to WAY_NODE_MOVED
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
 * Splitway + undo leaves way marked dirty
@@ -22,7 +23,6 @@ Potlatch 2: main outstanding issues
 
 == Saving ==
 
-** Comment and advanced -> "comment" should show the same thing
 * Save should be deactivated until there's things to change
 * Should be able to reuse changesets
 * Shouldn't be able to change created_by and version on changeset
