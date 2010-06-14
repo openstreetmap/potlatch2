@@ -18,7 +18,9 @@
     import mx.managers.PopUpManager;
     import mx.core.*;
    
-    public function addRoutes():void {
+    public function addRoutes(event:Event=null):void {
+		routeIcons.removeAllChildren();
+		addEventListener("routes_changed", addRoutes);
         for each(var relation:Object in matchedRelations) {
             var icon:RouteIcon = new RouteIcon();
             icon.setRoute(relation, RouteEditorFactory(_factory).icon);
@@ -30,17 +32,19 @@
     
     public function routeClicked(event:Event):void {
         var relation:Object = RouteIcon(event.currentTarget).route;
-        trace(relation+" is clicked");
         var panel:RelationEditorPanel = RelationEditorPanel(
             PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
         panel.setRelation(relation["relation"]);
         PopUpManager.centerPopUp(panel);
     }
 
-      public function addToRelation():void {
-          new RelationSelectPanel().init(_entity, _factory.relationTags);        
-      }
-      
+	public function addToRelation():void {
+		new RelationSelectPanel().init(_entity, _factory.relationTags);        
+	}
+
+	override protected function relationsChanged(event:Event):void {
+		dispatchEvent(new Event("routes_changed"));
+	}
     
   ]]></mx:Script>
 </edit:RelationMemberEditor>

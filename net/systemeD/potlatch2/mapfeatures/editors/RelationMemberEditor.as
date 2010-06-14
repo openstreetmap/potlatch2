@@ -62,11 +62,12 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       public function set entity(entity:Entity):void {
           _entity = entity;
           
-          // TODO: we need to listen for add/removal and relation tag changes
+          entity.addEventListener(Connection.ADDED_TO_RELATION, relationsChanged);
+          entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationsChanged);
           dispatchEvent(new Event("relations_changed"));
       }
       
-      private function relationsChanged(event:TagEvent):void {
+      protected function relationsChanged(event:Event):void {
           dispatchEvent(new Event("relations_changed"));
       }
 
