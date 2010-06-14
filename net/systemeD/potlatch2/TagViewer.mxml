@@ -198,9 +198,13 @@
 
       private function blankFeatureIcon(entity:Entity):void {
           iconImage.source = null;
-          iconText.htmlText = entity == null ?
-               "<i>Nothing selected</i>" :
-               "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
+		  if (entity == null) { 
+			iconText.htmlText = "<i>Nothing selected</i>";
+		  } else if (entity.hasTags()) {
+			iconText.htmlText = "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
+		  } else {
+			iconText.htmlText = "<b>No tags set</b><br/>Use the menu above to say what this "+entity.getType()+" is";
+          }
           popupChange.label = "unknown";
           setLimitTypes(entity);
           tw.setSelectedFeature(null);
