@@ -178,6 +178,7 @@ package net.systemeD.halcyon.connection {
             }
 
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
+	        dispatchEvent(new Event(DATA_CLEAN, true));
         }
 
         private function diffUploadError(event:IOErrorEvent):void {

@@ -36,8 +36,11 @@ package net.systemeD.halcyon.connection {
                 if ( undoActions.length > 0 ) {
                     var previous:UndoableAction = undoActions[undoActions.length - 1];
                     var isMerged:Boolean = action.mergePrevious(previous);
-                    if ( isMerged )
+                    if ( isMerged ) {
+						UndoableEntityAction(action).wasDirty = UndoableEntityAction(previous).wasDirty;
+						UndoableEntityAction(action).connectionWasDirty = UndoableEntityAction(previous).connectionWasDirty;
                         undoActions.pop();
+					}
                 }
                 undoActions.push(action);
                 redoActions = [];

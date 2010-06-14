@@ -36,7 +36,7 @@ package net.systemeD.halcyon.connection.actions {
             
         public override function undoAction():uint {
             setLatLon(oldLat, oldLon);
-            markDirty();
+            markClean();
             entity.dispatchEvent(new NodeMovedEvent(Connection.NODE_MOVED, Node(entity), newLat, newLon));
             return SUCCESS;
         }

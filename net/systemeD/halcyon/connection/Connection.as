@@ -57,6 +57,8 @@ package net.systemeD.halcyon.connection {
         public static var LOAD_COMPLETED:String = "load_completed";
         public static var SAVE_STARTED:String = "save_started";
         public static var SAVE_COMPLETED:String = "save_completed";
+        public static var DATA_DIRTY:String = "data_dirty";
+        public static var DATA_CLEAN:String = "data_clean";
         public static var NEW_CHANGESET:String = "new_changeset";
         public static var NEW_CHANGESET_ERROR:String = "new_changeset_error";
         public static var NEW_NODE:String = "new_node";
@@ -89,6 +91,7 @@ package net.systemeD.halcyon.connection {
         private var relations:Object = {};
         private var pois:Array = [];
         private var changeset:Changeset = null;
+		private var modified:Boolean = false;
 		public var nodecount:int=0;
 		public var waycount:int=0;
 		public var relationcount:int=0;
@@ -228,18 +231,21 @@ package net.systemeD.halcyon.connection {
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
             performCreate(new CreateEntityAction(node, setNode));
+			markDirty();
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array, performCreate:Function):Way {
             var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
             performCreate(new CreateEntityAction(way, setWay));
+			markDirty();
             return way;
         }
 
         public function createRelation(tags:Object, members:Array, performCreate:Function):Relation {
             var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
             performCreate(new CreateEntityAction(relation, setRelation));
+			markDirty();
             return relation;
         }
 
@@ -303,6 +309,18 @@ package net.systemeD.halcyon.connection {
 				}
 			}
 			// ** should purge POIs and relations too
+		}
+
+		public function markDirty():void {
+            if (!modified) { dispatchEvent(new Event(DATA_DIRTY)); }
+			modified=true;
+		}
+		public function markClean():void {
+            if (modified) { dispatchEvent(new Event(DATA_CLEAN)); }
+			modified=false;
+		}
+		public function get isDirty():Boolean {
+			return modified;
 		}
 
         // these are functions that the Connection implementation is expected to

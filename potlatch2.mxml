@@ -35,8 +35,8 @@
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
         <mx:Button label="Options" click="new OptionsDialog().init();" /> 
-        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();"
-			enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
+        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();" id="saveButton" 
+			enabled="false"/>
     </mx:ApplicationControlBar>
     
     <mx:HDividedBox width="100%" height="100%">
@@ -214,6 +214,8 @@
             conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
             conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
             conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
+            conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
+            conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
 		}
 		
         public function onResizeMap():void {
@@ -242,7 +244,13 @@
 			else                            { dataWorking.text=""; }
 			dataWorking.visible=(dataWorking.text!="");
 		}
-        
+        private function onDataDirty(event:Event):void {
+			saveButton.enabled=true;
+		}
+		private function onDataClean(event:Event):void {
+			saveButton.enabled=false;
+		}
+		
         private function onImageryLoad(event:Event):void {
 			var xml:XML = new XML(URLLoader(event.target).data);
             theController.imagery=new Array(
