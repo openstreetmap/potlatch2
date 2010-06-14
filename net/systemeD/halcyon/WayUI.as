@@ -21,6 +21,7 @@ package net.systemeD.halcyon {
 		public var heading:Array=new Array();		// angle at each node
         private var hitzone:Sprite;
 		public var nameformat:TextFormat;
+		private var recalculateDue:Boolean=false;
 
 		private const NODESIZE:uint=6;
 
@@ -88,6 +89,7 @@ package net.systemeD.halcyon {
             redraw();
         }
         private function nodeMoved(event:NodeMovedEvent):void {
+			recalculate();
             redraw();
         }
 		private function wayDeleted(event:EntityEvent):void {
@@ -107,11 +109,24 @@ package net.systemeD.halcyon {
 			// ** various other stuff
 		}
 
+		override public function suspendRedraw(event:EntityEvent):void {
+			super.suspendRedraw(event);
+			recalculateDue=false;
+		}
+		
+		override public function resumeRedraw(event:EntityEvent):void {
+			suspended=false;
+			if (recalculateDue) { recalculate(); }
+			super.resumeRedraw(event);
+		}
+
 		// ------------------------------------------------------------------------------------------
 		// Calculate length etc.
 		// ** this could be made scale-independent - would speed up redraw
 		
 		public function recalculate():void {
+			if (suspended) { recalculateDue=true; return; }
+			
 			var lx:Number, ly:Number, sc:Number;
 			var node:Node, latp:Number, lon:Number;
 			var cx:Number=0, cy:Number=0;
