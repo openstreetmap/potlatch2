@@ -20,7 +20,7 @@
    
     public function addRoutes(event:Event=null):void {
 		routeIcons.removeAllChildren();
-		addEventListener("routes_changed", addRoutes);
+		addEventListener("relations_changed", addRoutes);
         for each(var relation:Object in matchedRelations) {
             var icon:RouteIcon = new RouteIcon();
             icon.setRoute(relation, RouteEditorFactory(_factory).icon);
@@ -40,10 +40,6 @@
 
 	public function addToRelation():void {
 		new RelationSelectPanel().init(_entity, _factory.relationTags);        
-	}
-
-	override protected function relationsChanged(event:Event):void {
-		dispatchEvent(new Event("routes_changed"));
 	}
     
   ]]></mx:Script>
