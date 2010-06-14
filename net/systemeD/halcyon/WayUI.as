@@ -184,6 +184,9 @@ package net.systemeD.halcyon {
 			layer=0;
 			if (tags['layer']) { layer=Math.min(Math.max(tags['layer'],paint.minlayer),paint.maxlayer); }
 
+			// Keep track of maximum stroke width for hitzone
+			var maxwidth:Number=4;
+
 			// Iterate through each sublayer, drawing any styles on that layer
 			if (!sl) { sl=paint.ruleset.getStyles(this.way, tags); }
 			var drawn:Boolean;
@@ -209,6 +212,7 @@ package net.systemeD.halcyon {
 							if (s.line_style) { lineDecoration(stroke.graphics,s,segments); }
 						} else { solidLines(stroke.graphics,inners); }
 						drawn=true;
+						maxwidth=Math.max(maxwidth,s.width);
 					}
 
 					// Fill
@@ -230,6 +234,7 @@ package net.systemeD.halcyon {
 						if (s.casing_dashes && s.casing_dashes.length>0) { dashedLine(casing.graphics,s.casing_dashes); }
 																	else { solidLines(casing.graphics,inners); }
 						drawn=true;
+						maxwidth=Math.max(maxwidth,s.casing_width);
 					}
 				}
 				
@@ -283,7 +288,7 @@ package net.systemeD.halcyon {
 			
             // create a generic "way" hitzone sprite
             hitzone = new Sprite();
-            hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
+            hitzone.graphics.lineStyle(maxwidth, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
             solidLines(hitzone.graphics,[]);
             addToLayer(hitzone, CLICKSPRITE);
             hitzone.visible = false;
