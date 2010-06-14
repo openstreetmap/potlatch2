@@ -112,7 +112,7 @@ package net.systemeD.potlatch2 {
 
 		public function setCursor(cursor:Class):void {
 			CursorManager.removeAllCursors();
-			if (cursor) { CursorManager.setCursor(cursor); }
+			if (cursor) { CursorManager.setCursor(cursor,2,-4,0); }
 		}
 
     }
