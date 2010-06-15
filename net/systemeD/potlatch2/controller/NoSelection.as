@@ -13,6 +13,10 @@ package net.systemeD.potlatch2.controller {
 		public function NoSelection() {
 		}
 
+		override public function isSelectionState():Boolean {
+			return false;
+		}
+		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
@@ -39,7 +43,7 @@ package net.systemeD.potlatch2.controller {
         override public function enterState():void {
 			Globals.vars.root.addDebug("**** -> "+this);
         }
-        override public function exitState():void {
+        override public function exitState(newState:ControllerState):void {
 			Globals.vars.root.addDebug("**** <- "+this);
         }
 		override public function toString():String {

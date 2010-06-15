@@ -38,7 +38,7 @@ package net.systemeD.potlatch2.controller {
 			controller.map.draggable=false;
 			Globals.vars.root.addDebug("**** -> "+this);
         }
-        override public function exitState():void {
+        override public function exitState(newState:ControllerState):void {
 			controller.map.draggable=true;
 			Globals.vars.root.addDebug("**** <- "+this);
         }

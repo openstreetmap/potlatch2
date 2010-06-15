@@ -77,8 +77,8 @@ package net.systemeD.potlatch2.controller {
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
-		override public function exitState():void {
-            clearSelection();
+		override public function exitState(newState:ControllerState):void {
+            clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
 

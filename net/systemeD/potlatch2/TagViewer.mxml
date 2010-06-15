@@ -52,6 +52,7 @@
         </mx:HBox>
         <flexlib:SuperTabNavigator id="editorStack" width="100%" height="100%" paddingLeft="2" paddingRight="2"
             allowTabSqueezing="false" minTabWidth="10" closePolicy="close_never"
+			updateComplete="tabSelected()" 
             scrollSpeed="20" change="ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox)"/>
       </mx:VBox>
 
@@ -262,6 +263,14 @@
               tab.addChild(component);
           }
       }
+
+	private function tabSelected():void {
+		if (editorStack.selectedIndex<0) { return; }
+		// This fixes a Flex TabNavigator bug where the tab would be selected, but not actually skinned properly
+		for (var i:uint=0; i<editorStack.numChildren; i++) {
+			editorStack.getTabAt(i).selected=(i==editorStack.selectedIndex);
+		}
+	}
       
       private function checkAdvanced():void {
           if ( selectedEntity != null )

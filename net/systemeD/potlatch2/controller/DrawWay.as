@@ -196,8 +196,8 @@ package net.systemeD.potlatch2.controller {
 			controller.setCursor(controller.pen);
 			Globals.vars.root.addDebug("**** -> "+this);
 		}
-		override public function exitState():void {
-			super.exitState();
+		override public function exitState(newState:ControllerState):void {
+			super.exitState(newState);
 			controller.setCursor(null);
 			elastic.removeSprites();
 			elastic = null;

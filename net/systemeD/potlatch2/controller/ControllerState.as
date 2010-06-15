@@ -26,6 +26,10 @@ package net.systemeD.potlatch2.controller {
                 this.previousState = previousState;
         }
    
+		public function isSelectionState():Boolean {
+			return true;
+		}
+
         public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
             return this;
         }
@@ -39,7 +43,7 @@ package net.systemeD.potlatch2.controller {
 		}
 
         public function enterState():void {}
-        public function exitState():void {}
+        public function exitState(newState:ControllerState):void {}
 
 		public function toString():String {
 			return "(No state)";

@@ -22,17 +22,17 @@ package net.systemeD.potlatch2.controller {
             if ( way == selectedWay )
                 return;
 
-            clearSelection();
+            clearSelection(this);
             controller.setSelectedEntity(way);
             controller.map.setHighlight(way, { selected: true, showNodes: true, hover: false });
             selectedWay = way;
             initWay = way;
         }
 
-        protected function clearSelection():void {
+        protected function clearSelection(newState:ControllerState):void {
             if ( selectedWay != null ) {
             	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false, hover: false });
-                controller.setSelectedEntity(null);
+                if (!newState.isSelectionState()) { controller.setSelectedEntity(null); }
                 selectedWay = null;
             }
         }
@@ -121,9 +121,9 @@ package net.systemeD.potlatch2.controller {
             selectWay(initWay);
 			Globals.vars.root.addDebug("**** -> "+this+" "+selectedWay.id);
         }
-        override public function exitState():void {
+        override public function exitState(newState:ControllerState):void {
 			controller.clipboards['way']=selectedWay.getTagsCopy();
-            clearSelection();
+            clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
 
