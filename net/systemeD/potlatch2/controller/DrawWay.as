@@ -127,6 +127,11 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		protected function stopDrawing():ControllerState {
+			if ( hoverEntity ) {
+				controller.map.setHighlight(hoverEntity, { showNodesHover: false });
+				hoverEntity = null;
+			}
+
 			if ( selectedWay.length<2) {
 				controller.map.setHighlight(selectedWay, { showNodes: false });
 				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
