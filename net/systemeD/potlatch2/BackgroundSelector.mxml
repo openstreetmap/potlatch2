@@ -4,10 +4,11 @@
 	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
 	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
-	<mx:List width="100%" height="100%" id="background" change="updateBackground();" verticalScrollPolicy="on" 
-	         dataProvider="{Application.application.theController.imagery}" />
+	<mx:List width="100%" height="100%" id="background" verticalScrollPolicy="on" 
+			change="Application.application.setBackground(background.selectedItem.label, background.selectedItem.data);" 			
+	        dataProvider="{Application.application.theController.imagery}" />
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
-	    change="Globals.vars.root.tileset.setDimming(dim.selected); Globals.vars.yahoo.alpha = dim.selected ? 0.5 : 1" />
+	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
 	<mx:HBox>
 	<mx:Button label="Edit..." click="new BackgroundDialog().init(background);" />
@@ -22,19 +23,6 @@
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
 		import net.systemeD.halcyon.Globals;
-
-		private function updateBackground():void {
-            var theMap:Map = Globals.vars.root;
-			var bg:String=background.selectedItem.data;
-			if (bg=='yahoo') {
-				theMap.tileset.init('',false);
-				Globals.vars.yahoo.show();
-			} else {
-				theMap.tileset.init(background.selectedItem.data,true);
-				Globals.vars.yahoo.hide();
-			}
-		}
-
     ]]></mx:Script>	
 </mx:VBox>
 

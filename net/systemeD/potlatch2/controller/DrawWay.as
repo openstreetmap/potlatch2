@@ -91,7 +91,7 @@ package net.systemeD.potlatch2.controller {
 					controller.setCursor(controller.pen_plus);
 				}
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
-				if (focus!=selectedWay) {
+				if (entity!=selectedWay) {
 					hoverEntity=null;
 					controller.map.setHighlight(focus, { showNodesHover: false });
 					controller.map.setHighlight(selectedWay, { showNodes: true });

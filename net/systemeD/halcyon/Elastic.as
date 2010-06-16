@@ -61,8 +61,15 @@ package net.systemeD.halcyon {
 			// Create stroke object
 			var stroke:Shape = new Shape();
             stroke.graphics.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
-			addToLayer(stroke,3);
+
+			var l:DisplayObject=map.paint.getChildAt(map.paint.maxlayer-map.paint.minlayer);
+			var o:DisplayObject=Sprite(l).getChildAt(3);	// names layer
+			(o as Sprite).addChild(stroke);
+			sprites.push(stroke);
+
 			dashedLine(stroke.graphics, [2,2]);
+
+
 		}
 		
 		// ------------------------------------------------------------------------------------------
@@ -116,19 +123,5 @@ package net.systemeD.halcyon {
 				 else { g.moveTo(x,y); }
 		}
 
-		
-		// Add object (stroke/fill/roadname) to layer sprite
-		
-		private function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
-			var l:DisplayObject=Map(map).paint.getChildAt(map.paint.maxlayer-map.paint.minlayer);
-			var o:DisplayObject=Sprite(l).getChildAt(t);
-			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
-			Sprite(o).addChild(s);
-			sprites.push(s);
-            if ( s is Sprite ) {
-                Sprite(s).mouseEnabled = false;
-                Sprite(s).mouseChildren = false;
-            }
-		}
 	}
 }

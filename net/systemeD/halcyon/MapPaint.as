@@ -19,6 +19,9 @@ package net.systemeD.halcyon {
 		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
 		public var nodeuis:Object=new Object();			//  |
 		public var isBackground:Boolean = true;			// is it a background layer or the core paint object?
+		private var sublayerIndex:Object={};			// hash of index->position
+
+		private const VERYBIG:Number=Math.pow(2,16);
 
 		// Set up layering
 		// [layer][3]			- names
@@ -30,15 +33,14 @@ package net.systemeD.halcyon {
 			this.map=map;
 			this.minlayer=minlayer;
 			this.maxlayer=maxlayer;
+			sublayerIndex[1]=0;
 
 			for (var l:int=minlayer; l<=maxlayer; l++) {	// each layer (10 is +5, 0 is -5)
 				var s:Sprite = getHitSprite();      		//  |
 				s.addChild(getPaintSprite());				//	| 0 fill
 				s.addChild(getPaintSprite());				//	| 1 casing
 				var t:Sprite = getPaintSprite();			//  | 2 stroke
-				for (var j:int=0; j<11; j++) {				//	|  | ten sublayers
-					t.addChild(getPaintSprite());			//  |  |  |
-				}											//  |  |  |
+				t.addChild(getPaintSprite());				//  |  | sublayer
 				s.addChild(t);								//  |  |
 				s.addChild(getPaintSprite());				//	| 3 names
 				s.addChild(getPaintSprite());				//	| 4 nodes
@@ -54,18 +56,44 @@ package net.systemeD.halcyon {
 			return true;
 		}
 
-/*		public function addToLayer(s:DisplayObject, layer:int, t:uint, sublayer:int=-1) {
-			var l:DisplayObject=getChildAt(layer-minlayer);
-			var o:DisplayObject=Sprite(l).getChildAt(t);
-			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
-			Sprite(o).addChild(s);
-			sprites.push(s);
-            if ( s is Sprite ) {
-                Sprite(s).mouseEnabled = false;
-                Sprite(s).mouseChildren = false;
-            }
+		public function sublayer(layer:int,sublayer:Number):Sprite {
+			var l:DisplayObject;
+			var o:DisplayObject;
+			var index:String, ix:Number;
+			if (!sublayerIndex[sublayer]) {
+				// work out which position to add at
+				var lowestAbove:Number=VERYBIG;
+				var lowestAbovePos:int=-1;
+				var indexLength:uint=0;
+				for (index in sublayerIndex) {
+					ix=Number(index);
+					if (ix>sublayer && ix<lowestAbove) {
+						lowestAbove=ix;
+						lowestAbovePos=sublayerIndex[index];
+					}
+					indexLength++;
+				}
+				if (lowestAbovePos==-1) { lowestAbovePos=indexLength; }
+			
+				// add sprites
+				for (var i:int=minlayer; i<=maxlayer; i++) {
+					l=getChildAt(i-minlayer);
+					o=(l as Sprite).getChildAt(2);
+					(o as Sprite).addChildAt(getPaintSprite(),lowestAbovePos);
+				}
+			
+				// update index
+				for (index in sublayerIndex) {
+					ix=Number(index);
+					if (ix>sublayer) { sublayerIndex[index]++; }
+				}
+				sublayerIndex[sublayer]=lowestAbovePos;
+			}
+
+			l=getChildAt(layer-minlayer);
+			o=(l as Sprite).getChildAt(2);
+			return ((o as Sprite).getChildAt(sublayerIndex[sublayer]) as Sprite);
 		}
-*/
 
 		public function updateEntityUIs(o:Object, redraw:Boolean, remove:Boolean):void {
 			var way:Way, node:Node;

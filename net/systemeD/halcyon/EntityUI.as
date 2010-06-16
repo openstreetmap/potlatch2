@@ -48,10 +48,14 @@ package net.systemeD.halcyon {
 		// Add object (stroke/fill/roadname) to layer sprite
 		
 		protected function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
-			var l:DisplayObject=paint.getChildAt(layer-paint.minlayer);
-			var o:DisplayObject=Sprite(l).getChildAt(t);
-			if (sublayer!=-1) { o=Sprite(o).getChildAt(sublayer); }
-			Sprite(o).addChild(s);
+			var l:DisplayObject, o:Sprite;
+			if (sublayer!=-1) {
+				o=paint.sublayer(layer,sublayer);
+			} else {
+				l=paint.getChildAt(layer-paint.minlayer);
+				o=(l as Sprite).getChildAt(t) as Sprite;
+			}
+			o.addChild(s);
 			sprites.push(s);
             if ( s is Sprite ) {
                 Sprite(s).mouseChildren = false;

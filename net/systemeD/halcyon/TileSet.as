@@ -121,6 +121,10 @@ package net.systemeD.halcyon {
 		private function tileURL(tx:int,ty:int):String {
 			return baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
 		}
+		
+		public function get url():String {
+			return baseurl ? baseurl : '';
+		}
 
 
 		// Update offset

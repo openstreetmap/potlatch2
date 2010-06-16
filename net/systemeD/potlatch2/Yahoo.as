@@ -18,6 +18,7 @@ package net.systemeD.potlatch2 {
 		private var _scale:Number;
 		private var offset_lat:Number=0;
 		private var offset_lon:Number=0;
+		private var inited:Boolean=false;
 
 		public function Yahoo(w:Number, h:Number, map:Map) {
 			super();
@@ -25,13 +26,17 @@ package net.systemeD.potlatch2 {
 			this.mapType="satellite";
 			this.alpha=0.5;
 			this.map=map;
+			this.inited=false;
 		}
 		
 		public function show():void {
 			this.visible=true;
-			moveto(map.centre_lat, map.centre_lon, map.scale);
+			if (inited) {
+				moveto(map.centre_lat, map.centre_lon, map.scale);
+			} else {
+				this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
+			}
 
-			this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
 			map.addEventListener(MapEvent.MOVE, moveHandler);
 			map.addEventListener(MapEvent.RESIZE, resizeHandler);
 			map.addEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
@@ -40,17 +45,19 @@ package net.systemeD.potlatch2 {
 		public function hide():void {
 			this.visible=false;
 
-			this.removeEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
 			map.removeEventListener(MapEvent.MOVE, moveHandler);
 			map.removeEventListener(MapEvent.RESIZE, resizeHandler);
 			map.removeEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
 		
 		private function initHandler(event:YahooMapEvent):void {
+			inited=true;
 			moveto(map.centre_lat, map.centre_lon, map.scale);
+			this.removeEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
 		}
 
 		private function moveHandler(event:MapEvent):void {
+			if (!inited) { return; }
 			moveto(event.params.lat, event.params.lon, event.params.scale);
 		}
 

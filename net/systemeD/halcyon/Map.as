@@ -66,6 +66,8 @@ package net.systemeD.halcyon {
 
 		public var backdrop:Object;						// reference to backdrop sprite
 		public var tileset:TileSet;						// 900913 tile background
+		private var tileurl:String='';					// internal tile URL and priority - allows setting before tileset inited
+		private var tileprio:uint=0;					//  | 
 		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
 		public var connection:Connection;				// server connection
@@ -107,24 +109,23 @@ package net.systemeD.halcyon {
 				init(initparams['lat'],
 					 initparams['lon'],
 					 initparams['zoom'],
-					 initparams['style'],
-					 initparams['tileurl']);
+					 initparams['style']);
 
 			} else {
 				// somewhere innocuous
-				init(53.09465,-2.56495,17,"test.css?d="+Math.random(),"");
+				init(53.09465,-2.56495,17,"test.css?d="+Math.random());
 			}
 		}
 
 		// ------------------------------------------------------------------------------------------
 		// Initialise map at a given lat/lon
 
-        public function init(startlat:Number,startlon:Number,startscale:uint=0,style:String=null,tileurl:String=''):void {
+        public function init(startlat:Number,startlon:Number,startscale:uint=0,style:String=null):void {
 			while (numChildren) { removeChildAt(0); }
 
 			tileset=new TileSet(this);					// 0 - 900913 background
 			addChild(tileset);							//   |
-			tileset.init(tileurl);
+			tileset.init(tileurl);						//   |
 
 			vectorbg = new Sprite();					// 1 - vector background layers
 			addChild(vectorbg);							//   |
@@ -328,6 +329,17 @@ package net.systemeD.halcyon {
 				paint.ruleset.loadFromCSS(style);
 			}
         }
+
+		public function setBackground(url:String,priority:int):Boolean {
+			if (priority<tileprio) { return false; }
+			tileurl=url; tileprio=priority;
+			if (tileset) { tileset.init(url, url!=''); }
+			return true;
+		}
+
+		public function setDimming(dim:Boolean):void {
+			if (tileset) { tileset.setDimming(dim); }
+		}
 
 		// ------------------------------------------------------------------------------------------
 		// Export (experimental)
