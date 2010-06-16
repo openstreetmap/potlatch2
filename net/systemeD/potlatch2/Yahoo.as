@@ -18,7 +18,7 @@ package net.systemeD.potlatch2 {
 		private var _scale:Number;
 		private var offset_lat:Number=0;
 		private var offset_lon:Number=0;
-		private var inited:Boolean=false;
+		private var inited:Boolean;
 
 		public function Yahoo(w:Number, h:Number, map:Map) {
 			super();
@@ -27,15 +27,12 @@ package net.systemeD.potlatch2 {
 			this.alpha=0.5;
 			this.map=map;
 			this.inited=false;
+			this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
 		}
 		
 		public function show():void {
 			this.visible=true;
-			if (inited) {
-				moveto(map.centre_lat, map.centre_lon, map.scale);
-			} else {
-				this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
-			}
+			if (inited) { moveto(map.centre_lat, map.centre_lon, map.scale); }
 
 			map.addEventListener(MapEvent.MOVE, moveHandler);
 			map.addEventListener(MapEvent.RESIZE, resizeHandler);
@@ -52,7 +49,7 @@ package net.systemeD.potlatch2 {
 		
 		private function initHandler(event:YahooMapEvent):void {
 			inited=true;
-			moveto(map.centre_lat, map.centre_lon, map.scale);
+			if (map.centre_lat) { moveto(map.centre_lat, map.centre_lon, map.scale); }
 			this.removeEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
 		}
 
