@@ -44,7 +44,7 @@ package net.systemeD.potlatch2.mapfeatures {
         [Bindable(event="featuresChanged")]
         public function getFeaturesForType(type:String):Array {
             if ( type == null || type == "" )
-                return _features;
+                return []; //_features;
                 
             var filteredFeatures:Array = new Array();
             for each( var feature:Feature in _features ) {

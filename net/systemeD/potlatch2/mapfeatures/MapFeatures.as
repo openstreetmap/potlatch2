@@ -88,7 +88,7 @@ package net.systemeD.potlatch2.mapfeatures {
             if ( xml == null )
                 return null;
             if ( type == null || type == "" )  
-                return _categories;
+                return []; //_categories;
                 
             var filteredCategories:Array = new Array();
             for each( var cat:Category in _categories ) {
