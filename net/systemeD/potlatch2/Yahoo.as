@@ -19,6 +19,7 @@ package net.systemeD.potlatch2 {
 		private var offset_lat:Number=0;
 		private var offset_lon:Number=0;
 		private var inited:Boolean;
+		private var enabled:Boolean;
 
 		public function Yahoo(w:Number, h:Number, map:Map) {
 			super();
@@ -26,12 +27,13 @@ package net.systemeD.potlatch2 {
 			this.mapType="satellite";
 			this.alpha=0.5;
 			this.map=map;
-			this.inited=false;
+			inited=false;
+			visible=enabled=false;
 			this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
 		}
 		
 		public function show():void {
-			this.visible=true;
+			visible=enabled=true;
 			if (inited) { moveto(map.centre_lat, map.centre_lon, map.scale); }
 
 			map.addEventListener(MapEvent.MOVE, moveHandler);
@@ -40,7 +42,7 @@ package net.systemeD.potlatch2 {
 		}
 
 		public function hide():void {
-			this.visible=false;
+			visible=enabled=false;
 
 			map.removeEventListener(MapEvent.MOVE, moveHandler);
 			map.removeEventListener(MapEvent.RESIZE, resizeHandler);
@@ -51,6 +53,7 @@ package net.systemeD.potlatch2 {
 			inited=true;
 			if (map.centre_lat) { moveto(map.centre_lat, map.centre_lon, map.scale); }
 			this.removeEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
+			visible=enabled;
 		}
 
 		private function moveHandler(event:MapEvent):void {
@@ -59,10 +62,10 @@ package net.systemeD.potlatch2 {
 		}
 
 		private function moveto(lat:Number,lon:Number,scale:uint):void {
-			if (scale>MAXZOOM) { this.visible=false; return; }
+			if (scale>MAXZOOM) { visible=false; return; }
 			_lat=lat; _lon=lon; _scale=scale;
 			
-			this.visible=true;
+			visible=true;
 			this.zoomLevel=18-scale;
 			this.centerLatLon=new LatLon(lat+offset_lat, lon+offset_lon);
 		}
