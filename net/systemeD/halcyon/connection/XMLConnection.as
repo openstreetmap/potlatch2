@@ -122,8 +122,6 @@ package net.systemeD.halcyon.connection {
             upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot));
             upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot));
 
-			trace(upload);
-            
             // now actually upload them
             // make an OAuth query
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
@@ -178,7 +176,7 @@ package net.systemeD.halcyon.connection {
             }
 
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
-	        dispatchEvent(new Event(DATA_CLEAN, true));
+	        markClean();
         }
 
         private function diffUploadError(event:IOErrorEvent):void {
