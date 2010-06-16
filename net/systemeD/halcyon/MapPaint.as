@@ -83,10 +83,14 @@ package net.systemeD.halcyon {
 				}
 			
 				// update index
+				// (we do it in this rather indirect way because if you alter sublayerIndex directly
+				//  within the loop, it confuses the iterator)
+				var toUpdate:Array=[];
 				for (index in sublayerIndex) {
 					ix=Number(index);
-					if (ix>sublayer) { sublayerIndex[index]++; }
+					if (ix>sublayer) { toUpdate.push(index); }
 				}
+				for each (index in toUpdate) { sublayerIndex[index]++; }
 				sublayerIndex[sublayer]=lowestAbovePos;
 			}
 
