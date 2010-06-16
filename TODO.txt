@@ -4,7 +4,7 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-** Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?)
+* Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?) - can't reproduce
 * Dragging multipolygons (or constituent nodes) doesn't force redraw of all ways - need to hook something up to WAY_NODE_MOVED
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
@@ -40,7 +40,7 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
-** Potlatch 1-style "floaty warnings"
+* Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * B keypress for background source tag
