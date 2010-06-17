@@ -122,7 +122,7 @@
       import mx.events.DragEvent;
       import mx.managers.DragManager;
       import mx.core.DragSource;
-      
+
       private var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
       private var tagDataProvider:ArrayCollection;
@@ -160,13 +160,14 @@
                   oldFeature.removeEventListener("imageChanged", featureImageChanged);
               if ( feature != null )
                   feature.addEventListener("imageChanged", featureImageChanged);
-              initialiseEditors();
           }
 
-          if ( feature != null )
+          if ( feature != null ) {
+              initialiseEditors();
               setFeatureIcon(selectedEntity, feature);
-          else
+          } else {
               blankFeatureIcon(selectedEntity);
+          }
       }
 
       private function featureImageChanged(event:Event):void {
