@@ -4,7 +4,6 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-* Straighten way + undo + redo looks fine in the UI, but doesn't reinsert the nodes into the way properly when saving (maybe way isn't dirty?) - can't reproduce
 * Dragging multipolygons (or constituent nodes) doesn't force redraw of all ways - need to hook something up to WAY_NODE_MOVED
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
@@ -28,6 +27,7 @@ Potlatch 2: main outstanding issues
 
 == Tag editing ==
 
+** Roundabouts are recognised as areas, so you don't get highway types etc.
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
@@ -40,6 +40,8 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
+* Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
+* Stylesheets should be pulled from an XML file in exactly the same way as background layers
 * Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon

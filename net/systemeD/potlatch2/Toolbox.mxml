@@ -1,25 +1,70 @@
-package net.systemeD.potlatch2 {
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
+	height="46" width="219" 
+	headerHeight="6" headerColors="[black, gray]" 
+	borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
+	paddingLeft="4" paddingTop="4" layout="absolute" >
 
-	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import mx.containers.Panel;
-	import net.systemeD.halcyon.connection.*;
-    import net.systemeD.potlatch2.controller.*;
-    import net.systemeD.potlatch2.tools.*;
+		<mx:Image data="@Embed('../../../embedded/close_small.png')"
+		    includeInLayout="false" id="toolboxClose" click="toggle();" 
+		    y="-6" x="205" />
 
-	/*
-		Floating toolbox palette
-	*/
+        <mx:Button icon="@Embed('../../../embedded/delete.svg')"
+			click='doDelete();' 
+			enabled="{canDo('delete')}" 
+			alpha="{getAlpha('delete')}" 
+			toolTip="Delete item" 
+			width="28" height="28" textAlign="left" y="4" x="6" paddingLeft="6" paddingRight="0" />
+        <mx:Button icon="@Embed('../../../embedded/direction.svg')" 
+            click='doReverseDirection();'
+			enabled="{canDo('reverseDirection')}" 
+			alpha="{getAlpha('reverseDirection')}" 
+			toolTip="Reverse direction" 
+			width="28" height="28" textAlign="left" y="4" x="36" paddingLeft="8" paddingRight="0" />
+        <mx:Button icon="@Embed('../../../embedded/cut.svg')" 
+               click='doSplit();'
+			enabled="{canDo('split')}" 
+			alpha="{getAlpha('split')}" 
+			toolTip="Split way" 
+			width="28" height="28" textAlign="left" y="4" x="66" paddingLeft="8" paddingRight="0" />
+        <mx:Button icon="@Embed('../../../embedded/straighten.svg')" 
+			click='doStraighten();' 
+			enabled="{canDo('straighten')}" 
+			alpha="{getAlpha('straighten')}" 
+			toolTip="Straighten way" 
+			width="28" height="28" textAlign="left" y="4" x="96" paddingLeft="5" paddingRight="0" />
+        <mx:Button icon="@Embed('../../../embedded/circle.svg')" 
+			click='doCircularise();' 
+			enabled="{canDo('circularise')}" 
+			alpha="{getAlpha('circularise')}" 
+			toolTip="Make circular" 
+			width="28" height="28" textAlign="left" y="4" x="126" paddingLeft="4" paddingRight="0" />
+        <mx:Button icon="@Embed('../../../embedded/quadrilateralise.svg')" 
+			click='doQuadrilateralise();' 
+			enabled="{canDo('quadrilateralise')}" 
+			alpha="{getAlpha('quadrilateralise')}" 
+			toolTip="Make right-angled" 
+			width="28" height="28" textAlign="left" y="4" x="156" paddingLeft="6" paddingRight="0" />
+        <mx:Button icon="@Embed('../../../embedded/parallel.svg')" 
+			click='doParallelise();' 
+			enabled="{canDo('parallelise')}" 
+			alpha="{getAlpha('parallelise')}" 
+			toolTip="Create parallel way" 
+			width="28" height="28" textAlign="left" y="4" x="186" paddingLeft="8" paddingRight="0" />
 
-	public class Toolbox extends Panel {
-		
+	<mx:Script><![CDATA[
+
+		import flash.events.Event;
+		import flash.events.MouseEvent;
+		import net.systemeD.halcyon.connection.*;
+	    import net.systemeD.potlatch2.controller.*;
+	    import net.systemeD.potlatch2.tools.*;
+
 		private var entity:Entity;
 		private var controller:EditController;
 
-		public function Toolbox(){
-			super();
-		}
-		
 		public function init(controller:EditController):void {
 			this.controller=controller;
 		}
@@ -124,5 +169,7 @@ package net.systemeD.potlatch2 {
 			}
 		}
 
-	}
-}
+
+    ]]>
+</mx:Script>	
+</mx:Panel>

@@ -119,6 +119,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 13:					return stopDrawing();
 				case 27:					return stopDrawing();
+				case Keyboard.DELETE:		return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case 82:					repeatTags(selectedWay); return this;
 			}
