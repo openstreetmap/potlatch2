@@ -14,7 +14,7 @@
     
     <mx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.styleparser.MapCSS;
+    import net.systemeD.halcyon.styleparser.RuleSet;
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.events.*;
 
@@ -74,12 +74,12 @@
 
     [Bindable(event="route_changed")]
     private function get fg():uint {
-        return MapCSS.parseCSSColor(_fg);
+        return RuleSet.parseCSSColor(_fg);
     }
 
     [Bindable(event="route_changed")]
     private function get bg():uint {
-        return MapCSS.parseCSSColor(_bg);
+        return RuleSet.parseCSSColor(_bg);
     }
     
     public function get route():Object {

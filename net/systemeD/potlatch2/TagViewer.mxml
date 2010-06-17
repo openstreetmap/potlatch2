@@ -144,10 +144,10 @@
               stack.addChild(membersVBox);
           }
           refreshFeatureIcon(); 
-          
           if (selectedEntity == null) {
             sidebar.selectedChild = dndPanel;
           } else {
+            initialiseEditors();
             sidebar.selectedChild = tagsPanel;
           }
       }
@@ -163,7 +163,6 @@
           }
 
           if ( feature != null ) {
-              initialiseEditors();
               setFeatureIcon(selectedEntity, feature);
           } else {
               blankFeatureIcon(selectedEntity);

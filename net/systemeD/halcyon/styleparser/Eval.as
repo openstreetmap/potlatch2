@@ -35,6 +35,7 @@ package net.systemeD.halcyon.styleparser {
 		private function swfLoaded(event:Event):void {
 			var info:LoaderInfo = event.target as LoaderInfo;
 			swfclass=info.applicationDomain.getDefinition( "CompiledExpression" ) as Class;
+			dispatchEvent(new Event("swf_loaded"));
 		}
 		
 		public function exec(tags:Object):* {
