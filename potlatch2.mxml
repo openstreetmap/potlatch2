@@ -58,62 +58,6 @@
 
     </mx:Canvas>
 
-		<potlatch2:Toolbox id="toolbox" 
-			height="46" width="253" 
-			headerHeight="6" headerColors="[black, gray]" 
-			borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
-			paddingLeft="4" paddingTop="4" layout="horizontal"
-			includeInLayout="false" 
-			creationComplete="toolboxClose.y=-6; toolboxClose.x=239;">
-
-			<mx:Image data="@Embed('embedded/close_small.png')"
-			    includeInLayout="false" id="toolboxClose" click="toolbox.toggle();" />
-
-	        <mx:Button icon="@Embed('embedded/delete.svg')"
-				click='toolbox.doDelete();' 
-				enabled="{toolbox.canDo('delete')}" 
-				alpha="{toolbox.getAlpha('delete')}" 
-				toolTip="Delete item" 
-				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
-	        <mx:Button icon="@Embed('embedded/direction.svg')" 
-                click='toolbox.doReverseDirection();'
-				enabled="{toolbox.canDo('reverseDirection')}" 
-				alpha="{toolbox.getAlpha('reverseDirection')}" 
-				toolTip="Reverse direction" 
-				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
-	        <mx:Button icon="@Embed('embedded/cut.svg')" 
-                click='toolbox.doSplit();'
-				enabled="{toolbox.canDo('split')}" 
-				alpha="{toolbox.getAlpha('split')}" 
-				toolTip="Split way" 
-				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
-	        <mx:Button icon="@Embed('embedded/straighten.svg')" 
-				click='toolbox.doStraighten();' 
-				enabled="{toolbox.canDo('straighten')}" 
-				alpha="{toolbox.getAlpha('straighten')}" 
-				toolTip="Straighten way" 
-				width="28" height="28" textAlign="left" paddingLeft="5" paddingRight="0" />
-	        <mx:Button icon="@Embed('embedded/circle.svg')" 
-				click='toolbox.doCircularise();' 
-				enabled="{toolbox.canDo('circularise')}" 
-				alpha="{toolbox.getAlpha('circularise')}" 
-				toolTip="Make circular" 
-				width="28" height="28" textAlign="left" paddingLeft="4" paddingRight="0" />
-	        <mx:Button icon="@Embed('embedded/quadrilateralise.svg')" 
-				click='toolbox.doQuadrilateralise();' 
-				enabled="{toolbox.canDo('quadrilateralise')}" 
-				alpha="{toolbox.getAlpha('quadrilateralise')}" 
-				toolTip="Make right-angled" 
-				width="28" height="28" textAlign="left" paddingLeft="6" paddingRight="0" />
-	        <mx:Button icon="@Embed('embedded/parallel.svg')" 
-				click='toolbox.doParallelise();' 
-				enabled="{toolbox.canDo('parallelise')}" 
-				alpha="{toolbox.getAlpha('parallelise')}" 
-				toolTip="Create parallel way" 
-				width="28" height="28" textAlign="left" paddingLeft="8" paddingRight="0" />
-
-		</potlatch2:Toolbox>
-
     </mx:HDividedBox>
 
 	<mx:Script><![CDATA[
@@ -140,6 +84,7 @@
         public var theMap:Map;
         public var theController:EditController;
 		public var yahoo:Yahoo;
+		public var toolbox:Toolbox;
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
@@ -197,8 +142,10 @@
 	        loader.load(request);
 
 			// position toolbox
-			toolbox.x=stage.stageWidth-275;
-			toolbox.y=stage.stageHeight-100;
+			toolbox=Toolbox(PopUpManager.createPopUp(this,Toolbox,false));
+			toolbox.init(theController);
+			toolbox.x=stage.stageWidth-toolbox.width-15;
+			toolbox.y=stage.stageHeight-toolbox.height-15;
 
 			// add debug field
 			var t:TextField=new TextField();
@@ -224,6 +171,11 @@
         public function onResizeMap():void {
             if ( theMap != null )
                 theMap.updateSize(map_area.width, map_area.height);
+
+			if (toolbox) {
+				toolbox.x=Math.min(toolbox.x,stage.stageWidth-toolbox.width-15);
+				toolbox.y=Math.min(toolbox.y,stage.stageHeight-toolbox.height-15);
+			}
         }
 
         private function onDataStart(event:Event):void {
