@@ -11,7 +11,7 @@
 	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
 	<mx:HBox>
-	<mx:Button label="Edit..." click="new BackgroundDialog().init(background);" />
+	<mx:Button label="Edit..." click="new BackgroundDialog().init('Background imagery',background,Application.application.theController.imagery);" />
 	<mx:Button label="Vector file" click="new VectorSourceDialog().init();" />
 	</mx:HBox>
 

@@ -66,8 +66,8 @@ package net.systemeD.halcyon {
 
 		public var backdrop:Object;						// reference to backdrop sprite
 		public var tileset:TileSet;						// 900913 tile background
-		private var tileurl:String='';					// internal tile URL and priority - allows setting before tileset inited
-		private var tileprio:uint=0;					//  | 
+		private var tileurl:String='';					// internal tile URL
+		private var styleurl:String='';					// internal style URL
 		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
 		public var connection:Connection;				// server connection
@@ -108,19 +108,18 @@ package net.systemeD.halcyon {
 				// parameters sent from HTML
 				init(initparams['lat'],
 					 initparams['lon'],
-					 initparams['zoom'],
-					 initparams['style']);
+					 initparams['zoom']);
 
 			} else {
 				// somewhere innocuous
-				init(53.09465,-2.56495,17,"test.css?d="+Math.random());
+				init(53.09465,-2.56495,17);
 			}
 		}
 
 		// ------------------------------------------------------------------------------------------
 		// Initialise map at a given lat/lon
 
-        public function init(startlat:Number,startlon:Number,startscale:uint=0,style:String=null):void {
+        public function init(startlat:Number,startlon:Number,startscale:uint=0):void {
 			while (numChildren) { removeChildAt(0); }
 
 			tileset=new TileSet(this);					// 0 - 900913 background
@@ -134,9 +133,9 @@ package net.systemeD.halcyon {
 			addChild(paint);							//   |
 			paint.isBackground=false;					//   |
 
-			if (style) {
+			if (styleurl) {								// if we've only just set up paint, then setStyle won't have created the RuleSet
 				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-				paint.ruleset.loadFromCSS(style);
+				paint.ruleset.loadFromCSS(styleurl);
 			}
 			if (startscale>0) { scale=startscale; }
 
@@ -242,8 +241,7 @@ package net.systemeD.halcyon {
         private function newPOICreated(event:EntityEvent):void {
             var node:Node = event.entity as Node;
 			if (!node.within(edge_l,edge_r,edge_t,edge_b)) { return; }
-			var nodeui:NodeUI=paint.createNodeUI(node);
-			nodeui.redraw();
+			paint.createNodeUI(node);
         }
 
 		private function wayRenumbered(event:EntityRenumberedEvent):void {
@@ -323,18 +321,17 @@ package net.systemeD.halcyon {
 			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
 		
-		public function setStyle(style:String):void {
-			if (style) {
+		public function setStyle(url:String):void {
+			styleurl=url;
+			if (paint) { 
 				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-				paint.ruleset.loadFromCSS(style);
+				paint.ruleset.loadFromCSS(url);
 			}
         }
 
-		public function setBackground(url:String,priority:int):Boolean {
-			if (priority<tileprio) { return false; }
-			tileurl=url; tileprio=priority;
+		public function setBackground(url:String):void {
+			tileurl=url;
 			if (tileset) { tileset.init(url, url!=''); }
-			return true;
 		}
 
 		public function setDimming(dim:Boolean):void {

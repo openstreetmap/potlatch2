@@ -4,25 +4,17 @@
 	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
 	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
-	<mx:List width="100%" height="100%" id="mapStyle" change="updateMapStyle();"> 
-	    <!-- This should be pulled in from an XML file rather than sitting in the source -->
-	    <mx:dataProvider>
-	        <mx:Object label="Potlatch" data="potlatch.css" />
-	        <mx:Object label="Wireframe" data="wireframe.css" />
-	    </mx:dataProvider>
-	</mx:List>
+	<mx:List width="100%" height="100%" id="mapStyle" 
+	        change="Application.application.setStylesheet(mapStyle.selectedItem.label, mapStyle.selectedItem.data);"
+	        dataProvider="{Application.application.theController.stylesheets}" />
+
+	<mx:Button label="Edit..." click="new BackgroundDialog().init('Map style',mapStyle,Application.application.theController.stylesheets);" />
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
-
-		private function updateMapStyle():void {
-            var theMap:Map = Globals.vars.root;
-			var style:String=mapStyle.selectedItem.data;
-			theMap.setStyle(style);
-		}
-
+		import mx.core.*;
     ]]></mx:Script>	
 </mx:VBox>
 

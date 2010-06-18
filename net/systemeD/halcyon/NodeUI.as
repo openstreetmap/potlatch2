@@ -8,29 +8,25 @@ package net.systemeD.halcyon {
 	import flash.text.TextFormat;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
-    import net.systemeD.halcyon.connection.Node;
-    import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.halcyon.styleparser.*;
+    import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
 	
 	public class NodeUI extends EntityUI {
 		
-        private var node:Node;
 		public var loaded:Boolean=false;
 		private var iconname:String='';				// name of icon
 		private var heading:Number=0;				// heading within way
 		private var rotation:Number=0;				// rotation applied to this POI
 
-		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, interactive:Boolean=true) {
-			super();
-			this.node = node;
-			this.paint = paint;
+		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, interactive:Boolean=true, sl:StyleList=null) {
+			super(node,paint,interactive);
 			this.heading = heading;
-			this.interactive = interactive;
-			node.addEventListener(Connection.NODE_MOVED, nodeMoved);
-			node.addEventListener(Connection.NODE_DELETED, nodeDeleted);
-			node.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
-			node.addEventListener(Connection.RESUME_REDRAW, resumeRedraw);
+            entity.addEventListener(Connection.TAG_CHANGED, tagChanged);
+			entity.addEventListener(Connection.NODE_MOVED, nodeMoved);
+			entity.addEventListener(Connection.NODE_DELETED, nodeDeleted);
+            attachRelationListeners();
+			redraw(sl);
 		}
 		
 		public function nodeMoved(event:Event):void {
@@ -43,14 +39,14 @@ package net.systemeD.halcyon {
 		
 		override public function doRedraw(sl:StyleList):Boolean {
 			if (!paint.ready) { return false; }
-			if (node.deleted) { return false; }
+			if (entity.deleted) { return false; }
 
-			var tags:Object = node.getTagsCopy();
+			var tags:Object = entity.getTagsCopy();
 			tags=applyStateClasses(tags);
-			if (!node.hasParentWays) { tags[':poi']='yes'; }
-			if (!sl) { sl=paint.ruleset.getStyles(this.node,tags); }
+			if (!entity.hasParentWays) { tags[':poi']='yes'; }
+			if (!sl) { sl=paint.ruleset.getStyles(entity,tags); }
 
-			var inWay:Boolean=node.hasParentWays;
+			var inWay:Boolean=entity.hasParentWays;
 			var hasStyles:Boolean=sl.hasStyles();
 			
 			removeSprites(); iconname='';
@@ -93,7 +89,8 @@ package net.systemeD.halcyon {
 						} else if (paint.ruleset.images[s.icon_image]) {
 							// 'load' icon (actually just from library)
 							var loader:Loader = new Loader();
-							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { loadedIcon(e,sublayer); } );
+							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { 
+								loadedIcon(e,sublayer); } );
 							loader.loadBytes(paint.ruleset.images[s.icon_image]);
 							iconname=s.icon_image;
 						}
@@ -157,10 +154,6 @@ package net.systemeD.halcyon {
 			updatePosition();
 		}
 
-        override protected function mouseEvent(event:MouseEvent):void {
-			paint.map.entityMouseEvent(event, node);
-        }
-
 		private function updatePosition():void {
 			if (!loaded) { return; }
 
@@ -171,7 +164,7 @@ package net.systemeD.halcyon {
 				var m:Matrix=new Matrix();
 				m.translate(-d.width/2,-d.height/2);
 				m.rotate(rotation);
-				m.translate(paint.map.lon2coord(node.lon),paint.map.latp2coord(node.latp));
+				m.translate(paint.map.lon2coord(Node(entity).lon),paint.map.latp2coord(Node(entity).latp));
 				d.transform.matrix=m;
 			}
 		}

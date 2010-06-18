@@ -7,10 +7,11 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.StyleList;
 	import net.systemeD.halcyon.styleparser.RuleSet;
-    import net.systemeD.halcyon.connection.EntityEvent;
+    import net.systemeD.halcyon.connection.*;
 
 	public class EntityUI {
 
+		protected var entity:Entity;
 		protected var sprites:Array=new Array();		// instances in display list
         protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
 		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
@@ -35,7 +36,15 @@ package net.systemeD.halcyon {
 			gridFitType: GridFitType.NONE
 		};
 
-		public function EntityUI() {
+		public function EntityUI(entity:Entity, paint:MapPaint, interactive:Boolean) {
+			this.entity=entity;
+			this.paint=paint;
+			this.interactive=interactive;
+            entity.addEventListener(Connection.TAG_CHANGED, tagChanged);
+			entity.addEventListener(Connection.ADDED_TO_RELATION, relationAdded);
+			entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved);
+			entity.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
+			entity.addEventListener(Connection.RESUME_REDRAW, resumeRedraw);
 			listenSprite.addEventListener(MouseEvent.CLICK, mouseEvent);
 			listenSprite.addEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
 			listenSprite.addEventListener(MouseEvent.ROLL_OVER, mouseEvent);
@@ -44,6 +53,42 @@ package net.systemeD.halcyon {
 			listenSprite.addEventListener(MouseEvent.MOUSE_UP, mouseEvent);
 			listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
 		}
+
+
+		// -----------------------------------------------------------------
+		// Event listeners
+		
+		protected function attachRelationListeners():void {
+		    var relations:Array = entity.parentRelations;
+            for each(var relation:Relation in relations ) {
+                relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
+            }
+		}
+
+		private function relationAdded(event:RelationMemberEvent):void {
+		    event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
+		    redraw();
+		}
+		
+		private function relationRemoved(event:RelationMemberEvent):void {
+		    event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
+		    redraw();
+		}
+		
+        protected function tagChanged(event:TagEvent):void {
+            redraw();
+        }
+
+        protected function relationTagChanged(event:TagEvent):void {
+            redraw();
+        }
+		
+        protected function mouseEvent(event:MouseEvent):void {
+			paint.map.entityMouseEvent(event, entity);
+        }
+
+
+		// -----------------------------------------------------------------
 
 		// Add object (stroke/fill/roadname) to layer sprite
 		
@@ -86,9 +131,6 @@ package net.systemeD.halcyon {
             listenSprite.mouseEnabled = true;
 		}
 
-        protected function mouseEvent(event:MouseEvent):void {
-        }
-
         public function setHighlight(stateType:String, isOn:*):void {
             if ( isOn && stateClasses[stateType] == null ) {
                 stateClasses[stateType] = isOn;
@@ -104,6 +146,10 @@ package net.systemeD.halcyon {
 			return tags;
 		}
 		
+		public function toString():String {
+			return "[EntityUI "+entity+"]";
+		}
+
 		// Redraw control
 		
 		public function redraw(sl:StyleList=null):Boolean {

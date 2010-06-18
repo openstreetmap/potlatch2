@@ -13,7 +13,6 @@ package net.systemeD.halcyon {
 
 	public class WayUI extends EntityUI {
 
-        private var way:Way;
 		public var pathlength:Number;				// length of path
 		public var patharea:Number;					// area of path
 		public var centroid_x:Number;				// centroid
@@ -26,47 +25,23 @@ package net.systemeD.halcyon {
 		private const NODESIZE:uint=6;
 
 		public function WayUI(way:Way, paint:MapPaint, interactive:Boolean=true) {
-			super();
-			this.way = way;
-			this.paint = paint;
-			this.ruleset = ruleset;
-			this.interactive = interactive;
-            init();
-            way.addEventListener(Connection.TAG_CHANGED, wayTagChanged);
-            way.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
-            way.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
-            way.addEventListener(Connection.WAY_REORDERED, wayReordered);
-			way.addEventListener(Connection.WAY_DELETED, wayDeleted);
-            way.addEventListener(Connection.WAY_DRAGGED, wayDragged);
-			way.addEventListener(Connection.ADDED_TO_RELATION, wayRelationAdded);
-			way.addEventListener(Connection.REMOVED_FROM_RELATION, wayRelationRemoved);
-			way.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
-			way.addEventListener(Connection.RESUME_REDRAW, resumeRedraw);
+			super(way,paint,interactive);
+            entity.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
+            entity.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
+            entity.addEventListener(Connection.WAY_REORDERED, wayReordered);
+			entity.addEventListener(Connection.WAY_DELETED, wayDeleted);
+            entity.addEventListener(Connection.WAY_DRAGGED, wayDragged);
             attachNodeListeners();
             attachRelationListeners();
+            recalculate();
+			redraw();
 		}
 		
 		private function attachNodeListeners():void {
+			var way:Way=entity as Way;
             for (var i:uint = 0; i < way.length; i++ ) {
                 way.getNode(i).addEventListener(Connection.NODE_MOVED, nodeMoved);
             }
-		}
-
-		private function attachRelationListeners():void {
-		    var relations:Array = way.parentRelations;
-            for each(var relation:Relation in relations ) {
-                relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
-            }
-		}
-		
-		private function wayRelationAdded(event:RelationMemberEvent):void {
-		    event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
-		    redraw();
-		}
-		
-		private function wayRelationRemoved(event:RelationMemberEvent):void {
-		    event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
-		    redraw();
 		}
 		
 		private function wayNodeAdded(event:WayNodeEvent):void {
@@ -82,12 +57,6 @@ package net.systemeD.halcyon {
 		    redraw();
 		}
 		    
-        private function wayTagChanged(event:TagEvent):void {
-            redraw();
-        }
-        private function relationTagChanged(event:TagEvent):void {
-            redraw();
-        }
         private function nodeMoved(event:NodeMovedEvent):void {
 			recalculate();
             redraw();
@@ -100,13 +69,6 @@ package net.systemeD.halcyon {
         }
 		private function wayDragged(event:WayDraggedEvent):void {
 			offsetSprites(event.xDelta,event.yDelta);
-		}
-
-		private function init():void {
-			recalculate();
-			redraw();
-			// updateBbox(lon, lat);
-			// ** various other stuff
 		}
 
 		override public function suspendRedraw(event:EntityEvent):void {
@@ -130,6 +92,8 @@ package net.systemeD.halcyon {
 			var lx:Number, ly:Number, sc:Number;
 			var node:Node, latp:Number, lon:Number;
 			var cx:Number=0, cy:Number=0;
+			var way:Way=entity as Way;
+			
 			pathlength=0;
 			patharea=0;
 			if (way.length==0) { return; }
@@ -172,13 +136,13 @@ package net.systemeD.halcyon {
 
 		override public function doRedraw(sl:StyleList):Boolean {
 			removeSprites();
-			if (way.length==0) { return false; }
+			if (Way(entity).length==0) { return false; }
 			if (!paint.ready) { return false; }
 
             // Copy tags object, and add states
-            var tags:Object = way.getTagsCopy();
+            var tags:Object = entity.getTagsCopy();
 			tags=applyStateClasses(tags);
-			if (way.isArea()) { tags[':area']='yes'; }
+			if (Way(entity).isArea()) { tags[':area']='yes'; }
 
 			// Which layer?
 			layer=0;
@@ -188,9 +152,9 @@ package net.systemeD.halcyon {
 			var maxwidth:Number=4;
 
 			// Iterate through each sublayer, drawing any styles on that layer
-			if (!sl) { sl=paint.ruleset.getStyles(this.way, tags); }
+			if (!sl) { sl=paint.ruleset.getStyles(entity, tags); }
 			var drawn:Boolean;
-			var multis:Array=way.findParentRelationsOfType('multipolygon','outer');
+			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
 			for each (var m:Relation in multis) {
 				inners=inners.concat(m.findMembersByRole('inner'));
@@ -199,8 +163,8 @@ package net.systemeD.halcyon {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
-					var x0:Number=paint.map.lon2coord(way.getNode(0).lon);
-					var y0:Number=paint.map.latp2coord(way.getNode(0).latp);
+					var x0:Number=paint.map.lon2coord(Way(entity).getNode(0).lon);
+					var y0:Number=paint.map.latp2coord(Way(entity).getNode(0).latp);
 
 					// Stroke
 					if (s.width)  {
@@ -216,7 +180,7 @@ package net.systemeD.halcyon {
 					}
 
 					// Fill
-					if ((s.fill_color || s.fill_image) && way.findParentRelationsOfType('multipolygon','inner').length==0) {
+					if ((s.fill_color || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0) {
 						fill=new Shape(); addToLayer(fill,FILLSPRITE);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
@@ -264,8 +228,8 @@ package net.systemeD.halcyon {
 			var r:Number;
 			var nodetags:Object;
 			var nodeSelected:int=stateClasses["nodeSelected"];
-			for (var i:uint = 0; i < way.length; i++) {
-                var node:Node = way.getNode(i);
+			for (var i:uint = 0; i < Way(entity).length; i++) {
+                var node:Node = Way(entity).getNode(i);
 				nodetags=node.getTagsCopy();
 				if (i==0) { nodetags['_heading']= heading[i]; }
 				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
@@ -275,10 +239,11 @@ package net.systemeD.halcyon {
 				if (node.numParentWays>1) { nodetags[':junction']='yes'; }
 				sl=paint.ruleset.getStyles(node,nodetags);
 				if (sl.hasStyles()) {
-					if (!paint.nodeuis[node.id]) {
-						paint.nodeuis[node.id]=new NodeUI(node,paint,r);
+					if (paint.nodeuis[node.id]) {
+						paint.nodeuis[node.id].redraw(sl);
+					} else {
+						paint.nodeuis[node.id]=new NodeUI(node,paint,r,true,sl);
 					}
-					paint.nodeuis[node.id].redraw(sl);
 				} else if (paint.nodeuis[node.id]) {
 					paint.nodeuis[node.id].removeSprites();
 					delete paint.nodeuis[node.id];
@@ -303,7 +268,7 @@ package net.systemeD.halcyon {
 		// Draw solid polyline
 		
 		public function solidLines(g:Graphics,inners:Array):void {
-			solidLine(g,this.way);
+			solidLine(g,entity as Way);
 			for each (var w:Way in inners) { solidLine(g,w); }
 		}
 
@@ -319,6 +284,7 @@ package net.systemeD.halcyon {
 		// Draw dashed polyline
 		
 		private function dashedLine(g:Graphics,dashes:Array):Array {
+			var way:Way=entity as Way;
 			var segments:Array=[];
 			var draw:Boolean=false, dashleft:Number=0, dc:Array=new Array();
 			var a:Number, xc:Number, yc:Number;
@@ -403,6 +369,7 @@ package net.systemeD.halcyon {
 		// inspired by senocular's Path.as
 		
 		private function pointAt(t:Number):Array {
+			var way:Way=entity as Way;
 			var totallen:Number = t*pathlength;
 			var curlen:Number = 0;
 			var dx:Number, dy:Number, seglen:Number;
@@ -481,6 +448,7 @@ package net.systemeD.halcyon {
 		}
 		
 		public function getNodeAt(x:Number, y:Number):Node {
+			var way:Way=entity as Way;
 			for (var i:uint = 0; i < way.length; i++) {
                 var node:Node = way.getNode(i);
                 var nodeX:Number = paint.map.lon2coord(node.lon);
@@ -495,14 +463,9 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Interaction
 
-        override protected function mouseEvent(event:MouseEvent):void {
-			paint.map.entityMouseEvent(event, way);
-        }
-
 		public function hitTest(x:Number, y:Number):Way {
-			if (hitzone.hitTestPoint(x,y,true)) { return way; }
+			if (hitzone.hitTestPoint(x,y,true)) { return entity as Way; }
 			return null;
 		}
-
 	}
 }

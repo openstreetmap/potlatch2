@@ -19,6 +19,8 @@ package net.systemeD.potlatch2 {
 		private var keys:Object={};
 		public var clipboards:Object={};
 		public var imagery:Array=[];
+		public var stylesheets:Array=[];
+		public var cursorsEnabled:Boolean=true;
 
 		[Embed(source="../../../embedded/pen.png")] 		public var pen:Class;
 		[Embed(source="../../../embedded/pen_x.png")] 		public var pen_x:Class;
@@ -112,7 +114,7 @@ package net.systemeD.potlatch2 {
 
 		public function setCursor(cursor:Class):void {
 			CursorManager.removeAllCursors();
-			if (cursor) { CursorManager.setCursor(cursor,2,-4,0); }
+			if (cursor && cursorsEnabled) { CursorManager.setCursor(cursor,2,-4,0); }
 		}
 
     }

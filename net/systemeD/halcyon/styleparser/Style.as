@@ -90,5 +90,13 @@ package net.systemeD.halcyon.styleparser {
 			}
 			return false;
 		}
+
+		public function toString():String {
+			var str:String='';
+            for each (var k:String in this.properties) {
+				if (this.hasOwnProperty(k)) { str+=k+"="+this[k]+"; "; }
+			}
+			return str;
+        }
 	}
 }

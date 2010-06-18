@@ -97,6 +97,32 @@
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
 			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
 
+			// populate sharedObject with loaderInfo parameters if supplied
+			var obj:SharedObject = SharedObject.getLocal("user_state");
+			var objChanged:Boolean = false;
+			if (loaderInfo.parameters['tileurl']) {
+				obj.setProperty('background_url',loaderInfo.parameters['tileurl']); 
+				obj.setProperty('background_name','Custom'); 
+				objChanged=true;
+			}
+			if (loaderInfo.parameters['style']) { 
+				obj.setProperty('stylesheet_url',loaderInfo.parameters['style']);
+				obj.setProperty('stylesheet_name','Custom');
+				objChanged=true; 
+			}
+			if (objChanged) { obj.flush(); }
+
+			// load imagery and style XML
+	        var request:URLRequest = new URLRequest("imagery.xml?"+Math.random());
+	        var loader:URLLoader = new URLLoader();
+	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
+	        loader.load(request);
+
+			var request2:URLRequest = new URLRequest("stylesheets.xml?"+Math.random());
+			var loader2:URLLoader = new URLLoader();
+	        loader2.addEventListener(Event.COMPLETE, onStylesheetsLoad);
+	        loader2.load(request2);
+
 			// map backdrop object
             var w:uint = map_area.width;
             var h:uint = map_area.height;
@@ -115,9 +141,6 @@
 			_root.addChild(yahoo);
 			_root.addChild(theMap);
             theMap.updateSize(w,h);
-			if (loaderInfo.parameters['tileurl']) {
-				setBackground('custom',loaderInfo.parameters['tileurl'],2);
-			}
 
 			// add mask for map
 			var s:Sprite=new Sprite();
@@ -134,12 +157,6 @@
 
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
-
-			// load imagery XML
-	        var request:URLRequest = new URLRequest("imagery.xml?"+Math.random());
-	        var loader:URLLoader = new URLLoader();
-	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
-	        loader.load(request);
 
 			// position toolbox
 			toolbox=Toolbox(PopUpManager.createPopUp(this,Toolbox,false));
@@ -208,40 +225,69 @@
 		
         private function onImageryLoad(event:Event):void {
 			var xml:XML = new XML(URLLoader(event.target).data);
-
-			// create menu
+			var saved_url:String = SharedObject.getLocal("user_state").data['background_url'];
+			var saved_name:String= SharedObject.getLocal("user_state").data['background_name'];
+			var xml_url:String, xml_name:String, isSet:Boolean=false;
             theController.imagery=new Array(
 				{ label: "None", data: "" },
 				{ label: "Yahoo", data: "yahoo" } );
 			for each(var set:XML in xml.set) {
-                theController.imagery.push({ label:set.child("name"), data:set.child("url") });
+				xml_url= set.child("url");
+				xml_name=set.child("name");
+                theController.imagery.push({ label:xml_name, data:xml_url });
+				if (xml_url==saved_url || (xml_name==saved_name && xml_name!='Custom')) { isSet=true; }
 			}
+			if (!isSet) { theController.imagery.push({ label:saved_name, data:saved_url }); }
 
-			// set imagery from shared object
-			var previous:String = SharedObject.getLocal("user_state").data['background'];
 			for each (var bg:Object in theController.imagery) {
-				if (bg['label']==previous) { 
-					setBackground(bg['label'], bg['data'], 1);
+				if (bg['label']==saved_name || bg['data']==saved_url) {
+					setBackground(bg['label'], bg['data']);
+				}
+			}
+		}
+		
+		public function setBackground(name:String,url:String):void {
+			// ** this should take an object with all parameters (source tag, etc.)
+			if (url=='yahoo') { theMap.setBackground('') ; yahoo.show(); }
+			             else { theMap.setBackground(url); yahoo.hide(); }
+			var obj:SharedObject = SharedObject.getLocal("user_state");
+			obj.setProperty("background_url",url );
+			obj.setProperty("background_name",name);
+			obj.flush();
+		}
+
+		private function onStylesheetsLoad(event:Event):void {
+			var xml:XML = new XML(URLLoader(event.target).data);
+			var saved_url:String = SharedObject.getLocal("user_state").data['stylesheet_url'];
+			var saved_name:String= SharedObject.getLocal("user_state").data['stylesheet_name'];
+			var xml_url:String, xml_name:String, isSet:Boolean=false;
+			if (!saved_url) { saved_url='potlatch.css'; saved_name='Potlatch'; }
+			
+			// create menu
+            theController.stylesheets=new Array();
+			for each(var set:XML in xml.stylesheet) {
+				xml_url= set.child("url");
+				xml_name=set.child("name");
+                theController.stylesheets.push({ label:xml_name, data:xml_url });
+				if (xml_url==saved_url || (xml_name==saved_name && xml_name!='Custom')) { isSet=true; }
+			}
+			if (!isSet) { theController.stylesheets.push({ label:saved_name, data:saved_url }); }
+
+			for each (var bg:Object in theController.stylesheets) {
+				if (bg['label']==saved_name || bg['data']==saved_url) { 
+					setStylesheet(bg['label'], bg['data']);
 				}
 			}
 		}
 
-		public function setBackground(name:String,url:String,priority:uint=2):void {
-			// ** this should take an object with all parameters (source tag, etc.)
-			var set:Boolean;
-			if (url=='yahoo') {
-				set=theMap.setBackground('',2);
-				yahoo.show();
-			} else {
-				set=theMap.setBackground(url,priority)
-				yahoo.hide();
-			}
-			if (set) {
-				var obj:SharedObject = SharedObject.getLocal("user_state");
-				obj.setProperty("background", name);
-				obj.flush();
-			}
+		public function setStylesheet(name:String,url:String):void {
+			theMap.setStyle(url);
+			var obj:SharedObject = SharedObject.getLocal("user_state");
+			obj.setProperty("stylesheet_url",url);
+			obj.setProperty("stylesheet_name",name);
+			obj.flush();
 		}
+
 
         private function dragEnterHandler(event:DragEvent):void {
             // Get the drop target component from the event object.

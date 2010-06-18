@@ -512,6 +512,7 @@
           var undoStack:Function = MainUndoStack.getGlobalStack().addAction;
           var action:CompositeUndoableAction = new CompositeUndoableAction(
                   "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+newFeature.name);
+		  selectedEntity.suspend();
 
           // remove tags from the current feature
           if ( feature != null ) {
@@ -527,6 +528,7 @@
               }
           }
           
+		  selectedEntity.resume();
           undoStack(action);
           popupChange.close();
       }

@@ -41,7 +41,6 @@ Potlatch 2: main outstanding issues
 == UI ==
 
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
-* Stylesheets should be pulled from an XML file in exactly the same way as background layers
 * Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
@@ -53,6 +52,7 @@ Potlatch 2: main outstanding issues
 * Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * i18n
 * Multiple selection
+* Options should be remembered via SharedObjects
 
 == Miscellaneous data model ==
 
@@ -60,6 +60,8 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
+* StyleList and everything that iterates over it needs to cope with arbitrary sublayers
+* Occasionally way selected highlight appears in black, not yellow
 * halcyon_viewer needs updating for new tileurl stuff
 * { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * Shields

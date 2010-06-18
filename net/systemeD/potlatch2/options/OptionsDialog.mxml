@@ -14,6 +14,7 @@
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, optionsDialog_close);
 		tbcheck.selected=Application.application.toolbox.visible;
+		cursorcheck.selected=Application.application.theController.cursorsEnabled;
     }
     
     private function optionsDialog_close(evt:CloseEvent):void {
@@ -24,6 +25,9 @@
   </mx:Script>
 	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
 	    change="Application.application.toolbox.toggle()" />
+
+	<mx:CheckBox width="100%" label="Use custom cursors" selected="true" id="cursorcheck"
+	    change="Application.application.theController.cursorsEnabled=cursorcheck.selected" />
 
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
