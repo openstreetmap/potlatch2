@@ -9,4 +9,8 @@
 		<name>Wireframe</name>
 		<url>wireframe.css</url>
 	</stylesheet>
+    <stylesheet>
+        <name>OpenCycleMap</name>
+        <url>opencyclemap.css</url>
+    </stylesheet>
 </stylesheets>
