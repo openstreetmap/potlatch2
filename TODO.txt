@@ -61,7 +61,6 @@ Potlatch 2: main outstanding issues
 == Rendering (Halcyon) ==
 
 * StyleList and everything that iterates over it needs to cope with arbitrary sublayers
-* Occasionally way selected highlight appears in black, not yellow
 * halcyon_viewer needs updating for new tileurl stuff
 * { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * Shields

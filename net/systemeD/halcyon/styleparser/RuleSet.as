@@ -427,7 +427,7 @@ package net.systemeD.halcyon.styleparser {
 			var styles:Array=[];
 			var t:Object=new Object();
 			var o:Object=new Object();
-			var a:String, k:String;
+			var a:String, k:String, v:*;
 
 			// Create styles
 			var ss:ShapeStyle =new ShapeStyle() ;
@@ -468,15 +468,14 @@ package net.systemeD.halcyon.styleparser {
 			for (a in t) {
 				// Parse properties
 				// ** also do units, e.g. px/pt
-				if (a.match(COLOR)) {
-					t[a] = parseCSSColor(t[a]);
-				}
+				if (a.match(COLOR)) { v = parseCSSColor(t[a]); }
+				               else { v = t[a]; }
 				
 				// Set in styles
-				if      (ss.hasOwnProperty(a)) { ss.setPropertyFromString(a,t[a]); }
-				else if (ps.hasOwnProperty(a)) { ps.setPropertyFromString(a,t[a]); }
-				else if (ts.hasOwnProperty(a)) { ts.setPropertyFromString(a,t[a]); }
-				else if (hs.hasOwnProperty(a)) { hs.setPropertyFromString(a,t[a]); }
+				if      (ss.hasOwnProperty(a)) { ss.setPropertyFromString(a,v); }
+				else if (ps.hasOwnProperty(a)) { ps.setPropertyFromString(a,v); }
+				else if (ts.hasOwnProperty(a)) { ts.setPropertyFromString(a,v); }
+				else if (hs.hasOwnProperty(a)) { hs.setPropertyFromString(a,v); }
 			}
 
 			// Add each style to list
@@ -515,12 +514,11 @@ package net.systemeD.halcyon.styleparser {
 
         public static function parseCSSColor(colorStr:String):uint {
             colorStr = colorStr.toLowerCase();
-            if (CSSCOLORS[colorStr])
+            if (CSSCOLORS[colorStr]) {
                 return CSSCOLORS[colorStr];
-            else {
+            } else {
                 var match:Object = HEX.exec(colorStr);
-                if ( match )
-                    return Number("0x"+match[1]);
+                if ( match ) { return Number("0x"+match[1]); }
             }
             return 0;
         }
