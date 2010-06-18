@@ -518,7 +518,18 @@ package net.systemeD.halcyon.styleparser {
                 return CSSCOLORS[colorStr];
             } else {
                 var match:Object = HEX.exec(colorStr);
-                if ( match ) { return Number("0x"+match[1]); }
+                if ( match ) { 
+                  if ( match[1].length == 3) {
+                    // repeat digits. #abc => 0xaabbcc
+                    return Number("0x"+match[1].charAt(0)+match[1].charAt(0)+
+                                       match[1].charAt(1)+match[1].charAt(1)+
+                                       match[1].charAt(2)+match[1].charAt(2));
+                  } else if ( match[1].length == 6) {
+                    return Number("0x"+match[1]);
+                  } else {
+                    return Number("0x000000"); //as good as any
+                  }
+                }
             }
             return 0;
         }
