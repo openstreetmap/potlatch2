@@ -869,9 +869,9 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
     <point />
     <tag k="amenity" v="place_of_worship"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of it." priority="low"/>i
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of it." priority="low"/>
     <input type="freetext" presence="always" category="" name="religion" key="religion" description="The religion worshiped here" priority="low"/>
-    <input type="freetext" presence="always" category="" name="denomination" key="denomination=" description="The denomination of the religion worshiped here." priority="low"/>
+    <input type="freetext" presence="always" category="" name="denomination" key="denomination" description="The denomination of the religion worshiped here." priority="low"/>
   </feature>
 
 
