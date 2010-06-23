@@ -127,7 +127,7 @@ package net.systemeD.halcyon.styleparser {
 		// addZoom		<- adds into the current ruleChain (existing Rule)
 		public function addZoom(z1:uint,z2:uint):void {
 			ruleChains[rcpos][ruleChains[rcpos].length-1].minZoom=z1;
-			ruleChains[rcpos][ruleChains[rcpos].length-1].minZoom=z2;
+			ruleChains[rcpos][ruleChains[rcpos].length-1].maxZoom=z2;
 		}
 		
 		// addCondition	<- adds into the current ruleChain (existing Rule)
