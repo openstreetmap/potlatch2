@@ -531,6 +531,7 @@
 		  selectedEntity.resume();
           undoStack(action);
           popupChange.close();
+          initialiseEditors();
       }
       
       private function dragPOI(event:MouseEvent, tags:Array):void {
