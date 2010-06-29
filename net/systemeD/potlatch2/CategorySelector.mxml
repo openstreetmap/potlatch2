@@ -7,6 +7,7 @@
   <mx:HBox horizontalGap="0"> 
   <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical"/>
   <mx:ViewStack id="categoryStack" width="100%" height="100%"
+      change="_formerIndex=event.newIndex;" 
       creationComplete="setSelectedFeature(_selectedType);">
       <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType(limit)}">
           <mx:VBox label="{catRep.currentItem.name}">
@@ -42,6 +43,7 @@
       private var settingSelection:Boolean = false;
       private var _selectedType:Feature;
       private var _limit:String;
+      private var _formerIndex:int=0;
       
       [Bindable(event="selectedType")]
       public function get selectedType():Feature {
@@ -78,27 +80,28 @@
           if ( categoryStack == null )
               return;
 
+          // set the tab to the selected item's category
+          // (we have to manually fire the IndexChangedEvent because Flex's ViewStack.as isn't competent 
+          //  enough to do it reliably. This is basically a direct crib from dispatchChangeEvent)
+          var index:int=0;
           if ( feature != null ) {
               var primaryCategory:Category = feature.findFirstCategory();
-          
-              // set the tab to the selected item's category
-              // (we have to manually fire the IndexChangedEvent because Flex's ViewStack.as isn't competent 
-              //  enough to do it reliably. This is basically a direct crib from dispatchChangeEvent)
-              var index:int = MapFeatures.getInstance().getCategoriesForType(limit).indexOf(primaryCategory);
-              var former:int = categoryStack.selectedIndex;
-              if (index!=former) {
-	              var event:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
-	              event.oldIndex = former;
-	              event.newIndex = index;
-	              event.relatedObject = categoryStack.getChildAt(index);
-	              categoryStack.selectedIndex = index;
-	              categoryStack.dispatchEvent(event);
-              }
+              index = MapFeatures.getInstance().getCategoriesForType(limit).indexOf(primaryCategory);
           }
+          var event:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
+          event.oldIndex = _formerIndex;
+          event.newIndex = index;
+          event.relatedObject = categoryStack.getChildAt(index);
+          categoryStack.selectedIndex = index;
+          categoryStack.dispatchEvent(event);
+          _formerIndex=index;
           
           // finalise the item selection
           ensureSelection();
       }
+      public function setNoSelectedFeature():void {
+	    _selectedType=null;
+	  }
       
       /**
        * Sets the selected feature on each category page to the current
