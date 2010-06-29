@@ -37,6 +37,7 @@
 
       import mx.controls.*;
       import mx.containers.*;
+      import mx.events.IndexChangedEvent;
       
       private var settingSelection:Boolean = false;
       private var _selectedType:Feature;
@@ -81,8 +82,18 @@
               var primaryCategory:Category = feature.findFirstCategory();
           
               // set the tab to the selected item's category
+              // (we have to manually fire the IndexChangedEvent because Flex's ViewStack.as isn't competent 
+              //  enough to do it reliably. This is basically a direct crib from dispatchChangeEvent)
               var index:int = MapFeatures.getInstance().getCategoriesForType(limit).indexOf(primaryCategory);
-              categoryStack.selectedIndex = index;
+              var former:int = categoryStack.selectedIndex;
+              if (index!=former) {
+	              var event:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
+	              event.oldIndex = former;
+	              event.newIndex = index;
+	              event.relatedObject = categoryStack.getChildAt(index);
+	              categoryStack.selectedIndex = index;
+	              categoryStack.dispatchEvent(event);
+              }
           }
           
           // finalise the item selection
