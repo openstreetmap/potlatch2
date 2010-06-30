@@ -39,7 +39,7 @@
     </mx:TileList>
   </mx:VBox>
   
-  <mx:VBox id="tagsPanel" width="100%" height="100%">
+  <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto">
     <mx:ViewStack id="stack" width="100%" height="100%">
       <mx:VBox width="100%" height="100%" label="Simple">
         <mx:HBox borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3" id="iconContainer">
@@ -52,7 +52,7 @@
         </mx:HBox>
         <flexlib:SuperTabNavigator id="editorStack" width="100%" height="100%" paddingLeft="2" paddingRight="2"
             allowTabSqueezing="false" minTabWidth="10" closePolicy="close_never"
-			updateComplete="tabSelected()" 
+			updateComplete="tabSelected()" creationPolicy="auto" 
             scrollSpeed="20" change="ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox)"/>
       </mx:VBox>
 
@@ -130,6 +130,7 @@
       private var feature:Feature = null;
 
       public function setEntity(entity:Entity):void {
+          UIComponent.suspendBackgroundProcessing();
           if ( selectedEntity != entity ) {
               if ( selectedEntity != null )
                   selectedEntity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
@@ -150,6 +151,7 @@
             initialiseEditors();
             sidebar.selectedChild = tagsPanel;
           }
+          UIComponent.resumeBackgroundProcessing();
       }
 
       private function refreshFeatureIcon():void {
@@ -510,6 +512,7 @@
           if ( selectedEntity == null )
               return;
 
+          UIComponent.suspendBackgroundProcessing();
           var newFeature:Feature = tw.selectedType;
           var undoStack:Function = MainUndoStack.getGlobalStack().addAction;
           var action:CompositeUndoableAction = new CompositeUndoableAction(
@@ -534,6 +537,7 @@
           undoStack(action);
           popupChange.close();
           initialiseEditors();
+          UIComponent.resumeBackgroundProcessing();
       }
       
       private function dragPOI(event:MouseEvent, tags:Array):void {

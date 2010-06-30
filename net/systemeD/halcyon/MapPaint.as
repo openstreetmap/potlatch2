@@ -19,7 +19,7 @@ package net.systemeD.halcyon {
 		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
 		public var nodeuis:Object=new Object();			//  |
 		public var isBackground:Boolean = true;			// is it a background layer or the core paint object?
-		private var sublayerIndex:Object={};			// hash of index->position
+		public var sublayerIndex:Object={};				// hash of index->position
 
 		private const VERYBIG:Number=Math.pow(2,16);
 

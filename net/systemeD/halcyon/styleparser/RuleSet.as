@@ -226,10 +226,10 @@ package net.systemeD.halcyon.styleparser {
 
 		// Get styles for an object
 
-		public function getStyles(obj:Entity,tags:Object):StyleList {
+		public function getStyles(obj:Entity, tags:Object, zoom:uint):StyleList {
 			var sl:StyleList=new StyleList();
 			for each (var sc:StyleChooser in choosers) {
-				sc.updateStyles(obj,tags,sl,imageWidths);
+				sc.updateStyles(obj,tags,sl,imageWidths,zoom);
 			}
 			return sl;
 		}

@@ -31,13 +31,13 @@ package net.systemeD.halcyon.styleparser {
 
 		// Update the current StyleList from this StyleChooser
 
-		public function updateStyles(obj:Entity, tags:Object, sl:StyleList, imageWidths:Object):void {
+		public function updateStyles(obj:Entity, tags:Object, sl:StyleList, imageWidths:Object, zoom:uint):void {
 			// Are any of the ruleChains fulfilled?
 			// ** needs to cope with min/max zoom
 			var w:Number;
 			var fulfilled:Boolean=false;
 			for each (var c:Array in ruleChains) {
-				if (testChain(c,-1,obj,tags)) {
+				if (testChain(c,-1,obj,tags,zoom)) {
 					fulfilled=true; break;
 				}
 			}
@@ -73,6 +73,7 @@ package net.systemeD.halcyon.styleparser {
 				tags['_width']=sl.maxwidth;
 				
 				r.runEvals(tags);
+				sl.addSublayer(r.sublayer);
 				if (a[r.sublayer]) {
 					// If there's already a style on this sublayer, then merge them
 					// (making a deep copy if necessary to avoid altering the root style)
@@ -94,16 +95,16 @@ package net.systemeD.halcyon.styleparser {
 		// - if they succeed, and it's the last in the chain, return happily
 		// - if they succeed, and there's more in the chain, rerun this for each parent until success
 		
-		private function testChain(chain:Array,pos:int,obj:Entity,tags:Object):Boolean {
+		private function testChain(chain:Array,pos:int,obj:Entity,tags:Object,zoom:uint):Boolean {
 			if (pos==-1) { pos=chain.length-1; }
 
 			var r:Rule=chain[pos];
-			if (!r.test(obj, tags)) { return false; }
+			if (!r.test(obj, tags, zoom)) { return false; }
 			if (pos==0) { return true; }
 			
 			var o:Array=obj.parentObjects;
 			for each (var p:Entity in o) {
-				if (testChain(chain, pos-1, p, p.getTagsHash() )) { return true; }
+				if (testChain(chain, pos-1, p, p.getTagsHash(), zoom )) { return true; }
 			}
 			return false;
 		}

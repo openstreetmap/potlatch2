@@ -4,7 +4,7 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-* Dragging multipolygons (or constituent nodes) doesn't force redraw of all ways - need to hook something up to WAY_NODE_MOVED
+** Dragging/creating multipolygons (or constituent nodes) doesn't force redraw of all ways - need to hook something up to WAY_NODE_MOVED
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
 * Splitway + undo leaves way marked dirty
@@ -27,7 +27,7 @@ Potlatch 2: main outstanding issues
 
 == Tag editing ==
 
-** Roundabouts are recognised as areas, so you don't get highway types etc.
+* initialiseEditors is quite slow (typically 150ms)
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
@@ -49,7 +49,6 @@ Potlatch 2: main outstanding issues
 * Mouse wheel zooming
 * CSS editing
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
-* Bug: when drawing way, escape ends drawing. Should revert to previous way.
 * i18n
 * Multiple selection
 * Options should be remembered via SharedObjects
@@ -60,12 +59,11 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
-* StyleList and everything that iterates over it needs to cope with arbitrary sublayers
+** { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * halcyon_viewer needs updating for new tileurl stuff
-* { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
-* Complete MapCSS support
+* MapCSS 0.2 support
 * 'Light' version without vectorlayer support etc.
 * .gz support for OSMConnection
 * Multipolygon rendering for dashedLine, lineDecoration, and WayBitmapFiller

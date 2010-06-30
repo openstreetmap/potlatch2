@@ -151,7 +151,11 @@ package net.systemeD.potlatch2.mapfeatures {
         }
         
         public function isType(type:String):Boolean {
-            return _xml.elements(type).length() > 0;
+            if (type=='area') {
+			    return (_xml.elements(type).length() > 0) || (_xml.elements('line').length() > 0);
+            } else {
+			    return _xml.elements(type).length() > 0;
+			}
         }
         
         public function hasHelpURL():Boolean {

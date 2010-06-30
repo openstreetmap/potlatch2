@@ -14,8 +14,9 @@ package net.systemeD.halcyon.styleparser {
 			subject=s;
 		}
 		
-		public function test(obj:Entity,tags:Object):Boolean {
+		public function test(obj:Entity,tags:Object,zoom:uint):Boolean {
 			if (subject!='' && obj.getType()!=subject) { return false; }
+			if (zoom<minZoom || zoom>maxZoom) { return false; }
 			
 			var v:Boolean=true; var i:uint=0;
 			for each (var condition:Condition in conditions) {

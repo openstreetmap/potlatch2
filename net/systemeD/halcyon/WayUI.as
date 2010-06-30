@@ -152,14 +152,14 @@ package net.systemeD.halcyon {
 			var maxwidth:Number=4;
 
 			// Iterate through each sublayer, drawing any styles on that layer
-			if (!sl) { sl=paint.ruleset.getStyles(entity, tags); }
+			if (!sl) { sl=paint.ruleset.getStyles(entity, tags, paint.map.scale); }
 			var drawn:Boolean;
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
 			for each (var m:Relation in multis) {
 				inners=inners.concat(m.findMembersByRole('inner'));
 			}
-			for (var sublayer:int=10; sublayer>=0; sublayer--) {
+			for each (var sublayer:Number in sl.sublayers) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
@@ -237,7 +237,7 @@ package net.systemeD.halcyon {
 				if (stateClasses["showNodesHover"]) { nodetags[':hoverway']='yes'; }
 				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
 				if (node.numParentWays>1) { nodetags[':junction']='yes'; }
-				sl=paint.ruleset.getStyles(node,nodetags);
+				sl=paint.ruleset.getStyles(node, nodetags, paint.map.scale);
 				if (sl.hasStyles()) {
 					if (paint.nodeuis[node.id]) {
 						paint.nodeuis[node.id].redraw(sl);

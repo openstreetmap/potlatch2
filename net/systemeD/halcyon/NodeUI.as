@@ -44,7 +44,7 @@ package net.systemeD.halcyon {
 			var tags:Object = entity.getTagsCopy();
 			tags=applyStateClasses(tags);
 			if (!entity.hasParentWays) { tags[':poi']='yes'; }
-			if (!sl) { sl=paint.ruleset.getStyles(entity,tags); }
+			if (!sl) { sl=paint.ruleset.getStyles(entity,tags,paint.map.scale); }
 
 			var inWay:Boolean=entity.hasParentWays;
 			var hasStyles:Boolean=sl.hasStyles();
@@ -58,7 +58,7 @@ package net.systemeD.halcyon {
 			var w:Number;
 			var icon:Sprite;
 			layer=paint.maxlayer;
-			for (var sublayer:int=10; sublayer>=0; sublayer--) {
+			for each (var sublayer:Number in sl.sublayers) {
 
 				if (sl.pointStyles[sublayer]) {
 					var s:PointStyle=sl.pointStyles[sublayer];
