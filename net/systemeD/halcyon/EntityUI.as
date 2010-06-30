@@ -65,12 +65,12 @@ package net.systemeD.halcyon {
             }
 		}
 
-		private function relationAdded(event:RelationMemberEvent):void {
+		protected function relationAdded(event:RelationMemberEvent):void {
 		    event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
 		    redraw();
 		}
 		
-		private function relationRemoved(event:RelationMemberEvent):void {
+		protected function relationRemoved(event:RelationMemberEvent):void {
 		    event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
 		    redraw();
 		}

@@ -47,6 +47,7 @@ package net.systemeD.halcyon {
 		private function wayNodeAdded(event:WayNodeEvent):void {
 		    event.node.addEventListener(Connection.NODE_MOVED, nodeMoved);
 		    redraw();
+			redrawMultis();
 		}
 		    
 		private function wayNodeRemoved(event:WayNodeEvent):void {
@@ -55,20 +56,37 @@ package net.systemeD.halcyon {
 				paint.nodeuis[event.node.id].redraw();
 			}
 		    redraw();
+			redrawMultis();
 		}
 		    
         private function nodeMoved(event:NodeMovedEvent):void {
 			recalculate();
             redraw();
+			redrawMultis();
         }
 		private function wayDeleted(event:EntityEvent):void {
 			redraw();
+			redrawMultis();
 		}
         private function wayReordered(event:EntityEvent):void {
             redraw();
+			redrawMultis();
         }
 		private function wayDragged(event:WayDraggedEvent):void {
 			offsetSprites(event.xDelta,event.yDelta);
+		}
+
+		override protected function relationAdded(event:RelationMemberEvent):void {
+			super.relationAdded(event);
+			redrawMultis();
+		}
+		override protected function relationRemoved(event:RelationMemberEvent):void {
+			super.relationRemoved(event);
+			redrawMultis();
+		}
+		override protected function relationTagChanged(event:TagEvent):void {
+			super.relationTagChanged(event);
+			redrawMultis();
 		}
 
 		override public function suspendRedraw(event:EntityEvent):void {
@@ -80,6 +98,18 @@ package net.systemeD.halcyon {
 			suspended=false;
 			if (recalculateDue) { recalculate(); }
 			super.resumeRedraw(event);
+		}
+
+		private function redrawMultis():void {
+			var multis:Array=entity.findParentRelationsOfType('multipolygon','inner');
+			for each (var m:Relation in multis) {
+				var outers:Array=m.findMembersByRole('outer');
+				for each (var e:Entity in outers) { 
+					if (e is Way && paint.wayuis[e.id]) {
+						paint.wayuis[e.id].redraw();
+					}
+				}
+			}
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -273,6 +303,7 @@ package net.systemeD.halcyon {
 		}
 
 		private function solidLine(g:Graphics,w:Way):void {
+			if (w.length==0) { return; }
             var node:Node = w.getNode(0);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			for (var i:uint = 1; i < w.length; i++) {

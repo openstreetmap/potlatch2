@@ -291,8 +291,6 @@
 		editorStackTabNavigator.creationPolicy="auto";
 		editorStackTabNavigator.percentWidth=100;
 		editorStackTabNavigator.percentHeight=100;
-		editorStackTabNavigator.paddingLeft=1;
-		editorStackTabNavigator.paddingRight=1;
 
 		editorStackAccordion = new Accordion();
 		editorStackAccordion.percentWidth=100;

@@ -4,7 +4,6 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
-** Dragging/creating multipolygons (or constituent nodes) doesn't force redraw of all ways - need to hook something up to WAY_NODE_MOVED
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
 * Splitway + undo leaves way marked dirty
