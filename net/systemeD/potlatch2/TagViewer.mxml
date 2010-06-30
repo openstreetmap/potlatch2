@@ -41,7 +41,7 @@
   
   <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto">
     <mx:ViewStack id="stack" width="100%" height="100%">
-      <mx:VBox width="100%" height="100%" label="Simple">
+      <mx:VBox width="100%" height="100%" label="Simple" id="editorContainer" creationComplete="initEditorStackUIs()">
         <mx:HBox borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3" id="iconContainer">
             <mx:Image id="iconImage"/>
             <mx:VBox width="100%" verticalGap="1">
@@ -50,12 +50,7 @@
             </mx:VBox>
             <mx:LinkButton label="?" click="openDescription()" id="helpLabel"/>
         </mx:HBox>
-        <flexlib:SuperTabNavigator id="editorStack" width="100%" height="100%" paddingLeft="2" paddingRight="2"
-            allowTabSqueezing="false" minTabWidth="10" closePolicy="close_never"
-			updateComplete="tabSelected()" creationPolicy="auto" 
-            scrollSpeed="20" change="ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox)"/>
       </mx:VBox>
-
       <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
         <mx:Label id="advancedID">
           <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
@@ -104,7 +99,21 @@
       </mx:VBox>
       
       </mx:ViewStack>
-    <mx:LinkBar dataProvider="{stack}"/>
+
+	  <mx:HBox width="100%">
+		<mx:LinkBar dataProvider="{stack}"/>
+		<mx:Spacer width="100%"/>
+		<mx:LinkButton 
+			icon="@Embed('../../../embedded/view_tabbed.png')"
+			disabledIcon="@Embed('../../../embedded/view_tabbed_disabled.png')"
+			click="setEditorStackUI(true)" id="tabNavigatorLabel" paddingTop="6" 
+			enabled="{editorStack is Accordion &amp;&amp; stack.selectedIndex==0}" />
+		<mx:LinkButton
+			icon="@Embed('../../../embedded/view_accordion.png')" 
+			disabledIcon="@Embed('../../../embedded/view_accordion_disabled.png')"
+			click="setEditorStackUI(false)" id="accordionLabel" paddingTop="6"
+			enabled="{editorStack is SuperTabNavigator &amp;&amp; stack.selectedIndex==0}" />
+	  </mx:HBox>
   </mx:VBox>
 </mx:ViewStack>
 
@@ -122,6 +131,11 @@
       import mx.events.DragEvent;
       import mx.managers.DragManager;
       import mx.core.DragSource;
+      import flexlib.containers.SuperTabNavigator;
+
+      private var editorStackTabNavigator:SuperTabNavigator;
+      private var editorStackAccordion:Accordion;
+      [Bindable] private var editorStack:Container;
 
       private var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
@@ -267,15 +281,63 @@
               tab.addChild(component);
           }
       }
+      
+	private function initEditorStackUIs():void {
+		editorStackTabNavigator = new SuperTabNavigator();
+		editorStackTabNavigator.allowTabSqueezing=false;
+		editorStackTabNavigator.minTabWidth=10;
+		editorStackTabNavigator.closePolicy="close_never";
+		editorStackTabNavigator.scrollSpeed=20;
+		editorStackTabNavigator.creationPolicy="auto";
+		editorStackTabNavigator.percentWidth=100;
+		editorStackTabNavigator.percentHeight=100;
+		editorStackTabNavigator.paddingLeft=1;
+		editorStackTabNavigator.paddingRight=1;
 
-	private function tabSelected():void {
-		if (editorStack.selectedIndex<0) { return; }
-		// This fixes a Flex TabNavigator bug where the tab would be selected, but not actually skinned properly
-		for (var i:uint=0; i<editorStack.numChildren; i++) {
-			editorStack.getTabAt(i).selected=(i==editorStack.selectedIndex);
+		editorStackAccordion = new Accordion();
+		editorStackAccordion.percentWidth=100;
+		editorStackAccordion.percentHeight=100;
+		editorStackAccordion.creationPolicy="auto";
+
+		setEditorStackUI(true);
+	}
+
+	private function setEditorStackUI(isTabbed:Boolean):void {
+		var children:Array=[]; var i:uint;
+
+		if (editorStack) {
+			// blank existing component
+			editorStack.removeEventListener("change",editorStackUIChange);
+			editorStack.removeEventListener("updateComplete",editorStackUIUpdate);
+			editorStack.removeAllChildren();
+			editorContainer.removeChildAt(1);
+		}
+
+		// replace with new component
+		editorStack = (isTabbed ? editorStackTabNavigator : editorStackAccordion) as Container;
+		editorContainer.addChild(editorStack);
+
+		// re-add children and listeners
+		initialiseEditors();
+		editorStack.addEventListener("change",editorStackUIChange);
+		editorStack.addEventListener("updateComplete",editorStackUIUpdate);
+	}
+	
+	private function editorStackUIChange(event:Event):void {
+		ensureEditorsPopulated(IndexChangedEvent(event).relatedObject as VBox);
+	}
+
+	private function editorStackUIUpdate(event:Event):void {
+		if (editorStack is SuperTabNavigator) {
+			var e:SuperTabNavigator = editorStack as SuperTabNavigator;
+			if (e.selectedIndex<0) { return; }
+			for (var i:uint=0; i<e.numChildren; i++) {
+				e.getTabAt(i).selected=(i==e.selectedIndex);
+			}
 		}
 	}
-      
+
+
       private function checkAdvanced():void {
           if ( selectedEntity != null )
              setupAdvanced(selectedEntity);
