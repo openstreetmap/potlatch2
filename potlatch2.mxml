@@ -300,9 +300,12 @@
         }
         
         private function dragDropHandler(event:DragEvent):void {
-            // Get the data identified by the color format from the drag source.
-            // Blame http://www.adobe.com/devnet/flex/quickstart/adding_drag_and_drop/#manual
-            // for whatever horrid abuse of "color format" this is doing
+			// Deselect the dragged icon
+			if (event.dragSource.dataForFormat('container')) {
+				event.dragSource.dataForFormat('container').selectedItem=-1;
+			}
+
+			// Get the tags
             var tags:Array = event.dragSource.dataForFormat('tags') as Array;
             var mapLoc:Point = Globals.vars.root.globalToLocal(new Point(event.stageX, event.stageY));
             var lat:Number = Globals.vars.root.coord2lat(mapLoc.y);

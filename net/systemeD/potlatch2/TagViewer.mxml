@@ -7,36 +7,41 @@
 
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
   <mx:VBox id="dndPanel" width="100%" height="100%">
-    <!-- FIXME the panel text is repeated below for mouseOut -->
-    <mx:Text id="dndPanelText" text="Drag and Drop Points of Interest" />
-    <mx:TileList id="poiGrid" dataProvider="{MapFeatures.getInstance().pois}" width="100%" height="100%">
-      <mx:itemRenderer>
-        <mx:Component>
-          <mx:VBox mouseOver="parentDocument.dndPanelText.text = data.name"
-                   mouseOut="parentDocument.dndPanelText.text = 'Drag and Drop Points of Interest'">
-            <mx:Script><![CDATA[
-              import mx.events.DragEvent;
-              import mx.managers.DragManager;
-              import mx.core.DragSource;
-                  
-              private function dragPOI(event:MouseEvent, tags:Array):void {
-                  // Get the drag initiator component from the event object.
-                  var dragInitiator:Image = event.currentTarget as Image;
-                  var dragSource:DragSource = new DragSource();
-                  dragSource.addData(tags, 'tags');
-                  
-                  var dragProxy:Image = new Image();
-                  dragProxy.source = dragInitiator.source;
-                  dragProxy.width = dragInitiator.width;   // must set width and height explicitly
-                  dragProxy.height = dragInitiator.height; // for non-embedded images
-                  DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
-              }
-            ]]></mx:Script>
-            <mx:Image id="foo" source="{data.image}" height="25" width="25" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
-          </mx:VBox>
-        </mx:Component>
-      </mx:itemRenderer>
-    </mx:TileList>
+    <mx:Text id="dndPanelText" text="{dndPrompt}" automationName="{dndPrompt}" />
+	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}">
+		<mx:HBox width="100%"><mx:Label text="{dndRep.currentItem.name}"/></mx:HBox>
+
+			<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point')}" width="100%" 
+			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)">
+				<mx:itemRenderer>
+					<mx:Component>
+						<mx:VBox mouseOver="parentDocument.dndPanelText.text = data.name"
+								 mouseOut="parentDocument.dndPanelText.text = parentDocument.dndPanelText.automationName">
+						<mx:Script><![CDATA[
+							import mx.events.DragEvent;
+							import mx.managers.DragManager;
+							import mx.core.DragSource;
+
+							private function dragPOI(event:MouseEvent, tags:Array):void {
+								// Get the drag initiator component from the event object.
+								var dragInitiator:Image = event.currentTarget as Image;
+								var dragSource:DragSource = new DragSource();
+								dragSource.addData(tags, 'tags');
+								dragSource.addData(event.target.parent.parent.parent.parent, 'container');
+
+								var dragProxy:Image = new Image();
+								dragProxy.source = dragInitiator.source;
+								dragProxy.width = dragInitiator.width;   // must set width and height explicitly
+								dragProxy.height = dragInitiator.height; // for non-embedded images
+								DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
+							}
+						]]></mx:Script>
+						<mx:Image id="foo" source="{data.image}" height="25" width="25" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
+					</mx:VBox>
+				</mx:Component>
+			</mx:itemRenderer>
+		</mx:TileList>
+	</mx:Repeater>
   </mx:VBox>
   
   <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto">
@@ -132,6 +137,8 @@
       import mx.managers.DragManager;
       import mx.core.DragSource;
       import flexlib.containers.SuperTabNavigator;
+
+      private static const dndPrompt:String="Drag and drop points of interest";
 
       private var editorStackTabNavigator:SuperTabNavigator;
       private var editorStackAccordion:Accordion;
@@ -600,17 +607,11 @@
           UIComponent.resumeBackgroundProcessing();
       }
       
-      private function dragPOI(event:MouseEvent, tags:Array):void {
-          // Get the drag initiator component from the event object.
-          var dragInitiator:Image = event.currentTarget as Image;
-          var dragSource:DragSource = new DragSource();
-          dragSource.addData(tags, 'tags');
-          
-          var dragProxy:Image = new Image();
-          dragProxy.source = event.currentTarget.source;
-          
-          DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
-      }
+	private function resizePOIGrid(event:Event):void {
+		var rows:Number=event.target.dataProvider.length/event.target.columnCount;
+		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
+		event.target.height=rows*(event.target.rowHeight+1);
+	}
   ]]></mx:Script>
 </mx:VBox>
 

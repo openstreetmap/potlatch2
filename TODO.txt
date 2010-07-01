@@ -15,11 +15,6 @@ Potlatch 2: main outstanding issues
 * Import from OSM (is this worth sharing with the XML API stuff?)
 * Load GPX from API
 
-== Other core ==
-
-* Non-900913 projections
-* Plugin support
-
 == Saving ==
 
 * Should be able to reuse changesets
@@ -28,15 +23,8 @@ Potlatch 2: main outstanding issues
 == Tag editing ==
 
 * initialiseEditors is quite slow (typically 150ms)
-* Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
-* If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
-* It would be useful to have fields that only allow numbers in a non-destructive way, for example for step_count or capacity.
-* The area of pois for dragging on to the map should have a search, with synonyms and also be categorised like the lines are.
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
-* Checkboxes, for example what you can recycle, or whether something is a bridge or tunnel
-* Ability to specify that a node should be a point in a way, for example for crossings
-* Ability to say that it's unlikely/impossible to have a way that is a bridge and a tunnel at the same time.
 
 == UI ==
 
@@ -45,11 +33,6 @@ Potlatch 2: main outstanding issues
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * B keypress for background source tag
-* Bbox-sensitive menu for background imagery
-* Mouse wheel zooming
-* CSS editing
-* Quick-search on add-relations-to-way dialog (RelationSelectPanel)
-* i18n
 * Multiple selection
 * Options should be remembered via SharedObjects
 
@@ -63,7 +46,39 @@ Potlatch 2: main outstanding issues
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
 * MapCSS 0.2 support
-* 'Light' version without vectorlayer support etc.
 * .gz support for OSMConnection
 * Multipolygon rendering for dashedLine, lineDecoration, and WayBitmapFiller
 * Multipolygons should take their tags from the relation, not the way
+
+
+
+
+Requested enhancements
+----------------------
+
+== Other core ==
+
+* Non-900913 projections
+* Plugin support
+
+== Tag editing ==
+
+* Checkboxes, for example what you can recycle, or whether something is a bridge or tunnel
+* Ability to specify that a node should be a point in a way, for example for crossings
+* Ability to say that it's unlikely/impossible to have a way that is a bridge and a tunnel at the same time.
+* It would be useful to have fields that only allow numbers in a non-destructive way, for example for step_count or capacity.
+* Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
+* The area of pois for dragging on to the map should have a search, with synonyms.
+* If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
+
+== UI ==
+
+* Mouse wheel zooming
+* Bbox-sensitive menu for background imagery
+* CSS editing
+* Quick-search on add-relations-to-way dialog (RelationSelectPanel)
+* i18n
+
+== Rendering (Halcyon) ==
+
+* 'Light' version without vectorlayer support etc.
