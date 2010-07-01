@@ -24,8 +24,8 @@ package net.systemeD.halcyon {
 
 		private const NODESIZE:uint=6;
 
-		public function WayUI(way:Way, paint:MapPaint, interactive:Boolean=true) {
-			super(way,paint,interactive);
+		public function WayUI(way:Way, paint:MapPaint) {
+			super(way,paint);
             entity.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             entity.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
             entity.addEventListener(Connection.WAY_REORDERED, wayReordered);
@@ -165,6 +165,7 @@ package net.systemeD.halcyon {
 		// Redraw
 
 		override public function doRedraw(sl:StyleList):Boolean {
+			interactive=false;
 			removeSprites();
 			if (Way(entity).length==0) { return false; }
 			if (!paint.ready) { return false; }
@@ -195,6 +196,7 @@ package net.systemeD.halcyon {
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
 					var x0:Number=paint.map.lon2coord(Way(entity).getNode(0).lon);
 					var y0:Number=paint.map.latp2coord(Way(entity).getNode(0).latp);
+					interactive||=s.interactive;
 
 					// Stroke
 					if (s.width)  {
@@ -206,7 +208,7 @@ package net.systemeD.halcyon {
 							if (s.line_style) { lineDecoration(stroke.graphics,s,segments); }
 						} else { solidLines(stroke.graphics,inners); }
 						drawn=true;
-						maxwidth=Math.max(maxwidth,s.width);
+						if (s.interactive) { maxwidth=Math.max(maxwidth,s.width); }
 					}
 
 					// Fill
@@ -228,12 +230,13 @@ package net.systemeD.halcyon {
 						if (s.casing_dashes && s.casing_dashes.length>0) { dashedLine(casing.graphics,s.casing_dashes); }
 																	else { solidLines(casing.graphics,inners); }
 						drawn=true;
-						maxwidth=Math.max(maxwidth,s.casing_width);
+						if (s.interactive) { maxwidth=Math.max(maxwidth,s.casing_width); }
 					}
 				}
 				
 				if (sl.textStyles[sublayer]) {
 					var t:TextStyle=sl.textStyles[sublayer];
+					interactive||=t.interactive;
 					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);
 					nameformat = t.getTextFormat();
 					var a:String=tags[t.text];
@@ -272,7 +275,7 @@ package net.systemeD.halcyon {
 					if (paint.nodeuis[node.id]) {
 						paint.nodeuis[node.id].redraw(sl);
 					} else {
-						paint.nodeuis[node.id]=new NodeUI(node,paint,r,true,sl);
+						paint.nodeuis[node.id]=new NodeUI(node,paint,r,layer,sl);
 					}
 				} else if (paint.nodeuis[node.id]) {
 					paint.nodeuis[node.id].removeSprites();
@@ -282,12 +285,14 @@ package net.systemeD.halcyon {
 			if (!drawn) { return false; }
 			
             // create a generic "way" hitzone sprite
-            hitzone = new Sprite();
-            hitzone.graphics.lineStyle(maxwidth, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
-            solidLines(hitzone.graphics,[]);
-            addToLayer(hitzone, CLICKSPRITE);
-            hitzone.visible = false;
-			setListenSprite(hitzone);
+			if (interactive && drawn) {
+	            hitzone = new Sprite();
+	            hitzone.graphics.lineStyle(maxwidth, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
+	            solidLines(hitzone.graphics,[]);
+	            addToLayer(hitzone, WAYCLICKSPRITE);
+	            hitzone.visible = false;
+				setListenSprite(WAYCLICKSPRITE, hitzone);
+			}
 
 			return true;
 		}

@@ -8,6 +8,7 @@ package net.systemeD.halcyon.styleparser {
 		public var merged:Boolean=false;
 		public var edited:Boolean=false;		// true once a property has been set from a string
 		public var sublayer:uint=5;
+		public var interactive:Boolean=true;	
 		public var evals:Object={};				// compiled SWFs for each eval. We keep it here, not in the property 
 												//  | itself, so that we can retain typing for each property
 

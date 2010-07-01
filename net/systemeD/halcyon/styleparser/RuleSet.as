@@ -73,6 +73,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const UNDERLINE:RegExp=/^underline$/i;
 		private static const CAPS:RegExp=/^uppercase$/i;
 		private static const CENTER:RegExp=/^center$/i;
+		private static const FALSE:RegExp=/^(no|false|0)$/i;
 
 		private static const HEX:RegExp=/^#([0-9a-f]+)$/i;
 		private static const CSSCOLORS:Object = {
@@ -240,7 +241,7 @@ package net.systemeD.halcyon.styleparser {
 		public function loadFromCSS(str:String):void {
 			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); loaded=true; redrawCallback(); return; }
 
-			var request:URLRequest=new URLRequest(str);
+			var request:URLRequest=new URLRequest(str+"?"+Math.random());
 			var loader:URLLoader=new URLLoader();
 
 			request.method=URLRequestMethod.GET;
@@ -450,6 +451,11 @@ package net.systemeD.halcyon.styleparser {
 			if (t['z_index']) { sub=Number(t['z_index']); delete t['z_index']; }
 			ss.sublayer=ps.sublayer=ts.sublayer=hs.sublayer=sub;
 			xs.sublayer=10;
+			
+			// Find interactive
+			var inter:Boolean=true;
+			if (t['interactive']) { inter=t['interactive'].match(FALSE) ? false : true; delete t['interactive']; }
+			ss.interactive=ps.interactive=ts.interactive=hs.interactive=xs.interactive=inter;
 
 			// Munge special values
 			if (t['font_weight']    ) { t['font_bold'  ]    = t['font_weight'    ].match(BOLD  )    ? true : false; delete t['font_weight']; }
@@ -467,7 +473,7 @@ package net.systemeD.halcyon.styleparser {
 			// Assign each property to the appropriate style
 			for (a in t) {
 				// Parse properties
-				// ** also do units, e.g. px/pt
+				// ** also do units, e.g. px/pt/m
 				if (a.match(COLOR)) { v = parseCSSColor(t[a]); }
 				               else { v = t[a]; }
 				

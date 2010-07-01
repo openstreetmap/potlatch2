@@ -16,19 +16,19 @@ package net.systemeD.halcyon {
         protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
 		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
 		protected var layer:int=0;						// map layer
-		protected var interactive:Boolean=true;			// does it respond to connection events?
 		protected var suspended:Boolean=false;			// suspend redrawing?
 		protected var redrawDue:Boolean=false;			// redraw called while suspended?
 		protected var redrawStyleList:StyleList;		// stylelist to be used when redrawing?
 		public var paint:MapPaint;						// reference to parent MapPaint
 		public var ruleset:RuleSet;						// reference to ruleset in operation
+		public var interactive:Boolean=true;			// does object respond to clicks?
 
 		protected const FILLSPRITE:uint=0;
 		protected const CASINGSPRITE:uint=1;
 		protected const STROKESPRITE:uint=2;
 		protected const NAMESPRITE:uint=3;
-		protected const NODESPRITE:uint=4;
-		protected const CLICKSPRITE:uint=5;
+		protected const WAYCLICKSPRITE:uint=4;
+		protected const NODECLICKSPRITE:uint=5;
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
 			embedFonts: true,
@@ -36,10 +36,9 @@ package net.systemeD.halcyon {
 			gridFitType: GridFitType.NONE
 		};
 
-		public function EntityUI(entity:Entity, paint:MapPaint, interactive:Boolean) {
+		public function EntityUI(entity:Entity, paint:MapPaint) {
 			this.entity=entity;
 			this.paint=paint;
-			this.interactive=interactive;
             entity.addEventListener(Connection.TAG_CHANGED, tagChanged);
 			entity.addEventListener(Connection.ADDED_TO_RELATION, relationAdded);
 			entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved);
@@ -123,12 +122,16 @@ package net.systemeD.halcyon {
 			}
 		}
 
-		protected function setListenSprite(hitzone:Sprite):void {
-			if (!listenSprite.parent) { addToLayer(listenSprite, CLICKSPRITE); }
-            listenSprite.hitArea = hitzone;
-            listenSprite.buttonMode = true;
-            listenSprite.mouseChildren = true;
-            listenSprite.mouseEnabled = true;
+		protected function setListenSprite(spriteContainer:uint, hitzone:Sprite):void {
+			if (hitzone) {
+				if (!listenSprite.parent) { addToLayer(listenSprite, spriteContainer); }
+	            listenSprite.hitArea = hitzone;
+	            listenSprite.buttonMode = true;
+	            listenSprite.mouseChildren = true;
+	            listenSprite.mouseEnabled = true;
+			} else {
+				if (listenSprite.parent) { listenSprite.parent.removeChild(listenSprite); }
+			}
 		}
 
         public function setHighlight(stateType:String, isOn:*):void {

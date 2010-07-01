@@ -43,8 +43,8 @@ package net.systemeD.halcyon {
 				t.addChild(getPaintSprite());				//  |  | sublayer
 				s.addChild(t);								//  |  |
 				s.addChild(getPaintSprite());				//	| 3 names
-				s.addChild(getPaintSprite());				//	| 4 nodes
-				s.addChild(getHitSprite());				    //	| 5 entity hit tests
+				s.addChild(getHitSprite());					//	| 4 way hit tests
+				s.addChild(getHitSprite());				    //	| 5 node hit tests
 				addChild(s);								//  |
 			}
 			addChild(getPaintSprite());     				// name sprite
@@ -120,12 +120,12 @@ package net.systemeD.halcyon {
 		}
 
 		public function createWayUI(way:Way):WayUI {
-			if (!wayuis[way.id]) { wayuis[way.id]=new WayUI(way,this,false); }
+			if (!wayuis[way.id]) { wayuis[way.id]=new WayUI(way,this); }
 			return wayuis[way.id];
 		}
 
 		public function createNodeUI(node:Node):NodeUI {
-			if (!nodeuis[node.id]) { nodeuis[node.id]=new NodeUI(node,this,0,false); }
+			if (!nodeuis[node.id]) { nodeuis[node.id]=new NodeUI(node,this,0); }
 			return nodeuis[node.id];
 		}
 

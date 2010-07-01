@@ -4,6 +4,7 @@ Potlatch 2: main outstanding issues
 
 == Core geometry ==
 
+* P1-style J (join) / shift-J (unjoin)
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable
 * Splitway + undo leaves way marked dirty
@@ -58,7 +59,6 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
-** { interactive: no; } - stop items being clicked on (and their maxwidth being taken into account)
 * halcyon_viewer needs updating for new tileurl stuff
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
