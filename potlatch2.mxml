@@ -4,6 +4,8 @@
 	xmlns:halcyon="net.systemeD.halcyon.*"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	layout="vertical"
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off"
 	horizontalAlign="center" 
 	addedToStage="initApp()">
 	
