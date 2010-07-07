@@ -63,15 +63,26 @@ package net.systemeD.potlatch2.mapfeatures {
                 return null;
 
             for each(var feature:Feature in features) {
-                // check for matching tags
                 var match:Boolean = true;
+
+                // check for matching tags
                 for each(var tag:Object in feature.tags) {
                     var entityTag:String = entity.getTag(tag.k);
                     match = entityTag == tag.v || (entityTag != null && tag.v == "*");
                     if ( !match ) break;
                 }
-                if ( match )
+
+				// check for matching withins
+				if (match) {
+					for each (var within:Object in feature.withins) {
+						match = entity.countParentObjects(within) >= (within.minimum ? within.minimum : 1);
+						if (!match) { break; }
+					}
+				}
+
+                if (match) {
                     return feature;
+				}
             }
             return null;
         }

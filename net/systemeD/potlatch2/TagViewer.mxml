@@ -186,7 +186,7 @@
                   feature.addEventListener("imageChanged", featureImageChanged);
           }
 
-          if ( feature != null ) {
+          if ( feature != null && feature.name != null ) {
               setFeatureIcon(selectedEntity, feature);
           } else {
               blankFeatureIcon(selectedEntity);

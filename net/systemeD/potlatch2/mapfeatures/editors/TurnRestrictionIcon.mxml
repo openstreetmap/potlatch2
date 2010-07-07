@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3">
+	
+	<mx:Grid width="100%">
+		<mx:GridRow>
+			<mx:GridItem rowSpan="2">
+				<edit:ChoiceComboBox id="inputBox" dropdownFactory="mx.controls.TileList"
+				        itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.TurnRestrictionRenderer"
+						change="setRestrictionType(inputBox.selectedItem.data)" 
+				        click="event.stopPropagation()" 
+						selectedItem="{findSelectedRestrictionType()}"
+					    dropdownWidth="162" rowCount="2"
+					    fontWeight="normal">
+					<mx:ArrayCollection id="restrictionTypes">
+						<mx:Object label="No left turn" data='no_left_turn' />
+						<mx:Object label="No right turn" data='no_right_turn' />
+						<mx:Object label="No U turns" data='no_u_turn' />
+						<mx:Object label="No straight on" data='no_straight_on' />
+						<mx:Object label="Left turn only" data='only_left_turn' />
+						<mx:Object label="Right turn only" data='only_right_turn' />
+						<mx:Object label="Straight on only" data='only_straight_on' />
+					</mx:ArrayCollection>
+				</edit:ChoiceComboBox>
+				</mx:GridItem>
+			<mx:GridItem><mx:Text text="From" selectable="false"/></mx:GridItem>
+			<mx:GridItem><mx:ComboBox id="from" dataProvider="{connectingWays}"
+							selectedItem="{findSelected('from')}"
+							change="setMember(from.selectedItem.data,'from')"
+       						click="event.stopPropagation()" /></mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow>
+			<mx:GridItem><mx:Text text="To" selectable="false"/></mx:GridItem>
+			<mx:GridItem><mx:ComboBox id="to" dataProvider="{connectingWays}"
+							selectedItem="{findSelected('to')}"
+							change="setMember(to.selectedItem.data,'to')"
+     						click="event.stopPropagation()" /></mx:GridItem>
+		</mx:GridRow>
+	</mx:Grid>
+
+    <mx:Script><![CDATA[
+    import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.styleparser.RuleSet;
+    import net.systemeD.potlatch2.mapfeatures.*;
+    import flash.events.*;
+    import mx.collections.ArrayCollection;
+	import mx.utils.ObjectProxy;
+
+	/* ** FIXME as of Wed:
+		  - 'from' and 'to' don't get populated with original values
+		  - scrollbar ugh
+		  - "warning: unable to bind to property 'data' on class 'Object' (class is not an IEventDispatcher)"
+		  - (plus general node redraw bug when you change something)
+	*/
+
+    private var _turn:Object;
+    
+    public function setTurnRestriction(restriction:Object):void {   
+        _turn = restriction;
+    }
+    
+	private function findSelected(role:String):Object {
+		trace("calling findSelected for "+role);
+		var rel:Relation=Relation(_turn.relation);
+		for each (var item:Object in connectingWays) {
+			if (rel.hasMemberInRole(item.data,role)) { return item; }
+		}
+		return null;
+	}
+
+	private function get connectingWays():ArrayCollection {
+		trace("calling connectingWays");
+		var ways:Array=[];
+		for each (var way:Way in Entity(_turn.entity).parentWays) {
+			ways.push( { label:way.getDescription(), data:way } );
+		}
+		return new ArrayCollection(ways);
+	}
+    
+	private function setMember(entity:Entity,role:String):void {
+		trace("setMember "+role+" to "+entity);
+		var rel:Relation=Relation(_turn.relation);
+        var undo:CompositeUndoableAction = new CompositeUndoableAction("Delete refs");
+
+		// first, remove existing role from relation
+		var old:Array=rel.findMembersByRole(role);
+		for each (var memberEntity:Entity in old) {
+			rel.removeMember(memberEntity, undo.push);
+		}
+		undo.doAction();
+
+		// now add new entity
+		// ** FIXME - appendMember should be undoable
+		rel.appendMember(new RelationMember(entity,role))
+	}
+	
+	private function setRestrictionType(type:String):void {
+		var rel:Relation=Relation(_turn.relation);
+		rel.setTag('restriction', type, MainUndoStack.getGlobalStack().addAction);
+		trace ("set restriction type to "+type);
+	}
+	
+	private function findSelectedRestrictionType():Object {
+		var type:String=Relation(_turn.relation).getTag('restriction');
+		for each (var item:Object in restrictionTypes) {
+			if (item.data==type) { return item; }
+		}
+		return null;
+	}
+
+    public function get turnRestriction():Object {
+        return _turn;
+    }
+    
+    ]]></mx:Script>
+</mx:HBox>
+

@@ -98,6 +98,10 @@
     <inputSet ref="cycle"/>
     <inputSet ref="bus-route"/>
   </inputSet>
+  
+  <inputSet id="junctionNode">
+    <inputSet ref="turnRestrictions"/>
+  </inputSet>
 
   <inputSet id="roadRefs">
     <input type="freetext" presence="always"
@@ -171,6 +175,13 @@
         key="maxspeed"/>
   </inputSet>
   
+  <inputSet id="turnRestrictions">
+    <input type="turn" name="Turn restriction" description="Turn restriction" category="Restrictions" priority="normal" presence="onTagMatch">
+       <match k="type" v="restriction"/>
+       <role role="via"/>
+    </input>
+  </inputSet>
+
   <inputSet id="naptan">
     <input type="freetext" presence="onTagMatch" category="Naptan" description="12 character internal Naptan ID" name="Atco Code" key="naptan:AtcoCode" />
     <input type="choice" presence="onTagMatch" category="Naptan" description="The eight-point compass bearning" name="Naptan Bearing" key="naptan:Bearing" >
@@ -1183,4 +1194,13 @@
     <input type="freetext" presence="always" category="Naming" name="Network" key="network" description="The network of the tram service" priority="low"/>
   </feature>
   
+
+    <!-- Junction nodes (for turn restrictions) -->
+
+    <feature>
+    	<point/>
+    	<within entity="way" k="highway" minimum="2"/>
+    	<inputSet ref="junctionNode"/>
+    </feature>
+
 </mapFeatures>

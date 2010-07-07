@@ -191,15 +191,23 @@ package net.systemeD.halcyon.connection {
 		public function findParentRelationsOfType(type:String, role:String=""):Array {
 			var a:Array=[];
 			for (var o:Object in parents) {
-				if (o is Relation && Relation(o).tagIs('type',type)) { 
-					for (var i:uint=0; i<o.length; i++) {
-						if (o.getMember(i).entity==this && o.getMember(i).role==role) {
-							a.push(o);
-						}
-					}
+				if (o is Relation && Relation(o).tagIs('type',type) && Relation(o).hasMemberInRole(this,role)) { 
+					a.push(o);
 				}
 			}
 			return a;
+		}
+		
+		public function countParentObjects(within:Object):uint {
+			var count:uint=0;
+			for (var o:Object in parents) {
+				if (o.getType()==within.entity && o.getTag(within.k)) {
+					if (within.v && within.v!=o.getTag(within.k)) { break; }
+					if (within.role && !Relation(o).hasMemberInRole(this,within.role)) { break; }
+					count++;
+				}
+			}
+			return count;
 		}
 		
 		public function get parentObjects():Array {
@@ -239,6 +247,14 @@ package net.systemeD.halcyon.connection {
 		}
 
 		// To be overridden
+
+		public function getDescription():String {
+			var basic:String=this.getType()+" "+_id;
+			if (tags['ref'] && tags['name']) { return tags['ref']+' '+tags['name']+' ('+basic+')'; }
+			if (tags['ref']) { return tags['ref']+' ('+basic+')'; }
+			if (tags['name']) { return tags['name']+' ('+basic+')'; }
+			return basic;
+		}
 
         public function getType():String {
             return '';

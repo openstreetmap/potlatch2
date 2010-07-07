@@ -68,6 +68,13 @@ package net.systemeD.halcyon.connection {
 			return a;
 		}
 
+		public function hasMemberInRole(entity:Entity,role:String):Boolean {
+            for (var index:uint = 0; index < members.length; index++) {
+				if (members[index].role==role && members[index].entity == entity) { return true; }
+			}
+			return false;
+		}
+		
         public function insertMember(index:uint, member:RelationMember, performAction:Function):void {
             performAction(new AddMemberToRelationAction(this, index, member, members));
         }
@@ -105,7 +112,7 @@ package net.systemeD.halcyon.connection {
 			return (deleted || (members.length==0));
 		}
 
-        public function getDescription():String {
+        public override function getDescription():String {
             var desc:String = "";
             var relTags:Object = getTagsHash();
             if ( relTags["type"] ) {

@@ -34,6 +34,8 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                   if ( relVal != relationTags[k] )
                       addable = false;
               }
+              if (_factory.role && !relation.hasMemberInRole(_entity,_factory.role) ) { addable=false; }
+
               if (addable) {
                   for each( var memberIndex:int in relation.findEntityMemberIndexes(_entity)) {
                       var props:Object = {};

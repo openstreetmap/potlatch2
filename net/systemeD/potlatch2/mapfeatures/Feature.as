@@ -13,23 +13,32 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _xml:XML;
         private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
         private var _tags:Array;
+		private var _withins:Array;
         private var _editors:Array;
 
         public function Feature(mapFeatures:MapFeatures, _xml:XML) {
             this.mapFeatures = mapFeatures;
             this._xml = _xml;
-            parseTags();
+            parseConditions();
             parseEditors();
         }
         
-        private function parseTags():void {
-            _tags = new Array();
+        private function parseConditions():void {
+            _tags = [];
+			_withins = [];
             
+			// parse tags
             for each(var tag:XML in definition.tag) {
-                var tagObj:Object = new Object();
-                tagObj["k"] = tag.@k;
-                tagObj["v"] = tag.@v;
-                _tags.push(tagObj);
+                _tags.push( { k:tag.@k, v:tag.@v} );
+            }
+
+			// parse 'within'
+            for each(var within:XML in definition.within) {
+				var obj:Object= { entity:within.@entity, k:within.@k };
+				if (within.attribute('v'      ).length()>0) { obj['v'      ]=within.@v;       }
+				if (within.attribute('minimum').length()>0) { obj['minimum']=within.@minimum; }
+				if (within.attribute('role'   ).length()>0) { obj['role'   ]=within.@role;    }
+                _withins.push(obj);
             }
         }
         
@@ -78,7 +87,8 @@ package net.systemeD.potlatch2.mapfeatures {
     
         [Bindable(event="nameChanged")]
         public function get name():String {
-            return _xml.@name;
+			if (_xml.attribute('name').length()>0) { return _xml.@name; }
+			return null;
         }
     
         [Bindable(event="imageChanged")]
@@ -140,6 +150,10 @@ package net.systemeD.potlatch2.mapfeatures {
         
         public function get tags():Array {
             return _tags;
+        }
+
+        public function get withins():Array {
+            return _withins;
         }
         
         public function findFirstCategory():Category {

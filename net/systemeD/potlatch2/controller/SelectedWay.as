@@ -45,14 +45,14 @@ package net.systemeD.potlatch2.controller {
 				// start new way
 				var way:Way = controller.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
 				return new DrawWay(way, true, false);
-			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && event.ctrlKey ) {
-				// merge way
-				return mergeWith(entity as Way);
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==selectedWay && event.shiftKey) {
 				// insert node within way (shift-click)
                 var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
 				d.forceDragStart();
 				return d;
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && event.shiftKey ) {
+				// merge way
+				return mergeWith(entity as Way);
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;

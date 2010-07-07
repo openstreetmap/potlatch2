@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edit:RelationMemberEditor
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	verticalGap="0"
+	width="100%"
+	toolTip="{fieldDescription}"
+	initialize="addTurnRestrictions()">
+
+  <mx:Label text="{fieldName}:"/>
+  <mx:VBox verticalGap="0" width="100%" id="turnRestrictionIcons"/>
+  <mx:LinkButton label="Add new turn restriction" click="addNewTurnRestriction()" />
+
+  <mx:Script><![CDATA[
+	import net.systemeD.halcyon.connection.*;
+	import net.systemeD.potlatch2.*;
+	import mx.managers.PopUpManager;
+	import mx.core.*;
+
+	/* ** FIXME: some of this is common with RouteEditor.mxml. We can probably refactor */
+
+	public function addTurnRestrictions(event:Event=null):void {
+		turnRestrictionIcons.removeAllChildren();
+		addEventListener("relations_changed", addTurnRestrictions);
+		for each(var relation:Object in matchedRelations) {
+			var icon:TurnRestrictionIcon = new TurnRestrictionIcon();
+			icon.setTurnRestriction(relation);
+			
+			icon.addEventListener(MouseEvent.CLICK, turnRestrictionClicked);
+			turnRestrictionIcons.addChild(icon);
+		}
+	}
+	
+	public function turnRestrictionClicked(event:Event):void {
+		var relation:Object = TurnRestrictionIcon(event.currentTarget).turnRestriction;
+		var panel:RelationEditorPanel = RelationEditorPanel(
+			PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+		panel.setRelation(relation["relation"]);
+		PopUpManager.centerPopUp(panel);
+	}
+
+	public function addNewTurnRestriction():void {
+		var conn:Connection = Connection.getConnectionInstance();
+		var relation:Relation = conn.createRelation(
+			{ type: 'restriction' }, 
+			[ new RelationMember(_entity, 'via') ],
+            MainUndoStack.getGlobalStack().addAction);
+		addTurnRestrictions();
+	}
+	
+  ]]></mx:Script>
+</edit:RelationMemberEditor>
+
