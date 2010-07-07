@@ -22,7 +22,7 @@ Potlatch 2: main outstanding issues
 
 == Tag editing ==
 
-** Finish turn restriction editor
+** Turn restriction editor needs to lose the scrollbars
 * initialiseEditors is quite slow (typically 150ms)
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.

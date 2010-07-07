@@ -49,19 +49,21 @@
     import mx.collections.ArrayCollection;
 	import mx.utils.ObjectProxy;
 
-	/* ** FIXME as of Wed:
-		  - 'from' and 'to' don't get populated with original values
-		  - scrollbar ugh
-		  - "warning: unable to bind to property 'data' on class 'Object' (class is not an IEventDispatcher)"
-		  - (plus general node redraw bug when you change something)
-	*/
-
     private var _turn:Object;
+	[Bindable(event="turn_inited")] private var connectingWays:ArrayCollection;
     
     public function setTurnRestriction(restriction:Object):void {   
         _turn = restriction;
+
+		var ways:Array=[];
+		for each (var way:Way in Entity(_turn.entity).parentWays) {
+			ways.push( { label:way.getDescription(), data:way } );
+		}
+		connectingWays=new ArrayCollection(ways);
+
+		dispatchEvent(new Event("turn_inited"));
     }
-    
+
 	private function findSelected(role:String):Object {
 		trace("calling findSelected for "+role);
 		var rel:Relation=Relation(_turn.relation);
@@ -69,15 +71,6 @@
 			if (rel.hasMemberInRole(item.data,role)) { return item; }
 		}
 		return null;
-	}
-
-	private function get connectingWays():ArrayCollection {
-		trace("calling connectingWays");
-		var ways:Array=[];
-		for each (var way:Way in Entity(_turn.entity).parentWays) {
-			ways.push( { label:way.getDescription(), data:way } );
-		}
-		return new ArrayCollection(ways);
 	}
     
 	private function setMember(entity:Entity,role:String):void {

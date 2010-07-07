@@ -3,10 +3,19 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	width="40" height="40" maxWidth="40" maxHeight="40" minWidth="40" minHeight="40"
-	toolTip="{data.label}"
 	mouseEnabled="false" mouseChildren="false">
 
-    <mx:Image x="0" y="0" source="{'features/restriction__'+data.data+'.png'}"  left="4" top="4" />
-  
+	<mx:Image x="0" y="0" id="sign" left="4" top="4" source="{dataProxied.data ? 'features/restriction__'+dataProxied.data+'.png' : ''}" toolTip="{dataProxied.label}" />
+
+  <mx:Script><![CDATA[
+
+	import mx.utils.ObjectProxy;
+
+	[Bindable(event="dataChange")] public function get dataProxied():ObjectProxy {
+		return new ObjectProxy(data);
+	}
+
+  ]]></mx:Script>
+	
 </mx:Canvas>
 
