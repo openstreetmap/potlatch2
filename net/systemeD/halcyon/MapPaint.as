@@ -60,7 +60,7 @@ package net.systemeD.halcyon {
 			var l:DisplayObject;
 			var o:DisplayObject;
 			var index:String, ix:Number;
-			if (!sublayerIndex[sublayer]) {
+			if (!sublayerIndex.hasOwnProperty(sublayer)) {
 				// work out which position to add at
 				var lowestAbove:Number=VERYBIG;
 				var lowestAbovePos:int=-1;

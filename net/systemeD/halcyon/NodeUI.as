@@ -15,7 +15,7 @@ package net.systemeD.halcyon {
 	public class NodeUI extends EntityUI {
 		
 		public var loaded:Boolean=false;
-		private var iconname:String='';				// name of icon
+		private var iconnames:Object={};			// name of icon on each sublayer
 		private var heading:Number=0;				// heading within way
 		private var rotation:Number=0;				// rotation applied to this POI
 		private static const NO_LAYER:int=-99999;
@@ -51,7 +51,7 @@ package net.systemeD.halcyon {
 			var inWay:Boolean=entity.hasParentWays;
 			var hasStyles:Boolean=sl.hasStyles();
 			
-			removeSprites(); iconname='';
+			removeSprites(); iconnames={};
 			return renderFromStyle(sl,tags);
 		}
 
@@ -68,8 +68,7 @@ package net.systemeD.halcyon {
 					interactive||=s.interactive;
 					r=true;
 					if (s.rotation) { rotation=s.rotation; }
-
-					if (s.icon_image!=iconname) {
+					if (s.icon_image!=iconnames[sublayer]) {
 						if (s.icon_image=='square') {
 							// draw square
 							icon=new Sprite();
@@ -77,7 +76,7 @@ package net.systemeD.halcyon {
 							w=styleIcon(icon,sl,sublayer);
 							icon.graphics.drawRect(0,0,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconname='_square';
+							iconnames[sublayer]='_square';
 
 						} else if (s.icon_image=='circle') {
 							// draw circle
@@ -86,15 +85,15 @@ package net.systemeD.halcyon {
 							w=styleIcon(icon,sl,sublayer);
 							icon.graphics.drawCircle(w,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconname='_circle';
+							iconnames[sublayer]='_circle';
 
 						} else if (paint.ruleset.images[s.icon_image]) {
 							// 'load' icon (actually just from library)
-							var loader:Loader = new Loader();
-							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { 
-								loadedIcon(e,sublayer); } );
+							var loader:ExtendedLoader = new ExtendedLoader();
+							loader.info['sublayer']=sublayer;
+							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon);
 							loader.loadBytes(paint.ruleset.images[s.icon_image]);
-							iconname=s.icon_image;
+							iconnames[sublayer]=s.icon_image;
 						}
 					}
 				}
@@ -120,7 +119,7 @@ package net.systemeD.halcyon {
 		}
 
 
-		private function styleIcon(icon:Sprite, sl:StyleList, sublayer:uint):Number {
+		private function styleIcon(icon:Sprite, sl:StyleList, sublayer:Number):Number {
 			loaded=true;
 
 			// get colours
@@ -149,8 +148,9 @@ package net.systemeD.halcyon {
 			setListenSprite(NODECLICKSPRITE, hitzone);
 		}
 
-		private function loadedIcon(event:Event,sublayer:uint):void {
+		private function loadedIcon(event:Event):void {
 			var icon:Sprite=new Sprite();
+			var sublayer:Number=event.target.loader.info['sublayer'];
 			addToLayer(icon,STROKESPRITE,sublayer);
 			icon.addChild(Bitmap(event.target.content));
 			addHitSprite(icon.width);
