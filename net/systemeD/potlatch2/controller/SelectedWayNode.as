@@ -108,7 +108,9 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function removeNode():ControllerState {
-			if (selectedNode.numParentWays==1) { return deleteNode(); }
+			if (selectedNode.numParentWays==1 && selectedWay.hasOnceOnly(selectedNode)) {
+				return deleteNode();
+			}
 			selectedWay.removeNodeByIndex(selectedIndex, MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(selectedWay);
 		}

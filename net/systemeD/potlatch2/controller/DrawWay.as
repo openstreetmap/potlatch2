@@ -190,7 +190,7 @@ package net.systemeD.potlatch2.controller {
 				selectedWay.removeNodeByIndex(0, undo.push);
 				newDraw=0;
 			}
-			if (node.numParentWays==1) {
+			if (node.numParentWays==1 && selectedWay.hasOnceOnly(node)) {
 				controller.connection.unregisterPOI(node);
 				node.remove(undo.push);
 			}

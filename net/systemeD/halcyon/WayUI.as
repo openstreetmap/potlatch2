@@ -52,7 +52,9 @@ package net.systemeD.halcyon {
 		}
 		    
 		private function wayNodeRemoved(event:WayNodeEvent):void {
-		    event.node.removeEventListener(Connection.NODE_MOVED, nodeMoved);
+		    if (!event.node.hasParent(event.way)) {
+				event.node.removeEventListener(Connection.NODE_MOVED, nodeMoved);
+			}
 			if (paint.nodeuis[event.node.id]) {
 				paint.nodeuis[event.node.id].redraw();
 			}

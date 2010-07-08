@@ -78,6 +78,10 @@ package net.systemeD.halcyon.connection {
             return nodes.indexOf(node);
         }
 
+		public function hasOnceOnly(node:Node):Boolean {
+			return nodes.indexOf(node)==nodes.lastIndexOf(node);
+		}
+
 		public function removeNode(node:Node, performAction:Function):void {
 			performAction(new RemoveNodeFromWayAction(this, node, nodes));
 		}
