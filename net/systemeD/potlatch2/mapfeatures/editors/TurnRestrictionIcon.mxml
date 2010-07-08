@@ -29,7 +29,7 @@
 				</edit:ChoiceComboBox>
 				</mx:GridItem>
 			<mx:GridItem>
-			<mx:Text text="From" selectable="false"/>
+			<mx:Text text="From" id="fromLabel" selectable="false"/>
 			</mx:GridItem>
 			<mx:GridItem width="100%" id="fromCt">
 						 <mx:ComboBox id="from" dataProvider="{connectingWays}" width="{fromCt.width}"
@@ -39,7 +39,7 @@
 		</mx:GridRow>
 
 		<mx:GridRow>
-			<mx:GridItem><mx:Text text="To" selectable="false"/></mx:GridItem>
+			<mx:GridItem><mx:Text text="To" id="toLabel" selectable="false"/></mx:GridItem>
 			<mx:GridItem width="100%" id="toCt">
 						 <mx:ComboBox id="to" dataProvider="{connectingWays}" width="{toCt.width}"
 							selectedItem="{findSelected('to')}"
@@ -148,8 +148,12 @@
 	public function showFromTo():void {
 		if (show.label=='Show') {
 			show.label='Hide'; setHighlights(true);
+			fromLabel.setStyle('color',0xFF0000);
+			toLabel.setStyle('color',0x0000FF);
 		} else {
 			show.label='Show'; setHighlights(false);
+			fromLabel.setStyle('color',0)
+			toLabel.setStyle('color',0);
 		}
 		// ** FIXME - we should really remove the highlights when this icon panel is
 		// closed. But since the removedFromStage event basically doesn't fire at the 
