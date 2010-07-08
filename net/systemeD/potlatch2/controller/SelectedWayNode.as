@@ -22,7 +22,7 @@ package net.systemeD.potlatch2.controller {
 
             clearSelection(this);
             controller.setSelectedEntity(node);
-            controller.map.setHighlight(way, { showNodes: true, nodeSelected: node.id });
+            controller.map.setHighlight(way, { hover: false, showNodes: true, nodeSelected: node.id });
             selectedWay = way; initWay = way;
 			selectedIndex = index; initIndex = index;
             selectedNode = node;

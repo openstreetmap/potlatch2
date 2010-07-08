@@ -15,7 +15,7 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function update(version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number):void {
-			updateEntityProperties(version,tags,loaded); this.lat=lat; this.lon=lon;
+			updateEntityProperties(version,tags,loaded); setLatLonImmediate(lat,lon);
 		}
 
         public function get lat():Number {

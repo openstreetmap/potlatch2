@@ -16,6 +16,7 @@ package net.systemeD.potlatch2.mapfeatures {
             switch ( inputType ) {
             
             case "freetext": return new FreeTextEditorFactory(inputXML);
+            case "checkbox": return new CheckboxEditorFactory(inputXML);
             case "choice": return new ChoiceEditorFactory(inputXML);
             case "speed": return new SpeedEditorFactory(inputXML);
             case "route": return new RouteEditorFactory(inputXML);
@@ -65,6 +66,7 @@ package net.systemeD.potlatch2.mapfeatures {
         public function get description():String {
             return _description;
         }
+
     }
 
 }

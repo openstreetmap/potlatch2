@@ -138,6 +138,8 @@ way .highlighted { color: pink; }
 
 way :hover	{ z-index: 2; width: eval('_width+10'); color: #ffff99; }
 way :selected { z-index: 2; width: eval('_width+10'); color: yellow; opacity: 0.7;}
+way :restrictfrom { z-index: -1; width: eval('_width+10'); color: red; opacity: 0.7;}
+way :restrictto { z-index: -1; width: eval('_width+10'); color: blue; opacity: 0.7;}
 way !:drawn { z-index:10; width: 0.5; color: gray; } 
 
 relation[type=restriction] node { z-index:11; icon-image: icons/restriction.png; }

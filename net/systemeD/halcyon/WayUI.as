@@ -35,6 +35,7 @@ package net.systemeD.halcyon {
             attachRelationListeners();
             recalculate();
 			redraw();
+			redrawMultis();
 		}
 		
 		private function attachNodeListeners():void {
@@ -190,6 +191,7 @@ package net.systemeD.halcyon {
 			for each (var m:Relation in multis) {
 				inners=inners.concat(m.findMembersByRole('inner'));
 			}
+
 			for each (var sublayer:Number in sl.sublayers) {
 				if (sl.shapeStyles[sublayer]) {
 					var s:ShapeStyle=sl.shapeStyles[sublayer];

@@ -5,6 +5,7 @@
 	verticalGap="0"
 	toolTip="{fieldDescription}">
 
+<mx:Box direction="{fieldDirection}">
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
       change="value = inputBox.selectedItem.value"
@@ -18,6 +19,7 @@
         </mx:Component>
       </edit:itemRenderer>
   </edit:ChoiceComboBox>
+</mx:Box>
 
   <mx:Script><![CDATA[
       import mx.collections.*;

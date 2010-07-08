@@ -3,10 +3,12 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
+	horizontalScrollPolicy="off"
 	borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3">
-	
+
+	<mx:VBox width="100%">
 	<mx:Grid width="100%">
-		<mx:GridRow>
+		<mx:GridRow width="100%">
 			<mx:GridItem rowSpan="2">
 				<edit:ChoiceComboBox id="inputBox" dropdownFactory="mx.controls.TileList"
 				        itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.TurnRestrictionRenderer"
@@ -26,28 +28,47 @@
 					</mx:ArrayCollection>
 				</edit:ChoiceComboBox>
 				</mx:GridItem>
-			<mx:GridItem><mx:Text text="From" selectable="false"/></mx:GridItem>
-			<mx:GridItem><mx:ComboBox id="from" dataProvider="{connectingWays}"
+			<mx:GridItem>
+			<mx:Text text="From" selectable="false"/>
+			</mx:GridItem>
+			<mx:GridItem width="100%" id="fromCt">
+						 <mx:ComboBox id="from" dataProvider="{connectingWays}" width="{fromCt.width}"
 							selectedItem="{findSelected('from')}"
 							change="setMember(from.selectedItem.data,'from')"
        						click="event.stopPropagation()" /></mx:GridItem>
 		</mx:GridRow>
+
 		<mx:GridRow>
 			<mx:GridItem><mx:Text text="To" selectable="false"/></mx:GridItem>
-			<mx:GridItem><mx:ComboBox id="to" dataProvider="{connectingWays}"
+			<mx:GridItem width="100%" id="toCt">
+						 <mx:ComboBox id="to" dataProvider="{connectingWays}" width="{toCt.width}"
 							selectedItem="{findSelected('to')}"
 							change="setMember(to.selectedItem.data,'to')"
      						click="event.stopPropagation()" /></mx:GridItem>
 		</mx:GridRow>
 	</mx:Grid>
 
+	<mx:HBox>
+		<mx:LinkButton id="show" label="Show" click="showFromTo()" paddingTop="0" paddingLeft="0" paddingBottom="0" paddingRight="0" />
+		<mx:Text text="|" color='0xCCCCCC' />
+		<mx:LinkButton label="Advanced..." click="openAdvanced()" paddingTop="0" paddingLeft="0" paddingBottom="0" paddingRight="0"  />
+		<mx:Text text="|" color='0xCCCCCC' />
+		<mx:LinkButton label="Delete" click="deleteRestriction()" paddingTop="0" paddingLeft="0" paddingBottom="0" paddingRight="0"  />
+	</mx:HBox>
+	</mx:VBox>
+
     <mx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.styleparser.RuleSet;
+    import net.systemeD.potlatch2.RelationEditorPanel;
     import net.systemeD.potlatch2.mapfeatures.*;
+	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.Globals;
     import flash.events.*;
     import mx.collections.ArrayCollection;
 	import mx.utils.ObjectProxy;
+	import mx.core.Application;
+	import mx.managers.PopUpManager;
 
     private var _turn:Object;
 	[Bindable(event="turn_inited")] private var connectingWays:ArrayCollection;
@@ -57,7 +78,10 @@
 
 		var ways:Array=[];
 		for each (var way:Way in Entity(_turn.entity).parentWays) {
-			ways.push( { label:way.getDescription(), data:way } );
+			// ** FIXME - endsWith only works for nodes, and ways can be in the 'via' role too
+			if (way.endsWith(Node(_turn.entity))) {
+				ways.push( { label:way.getDescription(), data:way } );
+			}
 		}
 		connectingWays=new ArrayCollection(ways);
 
@@ -65,7 +89,6 @@
     }
 
 	private function findSelected(role:String):Object {
-		trace("calling findSelected for "+role);
 		var rel:Relation=Relation(_turn.relation);
 		for each (var item:Object in connectingWays) {
 			if (rel.hasMemberInRole(item.data,role)) { return item; }
@@ -74,10 +97,10 @@
 	}
     
 	private function setMember(entity:Entity,role:String):void {
-		trace("setMember "+role+" to "+entity);
 		var rel:Relation=Relation(_turn.relation);
         var undo:CompositeUndoableAction = new CompositeUndoableAction("Delete refs");
-
+		if (show.label=='Hide') { setHighlights(false); }
+		
 		// first, remove existing role from relation
 		var old:Array=rel.findMembersByRole(role);
 		for each (var memberEntity:Entity in old) {
@@ -88,12 +111,13 @@
 		// now add new entity
 		// ** FIXME - appendMember should be undoable
 		rel.appendMember(new RelationMember(entity,role))
+
+		if (show.label=='Hide') { setHighlights(true); }
 	}
 	
 	private function setRestrictionType(type:String):void {
 		var rel:Relation=Relation(_turn.relation);
 		rel.setTag('restriction', type, MainUndoStack.getGlobalStack().addAction);
-		trace ("set restriction type to "+type);
 	}
 	
 	private function findSelectedRestrictionType():Object {
@@ -107,6 +131,36 @@
     public function get turnRestriction():Object {
         return _turn;
     }
+
+	public function openAdvanced():void {
+		var rel:Relation=Relation(_turn.relation);
+		var panel:RelationEditorPanel = RelationEditorPanel(
+			PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+		panel.setRelation(rel);
+		PopUpManager.centerPopUp(panel);
+	}
+	
+	public function deleteRestriction():void {
+		var rel:Relation=Relation(_turn.relation);
+		rel.remove(MainUndoStack.getGlobalStack().addAction);
+	}
+
+	public function showFromTo():void {
+		if (show.label=='Show') {
+			show.label='Hide'; setHighlights(true);
+		} else {
+			show.label='Show'; setHighlights(false);
+		}
+		// ** FIXME - we should really remove the highlights when this icon panel is
+		// closed. But since the removedFromStage event basically doesn't fire at the 
+		// right point (thanks Flex), I can't yet see a way to do that.
+	}
+	
+	private function setHighlights(bool:Boolean):void {
+		var map:Map = Globals.vars.root;
+		var from:Object=findSelected('from'); if (from) { map.setHighlight(from.data, { restrictfrom: bool } ); }
+		var to:Object  =findSelected('to'  ); if (to  ) { map.setHighlight(to.data  , { restrictto: bool   } ); }
+	}
     
     ]]></mx:Script>
 </mx:HBox>

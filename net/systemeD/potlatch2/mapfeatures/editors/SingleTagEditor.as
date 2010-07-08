@@ -19,6 +19,11 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       public function get fieldDescription():String {
           return _factory == null ? "" : _factory.description;
       }
+
+      [Bindable(event="factory_set")]
+      public function get fieldDirection():String {
+          return _factory == null ? "" : _factory.direction;
+      }
       
       [Bindable(event="tag_changed")]
       public function get value():String {

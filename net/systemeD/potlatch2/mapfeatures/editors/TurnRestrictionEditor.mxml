@@ -15,7 +15,6 @@
   <mx:Script><![CDATA[
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.potlatch2.*;
-	import mx.managers.PopUpManager;
 	import mx.core.*;
 
 	/* ** FIXME: some of this is common with RouteEditor.mxml. We can probably refactor */
@@ -26,18 +25,8 @@
 		for each(var relation:Object in matchedRelations) {
 			var icon:TurnRestrictionIcon = new TurnRestrictionIcon();
 			icon.setTurnRestriction(relation);
-			
-			icon.addEventListener(MouseEvent.CLICK, turnRestrictionClicked);
 			turnRestrictionIcons.addChild(icon);
 		}
-	}
-	
-	public function turnRestrictionClicked(event:Event):void {
-		var relation:Object = TurnRestrictionIcon(event.currentTarget).turnRestriction;
-		var panel:RelationEditorPanel = RelationEditorPanel(
-			PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-		panel.setRelation(relation["relation"]);
-		PopUpManager.centerPopUp(panel);
 	}
 
 	public function addNewTurnRestriction():void {

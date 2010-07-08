@@ -6,10 +6,12 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
 	public class SingleTagEditorFactory extends EditorFactory {
 	    private var tagKey:String;
+		private var boxDirection:String;
         
         public function SingleTagEditorFactory(inputXML:XML) {
             super(inputXML);
             tagKey = inputXML.@key;
+			boxDirection = inputXML.@layout=='horizontal' ? 'horizontal' : 'vertical';
         }
         
         override public function areTagsMatching(entity:Entity):Boolean {
@@ -18,6 +20,10 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
         public function get key():String {
             return tagKey;
+        }
+        
+        public function get direction():String {
+            return boxDirection;
         }
         
         override public function createEditorInstance(entity:Entity):DisplayObject {

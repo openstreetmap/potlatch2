@@ -275,6 +275,7 @@ package net.systemeD.halcyon.connection {
 			var ok:Boolean;
             for each (var relation:Relation in relations) {
 				ok=true;
+				if (relation.deleted) { ok=false; }
 				for (var k:String in match) {
 					if (!relation.getTagsHash()[k] || relation.getTagsHash()[k]!=match[k]) { ok=false; }
 				}

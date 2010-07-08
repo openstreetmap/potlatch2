@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edit:SingleTagEditor
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	verticalGap="0"
+	width="100%"
+	toolTip="{fieldDescription}">
+
+	<mx:HBox>
+	<mx:Label text="{fieldName}:"/>
+	<mx:CheckBox id="inputBox" creationComplete="initCheckbox()"
+				 labelPlacement="right" label=""
+				 change="value=toYesNo()" />
+	</mx:HBox>
+  <mx:Script><![CDATA[
+  
+	protected function initCheckbox():void {
+		// ** FIXME - these should really be bindings (selected="{...}"). 
+		//    500 bonus points if you can get them to work as such, because I can't.
+		inputBox.selected=parseBoolean(value);
+		inputBox.label=checkValidity(value);
+		dispatchEvent(new Event("factory_set"));
+	}
+
+	[Bindable(event="factory_set")]
+	protected function checkValidity(value:String):String {
+		if (_factory==null || value==null) { return CheckboxEditorFactory(_factory).notPresentText; }
+		var cv:String=value.toLowerCase();
+		if (cv=='yes' || cv=='no' || cv=='1' || cv=='0' || cv=='true' || cv=='false') { return null; }
+		return CheckboxEditorFactory(_factory).notBooleanText;
+	}
+
+	[Bindable(event="factory_set")]
+	protected function parseBoolean(value:String):Boolean {
+		if (!value) { return false; }
+		var cv:String=value.toLowerCase();
+		if (cv=='yes' || cv=='1' || cv=='true') { return true; }
+		return false;
+	}
+	
+	protected function toYesNo():String {
+		inputBox.label='';
+		return inputBox.selected ? 'yes':'no';
+	}
+	
+  ]]></mx:Script>
+</edit:SingleTagEditor>
+

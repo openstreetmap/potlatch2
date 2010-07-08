@@ -21,43 +21,6 @@ package net.systemeD.halcyon.connection {
             var version:uint;
             var tags:Object;
 
-            for each(var nodeData:XML in map.node) {
-                id = Number(nodeData.@id);
-                version = uint(nodeData.@version);
-
-                var node:Node = getNode(id);
-                if ( node == null || !node.loaded ) {
-                    var lat:Number = Number(nodeData.@lat);
-                    var lon:Number = Number(nodeData.@lon);
-                    tags = parseTags(nodeData.tag);
-                    if ( node == null )
-                        setNode(new Node(id, version, tags, true, lat, lon),false);
-                    else {
-                        node.update(version, tags, true, lat, lon);
-                        sendEvent(new EntityEvent(NEW_NODE, node), false);
-                    }
-                }
-            }
-
-            for each(var data:XML in map.way) {
-                id = Number(data.@id);
-                version = uint(data.@version);
-
-                var way:Way = getWay(id);
-                if ( way == null || !way.loaded ) {
-                    var nodes:Array = [];
-                    for each(var nd:XML in data.nd)
-                        nodes.push(getNode(Number(nd.@ref)));
-                    tags = parseTags(data.tag);
-                    if ( way == null )
-                        setWay(new Way(id, version, tags, true, nodes),false);
-                    else {
-                        way.update(version, tags, true, nodes);
-                        sendEvent(new EntityEvent(NEW_WAY, way), false);
-                    }
-                }
-            }
-            
             for each(var relData:XML in map.relation) {
                 id = Number(relData.@id);
                 version = uint(relData.@version);
@@ -100,6 +63,43 @@ package net.systemeD.halcyon.connection {
                     else {
                         rel.update(version,tags,true,members);
                         sendEvent(new EntityEvent(NEW_RELATION, rel), false);
+                    }
+                }
+            }
+            
+            for each(var nodeData:XML in map.node) {
+                id = Number(nodeData.@id);
+                version = uint(nodeData.@version);
+
+                var node:Node = getNode(id);
+                if ( node == null || !node.loaded ) {
+                    var lat:Number = Number(nodeData.@lat);
+                    var lon:Number = Number(nodeData.@lon);
+                    tags = parseTags(nodeData.tag);
+                    if ( node == null )
+                        setNode(new Node(id, version, tags, true, lat, lon),false);
+                    else {
+                        node.update(version, tags, true, lat, lon);
+                        sendEvent(new EntityEvent(NEW_NODE, node), false);
+                    }
+                }
+            }
+
+            for each(var data:XML in map.way) {
+                id = Number(data.@id);
+                version = uint(data.@version);
+
+                var way:Way = getWay(id);
+                if ( way == null || !way.loaded ) {
+                    var nodes:Array = [];
+                    for each(var nd:XML in data.nd)
+                        nodes.push(getNode(Number(nd.@ref)));
+                    tags = parseTags(data.tag);
+                    if ( way == null )
+                        setWay(new Way(id, version, tags, true, nodes),false);
+                    else {
+                        way.update(version, tags, true, nodes);
+                        sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }
             }

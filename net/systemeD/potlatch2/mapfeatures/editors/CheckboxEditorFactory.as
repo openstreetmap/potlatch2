@@ -4,22 +4,22 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.display.*;
 
-	public class FreeTextEditorFactory extends SingleTagEditorFactory {
+	public class CheckboxEditorFactory extends SingleTagEditorFactory {
 	    private var _notPresentText:String;
+	    private var _notBooleanText:String;
         
-        public function FreeTextEditorFactory(inputXML:XML) {
+        public function CheckboxEditorFactory(inputXML:XML) {
             super(inputXML);
             _notPresentText = inputXML.hasOwnProperty("@absenceText") ? String(inputXML.@absenceText) : "Unset";
+            _notBooleanText = inputXML.hasOwnProperty("@invalidText") ? String(inputXML.@absenceText) : "Not yes/no";
         }
         
         override protected function createSingleTagEditor():SingleTagEditor {
-            return new FreeTextEditor();
+            return new CheckboxEditor();
         }
         
-        public function get notPresentText():String {
-            return _notPresentText;
-        }
-
+        public function get notPresentText():String { return _notPresentText; }
+        public function get notBooleanText():String { return _notBooleanText; }
     }
 
 }

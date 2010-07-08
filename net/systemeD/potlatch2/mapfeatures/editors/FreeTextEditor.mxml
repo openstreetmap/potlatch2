@@ -7,8 +7,10 @@
 	width="100%"
 	toolTip="{fieldDescription}">
 
+  <mx:Box direction="{fieldDirection}">
   <mx:Label text="{fieldName}:"/>
   <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" change="value = inputBox.text"/>
+  </mx:Box>
 
   <mx:Script><![CDATA[
   

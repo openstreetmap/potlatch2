@@ -37,6 +37,9 @@
   <category name="Amenity" id="amenity">
   </category>
 
+  <category name="Advanced" id="advanced">
+  </category>
+
   <!-- Common input sets -->
   
   <inputSet id="names">
@@ -1097,10 +1100,40 @@
     <tag k="amenity" v="pharmacy"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
-    <input type="choice" presence="always" category="Amenity" name="Dispensing" key="dispensing" description="Does this pharmacy sell prescription drugs?">
-      <choice value="yes" text="Yes"/>
-      <choice value="no" text="No"/>
+    <input type="checkbox" category="Amenity" presence="always" description="Does this pharmacy sell prescription drugs?" name="Dispensing" key="dispensing" layout="horizontal"/>
+  </feature>
+
+  <!-- advanced relations -->
+  <feature name="Turn restriction">
+    <category>advanced</category>
+    <help>http://wiki.openstreetmap.org/wiki/Turn_restrictions</help>
+    <relation/>
+    <tag k="type" v="restriction"/>
+    <input type="choice" category="Restrictions" presence="always" name="Type" key="restriction" description="What's the restriction?" layout="horizontal" priority="high">
+      <choice value="no_left_turn"      text="No left turn"/>
+      <choice value="no_right_turn"     text="No right turn"/>
+      <choice value="no_u_turn"         text="No U turns"/>
+      <choice value="no_straight_on"    text="No straight on"/>
+      <choice value="only_left_turn"    text="Left turn only"/>
+      <choice value="only_right_turn"   text="Right turn only"/>
+      <choice value="only_straight_on"  text="Straight on only"/>
     </input>
+    <input type="choice" category="Restrictions" presence="always" name="Except" key="except" description="Are any vehicles exempt?" layout="horizontal">
+      <choice value="psv"      text="Bus"/>
+      <choice value="bicycle"  text="Bicycle"/>
+      <choice value="motorcar" text="Car"/>
+      <choice value="hgv"      text="HGV"/>
+    </input>
+    <input type="freetext" category="Restrictions" presence="always" name="Start day"  key="day_on"   description="What day of the week does it start?" layout="horizontal" priority="low" />
+    <input type="freetext" category="Restrictions" presence="always" name="Start time" key="hour_on"  description="What time of day does it start?"     layout="horizontal" priority="low" />
+    <input type="freetext" category="Restrictions" presence="always" name="End day"    key="day_off"  description="What day of the week does it end?"   layout="horizontal" priority="lowest" />
+    <input type="freetext" category="Restrictions" presence="always" name="End time"   key="hour_off" description="What time of day does it end?"       layout="horizontal" priority="lowest" />
+  </feature>
+
+  <feature name="Multipolygon">
+    <category>advanced</category>
+    <relation/>
+    <tag k="type" v="multipolygon"/>
   </feature>
 
   <!-- cycle stuff -->
