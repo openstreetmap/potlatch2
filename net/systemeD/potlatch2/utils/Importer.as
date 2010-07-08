@@ -20,13 +20,14 @@ package net.systemeD.potlatch2.utils {
 		protected var callback:Function;
 		protected var simplify:Boolean;
 
-		public function Importer(container:*, paint:MapPaint, filenames:Array, simplify:Boolean) {
+		public function Importer(container:*, paint:MapPaint, filenames:Array, callback:Function, simplify:Boolean) {
 			Globals.vars.root.addDebug("starting importer"); 
 			Globals.vars.root.addDebug("container is "+container);
 			Globals.vars.root.addDebug("paint is "+paint);
 			this.container = container;
 			this.paint = paint;
 			this.filenames=filenames;
+			this.callback=callback;
 			this.simplify=simplify;
 
 			var sp:uint=0;
@@ -36,10 +37,11 @@ package net.systemeD.potlatch2.utils {
 				var loader:ExtendedURLLoader = new ExtendedURLLoader();
 				loader.info['file']=sp;
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
-				loader.addEventListener(Event.COMPLETE,						fileLoaded);
-				loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler);
-				loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
-				loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
+				loader.addEventListener(Event.COMPLETE,fileLoaded);
+				if (callback!=null) {
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
+					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
+				}
 				loader.load(new URLRequest(fn));
 				sp++;
 			}
@@ -52,15 +54,15 @@ package net.systemeD.potlatch2.utils {
 			if (filesloaded==filenames.length) { 
 				doImport();
 				paint.updateEntityUIs(container.getObjectsByBbox(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b), false, false);
+				if (callback!=null) { callback(true); }
 			}
 		}
 		
 		protected function doImport():void {
 		}
 
-		protected function httpStatusHandler( event:HTTPStatusEvent ):void { Globals.vars.root.addDebug("httpstatusevent"); }
-		protected function securityErrorHandler( event:SecurityErrorEvent ):void { Globals.vars.root.addDebug("securityerrorevent"); }
-		protected function ioErrorHandler( event:IOErrorEvent ):void { Globals.vars.root.addDebug("ioerrorevent"); }
+		protected function securityErrorHandler( event:SecurityErrorEvent ):void { callback(false,"You don't have permission to open that file."); }
+		protected function ioErrorHandler( event:IOErrorEvent ):void { callback(false,"The file could not be loaded."); }
 
 	}
 }

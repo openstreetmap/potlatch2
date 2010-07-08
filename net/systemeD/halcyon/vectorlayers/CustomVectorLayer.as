@@ -12,9 +12,14 @@ package net.systemeD.halcyon.vectorlayers {
 
 	public class CustomVectorLayer extends VectorLayer {
 
-		public function CustomVectorLayer(n:String,m:Map,style:String) {
-			super(n,m);
-			paint.ruleset=new RuleSet(m.MINSCALE,m.MAXSCALE,paint.redraw);
+		public function CustomVectorLayer(name:String,map:Map,style:String) {
+			super(name,map);
+			this.style=style;
+			redrawFromCSS(style);
+		}
+		
+		public function redrawFromCSS(style:String):void {
+			paint.ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,paint.redraw);
 			paint.ruleset.loadFromCSS(style);
 		}
 	}

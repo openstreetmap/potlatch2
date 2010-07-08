@@ -10,6 +10,8 @@ package net.systemeD.halcyon.vectorlayers {
 		public var map:Map;
 		public var paint:MapPaint;						// sprites
 		public var name:String;
+		public var url:String;
+		public var style:String='';
 
 		public var ways:Object=new Object();			// geodata
 		public var nodes:Object=new Object();			//  |
@@ -80,6 +82,12 @@ package net.systemeD.halcyon.vectorlayers {
 				map.paint.createWayUI(newWay);
 			}
 			return newWay;
+		}
+		
+		public function blank():void {
+			for each (var node:Node in nodes) { paint.deleteNodeUI(node); }
+			for each (var way:Way in ways) { paint.deleteWayUI(way); }
+			relations={}; nodes={}; ways={};
 		}
 
 	}

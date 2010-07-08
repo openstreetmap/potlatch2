@@ -3,8 +3,55 @@
         xmlns:mx="http://www.adobe.com/2006/mxml" 
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Load vector file"
-        width="350" height="250" verticalGap="0">
+        width="400" height="350" verticalGap="0">
+
+	<mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" 
+		dataProvider="{vectorLayers}" itemEditEnd="dataEdited(event)">
+	    <mx:columns>
+	        <mx:DataGridColumn editable="false" dataField="visible" headerText="Show" width="45">
+				<mx:itemRenderer>
+					<mx:Component>
+						<mx:CheckBox selectedField="isSelected"
+									 click="data.isSelected=!data.isSelected; this.parent.parent.dispatchEvent(new Event('visibility_changed'));" 
+									 paddingLeft="5"/>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+	        <mx:DataGridColumn editable="true"  dataField="name"  headerText="Name"/>
+	        <mx:DataGridColumn editable="false" dataField="url"   headerText="URL"/>
+	        <mx:DataGridColumn editable="false" dataField="style" headerText="Style">
+				<mx:itemRenderer>
+					<mx:Component>
+					<mx:ComboBox
+							selectedItem="{outerDocument.whichStyle(data)}"
+					        change="outerDocument.styleEdited(data.name,selectedItem.data)"
+					        dataProvider="{outerDocument.styles}" />
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+	    </mx:columns>
+	</mx:DataGrid>
+	<mx:HBox horizontalAlign="right" width="100%">
+		<mx:LinkButton label="Delete" click="removeVectorLayer()" enabled="{dataGrid.selectedItem != null? true : false}"/>
+	</mx:HBox>
+
+	<mx:VBox width="100%" paddingTop="10">
+		<mx:Label htmlText="&lt;b&gt;Add new vector layer&lt;/b&gt;" />
+		<mx:HBox>
+			<mx:RadioButtonGroup id="filetype" />
+			<mx:RadioButton width="100%" groupName="{filetype}" value="gpx" id="gpx" label="GPX" selected="true" />
+			<mx:RadioButton width="100%" groupName="{filetype}" value="shp" id="shp" label="Shapefile" />
+			<mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Text text="URL:"/>
+			<mx:TextInput width="100%" id="src" text="" />
+			<mx:Button label="Load" click="loadFiles(src.text, shp.selected?'shp':'gpx', simplify.selected);" enabled="{src.text == '' ? false : true}"/>
+		</mx:HBox>
+	</mx:VBox>
+
   <mx:Script><![CDATA[
+
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.vectorlayers.*;
@@ -12,51 +59,105 @@
 	import net.systemeD.potlatch2.utils.GpxImporter;
 	import net.systemeD.potlatch2.utils.ShpImporter;
     import mx.managers.PopUpManager;
+    import mx.events.DataGridEvent;
     import mx.events.CloseEvent;
     import mx.core.Application;
+	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
+
+	private var map:Map;
+
+	public function styleEdited(name:String,stylesheet:String):void {
+		map.vectorlayers[name].style=stylesheet;
+		map.vectorlayers[name].redrawFromCSS(stylesheet)
+	}
+
 
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, vectorDialog_close);
+		dataGrid.addEventListener("visibility_changed", toggleVisibility);
+		map = Globals.vars.root;
+		dispatchEvent(new Event("layers_changed"));
     }
+
+	public function whichStyle(item:Object):Object {
+		for each (var style:Object in styles) {
+			if (style.data==item.style) { return style; }
+		}
+		return {};
+	}
+
+	[Bindable(event="bogus")]
+	public function get styles():ArrayCollection {
+		return new ArrayCollection(Application.application.theController.stylesheets);
+	}
+
+	[Bindable(event="layers_changed")]
+	private function get vectorLayers():Array {
+		var v:Array=[];
+		for (var a:String in map.vectorlayers) {
+			var vl:VectorLayer=map.vectorlayers[a];
+			v.push( { name:a, visible:vl.paint.visible, url:vl.url, style:vl.style } );
+		}
+		return v;
+	}
+	
+	private function toggleVisibility(event:Event):void {
+		map.vectorlayers[dataGrid.selectedItem.name].paint.visible = !map.vectorlayers[dataGrid.selectedItem.name].paint.visible;
+	}
+	
+	private function dataEdited(event:DataGridEvent):void {
+		if (event.dataField=='name') {
+			// Rename field
+			var a:String=dataGrid.selectedItem.name;
+			var b:String=dataGrid.itemEditorInstance['text'];	// this is, unbelievably, how you get data within an itemEditEnd event
+			if (a==b || map.vectorlayers[b]) {
+				event.preventDefault();
+			} else {
+				map.vectorlayers[b]=map.vectorlayers[a];
+				delete map.vectorlayers[a];
+			}
+			dispatchEvent(new Event("layers_changed"));
+		}
+	}
+
+	private function removeVectorLayer():void {
+		var a:String=dataGrid.selectedItem.name;
+		map.vectorlayers[a].blank();
+		delete map.vectorlayers[a];
+		dispatchEvent(new Event("layers_changed"));
+	}
     
     private function vectorDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
     }
 
 	private function loadFiles(url:String,filetype:String,simplify:Boolean):void {
-        PopUpManager.removePopUp(this);
-		var theMap:Map = Globals.vars.root;
-		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(url,theMap,"potlatch.css");
-		theMap.vectorlayers.push(vectorlayer);
-		theMap.vectorbg.addChild(vectorlayer.paint);
+		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(url,map,"potlatch.css");
+		vectorlayer.url=url;
+		map.vectorlayers[url]=vectorlayer;
+		map.vectorbg.addChild(vectorlayer.paint);
 
 		if (filetype=='gpx') {
-			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], simplify);
+			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
 		} else {
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
 			var shp:ShpImporter=new ShpImporter(vectorlayer,
 			                                    vectorlayer.paint,
-			                                    [url+".shp",url+".shx",url+".dbf"], simplify);
+			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify);
+		}
+	}
+	
+	public function filesLoaded(success:Boolean,message:String=null):void {
+		if (success) {
+			dispatchEvent(new Event("layers_changed"));
+		} else {
+			Alert.show(message, 'Error', mx.controls.Alert.OK);
 		}
 	}
 
               ]]>
   </mx:Script>
-  <mx:Text>
-    <mx:text>
-      Input the URL of a file to import.
-    </mx:text>
-  </mx:Text>
-  <mx:TextInput width="100%" id="src" text="" />
-  <mx:RadioButtonGroup id="filetype" />
-  <mx:RadioButton width="100%" groupName="{filetype}" value="shp" id="shp" label="Shapefile" selected="true" />
-  <mx:RadioButton width="100%" groupName="{filetype}" value="gpx" id="gpx" label="GPX" />
-  <mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
-  <mx:ControlBar>
-    <mx:Spacer width="100%"/>
-    <mx:Button label="Load" click="loadFiles(src.text, shp.selected?'shp':'gpx', simplify.selected);" enabled="{src.text == '' ? false : true}"/>
-  </mx:ControlBar>
-
 </mx:TitleWindow>

@@ -12,7 +12,7 @@
 
 	<mx:HBox>
 	<mx:Button label="Edit..." click="new BackgroundDialog().init('Background imagery',background,Application.application.theController.imagery);" />
-	<mx:Button label="Vector file" click="new VectorSourceDialog().init();" />
+	<mx:Button label="Vector file..." click="new VectorSourceDialog().init();" />
 	</mx:HBox>
 
 	<mx:Script><![CDATA[

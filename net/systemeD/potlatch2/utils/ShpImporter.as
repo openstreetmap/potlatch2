@@ -10,8 +10,8 @@ package net.systemeD.potlatch2.utils {
 
 	public class ShpImporter extends Importer {
 
-		public function ShpImporter(container:*, paint:MapPaint, filenames:Array, simplify:Boolean=false) {
-			super(container,paint,filenames,simplify);
+		public function ShpImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
+			super(container,paint,filenames,callback,simplify);
 		}
 
 		override protected function doImport(): void {

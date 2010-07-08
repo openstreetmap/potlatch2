@@ -2,6 +2,10 @@ Potlatch 2: main outstanding issues
 -----------------------------------
 ** = required before P2 goes live
 
+
+** Slash and burn trace statements
+** Remove SimpleVectorLayer and move CustomVectorLayer into VectorLayer
+
 == Core geometry ==
 
 * P1-style J (join) / shift-J (unjoin)
@@ -13,7 +17,7 @@ Potlatch 2: main outstanding issues
 
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Import from OSM (is this worth sharing with the XML API stuff?)
-* Load GPX from API
+* Load GPX from API (probably into a designated 'GPX' layer which is automatically created)
 
 == Saving ==
 
@@ -22,13 +26,13 @@ Potlatch 2: main outstanding issues
 
 == Tag editing ==
 
-** Turn restriction editor needs to lose the scrollbars
 * initialiseEditors is quite slow (typically 150ms)
 * If a select name is too long then, the select menu seems to give a horizontal scrollbar instead of the name of the item e.g. cuisine#Coffee Shop
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
 
 == UI ==
 
+** Clicking the menu on the SuperTabNavigator appears to boggle it completely
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes
@@ -64,13 +68,16 @@ Requested enhancements
 
 == Tag editing ==
 
-* Checkboxes, for example what you can recycle, or whether something is a bridge or tunnel
 * Ability to specify that a node should be a point in a way, for example for crossings
 * Ability to say that it's unlikely/impossible to have a way that is a bridge and a tunnel at the same time.
 * It would be useful to have fields that only allow numbers in a non-destructive way, for example for step_count or capacity.
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * The area of pois for dragging on to the map should have a search, with synonyms.
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
+
+== Turn restrictions ==
+
+* Splitting a way should have smart turn restriction behaviour - i.e. only retain the relation in that part of the way which joins the via point.
 
 == UI ==
 

@@ -71,7 +71,7 @@ package net.systemeD.halcyon {
 		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
 		public var connection:Connection;				// server connection
-		public var vectorlayers:Array=[];				// VectorLayer objects 
+		public var vectorlayers:Object={};				// VectorLayer objects 
 
 		public const TILESPRITE:uint=0;
 		public const VECTORSPRITE:uint=1;

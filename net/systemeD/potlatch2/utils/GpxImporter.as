@@ -8,8 +8,8 @@ package net.systemeD.potlatch2.utils {
 
 	public class GpxImporter extends Importer {
 
-		public function GpxImporter(container:*, paint:MapPaint, filenames:Array, simplify:Boolean=false) {
-			super(container,paint,filenames,simplify);
+		public function GpxImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
+			super(container,paint,filenames,callback,simplify);
 		}
 
 		override protected function doImport(): void {
@@ -19,14 +19,11 @@ package net.systemeD.potlatch2.utils {
 			var file:XML=new XML(files[0]);
 
 			for each (var trk:XML in file.child("trk")) {
-				trace("trk");
 				for each (var trkseg:XML in trk.child("trkseg")) {
-					trace("trkseg");
 					var way:Way;
 					var nodestring:Array=[];
 					for each (var trkpt:XML in trkseg.child("trkpt")) {
 						nodestring.push(container.createNode({}, trkpt.@lat, trkpt.@lon));
-						trace("adding point at "+trkpt.@lat+","+trkpt.@lon);
 					}
 					if (nodestring.length>0) {
 						way=container.createWay({}, nodestring);
