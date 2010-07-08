@@ -63,9 +63,21 @@ package net.systemeD.potlatch2.controller {
 						}
 					}
 				} else if ( entity is Way ) {
-					node = createAndAddNode(event);
-					Way(entity).insertNodeAtClosestPosition(node, true,
-					    MainUndoStack.getGlobalStack().addAction);
+					if (entity as Way==selectedWay) {
+						// add junction node - self-intersecting way
+			            var lat:Number = controller.map.coord2lat(event.localY);
+			            var lon:Number = controller.map.coord2lon(event.localX);
+			            var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+			            node = controller.connection.createNode({}, lat, lon, undo.push);
+			            selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
+						appendNode(node,undo.push);
+			            MainUndoStack.getGlobalStack().addAction(undo);
+					} else {
+						// add junction node - another way
+						node = createAndAddNode(event);
+						Way(entity).insertNodeAtClosestPosition(node, true,
+						    MainUndoStack.getGlobalStack().addAction);
+					}
 					resetElastic(node);
 					lastClick=node;
 					controller.map.setHighlight(entity, { showNodesHover: false });
