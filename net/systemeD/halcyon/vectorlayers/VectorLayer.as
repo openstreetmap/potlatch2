@@ -4,6 +4,7 @@ package net.systemeD.halcyon.vectorlayers {
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.styleparser.RuleSet;
 
 	public class VectorLayer extends Object {
 
@@ -18,10 +19,17 @@ package net.systemeD.halcyon.vectorlayers {
 		public var relations:Object=new Object();		//  |
         private var negativeID:Number = -1;
 
-		public function VectorLayer(n:String,m:Map) {
+		public function VectorLayer(n:String,m:Map,s:String) {
 			name=n;
 			map=m;
+			style=s;
 			paint=new MapPaint(m,0,0);
+			redrawFromCSS(style);
+		}
+
+		public function redrawFromCSS(style:String):void {
+			paint.ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,paint.redraw);
+			paint.ruleset.loadFromCSS(style);
 		}
 		
 		public function createNode(tags:Object,lat:Number,lon:Number):Node {
