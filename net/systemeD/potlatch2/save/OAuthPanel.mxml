@@ -21,7 +21,7 @@
 	        label="http://oauth.dev.openstreetmap.org/oauth/authorize?somekey"
 	        click="openURL(authoriseURL); tryAccessButton.enabled=true;"/>
 	    <mx:Text width="100%">
-	      <mx:text>Once you've authorised the access click the 'Try Access' button below</mx:text>
+	      <mx:text>Once you've authorised the access click the 'Try Access' button below</mx:text> <!-- ' -->
 	    </mx:Text>
 	    <mx:Text styleName="failText" visible="false" id="deniedLabel">
 	      <mx:text><![CDATA[<b>Access was denied, please check, and try again</b>]]></mx:text>

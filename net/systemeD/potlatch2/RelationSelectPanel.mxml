@@ -49,7 +49,6 @@
           var relation:Relation = conn.createRelation(tags, [new RelationMember(entity, '')],
               MainUndoStack.getGlobalStack().addAction)
           PopUpManager.removePopUp(this);
-          trace("edit relation "+id);
           var panel:RelationEditorPanel = RelationEditorPanel(
               PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
           panel.setRelation(relation);

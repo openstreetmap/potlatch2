@@ -62,11 +62,16 @@ package net.systemeD.potlatch2.controller {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);
 
+			if ( paint && paint.isBackground ) {
+				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
+					// pull data out of vector background layer
+					if (entity is Way) { return new SelectedWay(paint.findSource().pullThrough(entity,controller.connection)); }
+				}
+				return (this is NoSelection) ? this : new NoSelection();
+			}
+
 			if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				if ( entity is Way && event.altKey && paint.isBackground ) {
-					// pull way out of vector background layer
-					return new SelectedWay(paint.findSource().pullThrough(entity,controller.connection));
-				} else if ( entity is Way ) {
+				if ( entity is Way ) {
 					// click way
 					return new DragWay(focus as Way, event);
 				} else if ( focus is Node ) {

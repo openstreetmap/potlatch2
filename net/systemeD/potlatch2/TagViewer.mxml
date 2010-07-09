@@ -487,7 +487,6 @@
           var rel:Relation = selectedEntity as Relation
           
           // drop members
-          trace("Dropping "+rel.length+" members");
           for (var i:int=rel.length-1 ; i>=0; i--) {
             rel.removeMemberByIndex(i);
           }
@@ -504,9 +503,7 @@
               e = conn.getRelation(id);
             }
             rel.appendMember(new RelationMember(e, memberObject.role));
-            trace("added member "+memberObject.type+" "+id+" in role "+memberObject.role);
           }
-          trace("complete: relation "+rel.id+" now has "+rel.length+" members");
       }
       
       private function editRelation(id:Number):void {
@@ -549,7 +546,6 @@
       }
 
       public function openDescription():void {
-          trace("open description here");
           if ( feature != null && feature.hasHelpURL() )
               navigateToURL(new URLRequest(feature.helpURL), "potlatch_help");
       }

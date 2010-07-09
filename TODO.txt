@@ -3,8 +3,6 @@ Potlatch 2: main outstanding issues
 ** = required before P2 goes live
 
 
-** Slash and burn trace statements
-
 == Core geometry ==
 
 * P1-style J (join) / shift-J (unjoin)
@@ -32,7 +30,6 @@ Potlatch 2: main outstanding issues
 
 == UI ==
 
-** Clicking the menu on the SuperTabNavigator appears to boggle it completely
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes

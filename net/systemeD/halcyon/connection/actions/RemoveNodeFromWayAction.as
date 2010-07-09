@@ -36,7 +36,6 @@ package net.systemeD.halcyon.connection.actions {
             
             for (var i:int = nodeRemovedFrom.length - 1; i >= 0; i--) {
                 var index:int = nodeRemovedFrom[i];
-                trace("node being added "+index+" "+i+" "+node);
                 nodeList.splice(index, 0, node);
             	entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, Way(entity), index));
             }

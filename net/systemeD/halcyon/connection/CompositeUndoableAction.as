@@ -53,7 +53,6 @@ package net.systemeD.halcyon.connection {
         public function undoFrom(index:int):void {
             for ( var i:int = index - 1; i >= 0; i-- ) {
                 var action:UndoableAction = actions[i];
-                trace("going to do "+action);
                 
                 action.undoAction();
             }

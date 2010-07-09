@@ -11,7 +11,6 @@ package net.systemeD.potlatch2.controller {
         private var downY:Number;
         
         public function DragBackground(event:MouseEvent) {
-			trace ("starting DragBackground");
             downX = event.localX;
             downY = event.localY;
         }

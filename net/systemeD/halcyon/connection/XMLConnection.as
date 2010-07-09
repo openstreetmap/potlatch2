@@ -5,6 +5,7 @@ package net.systemeD.halcyon.connection {
 	import flash.system.Security;
 	import flash.net.*;
     import org.iotashan.oauth.*;
+	import mx.controls.Alert;
 
 	import net.systemeD.halcyon.Globals;
 
@@ -18,7 +19,6 @@ package net.systemeD.halcyon.connection {
                 Security.loadPolicyFile(Connection.policyURL);
             var oauthPolicy:String = Connection.getParam("oauth_policy", "");
             if ( oauthPolicy != "" ) {
-                trace(oauthPolicy);
                 Security.loadPolicyFile(oauthPolicy);
             }
 		}
@@ -40,7 +40,7 @@ package net.systemeD.halcyon.connection {
 		}
 
         private function errorOnMapLoad(event:Event):void {
-            trace("error loading map");
+			Alert.show("Couldn't load the map", 'Error', mx.controls.Alert.OK);
         }
         private function mapLoadStatus(event:HTTPStatusEvent):void {
             trace("loading map status = "+event.status);
@@ -180,8 +180,7 @@ package net.systemeD.halcyon.connection {
         }
 
         private function diffUploadError(event:IOErrorEvent):void {
-            trace("error "+URLLoader(event.target).data + " "+httpStatus+ " " + event.text);
-
+			Alert.show("Couldn't upload data: "+httpStatus+" "+event.text, 'Error', mx.controls.Alert.OK);
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
         }
 

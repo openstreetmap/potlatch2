@@ -19,7 +19,6 @@ package net.systemeD.halcyon.connection {
          * stack -- find another one.
          */
         public function addAction(action:UndoableAction):void {
-            trace("doing "+action);
             var result:uint = action.doAction();
             
             switch ( result ) {
@@ -73,7 +72,6 @@ package net.systemeD.halcyon.connection {
         public function undo():void {
 			if (!undoActions.length) { return; }
             var action:UndoableAction = undoActions.pop();
-            trace("undoing "+action);
             action.undoAction();
             redoActions.push(action);
             dispatchEvent(new Event("new_undo_item"));
@@ -83,7 +81,6 @@ package net.systemeD.halcyon.connection {
         public function redo():void {
 			if (!redoActions.length) { return; }
             var action:UndoableAction = redoActions.pop();
-            trace("redoing "+action);
             action.doAction();
             undoActions.push(action);
             dispatchEvent(new Event("new_undo_item"));

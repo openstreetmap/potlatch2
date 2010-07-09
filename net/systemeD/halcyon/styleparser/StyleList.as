@@ -26,6 +26,16 @@ package net.systemeD.halcyon.styleparser {
 			if (sublayers.indexOf(s)==-1) { sublayers.push(s); }
 		}
 
+		public function toString():String {
+			var str:String='';
+			var k:String;
+			for (k in shapeStyles) { str+="- SS "+k+"="+shapeStyles[k]+"\n"; }
+			for (k in textStyles) { str+="- TS "+k+"="+textStyles[k]+"\n"; }
+			for (k in pointStyles) { str+="- PS "+k+"="+pointStyles[k]+"\n"; }
+			for (k in shieldStyles) { str+="- sS "+k+"="+shieldStyles[k]+"\n"; }
+			return str;
+		}
+
 		private function hasShapeStyles():Boolean  { for (var a:String in shapeStyles ) { return true; }; return false; }
 		private function hasTextStyles():Boolean   { for (var a:String in textStyles  ) { return true; }; return false; }
 		private function hasPointStyles():Boolean  { for (var a:String in pointStyles ) { return true; }; return false; }

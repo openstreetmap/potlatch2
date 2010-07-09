@@ -70,14 +70,18 @@ package net.systemeD.halcyon {
 			if (entity is Way) {
 				// copy way through to main layer
 				// ** shouldn't do this if the nodes are already in the main layer
+				//    (or maybe we should just match on lat/long to avoid ways in background having nodes in foreground)
 				var oldWay:Way=Way(entity);
 				var newWay:Way=connection.createWay(oldWay.getTagsCopy(), [], MainUndoStack.getGlobalStack().addAction);
+				var nodemap:Object={};
+				var oldNode:Node, newNode:Node;
 				for (i=0; i<oldWay.length; i++) {
-					var oldNode:Node = oldWay.getNode(i);
-					var newNode:Node = connection.createNode(
+					oldNode = oldWay.getNode(i);
+					newNode = nodemap[oldNode.id] ? nodemap[oldNode.id] : connection.createNode(
 						oldNode.getTagsCopy(), oldNode.lat, oldNode.lon, 
 						MainUndoStack.getGlobalStack().addAction);
 					newWay.appendNode(newNode, MainUndoStack.getGlobalStack().addAction);
+					nodemap[oldNode.id]=newNode;
 				}
 				// delete this way
 				while (oldWay.length) { 

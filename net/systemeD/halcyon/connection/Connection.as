@@ -34,7 +34,6 @@ package net.systemeD.halcyon.connection {
         }
 
         public static function getParam(name:String, defaultValue:String):String {
-            trace("Returning param "+name+" as "+(params[name] == null ? defaultValue : params[name]));
             return params[name] == null ? defaultValue : params[name];
         }
 
