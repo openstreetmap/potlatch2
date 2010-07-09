@@ -7,7 +7,7 @@
     initialize="loadFeatures()">
 
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
-  <mx:VBox id="dndPanel" width="100%" height="100%">
+  <mx:VBox id="dndPanel" width="100%" height="100%" horizontalScrollPolicy="off">
     <mx:Text id="dndPanelText" text="{dndPrompt}" automationName="{dndPrompt}" />
 	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}">
 		<mx:HBox width="100%"><mx:Label text="{dndRep.currentItem.name}"/></mx:HBox>
@@ -37,7 +37,7 @@
 								DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
 							}
 						]]></mx:Script>
-						<mx:Image id="foo" source="{data.image}" height="25" width="25" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
+						<mx:Image id="foo" source="{data.image}" height="24" width="24" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
 					</mx:VBox>
 				</mx:Component>
 			</mx:itemRenderer>
@@ -113,11 +113,13 @@
 			icon="@Embed('../../../embedded/view_tabbed.png')"
 			disabledIcon="@Embed('../../../embedded/view_tabbed_disabled.png')"
 			click="setEditorStackUI(true)" id="tabNavigatorLabel" paddingTop="6" 
+			toolTip="Show in tabs"
 			enabled="{editorStack is Accordion &amp;&amp; stack.selectedIndex==0}" />
 		<mx:LinkButton
 			icon="@Embed('../../../embedded/view_accordion.png')" 
 			disabledIcon="@Embed('../../../embedded/view_accordion_disabled.png')"
 			click="setEditorStackUI(false)" id="accordionLabel" paddingTop="6"
+			toolTip="Show in sliding windows"
 			enabled="{editorStack is SuperTabNavigator &amp;&amp; stack.selectedIndex==0}" />
 	  </mx:HBox>
   </mx:VBox>
@@ -259,18 +261,20 @@
                       editorBox.addChild(editor);
               }
               var category:String = factory.category;
-              var tab:VBox = tabs[category];
-              if ( tab == null ) {
-                  tab = createEditorBox();
-                  tab.label = category;
-                  editorStack.addChild(tab);
-                  tabs[category] = tab;
-                  tabComponents[tab] = [];
+              if (category!='') {
+	              var tab:VBox = tabs[category];
+	              if ( tab == null) {
+	                  tab = createEditorBox();
+	                  tab.label = category;
+	                  editorStack.addChild(tab);
+	                  tabs[category] = tab;
+	                  tabComponents[tab] = [];
+	              }
+	              var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
+	              if ( catEditor != null )
+	                  tabComponents[tab].push(catEditor);
+	              //    tab.addChild(catEditor);
               }
-              var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
-              if ( catEditor != null )
-                  tabComponents[tab].push(catEditor);
-              //    tab.addChild(catEditor);
           }
       }
       

@@ -28,13 +28,19 @@
   <category name="Buildings" id="buildings">
   </category>
 
+  <category name="Landuse" id="landuse">
+  </category>
+
   <category name="Entertainment" id="entertainment">
   </category>
   
-  <category name="Shopping" id="shopping">
+  <category name="Amenity" id="amenity">
   </category>
 
-  <category name="Amenity" id="amenity">
+  <category name="Tourism" id="tourism">
+  </category>
+
+  <category name="Shopping" id="shopping">
   </category>
 
   <category name="Advanced" id="advanced">
@@ -42,6 +48,10 @@
 
   <!-- Common input sets -->
   
+  <inputSet id="simpleName">
+    <input type="freetext" presence="always" name="Name" key="name" description="The name" priority="highest" />
+  </inputSet>
+
   <inputSet id="names">
     <input type="freetext" presence="always"
         name="Name" category="Naming" priority="highest"
@@ -101,6 +111,13 @@
     <inputSet ref="cycle"/>
     <inputSet ref="bus-route"/>
   </inputSet>
+
+  <inputSet id="path">
+    <inputSet ref="simpleName"/>
+    <inputSet ref="roadPhysical"/>
+    <inputSet ref="cycle"/>
+    <inputSet ref="ldp"/>
+  </inputSet>
   
   <inputSet id="junctionNode">
     <inputSet ref="turnRestrictions"/>
@@ -124,10 +141,10 @@
         key="layer" min="-5" max="5" default="0"/>
     <input type="freetext" presence="onTagMatch"
         name="Width" category="Physical"
-        key="width" description="Width of the road"/>
+        key="width" description="Width of the road" layout="horizontal"/>
     <input type="choice" presence="onTagMatch"
         name="Surface" category="Physical" description="Type of road surface"
-        key="surface">
+        key="surface" layout="horizontal">
       <choice value="unpaved" text="Unpaved" description="Road surface is unsealed"/>
       <choice value="paved" text="Paved" description="Road surface is sealed"/>
       <choice value="asphalt" text="Asphalt"/>
@@ -144,7 +161,7 @@
   <inputSet id="bridge">
     <input type="choice" presence="onTagMatch"
         name="Bridge" category="Physical" description="Road goes over a bridge"
-        key="bridge">
+        key="bridge" layout="horizontal">
       <choice value="yes" text="Generic Bridge" description="Generic bridge -- type unknown"/>
       <choice value="viaduct" text="Viaduct" description="Viaduct"/>
       <choice value="suspension" text="Suspension bridge"/>
@@ -153,7 +170,7 @@
   <inputSet id="tunnel">
     <input type="choice" presence="onTagMatch"
         name="Tunnel" category="Physical" description="Road goes into a tunnel"
-        key="tunnel">
+        key="tunnel" layout="horizontal">
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
   </inputSet>
@@ -255,6 +272,33 @@
        </icon>
     </input>
   </inputSet>
+
+  <inputSet id="ldp">
+    <input type="route" name="National Walking Route" description="National walking route" category="Walking" priority="normal">
+       <match k="type" v="route"/>
+       <match k="network" v="nwn"/>
+       <icon background="red" foreground="white">
+         <font size="14pt"><b>${ref}</b></font><br />
+         <font size="12pt">${name}</font>
+       </icon>
+    </input>
+    <input type="route" name="Regional Walking Route" description="Regional walking route" category="Walking" priority="low">
+       <match k="type" v="route"/>
+       <match k="network" v="rwn"/>
+       <icon background="cyan" foreground="white">
+         <font size="14pt"><b>${ref}</b></font><br />
+         <font size="12pt">${name}</font>
+       </icon>
+    </input>
+    <input type="route" name="Local Walking Route" description="Local walking route" category="Walking" priority="lowest">
+       <match k="type" v="route"/>
+       <match k="network" v="lwn"/>
+       <icon background="blue" foreground="white">
+         <font size="14pt"><b>${ref}</b></font><br />
+         <font size="12pt">${name}</font>
+       </icon>
+    </input>
+  </inputSet>
   
   <inputSet id="route">
     <inputSet ref="names"/>
@@ -266,6 +310,10 @@
     <input type="freetext" presence="always" name="Width" category="Properties" key="width" description="The width in metres" />
   </inputSet>
   
+  <!-- ************************************************************************
+       Roads
+       ************************************************************************ -->
+
   <feature name="Motorway">
     <category>roads</category>
     <icon image="features/highway__motorway.png">
@@ -287,7 +335,7 @@
     <inputSet ref="majorRoad"/>
   </feature>
 
-  <feature name="Trunk Road">
+  <feature name="Trunk road">
     <category>roads</category>
     <icon image="features/highway__trunk.png">
       <font size="16pt"><b>${ref}</b></font><br/>
@@ -301,7 +349,15 @@
     <inputSet ref="majorRoad"/>
   </feature>
 
-  <feature name="Primary Road">
+  <feature name="Trunk link" icon="features/motorway_link.png">
+    <category>roads</category>
+    <line/>
+    <tag k="highway" v="trunk_link"/>
+
+    <inputSet ref="majorRoad"/>
+  </feature>
+
+  <feature name="Primary road">
     <category>roads</category>
     <icon>
       <font size="16pt"><b>${ref}</b></font><br/>
@@ -315,7 +371,7 @@
     <inputSet ref="majorRoad"/>
   </feature>
 
-  <feature name="Secondary Road">
+  <feature name="Secondary road">
     <category>roads</category>
     <icon>
       <font size="16pt"><b>${ref}</b></font><br/>
@@ -329,7 +385,7 @@
     <inputSet ref="majorRoad"/>
   </feature>
 
-  <feature name="Tertiary Road">
+  <feature name="Tertiary road">
     <category>roads</category>
     <icon>
       <font size="14pt"><b>${name}</b></font><br/>
@@ -343,7 +399,20 @@
     <inputSet ref="majorRoad"/>
   </feature>
 
-  <feature name="Residential Road">
+  <feature name="Minor road">
+    <category>roads</category>
+    <icon image="features/highway__unclassified.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dunclassified</help>
+
+    <line/>
+    <tag k="highway" v="unclassified"/>
+
+    <inputSet ref="minorRoad"/>
+  </feature>
+
+  <feature name="Residential road">
     <category>roads</category>
     <icon image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font><br/>
@@ -357,20 +426,7 @@
     <inputSet ref="minorRoad"/>
   </feature>
 
-  <feature name="Road">
-    <category>roads</category>
-    <icon image="features/highway__unclassified.png">
-      <font size="14pt"><b>${name}</b></font>
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dunclassified</help>
-
-    <line/>
-    <tag k="highway" v="unclassified"/>
-
-    <inputSet ref="minorRoad"/>
-  </feature>
-
-  <feature name="Service Road">
+  <feature name="Service road">
     <category>roads</category>
     <icon image="features/highway__service.png">
       <font size="14pt"><b>${name}</b></font>
@@ -386,7 +442,7 @@
     <inputSet ref="minorRoad"/>
   </feature>
 
-  <feature name="Unknown Road">
+  <feature name="Unknown road">
     <category>roads</category>
     <icon>
       <font size="10pt">This road has not been given a specific type. It's a road, and that's all that's known.</font>
@@ -411,19 +467,7 @@
     <inputSet ref="minorRoad"/>
   </feature>
 
-  <feature name="Track">
-    <category>roads</category>
-    <icon>
-      <font size="14pt"><b>${name}</b></font>
-    </icon>
-
-    <line/>
-    <tag k="highway" v="track"/>
-
-    <inputSet ref="minorRoad"/>
-  </feature>
-
-  <feature name="Pedestrian Road">
+  <feature name="Pedestrian road">
     <category>roads</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
@@ -443,22 +487,11 @@
   </feature>
 
 
+  <!-- ************************************************************************
+       Paths
+       ************************************************************************ -->
 
-  <!-- Paths -->
-
-  <feature name="Cycle Path">
-    <category>paths</category>
-    <icon image="features/paths__unknown.png">
-      ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
-    </icon>
-
-    <line/>
-    <tag k="highway" v="cycleway"/>
-    <inputSet ref="bridge"/>
-    <inputSet ref="tunnel"/>
-  </feature>
-
-  <feature name="Foot Path">
+  <feature name="Footpath">
     <category>paths</category>
     <icon image="features/paths__footway.png">
       ${name} <i>${ref}</i>
@@ -466,8 +499,30 @@
 
     <line/>
     <tag k="highway" v="footway"/>
-    <inputSet ref="bridge"/>
-    <inputSet ref="tunnel"/>
+    <inputSet ref="path"/>
+  </feature>
+
+  <feature name="Cycle path">
+    <category>paths</category>
+    <icon image="features/paths__unknown.png">
+      ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="cycleway"/>
+    <inputSet ref="path"/>
+  </feature>
+
+  <feature name="Track">
+    <category>paths</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="highway" v="track"/>
+
+    <inputSet ref="path"/>
   </feature>
 
   <feature name="Bridleway">
@@ -477,6 +532,7 @@
 
     <line/>
     <tag k="highway" v="bridleway"/>
+    <inputSet ref="path"/>
   </feature>
 
   <feature name="Steps">
@@ -487,12 +543,13 @@
 
     <line/>
     <tag k="highway" v="steps"/>
-    <inputSet ref="names"/>
+    <inputSet ref="path"/>
     <input type="freetext" presence="always" category="Naming" name="Number of steps" key="step_count" description="The number of steps in the way" priority="low"/>
   </feature>
 
-
-  <!-- Barriers -->
+  <!-- ************************************************************************
+       Natural
+       ************************************************************************ -->
 
   <feature name="Fence">
     <category>natural</category>
@@ -514,6 +571,30 @@
     <tag k="barrier" v="hedge"/>
   </feature>
 
+  <feature name="Park">
+    <category>natural</category>
+    <icon>
+      <b>${name}</b><br/>
+    </icon>
+
+    <area/>
+    <tag k="leisure" v="park"/>
+  </feature>
+  
+  <feature name="Forest">
+    <category>natural</category>
+    <icon>
+      <b>${name}</b><br/>
+    </icon>
+
+    <area/>
+    <tag k="landuse" v="forest"/>
+  </feature>
+  
+  <!-- ************************************************************************
+       Barrier
+       ************************************************************************ -->
+
   <feature name="Wall">
     <category>barrier</category>
     <icon>
@@ -534,7 +615,7 @@
     <tag k="barrier" v="ditch"/>
   </feature>
   
-  <feature name="Retaining Wall">
+  <feature name="Retaining wall">
     <category>barrier</category>
     <icon>
     </icon>
@@ -544,7 +625,7 @@
     <tag k="barrier" v="retaining_wall"/>
   </feature>
   
-  <feature name="City Wall">
+  <feature name="City wall">
     <category>barrier</category>
     <icon>
     </icon>
@@ -553,72 +634,10 @@
     <line/>
     <tag k="barrier" v="city_wall"/>
   </feature>
-  
-  <!-- node based barriers, most should be of the node in way type -->
-  
-  <feature name="Bollard">
-    <category>barrier</category>
-    <icon image="icons/bollard.png">
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dbollard</help>
-    
-    <point />
-    <tag k="barrier" v="bollard"/>
-  </feature>
-  
-  <feature name="Gate">
-    <category>barrier</category>
-    <icon image="icons/gate.png">
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dgate</help>
-    
-    <point />
-    <tag k="barrier" v="gate"/>
-  </feature>
-  
-  <feature name="Cycle Barrier">
-    <category>barrier</category>
-    <icon image="icons/bollard.png">
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcycle_barrier</help>
-    
-    <point />
-    <tag k="barrier" v="cycle_barrier"/>
-  </feature>
-  
-  <feature name="Big Concrete Blocks">
-    <category>barrier</category>
-    <icon image="icons/bollard.png">
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dblock</help>
-    
-    <point />
-    <tag k="barrier" v="block"/>
-  </feature>
-  
-  <feature name="Cattle Grid">
-    <category>barrier</category>
-    <icon image="icons/cattle_grid.png">
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcattle_grid</help>
-    
-    <point />
-    <tag k="barrier" v="cattle_grid"/>
-  </feature>
-  
-  <feature name="Toll Booth">
-    <category>barrier</category>
-    <icon>
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth</help>
-    
-    <point />
-    <tag k="barrier" v="toll_booth"/>
-    <tagSet ref="fee"/>
-    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the toll" priority="low"/>
-  </feature>
 
-  <!-- Waterway -->
+  <!-- ************************************************************************
+       Waterways
+       ************************************************************************ -->
 
   <feature name="Stream">
     <category>water</category>
@@ -651,6 +670,16 @@
     <tag k="waterway" v="canal"/>
   </feature>
 
+  <feature name="Drain">
+    <category>water</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="waterway" v="drain"/>
+  </feature>
+
   <feature name="Dam">
     <category>water</category>
     <icon image="features/waterway__dam.png">
@@ -661,10 +690,42 @@
     <tag k="waterway" v="dam"/>
   </feature>
 
+  <feature name="Riverbank">
+    <category>water</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
 
-  <!-- Railways -->
+    <area/>
+    <tag k="waterway" v="riverbank"/>
+  </feature>
 
-  <feature name="Railway Line">
+  <feature name="Reservoir">
+    <category>water</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <area/>
+    <tag k="landuse" v="reservoir"/>
+  </feature>
+
+  <feature name="Dock">
+    <category>water</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <area/>
+    <tag k="waterway" v="dock"/>
+  </feature>
+
+
+  <!-- ************************************************************************
+       Transport
+       ************************************************************************ -->
+
+  <feature name="Railway line">
     <category>transport</category>
     <icon image="features/transport__railway.png">
       <font size="14pt"><b>${name}</b></font>
@@ -676,7 +737,71 @@
     <inputSet ref="tunnel"/>
   </feature>
 
-  <feature name="Tram Line">
+  <feature name="Railway spur">
+    <category>transport</category>
+    <icon image="features/transport__railway.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="rail"/>
+    <tag k="service" v="spur"/>
+  </feature>
+
+  <feature name="Railway siding">
+    <category>transport</category>
+    <icon image="features/transport__railway.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="rail"/>
+    <tag k="service" v="siding"/>
+  </feature>
+
+  <feature name="Preserved line">
+    <category>transport</category>
+    <icon image="features/transport__railway.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="preserved"/>
+  </feature>
+
+  <feature name="Disused tracks">
+    <category>transport</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="disused"/>
+  </feature>
+
+  <feature name="Old trackbed">
+    <category>transport</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="abandoned"/>
+  </feature>
+
+  <feature name="Light rail line">
+    <category>transport</category>
+    <icon image="features/transport__tram.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <line/>
+    <tag k="railway" v="light_rail"/>
+    <inputSet ref="bridge"/>
+    <inputSet ref="tunnel"/>
+  </feature>
+
+  <feature name="Tram line">
     <category>transport</category>
     <icon image="features/transport__tram.png">
       <font size="14pt"><b>${name}</b></font>
@@ -689,7 +814,7 @@
     <inputSet ref="tunnel"/>
   </feature>
 
-  <feature name="Subway Line">
+  <feature name="Subway line">
     <category>transport</category>
     <icon image="features/transport__subway.png">
       <font size="14pt"><b>${name}</b></font>
@@ -701,30 +826,7 @@
     <inputSet ref="tunnel"/>
   </feature>
 
-  <feature name="Railway Station">
-    <category>transport</category>
-    <icon image="features/transport__railway.png">
-      <font size="14pt"><b>${name}</b></font>
-    </icon>
-    
-    <point/>
-    <tag k="railway" v="station"/>
-    <inputSet ref="names"/>
-    <input type="freetext" presence="onTagMatch" category="Naming" name="Reference" key="ref" description="The shortcode/reference for the station" priority="low"/>
-    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
-  </feature>
-  
-  <feature name="Railway Station">
-    <category>buildings</category>
-    <icon image="features/transport__railway.png">
-      <font size="14pt"><b>${name}</b></font>
-    </icon>
-    
-    <area/>
-    <tag k="building" v="station"/>
-  </feature>
-  
-  <feature name="Railway Platform">
+  <feature name="Railway platform">
     <category>transport</category>
     
     <line />
@@ -732,8 +834,25 @@
     <tag k="railway" v="platform"/>
     <input type="freetext" presence="onTagMatch" category="Naming" name="Reference" key="ref" description="The number of the platform" priority="low"/>
   </feature>
+
+  <feature name="Bus station">
+    <category>transport</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="bus_station"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
     
-  <!-- Buildings -->
+
+  <!-- ************************************************************************
+       Buildings
+       ************************************************************************ -->
 
   <feature name="School">
     <category>buildings</category>
@@ -763,6 +882,131 @@
     <inputSet ref="buildingAddress" />
   </feature>
 
+  <feature name="Supermarket">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="shop" v="supermarket"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Place of worship">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="place_of_worship"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Public building">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="public_building"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Hospital">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="hospital"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="University">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="amenity" v="university"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Attraction">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="tourism" v="attraction"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Museum">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="tourism" v="museum"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Zoo">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="tourism" v="zoo"/>
+    <tag k="building" v="yes"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
+  <feature name="Stadium">
+    <category>buildings</category>
+    <icon>
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="leisure" v="stadium"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+  </feature>
+
   <feature name="Building">
     <category>buildings</category>
     <icon>
@@ -776,105 +1020,102 @@
     <inputSet ref="buildingAddress" />
   </feature>
 
-  <!-- Areas -->
+  <!-- ************************************************************************
+       Landuse
+       ************************************************************************ -->
 
-  <feature name="Park">
-    <category>natural</category>
-    <icon>
-      <b>${name}</b><br/>
-    </icon>
-
-    <area/>
-    <tag k="leisure" v="park"/>
-  </feature>
-  
-  <feature name="Forest">
-    <category>natural</category>
-    <icon>
-      <b>${name}</b><br/>
-    </icon>
-
-    <area/>
-    <tag k="landuse" v="forest"/>
-  </feature>
-  
-  <!-- POI -->
-  
-  <feature name="Aerodrome">
-    <category>aeroway</category>
-    <icon image="icons/airport.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
-    <point />
-    <tag k="aeroway" v="aerodrome"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the aerodrome/airport" priority="low"/>
+  <feature name="Industry">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="landuse" v="industrial"/>
+    <inputSet ref="simpleName"/>
   </feature>
 
-
-  <feature name="Cinema">
-    <category>amenity</category>
-    <icon image="icons/cinema.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
-    <point />
-    <tag k="amenity" v="cinema"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the cinema" priority="low"/>
+  <feature name="Offices">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="landuse" v="commercial"/>
+    <inputSet ref="simpleName"/>
   </feature>
 
-  <feature name="Ferry Terminal">
-    <category>amenity</category>
-    <icon image="icons/ferry_terminal.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
-    <point />
-    <tag k="amenity" v="ferry_terminal"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the ferry terminal." priority="low"/>
-    <input type="freetext" presence="always" category="" name="Operator" key="operator" description="The operator of the ferry terminal." priority="low"/>
-    <input type="freetext" presence="always" category="" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
+  <feature name="Retail">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="landuse" v="retail"/>
+    <inputSet ref="simpleName"/>
   </feature>
+
+  <feature name="Marketplace">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="amenity" v="marketplace"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Cemetery">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="landuse" v="cemetery"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Playground">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="leisure" v="playground"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Golf course">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="leisure" v="golf_course"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Recreation ground">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="leisure" v="recreation_ground"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Sports pitch">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="leisure" v="pitch"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Sports track">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="leisure" v="track"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+
+  <!-- ************************************************************************
+       POIs
+       ************************************************************************ -->
+
+  <!-- --------- Amenity --------- -->
 
   <feature name="Fire station">
     <category>amenity</category>
-    <icon image="icons/fire_station.png"/>
+    <icon image="features/pois/amenity_firestation2.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfire_station</help>
     <point />
     <tag k="amenity" v="fire_station"/>
     <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
   </feature>
 
-
   <feature name="Police Station">
     <category>amenity</category>
-    <icon image="icons/police.png"/>
+    <icon image="features/pois/amenity_police2.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpolice</help>
     <point />
     <tag k="amenity" v="police"/>
     <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
   </feature>
 
-
   <feature name="Hospital">
     <category>amenity</category>
-    <icon image="icons/hospital.png"/>
+    <icon image="features/pois/health_hospital.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital</help>
     <point />
     <tag k="amenity" v="hospital"/>
     <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
-  </feature>
-
-  <feature name="Hotel">
-    <category>tourism</category>
-    <icon image="icons/hotel.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
-    <point />
-    <tag k="tourism" v="hotel"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The of it." priority="low"/>
-  </feature>
-
-  <feature name="Museum">
-    <category>tourism</category>
-    <icon image="icons/museum.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
-    <point />
-    <tag k="tourism" v="museum"/>
-    <input type="freetext" presence="always" category="" name="" key="" description="The name of it." priority="low"/>
   </feature>
 
   <feature name="Place of Worship">
@@ -888,17 +1129,9 @@
     <input type="freetext" presence="always" category="" name="denomination" key="denomination" description="The denomination of the religion worshiped here." priority="low"/>
   </feature>
 
-
-
-
-
-
-
-
-
   <feature name="ATM">
     <category>amenity</category>
-    <icon image="icons/atm.png"/>
+    <icon image="features/pois/money_atm.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Atm</help>
     <point />
     <tag k="amenity" v="atm"/>
@@ -908,7 +1141,7 @@
   
   <feature name="Bank">
     <category>amenity</category>
-    <icon image="icons/bank.png">
+    <icon image="features/pois/money_bank2.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbank</help>
@@ -924,7 +1157,7 @@
   
   <feature name="Recycling">
     <category>amenity</category>
-    <icon image="icons/recycling.png"/>
+    <icon image="features/pois/amenity_recycling.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Drecycling</help>
     <point />
     <tag k="amenity" v="recycling"/>
@@ -932,21 +1165,155 @@
   
   <feature name="School">
     <category>amenity</category>
-    <icon image="icons/school.png">
+    <icon image="features/pois/education_school.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool</help>
     <point />
-    <area />
     <tag k="amenity" v="school"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
   </feature>
   
-  <!-- transportation -->
+  <feature name="Post Box">
+    <category>amenity</category>
+    <icon image="features/pois/amenity_post_box.n.24.png">
+      ${ref}
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Post_box</help>
+    <point />
+    <tag k="amenity" v="post_box"/>
+    <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post box" />
+    <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
+  </feature>
+  
+  <!-- --------- Tourism --------- -->
+
+  <feature name="Hotel">
+    <category>tourism</category>
+    <icon image="features/pois/accommodation_hotel.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
+    <point />
+    <tag k="tourism" v="hotel"/>
+    <inputSet ref="simpleName" />
+  </feature>
+
+  <feature name="Hostel">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/accommodation_youth_hostel.n.24.png"/>
+    <tag k="tourism" v="hostel"/>
+  </feature>
+
+  <feature name="Guesthouse (B&B)">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/accommodation_bed_and_breakfast.n.24.png"/>
+    <tag k="tourism" v="guesthouse"/>
+  </feature>
+
+  <feature name="Campsite">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/accommodation_camping.n.24.png"/>
+    <tag k="tourism" v="camp_site"/>
+  </feature>
+
+  <feature name="Caravan park">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/accommodation_caravan_park.n.24.png"/>
+    <tag k="tourism" v="caravan_site"/>
+  </feature>
+
+  <feature name="Museum">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_museum.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
+    <point />
+    <tag k="tourism" v="museum"/>
+    <inputSet ref="simpleName" />
+  </feature>
+
+  <feature name="Archaeological">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_archaeological.n.24.png"/>
+    <tag k="historic" v="archaeological_site"/>
+  </feature>
+
+  <feature name="Battlefield">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_battlefield.n.24.png"/>
+    <tag k="historic" v="battlefield"/>
+  </feature>
+
+  <feature name="Castle">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_castle.n.24.png"/>
+    <tag k="historic" v="castle"/>
+  </feature>
+
+  <feature name="Memorial">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_memorial.n.24.png"/>
+    <tag k="historic" v="memorial"/>
+  </feature>
+
+  <feature name="Monument">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_monument.n.24.png"/>
+    <tag k="historic" v="monument"/>
+  </feature>
+
+  <feature name="Picnic site">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_picnic.n.24.png"/>
+    <tag k="tourism" v="picnic_site"/>
+  </feature>
+
+  <feature name="Ruin">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_ruin.n.24.png"/>
+    <tag k="historic" v="ruin"/>
+  </feature>
+
+  <feature name="Cinema">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_cinema.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
+    <point />
+    <tag k="amenity" v="cinema"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the cinema" priority="low"/>
+  </feature>
+
+  <feature name="Theatre">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_ruin.n.24.png"/>
+    <tag k="amenity" v="theatre"/>
+  </feature>
+
+  <feature name="Viewpoint">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_view_point.n.24.png"/>
+    <tag k="tourism" v="viewpoint"/>
+  </feature>
+
+  <feature name="Viewpoint">
+    <category>tourism</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/tourist_zoo.n.24.png"/>
+    <tag k="tourism" v="zoo"/>
+  </feature>
+
+  <!-- --------- Transport --------- -->
+
+  <feature name="Aerodrome">
+    <category>aeroway</category>
+    <icon image="features/pois/transport_aerodrome.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
+    <point />
+    <tag k="aeroway" v="aerodrome"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the aerodrome/airport" priority="low"/>
+  </feature>
+
   <feature name="Bus Stop">
     <category>transport</category>
-    <icon image="features/transport__bus.png">
+    <icon image="features/pois/transport_bus_stop2.n.24.png">
       ${name} ${local_ref}
     </icon>
     <point />
@@ -956,7 +1323,7 @@
   
   <feature name="Car Parking">
     <category>transport</category>
-    <icon image="icons/parking.png">
+    <icon image="features/pois/transport_parking_car.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
@@ -971,7 +1338,7 @@
   
   <feature name="Bicycle Parking">
     <category>transport</category>
-    <icon image="icons/parking_cycle.png">
+    <icon image="features/pois/transport_parking_bicycle.n.24.png">
       ${name} ${capacity}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking</help>
@@ -987,11 +1354,135 @@
     </input>
   </feature>
   
-  <!-- eating places/entertainment -->
+  <feature name="Railway station">
+    <category>transport</category>
+    <icon image="features/pois/transport_train_station.n.24.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+    
+    <point/>
+    <tag k="railway" v="station"/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Reference" key="ref" description="The shortcode/reference for the station" priority="low"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the service" priority="low"/>
+  </feature>
+
+  <feature name="Fuel">
+    <category>transport</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/transport_fuel.n.24.png"/>
+    <tag k="amenity" v="fuel"/>
+  </feature>
+  
+  <feature name="Bus station">
+    <category>transport</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/transport_bus_station.n.24.png"/>
+    <tag k="amenity" v="bus_station"/>
+  </feature>
+  
+  <feature name="Taxi rank">
+    <category>transport</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/transport_taxi_rank.n.24.png"/>
+    <tag k="amenity" v="taxi"/>
+  </feature>
+
+  <feature name="Tram stop">
+    <category>transport</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/transport_tram_stop.n.24.png"/>
+    <tag k="railway" v="tram_stop"/>
+  </feature>
+  
+  <feature name="Bicycle rental">
+    <category>transport</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/transport_rental_bicycle.n.24.png"/>
+    <tag k="amenity" v="bicycle_rental"/>
+  </feature>
+
+  <feature name="Car rental">
+    <category>transport</category><point /><inputSet ref="simpleName" />
+	<icon image="features/pois/transport_rental_car.n.24.png"/>
+    <tag k="amenity" v="car_rental"/>
+  </feature>
+  
+  <feature name="Ferry Terminal">
+    <category>transport</category>
+    <icon image="features/pois/transport_port.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
+    <point />
+    <tag k="amenity" v="ferry_terminal"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the ferry terminal." priority="low"/>
+    <input type="freetext" presence="always" category="" name="Operator" key="operator" description="The operator of the ferry terminal." priority="low"/>
+    <input type="freetext" presence="always" category="" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
+  </feature>
+
+  <!-- --------- Barriers --------- -->
+
+  <feature name="Bollard">
+    <category>barrier</category>
+    <icon image="features/pois/barrier_bollard.n.24.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dbollard</help>
+    
+    <point />
+    <tag k="barrier" v="bollard"/>
+  </feature>
+  
+  <feature name="Gate">
+    <category>barrier</category>
+    <icon image="features/pois/barrier_gate.n.24.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dgate</help>
+    
+    <point />
+    <tag k="barrier" v="gate"/>
+  </feature>
+  
+  <feature name="Cycle Barrier">
+    <category>barrier</category>
+    <icon image="features/pois/barrier_bollard.n.24.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcycle_barrier</help>
+    
+    <point />
+    <tag k="barrier" v="cycle_barrier"/>
+  </feature>
+  
+  <feature name="Big Concrete Blocks">
+    <category>barrier</category>
+    <icon image="features/pois/barrier_bollard.n.24.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dblock</help>
+    
+    <point />
+    <tag k="barrier" v="block"/>
+  </feature>
+  
+  <feature name="Cattle Grid">
+    <category>barrier</category>
+    <icon image="icons/cattle_grid.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcattle_grid</help>
+    
+    <point />
+    <tag k="barrier" v="cattle_grid"/>
+  </feature>
+  
+  <feature name="Toll Booth">
+    <category>barrier</category>
+    <icon image="features/pois/barrier_toll_booth.n.24.png">
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth</help>
+    
+    <point />
+    <tag k="barrier" v="toll_booth"/>
+    <tagSet ref="fee"/>
+    <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the toll" priority="low"/>
+  </feature>
+  
+  <!-- --------- Entertainment --------- -->
   
   <feature name="Pub">
     <category>entertainment</category>
-    <icon image="icons/pub.png">
+    <icon image="features/pois/food_pub.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpub</help>
@@ -1004,7 +1495,7 @@
 
   <feature name="Bar">
     <category>entertainment</category>
-    <icon image="icons/bar.png">
+    <icon image="features/pois/food_bar.n.24.png">
       ${name}
     </icon>
     <point />
@@ -1016,7 +1507,7 @@
 
   <feature name="Restaurant">
     <category>entertainment</category>
-    <icon image="icons/restaurant.png">
+    <icon image="features/pois/food_restaurant.n.24.png">
       ${name}
     </icon>
     <point />
@@ -1028,7 +1519,7 @@
   
   <feature name="Cafe">
     <category>entertainment</category>
-    <icon image="icons/cafe.png">
+    <icon image="features/pois/food_cafe.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcafe</help>
@@ -1042,7 +1533,7 @@
   
   <feature name="Fast Food">
     <category>entertainment</category>
-    <icon image="icons/fast_food.png">
+    <icon image="features/pois/food_fastfood.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfast_food</help>
@@ -1053,22 +1544,11 @@
     <inputSet ref="cuisine"/>
   </feature>
 
-  <feature name="Post Box">
-    <category>amenity</category>
-    <icon image="icons/post_box.png">
-      ${ref}
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Post_box</help>
-    <point />
-    <tag k="amenity" v="post_box"/>
-    <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post box" />
-    <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
-  </feature>
-  
-  <!-- shops -->
-  <feature name="Small Convience Store">
+  <!-- --------- Shops --------- -->
+
+  <feature name="Small Convenience Store">
     <category>shopping</category>
-    <icon image="icons/convenience.png">
+    <icon image="features/pois/shopping_convenience.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dconvenience</help>
@@ -1080,7 +1560,7 @@
   
   <feature name="Supermarket">
     <category>shopping</category>
-    <icon image="icons/supermarket.png">
+    <icon image="features/pois/shopping_supermarket.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dsupermarket</help>
@@ -1089,10 +1569,124 @@
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
   </feature>
-  
+ 
+  <feature name="Alcohol shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_alcohol.n.24.png"/>
+    <tag k="shop" v="alcohol"/>
+  </feature>
+
+  <feature name="Bakery">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_bakery.n.24.png"/>
+    <tag k="shop" v="bakery"/>
+  </feature>
+
+  <feature name="Bike shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_bicycle.n.24.png"/>
+    <tag k="shop" v="bicycle"/>
+  </feature>
+
+  <feature name="Bookshop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_book.n.24.png"/>
+    <tag k="shop" v="book"/>
+  </feature>
+
+  <feature name="Butcher">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_butcher.n.24.png"/>
+    <tag k="shop" v="butcher"/>
+  </feature>
+
+  <feature name="Car repair">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_car_repair.n.24.png"/>
+    <tag k="shop" v="car_repair"/>
+  </feature>
+
+  <feature name="Clothes shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_clothes.n.24.png"/>
+    <tag k="shop" v="clothes"/>
+  </feature>
+
+  <feature name="Confectionery">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_confectionery.n.24.png"/>
+    <tag k="shop" v="confectionery"/>
+  </feature>
+
+  <feature name="DIY">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_diy.n.24.png"/>
+    <tag k="shop" v="doityourself"/>
+  </feature>
+
+  <feature name="Fishmonger">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_fish.n.24.png"/>
+    <tag k="shop" v="fishmonger"/>
+  </feature>
+
+  <feature name="Garden centre">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_garden_centre.n.24.png"/>
+    <tag k="shop" v="garden_centre"/>
+  </feature>
+
+  <feature name="Gift shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_gift.n.24.png"/>
+    <tag k="shop" v="gift"/>
+  </feature>
+
+  <feature name="Greengrocer">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_greengrocer.n.24.png"/>
+    <tag k="shop" v="greengrocer"/>
+  </feature>
+
+  <feature name="Hairdresser">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_hairdresser.n.24.png"/>
+    <tag k="shop" v="hairdresser"/>
+  </feature>
+
+  <feature name="Hifi shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_hifi.n.24.png"/>
+    <tag k="shop" v="hifi"/>
+  </feature>
+
+  <feature name="Jewellery">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_jewelry.n.24.png"/>
+    <tag k="shop" v="jewelry"/>
+  </feature>
+
+  <feature name="Launderette">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_laundrette.n.24.png"/>
+    <tag k="shop" v="laundry"/>
+  </feature>
+
+  <feature name="Motorbike shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_motorcycle.n.24.png"/>
+    <tag k="shop" v="motorcycle"/>
+  </feature>
+
+  <feature name="Music shop">
+    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+	<icon image="features/pois/shopping_music.n.24.png"/>
+    <tag k="shop" v="music"/>
+  </feature>
+
   <feature name="Pharmacy">
     <category>shopping</category>
-    <icon image="icons/pharmacy.png">
+    <icon image="features/pois/health_pharmacy.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Pharmacy</help>
@@ -1103,7 +1697,11 @@
     <input type="checkbox" category="Amenity" presence="always" description="Does this pharmacy sell prescription drugs?" name="Dispensing" key="dispensing" layout="horizontal"/>
   </feature>
 
-  <!-- advanced relations -->
+
+  <!-- ************************************************************************
+       Relations
+       ************************************************************************ -->
+
   <feature name="Turn restriction">
     <category>advanced</category>
     <help>http://wiki.openstreetmap.org/wiki/Turn_restrictions</help>
