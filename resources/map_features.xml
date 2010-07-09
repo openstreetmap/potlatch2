@@ -1284,7 +1284,7 @@
 
   <feature name="Theatre">
     <category>tourism</category><point /><inputSet ref="simpleName" />
-	<icon image="features/pois/tourist_ruin.n.24.png"/>
+	<icon image="features/pois/tourist_theatre.n.24.png"/>
     <tag k="amenity" v="theatre"/>
   </feature>
 
