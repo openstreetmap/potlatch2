@@ -76,35 +76,81 @@ way[addr:interpolation] { color: #B0E0E6; width: 3; dashes: 3,3;}
 
 /* POIs, too, can have bitmap icons - they can even be transparent */
 
-node[amenity=pub] { icon-image: icons/pub.png; text-offset: 15; font-family: DejaVu; text: name; font-size: 9; }
 node[place] { icon-image: icons/place.png; text-offset: 17; font-family: DejaVu; text: name; font-size: 9; font-weight: bold; text-decoration: underline; }
-node[railway=station] { icon-image: icons/station.png; text-offset: 13; font-family: DejaVu; text: name; font-size: 9; font-weight: bold; }
-node[aeroway=aerodrome] { icon-image: icons/airport.png; text-offset: 13; font-family: DejaVu; text: name; font-size: 10; }
-node[amenity=atm] { icon-image: icons/atm.png; }
-node[amenity=bank] { icon-image: icons/bank.png; text-offset: 15; text: name; }
-node[highway=bus_stop] { icon-image: icons/bus_stop.png; }
-node[amenity=cafe] { icon-image: icons/cafe.png; text-offset: 15; text: name; }
-node[shop=convenience] { icon-image: icons/convenience.png; text-offset:15; text:name; }
-node[shop=supermarket] { icon-image: icons/supermarket.png; text-offset:15; text:name; }
-node[amenity=fast_food] { icon-image: icons/fast_food.png; text-offset:15; text: name; }
-node[amenity=fire_station] { icon-image: icons/fire_station.png; }
-node[amenity=hospital] { icon-image: icons/hospital.png; }
-node[tourism=hotel] { icon-image: icons/hotel.png; }
-node[amenity=parking] { icon-image: icons/parking.png; }
-node[amenity=bicycle_parking] { icon-image: icons/parking_cycle.png; text-offset: 15; text: capacity; }
-node[amenity=pharmacy] { icon-image: icons/pharmacy.png; }
-node[amenity=pharmacy][dispensing=yes] { icon-image: icons/pharmacy_dispensing.png; }
-node[amenity=police] { icon-image: icons/police.png; }
-node[amenity=post_box] { icon-image: icons/post_box.png; }
-node[amenity=recycling] { icon-image: icons/recycling.png; }
-node[amenity=restaurant] { icon-image: icons/restaurant.png; }
-node[amenity=school] { icon-image: icons/school.png; }
-node[amenity=taxi] { icon-image: icons/taxi.png; }
 node[amenity=telephone] { icon-image: icons/telephone.png; }
-way node[barrier=gate], way node[highway=gate] { icon-image: icons/gate.png; }
-way node[barrier=bollard] { icon-image: icons/bollard.png; }
 node[barrier=cattle_grid] { icon-image: icons/cattle_grid.png; }
-	
+
+node[tourism=guesthouse] { icon-image: icons/accommodation_bed_and_breakfast.n.16.png; }
+node[tourism=camp_site] { icon-image: icons/accommodation_camping.n.16.png; }
+node[tourism=caravan_park] { icon-image: icons/accommodation_caravan_park.n.16.png; }
+node[tourism=hotel] { icon-image: icons/accommodation_hotel.n.16.png; text-offset:15; text: name; }
+node[tourism=hostel] { icon-image: icons/accommodation_youth_hostel.n.16.png; }
+node[amenity=fire_station] { icon-image: icons/amenity_firestation2.n.16.png; }
+node[amenity=police] { icon-image: icons/amenity_police2.n.16.png; }
+node[amenity=post_box] { icon-image: icons/amenity_post_box.n.16.png; }
+node[amenity=recycling] { icon-image: icons/amenity_recycling.n.16.png; }
+node[barrier=bollard] { icon-image: icons/barrier_bollard.n.16.png; }
+node[barrier=gate], node[highway=gate] { icon-image: icons/barrier_gate.n.16.png; }
+node[barrier=toll_booth] { icon-image: icons/barrier_toll_booth.n.16.png; }
+node[amenity=school] { icon-image: icons/education_school.n.16.png; text-offset:15; text: name; }
+node[amenity=bar] { icon-image: icons/food_bar.n.16.png; text-offset:15; text: name; }
+node[amenity=cafe] { icon-image: icons/food_cafe.n.16.png; text-offset:15; text: name; }
+node[amenity=fast_food] { icon-image: icons/food_fastfood.n.16.png; }
+node[amenity=pub] { icon-image: icons/food_pub.n.16.png; text-offset:15; text: name; }
+node[amenity=restaurant] { icon-image: icons/food_restaurant.n.16.png; text-offset:15; text: name; }
+node[amenity=hospital] { icon-image: icons/health_hospital.n.16.png; }
+node[amenity=pharmacy] { icon-image: icons/health_pharmacy.n.16.png; }
+node[amenity=atm] { icon-image: icons/money_atm.n.16.png; }
+node[amenity=bank] { icon-image: icons/money_bank2.n.16.png; }
+node[shop=alcohol] { icon-image: icons/shopping_alcohol.n.16.png; }
+node[shop=bakery] { icon-image: icons/shopping_bakery.n.16.png; }
+node[shop=bicycle] { icon-image: icons/shopping_bicycle.n.16.png; }
+node[shop=book] { icon-image: icons/shopping_book.n.16.png; }
+node[shop=butcher] { icon-image: icons/shopping_butcher.n.16.png; }
+node[shop=car_repair] { icon-image: icons/shopping_car_repair.n.16.png; }
+node[shop=car] { icon-image: icons/shopping_car.n.16.png; }
+node[shop=clothes] { icon-image: icons/shopping_clothes.n.16.png; }
+node[shop=confectionery] { icon-image: icons/shopping_confectionery.n.16.png; }
+node[shop=convenience] { icon-image: icons/shopping_convenience.n.16.png; }
+node[shop=doityourself] { icon-image: icons/shopping_diy.n.16.png; }
+node[shop=fishmonger] { icon-image: icons/shopping_fish.n.16.png; }
+node[shop=garden_centre] { icon-image: icons/shopping_garden_centre.n.16.png; }
+node[shop=gift] { icon-image: icons/shopping_gift.n.16.png; }
+node[shop=greengrocer] { icon-image: icons/shopping_greengrocer.n.16.png; }
+node[shop=hairdresser] { icon-image: icons/shopping_hairdresser.n.16.png; }
+node[shop=hifi] { icon-image: icons/shopping_hifi.n.16.png; }
+node[shop=jewelry] { icon-image: icons/shopping_jewelry.n.16.png; }
+node[shop=laundry] { icon-image: icons/shopping_laundrette.n.16.png; }
+node[shop=motorcycle] { icon-image: icons/shopping_motorcycle.n.16.png; }
+node[shop=music] { icon-image: icons/shopping_music.n.16.png; }
+node[shop=supermarket] { icon-image: icons/shopping_supermarket.n.16.png; }
+node[historic=archaeological_site] { icon-image: icons/tourist_archaeological.n.16.png; }
+node[historic=battlefield] { icon-image: icons/tourist_battlefield.n.16.png; }
+node[historic=castle] { icon-image: icons/tourist_castle.n.16.png; text-offset:15; text: name; }
+node[amenity=cinema] { icon-image: icons/tourist_cinema.n.16.png; }
+node[historic=memorial] { icon-image: icons/tourist_memorial.n.16.png; text-offset:15; text: name; }
+node[historic=monument] { icon-image: icons/tourist_monument.n.16.png; text-offset:15; text: name; }
+node[tourism=museum] { icon-image: icons/tourist_museum.n.16.png; text-offset:15; text: name; }
+node[tourism=picnic_site] { icon-image: icons/tourist_picnic.n.16.png; }
+node[historic=ruin] { icon-image: icons/tourist_ruin.n.16.png; }
+node[amenity=theatre] { icon-image: icons/tourist_theatre.n.16.png; }
+node[tourism=viewpoint] { icon-image: icons/tourist_view_point.n.16.png; }
+node[tourism=zoo] { icon-image: icons/tourist_zoo.n.16.png; }
+node[aeroway=aerodrome] { icon-image: icons/transport_aerodrome.n.16.png; }
+node[amenity=bus_station] { icon-image: icons/transport_bus_station.n.16.png; }
+node[highway=bus_stop] { icon-image: icons/transport_bus_stop2.n.16.png; }
+node[amenity=fuel] { icon-image: icons/transport_fuel.n.16.png; }
+node[amenity=bicycle_parking] { icon-image: icons/transport_parking_bicycle.n.16.png; text-offset: 15; text: capacity; }
+node[amenity=parking] { icon-image: icons/transport_parking_car.n.16.png; }
+node[amenity=ferry_terminal] { icon-image: icons/transport_port.n.16.png; }
+node[amenity=bicycle_rental] { icon-image: icons/transport_rental_bicycle.n.16.png; }
+node[amenity=car_rental] { icon-image: icons/transport_rental_car.n.16.png; }
+node[amenity=taxi] { icon-image: icons/transport_taxi_rank.n.16.png; }
+node[railway=station] { icon-image: icons/transport_train_station.n.16.png; text-offset:15; text: name; }
+node[railway=tram_stop] { icon-image: icons/transport_tram_stop.n.16.png; }
+
+
+
 /* We can stack styles at different z-index (depth) */
 
 way[railway=rail]
