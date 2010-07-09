@@ -39,7 +39,7 @@ package net.systemeD.halcyon.styleparser {
 		}
 		
 		public function exec(tags:Object):* {
-			if (!swfclass) { return; }
+			if (!swfclass) { return null; }
 			var cp:Object=new swfclass();
 			for (var k:String in tags) { cp[k]=tags[k]; }
 			return cp.execute();
