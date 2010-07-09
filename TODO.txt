@@ -15,8 +15,8 @@ Potlatch 2: main outstanding issues
 == Vector background layers ==
 
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
-* Import from OSM (is this worth sharing with the XML API stuff?)
 * Load GPX from API (probably into a designated 'GPX' layer which is automatically created)
+* Connectivity isn't preserved when bringing ways through (e.g. from OSM layer)
 
 == Saving ==
 

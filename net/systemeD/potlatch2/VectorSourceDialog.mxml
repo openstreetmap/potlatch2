@@ -39,14 +39,15 @@
 		<mx:Label htmlText="&lt;b&gt;Add new vector layer&lt;/b&gt;" />
 		<mx:HBox>
 			<mx:RadioButtonGroup id="filetype" />
-			<mx:RadioButton width="100%" groupName="{filetype}" value="gpx" id="gpx" label="GPX" selected="true" />
-			<mx:RadioButton width="100%" groupName="{filetype}" value="shp" id="shp" label="Shapefile" />
+			<mx:RadioButton width="100%" groupName="filetype" value="gpx" id="gpx" label="GPX" selected="true" />
+			<mx:RadioButton width="100%" groupName="filetype" value="osm" id="osm" label="OSM" />
+			<mx:RadioButton width="100%" groupName="filetype" value="shp" id="shp" label="Shapefile" />
 			<mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
 		</mx:HBox>
 		<mx:HBox>
 			<mx:Text text="URL:"/>
 			<mx:TextInput width="100%" id="src" text="" />
-			<mx:Button label="Load" click="loadFiles(src.text, shp.selected?'shp':'gpx', simplify.selected);" enabled="{src.text == '' ? false : true}"/>
+			<mx:Button label="Load" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected);" enabled="{src.text == '' ? false : true}"/>
 		</mx:HBox>
 	</mx:VBox>
 
@@ -58,6 +59,7 @@
 	import net.systemeD.potlatch2.utils.Importer;
 	import net.systemeD.potlatch2.utils.GpxImporter;
 	import net.systemeD.potlatch2.utils.ShpImporter;
+	import net.systemeD.potlatch2.utils.OsmImporter;
     import mx.managers.PopUpManager;
     import mx.events.DataGridEvent;
     import mx.events.CloseEvent;
@@ -134,14 +136,16 @@
         PopUpManager.removePopUp(this);
     }
 
-	private function loadFiles(url:String,filetype:String,simplify:Boolean):void {
+	private function loadFiles(url:String,type:String,simplify:Boolean):void {
 		var vectorlayer:VectorLayer=new VectorLayer(url,map,"potlatch.css");
 		vectorlayer.url=url;
 		map.vectorlayers[url]=vectorlayer;
 		map.vectorbg.addChild(vectorlayer.paint);
 
-		if (filetype=='gpx') {
+		if (type=='gpx') {
 			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
+		} else if (type=='osm') {
+			var osm:OsmImporter=new OsmImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
 		} else {
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
 			var shp:ShpImporter=new ShpImporter(vectorlayer,
