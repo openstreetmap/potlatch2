@@ -137,9 +137,10 @@
     }
 
 	private function loadFiles(url:String,type:String,simplify:Boolean):void {
-		var vectorlayer:VectorLayer=new VectorLayer(url,map,"potlatch.css");
+		var names:Array=url.split('/'); var name:String=names[names.length-1];
+		var vectorlayer:VectorLayer=new VectorLayer(name,map,"potlatch.css");
 		vectorlayer.url=url;
-		map.vectorlayers[url]=vectorlayer;
+		map.vectorlayers[name]=vectorlayer;
 		map.vectorbg.addChild(vectorlayer.paint);
 
 		if (type=='gpx') {

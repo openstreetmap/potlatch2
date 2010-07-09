@@ -17,6 +17,7 @@ Potlatch 2: main outstanding issues
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Load GPX from API (probably into a designated 'GPX' layer which is automatically created)
 * Connectivity isn't preserved when bringing ways through (e.g. from OSM layer)
+* Should disable most forms of editing for vector layers
 
 == Saving ==
 

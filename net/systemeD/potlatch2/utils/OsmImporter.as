@@ -11,8 +11,6 @@ package net.systemeD.potlatch2.utils {
 			super(container,paint,filenames,callback,simplify);
 		}
 
-		// http://127.0.0.1/~richard/osm/burton.osm
-
 		override protected function doImport():void {
 			var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
 			var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
