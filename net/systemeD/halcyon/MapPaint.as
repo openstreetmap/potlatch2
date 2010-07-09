@@ -7,7 +7,6 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.styleparser.RuleSet;
-	import net.systemeD.halcyon.vectorlayers.VectorLayer;
 	import net.systemeD.halcyon.Globals;
 
     public class MapPaint extends Sprite {

@@ -16,7 +16,6 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
-	import net.systemeD.halcyon.vectorlayers.*;
 	import net.systemeD.halcyon.Globals;
 
 //	for experimental export function:

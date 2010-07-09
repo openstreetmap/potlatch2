@@ -1,4 +1,4 @@
-package net.systemeD.halcyon.vectorlayers {
+package net.systemeD.halcyon {
 
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapPaint;

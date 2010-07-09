@@ -4,7 +4,6 @@ Potlatch 2: main outstanding issues
 
 
 ** Slash and burn trace statements
-** Remove SimpleVectorLayer and move CustomVectorLayer into VectorLayer
 
 == Core geometry ==
 

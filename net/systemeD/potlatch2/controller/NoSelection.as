@@ -5,7 +5,6 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapPaint;
-	import net.systemeD.halcyon.vectorlayers.VectorLayer;
 	import net.systemeD.halcyon.Globals;
 
 	public class NoSelection extends ControllerState {

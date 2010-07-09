@@ -54,7 +54,7 @@
 
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.Globals;
-	import net.systemeD.halcyon.vectorlayers.*;
+	import net.systemeD.halcyon.VectorLayer;
 	import net.systemeD.potlatch2.utils.Importer;
 	import net.systemeD.potlatch2.utils.GpxImporter;
 	import net.systemeD.potlatch2.utils.ShpImporter;
@@ -135,7 +135,7 @@
     }
 
 	private function loadFiles(url:String,filetype:String,simplify:Boolean):void {
-		var vectorlayer:CustomVectorLayer=new CustomVectorLayer(url,map,"potlatch.css");
+		var vectorlayer:VectorLayer=new VectorLayer(url,map,"potlatch.css");
 		vectorlayer.url=url;
 		map.vectorlayers[url]=vectorlayer;
 		map.vectorbg.addChild(vectorlayer.paint);
