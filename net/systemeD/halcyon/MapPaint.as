@@ -132,6 +132,9 @@ package net.systemeD.halcyon {
 			if (!wayuis[way.id]) { return; }
 			wayuis[way.id].removeSprites();
 			delete wayuis[way.id];
+			for (var i:uint=0; i<way.length; i++) {
+				deleteNodeUI(way.getNode(i));
+			}
 		}
 
 		public function deleteNodeUI(node:Node):void {

@@ -374,7 +374,7 @@ package net.systemeD.halcyon {
 			lastymouse=downY=mouseY;
 		}
         
-		public function mouseUpHandler(event:MouseEvent):void {
+		public function mouseUpHandler(event:MouseEvent=null):void {
 			if (dragstate==DRAGGING) {
 				updateCoords(x,y);
 				updateEntityUIs(false, false);

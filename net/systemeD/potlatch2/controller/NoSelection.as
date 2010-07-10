@@ -40,6 +40,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
         override public function enterState():void {
+			controller.map.mouseUpHandler();
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {

@@ -51,6 +51,14 @@ package net.systemeD.potlatch2.controller {
 			}
         }
 
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			if (event.keyCode==27) {
+				selectedWay.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, selectedWay, 0, 0));
+				return new SelectedWay(selectedWay);
+			}
+			return this;
+		}
+
         private function dragTo(event:MouseEvent):ControllerState {
 			selectedWay.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, selectedWay, event.localX-downX, event.localY-downY));
             return this;

@@ -1,10 +1,10 @@
 Potlatch 2: main outstanding issues
 -----------------------------------
-** = required before P2 goes live
 
 
 == Core geometry ==
 
+* purgeOutside simply doesn't work - WayUIs stay around. To investigate
 * P1-style J (join) / shift-J (unjoin)
 * Make parallelise properly undoable
 * Make Quadralatalawhatsit properly undoable

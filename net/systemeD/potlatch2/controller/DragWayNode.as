@@ -12,6 +12,8 @@ package net.systemeD.potlatch2.controller {
 
         private var downX:Number;
         private var downY:Number;
+		private var originalLat:Number;
+		private var originalLon:Number;
 		private var dragstate:uint=NOT_MOVED;
 		private const NOT_DRAGGING:uint=0;
 		private const NOT_MOVED:uint=1;
@@ -21,6 +23,8 @@ package net.systemeD.potlatch2.controller {
             selectedWay = way;
 			draggingIndex = index;
             draggingNode = way.getNode(index);
+			originalLat = draggingNode.lat;
+			originalLon = draggingNode.lon;
             downX = event.localX;
             downY = event.localY;
 			isNew = newNode;
@@ -61,6 +65,14 @@ package net.systemeD.potlatch2.controller {
                 return this;
 			}
         }
+
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			if (event.keyCode==27) {
+				draggingNode.setLatLon( originalLat, originalLon, MainUndoStack.getGlobalStack().addAction );
+               	return new SelectedWayNode(selectedWay,draggingIndex);
+			}
+			return this;
+		}
 
         private function endDrag():ControllerState {
             return previousState;

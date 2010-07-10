@@ -1294,7 +1294,7 @@
     <tag k="tourism" v="viewpoint"/>
   </feature>
 
-  <feature name="Viewpoint">
+  <feature name="Zoo">
     <category>tourism</category><point /><inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_zoo.n.24.png"/>
     <tag k="tourism" v="zoo"/>

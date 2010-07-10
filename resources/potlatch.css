@@ -14,7 +14,7 @@
   This is used as a debugger for finding unstyled areas; it's obviously oversimplistic since
   it picks up closed-loop highways. */
 
-way :area { color: red; width: 1; fill-color: red; fill-opacity: 0.5; }
+/* way :area { color: red; width: 1; fill-color: red; fill-opacity: 0.5; } */
 
 /* A set of fairly standard rules.
   We use z-index to make sure high-priority roads appear above minor ones.
@@ -26,7 +26,7 @@ way[highway=trunk],way[highway=trunk_link],
 way[highway=primary],way[highway=primary_link],
 way[highway=secondary],way[highway=secondary_link],
 way[highway=tertiary],way[highway=tertiary_link],
-way[highway=residential]                             { text: name; text-color: black; font-size: 7; text-position: line;}
+way[highway=residential]                             { text: name; text-color: black; font-size: 10; text-position: line; text-halo-color: white; text-halo-radius: 2; }
 way[highway=motorway],way[highway=motorway_link]    { z-index: 9; color: #809BC0; width: 7; casing-color: black; casing-width: 8; }
 way[highway=trunk],way[highway=trunk_link]          { z-index: 9; color: #7FC97F; width: 7; casing-color: black; casing-width: 8; }
 way[highway=primary],way[highway=primary_link]      { z-index: 8; color: #E46D71; width: 7; casing-color: black; casing-width: 8; }
@@ -90,7 +90,7 @@ node[amenity=police] { icon-image: icons/amenity_police2.n.16.png; z-index: 20; 
 node[amenity=post_box] { icon-image: icons/amenity_post_box.n.16.png; z-index: 20; }
 node[amenity=recycling] { icon-image: icons/amenity_recycling.n.16.png; z-index: 20; }
 node[barrier=bollard] { icon-image: icons/barrier_bollard.n.16.png; z-index: 20; }
-node[barrier=gate], node[highway=gate] { icon-image: icons/barrier_gate.n.16.png; z-index: 20; }
+node[barrier=gate], node[highway=gate] { icon-image: icons/gate.png; z-index: 20; }
 node[barrier=toll_booth] { icon-image: icons/barrier_toll_booth.n.16.png; z-index: 20; }
 node[amenity=school] { icon-image: icons/education_school.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[amenity=bar] { icon-image: icons/food_bar.n.16.png; text-offset:15; text: name; z-index: 20; }

@@ -303,12 +303,14 @@ package net.systemeD.halcyon.connection {
         }
         
 		public function purgeOutside(left:Number, right:Number, top:Number, bottom:Number):void {
+			return;
+			// ** this doesn't work - WayUIs stick around.
+			// ** should purge POIs and relations too
 			for each (var way:Way in ways) {
 				if (!way.within(left,right,top,bottom) && !way.isDirty) {
 					killWayWithNodes(way.id);
 				}
 			}
-			// ** should purge POIs and relations too
 		}
 
 		public function markDirty():void {
