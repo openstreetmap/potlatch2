@@ -23,8 +23,9 @@ package net.systemeD.halcyon.styleparser {
 
 		*/
 
-		public var ruleChains:Array=[[]];		// array of array of Rules
-		public var styles:Array=[];				// array of ShapeStyle/ShieldStyle/TextStyle/PointStyle
+		public var ruleChains:Array=[[]];			// array of array of Rules
+		public var styles:Array=[];					// array of ShapeStyle/ShieldStyle/TextStyle/PointStyle
+		public var zoomSpecific:Boolean=false;		// are any of the rules zoom-specific?
 
 		private var rcpos:uint=0;
 		private var stylepos:uint=0;
@@ -32,8 +33,9 @@ package net.systemeD.halcyon.styleparser {
 		// Update the current StyleList from this StyleChooser
 
 		public function updateStyles(obj:Entity, tags:Object, sl:StyleList, imageWidths:Object, zoom:uint):void {
+			if (zoomSpecific) { sl.validAt=zoom; }
+
 			// Are any of the ruleChains fulfilled?
-			// ** needs to cope with min/max zoom
 			var w:Number;
 			var fulfilled:Boolean=false;
 			for each (var c:Array in ruleChains) {
@@ -129,6 +131,7 @@ package net.systemeD.halcyon.styleparser {
 		public function addZoom(z1:uint,z2:uint):void {
 			ruleChains[rcpos][ruleChains[rcpos].length-1].minZoom=z1;
 			ruleChains[rcpos][ruleChains[rcpos].length-1].maxZoom=z2;
+			zoomSpecific=true;
 		}
 		
 		// addCondition	<- adds into the current ruleChain (existing Rule)

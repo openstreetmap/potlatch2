@@ -12,16 +12,17 @@ package net.systemeD.halcyon {
 	public class EntityUI {
 
 		protected var entity:Entity;
+		protected var styleList:StyleList;				// current StyleList for this entity
 		protected var sprites:Array=new Array();		// instances in display list
         protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
 		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
 		protected var layer:int=0;						// map layer
 		protected var suspended:Boolean=false;			// suspend redrawing?
 		protected var redrawDue:Boolean=false;			// redraw called while suspended?
-		protected var redrawStyleList:StyleList;		// stylelist to be used when redrawing?
 		public var paint:MapPaint;						// reference to parent MapPaint
 		public var ruleset:RuleSet;						// reference to ruleset in operation
 		public var interactive:Boolean=true;			// does object respond to clicks?
+		public var purgable:Boolean=true;				// can it be deleted when offscreen?
 
 		protected const FILLSPRITE:uint=0;
 		protected const CASINGSPRITE:uint=1;
@@ -66,19 +67,23 @@ package net.systemeD.halcyon {
 
 		protected function relationAdded(event:RelationMemberEvent):void {
 		    event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged);
+			invalidateStyleList();
 		    redraw();
 		}
 		
 		protected function relationRemoved(event:RelationMemberEvent):void {
 		    event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
+			invalidateStyleList();
 		    redraw();
 		}
 		
         protected function tagChanged(event:TagEvent):void {
+			invalidateStyleList();
             redraw();
         }
 
         protected function relationTagChanged(event:TagEvent):void {
+			invalidateStyleList();
             redraw();
         }
 		
@@ -134,15 +139,28 @@ package net.systemeD.halcyon {
 			}
 		}
 
-        public function setHighlight(stateType:String, isOn:*):void {
-            if ( isOn && stateClasses[stateType] == null ) {
-                stateClasses[stateType] = isOn;
-            } else if ( !isOn && stateClasses[stateType] != null ) {
-                delete stateClasses[stateType];
-            }
+        public function setHighlight(settings:Object):void {
+			var changed:Boolean=false;
+			for (var stateType:String in settings) {
+				if (setStateClass(stateType, settings[stateType])) { changed=true; }
+			}
+			if (changed) redraw();
         }
 
-		protected function applyStateClasses(tags:Object):Object {
+        public function setStateClass(stateType:String, isOn:*):Boolean {
+            if ( isOn && stateClasses[stateType] != isOn ) {
+                stateClasses[stateType] = isOn;
+				invalidateStyleList();
+				return true;
+            } else if ( !isOn && stateClasses[stateType] != null ) {
+                delete stateClasses[stateType];
+				invalidateStyleList();
+				return true;
+            }
+			return false;
+        }
+
+		public function applyStateClasses(tags:Object):Object {
             for (var stateKey:String in stateClasses) {
                 tags[":"+stateKey] = 'yes';
             }
@@ -155,12 +173,12 @@ package net.systemeD.halcyon {
 
 		// Redraw control
 		
-		public function redraw(sl:StyleList=null):Boolean {
-			if (suspended) { redrawStyleList=sl; redrawDue=true; return false; }
-			return doRedraw(sl);
+		public function redraw():Boolean {
+			if (suspended) { redrawDue=true; return false; }
+			return doRedraw();
 		}
 		
-		public function doRedraw(sl:StyleList):Boolean {
+		public function doRedraw():Boolean {
 			// to be overwritten
 			return false;
 		}
@@ -173,10 +191,13 @@ package net.systemeD.halcyon {
 		public function resumeRedraw(event:EntityEvent):void {
 			suspended=false;
 			if (redrawDue) { 
-				doRedraw(redrawStyleList);
+				doRedraw();
 				redrawDue=false;
-				redrawStyleList=null; 
 			}
+		}
+		
+		public function invalidateStyleList():void {
+			styleList=null;
 		}
 
 	}

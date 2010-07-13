@@ -105,16 +105,30 @@ package net.systemeD.halcyon {
 				if (!wayuis[way.id]) { createWayUI(way); }
 				else if (redraw) { wayuis[way.id].recalculate(); wayuis[way.id].redraw(); }
 			}
+
 			if (remove) {
-				for each (way in o.waysOutside) { deleteWayUI(way); }
+				for each (way in o.waysOutside) {
+					if (wayuis[way.id] && !wayuis[way.id].purgable) {
+						if (redraw) { wayuis[way.id].recalculate(); wayuis[way.id].redraw(); }
+					} else {
+						deleteWayUI(way);
+					}
+				}
 			}
 
-			for each (node in o.poisInside) {
+			for each (node in o.nodesInside) {
 				if (!nodeuis[node.id]) { createNodeUI(node); }
 				else if (redraw) { nodeuis[node.id].redraw(); }
 			}
+
 			if (remove) {
-				for each (node in o.poisOutside) { deleteNodeUI(node); }
+				for each (node in o.nodesOutside) { 
+					if (nodeuis[node.id] && !nodeuis[node.id].purgable) {
+						if (redraw) { nodeuis[node.id].redraw(); }
+					} else {
+						deleteNodeUI(node);
+					}
+				}
 			}
 		}
 
@@ -133,12 +147,14 @@ package net.systemeD.halcyon {
 			wayuis[way.id].removeSprites();
 			delete wayuis[way.id];
 			for (var i:uint=0; i<way.length; i++) {
-				deleteNodeUI(way.getNode(i));
+				var node:Node=way.getNode(i);
+				if (nodeuis[node.id]) { deleteNodeUI(node); }
 			}
 		}
 
 		public function deleteNodeUI(node:Node):void {
 			if (!nodeuis[node.id]) { return; }
+			if (!nodeuis[node.id].purgable) { return; }
 			nodeuis[node.id].removeSprites();
 			delete nodeuis[node.id];
 		}

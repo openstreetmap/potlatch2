@@ -6,8 +6,8 @@ package net.systemeD.halcyon.styleparser {
 
 		public var conditions:Array = [];
 		public var isAnd:Boolean = true;
-		public var minZoom:uint = 13;			// ** FIXME: shouldn't be hardcoded
-		public var maxZoom:uint = 19;			//  |
+		public var minZoom:uint = 0;
+		public var maxZoom:uint = 255;
 		public var subject:String='';			// "", "way", "node" or "relation"
 		
 		public function Rule(s:String=''):void {
@@ -28,7 +28,7 @@ package net.systemeD.halcyon.styleparser {
 			}
 			return v;
 		}
-		
+
 		public function toString():String {
 			return subject+" z"+minZoom+"-"+maxZoom+": "+conditions;
 		}

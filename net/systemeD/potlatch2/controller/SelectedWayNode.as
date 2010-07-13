@@ -22,7 +22,9 @@ package net.systemeD.potlatch2.controller {
 
             clearSelection(this);
             controller.setSelectedEntity(node);
-            controller.map.setHighlight(way, { hover: false, showNodes: true, nodeSelected: node.id });
+            controller.map.setHighlight(way, { hover: false });
+            controller.map.setHighlight(node, { selected: true });
+            controller.map.setHighlightOnNodes(way, { selectedway: true });
             selectedWay = way; initWay = way;
 			selectedIndex = index; initIndex = index;
             selectedNode = node;
@@ -30,7 +32,9 @@ package net.systemeD.potlatch2.controller {
                 
         override protected function clearSelection(newState:ControllerState):void {
             if ( selectedNode != null ) {
-            	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false, nodeSelected: null });
+            	controller.map.setHighlight(selectedWay, { selected: false });
+				controller.map.setHighlight(selectedNode, { selected: false });
+				controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
                 if (!newState.isSelectionState()) { controller.setSelectedEntity(null); }
                 selectedNode = null;
 				selectedWay = null;
@@ -73,10 +77,12 @@ package net.systemeD.potlatch2.controller {
 		
 		override public function enterState():void {
             selectNode(initWay,initIndex);
+			controller.map.setPurgable(selectedNode,false);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
 		override public function exitState(newState:ControllerState):void {
 			controller.clipboards['node']=selectedNode.getTagsCopy();
+			controller.map.setPurgable(selectedNode,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
@@ -102,6 +108,8 @@ package net.systemeD.potlatch2.controller {
 			if (selectedWay.getNode(0                   ) == selectedNode) { return this; }
 			if (selectedWay.getNode(selectedWay.length-1) == selectedNode) { return this; }
 
+			controller.map.setHighlightOnNodes(selectedWay, { selectedway: false } );
+			controller.map.setPurgable(selectedWay,true);
             MainUndoStack.getGlobalStack().addAction(new SplitWayAction(selectedWay, selectedNode));
 
 			return new SelectedWay(selectedWay);
@@ -116,6 +124,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function deleteNode():ControllerState {
+			controller.map.setPurgable(selectedNode,true);
 			selectedNode.remove(MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(selectedWay);
 		}

@@ -17,6 +17,7 @@ package net.systemeD.halcyon.styleparser {
 		public var shieldStyles:Object={};
 		public var maxwidth:Number=0;
 		public var sublayers:Array=[];
+		public var validAt:int=-1;				// zoom level at which this StyleList is valid, or -1 for all
 
 		public function hasStyles():Boolean {
 			return ( hasShapeStyles() || hasTextStyles() || hasPointStyles() || hasShieldStyles() );
@@ -34,6 +35,10 @@ package net.systemeD.halcyon.styleparser {
 			for (k in pointStyles) { str+="- PS "+k+"="+pointStyles[k]+"\n"; }
 			for (k in shieldStyles) { str+="- sS "+k+"="+shieldStyles[k]+"\n"; }
 			return str;
+		}
+
+		public function isValidAt(zoom:uint):Boolean {
+			return (validAt==-1 || validAt==zoom);
 		}
 
 		private function hasShapeStyles():Boolean  { for (var a:String in shapeStyles ) { return true; }; return false; }

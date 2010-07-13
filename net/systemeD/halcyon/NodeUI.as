@@ -20,15 +20,20 @@ package net.systemeD.halcyon {
 		private var rotation:Number=0;				// rotation applied to this POI
 		private static const NO_LAYER:int=-99999;
 
-		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, layer:int=NO_LAYER, sl:StyleList=null) {
+		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, layer:int=NO_LAYER, stateClasses:Object=null) {
 			super(node,paint);
 			if (layer==NO_LAYER) { this.layer=paint.maxlayer; } else { this.layer=layer; }
 			this.heading = heading;
+			if (stateClasses) {
+				for (var state:String in stateClasses) {
+					if (stateClasses[state]) { this.stateClasses[state]=stateClasses[state]; }
+				}
+			}
             entity.addEventListener(Connection.TAG_CHANGED, tagChanged);
 			entity.addEventListener(Connection.NODE_MOVED, nodeMoved);
 			entity.addEventListener(Connection.NODE_DELETED, nodeDeleted);
             attachRelationListeners();
-			redraw(sl);
+			redraw();
 		}
 		
 		public function nodeMoved(event:Event):void {
@@ -38,33 +43,35 @@ package net.systemeD.halcyon {
 		public function nodeDeleted(event:Event):void {
 			removeSprites();
 		}
-		
-		override public function doRedraw(sl:StyleList):Boolean {
+
+		override public function doRedraw():Boolean {
 			if (!paint.ready) { return false; }
 			if (entity.deleted) { return false; }
 
 			var tags:Object = entity.getTagsCopy();
 			tags=applyStateClasses(tags);
 			if (!entity.hasParentWays) { tags[':poi']='yes'; }
-			if (!sl) { sl=paint.ruleset.getStyles(entity,tags,paint.map.scale); }
+			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
+				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
+			}
 
 			var inWay:Boolean=entity.hasParentWays;
-			var hasStyles:Boolean=sl.hasStyles();
+			var hasStyles:Boolean=styleList.hasStyles();
 			
 			removeSprites(); iconnames={};
-			return renderFromStyle(sl,tags);
+			return renderFromStyle(tags);
 		}
 
-		private function renderFromStyle(sl:StyleList,tags:Object):Boolean {
+		private function renderFromStyle(tags:Object):Boolean {
 			var r:Boolean=false;			// ** rendered
 			var maxwidth:Number=4;			// biggest width
 			var w:Number;
 			var icon:Sprite;
 			interactive=false;
-			for each (var sublayer:Number in sl.sublayers) {
+			for each (var sublayer:Number in styleList.sublayers) {
 
-				if (sl.pointStyles[sublayer]) {
-					var s:PointStyle=sl.pointStyles[sublayer];
+				if (styleList.pointStyles[sublayer]) {
+					var s:PointStyle=styleList.pointStyles[sublayer];
 					interactive||=s.interactive;
 					r=true;
 					if (s.rotation) { rotation=s.rotation; }
@@ -73,7 +80,7 @@ package net.systemeD.halcyon {
 							// draw square
 							icon=new Sprite();
 							addToLayer(icon,STROKESPRITE,sublayer);
-							w=styleIcon(icon,sl,sublayer);
+							w=styleIcon(icon,sublayer);
 							icon.graphics.drawRect(0,0,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
 							iconnames[sublayer]='_square';
@@ -82,7 +89,7 @@ package net.systemeD.halcyon {
 							// draw circle
 							icon=new Sprite();
 							addToLayer(icon,STROKESPRITE,sublayer);
-							w=styleIcon(icon,sl,sublayer);
+							w=styleIcon(icon,sublayer);
 							icon.graphics.drawCircle(w,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
 							iconnames[sublayer]='_circle';
@@ -100,8 +107,8 @@ package net.systemeD.halcyon {
 
 				// name sprite
 				var a:String='', t:TextStyle;
-				if (sl.textStyles[sublayer]) {
-					t=sl.textStyles[sublayer];
+				if (styleList.textStyles[sublayer]) {
+					t=styleList.textStyles[sublayer];
 					interactive||=t.interactive;
 					a=tags[t.text];
 				}
@@ -119,12 +126,12 @@ package net.systemeD.halcyon {
 		}
 
 
-		private function styleIcon(icon:Sprite, sl:StyleList, sublayer:Number):Number {
+		private function styleIcon(icon:Sprite, sublayer:Number):Number {
 			loaded=true;
 
 			// get colours
-			if (sl.shapeStyles[sublayer]) {
-				var s:ShapeStyle=sl.shapeStyles[sublayer];
+			if (styleList.shapeStyles[sublayer]) {
+				var s:ShapeStyle=styleList.shapeStyles[sublayer];
 				if (s.color) { icon.graphics.beginFill(s.color); 
 					}
 				if (s.casing_width || !isNaN(s.casing_color)) {
@@ -135,7 +142,7 @@ package net.systemeD.halcyon {
 			}
 
 			// return width
-			return sl.pointStyles[sublayer].icon_width;
+			return styleList.pointStyles[sublayer].icon_width;
 		}
 
 		private function addHitSprite(w:uint):void {

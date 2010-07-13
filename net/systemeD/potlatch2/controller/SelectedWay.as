@@ -24,14 +24,16 @@ package net.systemeD.potlatch2.controller {
 
             clearSelection(this);
             controller.setSelectedEntity(way);
-            controller.map.setHighlight(way, { selected: true, showNodes: true, hover: false });
+            controller.map.setHighlight(way, { selected: true, hover: false });
+            controller.map.setHighlightOnNodes(way, { selectedway: true });
             selectedWay = way;
             initWay = way;
         }
 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectedWay != null ) {
-            	controller.map.setHighlight(selectedWay, { selected: false, showNodes: false, hover: false });
+            	controller.map.setHighlight(selectedWay, { selected: false, hover: false });
+            	controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
                 if (!newState.isSelectionState()) { controller.setSelectedEntity(null); }
                 selectedWay = null;
             }
@@ -119,10 +121,12 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectWay(initWay);
+			controller.map.setPurgable(selectedWay,false);
 			Globals.vars.root.addDebug("**** -> "+this+" "+selectedWay.id);
         }
         override public function exitState(newState:ControllerState):void {
 			controller.clipboards['way']=selectedWay.getTagsCopy();
+			controller.map.setPurgable(selectedWay,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }

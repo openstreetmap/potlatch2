@@ -36,7 +36,6 @@ package net.systemeD.potlatch2.controller {
  				if (dragstate==DRAGGING) {
 					// mouse-up while dragging, so end drag
                 	return new SelectedWayNode(selectedWay,draggingIndex);
-//	                return endDrag();
 				} else if (event.shiftKey && !isNew) {
 					// start new way
 					var way:Way = controller.connection.createWay({}, [entity],
@@ -74,10 +73,6 @@ package net.systemeD.potlatch2.controller {
 			return this;
 		}
 
-        private function endDrag():ControllerState {
-            return previousState;
-        }
-        
         private function dragTo(event:MouseEvent):ControllerState {
 			draggingNode.setLatLon( controller.map.coord2lat(event.localY),
                                     controller.map.coord2lon(event.localX),
@@ -90,11 +85,13 @@ package net.systemeD.potlatch2.controller {
 		}
 
         override public function enterState():void {
-            controller.map.setHighlight(selectedWay, { showNodes: true } );
+			controller.map.setHighlightOnNodes(selectedWay, { selectedway: true } );
+			controller.map.setHighlight(draggingNode, { selected: true } );
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-            controller.map.setHighlight(selectedWay, { showNodes: false } );
+			controller.map.setHighlightOnNodes(selectedWay, { selectedway: false } );
+			controller.map.setHighlight(draggingNode, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);
         }
         override public function toString():String {

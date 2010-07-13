@@ -115,6 +115,16 @@ package net.systemeD.halcyon {
 			}
 		}
 
+        public function setHighlightOnNodes(settings:Object):void {
+			for (var i:uint = 0; i < Way(entity).length; i++) {
+                var node:Node = Way(entity).getNode(i);
+				if (paint.nodeuis[node.id]) {
+					paint.nodeuis[node.id].setHighlight(settings);
+					paint.nodeuis[node.id].redraw();
+				}
+			}
+        }
+
 		// ------------------------------------------------------------------------------------------
 		// Calculate length etc.
 		// ** this could be made scale-independent - would speed up redraw
@@ -167,7 +177,7 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Redraw
 
-		override public function doRedraw(sl:StyleList):Boolean {
+		override public function doRedraw():Boolean {
 			interactive=false;
 			removeSprites();
 			if (Way(entity).length==0) { return false; }
@@ -185,8 +195,12 @@ package net.systemeD.halcyon {
 			// Keep track of maximum stroke width for hitzone
 			var maxwidth:Number=4;
 
+			// Create styleList if not already drawn
+			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
+				styleList=paint.ruleset.getStyles(entity, tags, paint.map.scale);
+			}
+
 			// Iterate through each sublayer, drawing any styles on that layer
-			if (!sl) { sl=paint.ruleset.getStyles(entity, tags, paint.map.scale); }
 			var drawn:Boolean;
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
@@ -194,9 +208,9 @@ package net.systemeD.halcyon {
 				inners=inners.concat(m.findMembersByRole('inner'));
 			}
 
-			for each (var sublayer:Number in sl.sublayers) {
-				if (sl.shapeStyles[sublayer]) {
-					var s:ShapeStyle=sl.shapeStyles[sublayer];
+			for each (var sublayer:Number in styleList.sublayers) {
+				if (styleList.shapeStyles[sublayer]) {
+					var s:ShapeStyle=styleList.shapeStyles[sublayer];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
 					var x0:Number=paint.map.lon2coord(Way(entity).getNode(0).lon);
 					var y0:Number=paint.map.latp2coord(Way(entity).getNode(0).latp);
@@ -238,8 +252,8 @@ package net.systemeD.halcyon {
 					}
 				}
 				
-				if (sl.textStyles[sublayer]) {
-					var t:TextStyle=sl.textStyles[sublayer];
+				if (styleList.textStyles[sublayer]) {
+					var t:TextStyle=styleList.textStyles[sublayer];
 					interactive||=t.interactive;
 					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);
 					nameformat = t.getTextFormat();
@@ -259,31 +273,24 @@ package net.systemeD.halcyon {
 			}
 
 			// Draw icons
-			// ** there should be huge potential to optimise this - at present we're
-			//    running getStyles for every node in the way on every redraw
-			// ** fix r/heading behaviour - that doesn't look right
 			var r:Number;
-			var nodetags:Object;
 			var nodeSelected:int=stateClasses["nodeSelected"];
 			for (var i:uint = 0; i < Way(entity).length; i++) {
                 var node:Node = Way(entity).getNode(i);
-				nodetags=node.getTagsCopy();
-				if (i==0) { nodetags['_heading']= heading[i]; }
-				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
-				if (stateClasses["showNodes"]) { nodetags[':selectedway']='yes'; }
-				if (stateClasses["showNodesHover"]) { nodetags[':hoverway']='yes'; }
-				if (node.id==nodeSelected) { nodetags[':selected']='yes'; }
-				if (node.numParentWays>1) { nodetags[':junction']='yes'; }
-				sl=paint.ruleset.getStyles(node, nodetags, paint.map.scale);
-				if (sl.hasStyles()) {
-					if (paint.nodeuis[node.id]) {
-						paint.nodeuis[node.id].redraw(sl);
-					} else {
-						paint.nodeuis[node.id]=new NodeUI(node,paint,r,layer,sl);
+				var nodeStateClasses:Object={};
+//				if (i==0) { nodetags['_heading']= heading[i]; }
+//				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
+				// ** FIXME - heading isn't currently applied
+				nodeStateClasses['junction']=(node.numParentWays>1);
+
+				if (paint.nodeuis[node.id]) {
+					var nodeui:NodeUI=paint.nodeuis[node.id];
+					for (var state:String in nodeStateClasses) {
+						nodeui.setStateClass(state,nodeStateClasses[state]);
 					}
-				} else if (paint.nodeuis[node.id]) {
-					paint.nodeuis[node.id].removeSprites();
-					delete paint.nodeuis[node.id];
+					nodeui.redraw();
+				} else {
+					paint.nodeuis[node.id]=new NodeUI(node,paint,r,layer,nodeStateClasses);
 				}
 			}
 			if (!drawn) { return false; }

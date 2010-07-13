@@ -284,16 +284,14 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
-			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [] };
+			var o:Object = { nodesInside: [], nodesOutside: [], waysInside: [], waysOutside: [] };
 			for each (var way:Way in ways) {
 				if (way.within(left,right,top,bottom)) { o.waysInside.push(way); }
 				                                  else { o.waysOutside.push(way); }
 			}
 			for each (var node:Node in nodes) {
-				if (!node.hasParentWays) {
-					if (node.within(left,right,top,bottom)) { o.poisInside.push(node); }
-					                                   else { o.poisOutside.push(node); }
-				}
+				if (node.within(left,right,top,bottom)) { o.nodesInside.push(node); }
+				                                   else { o.nodesOutside.push(node); }
 			}
 			return o;
 		}

@@ -54,8 +54,8 @@ package net.systemeD.potlatch2.controller {
 						}
 					} else {
 						appendNode(entity as Node, MainUndoStack.getGlobalStack().addAction);
-						controller.map.setHighlight(focus, { showNodesHover: false });
-						controller.map.setHighlight(selectedWay, { showNodes: true });
+						controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
+						controller.map.setHighlight(entity, { selectedway: true });
 						resetElastic(entity as Node);
 						lastClick=entity;
 						if (selectedWay.getNode(0)==selectedWay.getNode(selectedWay.length-1)) {
@@ -80,8 +80,8 @@ package net.systemeD.potlatch2.controller {
 					}
 					resetElastic(node);
 					lastClick=node;
-					controller.map.setHighlight(entity, { showNodesHover: false });
-					controller.map.setHighlight(selectedWay, { showNodes: true });
+					controller.map.setHighlightOnNodes(entity as Way, { hoverway: false });
+					controller.map.setHighlightOnNodes(selectedWay, { selectedway: true });
 				}
 				lastClickTime=new Date();
 			} else if ( event.type == MouseEvent.MOUSE_MOVE ) {
@@ -92,7 +92,7 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.ROLL_OVER ) {
 				if (focus!=selectedWay) {
 					hoverEntity=focus;
-					controller.map.setHighlight(focus, { showNodesHover: true });
+					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
 				}
 				if (entity is Node && focus is Way && Way(focus).endsWith(Node(entity))) {
 					if (focus==selectedWay) { controller.setCursor(controller.pen_so); }
@@ -105,14 +105,8 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
 				if (entity!=selectedWay) {
 					hoverEntity=null;
-					controller.map.setHighlight(focus, { showNodesHover: false });
-					controller.map.setHighlight(selectedWay, { showNodes: true });
-					// ** this call to setHighlight(selectedWay) is necessary in case the hovered way (blue nodes)
-					// shares any nodes with the selected way (red nodes): if they do, they'll be wiped out by the
-					// first call.
-					// Ultimately we should fix this by referring to 'way :selected nodes' instead of 'nodes :selectedway'.
-					// But this will do for now.
-					// We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
+					controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
+					// ** We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
 					// useful optimisation.
 				}
 				controller.setCursor(controller.pen);
@@ -141,12 +135,12 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function stopDrawing():ControllerState {
 			if ( hoverEntity ) {
-				controller.map.setHighlight(hoverEntity, { showNodesHover: false });
+				controller.map.setHighlightOnNodes(hoverEntity as Way, { hoverway: false });
 				hoverEntity = null;
 			}
 
 			if ( selectedWay.length<2) {
-				controller.map.setHighlight(selectedWay, { showNodes: false });
+				controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
 				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 				// delete controller.map.ways[selectedWay.id];
 				return new NoSelection();
@@ -167,6 +161,8 @@ package net.systemeD.potlatch2.controller {
 			appendNode(node, undo.push);
 			
 			MainUndoStack.getGlobalStack().addAction(undo);
+			controller.map.setHighlight(node, { selectedway: true });
+			controller.map.setPurgable(node, false);
 			return node;
 		}
 		
@@ -191,6 +187,7 @@ package net.systemeD.potlatch2.controller {
 				newDraw=0;
 			}
 			if (node.numParentWays==1 && selectedWay.hasOnceOnly(node)) {
+				controller.map.setPurgable(node, true);
 				controller.connection.unregisterPOI(node);
 				node.remove(undo.push);
 			}

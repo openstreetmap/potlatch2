@@ -27,7 +27,7 @@ package net.systemeD.halcyon {
 		public const MASTERSCALE:Number=5825.4222222222;// master map scale - how many Flash pixels in 1 degree longitude
 														// (for Landsat, 5120)
 		public const MINSCALE:uint=13;					// don't zoom out past this
-		public const MAXSCALE:uint=19;					// don't zoom in past this
+		public const MAXSCALE:uint=23;					// don't zoom in past this
 
 		public var paint:MapPaint;						// sprite for ways and (POI/tagged) nodes in core layer
 		public var vectorbg:Sprite;						// sprite for vector background layers
@@ -254,16 +254,27 @@ package net.systemeD.halcyon {
 		}
 
         public function setHighlight(entity:Entity, settings:Object):void {
-			var stateType:String;
-			var ui:EntityUI=null;
-			if      ( entity is Way  ) { ui = paint.wayuis[entity.id]; }
-			else if ( entity is Node ) { ui = paint.nodeuis[entity.id]; }
-			if (ui==null) { return; }
-			for (stateType in settings) {
-				ui.setHighlight(stateType, settings[stateType]);
-			}
-			ui.redraw();
+			if      ( entity is Way  ) { paint.wayuis[entity.id].setHighlight(settings); }
+			else if ( entity is Node ) { paint.nodeuis[entity.id].setHighlight(settings); }
         }
+
+        public function setHighlightOnNodes(way:Way, settings:Object):void {
+			paint.wayuis[way.id].setHighlightOnNodes(settings);
+        }
+
+		public function setPurgable(entity:Entity, purgable:Boolean):void {
+			if ( entity is Way  ) {
+				var way:Way=entity as Way;
+				paint.wayuis[way.id].purgable=purgable;
+				for (var i:uint=0; i<way.length; i++) {
+					if (paint.nodeuis[way.getNode(i).id]) {
+						paint.nodeuis[way.getNode(i).id].purgable=purgable;
+					}
+				}
+			} else if ( entity is Node ) { 
+				paint.nodeuis[entity.id].purgable=purgable;
+			}
+		}
 
         // Handle mouse events on ways/nodes
         private var mapController:MapController = null;

@@ -11,7 +11,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
         public var description:String = "";
         [Bindable]
         public var value:String = null;
-        [Bindable("iconLoaded")]
+        [Bindable(event="iconLoaded")]
         public var icon:ByteArray = null;
 
         private var _match:RegExp = null;

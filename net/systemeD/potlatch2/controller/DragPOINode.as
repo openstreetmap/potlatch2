@@ -54,11 +54,11 @@ package net.systemeD.potlatch2.controller {
 		}
 
         override public function enterState():void {
-            controller.map.setHighlight(selectedNode, { highlight: true } );
+            controller.map.setHighlight(selectedNode, { selected: true } );
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-            controller.map.setHighlight(selectedNode, { highlight: false } );
+            controller.map.setHighlight(selectedNode, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);
         }
         override public function toString():String {
