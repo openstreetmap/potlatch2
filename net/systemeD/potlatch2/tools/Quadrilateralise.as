@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.tools {
   import net.systemeD.halcyon.connection.Way;
   import net.systemeD.halcyon.connection.Node;
   import flash.geom.Point;
+  import net.systemeD.halcyon.connection.*;
 
   public class Quadrilateralise {
     private static const NUM_STEPS:uint = 1000;
@@ -111,10 +112,11 @@ package net.systemeD.potlatch2.tools {
      * way, and hence to the DB or whatever.
      */
     private function updateWay():void {
+      var moveAction:CompositeUndoableAction = new CompositeUndoableAction("Move Way");
       for (var i:uint = 0; i < points.length; ++i) {
-	way.getNode(i).lon = points[i].x;
-	way.getNode(i).latp = points[i].y;
+        way.getNode(i).setLonLatp( points[i].x, points[i].y, moveAction.push);
       }
+      MainUndoStack.getGlobalStack().addAction( moveAction );
     }
   }
 }
