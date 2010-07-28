@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Quick documentation:
+
+<category> the categories that features belong to. This includes both nodes (icons on left) and ways/areas (drop-down list that appears when a way/area is selected)
+  name: Shown in GUI
+  id: internal reference (a feature refers to this with category=xxx)
+  
+<feature> a pre-defined group of tags that make up a feature
+  category: [ctext] corresponding to category id
+  icon
+    @image: path to .png file
+    @background: colour spec
+    @foreground: colour spec
+    (general html goes here?) Variables substituted with ${ref}
+  help: [ctext] URL, shown as a linked ? icon. Should (?) usually be an OSM wiki page.
+  description: Not currently used?
+  line/point/area: any or all of these are allowed. Determines whether this feature is shown in the corresponding situations. None is equivalent to all three.
+  tag - one or more of these required, defines the tags that make up the feature.
+    @k - key
+    @v - value
+  input 
+    @ref=xxx
+  inputSet
+    @ref=xxx
+</feature>  
+  
+<inputSet>: a reusable group of properties for a feature.
+  @id="internal id"
+  input...
+</inputSet>
+
+<input>
+  @type="choice/freetext/turn/slider/route/speed/...?" (slider not implemented yet?)
+  @presence="always/onTagMatch" (whether it appears on the basic page?)
+  @category: which tab it appears on
+  @description: mouse-over text
+  @name: The text shown as the label of the property
+  @key: The actual OSM key (tag) that will be saved
+  @priority: ???
+  match: something to do with relations???
+    @k: key
+    @v: value
+  icon: see above
+-->
 
 <mapFeatures>
 
@@ -20,6 +64,9 @@
   </category>
   
   <category name="Barrier" id="barrier">
+  </category>
+
+  <category name="Power" id="power">
   </category>
 
   <category name="Admin" id="admin">
@@ -101,7 +148,10 @@
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
+    <inputSet ref="bicycle-lane"/>
     <inputSet ref="bus-route"/>
+    <inputSet ref="pedestrians"/>
+    <inputSet ref="roadLanes"/>
   </inputSet>
   
   <inputSet id="minorRoad">
@@ -109,7 +159,10 @@
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
+    <inputSet ref="bicycle-lane"/>
     <inputSet ref="bus-route"/>
+    <inputSet ref="pedestrians"/>
+    <inputSet ref="roadLanes"/>
   </inputSet>
 
   <inputSet id="path">
@@ -117,6 +170,7 @@
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
     <inputSet ref="ldp"/>
+    <inputSet ref="pedestrians"/>
   </inputSet>
   
   <inputSet id="junctionNode">
@@ -153,9 +207,17 @@
       <choice value="cobblestone" text="Cobblestone"/>
       <choice value="sand" text="Sand"/>
       <choice value="gravel" text="Gravel"/>
+      <choice value="dirt" text="Dirt"/>
+      <choice value="grass" text="Grass"/>
     </input>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
+    <inputSet ref="embankment-cutting"/>
+  </inputSet>
+
+  <inputSet id="roadLanes">
+    <input presence="always" type="slider" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
+           key="lanes" min="1" max="10" default="2"/>
   </inputSet>
   
   <inputSet id="bridge">
@@ -174,6 +236,20 @@
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
   </inputSet>
+  <inputSet id="embankment-cutting">
+    <input type="choice"
+           name="Embankment" category="Physical" description="Road supported on a raised bed of earth and rock."
+           key="embankment" layout="horizontal">
+      <choice value="yes" text="Embankment"/>
+    </input>
+    <input type="choice"
+           name="Cutting" category="Physical" description="Road carved out of hill on one or both sides."
+           key="cutting" layout="horizontal">
+      <choice value="yes" text="Cutting"/>
+    </input>
+
+  </inputSet>
+  
   
   <inputSet id="fee">
     <input type="freetext" presence="onTagMatch" category="Restrictions" description="The charge/cost of using this amenity" name="Fee" key="fee"/>
@@ -199,6 +275,14 @@
     <input type="turn" name="Turn restriction" description="Turn restriction" category="Restrictions" priority="normal" presence="onTagMatch">
        <match k="type" v="restriction"/>
        <role role="via"/>
+    </input>
+  </inputSet>
+
+  <inputSet id="pedestrians">
+    <input type="choice" name="Pedestrians" description="Can pedestrians use this road, including footpaths if any?" category="Walking" key="foot">
+      <choice value="yes" text="Allowed"/>
+      <choice value="no" text="Prohibited"/>
+      <choice value="designated" text="Designated"/>
     </input>
   </inputSet>
 
@@ -247,7 +331,8 @@
   </inputSet>
   
   <inputSet id="cycle">
-    <input type="route" name="National Cycle Route" description="National cycle route" category="Cycle" priority="normal">
+    <inputSet ref="bicycle-permission" />
+    <input type="route" name="National Cycle Route" description="A signposted route in the UK's National Cycle Network, or nearest equivalent." category="Cycle" priority="normal">
        <match k="type" v="route"/>
        <match k="network" v="ncn"/>
        <icon image="features/cycle__ncn.png" background="red" foreground="white">
@@ -255,7 +340,7 @@
          <font size="12pt">${name}</font>
        </icon>
     </input>
-    <input type="route" name="Regional Cycle Route" description="Regional cycle route" category="Cycle" priority="low">
+    <input type="route" name="Regional Cycle Route" description="A signposted route in the UK's Regional Cycle Network, or nearest equivalent." category="Cycle" priority="low">
        <match k="type" v="route"/>
        <match k="network" v="rcn"/>
        <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
@@ -263,13 +348,39 @@
          <font size="12pt">${name}</font>
        </icon>
     </input>
-    <input type="route" name="Local Cycle Route" description="Local cycle route" category="Cycle" priority="lowest">
+    <input type="route" name="Local Cycle Route" description="A signposted route in the UK's Local Cycle Network, or nearest equivalent." category="Cycle" priority="lowest">
        <match k="type" v="route"/>
        <match k="network" v="lcn"/>
        <icon image="features/cycle__lcn.png" background="blue" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
          <font size="12pt">${name}</font>
        </icon>
+    </input>
+  </inputSet>
+
+  <inputSet id="bicycle-permission">
+    <input type="choice"
+           name="Bicycles permitted" category="Cycle" description="Are bicyles allowed to use this road (regardless of physical suitability)?"
+           key="bicycle">
+      <choice value="no" text="Prohibited"/>
+      <choice value="yes" text="Allowed"/>
+      <choice value="designated" text="Designated"/>
+      <choice value="private" text="Private"/>
+      <help>http://wiki.openstreetmap.org/wiki/Key:access</help>
+    </input>
+  </inputSet>
+  
+  <inputSet id="bicycle-lane">
+    <input type="choice"
+        name="Bike lanes" category="Cycle" description="Road has bike lanes within the road surface"
+        key="cycleway" layout="horizontal">
+      <choice value="no" text="No bike lanes"/>
+      <choice value="opposite" text="No, but two-way bicycle traffic permitted" description="The route may be cycled in the direction opposite of other traffic, but does not have a dedicated lane. Common in Belgium, Netherlands, Denmark."/>
+      <choice value="lane" text="Standard bike lane" description="Separated by painted line"/>
+      <choice value="track" text="Copenhagen-style bike lane" description="Separated by kerb or parked cars"/>
+      <choice value="opposite_lane" text="Two-way bike lane" description="Separated by painted line, and allowing bicycles in both directions in an otherwise one-way street."/>
+      <choice value="opposite_track" text="Two-way Copenhagen-style bike lane" description="Separated by kerb or parked cars, and allowing bicycles in both directions in an otherwise one-way street."/>
+      <help>http://wiki.openstreetmap.org/wiki/Key:cycleway</help>
     </input>
   </inputSet>
 
@@ -305,9 +416,21 @@
     <inputSet ref="roadRefs"/>
   </inputSet>
   
-  <inputSet id="rivers">
+  <inputSet id="waterways">
     <input type="freetext" presence="always" name="Name" category="Naming" key="name" description="The name" />
     <input type="freetext" presence="always" name="Width" category="Properties" key="width" description="The width in metres" />
+    <inputSet ref="boatPermissions" />
+         
+           
+    </inputSet>
+
+  <inputSet id="boatPermissions">
+    <input type="choice" name="Boat permission" category="Permission" key="boat" description="Are boats allowed to use this waterway?">
+      <choice value="yes" text="Allowed"/>
+      <choice value="no" text="Prohibited"/>
+      <choice value="private" text="Private"/>
+
+    </input>
   </inputSet>
   
   <!-- ************************************************************************
@@ -551,26 +674,6 @@
        Natural
        ************************************************************************ -->
 
-  <feature name="Fence">
-    <category>natural</category>
-    <icon>
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dfence</help>
-
-    <line/>
-    <tag k="barrier" v="fence"/>
-  </feature>
-
-  <feature name="Hedge">
-    <category>natural</category>
-    <icon>
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dhedge</help>
-
-    <line/>
-    <tag k="barrier" v="hedge"/>
-  </feature>
-
   <feature name="Park">
     <category>natural</category>
     <icon>
@@ -635,18 +738,41 @@
     <tag k="barrier" v="city_wall"/>
   </feature>
 
+  <feature name="Fence">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dfence</help>
+
+    <line/>
+    <tag k="barrier" v="fence"/>
+  </feature>
+
+  <feature name="Hedge">
+    <category>barrier</category>
+    <icon>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dhedge</help>
+
+    <line/>
+    <tag k="barrier" v="hedge"/>
+  </feature>
+
+
   <!-- ************************************************************************
        Waterways
        ************************************************************************ -->
 
   <feature name="Stream">
     <category>water</category>
+    <description>A very narrow river.</description>
     <icon image="features/waterway__stream.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
     <line/>
     <tag k="waterway" v="stream"/>
+    <inputSet ref="waterways" />
   </feature>
 
   <feature name="River">
@@ -657,7 +783,7 @@
 
     <line/>
     <tag k="waterway" v="river"/>
-    <inputSet ref="rivers" />
+    <inputSet ref="waterways" />
   </feature>
 
   <feature name="Canal">
@@ -668,6 +794,8 @@
 
     <line/>
     <tag k="waterway" v="canal"/>
+    <inputSet ref="waterways" />
+    
   </feature>
 
   <feature name="Drain">
@@ -688,6 +816,7 @@
 
     <line/>
     <tag k="waterway" v="dam"/>
+    <inputSet ref="boatPermissions" />    
   </feature>
 
   <feature name="Riverbank">
@@ -708,7 +837,36 @@
 
     <area/>
     <tag k="landuse" v="reservoir"/>
+    <inputSet ref="boatPermissions" />
   </feature>
+
+  <feature name="Basin">
+    <category>water</category>
+    <icon>
+      <font size="14pt">
+        <b>${name}</b>
+      </font>
+    </icon>
+
+    <area/>
+    <tag k="landuse" v="basin"/>
+    <inputSet ref="boatPermissions" />
+  </feature>
+
+  <feature name="Weir">
+    <category>water</category>
+    <icon>
+      <font size="14pt">
+        <b>${name}</b>
+      </font>
+    </icon>
+
+    <line/>
+    <point/>
+    <tag k="waterway" v="weir"/>
+ </feature>
+
+
 
   <feature name="Dock">
     <category>water</category>
@@ -718,8 +876,31 @@
 
     <area/>
     <tag k="waterway" v="dock"/>
+    <inputSet ref="names"/>
   </feature>
 
+  <feature name="Marina">
+    <category>water</category>
+    <icon>
+      <font size="14pt">
+        <b>${name}</b>
+      </font>
+    </icon>
+
+    <area/>
+    <point/>
+    <tag k="leisure" v="marina"/>
+    <inputSet ref="names"/>    
+  </feature>
+
+  <feature name="Slipway">
+    <category>water</category>
+    <line/>
+    <tag k="leisure" v="slipway"/>
+    <inputSet ref="names"/>
+  </feature>
+
+  <area/>
 
   <!-- ************************************************************************
        Transport
@@ -735,6 +916,7 @@
     <tag k="railway" v="rail"/>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
+    <inputset ref="embankment-cutting"/>
   </feature>
 
   <feature name="Railway spur">
@@ -799,6 +981,7 @@
     <tag k="railway" v="light_rail"/>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
+    <inputset ref="embankment-cutting"/>
   </feature>
 
   <feature name="Tram line">
@@ -812,6 +995,7 @@
     <input ref="tram-route"/>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
+    <inputset ref="embankment-cutting"/>
   </feature>
 
   <feature name="Subway line">
@@ -824,6 +1008,7 @@
     <tag k="railway" v="subway"/>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
+    <inputset ref="embankment-cutting"/>
   </feature>
 
   <feature name="Railway platform">
@@ -848,8 +1033,69 @@
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress" />
   </feature>
-    
 
+  <feature name="Airport">
+    <category>transport</category>
+    <tag k="aeroway" v="aerodrome"/>
+    <area/>
+    <point/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="always" category="Naming" name="International Air Transport Association (IATA) airport code" key="ref"/>
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+
+  <feature name="Airport terminal">
+    <category>transport</category>
+    <tag k="aeroway" v="terminal"/>
+    <area/>
+    <point/>
+    <inputSet ref="names"/>
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+
+  <feature name="Helipad">
+    <category>transport</category>
+    <tag k="aeroway" v="helipad"/>
+    <area/>
+    <point/>
+    <inputSet ref="names"/>
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+
+  <feature name="Airport runway">
+    <category>transport</category>
+    <tag k="aeroway" v="runway"/>
+    <line/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="always" category="Naming" name="Runway number (01-36)" key="ref"/>
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+  
+  <feature name="Airport taxiway">
+    <category>transport</category>
+    <tag k="aeroway" v="taxiway"/>
+    <line/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="always" category="Naming" name="Taxiway number" key="ref"  />
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+  
+  <feature name="Airport apron">
+    <category>transport</category>
+    <tag k="aeroway" v="apron"/>
+    <area/>
+    <inputSet ref="names"/>
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+
+  <feature name="Airport gate">
+    <category>transport</category>
+    <tag k="aeroway" v="gate"/>
+    <point/>
+    <input type="freetext" presence="always" category="Naming" name="Gate number" key="ref" />
+    <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+  </feature>
+  
   <!-- ************************************************************************
        Buildings
        ************************************************************************ -->
@@ -1054,6 +1300,49 @@
     <inputSet ref="simpleName"/>
   </feature>
 
+  <feature name="Quarry">
+    <category>landuse</category>
+    <area/>
+    <tag k="landuse" v="quarry"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+ <feature name="Military">
+    <category>landuse</category>
+    <area/>
+    <tag k="landuse" v="military"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Farming">
+    <category>landuse</category>
+    <area/>
+    <tag k="landuse" v="farm"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+  
+    <feature name="Reservoir">
+    <category>water</category>
+    <icon>
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+
+    <area/>
+    <tag k="landuse" v="reservoir"/>
+  </feature>
+
+
+
+  <feature name="Conservation">
+    <category>natural</category>
+    <area/>
+    <tag k="landuse" v="conservation"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+
+
+
   <feature name="Playground">
     <category>landuse</category><area/><icon><b>${name}</b></icon>
     <tag k="leisure" v="playground"/>
@@ -1084,12 +1373,98 @@
     <inputSet ref="simpleName"/>
   </feature>
 
+    <feature name="Sports track">
+    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <tag k="leisure" v="track"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <!-- ************************************************************************
+       Power
+       ************************************************************************ -->
+
+  <feature name="High-voltage">
+    <category>power</category>
+    <line/>
+    <tag k="power" v="line"/>
+    <inputSet ref="powerCables"/>
+  </feature>
+
+  <feature name="Low-voltage">
+    <category>power</category>
+    <line/>
+    <tag k="power" v="minor_line"/>
+    <inputSet ref="powerCables"/>
+  </feature>
+
+  <feature name="High-voltage pylon">
+    <category>power</category>
+    <point/>
+    <tag k="power" v="tower"/>
+  </feature>
+
+  <feature name="Power pole">
+    <category>power</category>
+    <point/>
+    <tag k="power" v="pole"/>
+  </feature>
+
+  <feature name="Plant (station)">
+    <category>power</category>
+    <area/>
+    <point/>
+    <tag k="power" v="generator"/>
+  </feature>
+
+  <feature name="Substation">
+    <category>power</category>
+    <area/>
+    <point/>
+    <tag k="power" v="station"/>
+  </feature>
+
+  <feature name="Transformer">
+    <category>power</category>
+    <area/>
+    <point/>
+    <tag k="power" v="sub_station"/>
+  </feature>
+
+  <inputSet id="powerCables">
+    <input type="choice" name="Cables" key="cables" presence="always" category="Power">
+      <choice value="2" text="2"/>
+      <choice value="3" text="3"/>
+      <choice value="4" text="4"/>
+      <choice value="6" text="6"/>
+      <choice value="8" text="8"/>
+      <choice value="10" text="10"/>
+      <choice value="12" text="12"/>
+    </input>
+    <input type="choice" name="Voltage" key="voltage" presence="always" category="Power">
+      <!-- choices based on http://osmdoc.com/en/tag/voltage/#values-->
+      <choice value="400" text="400 V"/>
+      <choice value="600" text="600 V"/>
+      <choice value="750" text="750 V"/>
+      <choice value="1500" text="1500 V"/>
+      <choice value="3000" text="3000 V"/>
+      <choice value="15000" text="15 kV"/>
+      <choice value="20000" text="20 kV"/>
+      <choice value="35000" text="35 kV"/>
+      <choice value="110000" text="110 kV"/>
+      <choice value="132000" text="132 kV"/>
+      <choice value="138000" text="238 kV"/>
+      <choice value="220000" text="220 kV"/>
+      <choice value="380000" text="380 kV"/>
+    </input>
+  </inputSet>
+  
+  
 
   <!-- ************************************************************************
        POIs
        ************************************************************************ -->
 
-  <!-- --------- Amenity --------- -->
+  <!-- =========== Amenity ============ -->
 
   <feature name="Fire station">
     <category>amenity</category>
@@ -1187,7 +1562,7 @@
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
   </feature>
   
-  <!-- --------- Tourism --------- -->
+  <!-- ========= Tourism ========= -->
 
   <feature name="Hotel">
     <category>tourism</category>
@@ -1204,7 +1579,7 @@
     <tag k="tourism" v="hostel"/>
   </feature>
 
-  <feature name="Guesthouse (B&B)">
+  <feature name="Guesthouse (B&amp;B)">
     <category>tourism</category><point /><inputSet ref="simpleName" />
 	<icon image="features/pois/accommodation_bed_and_breakfast.n.24.png"/>
     <tag k="tourism" v="guesthouse"/>
@@ -1300,7 +1675,7 @@
     <tag k="tourism" v="zoo"/>
   </feature>
 
-  <!-- --------- Transport --------- -->
+  <!-- ========= Transport ========= -->
 
   <feature name="Aerodrome">
     <category>aeroway</category>
@@ -1414,7 +1789,7 @@
     <input type="freetext" presence="always" category="" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
   </feature>
 
-  <!-- --------- Barriers --------- -->
+  <!-- ========= Barriers ========= -->
 
   <feature name="Bollard">
     <category>barrier</category>
@@ -1435,7 +1810,22 @@
     <point />
     <tag k="barrier" v="gate"/>
   </feature>
-  
+
+  <feature name="Boom Gate">
+    <category>barrier</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dlift_gate</help>
+    <point />
+    <tag k="barrier" v="lift_gate"/>
+  </feature>
+
+  <feature name="Kissing Gate">
+    <category>barrier</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dkissing_gate</help>
+    <point />
+    <tag k="barrier" v="kissing_gate"/>
+  </feature>
+
+
   <feature name="Cycle Barrier">
     <category>barrier</category>
     <icon image="features/pois/barrier_bollard.n.24.png">
@@ -1477,8 +1867,18 @@
     <tagSet ref="fee"/>
     <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the toll" priority="low"/>
   </feature>
-  
-  <!-- --------- Entertainment --------- -->
+
+  <feature name="Stile">
+    <category>barrier</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dstile</help>
+    <point />
+    <tag k="barrier" v="stile"/>
+  </feature>
+
+
+
+
+  <!-- ========= Entertainment ========= -->
   
   <feature name="Pub">
     <category>entertainment</category>
@@ -1544,7 +1944,7 @@
     <inputSet ref="cuisine"/>
   </feature>
 
-  <!-- --------- Shops --------- -->
+  <!-- ========= Shops ========= -->
 
   <feature name="Small Convenience Store">
     <category>shopping</category>
