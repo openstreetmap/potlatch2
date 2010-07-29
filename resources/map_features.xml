@@ -47,7 +47,7 @@ Quick documentation:
 <mapFeatures>
 
   <!-- Categories -->
-  
+
   <category name="Roads" id="roads">
   </category>
 
@@ -87,10 +87,17 @@ Quick documentation:
   <category name="Tourism" id="tourism">
   </category>
 
+  <category name="Accommodation" id="accommodation">
+  </category>
+
+
   <category name="Shopping" id="shopping">
   </category>
 
   <category name="Advanced" id="advanced">
+  </category>
+
+  <category name="Misc" id="misc">
   </category>
 
   <!-- Common input sets -->
@@ -1110,6 +1117,7 @@ Quick documentation:
 
   <feature name="Airport">
     <category>transport</category>
+    <icon image="icons/transport_airport_48.png"/>
     <tag k="aeroway" v="aerodrome"/>
     <area/>
     <point/>
@@ -1120,6 +1128,7 @@ Quick documentation:
 
   <feature name="Airport terminal">
     <category>transport</category>
+    <icon image="icons/transport_blank.png"/>
     <tag k="aeroway" v="terminal"/>
     <area/>
     <point/>
@@ -1129,6 +1138,7 @@ Quick documentation:
 
   <feature name="Helipad">
     <category>transport</category>
+    <icon image="icons/transport_helipad_48.png"/>
     <tag k="aeroway" v="helipad"/>
     <area/>
     <point/>
@@ -1138,6 +1148,7 @@ Quick documentation:
 
   <feature name="Airport runway">
     <category>transport</category>
+    <icon image="icons/transport_blank.png"/>
     <tag k="aeroway" v="runway"/>
     <line/>
     <inputSet ref="names"/>
@@ -1147,6 +1158,7 @@ Quick documentation:
   
   <feature name="Airport taxiway">
     <category>transport</category>
+    <icon image="icons/transport_blank.png"/>
     <tag k="aeroway" v="taxiway"/>
     <line/>
     <inputSet ref="names"/>
@@ -1156,6 +1168,7 @@ Quick documentation:
   
   <feature name="Airport apron">
     <category>transport</category>
+    <icon image="icons/transport_blank.png"/>
     <tag k="aeroway" v="apron"/>
     <area/>
     <inputSet ref="names"/>
@@ -1164,6 +1177,7 @@ Quick documentation:
 
   <feature name="Airport gate">
     <category>transport</category>
+    <icon image="icons/transport_blank.png"/>
     <tag k="aeroway" v="gate"/>
     <point/>
     <input type="freetext" presence="always" category="Naming" name="Gate number" key="ref" />
@@ -1528,13 +1542,14 @@ Quick documentation:
 
   <feature name="Power pole">
     <category>power</category>
-    <icon image="icons/power_pole_24.png"/>"
+    <icon image="icons/power_pole_24.png"/>
     <point/>
     <tag k="power" v="pole"/>
   </feature>
 
   <feature name="Plant (station)">
     <category>power</category>
+    <icon image="icons/power_blank.png"/>
     <area/>
     <point/>
     <tag k="power" v="generator"/>
@@ -1556,6 +1571,7 @@ Quick documentation:
 
   <feature name="Substation">
     <category>power</category>
+    <icon image="icons/power_blank.png"/>"
     <area/>
     <point/>
     <tag k="power" v="station"/>
@@ -1563,6 +1579,7 @@ Quick documentation:
 
   <feature name="Transformer">
     <category>power</category>
+    <icon image="icons/power_blank.png"/>
     <area/>
     <point/>
     <tag k="power" v="sub_station"/>
@@ -1595,6 +1612,30 @@ Quick documentation:
       <choice value="380000" text="380 kV"/>
     </input>
   </inputSet>
+
+  <!-- Places -->
+  <feature name="Place">
+    <category>misc</category>
+    <point />
+    <area />
+    <!-- TODO: make this work -->
+    <tag k="place" v="*"/>
+    <inputSet ref="names" />
+    <input type="choice" name="Type of place name" presence="always" key="place">
+      <choice value="locality" text="Locality" />
+      <choice value="hamlet" text="Hamlet" />
+      <choice value="village" text="Village" />
+      <choice value="suburb" text="Suburb" />
+      <choice value="county" text="County" />
+      <choice value="city" text="City" />
+      <choice value="region" text="Region" />
+      <choice value="state" text="State" />
+      <choice value="country" text="Country" />
+      <choice value="continent" text="Continent"/>
+      <choice value="island" text="Island"/>
+      <choice value="islet" text="Islet"/>
+    </input>
+  </feature>
   
   
 
@@ -1708,65 +1749,133 @@ Quick documentation:
     <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post box" />
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
   </feature>
-  
-  <!-- ========= Tourism ========= -->
 
+  <!-- ========= Accommodation ========= -->
+  <!-- Split off from tourism by Steve Bennett, can be remerged if it doesn't work out. -->
   <feature name="Hotel">
-    <category>tourism</category>
+    <category>accommodation</category>
     <icon image="features/pois/accommodation_hotel.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
     <point />
+    <area />
     <tag k="tourism" v="hotel"/>
     <inputSet ref="simpleName" />
   </feature>
 
+  <feature name="Motel">
+    <category>accommodation</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmotel</help>
+    <point />
+    <area />
+    <icon image="icons/accommodation_blank.png"/>
+    <tag k="tourism" v="motel"/>
+    <inputSet ref="simpleName" />
+  </feature>
+
+
   <feature name="Hostel">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
-	<icon image="features/pois/accommodation_youth_hostel.n.24.png"/>
+    <category>accommodation</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <icon image="features/pois/accommodation_youth_hostel.n.24.png"/>
     <tag k="tourism" v="hostel"/>
   </feature>
 
+  <!-- Note that tourism=bed_and_breakfast also gets some use. -->
   <feature name="Guesthouse (B&amp;B)">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
-	<icon image="features/pois/accommodation_bed_and_breakfast.n.24.png"/>
-    <tag k="tourism" v="guesthouse"/>
+    <category>accommodation</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <icon image="features/pois/accommodation_bed_and_breakfast.n.24.png"/>
+    <tag k="tourism" v="guest_house"/>
   </feature>
 
   <feature name="Campsite">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
-	<icon image="features/pois/accommodation_camping.n.24.png"/>
+    <category>accommodation</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <icon image="features/pois/accommodation_camping.n.24.png"/>
     <tag k="tourism" v="camp_site"/>
   </feature>
 
   <feature name="Caravan park">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
-	<icon image="features/pois/accommodation_caravan_park.n.24.png"/>
+    <category>accommodation</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <icon image="features/pois/accommodation_caravan_park.n.24.png"/>
     <tag k="tourism" v="caravan_site"/>
   </feature>
+
+  <feature name="Alpine hut">
+    <category>accommodation</category>
+    <icon image="icons/accommodation_blank.png"/>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <tag k="tourism" v="alpine_hut"/>
+  </feature>
+
+  <feature name="Chalet">
+    <category>accommodation</category>
+    <icon image="icons/accommodation_blank.png"/>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <tag k="tourism" v="chalet"/>
+  </feature>
+
+
+  <!-- ========= Tourism ========= -->
+
+  <!-- This is a very popular tag, can't be left out -->
+  <feature name="Attraction">
+    <category>tourism</category>
+    <icon image="icons/tourist_blank.png"/>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <tag k="tourism" v="attraction"/>
+  </feature>
+
+
 
   <feature name="Museum">
     <category>tourism</category>
     <icon image="features/pois/tourist_museum.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
     <point />
+    <area />
     <tag k="tourism" v="museum"/>
     <inputSet ref="simpleName" />
   </feature>
 
   <feature name="Archaeological">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_archaeological.n.24.png"/>
     <tag k="historic" v="archaeological_site"/>
   </feature>
 
   <feature name="Battlefield">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_battlefield.n.24.png"/>
     <tag k="historic" v="battlefield"/>
   </feature>
 
   <feature name="Castle">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_castle.n.24.png"/>
     <tag k="historic" v="castle"/>
   </feature>
@@ -1790,7 +1899,10 @@ Quick documentation:
   </feature>
 
   <feature name="Ruin">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_ruin.n.24.png"/>
     <tag k="historic" v="ruin"/>
   </feature>
@@ -1800,27 +1912,64 @@ Quick documentation:
     <icon image="features/pois/tourist_cinema.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
     <point />
+    <area />
     <tag k="amenity" v="cinema"/>
     <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the cinema" priority="low"/>
   </feature>
 
   <feature name="Theatre">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_theatre.n.24.png"/>
     <tag k="amenity" v="theatre"/>
   </feature>
 
   <feature name="Viewpoint">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_view_point.n.24.png"/>
     <tag k="tourism" v="viewpoint"/>
   </feature>
 
   <feature name="Zoo">
-    <category>tourism</category><point /><inputSet ref="simpleName" />
+    <category>tourism</category>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
 	<icon image="features/pois/tourist_zoo.n.24.png"/>
     <tag k="tourism" v="zoo"/>
   </feature>
+
+  <!-- icons needed-->
+  <feature name="Information">
+    <category>tourism</category>
+    <icon image="icons/tourist_information.png"/>
+    <point />
+    <inputSet ref="simpleName" />
+    <tag k="tourism" v="information"/>
+  </feature>
+
+  <feature name="Artwork">
+    <category>tourism</category>
+    <icon image="icons/tourist_blank.png"/>
+    <point />
+    <inputSet ref="simpleName" />
+    <tag k="tourism" v="artwork"/>
+  </feature>
+
+
+  <feature name="Theme park">
+    <category>tourism</category>
+    <icon image="icons/tourist_blank.png"/>
+    <point />
+    <area />
+    <inputSet ref="simpleName" />
+    <tag k="tourism" v="theme_park"/>
+  </feature>
+
 
   <!-- ========= Transport ========= -->
 
