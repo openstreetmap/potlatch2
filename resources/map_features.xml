@@ -152,17 +152,19 @@ Quick documentation:
     <inputSet ref="bus-route"/>
     <inputSet ref="pedestrians"/>
     <inputSet ref="roadLanes"/>
-  </inputSet>
-  
-  <inputSet id="minorRoad">
-    <inputSet ref="names"/>
-    <inputSet ref="roadRestrictions"/>
-    <inputSet ref="roadPhysical"/>
-    <inputSet ref="cycle"/>
-    <inputSet ref="bicycle-lane"/>
-    <inputSet ref="bus-route"/>
-    <inputSet ref="pedestrians"/>
-    <inputSet ref="roadLanes"/>
+    <inputSet ref="roadRoundabout"/>
+    </inputSet>
+
+    <inputSet id="minorRoad">
+      <inputSet ref="names"/>
+      <inputSet ref="roadRestrictions"/>
+      <inputSet ref="roadPhysical"/>
+      <inputSet ref="cycle"/>
+      <inputSet ref="bicycle-lane"/>
+      <inputSet ref="bus-route"/>
+      <inputSet ref="pedestrians"/>
+      <inputSet ref="roadLanes"/>
+      <inputSet ref="roadRoundabout"/>
   </inputSet>
 
   <inputSet id="path">
@@ -216,8 +218,24 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="roadLanes">
-    <input presence="always" type="slider" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
-           key="lanes" min="1" max="10" default="2"/>
+    <!-- slider not implemented...-->
+    <!--    <input presence="always" type="slider" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
+           key="lanes" min="1" max="10" default="2"/>-->
+
+    <input presence="onTagMatch" type="choice" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
+       key="lanes" default="2">
+      <choice value="1" text="1" />
+      <choice value="2" text="2" />
+      <choice value="3" text="3" />
+      <choice value="4" text="4" />
+      <choice value="5" text="5" />
+      <choice value="6" text="6" />
+      <choice value="7" text="7" />
+      <choice value="8" text="8" />
+      <choice value="9" text="9" />
+      <choice value="10" text="10" />
+    </input>
+
   </inputSet>
   
   <inputSet id="bridge">
@@ -236,6 +254,7 @@ Quick documentation:
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
   </inputSet>
+  
   <inputSet id="embankment-cutting">
     <input type="choice"
            name="Embankment" category="Physical" description="Road supported on a raised bed of earth and rock."
@@ -249,7 +268,42 @@ Quick documentation:
     </input>
 
   </inputSet>
-  
+
+  <inputSet id="rail-electrification">
+    <input type="choice" name="Electrified" category="Electrification" description="Is the track electrified (whether by 3rd rail, overhead wires, etc)?"
+           key="electrified">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" name="Voltage" category="Electrification" description="Nominal voltage of electric wires"
+           key="voltage">
+      <choice value="600" text="600V"/>
+      <choice value="750" text="750V"/>
+      <choice value="1500" text="1500V"/>
+      <choice value="3000" text="3000V"/>
+      <choice value="15000" text="15kV"/>
+      <choice value="25000" text="25kV"/>
+    </input>
+    <input type="choice" name="Frequency" category="Electrification" description="Frequency in Hertz of alternating current power supply"
+           key="frequency">
+      <choice value="0" text="DC"/>
+      <choice value="16.67" text="16.67 Hz"/>
+      <choice value="16.7" text="16.7 Hz"/>
+      <choice value="25" text="25 Hz"/>
+      <choice value="50" text="50 Hz"/>
+      <choice value="60" text="60 Hz"/>
+    </input>
+  </inputSet>
+
+  <inputSet id="rail-usage">
+    <input type="choice" name="Usage" category="Usage" description="Main use of the line" key="usage">
+      <choice value="main" text="Main line" description="The principal artery of a rail system." />
+      <choice value="branch" text="Branch line" description="A secondary line, branching off a main line." />
+      <choice value="industrial" text="Industrial" />
+      <choice value="tourism" text="Tourism"  />
+      <choice value="military" text="Military" />
+    </input>
+  </inputSet>
   
   <inputSet id="fee">
     <input type="freetext" presence="onTagMatch" category="Restrictions" description="The charge/cost of using this amenity" name="Fee" key="fee"/>
@@ -269,6 +323,14 @@ Quick documentation:
     <input type="speed" presence="onTagMatch"
         name="Speed Limit" category="Restrictions" description="Maximum permitted speed on this road"
         key="maxspeed"/>
+  </inputSet>
+
+  <inputSet id="roadRoundabout">
+    <!-- review the choice of category -->
+    <input type="choice" presence="onTagMatch" name="Roundabout" category="Restrictions" description="Whether this road is a roundabout. Make the way face the direction appropriate for the country." 
+           key="junction">
+      <choice value="roundabout" text="Yes" />
+    </input>
   </inputSet>
   
   <inputSet id="turnRestrictions">
@@ -563,6 +625,13 @@ Quick documentation:
     <tag k="highway" v="service"/>
 
     <inputSet ref="minorRoad"/>
+    <input type="choice" presence="always" name="Type of service road" key="service" category="">
+      <choice value="alley" text="Alleyway/laneway"/>
+      <choice value="parking_aisle" text="Parking aisle" description="The path that cars drive on through a parking lot."/>
+      <choice value="driveway" text="Driveway" />
+      <choice value="drive-through" text="Drive-through" description="For drive-through restaurants, bottle shops etc."/>
+      <choice value="emergency_access" text="Emergency access" description="For firefighters and other emergency services." />
+    </input>
   </feature>
 
   <feature name="Unknown road">
@@ -916,7 +985,9 @@ Quick documentation:
     <tag k="railway" v="rail"/>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
-    <inputset ref="embankment-cutting"/>
+    <inputSet ref="embankment-cutting"/>
+    <inputSet ref="rail-electrification"/>
+    <inputSet ref="rail-usage"/>
   </feature>
 
   <feature name="Railway spur">
@@ -982,6 +1053,7 @@ Quick documentation:
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
     <inputset ref="embankment-cutting"/>
+    <inputSet ref="rail-electrification"/>
   </feature>
 
   <feature name="Tram line">
@@ -996,6 +1068,7 @@ Quick documentation:
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
     <inputset ref="embankment-cutting"/>
+    <inputSet ref="rail-electrification"/>
   </feature>
 
   <feature name="Subway line">
@@ -1009,6 +1082,7 @@ Quick documentation:
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
     <inputset ref="embankment-cutting"/>
+    <inputSet ref="rail-electrification"/>
   </feature>
 
   <feature name="Railway platform">
@@ -1154,6 +1228,10 @@ Quick documentation:
     <tag k="building" v="yes"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress" />
+    <input type="choice" category="Religion" name="Religion" key="religion" description="The religion to which this place of worship belongs.">
+      <choice value="christian" text="Christianity (church)" />
+      <choice value="jewish" text="Judaism (synagogue)" />
+    </input>
   </feature>
 
   <feature name="Public building">
@@ -1362,11 +1440,55 @@ Quick documentation:
   </feature>
 
   <feature name="Sports pitch">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <point/>
+    <area/>
+    <icon>
+      <b>${name}</b>
+    </icon>
     <tag k="leisure" v="pitch"/>
     <inputSet ref="simpleName"/>
+    <inputSet ref="pitchSport"/>
   </feature>
 
+  <inputSet id="pitchSport">
+    <input name="Sport" presence="always" category="Sport" key="sport" type="choice" description="The sport that is predominantly played here.">
+      <choice value="9pin" text="9 pin bowling"/>
+      <choice value="10pin" text="10 pin bowling"/>
+      <choice value="american_football" text="American football"/>
+      <choice value="archery" text="Archery"/>
+      <choice value="athletics" text="Athletics"/>
+      <choice value="australian_football" text="Australian Rules Football"/>
+      <choice value="baseball" text="Baseball"/>
+      <choice value="basketball" text="Basketball"/>
+      <choice value="beachvolleyball" text="Beach volleyball"/>
+      <choice value="boules" text="Boules/petanque/bocci"/>
+      <choice value="bowls" text="Lawn bowls"/>
+      <choice value="canadian_football" text="Canadian football"/>
+      <choice value="chess" text="Chess"/>
+      <choice value="cricket" text="Cricket"/>
+      <choice value="cricket_nets" text="Cricket nets"/>
+      <choice value="croquet" text="Croquet"/>
+      <choice value="equestrian" text="Equestrian"/>
+      <choice value="gaelic_football" text="Gaelic football"/>
+      <choice value="gymnastics" text="Gymnastics"/>
+      <choice value="team_handball" text="(Team) handball"/>
+      <choice value="hockey" text="(Field) hockey"/>
+      <choice value="korfball" text="Korball"/>
+      <choice value="pelota" text="Pelota"/>
+      <choice value="rugby_league" text="Rugby league"/>
+      <choice value="rugby_union" text="Rugby union"/>
+      <choice value="shooting" text="Shooting"/>
+      <choice value="skating" text="Ice skating"/>
+      <choice value="skateboard" text="Skateboarding"/>
+      <choice value="soccer" text="Soccer/football"/>
+      <choice value="swimming" text="Swimming"/>
+      <choice value="table_tennis" text="Table tennis"/>
+      <choice value="tennis" text="Tennis"/>
+      <choice value="volleyball" text="Volleyball"/>
+    </input>
+  </inputSet>
+  
   <feature name="Sports track">
     <category>landuse</category><area/><icon><b>${name}</b></icon>
     <tag k="leisure" v="track"/>
@@ -1399,12 +1521,14 @@ Quick documentation:
 
   <feature name="High-voltage pylon">
     <category>power</category>
+    <icon image="icons/power_tower_24.png"/>
     <point/>
     <tag k="power" v="tower"/>
   </feature>
 
   <feature name="Power pole">
     <category>power</category>
+    <icon image="icons/power_pole_24.png"/>"
     <point/>
     <tag k="power" v="pole"/>
   </feature>
@@ -1414,6 +1538,20 @@ Quick documentation:
     <area/>
     <point/>
     <tag k="power" v="generator"/>
+    <inputSet ref="names"/>
+    <input type="choice" presence="always"  name="Energy source" key="power_source" category="Power">
+      <choice value="coal" text="Coal" />
+      <choice value="gas" text="Gas" />
+      <choice value="oil" text="Oil" />
+      <choice value="fossil" text="Unspecified fossil fuel" />
+      <choice value="hydro" text="Hydroelectric" />
+      <choice value="geothermal" text="Geothermal" />
+      <choice value="nuclear" text="Nuclear" />
+      <choice value="wind" text="Wind" />
+      <choice value="photovoltaic" text="Solar PV" />
+      <choice value="solar_thermal" text="Solar thermal" />
+      <choice value="biofuel" text="Biofuel" />
+    </input>
   </feature>
 
   <feature name="Substation">
@@ -1500,7 +1638,16 @@ Quick documentation:
     <point />
     <tag k="amenity" v="place_of_worship"/>
     <input type="freetext" presence="always" category="" name="name" key="name" description="The name of it." priority="low"/>
-    <input type="freetext" presence="always" category="" name="religion" key="religion" description="The religion worshiped here" priority="low"/>
+    <input type="choice" presence="always" category="" name="Religion" key="religion" description="The religion worshipped here.">
+      <choice value="christian" text="Christianity (church)" />
+      <choice value="jewish" text="Judaism (synagogue)" />
+      <choice value="muslim" text="Islam (mosque)" />
+      <choice value="hindu" text="Hinduism (temple)" />
+      <choice value="buddhist" text="Buddhism (temple)" />
+      <choice value="sikh" text="Sikhism (gurdwara)" />
+      <choice value="shinto" text="Shinto (shrine)" />
+    </input>
+   
     <input type="freetext" presence="always" category="" name="denomination" key="denomination" description="The denomination of the religion worshiped here." priority="low"/>
   </feature>
 
@@ -1746,6 +1893,45 @@ Quick documentation:
     <category>transport</category><point /><inputSet ref="simpleName" />
 	<icon image="features/pois/transport_fuel.n.24.png"/>
     <tag k="amenity" v="fuel"/>
+    <input type="freetext" category="Naming" name="Operator" key="operator" description="The provider of the service"/>
+    <input type="choice" category="Fuels" name="Diesel" key="diesel" description="Is diesel fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Octane 91" key="diesel" description="Is octane 91 unleaded fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Octane 95" key="octane_95" description="Is octane 95 unleaded fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Octane 98" key="octane_98" description="Is octane 98 unleaded fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Octane 100" key="octane_100" description="Is octane 100 unleaded fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Ethanol" key="ethanol" description="Is ethanol sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="LPG" key="lpg" description="Is LPG (liquid petroleum gas) sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Octane 91" key="diesel" description="Is octane 91 unleaded fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+    <input type="choice" category="Fuels" name="Bio-diesel" key="biodiesel" description="Is biodiesel unleaded fuel sold here?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
+
+
   </feature>
   
   <feature name="Bus station">
@@ -1875,7 +2061,36 @@ Quick documentation:
     <tag k="barrier" v="stile"/>
   </feature>
 
+  <feature name="Turning circle">
+    <category>transport</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dturning_circle
+    </help>
+    <point />
+    <tag k="highway" v="turning_circle"/>
+  </feature>
 
+  <feature name="Traffic calming">
+    
+    <category>transport</category>
+    <icon image="icons/speed_hump_16.png"/>
+    <help>
+      http://wiki.openstreetmap.org/wiki/Key:traffic%3Dcalming
+    </help>
+    <point />
+    <!-- Warning: creates "traffic_calming=*" by default, but it's the best we can do. Steve Bennett-->
+    <tag k="traffic_calming" v="*"/>
+    <input type="choice" key="traffic_calming" name="Obstacle type" category="Traffic calming" presence="onTagMatch">
+      <choice value="yes" text="Unspecified"/>
+      <choice value="bump" text="Short bump" description="A sharp speed bump, typically slowing cars to 15 kph or less."/>
+      <choice value="hump" text="Speed hump" description="A gentler, longer bump, typically slowing cars to 30 kph or less."/>
+      <choice value="cushion" text="Speed cushion" description="A narrow speed bump allowing emergency vehicles and buses to pass without slowing."/>
+      <choice value="table" text="Speed table" description="A very long speed hump allowing the whole wheelbase to rest on top."/>
+      <choice value="chicane" text="Chicane" description="A set of obstacles causing vehicles to weave through."/>
+      <choice value="rumble_strip" text="Rumble strip" description="A series of very small bumps causing vibration or noise."/>
+      <choice value="choker" text="Choker" description="An artificial narrowing of the road."/>
+    </input>
+    
+  </feature>
 
 
   <!-- ========= Entertainment ========= -->
@@ -1971,7 +2186,9 @@ Quick documentation:
   </feature>
  
   <feature name="Alcohol shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_alcohol.n.24.png"/>
     <tag k="shop" v="alcohol"/>
   </feature>
@@ -2066,7 +2283,7 @@ Quick documentation:
     <tag k="shop" v="jewelry"/>
   </feature>
 
-  <feature name="Launderette">
+  <feature name="Laundrette">
     <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_laundrette.n.24.png"/>
     <tag k="shop" v="laundry"/>
