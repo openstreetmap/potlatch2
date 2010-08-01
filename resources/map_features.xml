@@ -2498,8 +2498,9 @@ Quick documentation:
     <inputSet ref="simpleName"/>
   </feature>
 
-  <feature name="Field/paddock/meadow">
+  <feature name="Field">
     <category>agriculture</category>
+    
     <area />
     <tag k="landuse" v="meadow"/>
     <inputSet ref="simpleName"/>
