@@ -31,7 +31,7 @@ Quick documentation:
 </inputSet>
 
 <input>
-  @type="choice/freetext/turn/slider/route/speed/...?" (slider not implemented yet?)
+  @type="choice/freetext/turn/checkbox/slider/route/speed/...?" (slider not implemented yet?)
   @presence="always/onTagMatch" (whether it appears on the basic page?)
   @category: which tab it appears on
   @description: mouse-over text
@@ -93,6 +93,10 @@ Quick documentation:
 
   <category name="Shopping" id="shopping">
   </category>
+
+  <category name="Agriculture" id="agriculture">
+  </category>
+
 
   <category name="Advanced" id="advanced">
   </category>
@@ -752,7 +756,7 @@ Quick documentation:
 
   <feature name="Park">
     <category>natural</category>
-    <icon>
+    <icon image="icons/natural_blank.png">
       <b>${name}</b><br/>
     </icon>
 
@@ -762,14 +766,21 @@ Quick documentation:
   
   <feature name="Forest">
     <category>natural</category>
-    <icon>
-      <b>${name}</b><br/>
-    </icon>
+    <icon image="icons/natural_blank.png" />
 
     <area/>
     <tag k="landuse" v="forest"/>
   </feature>
-  
+
+  <feature name="Meadow">
+    <category>natural</category>
+    <icon image="icons/natural_blank.png" />
+
+    <area/>
+    <tag k="landuse" v="meadow"/>
+  </feature>
+
+
   <!-- ************************************************************************
        Barrier
        ************************************************************************ -->
@@ -1427,6 +1438,7 @@ Quick documentation:
 
   <feature name="Conservation">
     <category>natural</category>
+    <icon image="icons/natural_blank.png"/>
     <area/>
     <tag k="landuse" v="conservation"/>
     <inputSet ref="simpleName"/>
@@ -2463,6 +2475,49 @@ Quick documentation:
     <input type="checkbox" category="Amenity" presence="always" description="Does this pharmacy sell prescription drugs?" name="Dispensing" key="dispensing" layout="horizontal"/>
   </feature>
 
+  <!-- **************** Agriculture *************** -->
+  <feature name="Farm">
+    <category>agriculture</category>
+<!--    <point /> Avoid this, to prevent POI icon -->
+    <area />
+    <tag k="landuse" v="farm"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Farmyard">
+    <category>agriculture</category>
+    <area />
+    <tag k="landuse" v="farmyard"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+ <feature name="Farmland">
+    <category>agriculture</category>
+    <area />
+    <tag k="landuse" v="farmland"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Field/paddock/meadow">
+    <category>agriculture</category>
+    <area />
+    <tag k="landuse" v="meadow"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+  
+  <feature name="Orchard">
+    <category>agriculture</category>
+    <area />
+    <tag k="landuse" v="orchard"/>
+    <inputSet ref="simpleName"/>
+  </feature>
+
+  <feature name="Vineyard">
+    <category>agriculture</category>
+    <area />
+    <tag k="landuse" v="vineyard"/>
+    <inputSet ref="simpleName"/>
+  </feature>
 
   <!-- ************************************************************************
        Relations
