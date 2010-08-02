@@ -21,6 +21,7 @@ package net.systemeD.halcyon.connection.actions {
         public override function doAction():uint {
             removed = nodeList.splice(index, 1);
             if (nodeList.indexOf(removed[0])==-1) { removed[0].removeParent(way); }
+            way.deleted = nodeList.length == 0;
             markDirty();
             if (fireEvent) {
                entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], way, index));
@@ -31,6 +32,7 @@ package net.systemeD.halcyon.connection.actions {
         public override function undoAction():uint {
             nodeList.splice(index, 0, removed[0]);
             removed[0].addParent(way);
+            way.deleted = nodeList.length == 0;
             markClean();
             if (fireEvent) {
                 entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, removed[0], way, index));

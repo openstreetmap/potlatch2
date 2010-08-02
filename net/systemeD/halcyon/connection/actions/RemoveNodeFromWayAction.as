@@ -24,6 +24,7 @@ package net.systemeD.halcyon.connection.actions {
 			
 			if ( nodeRemovedFrom.length > 0 ) {
 			    node.removeParent(entity);
+			    entity.deleted = nodeList.length == 0;
 			    markDirty();
 			    return SUCCESS;
 			}
@@ -40,6 +41,7 @@ package net.systemeD.halcyon.connection.actions {
             	entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, Way(entity), index));
             }
             
+            entity.deleted = nodeList.length == 0;
             markClean();
             
             return SUCCESS;
