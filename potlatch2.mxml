@@ -29,6 +29,7 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
+        <mx:Button label="GPS" click="trackLoader.load();"/>
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
@@ -86,6 +87,7 @@
         public var theMap:Map;
         public var theController:EditController;
 		public var yahoo:Yahoo;
+		public var trackLoader:TrackLoader;
 		public var toolbox:Toolbox;
 
 		private var savecount:uint=0;
@@ -185,6 +187,9 @@
             conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
             conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
             conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
+
+			// create GPS trackloader
+			trackLoader=new TrackLoader(theMap,conn.apiBase);
 		}
 		
         public function onResizeMap():void {

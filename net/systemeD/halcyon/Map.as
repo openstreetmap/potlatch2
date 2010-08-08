@@ -290,6 +290,14 @@ package net.systemeD.halcyon {
         }
 
 		// ------------------------------------------------------------------------------------------
+		// Add vector layer
+		
+		public function addVectorLayer(layer:VectorLayer):void {
+			vectorlayers[layer.name]=layer;
+			vectorbg.addChild(layer.paint);
+		}
+
+		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out
 		
 		public function updateEntityUIs(redraw:Boolean,remove:Boolean):void {

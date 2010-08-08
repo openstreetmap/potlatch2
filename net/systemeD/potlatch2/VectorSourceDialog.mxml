@@ -140,8 +140,7 @@
 		var names:Array=url.split('/'); var name:String=names[names.length-1];
 		var vectorlayer:VectorLayer=new VectorLayer(name,map,"potlatch.css");
 		vectorlayer.url=url;
-		map.vectorlayers[name]=vectorlayer;
-		map.vectorbg.addChild(vectorlayer.paint);
+		map.addVectorLayer(vectorlayer);
 
 		if (type=='gpx') {
 			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);

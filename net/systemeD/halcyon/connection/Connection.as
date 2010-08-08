@@ -37,7 +37,7 @@ package net.systemeD.halcyon.connection {
             return params[name] == null ? defaultValue : params[name];
         }
 
-        public static function get apiBase():String {
+        public function get apiBase():String {
             return apiBaseURL;
         }
 
