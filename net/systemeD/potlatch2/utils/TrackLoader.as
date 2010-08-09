@@ -6,6 +6,12 @@ package net.systemeD.potlatch2.utils {
 	import flash.net.*;
 	import flash.events.*;
 
+	/* still to do:
+	- don't join to GPS track when you click on it
+	- light-blue colour
+	- empty layer on reload
+	- cope with tracks with timestamps */
+
 	public class TrackLoader {
 
 		private var left:Number=0;
