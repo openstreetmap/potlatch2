@@ -36,8 +36,10 @@ Potlatch 2: main outstanding issues
 * B keypress for background source tag
 * Multiple selection
 * Options should be remembered via SharedObjects
-* Undo (via keypress) after backspaceNode doesn't update the elastic
+* When drawing a way, undo (via keypress) after backspaceNode doesn't update the elastic
 * small node hitzone when creating areas - hitzone and mouseover UI don't match up
+* backspaceNode leaves junctions on other ways highlighted
+* backspaceNode should also remove nodes that were just inserted into the other way (created with pen_plus)
 
 == Miscellaneous data model ==
 
