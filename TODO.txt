@@ -36,6 +36,8 @@ Potlatch 2: main outstanding issues
 * B keypress for background source tag
 * Multiple selection
 * Options should be remembered via SharedObjects
+* Undo (via keypress) after backspaceNode doesn't update the elastic
+* small node hitzone when creating areas - hitzone and mouseover UI don't match up
 
 == Miscellaneous data model ==
 
