@@ -19,7 +19,6 @@ Potlatch 2: main outstanding issues
 == Saving ==
 
 * Should be able to reuse changesets
-* Shouldn't be able to change created_by and version on changeset
 
 == Tag editing ==
 

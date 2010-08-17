@@ -30,7 +30,9 @@
         <mx:VBox width="100%" height="100%" label="Advanced">
           <mx:Label text="Changeset tags:"/>
           <mx:DataGrid editable="true" width="100%" id="advancedTagGrid"
-              dataProvider="{changesetTags}">
+              dataProvider="{changesetTags}"
+              itemEditBeginning="allowForEdit(event)"
+              itemEditEnd="verifyInput(event)">
             <mx:columns>
                 <mx:DataGridColumn editable="true" dataField="k" headerText="Key"/>
                 <mx:DataGridColumn editable="true" dataField="v" headerText="Value"/>
@@ -75,6 +77,8 @@
     import mx.controls.*;
     import mx.managers.PopUpManager;
 	import mx.core.Application;
+    import mx.events.DataGridEvent;
+    import mx.events.DataGridEventReason;
     
     import net.systemeD.halcyon.connection.*;
     
@@ -114,6 +118,28 @@
         conn.addEventListener(Connection.NEW_CHANGESET, changesetCreated);
         conn.addEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
         conn.createChangeset(tags);
+    }
+
+    private function allowForEdit(event:DataGridEvent):void {
+        /* check before editing the tag grid that it's neither created_by nor version tags */
+        var item:Object = ((event.currentTarget as DataGrid).dataProvider as ArrayCollection)[event.rowIndex];
+        if(item.k == 'created_by' || item.k == 'version') {
+          event.preventDefault();
+        }
+    }
+
+    private function verifyInput(event:DataGridEvent):void {
+        /* check before saving any change that the new key isn't created_by nor version */
+        // it is OK if the user cancels the edit
+        if( event.reason == DataGridEventReason.CANCELLED ) return;
+
+        var editor:TextInput = (event.currentTarget as DataGrid).itemEditorInstance as TextInput;
+
+        if( event.dataField == "k" ) {
+          if( editor.text == 'created_by' || editor.text == 'version' ) {
+            event.preventDefault();
+          }
+        }
     }
 
     private function changesetCreated(event:EntityEvent):void {
