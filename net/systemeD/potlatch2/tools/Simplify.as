@@ -12,7 +12,7 @@ package net.systemeD.potlatch2.tools {
 		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean):void {
 			if (way.length<3 || way.isArea()) { return; }
 
-			var action:CompositeUndoableAction = new CompositeUndoableAction("Straighten");
+			var action:CompositeUndoableAction = new CompositeUndoableAction("Simplify");
 			
 			var xa:Number, xb:Number;
 			var ya:Number, yb:Number;
