@@ -7,13 +7,13 @@
     initialize="loadFeatures()">
 
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
-  <mx:VBox id="dndPanel" width="100%" height="100%" horizontalScrollPolicy="off">
+  <mx:VBox id="dndPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
     <mx:Text id="dndPanelText" text="{dndPrompt}" automationName="{dndPrompt}" />
 	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}">
 		<mx:HBox width="100%"><mx:Label text="{dndRep.currentItem.name}"/></mx:HBox>
 
 			<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point')}" width="100%" height="1"
-			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)">
+			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)" styleName="dndPanelTileList">
 				<mx:itemRenderer>
 					<mx:Component>
 						<mx:VBox mouseOver="parentDocument.dndPanelText.text = data.name"

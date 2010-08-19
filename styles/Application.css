@@ -21,3 +21,13 @@ ApplicationControlBar {
 		selectedFillColors: haloBlue, black;
 		color: white;
 }
+
+.dndPanelTileList {
+  cornerRadius: 4px;
+}
+
+
+.dndPanelVbox {
+  paddingRight: 3px;
+  paddingLeft: 3px;
+}
