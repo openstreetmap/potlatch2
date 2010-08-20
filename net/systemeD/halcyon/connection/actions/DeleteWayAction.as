@@ -32,7 +32,13 @@ package net.systemeD.halcyon.connection.actions {
 			}
 			effects.doAction();
 			setDeleted(true);
-			markDirty();
+            
+            // see note in DeleteNodeAction
+            if (way.id < 0) {
+              markClean();
+            } else {
+              markDirty();
+            }
             way.dispatchEvent(new EntityEvent(Connection.WAY_DELETED, way));
 			way.resume();
 
@@ -43,7 +49,11 @@ package net.systemeD.halcyon.connection.actions {
             var way:Way = entity as Way;
 			way.suspend();
             setDeleted(false);
-            markClean();
+            if (way.id < 0) {
+              markDirty();
+            } else {
+              markClean();
+            }
             way.dispatchEvent(new EntityEvent(Connection.NEW_WAY, way));
             effects.undoAction();
             for each(var node:Node in oldNodeList) {

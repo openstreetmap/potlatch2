@@ -20,15 +20,35 @@ package net.systemeD.halcyon.connection.actions {
             node.removeFromParents(effects.push);
             effects.doAction();
             setDeleted(true);
-            markDirty();
+            
+            // The Delete[entity]Action is unusual, since it can be called both to delete an entity, and is also used to undo its creation
+            // (hence preserving the negative id, if the creation is subsequently redone). Normally a deletion would mark the entity dirty, but
+            // if a newly created entity is being deleted, the entity is now clean. 
+            // When the creation is "redone", it's actually an undo on the deletion of the new entity (see below),
+            // and so the connection will need to be considered dirty again. Usually it's an existing object that's deleted and restored,
+            // which would make things clean.
+            // See also CreateEntityAction
+            
+            if (node.id < 0) {
+              markClean();
+            } else {
+              markDirty();
+            }
             node.dispatchEvent(new EntityEvent(Connection.NODE_DELETED, node));
             
             return SUCCESS;
         }
             
         public override function undoAction():uint {
+            var node:Node = entity as Node;
             setDeleted(false);
-            markClean();
+            
+            // See note above
+            if (node.id < 0) {
+              markDirty();
+            } else {
+              markClean();
+            }
             entity.dispatchEvent(new EntityEvent(Connection.NEW_NODE, entity));
             if ( effects != null )
                 effects.undoAction();

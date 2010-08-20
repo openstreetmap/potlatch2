@@ -28,7 +28,13 @@ package net.systemeD.halcyon.connection.actions {
 			memberList.splice(0, memberList.length);
 			effects.doAction();
 			setDeleted(true);
-			markDirty();
+            
+            // see note in DeleteNodeAction
+            if (relation.id < 0) {
+              markClean();
+            } else {
+              markDirty();
+            }
             relation.dispatchEvent(new EntityEvent(Connection.RELATION_DELETED, relation));
 
             return SUCCESS;
@@ -37,7 +43,11 @@ package net.systemeD.halcyon.connection.actions {
         public override function undoAction():uint {
             var relation:Relation = entity as Relation;
             setDeleted(false);
-            markClean();
+            if (relation.id < 0) {
+              markDirty();
+            } else {
+              markClean();
+            }
             relation.dispatchEvent(new EntityEvent(Connection.NEW_RELATION, relation));
             effects.undoAction();
             for each(var member:RelationMember in oldMemberList) {
