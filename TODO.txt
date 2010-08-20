@@ -9,6 +9,8 @@ Potlatch 2: main outstanding issues
 * Make parallelise properly undoable
 * Splitway + undo leaves way marked dirty
 * Undo after save leaves things marked as clean
+* shift+delete a way that's part of a relation, then undo triggers infinite loop
+* double-click to make a poi leaves two actions in the undo list
 
 == Vector background layers ==
 
