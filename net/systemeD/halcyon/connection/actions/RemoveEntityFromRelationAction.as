@@ -41,7 +41,7 @@ package net.systemeD.halcyon.connection.actions {
             member.addParent(entity);
             
             var last:int = 0;
-            for (var i:uint = removedMembers.length - 1; i >= 0; i++) {
+            for (var i:int = removedMembers.length - 1; i >= 0; i--) {
                 var removed:RelationMember = removedMembers[i];
                 var index:int = memberRemovedFrom[i];
                 memberList.splice(index, 0, removed);

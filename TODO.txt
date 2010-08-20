@@ -7,7 +7,6 @@ Potlatch 2: main outstanding issues
 * purgeOutside simply doesn't work - WayUIs stay around. To investigate
 * P1-style J (join) / shift-J (unjoin)
 * Make parallelise properly undoable
-* shift+delete a way that's part of a relation, then undo triggers infinite loop
 * double-click to make a poi leaves two actions in the undo list
 
 == Vector background layers ==
