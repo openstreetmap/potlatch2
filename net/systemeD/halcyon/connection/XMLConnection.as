@@ -175,8 +175,9 @@ package net.systemeD.halcyon.connection {
 				}
             }
 
-	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
-	        markClean();
+            dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
+            markClean(); // marks the connection clean. Pressing undo from this point on leads to unexpected results
+            MainUndoStack.getGlobalStack().breakUndo(); // so, for now, break the undo stack
         }
 
         private function diffUploadError(event:IOErrorEvent):void {

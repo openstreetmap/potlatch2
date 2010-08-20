@@ -57,6 +57,8 @@ package net.systemeD.halcyon.connection {
         public function breakUndo():void {
             undoActions = [];
             redoActions = [];
+            dispatchEvent(new Event("new_undo_item"));
+            dispatchEvent(new Event("new_redo_item"));
         }
         
         [Bindable(event="new_undo_item")]
