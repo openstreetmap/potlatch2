@@ -17,7 +17,7 @@ package net.systemeD.halcyon.connection.actions {
             } else {
                 setCreate(entity, false);
             }
-            
+            markDirty();
             return SUCCESS;
         }
             
@@ -26,7 +26,7 @@ package net.systemeD.halcyon.connection.actions {
                 entity.remove(setAction);
             }
             deleteAction.doAction();
-            
+            markClean();
             return SUCCESS;
         }
         

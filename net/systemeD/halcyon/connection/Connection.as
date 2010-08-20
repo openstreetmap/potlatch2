@@ -230,21 +230,21 @@ package net.systemeD.halcyon.connection {
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
             performCreate(new CreateEntityAction(node, setNode));
-			markDirty();
+			//markDirty();
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array, performCreate:Function):Way {
             var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
             performCreate(new CreateEntityAction(way, setWay));
-			markDirty();
+			//markDirty();
             return way;
         }
 
         public function createRelation(tags:Object, members:Array, performCreate:Function):Relation {
             var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
             performCreate(new CreateEntityAction(relation, setRelation));
-			markDirty();
+			//markDirty();
             return relation;
         }
 
