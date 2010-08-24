@@ -66,8 +66,8 @@ package net.systemeD.potlatch2.controller {
 				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// pull data out of vector background layer
 					var newEntity:Entity=paint.findSource().pullThrough(entity,controller.connection);
-					if (entity is Way) { return new SelectedWay(newEntity); }
-					else if (entity is Node) { return new SelectedPOINode(newEntity); }
+					if (entity is Way) { return new SelectedWay(newEntity as Way); }
+					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
 				}
 				return (this is NoSelection) ? this : new NoSelection();
 			}
