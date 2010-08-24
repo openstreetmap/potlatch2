@@ -13,4 +13,8 @@
         <name>OpenCycleMap</name>
         <url>opencyclemap.css</url>
     </stylesheet>
+    <stylesheet>
+        <name>GPS</name>
+        <url>gpx.css</url>
+    </stylesheet>
 </stylesheets>

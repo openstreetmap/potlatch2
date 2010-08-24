@@ -32,8 +32,11 @@ package net.systemeD.potlatch2.utils {
 				}
 			}
 			for each (var wpt:XML in file.child("wpt")) {
-				// ** could potentially get the children and add them as gpx:tags
-				container.createNode({}, wpt.lat, wpt.lon);
+				var tags:Object={};
+				for each (var tag:XML in wpt.children()) {
+					tags[tag.name()]=tag.toString();
+				}
+				container.createNode(tags, wpt.@lat, wpt.@lon);
 			}
 		}
 	}

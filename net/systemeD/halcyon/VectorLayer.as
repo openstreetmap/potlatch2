@@ -90,6 +90,9 @@ package net.systemeD.halcyon {
 				paint.wayuis[oldWay.id].redraw();
 				delete ways[oldWay.id];
 				map.paint.createWayUI(newWay);
+			} else {
+				// ** should be able to pull nodes through
+				trace ("Pulling nodes through isn't supported yet");
 			}
 			return newWay;
 		}

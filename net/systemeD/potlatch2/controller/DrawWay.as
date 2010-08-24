@@ -1,11 +1,13 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	import flash.geom.*;
+	import flash.display.DisplayObject;
 	import flash.ui.Keyboard;
 	import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Elastic;
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.MapPaint;
 
 	public class DrawWay extends SelectedWay {
 		private var elastic:Elastic;
@@ -31,11 +33,14 @@ package net.systemeD.potlatch2.controller {
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			var mouse:Point;
 			var node:Node;
+			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
+			var isBackground:Boolean = paint && paint.isBackground;
+
 			if (entity == null && hoverEntity) { entity=hoverEntity; }
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
-				if ( entity == null ) {
+				if ( entity == null || isBackground ) {
 					node = createAndAddNode(event);
 					resetElastic(node);
 					lastClick=node;
@@ -89,7 +94,7 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2lon(event.localX),
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
-			} else if ( event.type == MouseEvent.ROLL_OVER ) {
+			} else if ( event.type == MouseEvent.ROLL_OVER && !isBackground ) {
 				if (focus!=selectedWay) {
 					hoverEntity=focus;
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
@@ -102,7 +107,7 @@ package net.systemeD.potlatch2.controller {
 				} else {
 					controller.setCursor(controller.pen_plus);
 				}
-			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
+			} else if ( event.type == MouseEvent.MOUSE_OUT && !isBackground ) {
 				if (entity!=selectedWay) {
 					hoverEntity=null;
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });

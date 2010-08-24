@@ -7,8 +7,6 @@ package net.systemeD.potlatch2.utils {
 	import flash.events.*;
 
 	/* still to do:
-	- don't join to GPS track when you click on it
-	- light-blue colour
 	- empty layer on reload
 	- cope with tracks with timestamps */
 
@@ -24,7 +22,7 @@ package net.systemeD.potlatch2.utils {
 		private var map:Map;
 		private var apiBaseURL:String;
 
-		private static const STYLESHEET:String="wireframe.css";
+		private static const STYLESHEET:String="gpx.css";
 		
 		public function TrackLoader(map:Map, url:String) {
 			this.map=map;

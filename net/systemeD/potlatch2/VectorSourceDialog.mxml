@@ -138,7 +138,9 @@
 
 	private function loadFiles(url:String,type:String,simplify:Boolean):void {
 		var names:Array=url.split('/'); var name:String=names[names.length-1];
-		var vectorlayer:VectorLayer=new VectorLayer(name,map,"potlatch.css");
+		var stylesheet:String="potlatch.css";
+		if (type=='gpx') { stylesheet="gpx.css"; }
+		var vectorlayer:VectorLayer=new VectorLayer(name,map,stylesheet);
 		vectorlayer.url=url;
 		map.addVectorLayer(vectorlayer);
 
