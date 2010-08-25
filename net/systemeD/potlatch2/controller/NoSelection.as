@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.display.*;
 	import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.Globals;
@@ -21,7 +22,7 @@ package net.systemeD.potlatch2.controller {
 
 			if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
-				var undo:CompositeUndoableAction = new CompositeUndoableAction("Begin way");
+				var undo:CompositeUndoableAction = new BeginWayAction();
 				var startNode:Node = controller.connection.createNode(
 					{}, 
 					controller.map.coord2lat(event.localY),
