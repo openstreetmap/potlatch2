@@ -5,6 +5,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
 	import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Elastic;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.MapPaint;
@@ -48,14 +49,12 @@ package net.systemeD.potlatch2.controller {
 					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
 						if (selectedWay.length==1 && selectedWay.getNode(0).parentWays.length==1) {
 							// double-click to create new POI
+                            stopDrawing();
                             MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
-                            node = controller.connection.createNode(
-                              {},
-                              controller.map.coord2lat(event.localY),
-                              controller.map.coord2lon(event.localX), MainUndoStack.getGlobalStack().addAction);
-							stopDrawing();
-							controller.connection.registerPOI(node);
-							return new SelectedPOINode(node);
+                            
+                            var newPoiAction:CreatePOIAction = new CreatePOIAction(event, controller.map);
+                            MainUndoStack.getGlobalStack().addAction(newPoiAction);
+                            return new SelectedPOINode(newPoiAction.getNode());
 						} else {
 							// double-click at end of way
 							return stopDrawing();
