@@ -48,9 +48,12 @@ package net.systemeD.potlatch2.controller {
 					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
 						if (selectedWay.length==1 && selectedWay.getNode(0).parentWays.length==1) {
 							// double-click to create new POI
-							node=selectedWay.getNode(0);
+                            MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
+                            node = controller.connection.createNode(
+                              {},
+                              controller.map.coord2lat(event.localY),
+                              controller.map.coord2lon(event.localX), MainUndoStack.getGlobalStack().addAction);
 							stopDrawing();
-							node.setDeletedState(false);	// has just been deleted by stopDrawing
 							controller.connection.registerPOI(node);
 							return new SelectedPOINode(node);
 						} else {
@@ -144,7 +147,7 @@ package net.systemeD.potlatch2.controller {
 				hoverEntity = null;
 			}
 
-			if ( selectedWay.length<2) {
+			if ( false ) {
 				controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
 				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 				// delete controller.map.ways[selectedWay.id];
