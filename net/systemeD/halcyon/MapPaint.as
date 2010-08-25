@@ -137,10 +137,14 @@ package net.systemeD.halcyon {
 			return wayuis[way.id];
 		}
 
-		public function createNodeUI(node:Node):NodeUI {
-			if (!nodeuis[node.id]) { nodeuis[node.id]=new NodeUI(node,this,0); }
-			return nodeuis[node.id];
-		}
+        public function createNodeUI(node:Node):NodeUI {
+            if (!nodeuis[node.id]) {
+              nodeuis[node.id]=new NodeUI(node,this,0);
+            } else {
+              nodeuis[node.id].redraw();
+            }
+            return nodeuis[node.id];
+        }
 
 		public function deleteWayUI(way:Way):void {
 			if (!wayuis[way.id]) { return; }
