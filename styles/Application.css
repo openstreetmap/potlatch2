@@ -22,6 +22,11 @@ ApplicationControlBar {
 		color: white;
 }
 
+Label.helpInfo {
+  fontStyle: italic;
+  fontSize: 11pt;
+}
+
 .dndPanelTileList {
   cornerRadius: 4px;
 }
@@ -30,4 +35,9 @@ ApplicationControlBar {
 .dndPanelVbox {
   paddingRight: 3px;
   paddingLeft: 3px;
+  verticalGap: 0px;
+}
+
+.dndPanelCategoryLabel {
+  paddingTop: 6px;
 }
