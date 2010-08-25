@@ -5,7 +5,7 @@
 	verticalGap="0"
 	toolTip="{fieldDescription}">
 
-<mx:Box direction="{fieldDirection}">
+<mx:Box direction="{fieldDirection}" styleName="titledEditor">
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
       change="value = inputBox.selectedItem.value"

@@ -3,11 +3,10 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
-	verticalGap="0"
 	width="100%"
 	toolTip="{fieldDescription}">
 
-  <mx:Box direction="{fieldDirection}">
+  <mx:Box direction="{fieldDirection}" styleName="titledEditor">
   <mx:Label text="{fieldName}:"/>
   <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" change="value = inputBox.text"/>
   </mx:Box>

@@ -8,7 +8,7 @@
 
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
   <mx:VBox id="dndPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
-    <mx:Text id="dndPanelText" text="{dndPrompt}" styleName="helpInfo" />
+    <mx:Text id="dndPanelText" text="{dndPrompt}" width="100%" styleName="helpInfo" />
 	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}">
 		<mx:HBox width="100%"><mx:Label text="{dndRep.currentItem.name}:" styleName="dndPanelCategoryLabel"/></mx:HBox>
 
@@ -47,13 +47,13 @@
   <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto">
     <mx:ViewStack id="stack" width="100%" height="100%">
       <mx:VBox width="100%" height="100%" label="Simple" id="editorContainer" creationComplete="initEditorStackUIs()">
-        <mx:HBox borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3" id="iconContainer">
+        <mx:HBox width="100%" id="iconContainer" styleName="featureSelector">
             <mx:Image id="iconImage"/>
             <mx:VBox width="100%" verticalGap="1">
               <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%"/>
               <mx:Text condenseWhite="true" width="100%" id="iconText"/>
             </mx:VBox>
-            <mx:LinkButton label="?" click="openDescription()" id="helpLabel"/>
+            <mx:LinkButton label="?" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
         </mx:HBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
@@ -281,6 +281,7 @@
           var box:VBox = new VBox();
           box.percentWidth = 100;
           box.percentHeight = 100;
+          box.styleName = "editorContainer";
           return box;
       }
 

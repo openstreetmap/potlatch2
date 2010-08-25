@@ -1,14 +1,26 @@
 
 Application {
-  padding-left: 5;
-  padding-right: 5;
-  padding-top: 5;
-  padding-bottom: 5;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  backgroundColor: #c0c0c0;
+  borderStyle: none;
 }
 
 ApplicationControlBar {
   padding-top: 2;
   padding-bottom: 2;
+  fillAlphas: 1.0,1.0;
+  fillColors: #e0e0e0, #c0c0c0;
+  backgroundColor: #c0c0c0;
+  borderSkin: ClassReference("mx.skins.halo.ApplicationBackground");
+}
+
+TitleWindow {
+  borderAlpha: 0.8;
+  borderThicknessLeft: 5;
+  borderThicknessRight: 5;
 }
 
 .failText {
@@ -22,10 +34,30 @@ ApplicationControlBar {
 		color: white;
 }
 
-Label.helpInfo {
+.helpInfo {
   fontStyle: italic;
   fontSize: 11pt;
 }
+
+.featureSelector {
+  paddingTop: 3;
+  paddingLeft: 3;
+  paddingRight: 3;
+}
+
+.editorContainer {
+  verticalGap: 4;
+  paddingTop: 3;
+  paddingLeft: 3;
+  paddingRight: 3;
+}
+
+.titledEditor {
+  verticalGap: 0;
+  verticalAlign: middle;
+  horizontalGap: 3;
+}
+
 
 .dndPanelTileList {
   cornerRadius: 4px;
