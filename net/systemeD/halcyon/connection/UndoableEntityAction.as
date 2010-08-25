@@ -3,6 +3,7 @@ package net.systemeD.halcyon.connection {
     public class UndoableEntityAction extends UndoableAction {
         public var wasDirty:Boolean;
 		public var connectionWasDirty:Boolean;
+        private var initialised:Boolean = false;
         protected var name:String;
         protected var entity:Entity;
             
@@ -12,23 +13,33 @@ package net.systemeD.halcyon.connection {
         }
             
         protected function markDirty():void {
-			var conn:Connection = Connection.getConnectionInstance();
-            wasDirty = entity.isDirty;
-			connectionWasDirty = conn.isDirty;
+            if ( !initialised ) init();
 
-            if ( !wasDirty )
-                entity.markDirty();
+            if ( !wasDirty ) {
+              entity.markDirty();
+            }
 
-            if ( !connectionWasDirty )
-                conn.markDirty();
+            if ( !connectionWasDirty ) {
+              Connection.getConnectionInstance().markDirty();
+            }
         }
             
         protected function markClean():void {
-            if ( !wasDirty )
-                entity.markClean(entity.id, entity.version);
+            if ( !initialised ) init();
 
-            if ( !connectionWasDirty )
-                Connection.getConnectionInstance().markClean();
+            if ( !wasDirty ) {
+              entity.markClean(entity.id, entity.version);
+            }
+
+            if ( !connectionWasDirty ) {
+              Connection.getConnectionInstance().markClean();
+            }
+        }
+        
+        private function init():void {
+            wasDirty = entity.isDirty;
+            connectionWasDirty = Connection.getConnectionInstance().isDirty;
+            initialised = true;
         }
             
         public function toString():String {
