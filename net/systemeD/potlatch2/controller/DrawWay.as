@@ -61,7 +61,9 @@ package net.systemeD.potlatch2.controller {
 						}
 					} else {
 						appendNode(entity as Node, MainUndoStack.getGlobalStack().addAction);
-						controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
+						if (focus is Way) {
+                          controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
+                        }
 						controller.map.setHighlight(entity, { selectedway: true });
 						resetElastic(entity as Node);
 						lastClick=entity;
@@ -97,7 +99,7 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
 			} else if ( event.type == MouseEvent.ROLL_OVER && !isBackground ) {
-				if (focus!=selectedWay) {
+				if (focus is Way && focus!=selectedWay) {
 					hoverEntity=focus;
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
 				}
@@ -110,7 +112,7 @@ package net.systemeD.potlatch2.controller {
 					controller.setCursor(controller.pen_plus);
 				}
 			} else if ( event.type == MouseEvent.MOUSE_OUT && !isBackground ) {
-				if (entity!=selectedWay) {
+				if (focus is Way && entity!=selectedWay) {
 					hoverEntity=null;
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
 					// ** We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a

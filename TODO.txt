@@ -41,7 +41,6 @@ Potlatch 2: main outstanding issues
 * Unexpected number of undo actions (3) when undoing drawway after adding a junction
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
-* sometimes triggering a null reference error within drawway (sethiglightonnodes)
 
 == Miscellaneous data model ==
 
