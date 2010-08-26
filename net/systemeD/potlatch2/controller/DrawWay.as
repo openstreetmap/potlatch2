@@ -29,6 +29,8 @@ package net.systemeD.potlatch2.controller {
 				lastClick=way.getNode(0);
 				lastClickTime=new Date();
 			}
+            way.addEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
+            way.addEventListener(Connection.WAY_NODE_ADDED, fixElastic);
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
@@ -129,6 +131,19 @@ package net.systemeD.potlatch2.controller {
 			elastic.start = mouse;
 			elastic.end = mouse;
 		}
+
+        /* Fix up the elastic after a WayNode event - e.g. triggered by undo */
+        private function fixElastic(event:Event):void {
+            var node:Node
+            if (editEnd) {
+              node = selectedWay.getNode(selectedWay.length-1);
+            } else {
+              node = selectedWay.getNode(0);
+            }
+            if (node) { //maybe selectedWay doesn't have any nodes left
+              elastic.start = new Point(node.lon, node.latp);
+            }
+        }
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
