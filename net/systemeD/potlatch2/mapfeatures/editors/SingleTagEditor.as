@@ -5,7 +5,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import mx.containers.VBox;
     import flash.events.*;
 
-	public class SingleTagEditor extends VBox {
+    public class SingleTagEditor extends VBox {
 
       protected var _factory:SingleTagEditorFactory;
       protected var _entity:Entity;
@@ -27,7 +27,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       
       [Bindable(event="tag_changed")]
       public function get value():String {
-          return _entity == null ? "" : _entity.getTag(_factory.key);
+          return _entity == null ? null : _entity.getTag(_factory.key);
       }
       
       public function set value(val:String):void {
