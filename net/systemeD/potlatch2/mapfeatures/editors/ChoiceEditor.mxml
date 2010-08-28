@@ -65,7 +65,7 @@
           var choice:Choice = new Choice();
           choice.icon = null;
           choice.description = "Field not set";
-          choice.label = "<i>Unset</i>";
+          choice.label = "<font color='#a0a0a0'><i>Unset</i></font>";
           choice.value = null;
           return choice;
       }

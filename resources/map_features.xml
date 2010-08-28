@@ -205,7 +205,8 @@ Quick documentation:
   <inputSet id="roadPhysical">
     <input type="slider" presence="onTagMatch"
         name="Layer" category="Physical" description="Relative vertical positions (-5 lowest, +5 highest)"
-        key="layer" min="-5" max="5" default="0"/>
+        key="layer" minimum="-5" maximum="5" default="0" snapInterval="1" labels="Lowest,Ground,Highest"
+        defaultName="Ground"/>
     <input type="freetext" presence="onTagMatch"
         name="Width" category="Physical"
         key="width" description="Width of the road" layout="horizontal"/>

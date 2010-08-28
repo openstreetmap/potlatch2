@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edit:SingleTagEditor
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	verticalGap="0"
+	width="100%"
+	toolTip="{fieldDescription}">
+
+	<mx:HBox styleName="titledEditor">
+	<mx:Label text="{fieldName}:"/>
+	<mx:HSlider id="inputSlider"
+                 minimum="{sliderMinimum}" maximum="{sliderMaximum}"
+                 snapInterval="{sliderSnapInterval}" tickInterval="{sliderSnapInterval}"
+                 labels="{sliderLabels}" dataTipFormatFunction="formatDataTip"
+                 value="{translatedValue}"
+                 enabled="{isValueValid}"
+                 liveDragging="true"
+				 change="setTagValueFromSlider()" />
+	</mx:HBox>
+  <mx:Script><![CDATA[
+
+    private function setTagValueFromSlider():void {
+        // unset the tag if being set to the default
+        var newValue:Number = inputSlider.value;
+        value = newValue == SliderEditorFactory(_factory).defaultValue ? null : newValue.toString()
+    }
+
+    private function formatDataTip(value:Number):String {
+        if ( value == inputSlider.minimum )
+            return inputSlider.labels[0];
+        if ( value == inputSlider.maximum )
+            return inputSlider.labels[inputSlider.labels.length-1];
+        if ( value == SliderEditorFactory(_factory).defaultValue )
+            return SliderEditorFactory(_factory).defaultValueName
+        return value.toString();
+    }
+
+    [Bindable(event="factory_set")]
+    public function get sliderMinimum():Number {
+        return SliderEditorFactory(_factory) == null ? 0 : SliderEditorFactory(_factory).minimum;
+    }
+
+    [Bindable(event="factory_set")]
+    public function get sliderMaximum():Number {
+        return SliderEditorFactory(_factory) == null ? 100 : SliderEditorFactory(_factory).maximum;
+    }
+
+    [Bindable(event="factory_set")]
+    public function get sliderSnapInterval():Number {
+        return SliderEditorFactory(_factory) == null ? 1 : SliderEditorFactory(_factory).snapInterval;
+    }
+
+    [Bindable(event="factory_set")]
+    public function get sliderLabels():Array {
+        return SliderEditorFactory(_factory) == null ? ["0","100"] : SliderEditorFactory(_factory).labels;
+    }
+
+    [Bindable(event="tag_changed")]
+    private function get translatedValue():Number {
+        var validatedValue:Number = getValidatedValue();
+        return isNaN(validatedValue) ? SliderEditorFactory(_factory).defaultValue : validatedValue;
+    }
+
+    [Bindable(event="tag_changed")]
+    private function get isValueValid():Boolean {
+        var validatedValue:Number = getValidatedValue();
+        return !isNaN(validatedValue);
+    }
+
+    private function getValidatedValue():Number {
+        var valueStr:String = value;
+        if ( valueStr == null || valueStr == "" )
+            return SliderEditorFactory(_factory).defaultValue;
+
+        var parsed:Number = parseFloat(value);
+        if ( isNaN(parsed) || parsed < sliderMinimum || parsed > sliderMaximum )
+            return Number.NaN;
+        return parsed;
+    }
+	
+  ]]></mx:Script>
+</edit:SingleTagEditor>
+
