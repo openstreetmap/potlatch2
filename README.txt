@@ -8,14 +8,19 @@ Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex fram
 
 === What you'll need ===
 
-* Flex SDK - http://www.adobe.com/products/flex/ (free, OS X/Windows/Linux) (Use version 3 and NOT version 4 as there is a compatibility issue)
+* Flex SDK 3.4 or 3.5 - http://www.adobe.com/products/flex/ (free, OS X/Windows/Linux)
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
 
+***Do not use FlexSDK <= 3.3 or > 4***. There are compatibility errors with version 4, and 3.3
+and earlier have this bug: http://bugs.adobe.com/jira/browse/SDK-16705 which is a major issue for the
+tag editors.
+
 You'll only need OSM Rails port installed on your local machine if you are doing hard-core 
 server-communication coding, but if generally you can use the dev server at api06.dev.openstreetmap.org
 for development and testing.
+
 
 === How to compile and run ===
 
