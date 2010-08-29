@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edit:SingleTagEditor
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
+	xmlns:flexlib="flexlib.controls.*"
+	verticalGap="0"
+	width="100%"
+	toolTip="{fieldDescription}"
+    direction="{fieldDirection}" styleName="titledEditor">
+
+	<mx:Label text="{fieldName}:"/>
+    <mx:HBox horizontalGap="3" verticalAlign="middle">
+	    <mx:NumericStepper id="input"
+                 minimum="{minimum}" maximum="{maximum}"
+                 stepSize="{stepSize}"
+                 value="{translatedValue}"
+                 enabled="{isValueValid}"
+				 change="value = input.value.toString()" />
+        <mx:Label text="{prompt}" visible="{value == null || value == ''}"/>
+    </mx:HBox>
+
+  <mx:Script><![CDATA[
+    [Bindable(event="factory_set")]
+    protected function get prompt():String {
+        return _factory == null ? null : NumberEditorFactory(_factory).notPresentText;
+    }
+
+    [Bindable(event="factory_set")]
+    public function get minimum():Number {
+        return NumberEditorFactory(_factory) == null ? 0 : NumberEditorFactory(_factory).minimum;
+    }
+
+    [Bindable(event="factory_set")]
+    public function get maximum():Number {
+        return NumberEditorFactory(_factory) == null ? 100 : NumberEditorFactory(_factory).maximum;
+    }
+
+    [Bindable(event="factory_set")]
+    public function get stepSize():Number {
+        return NumberEditorFactory(_factory) == null ? 1 : NumberEditorFactory(_factory).stepSize;
+    }
+
+    [Bindable(event="tag_changed")]
+    private function get translatedValue():Number {
+        var validatedValue:Number = getValidatedValue();
+        return validatedValue;
+    }
+
+    [Bindable(event="tag_changed")]
+    private function get isValueValid():Boolean {
+        var validatedValue:Number = getValidatedValue();
+        return !(isNaN(validatedValue) && value != null && value != "");
+    }
+
+    private function getValidatedValue():Number {
+        var valueStr:String = value;
+        if ( valueStr == null || valueStr == "" )
+            return Number.NaN;
+
+        var parsed:Number = parseFloat(value);
+        if ( isNaN(parsed) || parsed < minimum || parsed > maximum )
+            return Number.NaN;
+        return parsed;
+    }
+	
+  ]]></mx:Script>
+</edit:SingleTagEditor>
+

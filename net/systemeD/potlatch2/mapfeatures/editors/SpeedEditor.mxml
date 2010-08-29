@@ -3,7 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	toolTip="{fieldDescription}"
-	verticalGap="0">
+	direction="horizontal" styleName="titledEditor">
 
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"

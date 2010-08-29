@@ -4,12 +4,11 @@
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	width="100%"
-	toolTip="{fieldDescription}">
+	toolTip="{fieldDescription}"
+    direction="{fieldDirection}" styleName="titledEditor">
 
-  <mx:Box direction="{fieldDirection}" styleName="titledEditor">
   <mx:Label text="{fieldName}:"/>
   <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" change="value = inputBox.text"/>
-  </mx:Box>
 
   <mx:Script><![CDATA[
   

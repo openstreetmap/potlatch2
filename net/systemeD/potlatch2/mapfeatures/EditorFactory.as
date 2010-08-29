@@ -19,6 +19,7 @@ package net.systemeD.potlatch2.mapfeatures {
             case "checkbox": return new CheckboxEditorFactory(inputXML);
             case "choice": return new ChoiceEditorFactory(inputXML);
             case "slider": return new SliderEditorFactory(inputXML);
+            case "number": return new NumberEditorFactory(inputXML);
             case "speed": return new SpeedEditorFactory(inputXML);
             case "route": return new RouteEditorFactory(inputXML);
             case "turn": return new TurnRestrictionEditorFactory(inputXML);

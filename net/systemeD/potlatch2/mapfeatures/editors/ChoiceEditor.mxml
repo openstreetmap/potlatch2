@@ -2,10 +2,9 @@
 <edit:SingleTagEditor
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
-	verticalGap="0"
-	toolTip="{fieldDescription}">
+	toolTip="{fieldDescription}"
+    direction="{fieldDirection}" styleName="titledEditor">
 
-<mx:Box direction="{fieldDirection}" styleName="titledEditor">
   <mx:Label text="{fieldName}:"/>
   <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
       change="value = inputBox.selectedItem.value"
@@ -19,7 +18,6 @@
         </mx:Component>
       </edit:itemRenderer>
   </edit:ChoiceComboBox>
-</mx:Box>
 
   <mx:Script><![CDATA[
       import mx.collections.*;

@@ -5,14 +5,14 @@
 	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
 	width="100%"
-	toolTip="{fieldDescription}">
+	toolTip="{fieldDescription}"
+    direction="horizontal">
 
-	<mx:HBox>
 	<mx:Label text="{fieldName}:"/>
 	<mx:CheckBox id="inputBox" creationComplete="initCheckbox()"
 				 labelPlacement="right" label=""
 				 change="value=toYesNo()" />
-	</mx:HBox>
+
   <mx:Script><![CDATA[
   
 	protected function initCheckbox():void {

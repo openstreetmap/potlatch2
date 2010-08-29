@@ -203,10 +203,6 @@ Quick documentation:
   </inputSet>
   
   <inputSet id="roadPhysical">
-    <input type="slider" presence="onTagMatch"
-        name="Layer" category="Physical" description="Relative vertical positions (-5 lowest, +5 highest)"
-        key="layer" minimum="-5" maximum="5" default="0" snapInterval="1" labels="Lowest,Ground,Highest"
-        defaultName="Ground"/>
     <input type="freetext" presence="onTagMatch"
         name="Width" category="Physical"
         key="width" description="Width of the road" layout="horizontal"/>
@@ -230,24 +226,8 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="roadLanes">
-    <!-- slider not implemented...-->
-    <!--    <input presence="always" type="slider" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
-           key="lanes" min="1" max="10" default="2"/>-->
-
-    <input presence="onTagMatch" type="choice" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
-       key="lanes" default="2">
-      <choice value="1" text="1" />
-      <choice value="2" text="2" />
-      <choice value="3" text="3" />
-      <choice value="4" text="4" />
-      <choice value="5" text="5" />
-      <choice value="6" text="6" />
-      <choice value="7" text="7" />
-      <choice value="8" text="8" />
-      <choice value="9" text="9" />
-      <choice value="10" text="10" />
-    </input>
-
+    <input presence="onTagMatch" type="number" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
+           key="lanes" minimum="1" maximum="10" layout="horizontal"/>
   </inputSet>
   
   <inputSet id="bridge">
@@ -258,7 +238,11 @@ Quick documentation:
       <choice value="viaduct" text="Viaduct" description="Viaduct"/>
       <choice value="suspension" text="Suspension bridge"/>
     </input>
-  </inputSet>
+    <input type="slider" presence="onTagMatch"
+        name="Layer" category="Physical" description="Relative vertical positions (-5 lowest, +5 highest)"
+        key="layer" minimum="-5" maximum="5" default="0" snapInterval="1" labels="Lowest,Ground,Highest"
+        defaultName="Ground"/>
+    </inputSet>
   <inputSet id="tunnel">
     <input type="choice" presence="onTagMatch"
         name="Tunnel" category="Physical" description="Road goes into a tunnel"
@@ -2016,7 +2000,7 @@ Quick documentation:
     <tag k="amenity" v="parking"/>
     <inputSet ref="names"/>
     <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
-    <input type="freetext" presence="always" category="Parking" name="Capacity" key="capacity" description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
+    <input type="number" minimum="0" maximum="99999" stepSize="1" presence="always" category="Parking" name="Capacity" key="capacity" description="The number of cars that can be parked in the car park"/>
     <inputSet ref="fee"/>
   </feature>
   
@@ -2030,7 +2014,9 @@ Quick documentation:
     <tag k="amenity" v="bicycle_parking"/>
     <inputSet ref="names"/>
     <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
-    <input type="freetext" presence="always" category="Cycle" name="Capacity" key="capacity" description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
+    <input type="number" minimum="0" maximum="99999" stepSize="1" 
+        presence="always" category="Cycle" name="Capacity" key="capacity"
+        description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
     <inputSet ref="fee"/>
     <input type="choice" presence="always" category="Cycle" name="Covered" key="covered" description="Is the cycle parking covered, so that the bikes are kept dry?">
       <choice value="yes" text="Yes"/>

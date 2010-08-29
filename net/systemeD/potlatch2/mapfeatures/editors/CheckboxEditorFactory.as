@@ -11,7 +11,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
         public function CheckboxEditorFactory(inputXML:XML) {
             super(inputXML);
             _notPresentText = inputXML.hasOwnProperty("@absenceText") ? String(inputXML.@absenceText) : "Unset";
-            _notBooleanText = inputXML.hasOwnProperty("@invalidText") ? String(inputXML.@absenceText) : "Not yes/no";
+            _notBooleanText = inputXML.hasOwnProperty("@invalidText") ? String(inputXML.@invalidText) : "Not yes/no";
         }
         
         override protected function createSingleTagEditor():SingleTagEditor {

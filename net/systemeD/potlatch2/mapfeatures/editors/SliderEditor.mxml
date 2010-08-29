@@ -5,9 +5,9 @@
 	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
 	width="100%"
-	toolTip="{fieldDescription}">
+	toolTip="{fieldDescription}"
+    direction="horizontal" styleName="titledEditor">
 
-	<mx:HBox styleName="titledEditor">
 	<mx:Label text="{fieldName}:"/>
 	<mx:HSlider id="inputSlider"
                  minimum="{sliderMinimum}" maximum="{sliderMaximum}"
@@ -17,7 +17,7 @@
                  enabled="{isValueValid}"
                  liveDragging="true"
 				 change="setTagValueFromSlider()" />
-	</mx:HBox>
+
   <mx:Script><![CDATA[
 
     private function setTagValueFromSlider():void {
