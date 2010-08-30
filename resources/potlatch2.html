@@ -13,10 +13,42 @@
 </div>
 
 <script>
+	function getArgs() {
+		var args = new Object();
+		var query = location.search.substring(1);
+		var pairs = query.split("&");
+		for(var i = 0; i < pairs.length; i++) {
+			var pos = pairs[i].indexOf('=');
+			if (pos == -1) continue;
+			var argname = pairs[i].substring(0,pos);
+			var value = pairs[i].substring(pos+1);
+			args[argname] = unescape(value);
+		}
+		return args;
+	}
+
+	var args = getArgs();
+	var lat;
+	var lon;
+	var zoom;
+	if (args.lat && args.lon) {
+		lat = parseFloat(args.lat);
+		lon = parseFloat(args.lon);
+	} else {
+		lat=51.875;
+		lon=-1.492;
+	}
+
+	if (args.zoom) {
+		zoom = parseInt(args.zoom);
+	} else {
+		zoom = 16;
+	}
+
 	var fo = new SWFObject("potlatch2.swf?d="+Math.round(Math.random()*1000), "map", "100%", "100%", "9", "#FFFFFF");
-	fo.addVariable("lat",51.875);
-	fo.addVariable("lon",-1.492);
-	fo.addVariable("zoom",16);
+	fo.addVariable("lat",lat);
+	fo.addVariable("lon",lon);
+	fo.addVariable("zoom",zoom);
 	fo.addVariable("api","http://api06.dev.openstreetmap.org/api/0.6/");
 	fo.addVariable("policy","http://api06.dev.openstreetmap.org/api/crossdomain.xml");
 	fo.addVariable("connection","XML");
