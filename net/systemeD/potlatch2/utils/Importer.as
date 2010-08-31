@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.utils {
 
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.ExtendedURLLoader;
+	import net.systemeD.halcyon.DebugURLRequest;
 	import flash.net.URLLoader;
 	import flash.display.LoaderInfo;
 	import flash.events.*;
@@ -34,6 +35,7 @@ package net.systemeD.potlatch2.utils {
 			for each (var fn:String in filenames) {
 				Globals.vars.root.addDebug("requesting file "+fn); 
 
+				var request:DebugURLRequest = new DebugURLRequest(fn);
 				var loader:ExtendedURLLoader = new ExtendedURLLoader();
 				loader.info['file']=sp;
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
@@ -42,7 +44,7 @@ package net.systemeD.potlatch2.utils {
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
 				}
-				loader.load(new URLRequest(fn));
+				loader.load(request.request);
 				sp++;
 			}
 		}

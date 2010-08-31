@@ -60,7 +60,6 @@ Requested enhancements
 
 == Other core ==
 
-* Disable caching (i.e. set all URLRequests to POST) if URL parameter passed
 * Non-900913 projections
 * Plugin support
 * Support undo / redo across saving events

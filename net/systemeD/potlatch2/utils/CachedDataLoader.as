@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.utils {
 	import mx.graphics.codec.PNGEncoder;
 
     import net.systemeD.halcyon.ExtendedURLLoader;
+	import net.systemeD.halcyon.DebugURLRequest;
 
 	public class CachedDataLoader {
 
@@ -24,12 +25,13 @@ package net.systemeD.potlatch2.utils {
 		        requests = [];
 		        requestsMade[url] = requests;
 
+				var request:DebugURLRequest = new DebugURLRequest(url);
        		    var loader:ExtendedURLLoader = new ExtendedURLLoader();
     		    loader.info = url;
                 loader.addEventListener(Event.COMPLETE, imageLoaded);
                 loader.addEventListener(IOErrorEvent.IO_ERROR, imageLoadFailed);
                 loader.dataFormat = URLLoaderDataFormat.BINARY;
-                loader.load(new URLRequest(url));
+                loader.load(request.request);
 		    }
 		    requests.push(onLoadHandler);
 		    

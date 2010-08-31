@@ -4,6 +4,7 @@ package net.systemeD.halcyon.styleparser {
 	import flash.net.*;
 	import net.systemeD.halcyon.ExtendedLoader;
 	import net.systemeD.halcyon.ExtendedURLLoader;
+	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.Entity;
 
     import net.systemeD.halcyon.connection.*;
@@ -241,16 +242,16 @@ package net.systemeD.halcyon.styleparser {
 		public function loadFromCSS(str:String):void {
 			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); loaded=true; redrawCallback(); return; }
 
-			var request:URLRequest=new URLRequest(str+"?"+Math.random());
+			var request:DebugURLRequest=new DebugURLRequest(str);
 			var loader:URLLoader=new URLLoader();
 
-			request.method=URLRequestMethod.GET;
+//			request.method=URLRequestMethod.GET;
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			loader.addEventListener(Event.COMPLETE, 					doParseCSS);
 			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler);
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
 			loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
-			loader.load(request);
+			loader.load(request.request);
 		}
 
 		private function doParseCSS(e:Event):void {
@@ -280,7 +281,7 @@ package net.systemeD.halcyon.styleparser {
 					if (filename=='square' || filename=='circle') { continue; }
 				
 					iconsToLoad++;
-					var request:URLRequest=new URLRequest(filename);
+					var request:DebugURLRequest=new DebugURLRequest(filename);
 					var loader:ExtendedURLLoader=new ExtendedURLLoader();
 					loader.dataFormat=URLLoaderDataFormat.BINARY;
 					loader.info['filename']=filename;
@@ -288,7 +289,7 @@ package net.systemeD.halcyon.styleparser {
 					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
-					loader.load(request);
+					loader.load(request.request);
 				}
 			}
 		}

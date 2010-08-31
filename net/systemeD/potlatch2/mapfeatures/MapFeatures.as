@@ -3,13 +3,12 @@ package net.systemeD.potlatch2.mapfeatures {
     import flash.events.EventDispatcher;
     import flash.events.Event;
     import flash.net.URLLoader;
-    import flash.net.URLRequest;
 
 	import flash.system.Security;
 	import flash.net.*;
 
     import net.systemeD.halcyon.connection.*;
-
+	import net.systemeD.halcyon.DebugURLRequest;
 
 	public class MapFeatures extends EventDispatcher {
         private static var instance:MapFeatures;
@@ -29,10 +28,10 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _categories:Array = null;
 
         protected function loadFeatures():void {
-            var request:URLRequest = new URLRequest("map_features.xml?"+Math.random());
+            var request:DebugURLRequest = new DebugURLRequest("map_features.xml");
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, onFeatureLoad);
-            loader.load(request);
+            loader.load(request.request);
         }
 
         internal function get definition():XML {

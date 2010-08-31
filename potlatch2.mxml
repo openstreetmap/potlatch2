@@ -117,15 +117,15 @@
 			if (objChanged) { obj.flush(); }
 
 			// load imagery and style XML
-	        var request:URLRequest = new URLRequest("imagery.xml?"+Math.random());
+	        var request:DebugURLRequest = new DebugURLRequest("imagery.xml");
 	        var loader:URLLoader = new URLLoader();
 	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
-	        loader.load(request);
+	        loader.load(request.request);
 
-			var request2:URLRequest = new URLRequest("stylesheets.xml?"+Math.random());
+			var request2:DebugURLRequest = new DebugURLRequest("stylesheets.xml");
 			var loader2:URLLoader = new URLLoader();
 	        loader2.addEventListener(Event.COMPLETE, onStylesheetsLoad);
-	        loader2.load(request2);
+	        loader2.load(request2.request);
 
 			// map backdrop object
             var w:uint = map_area.width;
