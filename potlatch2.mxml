@@ -268,24 +268,37 @@
 			var xml:XML = new XML(URLLoader(event.target).data);
 			var saved_url:String = SharedObject.getLocal("user_state").data['stylesheet_url'];
 			var saved_name:String= SharedObject.getLocal("user_state").data['stylesheet_name'];
-			var xml_url:String, xml_name:String, isSet:Boolean=false;
-			if (!saved_url) { saved_url='potlatch.css'; saved_name='Potlatch'; }
-			
-			// create menu
+			var xml_url:String, xml_name:String, isInMenu:Boolean=false, isSet:Boolean=false;
+
+            // first, build the menu from the stylesheet list.
+            // Also ensure the saved_url is in the menu (might be either saved from before, or supplied via loaderInfo)
             theController.stylesheets=new Array();
 			for each(var set:XML in xml.stylesheet) {
 				xml_url= set.child("url");
 				xml_name=set.child("name");
                 theController.stylesheets.push({ label:xml_name, data:xml_url });
-				if (xml_url==saved_url || (xml_name==saved_name && xml_name!='Custom')) { isSet=true; }
+				if (xml_url==saved_url || (xml_name==saved_name && xml_name!='Custom')) { isInMenu=true; }
 			}
-			if (!isSet) { theController.stylesheets.push({ label:saved_name, data:saved_url }); }
+			if (saved_url && !isInMenu) { theController.stylesheets.push({ label:saved_name, data:saved_url }); }
 
-			for each (var bg:Object in theController.stylesheets) {
-				if (bg['label']==saved_name || bg['data']==saved_url) { 
-					setStylesheet(bg['label'], bg['data']);
+            // pick a stylesheet to be set. It should be the saved one, if it is in the menu
+            // or alternatively the first one on the menu,
+            // or finally try 'potlatch.css'
+			for each (var ss:Object in theController.stylesheets) {
+				if (ss['label']==saved_name || ss['data']==saved_url) {
+					setStylesheet(ss['label'], ss['data']);
+                    isSet = true;
+                    break;
 				}
 			}
+            if (!isSet && theController.stylesheets.length > 0) {
+                var s:Object = theController.stylesheets[0];
+                setStylesheet(s['label'], s['data']);
+            } else {
+                //hit and hope. FIXME should this be an error state?
+                theController.stylesheets.push({ label:'Potlatch', data:'potlatch.css'});
+                setStylesheet('Potlatch','potlatch.css');
+            }
 		}
 
 		public function setStylesheet(name:String,url:String):void {
