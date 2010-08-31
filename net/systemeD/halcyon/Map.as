@@ -428,11 +428,10 @@ package net.systemeD.halcyon {
 		// Miscellaneous events
 		
 		public function keyUpHandler(event:KeyboardEvent):void {
-			if ( !event.ctrlKey ) return;
 			addDebug("pressed "+event.keyCode);
-			if (event.keyCode==73) { zoomIn(); }			// I - zoom in
-			if (event.keyCode==79) { zoomOut(); } 			// O - zoom out
-			if (event.keyCode==76) { reportPosition(); }	// L - report lat/long
+			if (event.keyCode==33) { zoomIn(); }			// Page Up - zoom in
+			if (event.keyCode==34) { zoomOut(); } 			// Page Down - zoom out
+//			if (event.keyCode==76) { reportPosition(); }	// L - report lat/long
 		}
 
 		public function connectionError(err:Object=null): void {

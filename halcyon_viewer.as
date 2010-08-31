@@ -27,6 +27,7 @@ package {
             theMap.updateSize(stage.stageWidth, stage.stageHeight);
 			addChild(theMap);
 			Globals.vars.root=theMap;
+			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
 
 			// add debug field
 			var t:TextField=new TextField();

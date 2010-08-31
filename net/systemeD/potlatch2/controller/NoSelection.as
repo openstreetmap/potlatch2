@@ -18,9 +18,13 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
+			var cs:ControllerState = sharedMouseEvents(event, entity);
+			if (cs) return cs;
+
+			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if (event.type==MouseEvent.MOUSE_UP && focus==null && map.dragstate!=map.DRAGGING) {
+			if (event.type==MouseEvent.MOUSE_UP && (focus==null || (paint && paint.isBackground)) && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
 				var undo:CompositeUndoableAction = new BeginWayAction();
 				var startNode:Node = controller.connection.createNode(
@@ -31,8 +35,7 @@ package net.systemeD.potlatch2.controller {
 				MainUndoStack.getGlobalStack().addAction(undo);
 				return new DrawWay(way, true, false);
 			}
-			var cs:ControllerState = sharedMouseEvents(event, entity);
-			return cs ? cs : this;
+			return this;
 		}
 		
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {

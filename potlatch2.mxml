@@ -100,6 +100,7 @@
 			Globals.vars.map_area = map_area;
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
 			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
+			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
 
 			// populate sharedObject with loaderInfo parameters if supplied
 			var obj:SharedObject = SharedObject.getLocal("user_state");

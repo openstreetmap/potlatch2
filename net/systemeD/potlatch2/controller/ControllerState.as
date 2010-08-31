@@ -64,12 +64,13 @@ package net.systemeD.potlatch2.controller {
 
 			if ( paint && paint.isBackground ) {
 				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
-					// pull data out of vector background layer
+					// alt-click to pull data out of vector background layer
 					var newEntity:Entity=paint.findSource().pullThrough(entity,controller.connection);
 					if (entity is Way) { return new SelectedWay(newEntity as Way); }
 					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
-				}
-				return (this is NoSelection) ? this : new NoSelection();
+				} else if ( event.type == MouseEvent.MOUSE_UP ) { 
+					return (this is NoSelection) ? null : new NoSelection();
+				} else { return null; }
 			}
 
 			if ( event.type == MouseEvent.MOUSE_DOWN ) {
@@ -89,8 +90,8 @@ package net.systemeD.potlatch2.controller {
 					// drag map
 					return new DragBackground(event);
 				}
-			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING ) {
-				return new NoSelection();
+			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING) {
+				return (this is NoSelection) ? null : new NoSelection();
 			} else if ( event.type == MouseEvent.ROLL_OVER ) {
 				controller.map.setHighlight(focus, { hover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
