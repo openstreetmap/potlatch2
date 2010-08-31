@@ -13,7 +13,6 @@ Potlatch 2: main outstanding issues
 * Load from local file (Flash Player 10 only)
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Connectivity isn't preserved when bringing ways through (e.g. from OSM layer)
-* Should disable most forms of editing for vector layers
 
 == Saving ==
 
@@ -21,7 +20,6 @@ Potlatch 2: main outstanding issues
 
 == Tag editing ==
 
-* Adding a new relation (e.g. cycle route) to a way which already has one can cause only the new one to be displayed
 * initialiseEditors is quite slow (typically 150ms)
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
 

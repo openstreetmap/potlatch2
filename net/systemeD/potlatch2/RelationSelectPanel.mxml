@@ -19,7 +19,7 @@
 
         public function init(e:Entity, t:Object):void {
           entity = e;
-		  tags = t;
+          tags = {}; for (var k:String in t) { tags[k]=t[k]; }	// deep copy tags
           PopUpManager.addPopUp(this, Application(Application.application), true);
           PopUpManager.centerPopUp(this);
     

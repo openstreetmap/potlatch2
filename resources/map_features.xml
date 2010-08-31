@@ -392,6 +392,7 @@ Quick documentation:
     <inputSet ref="bicycle-permission" />
     <input type="route" name="National Cycle Route" description="A signposted route in the UK's National Cycle Network, or nearest equivalent." category="Cycle" priority="normal">
        <match k="type" v="route"/>
+       <match k="route" v="bicycle"/>
        <match k="network" v="ncn"/>
        <icon image="features/cycle__ncn.png" background="red" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
@@ -400,6 +401,7 @@ Quick documentation:
     </input>
     <input type="route" name="Regional Cycle Route" description="A signposted route in the UK's Regional Cycle Network, or nearest equivalent." category="Cycle" priority="low">
        <match k="type" v="route"/>
+       <match k="route" v="bicycle"/>
        <match k="network" v="rcn"/>
        <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
@@ -408,6 +410,7 @@ Quick documentation:
     </input>
     <input type="route" name="Local Cycle Route" description="A signposted route in the UK's Local Cycle Network, or nearest equivalent." category="Cycle" priority="lowest">
        <match k="type" v="route"/>
+       <match k="route" v="bicycle"/>
        <match k="network" v="lcn"/>
        <icon image="features/cycle__lcn.png" background="blue" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
