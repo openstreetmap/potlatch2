@@ -134,6 +134,7 @@ package net.systemeD.potlatch2.controller {
 
         /* Fix up the elastic after a WayNode event - e.g. triggered by undo */
         private function fixElastic(event:Event):void {
+            if (selectedWay == null) return;
             var node:Node
             if (editEnd) {
               node = selectedWay.getNode(selectedWay.length-1);
