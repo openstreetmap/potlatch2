@@ -57,9 +57,11 @@ package net.systemeD.halcyon {
 		private var lastymouse:Number;					//  |
 		private var downX:Number;						//  |
 		private var downY:Number;						//  |
+		private var downTime:Number;					//  |
 		public const NOT_DRAGGING:uint=0;				//  |
 		public const NOT_MOVED:uint=1;					//  |
 		public const DRAGGING:uint=2;					//  |
+		public const TOLERANCE:uint=7;					//  |
 		
 		public var initparams:Object;					// object containing HTML page parameters
 
@@ -389,8 +391,9 @@ package net.systemeD.halcyon {
 		public function mouseDownHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
 			dragstate=NOT_MOVED;
-			lastxmouse=downX=mouseX;
-			lastymouse=downY=mouseY;
+			lastxmouse=mouseX; downX=stage.mouseX;
+			lastymouse=mouseY; downY=stage.mouseY;
+			downTime=new Date().getTime();
 		}
         
 		public function mouseUpHandler(event:MouseEvent=null):void {
@@ -406,11 +409,15 @@ package net.systemeD.halcyon {
 			if (!_draggable) { return; }
 			if (dragstate==NOT_DRAGGING) { return; }
 			
-			if (dragstate==NOT_MOVED && Math.abs(downX - mouseX) < 3 && Math.abs(downY - mouseY) < 3) {
-				return;
+			if (dragstate==NOT_MOVED) {
+				if (new Date().getTime()-downTime<300) {
+					if (Math.abs(downX-stage.mouseX)<=TOLERANCE   && Math.abs(downY-stage.mouseY)<=TOLERANCE  ) return;
+				} else {
+					if (Math.abs(downX-stage.mouseX)<=TOLERANCE/2 && Math.abs(downY-stage.mouseY)<=TOLERANCE/2) return;
+				}
+				dragstate=DRAGGING;
 			}
 			
-			dragstate=DRAGGING;
 			x+=mouseX-lastxmouse;
 			y+=mouseY-lastymouse;
 			lastxmouse=mouseX; lastymouse=mouseY;
