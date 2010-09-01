@@ -83,6 +83,7 @@
         import mx.events.DragEvent;
         import mx.managers.DragManager;
         import mx.core.DragSource;
+        import mx.controls.Alert;
 
         public var theMap:Map;
         public var theController:EditController;
@@ -188,11 +189,16 @@
             conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
             conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
             conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
+			conn.addEventListener(MapEvent.ERROR, onMapError);
 
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
 		}
 		
+		public function onMapError(event:MapEvent):void {
+			Alert.show(event.params.message, 'Error', mx.controls.Alert.OK);
+		}
+
         public function onResizeMap():void {
             if ( theMap != null )
                 theMap.updateSize(map_area.width, map_area.height);

@@ -5,9 +5,8 @@ package net.systemeD.halcyon.connection {
 	import flash.system.Security;
 	import flash.net.*;
     import org.iotashan.oauth.*;
-	import mx.controls.Alert;
 
-	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.MapEvent;
 
 	public class XMLConnection extends XMLBaseConnection {
 
@@ -40,7 +39,7 @@ package net.systemeD.halcyon.connection {
 		}
 
         private function errorOnMapLoad(event:Event):void {
-			Alert.show("Couldn't load the map", 'Error', mx.controls.Alert.OK);
+			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map" } ));
         }
         private function mapLoadStatus(event:HTTPStatusEvent):void {
             trace("loading map status = "+event.status);
@@ -181,7 +180,7 @@ package net.systemeD.halcyon.connection {
         }
 
         private function diffUploadError(event:IOErrorEvent):void {
-			Alert.show("Couldn't upload data: "+httpStatus+" "+event.text, 'Error', mx.controls.Alert.OK);
+			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't upload data: "+httpStatus+" "+event.text } ));
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
         }
 
