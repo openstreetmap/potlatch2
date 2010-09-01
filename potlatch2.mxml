@@ -297,13 +297,15 @@
                     break;
 				}
 			}
-            if (!isSet && theController.stylesheets.length > 0) {
+            if (!isSet) {
+              if(theController.stylesheets.length > 0) {
                 var s:Object = theController.stylesheets[0];
                 setStylesheet(s['label'], s['data']);
-            } else {
+              } else {
                 //hit and hope. FIXME should this be an error state?
                 theController.stylesheets.push({ label:'Potlatch', data:'potlatch.css'});
                 setStylesheet('Potlatch','potlatch.css');
+              }
             }
 		}
 
