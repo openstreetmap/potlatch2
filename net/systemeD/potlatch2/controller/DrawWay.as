@@ -202,6 +202,8 @@ package net.systemeD.potlatch2.controller {
 			var node:Node;
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Remove node");
 			var newDraw:int;
+            var state:ControllerState;
+
 			if (editEnd) {
 				node=selectedWay.getNode(selectedWay.length-1);
 				selectedWay.removeNodeByIndex(selectedWay.length-1, undo.push);
@@ -216,15 +218,18 @@ package net.systemeD.potlatch2.controller {
 				controller.connection.unregisterPOI(node);
 				node.remove(undo.push);
 			}
-			MainUndoStack.getGlobalStack().addAction(undo);
 
-			if (newDraw>=0 && newDraw<=selectedWay.length-1) {
+			if (newDraw>=0 && newDraw<=selectedWay.length-2) {
 				var mouse:Point = new Point(selectedWay.getNode(newDraw).lon, selectedWay.getNode(newDraw).latp);
 				elastic.start = mouse;
-				return this;
+				state = this;
 			} else {
-				return new NoSelection();
+                selectedWay.remove(undo.push);
+                state = new NoSelection();
 			}
+
+            performAction(undo);
+            return state;
 		}
 		
 		override public function enterState():void {
