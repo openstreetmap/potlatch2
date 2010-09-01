@@ -47,7 +47,15 @@ package net.systemeD.halcyon.connection {
             return false;
         }
 
-		// ** we could do with hasInterestingTags - don't bother with source, created_by, any TIGER tags, etc.
+        public function hasInterestingTags():Boolean {
+            for (var key:String in tags) {
+              if (key != "attribution" && key != "created_by" && key != "source" && key.indexOf('tiger:') != 0) {
+                //trace(key);
+                return true;
+              }
+            }
+            return false;
+        }
 
         public function getTag(key:String):String {
             return tags[key];

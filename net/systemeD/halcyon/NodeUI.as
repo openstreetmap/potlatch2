@@ -51,6 +51,7 @@ package net.systemeD.halcyon {
 			var tags:Object = entity.getTagsCopy();
 			tags=applyStateClasses(tags);
 			if (!entity.hasParentWays) { tags[':poi']='yes'; }
+            if (entity.hasInterestingTags()) { tags[':hasTags']='yes'; }
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
 				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
 			}
