@@ -47,6 +47,7 @@ package net.systemeD.halcyon {
 		
 		private function wayNodeAdded(event:WayNodeEvent):void {
 		    event.node.addEventListener(Connection.NODE_MOVED, nodeMoved);
+            recalculate();
 		    redraw();
 			redrawMultis();
 		}
@@ -58,6 +59,7 @@ package net.systemeD.halcyon {
 			if (paint.nodeuis[event.node.id]) {
 				paint.nodeuis[event.node.id].redraw();
 			}
+            recalculate();
 		    redraw();
 			redrawMultis();
 		}
