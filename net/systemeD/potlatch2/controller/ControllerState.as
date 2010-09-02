@@ -94,6 +94,8 @@ package net.systemeD.potlatch2.controller {
 				}
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING) {
 				return (this is NoSelection) ? null : new NoSelection();
+			} else if ( event.type == MouseEvent.MOUSE_UP && focus && map.dragstate==map.DRAGGING) {
+				map.mouseUpHandler();	// in case the end-drag is over an EntityUI
 			} else if ( event.type == MouseEvent.ROLL_OVER ) {
 				controller.map.setHighlight(focus, { hover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {

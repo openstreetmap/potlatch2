@@ -180,6 +180,12 @@ package net.systemeD.halcyon {
 			this.dispatchEvent(new MapEvent(MapEvent.NUDGE_BACKGROUND, { x: x, y: y }));
 		}
 
+		private function moveMap(dx:Number,dy:Number):void {
+			updateCoords(x+dx,y+dy);
+			updateEntityUIs(false, false);
+			download();
+		}
+
 		// Co-ordinate conversion functions
 
 		public function latp2coord(a:Number):Number	{ return -(a-basey)*scalefactor; }
@@ -397,11 +403,7 @@ package net.systemeD.halcyon {
 		}
         
 		public function mouseUpHandler(event:MouseEvent=null):void {
-			if (dragstate==DRAGGING) {
-				updateCoords(x,y);
-				updateEntityUIs(false, false);
-				download();
-			}
+			if (dragstate==DRAGGING) { moveMap(0,0); }
 			dragstate=NOT_DRAGGING;
 		}
         
@@ -436,9 +438,15 @@ package net.systemeD.halcyon {
 		
 		public function keyUpHandler(event:KeyboardEvent):void {
 			addDebug("pressed "+event.keyCode);
-			if (event.keyCode==33) { zoomIn(); }			// Page Up - zoom in
-			if (event.keyCode==34) { zoomOut(); } 			// Page Down - zoom out
-//			if (event.keyCode==76) { reportPosition(); }	// L - report lat/long
+			switch (event.keyCode) {
+				case 33:	zoomIn(); break;					// Page Up - zoom in
+				case 34:	zoomOut(); break;					// Page Down - zoom out
+				case 37:	moveMap(mapwidth/2,0); break;		// left cursor
+				case 38:	moveMap(0,mapheight/2); break;		// up cursor
+				case 39:	moveMap(-mapwidth/2,0); break;		// right cursor
+				case 40:	moveMap(0,-mapheight/2); break;		// down cursor
+//				case 76:	reportPosition(); break;			// L - report lat/long
+			}
 		}
 
 		public function connectionError(err:Object=null): void {
