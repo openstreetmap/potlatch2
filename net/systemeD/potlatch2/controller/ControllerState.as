@@ -6,6 +6,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.potlatch2.save.SaveManager;
 
     public class ControllerState {
 
@@ -51,7 +52,9 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
+				case 67:	controller.connection.closeChangeset(); break;							// C - close changeset
 				case 68:	controller.map.paint.alpha=1.3-controller.map.paint.alpha; return null;	// D - dim
+				case 83:	SaveManager.saveChanges(); break;										// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 87:	if (selectedWay) { return new SelectedWay(selectedWay); }; return null;	// W - select way
 				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z - undo

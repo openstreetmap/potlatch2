@@ -156,16 +156,6 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-        protected function setActiveChangeset(changeset:Changeset):void {
-            this.changeset = changeset;
-			changesetUpdated = new Date().getTime();
-            sendEvent(new EntityEvent(NEW_CHANGESET, changeset),false);
-        }
-
-		protected function freshenActiveChangeset():void {
-			changesetUpdated = new Date().getTime();
-		}
-        
         public function getNode(id:Number):Node {
             return nodes[id];
         }
@@ -302,14 +292,6 @@ package net.systemeD.halcyon.connection {
 			return o;
 		}
 
-        public function getActiveChangeset():Changeset {
-			// ** FIXME - should be able to manually close changesets
-			if (changeset && (new Date().getTime()) > (changesetUpdated+58*60*1000)) {
-				changeset=null;
-			}
-            return changeset;
-        }
-        
 		public function purgeOutside(left:Number, right:Number, top:Number, bottom:Number):void {
 			return;
 			// ** this doesn't work - WayUIs stick around.
@@ -333,6 +315,30 @@ package net.systemeD.halcyon.connection {
 			return modified;
 		}
 
+		// Changeset tracking
+
+        protected function setActiveChangeset(changeset:Changeset):void {
+            this.changeset = changeset;
+			changesetUpdated = new Date().getTime();
+            sendEvent(new EntityEvent(NEW_CHANGESET, changeset),false);
+        }
+
+		protected function freshenActiveChangeset():void {
+			changesetUpdated = new Date().getTime();
+		}
+		
+		protected function closeActiveChangeset():void {
+			changeset = null;
+		}
+        
+        public function getActiveChangeset():Changeset {
+			if (changeset && (new Date().getTime()) > (changesetUpdated+58*60*1000)) {
+				closeActiveChangeset();
+			}
+            return changeset;
+        }
+        
+
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
 		public function loadBbox(left:Number, right:Number,
@@ -342,6 +348,7 @@ package net.systemeD.halcyon.connection {
 	    public function setAppID(id:Object):void {}
 	    public function setAuthToken(id:Object):void {}
 	    public function createChangeset(tags:Object):void {}
+		public function closeChangeset():void {}
 	    public function uploadChanges():void {}
     }
 

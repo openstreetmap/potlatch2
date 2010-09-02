@@ -76,24 +76,9 @@ package net.systemeD.halcyon.connection {
               changesetXML.changeset.appendChild(tagXML);
             }        
 
-            // make an OAuth query
-            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
-            var url:String = Connection.apiBaseURL+"changeset/create";
-            //var params:Object = { _method: "PUT" };
-            var oauthRequest:OAuthRequest = new OAuthRequest("PUT", url, null, appID, authToken);
-            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
-
-            // build the actual request
-            var urlReq:URLRequest = new URLRequest(String(urlStr));
-            urlReq.method = "POST";
-            urlReq.data = changesetXML.toXMLString();
-            urlReq.contentType = "application/xml";
-            urlReq.requestHeaders = new Array(new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"));
-            var loader:URLLoader = new URLLoader();
-            loader.addEventListener(Event.COMPLETE, changesetCreateComplete);
-            loader.addEventListener(IOErrorEvent.IO_ERROR, changesetCreateError);
-            loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, recordStatus);
-	        loader.load(urlReq);
+			sendOAuthPut(Connection.apiBaseURL+"changeset/create",
+						 changesetXML,
+						 changesetCreateComplete, changesetCreateError, recordStatus);
 	    }
 
         private function changesetCreateComplete(event:Event):void {
@@ -107,6 +92,39 @@ package net.systemeD.halcyon.connection {
         private function changesetCreateError(event:IOErrorEvent):void {
             dispatchEvent(new Event(NEW_CHANGESET_ERROR));
         }
+
+		override public function closeChangeset():void {
+            var cs:Changeset = getActiveChangeset();
+			if (!cs) return;
+			
+			sendOAuthPut(Connection.apiBaseURL+"changeset/"+cs.id+"/close",
+						 null,
+						 changesetCloseComplete, changesetCloseError, recordStatus);
+			closeActiveChangeset();
+		}
+		
+		private function changesetCloseComplete(event:Event):void { }
+		private function changesetCloseError(event:Event):void { }
+		// ** TODO: when we get little floating warnings, we can send a happy or sad one up
+
+		private function sendOAuthPut(url:String, xml:XML, onComplete:Function, onError:Function, onStatus:Function):void {
+            // make an OAuth query
+            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
+            var oauthRequest:OAuthRequest = new OAuthRequest("PUT", url, null, appID, authToken);
+            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
+
+            // build the actual request
+            var urlReq:URLRequest = new URLRequest(String(urlStr));
+            urlReq.method = "POST";
+			if (xml) { urlReq.data = xml.toXMLString(); } else { urlReq.data = true; }
+            urlReq.contentType = "application/xml";
+            urlReq.requestHeaders = new Array(new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"));
+            var loader:URLLoader = new URLLoader();
+            loader.addEventListener(Event.COMPLETE, onComplete);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+            loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onStatus);
+	        loader.load(urlReq);
+		}
         
         override public function uploadChanges():void {
             var changeset:Changeset = getActiveChangeset();
