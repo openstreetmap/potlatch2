@@ -193,8 +193,8 @@ relation[type=restriction] node { z-index:11; icon-image: icons/restriction.png;
 
 node :hoverway { z-index: 9; icon-image: square; icon-width: 7; color: blue; }
 node !:drawn :poi { z-index: 2; icon-image: circle; icon-width: 4; color: green; casing-color: black; casing-width: 1; }
-node !:drawn :hasTags { z-index: 9; icon-image: circle; icon-width: 3; color: darkslateblue; casing-color: black; casing-width: 1;}
-node :hasTags :selectedway { z-index: 9; icon-image: square; icon-width: 8; color: darkslateblue; }
+node !:drawn :hasTags { z-index: 9; icon-image: circle; icon-width: 4; color: black; }
+node :hasTags :selectedway { z-index: 9; icon-image: square; icon-width: 8; color: black; }
 node !:drawn :selectedway { z-index: 9; icon-image: square; icon-width: 8; color: red; }
 node :selected { z-index: 1; icon-image: square; icon-width: eval('_width+10'); color: yellow; interactive: no; }
 node :junction :selectedway { z-index: 8; icon-image: square; icon-width: 12; casing-color: black; casing-width: 1; }

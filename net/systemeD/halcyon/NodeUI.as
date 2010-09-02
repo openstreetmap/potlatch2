@@ -133,7 +133,7 @@ package net.systemeD.halcyon {
 			// get colours
 			if (styleList.shapeStyles[sublayer]) {
 				var s:ShapeStyle=styleList.shapeStyles[sublayer];
-				if (s.color) { icon.graphics.beginFill(s.color); 
+				if (!isNaN(s.color)) { icon.graphics.beginFill(s.color);
 					}
 				if (s.casing_width || !isNaN(s.casing_color)) {
 					icon.graphics.lineStyle(s.casing_width ? s.casing_width : 1,

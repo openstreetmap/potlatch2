@@ -30,7 +30,7 @@ package net.systemeD.halcyon.styleparser {
 		}
 		
 		override public function get drawn():Boolean {
-			return (fill_image || fill_color || width || casing_width);
+			return (fill_image || !isNaN(fill_color) || width || casing_width);
 		}
 
 		public function applyStrokeStyle(g:Graphics):void {

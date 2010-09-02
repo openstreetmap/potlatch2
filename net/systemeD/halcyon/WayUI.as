@@ -232,7 +232,7 @@ package net.systemeD.halcyon {
 					}
 
 					// Fill
-					if ((s.fill_color || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0) {
+					if ((!isNaN(s.fill_color) || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0) {
 						fill=new Shape(); addToLayer(fill,FILLSPRITE);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
