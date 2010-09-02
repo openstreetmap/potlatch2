@@ -150,8 +150,7 @@ package net.systemeD.halcyon.connection {
             
             // splice in new node
             if ( isSnap ) {
-                newNode.latp = snapped.y;
-                newNode.lon = snapped.x;
+                newNode.setLonLatp(snapped.x, snapped.y, performAction);
             }
             insertNode(newIndex, newNode, performAction);
             return newIndex;

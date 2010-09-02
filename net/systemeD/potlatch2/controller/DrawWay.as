@@ -44,7 +44,9 @@ package net.systemeD.potlatch2.controller {
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
 				if ( entity == null || isBackground ) {
-					node = createAndAddNode(event);
+					node = createAndAddNode(event, MainUndoStack.getGlobalStack().addAction);
+                    controller.map.setHighlight(node, { selectedway: true });
+                    controller.map.setPurgable(node, false);
 					resetElastic(node);
 					lastClick=node;
 				} else if ( entity is Node ) {
@@ -84,10 +86,13 @@ package net.systemeD.potlatch2.controller {
 						appendNode(node,undo.push);
 			            MainUndoStack.getGlobalStack().addAction(undo);
 					} else {
-						// add junction node - another way
-						node = createAndAddNode(event);
-						Way(entity).insertNodeAtClosestPosition(node, true,
-						    MainUndoStack.getGlobalStack().addAction);
+                        // add junction node - another way
+                        var jnct:CompositeUndoableAction = new CompositeUndoableAction("Junction Node");
+                        node = createAndAddNode(event, jnct.push);
+                        Way(entity).insertNodeAtClosestPosition(node, true, jnct.push);
+                        MainUndoStack.getGlobalStack().addAction(jnct);
+                        controller.map.setHighlight(node, { selectedway: true });
+                        controller.map.setPurgable(node, false);
 					}
 					resetElastic(node);
 					lastClick=node;
@@ -177,7 +182,7 @@ package net.systemeD.potlatch2.controller {
 			return this;
 		}
 
-		public function createAndAddNode(event:MouseEvent):Node {
+		public function createAndAddNode(event:MouseEvent, performAction:Function):Node {
 		    var undo:CompositeUndoableAction = new CompositeUndoableAction("Add node");
 		    
 			var lat:Number = controller.map.coord2lat(event.localY);
@@ -185,9 +190,7 @@ package net.systemeD.potlatch2.controller {
 			var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
 			appendNode(node, undo.push);
 			
-			MainUndoStack.getGlobalStack().addAction(undo);
-			controller.map.setHighlight(node, { selectedway: true });
-			controller.map.setPurgable(node, false);
+			performAction(undo);
 			return node;
 		}
 		
