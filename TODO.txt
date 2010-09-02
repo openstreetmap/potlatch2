@@ -14,10 +14,6 @@ Potlatch 2: main outstanding issues
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Connectivity isn't preserved when bringing ways through (e.g. from OSM layer)
 
-== Saving ==
-
-* Should be able to reuse changesets
-
 == Tag editing ==
 
 * initialiseEditors is quite slow (typically 150ms)
@@ -37,6 +33,9 @@ Potlatch 2: main outstanding issues
 * Unexpected number of undo actions (3) when undoing drawway after adding a junction
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
+* Resizing window doesn't update Yahoo, until map is panned.
+* Small window -> yahoo -> mapnik -> big window -> yahoo leave yahoo layer borked.
+* Can't use + for second tag
 
 == Miscellaneous data model ==
 
