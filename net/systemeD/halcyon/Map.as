@@ -437,7 +437,7 @@ package net.systemeD.halcyon {
 		// Miscellaneous events
 		
 		public function keyUpHandler(event:KeyboardEvent):void {
-			addDebug("pressed "+event.keyCode);
+			if (event.target is TextField) return;				// not meant for us
 			switch (event.keyCode) {
 				case 33:	zoomIn(); break;					// Page Up - zoom in
 				case 34:	zoomOut(); break;					// Page Down - zoom out
