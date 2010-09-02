@@ -137,6 +137,10 @@ Quick documentation:
     <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
   </inputSet>
   
+  <inputSet id="web">
+    <input type="freetext" presence="always" category="Web" description="The URL of the website" name="Website" key="website" />
+  </inputSet>
+
   <inputSet id="cuisine">
     <input type="choice" presence="always" name="Cuisine" category="Eating" description="The type of food that they serve" key="cuisine">
       <choice value="burger" text="Burger"/>
@@ -2255,6 +2259,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="pub"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress" />
     <inputSet ref="wifi" />
   </feature>
@@ -2267,6 +2272,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="bar"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress" />
     <inputSet ref="wifi" />
   </feature>
@@ -2279,6 +2285,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="restaurant"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
     <inputSet ref="cuisine"/>
   </feature>
@@ -2292,6 +2299,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="cafe"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
     <inputSet ref="cuisine"/>
     <inputSet ref="wifi" />
@@ -2306,6 +2314,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="fast_food"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
     <inputSet ref="cuisine"/>
   </feature>
@@ -2321,6 +2330,7 @@ Quick documentation:
     <point />
     <tag k="shop" v="convenience"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
   </feature>
   
@@ -2333,121 +2343,177 @@ Quick documentation:
     <point />
     <tag k="shop" v="supermarket"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
   </feature>
  
   <feature name="Alcohol shop">
     <category>shopping</category><point />
     <inputSet ref="simpleName" />
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_alcohol.n.24.png"/>
     <tag k="shop" v="alcohol"/>
   </feature>
 
   <feature name="Bakery">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_bakery.n.24.png"/>
     <tag k="shop" v="bakery"/>
   </feature>
 
   <feature name="Bike shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_bicycle.n.24.png"/>
     <tag k="shop" v="bicycle"/>
   </feature>
 
   <feature name="Bookshop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_book.n.24.png"/>
     <tag k="shop" v="book"/>
   </feature>
 
   <feature name="Butcher">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_butcher.n.24.png"/>
     <tag k="shop" v="butcher"/>
   </feature>
 
   <feature name="Car repair">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_car_repair.n.24.png"/>
     <tag k="shop" v="car_repair"/>
   </feature>
 
   <feature name="Clothes shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_clothes.n.24.png"/>
     <tag k="shop" v="clothes"/>
   </feature>
 
   <feature name="Confectionery">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_confectionery.n.24.png"/>
     <tag k="shop" v="confectionery"/>
   </feature>
 
   <feature name="DIY">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_diy.n.24.png"/>
     <tag k="shop" v="doityourself"/>
   </feature>
 
   <feature name="Fishmonger">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_fish.n.24.png"/>
     <tag k="shop" v="fishmonger"/>
   </feature>
 
   <feature name="Garden centre">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_garden_centre.n.24.png"/>
     <tag k="shop" v="garden_centre"/>
   </feature>
 
   <feature name="Gift shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_gift.n.24.png"/>
     <tag k="shop" v="gift"/>
   </feature>
 
   <feature name="Greengrocer">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_greengrocer.n.24.png"/>
     <tag k="shop" v="greengrocer"/>
   </feature>
 
   <feature name="Hairdresser">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_hairdresser.n.24.png"/>
     <tag k="shop" v="hairdresser"/>
   </feature>
 
   <feature name="Hifi shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_hifi.n.24.png"/>
     <tag k="shop" v="hifi"/>
   </feature>
 
   <feature name="Jewellery">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_jewelry.n.24.png"/>
     <tag k="shop" v="jewelry"/>
   </feature>
 
   <feature name="Laundrette">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_laundrette.n.24.png"/>
     <tag k="shop" v="laundry"/>
   </feature>
 
   <feature name="Motorbike shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_motorcycle.n.24.png"/>
     <tag k="shop" v="motorcycle"/>
   </feature>
 
   <feature name="Music shop">
-    <category>shopping</category><point /><inputSet ref="simpleName" /><inputSet ref="buildingAddress"/>
+    <category>shopping</category><point />
+    <inputSet ref="simpleName" />
+    <inputSet ref="web" />
+    <inputSet ref="buildingAddress"/>
 	<icon image="features/pois/shopping_music.n.24.png"/>
     <tag k="shop" v="music"/>
   </feature>
@@ -2461,6 +2527,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="pharmacy"/>
     <inputSet ref="names"/>
+    <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
     <input type="checkbox" category="Amenity" presence="always" description="Does this pharmacy sell prescription drugs?" name="Dispensing" key="dispensing" layout="horizontal"/>
   </feature>
