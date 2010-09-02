@@ -32,8 +32,6 @@ Potlatch 2: main outstanding issues
 * backspaceNode leaves junctions on other ways highlighted
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
-* Resizing window doesn't update Yahoo, until map is panned.
-* Small window -> yahoo -> mapnik -> big window -> yahoo leave yahoo layer borked.
 * Can't use + for second tag
 
 == Miscellaneous data model ==

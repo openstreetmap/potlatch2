@@ -207,10 +207,11 @@ package net.systemeD.halcyon {
 		// Resize map size based on current stage and height
 
 		public function updateSize(w:uint, h:uint):void {
+			mapwidth = w; centre_lon=coord2lon(-x+w/2);
+			mapheight= h; centre_lat=coord2lat(-y+h/2);
+
 			this.dispatchEvent(new MapEvent(MapEvent.RESIZE, {width:w, height:h}));
 			
-			mapwidth = w;
-			mapheight= h;
             if ( backdrop != null ) {
                 backdrop.width=mapwidth;
                 backdrop.height=mapheight;

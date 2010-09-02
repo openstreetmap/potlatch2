@@ -34,7 +34,10 @@ package net.systemeD.potlatch2 {
 		
 		public function show():void {
 			visible=enabled=true;
-			if (inited) { moveto(map.centre_lat, map.centre_lon, map.scale); }
+			if (inited) { 
+				moveto(map.centre_lat, map.centre_lon, map.scale);
+				this.setSize(map.mapwidth,map.mapheight);
+			}
 
 			map.addEventListener(MapEvent.MOVE, moveHandler);
 			map.addEventListener(MapEvent.RESIZE, resizeHandler);
@@ -69,8 +72,9 @@ package net.systemeD.potlatch2 {
 			this.zoomLevel=18-scale;
 			this.centerLatLon=new LatLon(lat+offset_lat, lon+offset_lon);
 		}
-
+		
 		private function resizeHandler(event:MapEvent):void {
+			moveto(map.centre_lat, map.centre_lon, map.scale);
 			this.setSize(event.params.width, event.params.height);
 		}
 		
