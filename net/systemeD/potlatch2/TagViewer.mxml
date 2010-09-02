@@ -56,7 +56,7 @@
             <mx:LinkButton label="?" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
         </mx:HBox>
       </mx:VBox>
-      <mx:VBox width="100%" height="100%" label="Advanced" initialize="checkAdvanced()" verticalGap="1">
+      <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
         <mx:Label id="advancedID">
           <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
         </mx:Label>
@@ -348,6 +348,14 @@
 	}
 
 
+	public function togglePanel():void {
+		if (stack.selectedChild==editorContainer && selectedEntity!=null) {
+			stack.selectedChild=advancedContainer;
+		} else if (stack.selectedChild!=editorContainer) {
+			stack.selectedChild=editorContainer;
+		}
+	}
+
       private function checkAdvanced():void {
           if ( selectedEntity != null )
              setupAdvanced(selectedEntity);
@@ -551,6 +559,7 @@
       }
 
       public function addNewTag():void {
+          if (stack.selectedChild!=advancedContainer) { return; }
           var newKey:String = "(new tag)";
           var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
           tagDataProvider.addItem(newTag);

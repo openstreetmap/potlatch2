@@ -95,7 +95,7 @@ package net.systemeD.potlatch2.controller {
 					controller.map.setHighlightOnNodes(selectedWay, { selectedway: true });
 				}
 				lastClickTime=new Date();
-			} else if ( event.type == MouseEvent.MOUSE_MOVE ) {
+			} else if ( event.type == MouseEvent.MOUSE_MOVE && elastic ) {
 				mouse = new Point(
 						  controller.map.coord2lon(event.localX),
 						  controller.map.coord2latp(event.localY));

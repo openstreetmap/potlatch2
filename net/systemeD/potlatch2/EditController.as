@@ -10,7 +10,7 @@ package net.systemeD.potlatch2 {
     public class EditController implements MapController {
 
         private var _map:Map;
-        private var tagViewer:TagViewer;
+        public var tagViewer:TagViewer;
 		private var toolbox:Toolbox;
         
         public var state:ControllerState;
