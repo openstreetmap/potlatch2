@@ -75,12 +75,16 @@ package net.systemeD.potlatch2.save {
         }
         
         private function saveData():void {
-            Connection.getConnectionInstance().setAppID(consumer);
-            Connection.getConnectionInstance().setAuthToken(accessToken);
-            
             var saveDialog:SaveDialog = SaveDialog(
                 PopUpManager.createPopUp(Application(Application.application), SaveDialog, true));
             PopUpManager.centerPopUp(saveDialog);
+
+			if (Connection.getConnectionInstance().getActiveChangeset()) {
+				saveDialog.dontPrompt();
+			} else {
+	            Connection.getConnectionInstance().setAppID(consumer);
+	            Connection.getConnectionInstance().setAuthToken(accessToken);
+			}
         }
     }
     

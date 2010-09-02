@@ -175,6 +175,7 @@ package net.systemeD.halcyon.connection {
             }
 
             dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, true));
+			freshenActiveChangeset();
             markClean(); // marks the connection clean. Pressing undo from this point on leads to unexpected results
             MainUndoStack.getGlobalStack().breakUndo(); // so, for now, break the undo stack
         }

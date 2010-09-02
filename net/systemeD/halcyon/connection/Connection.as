@@ -90,6 +90,7 @@ package net.systemeD.halcyon.connection {
         private var relations:Object = {};
         private var pois:Array = [];
         private var changeset:Changeset = null;
+		private var changesetUpdated:Number;
 		private var modified:Boolean = false;
 		public var nodecount:int=0;
 		public var waycount:int=0;
@@ -157,8 +158,13 @@ package net.systemeD.halcyon.connection {
 
         protected function setActiveChangeset(changeset:Changeset):void {
             this.changeset = changeset;
+			changesetUpdated = new Date().getTime();
             sendEvent(new EntityEvent(NEW_CHANGESET, changeset),false);
         }
+
+		protected function freshenActiveChangeset():void {
+			changesetUpdated = new Date().getTime();
+		}
         
         public function getNode(id:Number):Node {
             return nodes[id];
@@ -297,6 +303,10 @@ package net.systemeD.halcyon.connection {
 		}
 
         public function getActiveChangeset():Changeset {
+			// ** FIXME - should be able to manually close changesets
+			if (changeset && (new Date().getTime()) > (changesetUpdated+58*60*1000)) {
+				changeset=null;
+			}
             return changeset;
         }
         

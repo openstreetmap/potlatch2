@@ -11,7 +11,8 @@
     <mx:Object k="comment" v=""/>
   </mx:ArrayCollection>
   
-  <mx:ViewStack id="processSequence" width="100%" height="100%">
+  <mx:ViewStack id="processSequence" width="100%" height="100%" 
+      creationPolicy="all" creationComplete="if (doSkip) skipInput();">
   
     <!-- section for entering tags -->
     <mx:VBox width="100%" height="100%" verticalGap="0">
@@ -83,9 +84,20 @@
     import net.systemeD.halcyon.connection.*;
     
     private var conn:Connection = Connection.getConnectionInstance();
+	private var doSkip:Boolean = false;
     
     [Bindable]
     private var failureText:String = "";
+
+	public function dontPrompt():void {
+		if (processSequence.initialized) { skipInput(); } else { doSkip=true; }
+	}
+
+	private function skipInput():void {
+       	processSequence.selectedChild = createChangesetTab;
+		saveButton.enabled = false;
+		changesetCreated();
+	}
 
 	private function commentChanged(event:Event):void {
 		for (var i:int=changesetTags.length-1; i>0; i--) {
@@ -142,9 +154,9 @@
         }
     }
 
-    private function changesetCreated(event:EntityEvent):void {
+    private function changesetCreated(event:EntityEvent=null):void {
         var changeset:Changeset = conn.getActiveChangeset();
-        addStatus("Changeset created (id: "+changeset.id+")");
+        addStatus("Saving to changeset "+changeset.id);
         
         saveProgress.label = "Uploading changes";
         conn.addEventListener(Connection.SAVE_COMPLETED, saveCompleted);
