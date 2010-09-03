@@ -27,6 +27,16 @@
 		return args;
 	}
 
+    var changesaved=true;
+  
+    window.onbeforeunload=function() {
+        if (!changesaved) {
+            return 'You have unsaved changes. You need to press the Save button to save them';
+        }
+    }
+
+    function markChanged(a) { changesaved=a; } /* called from flash */
+
 	var args = getArgs();
 	var lat;
 	var lon;

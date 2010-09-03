@@ -232,9 +232,15 @@
 		}
         private function onDataDirty(event:Event):void {
 			saveButton.enabled=true;
+            if (ExternalInterface.available) {
+              ExternalInterface.call("markChanged", false);
+            }
 		}
 		private function onDataClean(event:Event):void {
 			saveButton.enabled=false;
+            if (ExternalInterface.available) {
+              ExternalInterface.call("markChanged", true);
+            }
 		}
 		
         private function onImageryLoad(event:Event):void {
