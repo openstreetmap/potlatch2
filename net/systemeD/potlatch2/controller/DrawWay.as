@@ -232,6 +232,10 @@ package net.systemeD.potlatch2.controller {
 			}
 
             performAction(undo);
+
+            if(!node.isDeleted()) { // i.e. was junction with another way (or is now POI)
+              controller.map.setHighlight(node, {selectedway: false});
+            }
             return state;
 		}
 		

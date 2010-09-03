@@ -29,7 +29,6 @@ Potlatch 2: main outstanding issues
 * Multiple selection
 * Options should be remembered via SharedObjects
 * small node hitzone when creating areas - hitzone and mouseover UI don't match up
-* backspaceNode leaves junctions on other ways highlighted
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
 * Can't use + for second tag
