@@ -43,6 +43,7 @@ package net.systemeD.potlatch2.controller {
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
+                controller.map.mouseUpHandler(); // in case you're still in the drag-tolerance zone, and mouse up over something.
 				if ( entity == null || isBackground ) {
 					node = createAndAddNode(event, MainUndoStack.getGlobalStack().addAction);
                     controller.map.setHighlight(node, { selectedway: true });
