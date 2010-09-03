@@ -9,6 +9,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
         private var _maximum:Number;
         private var _stepSize:Number;
 	    private var _notPresentText:String;
+        private var _notValidText:String;
 
         public function NumberEditorFactory(inputXML:XML) {
             super(inputXML);
@@ -16,6 +17,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
             _maximum = parseFloat(inputXML.hasOwnProperty("@maximum") ? String(inputXML.@maximum) : "100");
             _stepSize = parseFloat(inputXML.hasOwnProperty("@stepSize") ? String(inputXML.@stepSize) : "1");
             _notPresentText = inputXML.hasOwnProperty("@absenceText") ? String(inputXML.@absenceText) : "Unset";
+            _notValidText = inputXML.hasOwnProperty("@notValidText") ? String(inputXML.@notValidText) : "(existing value not recognised)";
         }
         
         override protected function createSingleTagEditor():SingleTagEditor {
@@ -26,6 +28,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
         public function get maximum():Number { return _maximum; }
         public function get stepSize():Number { return _stepSize; }
         public function get notPresentText():String { return _notPresentText; }
+        public function get notValidText():String { return _notValidText; }
     }
 
 }

@@ -27,6 +27,14 @@ TitleWindow {
   color: red;
 }
 
+.warningText {
+  color: #ff4500;
+}
+
+.promptText {
+  fontStyle: italic;
+}
+
 .header {
 		fillColors: haloSilver, x222222;
 		fillAlphas: 1.0, 1.0;

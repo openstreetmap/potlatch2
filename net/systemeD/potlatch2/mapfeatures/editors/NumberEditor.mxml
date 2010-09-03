@@ -10,19 +10,27 @@
 
 	<mx:Label text="{fieldName}:"/>
     <mx:HBox horizontalGap="3" verticalAlign="middle">
+        <!-- it would be great if the numericStepper showed something other than zero when unset -->
 	    <mx:NumericStepper id="input"
                  minimum="{minimum}" maximum="{maximum}"
                  stepSize="{stepSize}"
                  value="{translatedValue}"
                  enabled="{isValueValid}"
 				 change="value = input.value.toString()" />
-        <mx:Label text="{prompt}" visible="{value == null || value == ''}"/>
+        <mx:LinkButton label="Clear" click="clear()" enabled="{isValueClearable}" />
+        <mx:Label text="{prompt}" visible="{value == null || value == ''}" includeInLayout="{value == null || value == ''}" styleName="promptText"/>
+        <mx:Label text="{warning}" visible="{!isValueValid}" includeInLayout="{!isValueValid}" styleName="warningText" />
     </mx:HBox>
 
   <mx:Script><![CDATA[
     [Bindable(event="factory_set")]
     protected function get prompt():String {
         return _factory == null ? null : NumberEditorFactory(_factory).notPresentText;
+    }
+    
+    [Bindable(event="factory_set")]
+    protected function get warning():String {
+        return _factory == null ? null : NumberEditorFactory(_factory).notValidText;
     }
 
     [Bindable(event="factory_set")]
@@ -51,6 +59,12 @@
         var validatedValue:Number = getValidatedValue();
         return !(isNaN(validatedValue) && value != null && value != "");
     }
+    
+    [Bindable(event="tag_changed")]
+    private function get isValueClearable():Boolean {
+        var validatedValue:Number = getValidatedValue();
+        return !isNaN(validatedValue);
+    }
 
     private function getValidatedValue():Number {
         var valueStr:String = value;
@@ -61,6 +75,10 @@
         if ( isNaN(parsed) || parsed < minimum || parsed > maximum )
             return Number.NaN;
         return parsed;
+    }
+    
+    private function clear():void {
+        value = null;
     }
 	
   ]]></mx:Script>

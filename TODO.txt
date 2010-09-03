@@ -32,6 +32,7 @@ Potlatch 2: main outstanding issues
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
 * Can't use + for second tag
+* Tag panel jumps up and down when number spinner is used on bike parking
 
 == Miscellaneous data model ==
 
@@ -63,7 +64,6 @@ Requested enhancements
 
 * Ability to specify that a node should be a point in a way, for example for crossings
 * Ability to say that it's unlikely/impossible to have a way that is a bridge and a tunnel at the same time.
-* It would be useful to have fields that only allow numbers in a non-destructive way, for example for step_count or capacity.
 * Dynamic reloading of stylesheet/map_features, so that you don't need to reload the full page when editing them
 * The area of pois for dragging on to the map should have a search, with synonyms.
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
