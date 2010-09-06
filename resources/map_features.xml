@@ -1608,6 +1608,7 @@ Quick documentation:
   <!-- Places -->
   <feature name="Place">
     <category>misc</category>
+    <icon image="icons/place.png" />
     <point />
     <area />
     <!-- TODO: make this work -->
@@ -2142,6 +2143,7 @@ Quick documentation:
 
   <feature name="Boom Gate">
     <category>barrier</category>
+    <icon image="features/pois/barrier_generic.24.png" />
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dlift_gate</help>
     <point />
     <tag k="barrier" v="lift_gate"/>
@@ -2149,6 +2151,7 @@ Quick documentation:
 
   <feature name="Kissing Gate">
     <category>barrier</category>
+    <icon image="features/pois/barrier_generic.24.png" />
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dkissing_gate</help>
     <point />
     <tag k="barrier" v="kissing_gate"/>
