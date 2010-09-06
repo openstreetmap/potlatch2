@@ -1416,18 +1416,6 @@ Quick documentation:
     <inputSet ref="simpleName"/>
   </feature>
   
-    <feature name="Reservoir">
-    <category>water</category>
-    <icon>
-      <font size="14pt"><b>${name}</b></font>
-    </icon>
-
-    <area/>
-    <tag k="landuse" v="reservoir"/>
-  </feature>
-
-
-
   <feature name="Conservation">
     <category>natural</category>
     <icon image="icons/natural_blank.png"/>
