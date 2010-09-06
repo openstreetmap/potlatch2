@@ -10,7 +10,7 @@
 
   <mx:Label text="{fieldName}:"/>
   <mx:VBox verticalGap="0" width="100%" id="routeIcons"/>
-  <mx:LinkButton label="Add to route" click="addToRelation()" />
+  <mx:LinkButton label="Add to a route" click="addToRelation()" />
 
   <mx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
