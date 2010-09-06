@@ -1511,15 +1511,17 @@ Quick documentation:
        Power
        ************************************************************************ -->
 
-  <feature name="High-voltage">
+  <feature name="High-voltage line">
     <category>power</category>
+    <icon image="features/power_high.png" />
     <line/>
     <tag k="power" v="line"/>
     <inputSet ref="powerCables"/>
   </feature>
 
-  <feature name="Low-voltage">
+  <feature name="Low-voltage line">
     <category>power</category>
+    <icon image="features/power_low.png" />
     <line/>
     <tag k="power" v="minor_line"/>
     <inputSet ref="powerCables"/>
