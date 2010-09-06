@@ -31,14 +31,14 @@ Quick documentation:
 </inputSet>
 
 <input>
-  @type="choice/freetext/turn/checkbox/slider/route/speed/...?" (slider not implemented yet?)
-  @presence="always/onTagMatch" (whether it appears on the basic page?)
+  @type: choice/freetext/turn/checkbox/slider/route/speed/number - the different types of supported input dialogs.
+  @presence: always/onTagMatch/withCategory - Whether it always appears on the basic page, appears only when the tag is already set, or (something else).
   @category: which tab it appears on
   @description: mouse-over text
   @name: The text shown as the label of the property
   @key: The actual OSM key (tag) that will be saved
-  @priority: ???
-  match: something to do with relations???
+  @priority: highest/high/normal/low/lowest (default=>normal) - controls the order that different features show up in a panel.
+  match: for turn|route inputs, the tags to be considered on the relation as indicating a match.
     @k: key
     @v: value
   icon: see above
