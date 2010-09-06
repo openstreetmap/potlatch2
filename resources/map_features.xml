@@ -779,6 +779,7 @@ Quick documentation:
 
   <feature name="Wall">
     <category>barrier</category>
+    <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dwall</help>
@@ -789,6 +790,7 @@ Quick documentation:
 
   <feature name="Ditch">
     <category>barrier</category>
+    <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dditch</help>
@@ -799,6 +801,7 @@ Quick documentation:
   
   <feature name="Retaining wall">
     <category>barrier</category>
+    <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dretaining_wall</help>
@@ -809,6 +812,7 @@ Quick documentation:
   
   <feature name="City wall">
     <category>barrier</category>
+    <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcity_wall</help>
@@ -819,6 +823,7 @@ Quick documentation:
 
   <feature name="Fence">
     <category>barrier</category>
+    <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dfence</help>
@@ -829,6 +834,7 @@ Quick documentation:
 
   <feature name="Hedge">
     <category>barrier</category>
+    <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dhedge</help>
