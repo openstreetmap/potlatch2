@@ -2,6 +2,7 @@
 <mx:VBox
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="flexlib.containers.*"
+	xmlns:controls="net.systemeD.controls.*"
 	horizontalScrollPolicy="off"
     backgroundColor="white"
     initialize="loadFeatures()">
@@ -65,8 +66,36 @@
             doubleClickEnabled="true"
             doubleClick="if (event.target.parent==advancedTagGrid) { addNewTag(); }">
                 <mx:columns>
-                    <mx:DataGridColumn editable="true" dataField="key" headerText="Key"/>
-                    <mx:DataGridColumn editable="true" dataField="value" headerText="Value"/>
+                    <mx:DataGridColumn editable="true" dataField="key" headerText="Key">
+						<mx:itemEditor>
+							<mx:Component>
+								<controls:AutoComplete 
+								  dataProvider="{autoCompleteKeys()}" 
+								  labelField="name" 
+								  rowCount="10"
+								  typedText="{getSelectedKey()}">
+									<mx:Script><![CDATA[
+										import net.systemeD.potlatch2.mapfeatures.MapFeatures;
+										import mx.collections.ArrayCollection;
+										import mx.controls.DataGrid;
+
+										public function autoCompleteKeys():Array {
+											var a:Array=[];
+											for each (var k:String in MapFeatures.getInstance().getAutoCompleteKeys()) {
+												a.push( { name: k } );
+											}
+											return a;
+										}
+
+										internal function getSelectedKey():String {
+											return DataGrid(this.parent.parent).selectedItem.key;
+										}
+									]]></mx:Script>
+								</controls:AutoComplete>
+							</mx:Component>
+						</mx:itemEditor>
+					</mx:DataGridColumn>
+                    <mx:DataGridColumn editable="true" dataField="value" headerText="Value" />
                 </mx:columns>
         </mx:DataGrid>
 
@@ -149,7 +178,7 @@
       private var editorStackAccordion:Accordion;
       [Bindable] private var editorStack:Container;
 
-      private var mapFeatures:MapFeatures;
+      public var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
       private var tagDataProvider:ArrayCollection;
       private var tw:CategorySelector = null;

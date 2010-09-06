@@ -7,6 +7,9 @@ package net.systemeD.potlatch2.mapfeatures {
 	import flash.system.Security;
 	import flash.net.*;
 
+	import mx.core.UIComponent;
+	import mx.controls.DataGrid;
+
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.DebugURLRequest;
 
@@ -21,11 +24,11 @@ package net.systemeD.potlatch2.mapfeatures {
             return instance;
         }
 
-
-
         private var xml:XML = null;
         private var _features:Array = null;
         private var _categories:Array = null;
+		private var _keys:Array = null;
+		private var _tags:Object = null;
 
         protected function loadFeatures():void {
             var request:DebugURLRequest = new DebugURLRequest("map_features.xml");
@@ -39,12 +42,23 @@ package net.systemeD.potlatch2.mapfeatures {
         }
         
         private function onFeatureLoad(event:Event):void {
+			var f:Feature;
+
             xml = new XML(URLLoader(event.target).data);
-            
-            _features = new Array();
+            _features = [];
+			_keys = [];
+			_tags = {};
+
             for each(var feature:XML in xml.feature) {
-                _features.push(new Feature(this, feature));
+                f=new Feature(this,feature);
+				_features.push(f);
+				for each (var tag:Object in f.tags) {
+					if (!_tags[tag.k]) { _tags[tag.k]=new Object; _keys.push(tag.k); }
+					_tags[tag.k][tag.v]=true;
+				}
             }            
+			_keys.sort();
+
             _categories = new Array();
             for each(var catXML:XML in xml.category) {
                 if ( catXML.child("category").length() == 0 )
@@ -128,6 +142,19 @@ package net.systemeD.potlatch2.mapfeatures {
             }
             return pois;
         }
+
+		[Bindable(event="featuresLoaded")]
+		public function getAutoCompleteKeys():Array {
+			return _keys;
+		}
+		
+		public function getAutoCompleteValues(key:String):Array {
+			var list:Array=[];
+			for (var v:String in _tags[key]) { list.push(v); }
+			list.sort();
+			return list;
+		}
+		
     }
 
 }

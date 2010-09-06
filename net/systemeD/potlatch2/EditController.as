@@ -77,7 +77,7 @@ package net.systemeD.potlatch2 {
 		}
 
         private function mapMouseEvent(event:MouseEvent):void {
-            map.stage.focus = map.parent;
+            if (event.type!=MouseEvent.ROLL_OVER) map.stage.focus = map.parent;
             if (event.type==MouseEvent.MOUSE_UP && map.dragstate==map.DRAGGING) { return; }
             
             var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
@@ -89,7 +89,7 @@ package net.systemeD.potlatch2 {
         }
         
         public function entityMouseEvent(event:MouseEvent, entity:Entity):void {
-            map.stage.focus = map.parent;
+            if (event.type!=MouseEvent.ROLL_OVER) map.stage.focus = map.parent;
             //if ( event.type == MouseEvent.MOUSE_DOWN )
             event.stopPropagation();
                 
