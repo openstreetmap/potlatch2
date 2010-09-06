@@ -2177,7 +2177,7 @@ Quick documentation:
 
   <feature name="Cycle Barrier">
     <category>barrier</category>
-    <icon image="features/pois/barrier_bollard.n.24.png">
+    <icon image="features/pois/barrier_cycle_barrier.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcycle_barrier</help>
     
@@ -2187,7 +2187,7 @@ Quick documentation:
   
   <feature name="Big Concrete Blocks">
     <category>barrier</category>
-    <icon image="features/pois/barrier_bollard.n.24.png">
+    <icon image="features/pois/barrier_blocks.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dblock</help>
     
@@ -2197,7 +2197,7 @@ Quick documentation:
   
   <feature name="Cattle Grid">
     <category>barrier</category>
-    <icon image="icons/cattle_grid.png">
+    <icon image="features/pois/barrier_cattle_grid.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcattle_grid</help>
     
