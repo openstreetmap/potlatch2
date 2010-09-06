@@ -276,7 +276,7 @@ Quick documentation:
       <choice value="no" text="No"/>
     </input>
     <input type="choice" name="Voltage" category="Electrification" description="Nominal voltage of electric wires"
-           key="voltage">
+           key="voltage" presence="withCategory">
       <choice value="600" text="600V"/>
       <choice value="750" text="750V"/>
       <choice value="1500" text="1500V"/>
@@ -285,7 +285,7 @@ Quick documentation:
       <choice value="25000" text="25kV"/>
     </input>
     <input type="choice" name="Frequency" category="Electrification" description="Frequency in Hertz of alternating current power supply"
-           key="frequency">
+           key="frequency" presence="withCategory">
       <choice value="0" text="DC"/>
       <choice value="16.67" text="16.67 Hz"/>
       <choice value="16.7" text="16.7 Hz"/>
