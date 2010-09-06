@@ -879,7 +879,7 @@ Quick documentation:
 
   <feature name="Drain">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -900,7 +900,7 @@ Quick documentation:
 
   <feature name="Riverbank">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -910,7 +910,7 @@ Quick documentation:
 
   <feature name="Reservoir">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -921,7 +921,7 @@ Quick documentation:
 
   <feature name="Basin">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -934,7 +934,7 @@ Quick documentation:
 
   <feature name="Weir">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -949,7 +949,7 @@ Quick documentation:
 
   <feature name="Dock">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -960,7 +960,7 @@ Quick documentation:
 
   <feature name="Marina">
     <category>water</category>
-    <icon>
+    <icon image="features/pois/water_generic.24.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -974,6 +974,7 @@ Quick documentation:
 
   <feature name="Slipway">
     <category>water</category>
+    <icon image="features/pois/water_generic.24.png"/>
     <line/>
     <tag k="leisure" v="slipway"/>
     <inputSet ref="names"/>
