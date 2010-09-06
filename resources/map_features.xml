@@ -901,7 +901,6 @@ Quick documentation:
 
     <line/>
     <tag k="waterway" v="dam"/>
-    <inputSet ref="boatPermissions" />    
   </feature>
 
   <feature name="Riverbank">
@@ -922,6 +921,16 @@ Quick documentation:
 
     <area/>
     <tag k="landuse" v="reservoir"/>
+    <inputSet ref="boatPermissions" />
+  </feature>
+
+  <feature name="Lake">
+    <category>water</category>
+    <icon image="features/pois/water_generic.24.png">
+      <font size="14pt"><b>${name}</b></font>
+    </icon>
+    <area/>
+    <tag k="natural" v="water" />
     <inputSet ref="boatPermissions" />
   </feature>
 
