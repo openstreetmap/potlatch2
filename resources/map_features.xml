@@ -123,7 +123,7 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="wifi">
-    <input type="choice" presence="always" category="Eating" name="Wifi" key="wifi">
+    <input type="choice" presence="onTagMatch" category="Eating" name="Wifi" key="wifi">
       <choice value="free" text="Free"/>
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
@@ -138,7 +138,7 @@ Quick documentation:
   </inputSet>
   
   <inputSet id="web">
-    <input type="freetext" presence="always" category="Web" description="The URL of the website" name="Website" key="website" />
+    <input type="freetext" presence="onTagMatch" category="Web" description="The URL of the website" name="Website" key="website" />
   </inputSet>
 
   <inputSet id="cuisine">
@@ -2124,9 +2124,9 @@ Quick documentation:
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
     <point />
     <tag k="amenity" v="ferry_terminal"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the ferry terminal." priority="low"/>
+    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the ferry terminal."/>
     <input type="freetext" presence="always" category="" name="Operator" key="operator" description="The operator of the ferry terminal." priority="low"/>
-    <input type="freetext" presence="always" category="" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
+    <input type="freetext" presence="onTagMatch" category="Cargo" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
   </feature>
 
   <!-- ========= Barriers ========= -->
