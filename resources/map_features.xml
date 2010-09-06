@@ -1459,7 +1459,6 @@ Quick documentation:
 
   <feature name="Sports pitch">
     <category>landuse</category>
-    <point/>
     <area/>
     <icon>
       <b>${name}</b>
