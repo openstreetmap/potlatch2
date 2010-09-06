@@ -2158,9 +2158,9 @@ Quick documentation:
     <tag k="barrier" v="gate"/>
   </feature>
 
-  <feature name="Boom Gate">
+  <feature name="Lift Gate">
     <category>barrier</category>
-    <icon image="features/pois/barrier_generic.24.png" />
+    <icon image="features/pois/barrier_lift_gate.n.24.png" />
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dlift_gate</help>
     <point />
     <tag k="barrier" v="lift_gate"/>
