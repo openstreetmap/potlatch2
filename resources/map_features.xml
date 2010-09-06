@@ -2206,6 +2206,7 @@ Quick documentation:
 
   <feature name="Turning circle">
     <category>transport</category>
+    <icon image="icons/transport_blank.png" />
     <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dturning_circle
     </help>
     <point />
