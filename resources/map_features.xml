@@ -32,7 +32,7 @@ Quick documentation:
 
 <input>
   @type: choice/freetext/turn/checkbox/slider/route/speed/number - the different types of supported input dialogs.
-  @presence: always/onTagMatch/withCategory - Whether it always appears on the basic page, appears only when the tag is already set, or (something else).
+  @presence: always/onTagMatch/withCategory - Whether it always appears on the basic page, appears only when the tag is already set, or only ever show on the category page.
   @category: which tab it appears on
   @description: mouse-over text
   @name: The text shown as the label of the property

@@ -12,6 +12,7 @@ package net.systemeD.potlatch2.mapfeatures {
             if ( ALWAYS == null ) {
                 ALWAYS = new Presence();
                 ON_TAG_MATCH = new OnTagMatch();
+                WITH_CATEGORY = new WithCategory();
             }
             if ( presence == "always" )
                 return ALWAYS;
