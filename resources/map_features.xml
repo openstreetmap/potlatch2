@@ -394,29 +394,29 @@ Quick documentation:
   
   <inputSet id="cycle">
     <inputSet ref="bicycle-permission" />
-    <input type="route" name="National Cycle Route" description="A signposted route in the UK's National Cycle Network, or nearest equivalent." category="Cycle" priority="normal">
+    <input type="route" name="National Cycle Routes" description="A signposted route in a National Cycle Network, or nearest equivalent." category="Cycle" priority="low">
        <match k="type" v="route"/>
        <match k="route" v="bicycle"/>
        <match k="network" v="ncn"/>
-       <icon image="features/cycle__ncn.png" background="red" foreground="white">
+       <icon image="features/cycle__ncn.png" background="#ff6f7a" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
          <font size="12pt">${name}</font>
        </icon>
     </input>
-    <input type="route" name="Regional Cycle Route" description="A signposted route in the UK's Regional Cycle Network, or nearest equivalent." category="Cycle" priority="low">
+    <input type="route" name="Regional Cycle Routes" description="A signposted route in a Regional Cycle Network, or nearest equivalent." category="Cycle" priority="low">
        <match k="type" v="route"/>
        <match k="route" v="bicycle"/>
        <match k="network" v="rcn"/>
-       <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
+       <icon image="features/cycle__rcn.png" background="#6ff7ff" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
          <font size="12pt">${name}</font>
        </icon>
     </input>
-    <input type="route" name="Local Cycle Route" description="A signposted route in the UK's Local Cycle Network, or nearest equivalent." category="Cycle" priority="lowest">
+    <input type="route" name="Local Cycle Routes" description="A signposted route in a Local Cycle Network, or nearest equivalent." category="Cycle" priority="lowest">
        <match k="type" v="route"/>
        <match k="route" v="bicycle"/>
        <match k="network" v="lcn"/>
-       <icon image="features/cycle__lcn.png" background="blue" foreground="white">
+       <icon image="features/cycle__lcn.png" background="#7d6fff" foreground="white">
          <font size="14pt"><b>${ref}</b></font><br />
          <font size="12pt">${name}</font>
        </icon>
