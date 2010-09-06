@@ -81,8 +81,10 @@ node[amenity=telephone] { icon-image: icons/telephone.png; z-index: 20; }
 node[barrier=cattle_grid] { icon-image: icons/cattle_grid.png; z-index: 20; }
 
 node[tourism=guesthouse] { icon-image: icons/accommodation_bed_and_breakfast.n.16.png; z-index: 20; }
+node[tourism=alpine_hut] { icon-image: icons/accommodation_alpinehut.n.16.png; z-index: 20; }
 node[tourism=camp_site] { icon-image: icons/accommodation_camping.n.16.png; z-index: 20; }
 node[tourism=caravan_site] { icon-image: icons/accommodation_caravan_park.n.16.png; z-index: 20; }
+node[tourism=guest_house],node[tourism=bed_and_breakfast] { icon-image: icons/accommodation_bed_and_breakfast.n.16.png; z-index: 20; }
 node[tourism=hotel] { icon-image: icons/accommodation_hotel.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[tourism=hostel] { icon-image: icons/accommodation_youth_hostel.n.16.png; z-index: 20; }
 node[amenity=fire_station] { icon-image: icons/amenity_firestation2.n.16.png; z-index: 20; }
@@ -91,6 +93,7 @@ node[amenity=post_box] { icon-image: icons/amenity_post_box.n.16.png; z-index: 2
 node[amenity=recycling] { icon-image: icons/amenity_recycling.n.16.png; z-index: 20; }
 node[barrier=bollard] { icon-image: icons/barrier_bollard.n.16.png; z-index: 20; }
 node[barrier=gate], node[highway=gate] { icon-image: icons/gate.png; z-index: 20; }
+node[barrier=stile], node[highway=stile] { icon-image: icons/barrier_stile.n.16.png; z-index: 20; }
 node[barrier=toll_booth] { icon-image: icons/barrier_toll_booth.n.16.png; z-index: 20; }
 node[amenity=school] { icon-image: icons/education_school.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[amenity=bar] { icon-image: icons/food_bar.n.16.png; text-offset:15; text: name; z-index: 20; }
@@ -148,6 +151,7 @@ node[amenity=car_rental] { icon-image: icons/transport_rental_car.n.16.png; z-in
 node[amenity=taxi] { icon-image: icons/transport_taxi_rank.n.16.png; z-index: 20; }
 node[railway=station] { icon-image: icons/transport_train_station.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[railway=tram_stop] { icon-image: icons/transport_tram_stop.n.16.png; z-index: 20; }
+node[leisure=marina] { icon-image: icons/transport_marina.n.16.png; z-index: 20; }
 
 
 

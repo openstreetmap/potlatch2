@@ -975,7 +975,7 @@ Quick documentation:
 
   <feature name="Marina">
     <category>water</category>
-    <icon image="features/pois/water_generic.24.png">
+    <icon image="features/pois/transport_marina.n.24.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -1795,7 +1795,6 @@ Quick documentation:
   <!-- Note that tourism=bed_and_breakfast also gets some use. -->
   <feature name="Guesthouse (B&amp;B)">
     <category>accommodation</category>
-    <icon image="icons/accommodation_blank.png"/>
     <point />
     <area />
     <inputSet ref="simpleName" />
@@ -1805,7 +1804,6 @@ Quick documentation:
 
   <feature name="Campsite">
     <category>accommodation</category>
-    <icon image="icons/accommodation_blank.png"/>
     <point />
     <area />
     <inputSet ref="simpleName" />
@@ -1815,7 +1813,6 @@ Quick documentation:
 
   <feature name="Caravan park">
     <category>accommodation</category>
-    <icon image="icons/accommodation_blank.png"/>
     <point />
     <area />
     <inputSet ref="simpleName" />
@@ -1825,10 +1822,10 @@ Quick documentation:
 
   <feature name="Alpine hut">
     <category>accommodation</category>
-    <icon image="icons/accommodation_blank.png"/>
     <point />
     <area />
     <inputSet ref="simpleName" />
+    <icon image="features/pois/accommodation_alpinehut.n.24.png"/>
     <tag k="tourism" v="alpine_hut"/>
   </feature>
 
@@ -2222,7 +2219,7 @@ Quick documentation:
 
   <feature name="Stile">
     <category>barrier</category>
-    <icon image="features/pois/barrier_generic.24.png" />
+    <icon image="features/pois/barrier_stile.n.24.png" />
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dstile</help>
     <point />
     <tag k="barrier" v="stile"/>
