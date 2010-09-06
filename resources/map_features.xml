@@ -2168,7 +2168,7 @@ Quick documentation:
 
   <feature name="Kissing Gate">
     <category>barrier</category>
-    <icon image="features/pois/barrier_generic.24.png" />
+    <icon image="features/pois/barrier_kissing_gate.24.png" />
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dkissing_gate</help>
     <point />
     <tag k="barrier" v="kissing_gate"/>

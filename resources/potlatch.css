@@ -96,6 +96,7 @@ node[barrier=gate], node[highway=gate] { icon-image: icons/gate.png; z-index: 20
 node[barrier=stile], node[highway=stile] { icon-image: icons/barrier_stile.n.16.png; z-index: 20; }
 node[barrier=toll_booth] { icon-image: icons/barrier_toll_booth.n.16.png; z-index: 20; }
 node[barrier=lift_gate] { icon-image: icons/barrier_lift_gate.n.16.png; z-index: 20; }
+node[barrier=kissing_gate] { icon-image: icons/barrier_kissing_gate.16.png; z-index: 20; }
 node[amenity=school] { icon-image: icons/education_school.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[amenity=bar] { icon-image: icons/food_bar.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[amenity=cafe] { icon-image: icons/food_cafe.n.16.png; text-offset:15; text: name; z-index: 20; }
