@@ -1114,7 +1114,7 @@ Quick documentation:
 
   <feature name="Railway platform">
     <category>transport</category>
-    
+    <icon image="features/transport__railway_platform.png" />
     <line />
     <area />
     <tag k="railway" v="platform"/>
