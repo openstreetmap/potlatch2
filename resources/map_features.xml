@@ -1051,7 +1051,7 @@ Quick documentation:
 
   <feature name="Disused tracks">
     <category>transport</category>
-    <icon>
+    <icon image="features/transport__railway_disused.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -1061,7 +1061,7 @@ Quick documentation:
 
   <feature name="Old trackbed">
     <category>transport</category>
-    <icon>
+    <icon image="features/transport__railway_abandoned.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
