@@ -6,6 +6,8 @@ Halcyon is its rendering engine. It's rules-based (like, say, Mapnik) and does d
 
 Both are written in ActionScript 3. Potlatch 2.0 additionally uses the Flex framework.
 
+Many icons used in halcyon/potlatch2 are based on the awesome CC0-licensed SJJB icons project. http://www.sjjb.co.uk/mapicons/
+
 === What you'll need ===
 
 * Flex SDK 3.4 or 3.5 - http://www.adobe.com/products/flex/ (free, OS X/Windows/Linux)
@@ -82,7 +84,7 @@ Running:
 * Flex compiler runs at about the speed of a tortoise soaked in molasses which happens also to be dead.
 * Running the debug player helps when coding, since it'll pop up the runtime errors. You don't see them
   with the normal player.
-
+  
 Richard Fairhurst
 richard@systemeD.net
 
