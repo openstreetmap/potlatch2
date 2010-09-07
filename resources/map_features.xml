@@ -1123,7 +1123,7 @@ Quick documentation:
 
   <feature name="Bus station">
     <category>transport</category>
-    <icon>
+    <icon image="icons/transport_blank.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1210,7 +1210,7 @@ Quick documentation:
 
   <feature name="School">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/education_school.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1224,7 +1224,7 @@ Quick documentation:
 
   <feature name="College">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/education_university.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1238,7 +1238,7 @@ Quick documentation:
 
   <feature name="Supermarket">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/shopping_supermarket.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1252,7 +1252,7 @@ Quick documentation:
 
   <feature name="Place of worship">
     <category>buildings</category>
-    <icon>
+    <icon image="icons/place_of_worship.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1270,7 +1270,7 @@ Quick documentation:
 
   <feature name="Public building">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/building_generic.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1284,7 +1284,7 @@ Quick documentation:
 
   <feature name="Hospital">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/health_hospital.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1298,7 +1298,7 @@ Quick documentation:
 
   <feature name="University">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/education_university.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1312,7 +1312,7 @@ Quick documentation:
 
   <feature name="Attraction">
     <category>buildings</category>
-    <icon>
+    <icon image="icons/tourist_blank.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1326,7 +1326,7 @@ Quick documentation:
 
   <feature name="Museum">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/tourist_museum.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1340,7 +1340,7 @@ Quick documentation:
 
   <feature name="Zoo">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/tourist_zoo.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1354,7 +1354,7 @@ Quick documentation:
 
   <feature name="Stadium">
     <category>buildings</category>
-    <icon>
+    <icon image="icons/tourist_blank.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1367,7 +1367,7 @@ Quick documentation:
 
   <feature name="Building">
     <category>buildings</category>
-    <icon>
+    <icon image="features/pois/building_generic.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
