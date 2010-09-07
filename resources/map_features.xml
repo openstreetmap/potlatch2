@@ -1383,37 +1383,58 @@ Quick documentation:
        ************************************************************************ -->
 
   <feature name="Industry">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/building_generic.png">
+      <b>${name}</b>
+    </icon>
     <tag k="landuse" v="industrial"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Offices">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/building_generic.png">
+      <b>${name}</b>
+    </icon>
     <tag k="landuse" v="commercial"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Retail">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/building_generic.png">
+      <b>${name}</b>
+    </icon>
     <tag k="landuse" v="retail"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Marketplace">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/shopping_greengrocer.n.24.png">
+      <b>${name}</b>
+    </icon>
     <tag k="amenity" v="marketplace"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Cemetery">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/place_of_worship_unknown3.n.24.png">
+      <b>${name}</b>
+    </icon>
     <tag k="landuse" v="cemetery"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Quarry">
     <category>landuse</category>
+    <icon image="features/pois/poi_mine.n.24.png" />
     <area/>
     <tag k="landuse" v="quarry"/>
     <inputSet ref="simpleName"/>
@@ -1421,6 +1442,7 @@ Quick documentation:
 
  <feature name="Military">
     <category>landuse</category>
+    <icon image="features/pois/poi_military_bunker.n.24.png" />
     <area/>
     <tag k="landuse" v="military"/>
     <inputSet ref="simpleName"/>
@@ -1438,19 +1460,31 @@ Quick documentation:
 
 
   <feature name="Playground">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/sport_leisure_centre.n.24.png">
+      <b>${name}</b>
+    </icon>
     <tag k="leisure" v="playground"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Golf course">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon  image="features/pois/sport_golf.n.24.png">
+      <b>${name}</b>
+    </icon>
     <tag k="leisure" v="golf_course"/>
     <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Recreation ground">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/sport_leisure_centre.n.24.png">
+      <b>${name}</b>
+    </icon>
     <tag k="leisure" v="recreation_ground"/>
     <inputSet ref="simpleName"/>
   </feature>
@@ -1458,7 +1492,7 @@ Quick documentation:
   <feature name="Sports pitch">
     <category>landuse</category>
     <area/>
-    <icon>
+    <icon image="features/pois/sport_leisure_centre.n.24.png">
       <b>${name}</b>
     </icon>
     <tag k="leisure" v="pitch"/>
@@ -1505,7 +1539,11 @@ Quick documentation:
   </inputSet>
   
   <feature name="Sports track">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
+    <category>landuse</category>
+    <area/>
+    <icon image="features/pois/sport_leisure_centre.n.24.png">
+      <b>${name}</b>
+    </icon>
     <tag k="leisure" v="track"/>
     <inputSet ref="simpleName"/>
   </feature>
