@@ -693,7 +693,7 @@ Quick documentation:
 
   <feature name="Cycle path">
     <category>paths</category>
-    <icon image="features/paths__unknown.png">
+    <icon image="features/paths__bike.png">
       ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
 
@@ -704,7 +704,7 @@ Quick documentation:
   
   <feature name="Pedestrian Street">
     <category>paths</category>
-    <icon>
+    <icon image="features/paths__pedestrian.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
