@@ -516,6 +516,7 @@ Quick documentation:
 
   <feature name="Motorway link" icon="features/motorway_link.png">
     <category>roads</category>
+    <icon image="features/highway__motorway.png" />
     <line/>
     <tag k="highway" v="motorway_link"/>
 
@@ -538,6 +539,7 @@ Quick documentation:
 
   <feature name="Trunk link" icon="features/motorway_link.png">
     <category>roads</category>
+    <icon image="features/highway__trunk.png" />
     <line/>
     <tag k="highway" v="trunk_link"/>
 
@@ -546,7 +548,7 @@ Quick documentation:
 
   <feature name="Primary road">
     <category>roads</category>
-    <icon>
+    <icon image="features/highway__unclassified.png">
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
@@ -560,7 +562,7 @@ Quick documentation:
 
   <feature name="Secondary road">
     <category>roads</category>
-    <icon>
+    <icon image="features/highway__unclassified.png">
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
@@ -574,7 +576,7 @@ Quick documentation:
 
   <feature name="Tertiary road">
     <category>roads</category>
-    <icon>
+    <icon image="features/highway__unclassified.png">
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="10pt">${ref}</font>
     </icon>
@@ -638,7 +640,7 @@ Quick documentation:
 
   <feature name="Unknown road">
     <category>roads</category>
-    <icon>
+    <icon image="features/highway__service.png">
       <font size="10pt">This road has not been given a specific type. It's a road, and that's all that's known.</font>
     </icon>
 
@@ -650,7 +652,7 @@ Quick documentation:
 
   <feature name="Living Street">
     <category>roads</category>
-    <icon>
+    <icon image="features/highway__residential.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dliving_street</help>
@@ -660,24 +662,17 @@ Quick documentation:
 
     <inputSet ref="minorRoad"/>
   </feature>
-
-  <feature name="Pedestrian road">
+  
+  <feature name="Track">
     <category>roads</category>
-    <icon>
+    <icon image="features/highway__unclassified.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
-    <tag k="highway" v="pedestrian"/>
-    <!-- pedestrian roads can be lines or areas, with different tags -->
-    <!-- TODO - implement this! -->
-    <line>
-      <tag k="highway" v="pedestrian"/>
-    </line>
-    <area>
-      <tag k="highway" v="pedestrian"/>
-      <tag k="area" v="yes"/>
-    </area>
-    <inputSet ref="minorRoad"/>
+    <line/>
+    <tag k="highway" v="track"/>
+
+    <inputSet ref="path"/>
   </feature>
 
 
@@ -706,17 +701,24 @@ Quick documentation:
     <tag k="highway" v="cycleway"/>
     <inputSet ref="path"/>
   </feature>
-
-  <feature name="Track">
+  
+  <feature name="Pedestrian Street">
     <category>paths</category>
     <icon>
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
-    <line/>
-    <tag k="highway" v="track"/>
-
-    <inputSet ref="path"/>
+    <tag k="highway" v="pedestrian"/>
+    <!-- pedestrian roads can be lines or areas, with different tags -->
+    <!-- TODO - implement this! -->
+    <line>
+      <tag k="highway" v="pedestrian"/>
+    </line>
+    <area>
+      <tag k="highway" v="pedestrian"/>
+      <tag k="area" v="yes"/>
+    </area>
+    <inputSet ref="minorRoad"/>
   </feature>
 
   <feature name="Bridleway">
