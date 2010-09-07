@@ -18,9 +18,19 @@ Potlatch 2: main outstanding issues
 
 * initialiseEditors is quite slow (typically 150ms)
 * Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
+* Can't use + for second tag
+* Tag panel jumps up and down when number spinner is used on bike parking
+* New relation panel jumps up and down, but I haven't seen it on editing existing relations
+* Changing relation ref doesn't update the main tagviewer until the entity is reselected
+* Changing type of relation doesn't update the main tagviewer until the entity is reselected
+* Adding a relation via the advanced panel doesn't update the simple panel
+* 'Select relation' panel doesn't indicate that the list is being filtered (e.g. simple -> add to a route)
+* Checkbox needs a clear button, or to be changed to a ✓✗? triplet
+
 
 == UI ==
 
+* Failing to parse map_features should be an error state
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes
@@ -31,8 +41,6 @@ Potlatch 2: main outstanding issues
 * small node hitzone when creating areas - hitzone and mouseover UI don't match up
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
-* Can't use + for second tag
-* Tag panel jumps up and down when number spinner is used on bike parking
 
 == Miscellaneous data model ==
 
@@ -48,8 +56,8 @@ Potlatch 2: main outstanding issues
 * Multipolygon rendering for dashedLine, lineDecoration, and WayBitmapFiller
 * Multipolygons should take their tags from the relation, not the way
 
-
-
+== Other ==
+* should have build numbers available somehow
 
 Requested enhancements
 ----------------------
