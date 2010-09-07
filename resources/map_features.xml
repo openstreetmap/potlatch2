@@ -1510,12 +1510,6 @@ Quick documentation:
     <inputSet ref="simpleName"/>
   </feature>
 
-    <feature name="Sports track">
-    <category>landuse</category><area/><icon><b>${name}</b></icon>
-    <tag k="leisure" v="track"/>
-    <inputSet ref="simpleName"/>
-  </feature>
-
   <!-- ************************************************************************
        Power
        ************************************************************************ -->
