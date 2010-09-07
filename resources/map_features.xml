@@ -57,7 +57,7 @@ Quick documentation:
   <category name="Shopping" id="shopping">
   </category>
 
-  <category name="Entertainment" id="entertainment">
+  <category name="Food and Drink" id="foodanddrink">
   </category>
 
   <category name="Amenity" id="amenity">
@@ -2262,7 +2262,7 @@ Quick documentation:
   <!-- ========= Entertainment ========= -->
   
   <feature name="Pub">
-    <category>entertainment</category>
+    <category>foodanddrink</category>
     <icon image="features/pois/food_pub.n.24.png">
       ${name}
     </icon>
@@ -2276,7 +2276,7 @@ Quick documentation:
   </feature>
 
   <feature name="Bar">
-    <category>entertainment</category>
+    <category>foodanddrink</category>
     <icon image="features/pois/food_bar.n.24.png">
       ${name}
     </icon>
@@ -2289,7 +2289,7 @@ Quick documentation:
   </feature>
 
   <feature name="Restaurant">
-    <category>entertainment</category>
+    <category>foodanddrink</category>
     <icon image="features/pois/food_restaurant.n.24.png">
       ${name}
     </icon>
@@ -2302,7 +2302,7 @@ Quick documentation:
   </feature>
   
   <feature name="Cafe">
-    <category>entertainment</category>
+    <category>foodanddrink</category>
     <icon image="features/pois/food_cafe.n.24.png">
       ${name}
     </icon>
@@ -2317,7 +2317,7 @@ Quick documentation:
   </feature>
   
   <feature name="Fast Food">
-    <category>entertainment</category>
+    <category>foodanddrink</category>
     <icon image="features/pois/food_fastfood.n.24.png">
       ${name}
     </icon>
