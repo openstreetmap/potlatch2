@@ -54,6 +54,21 @@ Quick documentation:
   <category name="Paths" id="paths">
   </category>
 
+  <category name="Shopping" id="shopping">
+  </category>
+
+  <category name="Entertainment" id="entertainment">
+  </category>
+
+  <category name="Amenity" id="amenity">
+  </category>
+
+  <category name="Tourism" id="tourism">
+  </category>
+
+  <category name="Accommodation" id="accommodation">
+  </category>
+
   <category name="Transport" id="transport">
   </category>
 
@@ -76,22 +91,6 @@ Quick documentation:
   </category>
 
   <category name="Landuse" id="landuse">
-  </category>
-
-  <category name="Entertainment" id="entertainment">
-  </category>
-  
-  <category name="Amenity" id="amenity">
-  </category>
-
-  <category name="Tourism" id="tourism">
-  </category>
-
-  <category name="Accommodation" id="accommodation">
-  </category>
-
-
-  <category name="Shopping" id="shopping">
   </category>
 
   <category name="Agriculture" id="agriculture">
