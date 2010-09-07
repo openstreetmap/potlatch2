@@ -1425,13 +1425,6 @@ Quick documentation:
     <tag k="landuse" v="military"/>
     <inputSet ref="simpleName"/>
   </feature>
-
-  <feature name="Farming">
-    <category>landuse</category>
-    <area/>
-    <tag k="landuse" v="farm"/>
-    <inputSet ref="simpleName"/>
-  </feature>
   
   <feature name="Conservation">
     <category>natural</category>
@@ -2546,7 +2539,7 @@ Quick documentation:
   <!-- **************** Agriculture *************** -->
   <feature name="Farm">
     <category>agriculture</category>
-<!--    <point /> Avoid this, to prevent POI icon -->
+    <icon image="features/pois/landuse_grass.n.24.png" />
     <area />
     <tag k="landuse" v="farm"/>
     <inputSet ref="simpleName"/>
@@ -2554,6 +2547,7 @@ Quick documentation:
 
   <feature name="Farmyard">
     <category>agriculture</category>
+    <icon image="features/pois/landuse_grass.n.24.png" />
     <area />
     <tag k="landuse" v="farmyard"/>
     <inputSet ref="simpleName"/>
@@ -2561,6 +2555,7 @@ Quick documentation:
 
  <feature name="Farmland">
     <category>agriculture</category>
+    <icon image="features/pois/landuse_grass.n.24.png" />
     <area />
     <tag k="landuse" v="farmland"/>
     <inputSet ref="simpleName"/>
@@ -2568,7 +2563,7 @@ Quick documentation:
 
   <feature name="Field">
     <category>agriculture</category>
-    
+    <icon image="features/pois/landuse_grass.n.24.png" />
     <area />
     <tag k="landuse" v="meadow"/>
     <inputSet ref="simpleName"/>
@@ -2576,6 +2571,7 @@ Quick documentation:
   
   <feature name="Orchard">
     <category>agriculture</category>
+    <icon image="features/pois/landuse_grass.n.24.png" />
     <area />
     <tag k="landuse" v="orchard"/>
     <inputSet ref="simpleName"/>
@@ -2583,6 +2579,7 @@ Quick documentation:
 
   <feature name="Vineyard">
     <category>agriculture</category>
+    <icon image="features/pois/landuse_grass.n.24.png" />
     <area />
     <tag k="landuse" v="vineyard"/>
     <inputSet ref="simpleName"/>
