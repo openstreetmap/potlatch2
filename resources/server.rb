@@ -13,7 +13,7 @@
 require 'webrick'
 include WEBrick
 
-s=HTTPServer.new(:Port => 3333, :DocumentRoot => Dir.pwd)
+s=HTTPServer.new(:Port => 3333, :DocumentRoot => Dir.pwd, :MaxClients => 1000)
 
 # Handle signals.
 %w(INT TERM).each do |signal|
