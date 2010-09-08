@@ -11,11 +11,6 @@
 		<type>900913</type>
 		<url>http://tah.openstreetmap.org/Tiles/tile/$z/$x/$y.png</url>
 	</set>
-	<set>
-		<name>OSM - Maplint (errors)</name>
-		<type>900913</type>
-		<url>http://tah.openstreetmap.org/Tiles/maplint/$z/$x/$y.png</url>
-	</set>
 	<set>
 		<name>OS OpenData Streetview</name>
 		<type>900913</type>
