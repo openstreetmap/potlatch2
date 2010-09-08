@@ -154,14 +154,24 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 13:					return stopDrawing();
-				case 27:					return stopDrawing();
+				case 13:					return keyExitDrawing();
+				case 27:					return keyExitDrawing();
 				case Keyboard.DELETE:		return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case 82:					repeatTags(selectedWay); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
+		}
+		
+		protected function keyExitDrawing():ControllerState {
+			if (selectedWay.length==1) { 
+				if (MainUndoStack.getGlobalStack().undoIfAction(BeginWayAction)) { 
+					return new NoSelection();
+				}
+				return deleteWay();
+			}
+			return stopDrawing();
 		}
 		
 		protected function stopDrawing():ControllerState {

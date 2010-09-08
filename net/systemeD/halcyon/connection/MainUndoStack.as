@@ -80,6 +80,16 @@ package net.systemeD.halcyon.connection {
             dispatchEvent(new Event("new_redo_item"));
         }
         
+		public function undoIfAction(action:Class):Boolean {
+			if (!undoActions.length) { return false; }
+			if (undoActions[undoActions.length-1] is action) {
+				undo();
+				return true;
+			} else {
+				return false;
+			}
+		}
+
         public function redo():void {
 			if (!redoActions.length) { return; }
             var action:UndoableAction = redoActions.pop();
