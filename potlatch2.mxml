@@ -193,6 +193,15 @@
 
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
+
+            // show help dialog on startup, if required
+            // show_help == always => on every startup
+            // show_help == once => show on first startup only
+            var show_help:String = loaderInfo.parameters["show_help"];
+
+            if (show_help == 'always' || (show_help == 'once' && obj.data["help_shown"] != "true")) {
+              new HelpDialog().init();
+            }
 		}
 		
 		public function onMapError(event:MapEvent):void {

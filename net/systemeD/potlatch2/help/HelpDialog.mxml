@@ -13,6 +13,10 @@
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, helpDialog_close);
+
+        // store whether the user has seen the help dialog before
+        var obj:SharedObject = SharedObject.getLocal("user_state");
+        obj.setProperty("help_shown","true");
     }
     
     private function helpDialog_close(evt:CloseEvent):void {
