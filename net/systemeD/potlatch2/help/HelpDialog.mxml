@@ -3,7 +3,7 @@
         xmlns:mx="http://www.adobe.com/2006/mxml" 
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Welcome to Potlatch2 for [Website]"
-        width="550" height="350"
+        width="600" height="400"
         verticalGap="0">
   <mx:Script><![CDATA[
     import mx.managers.PopUpManager;
@@ -26,7 +26,7 @@
 
               ]]>
   </mx:Script>
-  <mx:TabNavigator id="helpTN" width="100%" height="100%">
+  <mx:TabNavigator id="helpTN" width="100%" height="100%" styleName="helpTN">
     <mx:VBox label="Welcome" width="100%" height="100%">
       <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
@@ -42,11 +42,11 @@
       </mx:Text>
     </mx:VBox>
     <mx:VBox label="Controls" width="100%" height="100%">
-      <mx:Label text="Interface Controls" />
+      <mx:Label text="Interface Controls" textAlign="center" width="100%" styleName="helpPageHeader"/>
       <mx:Grid width="100%">
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label text="Background" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="Background" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -60,7 +60,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label text="MapStyle" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="MapStyle" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -74,7 +74,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label text="GPS" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="GPS" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -88,7 +88,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label text="Undo / Redo" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="Undo / Redo" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -102,7 +102,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label text="Help" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="Help" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -116,7 +116,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label text="Save" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="Save" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -131,7 +131,7 @@
       </mx:Grid>
     </mx:VBox>
     <mx:VBox label="Adding">
-      <mx:Label text="Adding Features" />
+      <mx:Label text="Adding Features" textAlign="center" width="100%" styleName="helpPageHeader" />
       <mx:Text condenseWhite="true" width="100%">
         <mx:htmlText>
           <![CDATA[
@@ -147,28 +147,46 @@
       </mx:Text>
     </mx:VBox>
     <mx:VBox label="Editing (Beg.)">
-      <mx:Text>
+      <mx:Label text="Editing Features (Beginner)" textAlign="center" width="100%" styleName="helpPageHeader" />
+      <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
           <![CDATA[
-            <h1>Interface Controls</h1>
+            <p><b>To add a point to an existing way</b>, select the way and shift+click ad the desired location.</p>
+            <p><b>To delete a point or way</b>, select the way and click the Delete Item button in the bottom right corner or press Delete (Backspace) on your keyboard.</p>
+            <p><b>To delete a point in an existing way</b>, select the point and click the Delete Item button in the bottom right corner or press Delete (Backspace) on your keyboard.</p>
+            <p><b>To move a point</b>, click and drag the point.</p>
+            <p><b>To move a way</b>, click and drag the entire feature (hint: grab a segment where you won't accidentally move a node).</p>
+            <p><b>To extend a way</b>, click on one of the end points of the way. Then continue drawing as usual.</p>
+            <p><b>To add a new way extending from an existing way</b>, shift+click on one of the end points of the way. Then continue drawing as usual.</p>
           ]]>
         </mx:htmlText>
       </mx:Text>
     </mx:VBox>
     <mx:VBox label="Editing (Adv.)">
-      <mx:Text>
+      <mx:Label text="Editing Features (Advanced)" textAlign="center" width="100%" styleName="helpPageHeader" />
+      <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
           <![CDATA[
-            <h1>Interface Controls</h1>
+            <p><b>To split a way</b>, select the point at which you want to cut, and click the Scissor tool or press X on your keyboard.</p>
+            <p><b>To make a junction between two ways</b>, draw as usual until you need to make a junction. Then as you move your mouse over another way, the points will light up blue. Click on one of the blue points or any other desired location on the way to make a junction.</p>
+            <p><b>To disconnect a junction</b>, select the point on the way you wish to alter. The press - on your keyboard to remove the point.</p>
+            <p><b>To reverse the direction of a way</b>, click the Reverse Direction button in the bottom right corner. The direction of a way is only a concern for those features with a "oneway" tag - oneway streets, coastlines, islands, and so on.</p>
+            <p><b>To create a way running parallel</b>, select the way and click the Create Parallel Way button in the bottom right corner or press P on your keyboard.</p>
+            <p><i>Visit the Potlatch2/Primer on the OpenStreetMap wiki for even more advanced editing methods and conventions.</i></p>
           ]]>
         </mx:htmlText>
       </mx:Text>
     </mx:VBox>
     <mx:VBox label="Tagging">
-      <mx:Text>
+    <mx:Label text="Tagging Features" textAlign="center" width="100%" styleName="helpPageHeader" />
+      <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
           <![CDATA[
-            <h1>Interface Controls</h1>
+            <p>With Potlatch2, tagging features has become relatively easy with its use of graphical menus and dedicated fields/icons.</p>
+            <p><b>Tagging a feature</b></p>
+            <p>Select the point or way that you wish to edit, adn choose the appropriate tag from the left sidebar. After tagging the feature, some basic fields should appear such as Name, Speed Limit, and Width, depending on the tag you gave. Fill these out as best you can.</p>
+            <p>Advanced users may notice the absence of a few tags and tag values they occasionally use. If this is the case, click on the Advanced tab at the bottom of the sidebar and edit/add as necessary.</p>
+            <p>The OpenStreetMap wiki also provides an <a href="http://wiki.openstreetmap.org/wiki/Map_features">extensive list of tags and tag values</a>. Please refer backt o the OSM documentation if you are unsure of which tag to use.</p>
           ]]>
         </mx:htmlText>
       </mx:Text>

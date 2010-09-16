@@ -37,7 +37,17 @@ TitleWindow {
 
 .helpHeaderText {
   fontWeight: bold;
+  fontSize: 12pt;
+  textAlign: right;
+}
+
+.helpPageHeader {
+  fontWeight: bold;
   fontSize: 13pt;
+}
+
+.helpTN {
+  /*backgroundColor: #e8f4d9;*/
 }
 
 .header {
