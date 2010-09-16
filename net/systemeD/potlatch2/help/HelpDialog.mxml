@@ -28,18 +28,57 @@
   </mx:Script>
   <mx:TabNavigator id="helpTN" width="100%" height="100%" styleName="helpTN">
     <mx:VBox label="Welcome" width="100%" height="100%">
-      <mx:Text condenseWhite="true" width="100%" height="100%">
-        <mx:htmlText>
-          <![CDATA[
-            <p><b>Potlatch 2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the [Website] website.</p>
-            <p><b>Why OpenStreetMap?</b> OSM is a mapping service in which all data is constantly updated and edited by everyday people like you. The obvious benefit is that it's free to use, but it has also become a major player in crisis mapping (i.e. use of OSM data to coordinate earthquake relief efforts in Haiti). Accuracy of this data is critical, and we hope you are able to volunteer some of your time!</p>
-            <p> * * * </p>
-            <p><b>Getting Started</b></p>
-            <p><b>+ For active OpenStreetMap members</b>, please sign in to OSM before editing</b></p>
-            <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here.</p>
-          ]]>
-        </mx:htmlText>
-      </mx:Text>
+      <mx:Grid width="100%"><!-- prepare for a column of icons, at some point -->
+        <mx:GridRow width="100%">
+          <mx:GridItem width="100%">
+            <mx:Text condenseWhite="true" width="100%">
+              <mx:htmlText>
+                <![CDATA[
+                  <p><b>Potlatch 2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the [Website] website.</p>
+                ]]>
+              </mx:htmlText>
+            </mx:Text>
+          </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%">
+          <mx:GridItem width="100%">
+            <mx:Text condenseWhite="true" width="100%">
+              <mx:htmlText>
+                <![CDATA[
+                  <p><b>Why OpenStreetMap?</b> OSM is a mapping service in which all data is constantly updated and edited by everyday people like you. The obvious benefit is that it's free to use, but it has also become a major player in crisis mapping (i.e. use of OSM data to coordinate earthquake relief efforts in Haiti). Accuracy of this data is critical, and we hope you are able to volunteer some of your time!</p>
+                ]]>
+              </mx:htmlText>
+            </mx:Text>
+          </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%">
+          <mx:GridItem width="100%">
+            <mx:Label text="Getting Started" textAlign="center" width="100%" styleName="helpPageHeader" />
+          </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%">
+          <mx:GridItem width="100%">
+            <mx:Text condenseWhite="true" width="100%">
+              <mx:htmlText>
+                <![CDATA[
+                  <p><b>+ For active OpenStreetMap members</b>, please sign in to OSM before editing</b></p>
+                ]]>
+              </mx:htmlText>
+            </mx:Text>
+          </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%">
+          <mx:GridItem width="100%">
+            <mx:Text condenseWhite="true" width="100%">
+              <mx:htmlText>
+                <![CDATA[
+                  <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here.</p>
+                ]]>
+              </mx:htmlText>
+            </mx:Text>
+          </mx:GridItem>
+        </mx:GridRow>
+      </mx:Grid>
     </mx:VBox>
     <mx:VBox label="Controls" width="100%" height="100%">
       <mx:Label text="Interface Controls" textAlign="center" width="100%" styleName="helpPageHeader"/>
