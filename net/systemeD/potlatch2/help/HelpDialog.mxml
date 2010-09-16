@@ -2,8 +2,9 @@
 <mx:TitleWindow
         xmlns:mx="http://www.adobe.com/2006/mxml" 
         layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="Help"
-        width="350" height="250" verticalGap="0">
+        horizontalAlign="center" title="Welcome to Potlatch2 for [Website]"
+        width="450" height="350"
+        verticalGap="0">
   <mx:Script><![CDATA[
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
@@ -25,13 +26,68 @@
 
               ]]>
   </mx:Script>
-  <mx:Text>
-    <mx:htmlText>
-		<![CDATA[
-For Potlatch 2 help, see the <u><a href="http://wiki.openstreetmap.org/wiki/Potlatch_2" target="_blank">OpenStreetMap wiki</a></u>.
-		]]>
-    </mx:htmlText>
-  </mx:Text>
+  <mx:TabNavigator id="tn" width="100%" height="100%">
+    <mx:VBox label="Welcome" width="100%" height="100%">
+      <mx:Text condenseWhite="true" width="100%" height="100%">
+        <mx:htmlText>
+          <![CDATA[
+            <p><b>Potlatch 2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the [Website] website.</p>
+            <p><b>Why OpenStreetMap?</b> OSM is a mapping service in which all data is constantly updated and edited by everyday people like you. The obvious benefit is that it's free to use, but it has also become a major player in crisis mapping (i.e. use of OSM data to coordinate earthquake relief efforts in Haiti). Accuracy of this data is critical, and we hope you are able to volunteer some of your time!</p>
+            <p> * * * </p>
+            <h1>Getting Started</h1>
+            <p><b>+ For active OpenStreetMap members</b>, please sign in to OSM before editing</b></p>
+            <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here.</p>
+          ]]>
+        </mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+    <mx:VBox label="Controls">
+      <mx:Text>
+        <mx:htmlText>
+          <![CDATA[
+            <h1>Interface Controls</h1>
+          ]]>
+        </mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+    <mx:VBox label="Adding">
+      <mx:Text>
+        <mx:htmlText>
+          <![CDATA[
+            <h1>Interface Controls</h1>
+          ]]>
+        </mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+    <mx:VBox label="Editing (Beg.)">
+      <mx:Text>
+        <mx:htmlText>
+          <![CDATA[
+            <h1>Interface Controls</h1>
+          ]]>
+        </mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+    <mx:VBox label="Editing (Adv.)">
+      <mx:Text>
+        <mx:htmlText>
+          <![CDATA[
+            <h1>Interface Controls</h1>
+          ]]>
+        </mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+    <mx:VBox label="Tagging">
+      <mx:Text>
+        <mx:htmlText>
+          <![CDATA[
+            <h1>Interface Controls</h1>
+          ]]>
+        </mx:htmlText>
+      </mx:Text>
+    </mx:VBox>
+  </mx:TabNavigator>
+
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
     <mx:Button label="Ok" click="PopUpManager.removePopUp(this);"/>
