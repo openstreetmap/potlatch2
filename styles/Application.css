@@ -35,6 +35,11 @@ TitleWindow {
   fontStyle: italic;
 }
 
+.helpHeaderText {
+  fontWeight: bold;
+  fontSize: 13pt;
+}
+
 .header {
 		fillColors: haloSilver, x222222;
 		fillAlphas: 1.0, 1.0;
