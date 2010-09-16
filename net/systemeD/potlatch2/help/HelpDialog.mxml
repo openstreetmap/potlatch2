@@ -34,7 +34,7 @@
             <p><b>Potlatch 2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the [Website] website.</p>
             <p><b>Why OpenStreetMap?</b> OSM is a mapping service in which all data is constantly updated and edited by everyday people like you. The obvious benefit is that it's free to use, but it has also become a major player in crisis mapping (i.e. use of OSM data to coordinate earthquake relief efforts in Haiti). Accuracy of this data is critical, and we hope you are able to volunteer some of your time!</p>
             <p> * * * </p>
-            <h1>Getting Started</h1>
+            <p><b>Getting Started</b></p>
             <p><b>+ For active OpenStreetMap members</b>, please sign in to OSM before editing</b></p>
             <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here.</p>
           ]]>
@@ -135,7 +135,7 @@
       <mx:Text condenseWhite="true" width="100%">
         <mx:htmlText>
           <![CDATA[
-            <p><i>Before you being, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: Copyright - OpenStreetMap Wiki)</i></p>
+            <p><i>Before you begin, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: Copyright - OpenStreetMap Wiki)</i></p>
             <p></p>
             <p>Linear features such as streets, footpaths, railways and building outlines will hereby be referred to as ways.</p>
             <p><b>To create a point (or node)</b>, just drag and drop the appropriate icon from the sidebar onto the map.</p>
