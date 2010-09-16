@@ -2,7 +2,7 @@
 <mx:TitleWindow
         xmlns:mx="http://www.adobe.com/2006/mxml" 
         layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="Welcome to Potlatch2 for [Website]"
+        horizontalAlign="center" title="{getTitleText()}"
         width="600" height="400"
         verticalGap="0">
   <mx:Script><![CDATA[
@@ -19,9 +19,33 @@
         var obj:SharedObject = SharedObject.getLocal("user_state");
         obj.setProperty("help_shown","true");
     }
-    
+
     private function helpDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
+    }
+
+    private function getTitleText():String {
+        var site_name:String = loaderInfo.parameters["site_name"];
+        if (site_name) {
+          return "Welcome to Potlatch2 for " + site_name;
+        }
+        return "Welcome to Potlatch2";
+    }
+
+    private function getIntroText():String {
+        var site_name:String = loaderInfo.parameters["site_name"];
+        if (site_name) {
+          return "<p><b>Potlatch2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the " + site_name + " website.</p>";
+        }
+        return "<p><b>Potlatch2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through this website.</p>";
+    }
+
+    private function getSaveText():String {
+        var site_name:String = loaderInfo.parameters["site_name"];
+        if (site_name) {
+          return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM and subsequently on " + site_name + ".</p>";
+        }
+        return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM.</p>"
     }
 
               ]]>
@@ -31,13 +55,7 @@
       <mx:Grid width="100%"><!-- prepare for a column of icons, at some point -->
         <mx:GridRow width="100%">
           <mx:GridItem width="100%">
-            <mx:Text condenseWhite="true" width="100%">
-              <mx:htmlText>
-                <![CDATA[
-                  <p><b>Potlatch 2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the [Website] website.</p>
-                ]]>
-              </mx:htmlText>
-            </mx:Text>
+            <mx:Text condenseWhite="true" width="100%" htmlText="{getIntroText()}" />
           </mx:GridItem>
         </mx:GridRow>
         <mx:GridRow width="100%">
@@ -158,13 +176,7 @@
             <mx:Label width="100%" text="Save" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
-            <mx:Text condenseWhite="true" width="100%">
-              <mx:htmlText>
-                <![CDATA[
-                  <p>If you feel confident with your edits, hit save to publish to <a href="http://www.openstreetmap.org">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM and subsequently on [Website].</p>
-                ]]>
-              </mx:htmlText>
-            </mx:Text>
+            <mx:Text condenseWhite="true" width="100%" htmlText="{getSaveText()}" />
           </mx:GridItem>
         </mx:GridRow>
       </mx:Grid>
