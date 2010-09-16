@@ -48,6 +48,8 @@ TitleWindow {
 
 .helpTN {
   /*backgroundColor: #e8f4d9;*/
+  cornerRadius: 5px;
+  tabOffset: 10px;
 }
 
 .header {
