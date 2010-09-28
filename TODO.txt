@@ -15,6 +15,7 @@ Potlatch 2: main outstanding issues
 * Connectivity isn't preserved when bringing ways through (e.g. from OSM layer)
 * Alt-click on lines from GPX appears to prevent anything from being selected.
 * z-ordering - areas in editing layer prevent background layers from being clicked.
+* Make loading your own traces from osm 150% less painful
 
 == Tag editing ==
 
