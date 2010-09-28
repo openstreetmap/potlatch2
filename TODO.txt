@@ -13,6 +13,8 @@ Potlatch 2: main outstanding issues
 * Load from local file (Flash Player 10 only)
 * TagTransform (cf http://wiki.openstreetmap.org/wiki/Osmosis/TagTransform)
 * Connectivity isn't preserved when bringing ways through (e.g. from OSM layer)
+* Alt-click on lines from GPX appears to prevent anything from being selected.
+* z-ordering - areas in editing layer prevent background layers from being clicked.
 
 == Tag editing ==
 
