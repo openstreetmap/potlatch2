@@ -50,6 +50,10 @@ way[waterway=river], way[waterway=canal] { color: blue; width: 2; text:name; tex
 
 way[barrier] {color: #000000; width: 1}
 
+/*add node[power=pylon] etc when there's an icon */
+way[power=line] {color: black; width: 1; dashes: 6,2; }
+way[power=minor_line] {color: grey; width: 1; dashes: 2,4; }
+
 /* Fills can be solid colour or bitmap images */
 
 
