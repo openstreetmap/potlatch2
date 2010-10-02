@@ -167,6 +167,7 @@ Quick documentation:
     <inputSet ref="pedestrians"/>
     <inputSet ref="roadLanes"/>
     <inputSet ref="roadRoundabout"/>
+    <inputSet ref="permissions"/>
     </inputSet>
 
     <inputSet id="minorRoad">
@@ -179,7 +180,8 @@ Quick documentation:
       <inputSet ref="pedestrians"/>
       <inputSet ref="roadLanes"/>
       <inputSet ref="roadRoundabout"/>
-  </inputSet>
+      <inputSet ref="permissions"/>
+    </inputSet>
 
   <inputSet id="path">
     <inputSet ref="simpleName"/>
@@ -187,6 +189,7 @@ Quick documentation:
     <inputSet ref="cycle"/>
     <inputSet ref="ldp"/>
     <inputSet ref="pedestrians"/>
+    <inputSet ref="permissions"/>
   </inputSet>
   
   <inputSet id="junctionNode">
@@ -487,14 +490,43 @@ Quick documentation:
          
            
     </inputSet>
-
+<!-- Would be good to have a dedicated 'access' type of input -->
+  <!-- all the description fields are identical at the moment for ease of maintenance, should be tailored in future. -->
   <inputSet id="boatPermissions">
     <input type="choice" name="Boat permission" category="Permission" key="boat" description="Are boats allowed to use this waterway?">
-      <choice value="yes" text="Allowed"/>
-      <choice value="no" text="Prohibited"/>
-      <choice value="private" text="Private"/>
-
+      <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="yes" text="Allowed" description="General right of way."/>
+      <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
+      <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
+      <choice value="no" text="Prohibited" description="No access to the public."/>
     </input>
+  </inputSet>
+
+  <inputSet id="permissions">
+    <input type="choice" name="General access" category="Permission" key="access" description="Is there a general right of access, regardless of mode of transport?">
+      <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="yes" text="Allowed" description="General right of way."/>
+      <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
+      <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
+      <choice value="no" text="Prohibited" description="No access to the public."/>
+    </input>
+
+    <input type="choice" name="Motor vehicles" category="Permission" key="motor_vehicle" description="Are cars and other private vehicles allowed?">
+      <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="yes" text="Allowed" description="General right of way."/>
+      <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
+      <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
+      <choice value="no" text="Prohibited" description="No access to the public."/>
+    </input>
+
+    <input type="choice" name="Horses" category="Permission" key="horse" description="Are cars and other private vehicles allowed?">
+      <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="yes" text="Allowed" description="General right of way."/>
+      <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
+      <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
+      <choice value="no" text="Prohibited" description="No access to the public."/>
+    </input>
+
   </inputSet>
   
   <!-- ************************************************************************
