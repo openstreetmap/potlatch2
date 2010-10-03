@@ -7,21 +7,20 @@ package net.systemeD.halcyon.connection.actions {
     public class CreatePOIAction extends CompositeUndoableAction {
     
         private var newNode:Node;
-        private var event:MouseEvent;
-        private var map:Map;
+		private var tags:Object;
+		private var lat:Number;
+		private var lon:Number;
         
-        public function CreatePOIAction(event:MouseEvent, map:Map) {
+        public function CreatePOIAction(tags:Object, lat:Number, lon:Number) {
           super("Create POI");
-          this.event = event;
-          this.map = map;
+          this.tags = tags;
+          this.lat = lat;
+          this.lon = lon;
         }
         
         public override function doAction():uint {
           if (newNode == null) {
-            newNode = Connection.getConnection().createNode(
-                {},
-                map.coord2lat(event.localY),
-                map.coord2lon(event.localX), push);
+            newNode = Connection.getConnection().createNode(tags,lat,lon,push);
           }
           super.doAction();
           Connection.getConnection().registerPOI(newNode);

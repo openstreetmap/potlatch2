@@ -57,7 +57,10 @@ package net.systemeD.potlatch2.controller {
                             stopDrawing();
                             MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
                             
-                            var newPoiAction:CreatePOIAction = new CreatePOIAction(event, controller.map);
+                            var newPoiAction:CreatePOIAction = new CreatePOIAction(
+								{},
+								controller.map.coord2lat(event.localX),
+								controller.map.coord2lon(event.localY));
                             MainUndoStack.getGlobalStack().addAction(newPoiAction);
                             return new SelectedPOINode(newPoiAction.getNode());
 						} else {

@@ -263,8 +263,8 @@ package net.systemeD.halcyon {
 		}
 
         public function setHighlight(entity:Entity, settings:Object):void {
-			if      ( entity is Way  ) { paint.wayuis[entity.id].setHighlight(settings); }
-			else if ( entity is Node ) { paint.nodeuis[entity.id].setHighlight(settings); }
+			if      ( entity is Way  && paint.wayuis[entity.id] ) { paint.wayuis[entity.id].setHighlight(settings);  }
+			else if ( entity is Node && paint.nodeuis[entity.id]) { paint.nodeuis[entity.id].setHighlight(settings); }
         }
 
         public function setHighlightOnNodes(way:Way, settings:Object):void {

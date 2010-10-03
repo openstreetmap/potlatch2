@@ -3,6 +3,7 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.RuleSet;
 
@@ -63,8 +64,9 @@ package net.systemeD.halcyon {
 			return o;
 		}
 		
-		public function pullThrough(entity:Entity,connection:Connection):Way {
+		public function pullThrough(entity:Entity,connection:Connection):Entity {
 			var i:uint=0;
+			var oldNode:Node, newNode:Node;
 			if (entity is Way) {
 				// copy way through to main layer
 				// ** shouldn't do this if the nodes are already in the main layer
@@ -72,7 +74,6 @@ package net.systemeD.halcyon {
 				var oldWay:Way=Way(entity);
 				var newWay:Way=connection.createWay(oldWay.getTagsCopy(), [], MainUndoStack.getGlobalStack().addAction);
 				var nodemap:Object={};
-				var oldNode:Node, newNode:Node;
 				for (i=0; i<oldWay.length; i++) {
 					oldNode = oldWay.getNode(i);
 					newNode = nodemap[oldNode.id] ? nodemap[oldNode.id] : connection.createNode(
@@ -90,11 +91,20 @@ package net.systemeD.halcyon {
 				paint.wayuis[oldWay.id].redraw();
 				delete ways[oldWay.id];
 				map.paint.createWayUI(newWay);
-			} else {
-				// ** should be able to pull nodes through
-				trace ("Pulling nodes through isn't supported yet");
+				return newWay;
+
+			} else if (entity is Node && !entity.hasParentWays) {
+				// copy node through to main layer
+				// ** should be properly undoable
+				oldNode=Node(entity)
+				var newPoiAction:CreatePOIAction = new CreatePOIAction(
+					oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
+				MainUndoStack.getGlobalStack().addAction(newPoiAction);
+				paint.deleteNodeUI(oldNode);
+				delete nodes[oldNode.id];
+				return newPoiAction.getNode();
 			}
-			return newWay;
+			return null;
 		}
 		
 		public function blank():void {
