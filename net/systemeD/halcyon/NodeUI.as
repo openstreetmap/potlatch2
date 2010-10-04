@@ -147,12 +147,12 @@ package net.systemeD.halcyon {
 		}
 
 		private function addHitSprite(w:uint):void {
-            var hitzone:Sprite = new Sprite();
+            hitzone = new Sprite();
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 			hitzone.graphics.beginFill(0);
 			hitzone.graphics.drawRect(0,0,w,w);
 			hitzone.visible = false;
-			setListenSprite(hitzone);
+			setListenSprite();
 		}
 
 		private function loadedIcon(event:Event):void {

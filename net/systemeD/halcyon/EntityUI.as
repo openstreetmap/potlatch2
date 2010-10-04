@@ -14,7 +14,8 @@ package net.systemeD.halcyon {
 		protected var entity:Entity;
 		protected var styleList:StyleList;				// current StyleList for this entity
 		protected var sprites:Array=new Array();		// instances in display list
-        protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
+		protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
+		protected var hitzone:Sprite;					// hitzone for above
 		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
 		protected var layer:int=0;						// map layer
 		protected var suspended:Boolean=false;			// suspend redrawing?
@@ -112,7 +113,7 @@ package net.systemeD.halcyon {
             }
 		}
 
-		protected function setListenSprite(hitzone:Sprite):void {
+		protected function setListenSprite():void {
 			var l:Sprite=paint.getHitSpriteAt(layer);
 			var s:Sprite;
 			if (entity is Way) { s=l.getChildAt(0) as Sprite; }
@@ -136,6 +137,7 @@ package net.systemeD.halcyon {
 				if (d.parent) { d.parent.removeChild(d); }
 			}
 			listenSprite.hitArea=null;
+			hitzone=null;
 		}
 
 		protected function offsetSprites(x:Number, y:Number):void {

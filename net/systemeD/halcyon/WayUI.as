@@ -18,7 +18,6 @@ package net.systemeD.halcyon {
 		public var centroid_x:Number;				// centroid
 		public var centroid_y:Number;				//  |
 		public var heading:Array=new Array();		// angle at each node
-        private var hitzone:Sprite;
 		public var nameformat:TextFormat;
 		private var recalculateDue:Boolean=false;
 
@@ -303,7 +302,7 @@ package net.systemeD.halcyon {
 	            hitzone.graphics.lineStyle(maxwidth, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 	            solidLines(hitzone.graphics,[]);
 	            hitzone.visible = false;
-				setListenSprite(hitzone);
+				setListenSprite();
 			}
 
 			return true;
