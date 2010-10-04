@@ -62,7 +62,7 @@ package net.systemeD.halcyon {
 			var stroke:Shape = new Shape();
             stroke.graphics.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 
-			var l:DisplayObject=map.paint.getChildAt(map.paint.maxlayer-map.paint.minlayer);
+			var l:DisplayObject=map.paint.getPaintSpriteAt(map.paint.maxlayer);
 			var o:DisplayObject=Sprite(l).getChildAt(3);	// names layer
 			(o as Sprite).addChild(stroke);
 			sprites.push(stroke);

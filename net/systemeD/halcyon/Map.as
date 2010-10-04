@@ -73,11 +73,6 @@ package net.systemeD.halcyon {
 		
 		public var connection:Connection;				// server connection
 		public var vectorlayers:Object={};				// VectorLayer objects 
-
-		public const TILESPRITE:uint=0;
-		public const VECTORSPRITE:uint=1;
-		public const WAYSPRITE:uint=2;
-		public const NAMESPRITE:uint=13;
 		
 		// ------------------------------------------------------------------------------------------
 		// Map constructor function

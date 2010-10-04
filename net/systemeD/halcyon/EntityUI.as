@@ -28,8 +28,8 @@ package net.systemeD.halcyon {
 		protected const CASINGSPRITE:uint=1;
 		protected const STROKESPRITE:uint=2;
 		protected const NAMESPRITE:uint=3;
-		protected const WAYCLICKSPRITE:uint=4;
-		protected const NODECLICKSPRITE:uint=5;
+		protected const WAYCLICKSPRITE:uint=0;
+		protected const NODECLICKSPRITE:uint=1;
 
 		public static const DEFAULT_TEXTFIELD_PARAMS:Object = {
 			embedFonts: true,
@@ -97,21 +97,38 @@ package net.systemeD.halcyon {
 		// Add object (stroke/fill/roadname) to layer sprite
 		
 		protected function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
-			var l:DisplayObject, o:Sprite;
+			var l:Sprite, o:Sprite;
 			if (sublayer!=-1) {
 				o=paint.sublayer(layer,sublayer);
 			} else {
-				l=paint.getChildAt(layer-paint.minlayer);
-				o=(l as Sprite).getChildAt(t) as Sprite;
+				l=paint.getPaintSpriteAt(layer);
+				o=l.getChildAt(t) as Sprite;
 			}
 			o.addChild(s);
-			sprites.push(s);
+			if (sprites.indexOf(s)==-1) { sprites.push(s); }
             if ( s is Sprite ) {
                 Sprite(s).mouseChildren = false;
                 Sprite(s).mouseEnabled = false;
             }
 		}
 
+		protected function setListenSprite(hitzone:Sprite):void {
+			var l:Sprite=paint.getHitSpriteAt(layer);
+			var s:Sprite;
+			if (entity is Way) { s=l.getChildAt(0) as Sprite; }
+			              else { s=l.getChildAt(1) as Sprite; }
+			
+			if (hitzone) {
+				if (!listenSprite.parent) { s.addChild(listenSprite); if (sprites.indexOf(listenSprite)==-1) { sprites.push(listenSprite); } }
+				if (!hitzone.parent)      { s.addChild(hitzone     ); if (sprites.indexOf(hitzone     )==-1) { sprites.push(hitzone     ); } }
+				listenSprite.hitArea = hitzone;
+				listenSprite.buttonMode = true;
+				listenSprite.mouseChildren = true;
+				listenSprite.mouseEnabled = true;
+			} else if (listenSprite.parent) { 
+				listenSprite.parent.removeChild(listenSprite);
+			}
+		}
 
 		public function removeSprites():void {
 			while (sprites.length>0) {
@@ -124,18 +141,6 @@ package net.systemeD.halcyon {
 		protected function offsetSprites(x:Number, y:Number):void {
 			for each (var d:DisplayObject in sprites) {
 				d.x=x; d.y=y;
-			}
-		}
-
-		protected function setListenSprite(spriteContainer:uint, hitzone:Sprite):void {
-			if (hitzone) {
-				if (!listenSprite.parent) { addToLayer(listenSprite, spriteContainer); }
-	            listenSprite.hitArea = hitzone;
-	            listenSprite.buttonMode = true;
-	            listenSprite.mouseChildren = true;
-	            listenSprite.mouseEnabled = true;
-			} else {
-				if (listenSprite.parent) { listenSprite.parent.removeChild(listenSprite); }
 			}
 		}
 

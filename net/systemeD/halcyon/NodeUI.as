@@ -151,9 +151,8 @@ package net.systemeD.halcyon {
             hitzone.graphics.lineStyle(4, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 			hitzone.graphics.beginFill(0);
 			hitzone.graphics.drawRect(0,0,w,w);
-            addToLayer(hitzone, NODECLICKSPRITE);
-            hitzone.visible = false;
-			setListenSprite(NODECLICKSPRITE, hitzone);
+			hitzone.visible = false;
+			setListenSprite(hitzone);
 		}
 
 		private function loadedIcon(event:Event):void {

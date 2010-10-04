@@ -23,30 +23,43 @@ package net.systemeD.halcyon {
 		private const VERYBIG:Number=Math.pow(2,16);
 
 		// Set up layering
-		// [layer][3]			- names
-		// [layer][2][sublayer]	- stroke
-		// [layer][1]			- casing
-		// [layer][0]			- fill
 
 		public function MapPaint(map:Map,minlayer:int,maxlayer:int) {
+			mouseEnabled=false;
+
 			this.map=map;
 			this.minlayer=minlayer;
 			this.maxlayer=maxlayer;
 			sublayerIndex[1]=0;
+			var s:Sprite, l:int;
 
-			for (var l:int=minlayer; l<=maxlayer; l++) {	// each layer (10 is +5, 0 is -5)
-				var s:Sprite = getHitSprite();      		//  |
+			// Add paint sprites
+			for (l=minlayer; l<=maxlayer; l++) {			// each layer (10 is +5, 0 is -5)
+				s = getPaintSprite();      					//  |
 				s.addChild(getPaintSprite());				//	| 0 fill
 				s.addChild(getPaintSprite());				//	| 1 casing
 				var t:Sprite = getPaintSprite();			//  | 2 stroke
 				t.addChild(getPaintSprite());				//  |  | sublayer
 				s.addChild(t);								//  |  |
 				s.addChild(getPaintSprite());				//	| 3 names
-				s.addChild(getHitSprite());					//	| 4 way hit tests
-				s.addChild(getHitSprite());				    //	| 5 node hit tests
 				addChild(s);								//  |
 			}
-			addChild(getPaintSprite());     				// name sprite
+			
+			// Add hit sprites
+			for (l=minlayer; l<=maxlayer; l++) {			// each layer (21 is +5, 11 is -5)
+				s = getHitSprite();							//  |
+				s.addChild(getHitSprite());					//	| 0 way hit tests
+				s.addChild(getHitSprite());				    //	| 1 node hit tests
+				addChild(s);
+			}
+		}
+		
+		public function getPaintSpriteAt(l:int):Sprite {
+			return getChildAt(l-minlayer) as Sprite;
+		}
+
+		public function getHitSpriteAt(l:int):Sprite {
+			return getChildAt((l-minlayer) + (maxlayer-minlayer+1)) as Sprite;
 		}
 		
 		public function get ready():Boolean {

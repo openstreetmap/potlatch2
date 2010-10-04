@@ -302,9 +302,8 @@ package net.systemeD.halcyon {
 	            hitzone = new Sprite();
 	            hitzone.graphics.lineStyle(maxwidth, 0x000000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 	            solidLines(hitzone.graphics,[]);
-	            addToLayer(hitzone, WAYCLICKSPRITE);
 	            hitzone.visible = false;
-				setListenSprite(WAYCLICKSPRITE, hitzone);
+				setListenSprite(hitzone);
 			}
 
 			return true;

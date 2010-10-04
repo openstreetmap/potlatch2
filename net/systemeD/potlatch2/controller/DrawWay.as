@@ -168,13 +168,14 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		protected function keyExitDrawing():ControllerState {
+			var cs:ControllerState=stopDrawing();
 			if (selectedWay.length==1) { 
 				if (MainUndoStack.getGlobalStack().undoIfAction(BeginWayAction)) { 
 					return new NoSelection();
 				}
 				return deleteWay();
 			}
-			return stopDrawing();
+			return cs;
 		}
 		
 		protected function stopDrawing():ControllerState {
@@ -183,17 +184,11 @@ package net.systemeD.potlatch2.controller {
 				hoverEntity = null;
 			}
 
-			if ( false ) {
-				controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
-				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
-				// delete controller.map.ways[selectedWay.id];
-				return new NoSelection();
-			} else if ( leaveNodeSelected ) {
+			if ( leaveNodeSelected ) {
 			    return new SelectedWayNode(selectedWay, editEnd ? selectedWay.length - 1 : 0);
 			} else {
 			    return new SelectedWay(selectedWay);
 			}
-			return this;
 		}
 
 		public function createAndAddNode(event:MouseEvent, performAction:Function):Node {
