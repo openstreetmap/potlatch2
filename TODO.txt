@@ -44,7 +44,7 @@ Potlatch 2: main outstanding issues
 * small node hitzone when creating areas - hitzone and mouseover UI don't match up
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
-* Can't move a selectedWayNode if it's under a POI text label.
+
 
 == Miscellaneous data model ==
 
