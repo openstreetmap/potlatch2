@@ -5,7 +5,7 @@ Quick documentation:
 <category> the categories that features belong to. This includes both nodes (icons on left) and ways/areas (drop-down list that appears when a way/area is selected)
   name: Shown in GUI
   id: internal reference (a feature refers to this with category=xxx)
-  
+
 <feature> a pre-defined group of tags that make up a feature
   category: [ctext] corresponding to category id
   icon
@@ -19,12 +19,12 @@ Quick documentation:
   tag - one or more of these required, defines the tags that make up the feature.
     @k - key
     @v - value
-  input 
+  input
     @ref=xxx
   inputSet
     @ref=xxx
-</feature>  
-  
+</feature>
+
 <inputSet>: a reusable group of properties for a feature.
   @id="internal id"
   input...
@@ -77,7 +77,7 @@ Quick documentation:
 
   <category name="Natural" id="natural">
   </category>
-  
+
   <category name="Barrier" id="barrier">
   </category>
 
@@ -86,7 +86,7 @@ Quick documentation:
 
   <category name="Admin" id="admin">
   </category>
-  
+
   <category name="Buildings" id="buildings">
   </category>
 
@@ -104,7 +104,7 @@ Quick documentation:
   </category>
 
   <!-- Common input sets -->
-  
+
   <inputSet id="simpleName">
     <input type="freetext" presence="always" name="Name" key="name" description="The name" priority="highest" />
   </inputSet>
@@ -128,14 +128,14 @@ Quick documentation:
       <choice value="no" text="No"/>
     </input>
   </inputSet>
-  
+
   <inputSet id="buildingAddress">
     <input type="freetext" presence="onTagMatch" category="Address" description="The number of the house, e.g. 156 or 10-12" name="House Number" key="addr:housenumber"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The name of the house, e.g. Riverbank Cottage" name="Building Name" key="addr:housename"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The Street Name (optional)" name="Street Name" key="addr:street"/>
     <input type="freetext" presence="onTagMatch" category="Address" description="The postcode" name="Postcode" key="addr:postcode"/>
   </inputSet>
-  
+
   <inputSet id="web">
     <input type="freetext" presence="onTagMatch" category="Web" description="The URL of the website" name="Website" key="website" />
   </inputSet>
@@ -155,7 +155,7 @@ Quick documentation:
   </inputSet>
 
   <!-- Roads -->
-  
+
   <inputSet id="majorRoad">
     <inputSet ref="names"/>
     <inputSet ref="roadRefs"/>
@@ -191,7 +191,7 @@ Quick documentation:
     <inputSet ref="pedestrians"/>
     <inputSet ref="permissions"/>
   </inputSet>
-  
+
   <inputSet id="junctionNode">
     <inputSet ref="turnRestrictions"/>
   </inputSet>
@@ -205,9 +205,9 @@ Quick documentation:
         key="int_ref" description="The official international reference number"/>
     <input type="freetext" presence="onTagMatch"
         name="Old Reference" category="Naming" priority="low"
-        key="old_ref" description="The historic or previous reference number"/>  
+        key="old_ref" description="The historic or previous reference number"/>
   </inputSet>
-  
+
   <inputSet id="roadPhysical">
     <input type="freetext" presence="onTagMatch"
         name="Width" category="Physical"
@@ -235,7 +235,7 @@ Quick documentation:
     <input presence="onTagMatch" type="number" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
            key="lanes" minimum="1" maximum="10" layout="horizontal"/>
   </inputSet>
-  
+
   <inputSet id="bridge">
     <input type="choice" presence="onTagMatch"
         name="Bridge" category="Physical" description="Road goes over a bridge"
@@ -256,7 +256,7 @@ Quick documentation:
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
   </inputSet>
-  
+
   <inputSet id="embankment-cutting">
     <input type="choice"
            name="Embankment" category="Physical" description="Road supported on a raised bed of earth and rock."
@@ -306,13 +306,13 @@ Quick documentation:
       <choice value="military" text="Military" />
     </input>
   </inputSet>
-  
+
   <inputSet id="fee">
     <input type="freetext" presence="onTagMatch" category="Restrictions" description="The charge/cost of using this amenity" name="Fee" key="fee"/>
   </inputSet>
 
   <inputSet id="roadRestrictions">
-    <input type="choice" presence="onTagMatch"
+    <input type="choice" presence="always"
         name="Oneway" category="Restrictions" description="Oneway roads"
         key="oneway">
       <choice value="yes" match="yes|true|1" text="One way"
@@ -329,12 +329,12 @@ Quick documentation:
 
   <inputSet id="roadRoundabout">
     <!-- review the choice of category -->
-    <input type="choice" presence="onTagMatch" name="Roundabout" category="Restrictions" description="Whether this road is a roundabout. Make the way face the direction appropriate for the country." 
+    <input type="choice" presence="onTagMatch" name="Roundabout" category="Restrictions" description="Whether this road is a roundabout. Make the way face the direction appropriate for the country."
            key="junction">
       <choice value="roundabout" text="Yes" />
     </input>
   </inputSet>
-  
+
   <inputSet id="turnRestrictions">
     <input type="turn" name="Turn restriction" description="Turn restriction" category="Restrictions" priority="normal" presence="onTagMatch">
        <match k="type" v="restriction"/>
@@ -367,13 +367,13 @@ Quick documentation:
     <input type="freetext" presence="onTagMatch" category="Naptan" description="" name="Naptan Street (read-only)" key="naptan:Street" />
     <input type="freetext" presence="onTagMatch" category="Naptan" description="Delete this when the details have been verified on-the-ground" name="Naptan Verified?" key="naptan:verified" />
   </inputSet>
-  
+
   <inputSet id="buses">
     <input type="freetext" presence="always" category="Bus Stop" name="Stop Name" key="name" description="The name of the bus stop" />
     <input type="freetext" presence="always" category="Bus Stop" name="Local Ref" key="local_ref" description="The local reference of the stop, usually one or two letters above the main flag, used at bus interchanges, e.g. L, BX" />
     <inputSet ref="naptan" />
   </inputSet>
-  
+
   <inputSet id="bus-route">
     <input type="route" name="Bus Route" description="Bus route" category="Transport" priority="low" presence="onTagMatch">
       <match k="type" v="route"/>
@@ -383,7 +383,7 @@ Quick documentation:
       </icon>
     </input>
   </inputSet>
-  
+
   <inputSet id="tram-route">
     <input type="route" name="Tram Route" description="Tram route" category="Transport" priority="low" presence="onTagMatch">
       <match k="type" v="route"/>
@@ -393,7 +393,7 @@ Quick documentation:
       </icon>
     </input>
   </inputSet>
-  
+
   <inputSet id="cycle">
     <inputSet ref="bicycle-permission" />
     <input type="route" name="National Cycle Routes" description="A signposted route in a National Cycle Network, or nearest equivalent." category="Cycle" priority="low">
@@ -436,7 +436,7 @@ Quick documentation:
       <help>http://wiki.openstreetmap.org/wiki/Key:access</help>
     </input>
   </inputSet>
-  
+
   <inputSet id="bicycle-lane">
     <input type="choice"
         name="Bike lanes" category="Cycle" description="Road has bike lanes within the road surface"
@@ -477,18 +477,18 @@ Quick documentation:
        </icon>
     </input>
   </inputSet>
-  
+
   <inputSet id="route">
     <inputSet ref="names"/>
     <inputSet ref="roadRefs"/>
   </inputSet>
-  
+
   <inputSet id="waterways">
     <input type="freetext" presence="always" name="Name" category="Naming" key="name" description="The name" />
     <input type="freetext" presence="always" name="Width" category="Properties" key="width" description="The width in metres" />
     <inputSet ref="boatPermissions" />
-         
-           
+
+
     </inputSet>
 <!-- Would be good to have a dedicated 'access' type of input -->
   <!-- all the description fields are identical at the moment for ease of maintenance, should be tailored in future. -->
@@ -528,7 +528,7 @@ Quick documentation:
     </input>
 
   </inputSet>
-  
+
   <!-- ************************************************************************
        Roads
        ************************************************************************ -->
@@ -565,7 +565,7 @@ Quick documentation:
 
     <line/>
     <tag k="highway" v="trunk"/>
-    
+
     <inputSet ref="majorRoad"/>
   </feature>
 
@@ -592,6 +592,21 @@ Quick documentation:
     <inputSet ref="majorRoad"/>
   </feature>
 
+  <feature name="Primary road link">
+    <category>roads</category>
+    <icon image="features/highway__unclassified.png">
+      <font size="16pt"><b>${ref}</b></font><br/>
+      <font size="10pt">${name}</font>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dprimary_link</help>
+
+    <line/>
+    <tag k="highway" v="primary_link"/>
+
+    <inputSet ref="majorRoad"/>
+  </feature>
+
+
   <feature name="Secondary road">
     <category>roads</category>
     <icon image="features/highway__unclassified.png">
@@ -606,6 +621,22 @@ Quick documentation:
     <inputSet ref="majorRoad"/>
   </feature>
 
+  <feature name="Secondary road link">
+    <category>roads</category>
+    <icon image="features/highway__unclassified.png">
+      <font size="16pt"><b>${ref}</b></font><br/>
+      <font size="10pt">${name}</font>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsecondary_link</help>
+
+    <line/>
+    <tag k="highway" v="secondary_link"/>
+
+    <inputSet ref="majorRoad"/>
+  </feature>
+
+
+
   <feature name="Tertiary road">
     <category>roads</category>
     <icon image="features/highway__unclassified.png">
@@ -619,6 +650,21 @@ Quick documentation:
 
     <inputSet ref="majorRoad"/>
   </feature>
+
+  <feature name="Tertiary road link">
+    <category>roads</category>
+    <icon image="features/highway__unclassified.png">
+      <font size="14pt"><b>${name}</b></font><br/>
+      <font size="10pt">${ref}</font>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dtertiary_link</help>
+
+    <line/>
+    <tag k="highway" v="tertiary_link"/>
+
+    <inputSet ref="majorRoad"/>
+  </feature>
+
 
   <feature name="Minor road">
     <category>roads</category>
@@ -694,7 +740,7 @@ Quick documentation:
 
     <inputSet ref="minorRoad"/>
   </feature>
-  
+
   <feature name="Track">
     <category>roads</category>
     <icon image="features/highway__unclassified.png">
@@ -733,7 +779,7 @@ Quick documentation:
     <tag k="highway" v="cycleway"/>
     <inputSet ref="path"/>
   </feature>
-  
+
   <feature name="Pedestrian Street">
     <category>paths</category>
     <icon image="features/paths__pedestrian.png">
@@ -788,7 +834,7 @@ Quick documentation:
     <area/>
     <tag k="leisure" v="park"/>
   </feature>
-  
+
   <feature name="Forest">
     <category>natural</category>
     <icon image="icons/natural_blank.png" />
@@ -827,29 +873,29 @@ Quick documentation:
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dditch</help>
-    
+
     <line/>
     <tag k="barrier" v="ditch"/>
   </feature>
-  
+
   <feature name="Retaining wall">
     <category>barrier</category>
     <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dretaining_wall</help>
-    
+
     <line/>
     <tag k="barrier" v="retaining_wall"/>
   </feature>
-  
+
   <feature name="City wall">
     <category>barrier</category>
     <icon image="features/barrier_generic.png" />
     <icon>
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcity_wall</help>
-    
+
     <line/>
     <tag k="barrier" v="city_wall"/>
   </feature>
@@ -913,7 +959,7 @@ Quick documentation:
     <line/>
     <tag k="waterway" v="canal"/>
     <inputSet ref="waterways" />
-    
+
   </feature>
 
   <feature name="Drain">
@@ -1017,7 +1063,7 @@ Quick documentation:
     <area/>
     <point/>
     <tag k="leisure" v="marina"/>
-    <inputSet ref="names"/>    
+    <inputSet ref="names"/>
   </feature>
 
   <feature name="Slipway">
@@ -1207,7 +1253,7 @@ Quick documentation:
     <input type="freetext" presence="always" category="Naming" name="Runway number (01-36)" key="ref"/>
     <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
   </feature>
-  
+
   <feature name="Airport taxiway">
     <category>transport</category>
     <icon image="icons/transport_blank.png"/>
@@ -1217,7 +1263,7 @@ Quick documentation:
     <input type="freetext" presence="always" category="Naming" name="Taxiway number" key="ref"  />
     <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
   </feature>
-  
+
   <feature name="Airport apron">
     <category>transport</category>
     <icon image="icons/transport_blank.png"/>
@@ -1235,7 +1281,7 @@ Quick documentation:
     <input type="freetext" presence="always" category="Naming" name="Gate number" key="ref" />
     <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
   </feature>
-  
+
   <!-- ************************************************************************
        Buildings
        ************************************************************************ -->
@@ -1410,6 +1456,22 @@ Quick documentation:
     <inputSet ref="buildingAddress" />
   </feature>
 
+  <feature name="Sports centre">
+    <category>buildings</category>
+    <icon >
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <point />
+    <tag k="leisure" v="sports_centre"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress" />
+    <inputSet ref="pitchSport"/>
+  </feature>
+
+
   <!-- ************************************************************************
        Landuse
        ************************************************************************ -->
@@ -1479,7 +1541,7 @@ Quick documentation:
     <tag k="landuse" v="military"/>
     <inputSet ref="simpleName"/>
   </feature>
-  
+
   <feature name="Conservation">
     <category>natural</category>
     <icon image="icons/natural_blank.png"/>
@@ -1569,7 +1631,7 @@ Quick documentation:
       <choice value="volleyball" text="Volleyball"/>
     </input>
   </inputSet>
-  
+
   <feature name="Sports track">
     <category>landuse</category>
     <area/>
@@ -1704,8 +1766,8 @@ Quick documentation:
       <choice value="islet" text="Islet"/>
     </input>
   </feature>
-  
-  
+
+
 
   <!-- ************************************************************************
        POIs
@@ -1756,7 +1818,7 @@ Quick documentation:
       <choice value="sikh" text="Sikhism (gurdwara)" />
       <choice value="shinto" text="Shinto (shrine)" />
     </input>
-   
+
     <input type="freetext" presence="always" category="" name="denomination" key="denomination" description="The denomination of the religion worshiped here." priority="low"/>
   </feature>
 
@@ -1769,7 +1831,7 @@ Quick documentation:
     <input type="freetext" presence="always" category="Banking" name="Operator" key="operator" description="The organisation that provides this ATM" priority="low"/>
     <input type="freetext" presence="always" category="Banking" name="Fee" key="fee" description="Is there a charge for using this ATM? If so how much?"/>
   </feature>
-  
+
   <feature name="Bank">
     <category>amenity</category>
     <icon image="features/pois/money_bank2.n.24.png">
@@ -1783,9 +1845,9 @@ Quick documentation:
     <input type="choice" presence="always" category="Bank" name="Public ATM available" key="atm" description="Is there a public ATM available?">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
-    </input>    
+    </input>
   </feature>
-  
+
   <feature name="Recycling">
     <category>amenity</category>
     <icon image="features/pois/amenity_recycling.n.24.png"/>
@@ -1793,7 +1855,7 @@ Quick documentation:
     <point />
     <tag k="amenity" v="recycling"/>
   </feature>
-  
+
   <feature name="School">
     <category>amenity</category>
     <icon image="features/pois/education_school.n.24.png">
@@ -1805,7 +1867,7 @@ Quick documentation:
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
   </feature>
-  
+
   <feature name="Post Box">
     <category>amenity</category>
     <icon image="features/pois/amenity_post_box.n.24.png">
@@ -2059,7 +2121,7 @@ Quick documentation:
     <tag k="highway" v="bus_stop"/>
     <inputSet ref="buses" />
   </feature>
-  
+
   <feature name="Car Parking">
     <category>transport</category>
     <icon image="features/pois/transport_parking_car.n.24.png">
@@ -2074,7 +2136,7 @@ Quick documentation:
     <input type="number" minimum="0" maximum="99999" stepSize="1" presence="always" category="Parking" name="Capacity" key="capacity" description="The number of cars that can be parked in the car park"/>
     <inputSet ref="fee"/>
   </feature>
-  
+
   <feature name="Bicycle Parking">
     <category>transport</category>
     <icon image="features/pois/transport_parking_bicycle.n.24.png">
@@ -2085,7 +2147,7 @@ Quick documentation:
     <tag k="amenity" v="bicycle_parking"/>
     <inputSet ref="names"/>
     <input type="freetext" presence="onTagMatch" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
-    <input type="number" minimum="0" maximum="99999" stepSize="1" 
+    <input type="number" minimum="0" maximum="99999" stepSize="1"
         presence="always" category="Cycle" name="Capacity" key="capacity"
         description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
     <inputSet ref="fee"/>
@@ -2094,13 +2156,13 @@ Quick documentation:
       <choice value="no" text="No"/>
     </input>
   </feature>
-  
+
   <feature name="Railway station">
     <category>transport</category>
     <icon image="features/pois/transport_train_station.n.24.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
-    
+
     <point/>
     <tag k="railway" v="station"/>
     <inputSet ref="names"/>
@@ -2152,13 +2214,13 @@ Quick documentation:
 
 
   </feature>
-  
+
   <feature name="Bus station">
     <category>transport</category><point /><inputSet ref="simpleName" />
 	<icon image="features/pois/transport_bus_station.n.24.png"/>
     <tag k="amenity" v="bus_station"/>
   </feature>
-  
+
   <feature name="Taxi rank">
     <category>transport</category><point /><inputSet ref="simpleName" />
 	<icon image="features/pois/transport_taxi_rank.n.24.png"/>
@@ -2170,7 +2232,7 @@ Quick documentation:
 	<icon image="features/pois/transport_tram_stop.n.24.png"/>
     <tag k="railway" v="tram_stop"/>
   </feature>
-  
+
   <feature name="Bicycle rental">
     <category>transport</category><point /><inputSet ref="simpleName" />
 	<icon image="features/pois/transport_rental_bicycle.n.24.png"/>
@@ -2182,7 +2244,7 @@ Quick documentation:
 	<icon image="features/pois/transport_rental_car.n.24.png"/>
     <tag k="amenity" v="car_rental"/>
   </feature>
-  
+
   <feature name="Ferry Terminal">
     <category>transport</category>
     <icon image="features/pois/transport_port.n.24.png"/>
@@ -2201,17 +2263,17 @@ Quick documentation:
     <icon image="features/pois/barrier_bollard.n.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dbollard</help>
-    
+
     <point />
     <tag k="barrier" v="bollard"/>
   </feature>
-  
+
   <feature name="Gate">
     <category>barrier</category>
     <icon image="features/pois/barrier_gate.n.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dgate</help>
-    
+
     <point />
     <tag k="barrier" v="gate"/>
   </feature>
@@ -2238,37 +2300,37 @@ Quick documentation:
     <icon image="features/pois/barrier_cycle_barrier.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcycle_barrier</help>
-    
+
     <point />
     <tag k="barrier" v="cycle_barrier"/>
   </feature>
-  
+
   <feature name="Big Concrete Blocks">
     <category>barrier</category>
     <icon image="features/pois/barrier_blocks.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dblock</help>
-    
+
     <point />
     <tag k="barrier" v="block"/>
   </feature>
-  
+
   <feature name="Cattle Grid">
     <category>barrier</category>
     <icon image="features/pois/barrier_cattle_grid.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcattle_grid</help>
-    
+
     <point />
     <tag k="barrier" v="cattle_grid"/>
   </feature>
-  
+
   <feature name="Toll Booth">
     <category>barrier</category>
     <icon image="features/pois/barrier_toll_booth.n.24.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth</help>
-    
+
     <point />
     <tag k="barrier" v="toll_booth"/>
     <tagSet ref="fee"/>
@@ -2293,7 +2355,7 @@ Quick documentation:
   </feature>
 
   <feature name="Traffic calming">
-    
+
     <category>transport</category>
     <icon image="icons/speed_hump_16.png"/>
     <help>
@@ -2312,12 +2374,12 @@ Quick documentation:
       <choice value="rumble_strip" text="Rumble strip" description="A series of very small bumps causing vibration or noise."/>
       <choice value="choker" text="Choker" description="An artificial narrowing of the road."/>
     </input>
-    
+
   </feature>
 
 
   <!-- ========= Entertainment ========= -->
-  
+
   <feature name="Pub">
     <category>foodanddrink</category>
     <icon image="features/pois/food_pub.n.24.png">
@@ -2357,7 +2419,7 @@ Quick documentation:
     <inputSet ref="buildingAddress"/>
     <inputSet ref="cuisine"/>
   </feature>
-  
+
   <feature name="Cafe">
     <category>foodanddrink</category>
     <icon image="features/pois/food_cafe.n.24.png">
@@ -2372,7 +2434,7 @@ Quick documentation:
     <inputSet ref="cuisine"/>
     <inputSet ref="wifi" />
   </feature>
-  
+
   <feature name="Fast Food">
     <category>foodanddrink</category>
     <icon image="features/pois/food_fastfood.n.24.png">
@@ -2401,7 +2463,7 @@ Quick documentation:
     <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
   </feature>
-  
+
   <feature name="Supermarket">
     <category>shopping</category>
     <icon image="features/pois/shopping_supermarket.n.24.png">
@@ -2414,7 +2476,7 @@ Quick documentation:
     <inputSet ref="web" />
     <inputSet ref="buildingAddress"/>
   </feature>
- 
+
   <feature name="Alcohol shop">
     <category>shopping</category><point />
     <inputSet ref="simpleName" />
@@ -2632,7 +2694,7 @@ Quick documentation:
     <tag k="landuse" v="meadow"/>
     <inputSet ref="simpleName"/>
   </feature>
-  
+
   <feature name="Orchard">
     <category>agriculture</category>
     <icon image="features/pois/landuse_grass.n.24.png" />
@@ -2696,10 +2758,10 @@ Quick documentation:
     <relation/>
     <tag k="type" v="route"/>
     <tag k="network" v="ncn"/>
-      
+
     <inputSet ref="route"/>
   </feature>
-  
+
   <feature name="Regional Cycle Network">
     <category>paths</category>
     <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
@@ -2710,7 +2772,7 @@ Quick documentation:
     <relation/>
     <tag k="type" v="route"/>
     <tag k="network" v="rcn"/>
-      
+
     <inputSet ref="route"/>
   </feature>
 
@@ -2724,7 +2786,7 @@ Quick documentation:
     <relation/>
     <tag k="type" v="route"/>
     <tag k="network" v="lcn"/>
-      
+
     <inputSet ref="route"/>
   </feature>
 
@@ -2740,7 +2802,7 @@ Quick documentation:
     <relation/>
     <tag k="type" v="route"/>
     <tag k="route" v="foot"/>
-      
+
     <inputSet ref="route"/>
   </feature>
 
@@ -2755,27 +2817,27 @@ Quick documentation:
     <relation/>
     <tag k="type" v="route"/>
     <tag k="route" v="bus"/>
-      
+
     <inputSet ref="route"/>
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the bus service" priority="low"/>
     <input type="freetext" presence="always" category="Naming" name="Network" key="network" description="The network of the bus service" priority="low"/>
   </feature>
-  
+
   <feature name="Tram Route">
     <category>transport</category>
     <icon image="features/transport__tram.png">
       <font size="12pt">${operator} <b>${reg}</b></font>
     </icon>
-    
+
     <relation/>
     <tag k="type" v="route"/>
     <tag k="route" v="tram"/>
-    
+
     <inputSet ref="route"/>
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the tram service" priority="low"/>
     <input type="freetext" presence="always" category="Naming" name="Network" key="network" description="The network of the tram service" priority="low"/>
   </feature>
-  
+
 
     <!-- Junction nodes (for turn restrictions) -->
 
