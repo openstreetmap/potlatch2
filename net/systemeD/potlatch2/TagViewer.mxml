@@ -591,8 +591,7 @@
       }
 
       public function openEntityPage():void {
-          if (selectedEntity != null)
-              // TODO: make this robust against -ve ids
+          if (selectedEntity != null && selectedEntity.id >= 0)
               // TODO: make this choose the correct server
               navigateToURL(new URLRequest('http://www.openstreetmap.org/browse/'+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
       }
