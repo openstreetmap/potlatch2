@@ -591,9 +591,11 @@
       }
 
       public function openEntityPage():void {
-          if (selectedEntity != null && selectedEntity.id >= 0)
-              // TODO: make this choose the correct server
-              navigateToURL(new URLRequest('http://www.openstreetmap.org/browse/'+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
+          if (selectedEntity != null && selectedEntity.id >= 0) {
+              // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
+              var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
+              navigateToURL(new URLRequest(urlBase+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
+          }
       }
 
       public function addNewTag():void {
