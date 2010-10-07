@@ -58,7 +58,7 @@
         </mx:HBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
-        <mx:Label id="advancedID">
+        <mx:Label id="advancedID" click="openEntityPage()">
           <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
         </mx:Label>
 
@@ -588,6 +588,13 @@
       public function openDescription():void {
           if ( feature != null && feature.hasHelpURL() )
               navigateToURL(new URLRequest(feature.helpURL), "potlatch_help");
+      }
+
+      public function openEntityPage():void {
+          if (selectedEntity != null)
+              // TODO: make this robust against -ve ids
+              // TODO: make this choose the correct server
+              navigateToURL(new URLRequest('http://www.openstreetmap.org/browse/'+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
       }
 
       public function addNewTag():void {
