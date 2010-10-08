@@ -1010,6 +1010,7 @@ Quick documentation:
     </icon>
     <area/>
     <tag k="natural" v="water" />
+    <inputSet ref="names" />
     <inputSet ref="boatPermissions" />
   </feature>
 
