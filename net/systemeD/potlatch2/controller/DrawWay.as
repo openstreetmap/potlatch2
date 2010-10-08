@@ -59,8 +59,8 @@ package net.systemeD.potlatch2.controller {
                             
                             var newPoiAction:CreatePOIAction = new CreatePOIAction(
 								{},
-								controller.map.coord2lat(event.localX),
-								controller.map.coord2lon(event.localY));
+								controller.map.coord2lat(event.localY),
+								controller.map.coord2lon(event.localX));
                             MainUndoStack.getGlobalStack().addAction(newPoiAction);
                             return new SelectedPOINode(newPoiAction.getNode());
 						} else {
