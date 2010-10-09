@@ -7,8 +7,6 @@
 	MapCSS demonstration stylesheet
 	Richard Fairhurst, October 2009
 
-Todo: define some reusable classes like "centred text".
-
 */
 
 /* This rule applies to all areas (closed ways). Note that rules are applied in the order
@@ -38,7 +36,7 @@ way[highway=tertiary_link]                          { z-index: 5; color: #FEFECB
 way[highway=residential]                            { z-index: 5; color: #E8E8E8; width: 5; casing-color: gray; casing-width: 7; }
 way[highway=service][service!=parking_aisle]        { color: white; width: 3; casing-color: gray; casing-width: 5; }
 way[highway=service][service=parking_aisle]         { color: white; width: 1; casing-color: #aaaaaa; casing-width: 2; }
-way[highway=service][service=alley]                 { color: white; width: 2; dashes: 6,2; casing-color: #aaaaaa; casing-width: 2; }
+way[highway=service][service=alley]                 { color: white; width: 2; dashes: 6,2; casing-color: black; casing-width: 4; }
 way[highway=road]                                   { color: gray; width: 5; casing-color: white; casing-width: 7; }
 
 /* Pedestrian precincts need to be treated carefully. Only closed-loops with an explicit
@@ -56,7 +54,9 @@ way[highway=cycleway]  { color: Blue; width: 2; dashes: 4, 2; set .path;}
 way[railway=tram]      {z-index: 11; color: #999999; width: 2; casing-color: black; casing-width: 6; }
 way .path              {text:name; text-color: black; text-position: offset; text-offset: 3;}
 
-way[waterway=river], way[waterway=canal] { color: blue; width: 2; text:name; text-color:blue; font-size:9; text-position: offset; text-offset: 7;}
+way[waterway=river], 
+way[waterway=canal], 
+way[waterway=stream]   { color: blue; width: 2; text:name; text-color:blue; font-size:9; text-position: offset; text-offset: 7;}
 way[waterway=drain] 			 {color: blue; width: 1; text:name; text-color: blue; text-position: offset; text-offset: 3;}
 way[waterway][tunnel=yes]                {dashes: 8,4;}
 
@@ -66,8 +66,8 @@ way[barrier=fence] {color: #000000; width: 1; dashes: 8,4,2,4; }
 /*add node[power=pylon] etc when there's an icon */
 way[power=line] {color: darkgray; width: 3; dashes: 12,2; casing-color: black; casing-width: 8; casing-dashes: 4, 38;}
 way[power=minor_line] {color: gray; width: 2; dashes: 2,4; casing-width: 8; casing-color: white; casing-dashes: 2,22;}
-way[power=station] :area { color: black; width: 2; fill-color: #666666; fill-opacity: 0.6;}
-way[power=generator] :area { color: black; width: 2; fill-color: #444444; fill-opacity: 0.6;}
+way[power=station] :area { color: black; width: 2; fill-color: #666666; fill-opacity: 0.6; set .area_small_name;}
+way[power=generator] :area { color: black; width: 2; fill-color: #444444; fill-opacity: 0.6; set .area_small_name;}
 
 way[golf=hole] {color: darkgreen; width: 5; casing-color: green; casing-width: 10; }
 
@@ -75,39 +75,40 @@ way[golf=hole] {color: darkgreen; width: 5; casing-color: green; casing-width: 1
 
 
 way[natural] :area                          { color: #ADD6A5; width: 1; fill-color: #ADD6A5; fill-opacity: 0.2; }
-way[natural=beach] :area                    { color: #ffdd44; width: 1; fill-color: yellow; fill-opacity: 0.2; }
+way[natural=beach] :area                    { color: #ffdd44; width: 1; fill-color: yellow; fill-opacity: 0.2; set .area_small_name;}
+way[natural=coastline]						{ color: black; width: 3; }
 way[landuse] :area                          { color: #444444; width: 2; fill-color: #444444; fill-opacity: 0.3; }
 way[landuse=residential] :area              { color: #666666; width: 2; fill-color: #666666; fill-opacity: 0.15; }
 way[landuse=retail] :area                   { color: #cc2222; width: 2; fill-color: #aa4422; fill-opacity: 0.15; }
 way[landuse=commercial] :area               { color: #4444bb; width: 2; fill-color: #444488; fill-opacity: 0.15; }
-way[landuse=military] :area                 { color: #ff4444; width: 2; fill-color: #ff4444; fill-opacity: 0.2; }
+way[landuse=military] :area                 { color: #ff4444; width: 2; fill-color: #ff4444; fill-opacity: 0.2; set .area_small_name; }
 way[amenity],way[shop] :area                { color: #ADCEB5; width: 1; fill-color: #ADCEB5; fill-opacity: 0.2; }
 way[leisure],way[sport] :area               { color: #8CD6B5; width: 1; fill-color: #8CD6B5; fill-opacity: 0.2; }
-way[tourism] :area                          { color: #F7CECE; width: 1; fill-color: #F7CECE; fill-opacity: 0.2; }
-way[historic],way[ruins] :area              { color: #F7F7DE; width: 1; fill-color: #F7F7DE; fill-opacity: 0.2; }
-way[military] :area                         { color: #D6D6D6; width: 1; fill-color: #D6D6D6; fill-opacity: 0.2; }
+way[tourism] :area                          { color: #F7CECE; width: 1; fill-color: #F7CECE; fill-opacity: 0.2; set .area_small_name;}
+way[historic],way[ruins] :area              { color: #F7F7DE; width: 1; fill-color: #F7F7DE; fill-opacity: 0.2; set .area_small_name;}
+way[military] :area                         { color: #D6D6D6; width: 1; fill-color: #D6D6D6; fill-opacity: 0.2; set .area_small_name;}
 way[building] :area                         { color: #ff6ec7; width: 1; fill-color: #ff6ec7; fill-opacity: 0.2; }
 way[natural=water],
-way[waterway] :area               { color: blue;    width: 2; fill-color: blue;    fill-opacity: 0.2; }
-way[landuse=forest],way[natural=wood] :area { color: green;   width: 2; fill-color: green;   fill-opacity: 0.2; }
-way[leisure=park]  :area                    { color: #44ff44; width: 1; fill-color: #44ff44; fill-opacity: 0.15; }
-way[leisure=garden]  :area                  { color: #66ff44; width: 1; fill-color: #66ff44; fill-opacity: 0.2; }
-way[leisure=pitch] :area					{ z-index: 6; color: #88bb44; width: 2; fill-color: #88ff44; fill-opacity: 0.4; }
-way[landuse=recreation_ground] :area        { color: green; fill-color: green; }
-way[amenity=parking] :area                  { color: gray;    width: 1; fill-color: gray;    fill-opacity: 0.2; }
+way[waterway] :area               { color: blue;    width: 2; fill-color: blue;    fill-opacity: 0.2; set .area_small_name;}
+way[landuse=forest],way[natural=wood] :area { color: green;   width: 2; fill-color: green;   fill-opacity: 0.2; set .area_small_name;}
+way[leisure=park]  :area                    { color: #44ff44; width: 1; fill-color: #44ff44; fill-opacity: 0.15; set .area_small_name;}
+way[leisure=garden]  :area                  { color: #66ff44; width: 1; fill-color: #66ff44; fill-opacity: 0.2; set .area_small_name;}
+way[leisure=pitch] :area					{ z-index: 6; color: #88bb44; width: 2; fill-color: #88ff44; fill-opacity: 0.4; set .area_small_name;}
+way[landuse=recreation_ground] :area        { color: green; fill-color: green; set .area_small_name;}
+way[amenity=parking] :area                  { color: #bbaa66;    width: 1; fill-color: #bbaa66;    fill-opacity: 0.2; }
 way[public_transport=pay_scale_area] :area  { color: gray;    width: 1; fill-color: gray;    fill-opacity: 0.1; }
 
 way[man_made=pier]							{ z-index: 4; color: #777; width: 3; casing-color: black; casing-width: 5;}
 way[man_made=pier][floating=yes]			{ dashes: 4,2; casing-color: #444;}
-way[leisure=marina] :area					{ color: pink; fill-color: pink; fill-opacity: 0.4;}
+way[leisure=marina] :area					{ color: pink; fill-color: pink; fill-opacity: 0.4; set .area_small_name;}
 way[leisure=slipway]						{ color: grey; width: 3; casing-color: blue; casing-width: 7; }
+way[leisure=golf_course] :area { color: #44ee22; width: 2; fill-color: #44ee22; fill-opacity: 0.2; set .area_small_name;}
 
 way[embankment=yes]			    { z-index: 6; opacity: 0.5; color: brown; width: eval('_width+16'); dashes: 2, 14; }
 					    { z-index: 5; opacity: 0.5; color: brown; width: eval('_width+24'); dashes: 2, 30; } /* meh, improve this */
 
 way[boundary=administrative]                { color: purple; width: 10; opacity: 0.2; dashes: 12,24; }
-
-
+way[landuse=cemetery]						{ color: #664466; width: 2; fill-color: color: #664466; opacity: 0.2; set .area_small_name;}
 /* Addressing. Nodes with addresses *and* match POIs should have a poi icon, so we put addressing first */
 
 node[addr:housenumber],
@@ -140,7 +141,7 @@ node[barrier=cycle_barrier] { icon-image: icons/barrier_cycle_barrier.16.png; z-
 node[barrier=block] { icon-image: icons/barrier_blocks.16.png; z-index: 20; }
 node[barrier=cattle_grid] { icon-image: icons/barrier_cattle_grid.16.png; z-index: 20; }
 node[amenity=school] { icon-image: icons/education_school.n.16.png; text-offset:15; text: name; z-index: 20; }
-way[amenity=school] :area { color: yellow; fill-color: yellow; fill-opacity: 0.1; text-color: black; font-size: 10; text: name; text-halo: white; text-halo-radius: 2; text-position: center; }
+way[amenity=school] :area { color: yellow; fill-color: yellow; fill-opacity: 0.1; set .area_small_name; }
 node[amenity=bar] { icon-image: icons/food_bar.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[amenity=cafe] { icon-image: icons/food_cafe.n.16.png; text-offset:15; text: name; z-index: 20; }
 node[amenity=fast_food] { icon-image: icons/food_fastfood.n.16.png; z-index: 20; }
@@ -198,7 +199,7 @@ node[railway=station] { icon-image: icons/transport_train_station.n.16.png; text
 node[railway=tram_stop] { icon-image: icons/transport_tram_stop.n.16.png; z-index: 20; }
 node[leisure=marina] { icon-image: icons/transport_marina.n.16.png; z-index: 20; }
 
-way[leisure=sports_centre] :area { color: #66ddcc; fill-color: #66ddcc; text: name; text-color: black; font-size: 10; text-halo: white; text-halo-radius: 2; text-position: center; }
+way[leisure=sports_centre] :area { color: #66ddcc; fill-color: #66ddcc; set .area_small_name; }
 
 
 /* We can stack styles at different z-index (depth) */
@@ -227,7 +228,7 @@ way[oneway=yes] { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-sty
 way[access=private],way[access=no] { z-index: 10; color: red; width: eval('_width+8'); dashes: 2,15;}
 way[access=permissive] { z-index: 10; color: green; width: eval('_width+6'); dashes: 1,7;}
 
-
+way .area_small_name {text-color: black; font-size: 9; text: name; text-halo: #ffffaa; text-halo-radius: 2; text-position: center;}
 /* Change the road colour based on dynamically set "highlighted" tag (see earlier) */
 
 way .highlighted { color: pink; }
