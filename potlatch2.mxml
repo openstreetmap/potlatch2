@@ -30,6 +30,7 @@
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
         <mx:Button label="GPS" click="trackLoader.load();"/>
+        <mx:Button label="MyGpx" click="new MyGpxDialog().init();" />
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
@@ -72,6 +73,7 @@
 		import net.systemeD.potlatch2.help.*;
 		import net.systemeD.potlatch2.options.*;
 		import net.systemeD.potlatch2.utils.*;
+        import net.systemeD.potlatch2.mygpx.*;
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;

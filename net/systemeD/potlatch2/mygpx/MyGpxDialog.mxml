@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+        xmlns:mx="http://www.adobe.com/2006/mxml"
+        layout="vertical" showCloseButton="true"
+        horizontalAlign="center" title="MyGpx Files"
+        width="600" height="400"
+        verticalGap="0">
+  <mx:Script><![CDATA[
+    import mx.managers.PopUpManager;
+    import mx.events.CloseEvent;
+    import mx.core.Application;
+
+    import net.systemeD.halcyon.connection.*;
+
+    public function init():void {
+        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.centerPopUp(this);
+        this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
+
+        // store whether the user has seen the help dialog before
+        var obj:SharedObject = SharedObject.getLocal("user_state");
+        obj.setProperty("help_shown","true");
+    }
+
+    private function myGpxDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+    }
+
+    private function fetchList():void {
+        Connection.getConnectionInstance().fetchUserTraces();
+        results.text="yes";
+    }
+              ]]>
+  </mx:Script>
+
+  <mx:Text text="foo" id="results" />
+  <mx:Button label="fetch" click="fetchList()" />
+</mx:TitleWindow>

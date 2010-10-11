@@ -125,6 +125,20 @@ package net.systemeD.halcyon.connection {
             loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onStatus);
 	        loader.load(urlReq);
 		}
+
+        private function sendOAuthGet(url:String, onComplete:Function, onError:Function, onStatus:Function):void {
+            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
+            var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, appID, authToken);
+            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING);
+
+            var urlReq:URLRequest = new URLRequest(String(urlStr));
+            urlReq.method = "GET";
+            var loader:URLLoader = new URLLoader();
+            loader.addEventListener(Event.COMPLETE, onComplete);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+            loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onStatus);
+            loader.load(urlReq);
+        }
         
         override public function uploadChanges():void {
             var changeset:Changeset = getActiveChangeset();
@@ -301,5 +315,19 @@ package net.systemeD.halcyon.connection {
             }
         }
 
+        override public function fetchUserTraces():void {
+            sendOAuthGet(Connection.apiBaseURL+"user/gpx_files",
+                         tracesLoadComplete, errorOnMapLoad, mapLoadStatus); //needs error handlers
+            dispatchEvent(new Event(LOAD_STARTED)); //specific to map or reusable?
+        }
+
+        private function tracesLoadComplete(event:Event):void {
+            //for each result in XML file
+            //  create a trace object
+            //  store in connection.traces
+            //emit event
+                        var traces:XML = new XML(URLLoader(event.target).data);
+            trace(traces);
+        }
 	}
 }

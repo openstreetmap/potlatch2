@@ -95,6 +95,7 @@ package net.systemeD.halcyon.connection {
 		public var nodecount:int=0;
 		public var waycount:int=0;
 		public var relationcount:int=0;
+        private var traces:Array = [];
 
         protected function get nextNegative():Number {
             return negativeID--;
@@ -350,6 +351,7 @@ package net.systemeD.halcyon.connection {
 	    public function createChangeset(tags:Object):void {}
 		public function closeChangeset():void {}
 	    public function uploadChanges():void {}
+        public function fetchUserTraces():void {}
     }
 
 }
