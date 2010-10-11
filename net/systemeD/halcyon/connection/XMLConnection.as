@@ -329,10 +329,7 @@ package net.systemeD.halcyon.connection {
         }
 
         private function tracesLoadComplete(event:Event):void {
-            //for each result in XML file
-            //  create a trace object
-            //  store in connection.traces
-            //emit event
+            clearTraces();
             var files:XML = new XML(URLLoader(event.target).data);
             for each(var traceData:XML in files.gpx_file) {
               var t:Object = {};

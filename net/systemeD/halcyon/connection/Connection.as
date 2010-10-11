@@ -344,6 +344,10 @@ package net.systemeD.halcyon.connection {
             traces.push(t);
         }
 
+        protected function clearTraces():void {
+            traces = [];
+        }
+
         public function getTraces():Array {
             return traces;
         }
