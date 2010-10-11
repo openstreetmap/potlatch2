@@ -15,19 +15,19 @@ package net.systemeD.potlatch2.save {
         private var consumer:OAuthConsumer;
 
         public static function saveChanges():void {
-            instance.save();
+            instance.save(instance.saveData);
         }
-        
-        private function save():void {
+
+        private function save(callback:Function):void {
             if ( consumer == null )
                 consumer = getConsumer();
             if ( accessToken == null )
                 accessToken = getAccessToken();
         
             if ( accessToken == null )
-                getNewToken(saveData);
+                getNewToken(callback);
             else
-                saveData();
+                callback();
         }
     
         private function getAccessToken():OAuthToken {
