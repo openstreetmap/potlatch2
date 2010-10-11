@@ -18,6 +18,17 @@ package net.systemeD.potlatch2.save {
             instance.save(instance.saveData);
         }
 
+        public static function getAccessSorted():void {
+            // hacky hack of pond-like clarity
+            instance.save(instance.doNothing);
+        }
+
+        private function doNothing():void {
+            //hack hacky hack hack. Please look the other way...
+            Connection.getConnectionInstance().setAppID(consumer);
+            Connection.getConnectionInstance().setAuthToken(accessToken);
+        }
+
         private function save(callback:Function):void {
             if ( consumer == null )
                 consumer = getConsumer();
@@ -29,7 +40,7 @@ package net.systemeD.potlatch2.save {
             else
                 callback();
         }
-    
+
         private function getAccessToken():OAuthToken {
             var key:String = Connection.getParam("oauth_token", null);
             var secret:String = Connection.getParam("oauth_token_secret", null);

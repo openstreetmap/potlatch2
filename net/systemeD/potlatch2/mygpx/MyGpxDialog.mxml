@@ -11,15 +11,12 @@
     import mx.core.Application;
 
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.potlatch2.save.*;
 
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
-
-        // store whether the user has seen the help dialog before
-        var obj:SharedObject = SharedObject.getLocal("user_state");
-        obj.setProperty("help_shown","true");
     }
 
     private function myGpxDialog_close(evt:CloseEvent):void {
@@ -27,8 +24,9 @@
     }
 
     private function fetchList():void {
+        SaveManager.getAccessSorted();
         Connection.getConnectionInstance().fetchUserTraces();
-        results.text="yes";
+        results.text="fetching...";
     }
               ]]>
   </mx:Script>
