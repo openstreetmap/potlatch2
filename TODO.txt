@@ -66,6 +66,20 @@ Potlatch 2: main outstanding issues
 == Other ==
 * should have build numbers available somehow
 
+== MyGPX ==
+
+* Combine two GPX buttons
+* Shouldn't refetch just when opening dialog
+* Refactor sendOAuthGet, sendOAuthPut and signOAuthUrl
+* Make the connection, not the savemanager, in charge of sorting out the oauth stuff?
+* Ensure the oauth dialog pops up if there's no oauth credentials
+* Rework the loading text
+* Show descriptions, tags (needs rails_port changes)
+* Have a remove button for removing loaded traces
+* Have a check button for simplifying traces
+* Refactor the importer.as so that downloading the files can be done via the connection, not just directly
+* if(true) in importer.as#56 might actually be breaking other things. Fix it, or do the above
+
 Requested enhancements
 ----------------------
 
