@@ -139,6 +139,13 @@ package net.systemeD.halcyon.connection {
             loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onStatus);
             loader.load(urlReq);
         }
+
+        override public function signOAuthGet(url:String):String {
+            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
+            var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, appID, authToken);
+            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING);
+            return String(urlStr);
+        }
         
         override public function uploadChanges():void {
             var changeset:Changeset = getActiveChangeset();
