@@ -326,8 +326,16 @@ package net.systemeD.halcyon.connection {
             //  create a trace object
             //  store in connection.traces
             //emit event
-                        var traces:XML = new XML(URLLoader(event.target).data);
-            trace(traces);
+            var files:XML = new XML(URLLoader(event.target).data);
+            for each(var traceData:XML in files.gpx_file) {
+              var t:Object = {};
+              t.id = traceData.@id;
+              t.name = traceData.@name;
+              t.url = Connection.apiBaseURL+"gpx/"+t.id+"/data";
+              addTrace(t);
+            }
+            trace("loaded gpx files");
+            dispatchEvent(new Event(TRACES_LOADED));
         }
 	}
 }

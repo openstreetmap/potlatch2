@@ -82,6 +82,7 @@ package net.systemeD.halcyon.connection {
 		public static var REMOVED_FROM_RELATION:String = "removed_from_relation";
 		public static var SUSPEND_REDRAW:String = "suspend_redraw";
 		public static var RESUME_REDRAW:String = "resume_redraw";
+        public static var TRACES_LOADED:String = "traces_loaded";
 
         // store the data we download
         private var negativeID:Number = -1;
@@ -338,7 +339,14 @@ package net.systemeD.halcyon.connection {
 			}
             return changeset;
         }
-        
+
+        protected function addTrace(t:Object):void {
+            traces.push(t);
+        }
+
+        public function getTraces():Array {
+            return traces;
+        }
 
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
