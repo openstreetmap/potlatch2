@@ -342,6 +342,7 @@ package net.systemeD.halcyon.connection {
               addTrace(t);
             }
             trace("loaded gpx files");
+            dispatchEvent(new Event(LOAD_COMPLETED));
             dispatchEvent(new Event(TRACES_LOADED));
         }
 	}
