@@ -57,7 +57,7 @@
         var vectorlayer:VectorLayer=new VectorLayer(o.name,map,"gpx.css");
         vectorlayer.url=o.url;
         map.addVectorLayer(vectorlayer);
-        var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [o.url], filesLoaded, true);
+        var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [o.url], filesLoaded, false);
     }
 
     public function filesLoaded(success:Boolean,message:String=null):void {
