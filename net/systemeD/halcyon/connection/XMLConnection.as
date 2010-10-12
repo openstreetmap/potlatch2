@@ -8,6 +8,10 @@ package net.systemeD.halcyon.connection {
 
 	import net.systemeD.halcyon.MapEvent;
 
+    /**
+    * XMLConnection provides all the methods required to connect to a live
+    * OSM server. See OSMConnection for connecting to a read-only .osm file
+    */
 	public class XMLConnection extends XMLBaseConnection {
 
         //public var readConnection:NetConnection;

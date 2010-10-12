@@ -8,6 +8,11 @@ package net.systemeD.halcyon.connection {
 
 	import net.systemeD.halcyon.Globals;
 
+    /**
+    * XMLBaseConnection is the common code between connecting to an OSM server
+    * (i.e. XMLConnection) and connecting to a standalone .osm file (i.e. OSMConnection)
+    * and so mainly concerns itself with /map -call-ish related matters
+    */
 	public class XMLBaseConnection extends Connection {
 
 		public function XMLBaseConnection() {

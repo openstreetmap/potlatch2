@@ -8,7 +8,11 @@ package net.systemeD.halcyon.connection {
 	import net.systemeD.halcyon.ExtendedURLLoader;
 	import net.systemeD.halcyon.Globals;
 
-	// Read-only connection from local files (for Halcyon)
+    /**
+    * Read-only connection from local OSM-XML format (.osm) files.
+    * This is used by Halcyon; Potlatch 2 needs a full server connection
+    * of the type provided by XMLConnection
+    */
 
 	// For a limited set of arbitrary files, invoke it like this:
 	//		fo.addVariable("api","http://127.0.0.1/~richard/potlatch2");		// base URL

@@ -7,6 +7,12 @@ package net.systemeD.halcyon.connection {
 	import flash.system.Security;
 	import flash.net.*;
 
+    /**
+    * AMFConnection provides read-write access to an AMF server. The read/write
+    * methods bear little resemblance to the standard OSM server XML API methods,
+    * but are similar (the same?) as that used by Potlatch 1.
+    * For a lightweight AMF server see resources/tinyamf.cgi
+    */
 	public class AMFConnection extends Connection {
 
 		public var readConnection:NetConnection;
