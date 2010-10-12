@@ -335,6 +335,12 @@ package net.systemeD.halcyon.connection {
               var t:Object = {};
               t.id = traceData.@id;
               t.name = traceData.@name;
+              t.description = traceData.description;
+              var tags:Array = [];
+              for each(var tag:XML in traceData.tag) {
+                tags.push(String(tag));
+              }
+              t.tags = tags.join(" ");
               t.url = Connection.apiBaseURL+"gpx/"+t.id+"/data";
               addTrace(t);
             }

@@ -74,7 +74,6 @@ Potlatch 2: main outstanding issues
 * Make the connection, not the savemanager, in charge of sorting out the oauth stuff?
 * Ensure the oauth dialog pops up if there's no oauth credentials
 * Rework the loading text
-* Show descriptions, tags (needs rails_port changes)
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
 * Refactor the importer.as so that downloading the files can be done via the connection, not just directly

@@ -81,7 +81,8 @@
     <mx:columns>
             <mx:DataGridColumn editable="false" dataField="id" headerText="id" width="45"/>
             <mx:DataGridColumn editable="false" dataField="name" headerText="filename"/>
-            <mx:DataGridColumn editable="false" dataField="url" headerText="url"/>
+            <mx:DataGridColumn editable="false" dataField="description" headerText="description"/>
+            <mx:DataGridColumn editable="false" dataField="tags" headerText="tags"/>
             <mx:DataGridColumn editable="false">
               <mx:itemRenderer>
                 <mx:Component>
