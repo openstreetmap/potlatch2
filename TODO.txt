@@ -75,7 +75,6 @@ Potlatch 2: main outstanding issues
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
 * Refactor the importer.as so that downloading the files can be done via the connection, not just directly
-* if(true) in importer.as#56 might actually be breaking other things. Fix it, or do the above
 
 Requested enhancements
 ----------------------
