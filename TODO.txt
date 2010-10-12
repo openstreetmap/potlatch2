@@ -69,7 +69,6 @@ Potlatch 2: main outstanding issues
 
 * Combine two GPX buttons
 * Shouldn't refetch just when opening dialog
-* Refactor sendOAuthGet, sendOAuthPut and signOAuthUrl
 * Make the connection, not the savemanager, in charge of sorting out the oauth stuff?
 * Ensure the oauth dialog pops up if there's no oauth credentials
 * Rework the loading text

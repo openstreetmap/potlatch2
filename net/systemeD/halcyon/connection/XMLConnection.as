@@ -107,14 +107,17 @@ package net.systemeD.halcyon.connection {
 		private function changesetCloseError(event:Event):void { }
 		// ** TODO: when we get little floating warnings, we can send a happy or sad one up
 
-		private function sendOAuthPut(url:String, xml:XML, onComplete:Function, onError:Function, onStatus:Function):void {
-            // make an OAuth query
+        private function signedOAuthURL(url:String, method:String):String {
+            // method should be PUT, GET, POST or DELETE
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
-            var oauthRequest:OAuthRequest = new OAuthRequest("PUT", url, null, appID, authToken);
-            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
+            var oauthRequest:OAuthRequest = new OAuthRequest(method, url, null, appID, authToken);
+            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING);
+            return String(urlStr);
+        }
 
-            // build the actual request
-            var urlReq:URLRequest = new URLRequest(String(urlStr));
+		private function sendOAuthPut(url:String, xml:XML, onComplete:Function, onError:Function, onStatus:Function):void {
+            // build the request
+            var urlReq:URLRequest = new URLRequest(signedOAuthURL(url, "PUT"));
             urlReq.method = "POST";
 			if (xml) { urlReq.data = xml.toXMLString(); } else { urlReq.data = true; }
             urlReq.contentType = "application/xml";
@@ -127,11 +130,7 @@ package net.systemeD.halcyon.connection {
 		}
 
         private function sendOAuthGet(url:String, onComplete:Function, onError:Function, onStatus:Function):void {
-            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
-            var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, appID, authToken);
-            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING);
-
-            var urlReq:URLRequest = new URLRequest(String(urlStr));
+            var urlReq:URLRequest = new URLRequest(signedOAuthURL(url, "GET"));
             urlReq.method = "GET";
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, onComplete);
@@ -141,10 +140,7 @@ package net.systemeD.halcyon.connection {
         }
 
         override public function signOAuthGet(url:String):String {
-            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
-            var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, appID, authToken);
-            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING);
-            return String(urlStr);
+            return signedOAuthURL(url, "GET");
         }
         
         override public function uploadChanges():void {
@@ -162,13 +158,11 @@ package net.systemeD.halcyon.connection {
 
             // now actually upload them
             // make an OAuth query
-            var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
+
             var url:String = Connection.apiBaseURL+"changeset/" + changeset.id + "/upload";
-            var oauthRequest:OAuthRequest = new OAuthRequest("POST", url, null, appID, authToken);
-            var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
 
             // build the actual request
-            var urlReq:URLRequest = new URLRequest(String(urlStr));
+            var urlReq:URLRequest = new URLRequest(signedOAuthURL(url, "POST"));
             urlReq.method = "POST";
             urlReq.data = upload.toXMLString();
             urlReq.contentType = "text/xml";
