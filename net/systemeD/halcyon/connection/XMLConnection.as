@@ -331,7 +331,7 @@ package net.systemeD.halcyon.connection {
             var files:XML = new XML(URLLoader(event.target).data);
             for each(var traceData:XML in files.gpx_file) {
               var t:Object = {};
-              t.id = traceData.@id;
+              t.id = Number(traceData.@id);
               t.name = traceData.@name;
               t.description = traceData.description;
               var tags:Array = [];
