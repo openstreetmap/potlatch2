@@ -50,20 +50,10 @@
         return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM.</p>"
     }
 
-    private function buildShortCuts():void {
-        var text:Array = [["Click+Drag", "Drag the map to move around"],
-                          ["Single Click", "Start a new way"],
-                          ["Click+Drag at node or way", "Move the node or way"],
-                          ["Shift+Click", "Insert point in a way"],
-                          ["Shift+Click at point", "Create new way from point"],
-                          ["Shift+Click on another way", "Merge ways if they share a common endpoint (current way must already be highlighted)"],
-                          ["Double-Click or Return", "Finish drawing way"],
-                          ["-","Delete point from selected way"],
-                          ["Backspace/Delete", "Delete point"],
-                          ["Shift+Backspace/Delete", "Delete way"]
-                          ];
+    private function buildGrid(text:Array):Grid {
         var grid:Grid = new Grid()
         grid.percentWidth=100;
+        grid.setStyle("verticalGap",1);
         for each (var pair:Array in text) {
           var gr:GridRow = new GridRow();
           gr.percentWidth=100;
@@ -84,7 +74,36 @@
           gr.addChild(right);
           grid.addChild(gr);
         }
-        shortcuts1.addChild(grid);
+        return grid;
+    }
+
+    private function buildShortCuts():void {
+        var text:Array = [["Click+Drag", "Drag the map to move around"],
+                          ["Single Click", "Start a new way"],
+                          ["Click+Drag at node or way", "Move the node or way"],
+                          ["Shift+Click", "Insert point in a way"],
+                          ["Shift+Click at point", "Create new way from point"],
+                          ["Shift+Click on another way", "Merge ways if they share a common endpoint (current way must already be highlighted)"],
+                          ["Double-Click or Return", "Finish drawing way"],
+                          ["-","Delete point from selected way"],
+                          ["Backspace/Delete", "Delete point"],
+                          ["Shift+Backspace/Delete", "Delete way"]
+                          ];
+        var text2:Array =  [["D", "Dim features"],
+                            ["R", "Repeat tags"],
+                            ["T", "Toggle between simple and advanced tags"],
+                            ["P", "Create parallel way"],
+                            ["V", "Reverse direction of way"]
+                            ];
+        var text3:Array =  [["S", "Save"],
+                            ["X", "Cut way at node"],
+                            ["Z", "Undo"],
+                            ["Esc", "Cancel edit"],
+                            ["Space", "Hold to realign background image"]
+                            ];
+        shortcuts1.addChild(buildGrid(text));
+        shortcuts2a.addChild(buildGrid(text2));
+        shortcuts2b.addChild(buildGrid(text3));
     }
 
               ]]>
@@ -298,7 +317,10 @@
     <mx:VBox label="Shortcuts" id="shortcuts">
       <mx:Label text="Keyboard Shortcuts" textAlign="center" width="100%" styleName="helpPageHeader" />
       <mx:HBox id="shortcuts1" width="100%"/>
-      <mx:HBox id="shortcuts2" width="100%"/>
+      <mx:HBox id="shortcuts2" width="100%">
+        <mx:HBox id="shortcuts2a" width="100%" />
+        <mx:HBox id="shortcuts2b" width="100%" />
+      </mx:HBox>
     </mx:VBox>
   </mx:TabNavigator>
 
