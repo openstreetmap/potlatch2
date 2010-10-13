@@ -53,29 +53,43 @@
     private function buildShortCuts():void {
         var text:Array = [["Click+Drag", "Drag the map to move around"],
                           ["Single Click", "Start a new way"],
-                          ["Click+Drag at node or way", "Move the node or way"]];
+                          ["Click+Drag at node or way", "Move the node or way"],
+                          ["Shift+Click", "Insert point in a way"],
+                          ["Shift+Click at point", "Create new way from point"],
+                          ["Shift+Click on another way", "Merge ways if they share a common endpoint (current way must already be highlighted)"],
+                          ["Double-Click or Return", "Finish drawing way"],
+                          ["-","Delete point from selected way"],
+                          ["Backspace/Delete", "Delete point"],
+                          ["Shift+Backspace/Delete", "Delete way"]
+                          ];
         var grid:Grid = new Grid()
-        grid.width="100%"
+        grid.percentWidth=100;
         for each (var pair:Array in text) {
           var gr:GridRow = new GridRow();
+          gr.percentWidth=100;
           var left:GridItem = new GridItem();
-          var ltext:Text = new Text();
-          ltext.text = pair[0];
+          var label:Label = new Label();
+          label.styleName = "helpHeaderText";
+          label.percentWidth=100;
+          label.text = pair[0];
           var right:GridItem = new GridItem();
+          right.percentWidth=100;
           var rtext:Text = new Text();
-          rtext.text = pair[1];
-          left.addChild(ltext);
+          rtext.condenseWhite=true;
+          rtext.percentWidth=100;
+          rtext.htmlText = pair[1];
+          left.addChild(label);
           right.addChild(rtext);
           gr.addChild(left);
           gr.addChild(right);
           grid.addChild(gr);
         }
-        foo.addChild(grid);
+        shortcuts1.addChild(grid);
     }
 
               ]]>
   </mx:Script>
-  <mx:TabNavigator id="helpTN" width="100%" height="100%" styleName="helpTN">
+  <mx:TabNavigator id="helpTN" width="100%" height="100%" styleName="helpTN" creationPolicy="all">
     <mx:VBox label="Welcome" width="100%" height="100%">
       <mx:Grid width="100%"><!-- prepare for a column of icons, at some point -->
         <mx:GridRow width="100%">
@@ -281,8 +295,10 @@
         </mx:htmlText>
       </mx:Text>
     </mx:VBox>
-    <mx:VBox label="Shortcuts" id="foo">
+    <mx:VBox label="Shortcuts" id="shortcuts">
       <mx:Label text="Keyboard Shortcuts" textAlign="center" width="100%" styleName="helpPageHeader" />
+      <mx:HBox id="shortcuts1" width="100%"/>
+      <mx:HBox id="shortcuts2" width="100%"/>
     </mx:VBox>
   </mx:TabNavigator>
 
