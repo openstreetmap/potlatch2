@@ -63,7 +63,7 @@
             <mx:Text condenseWhite="true" width="100%">
               <mx:htmlText>
                 <![CDATA[
-                  <p><b>Why OpenStreetMap?</b> OSM is a mapping service in which all data is constantly updated and edited by everyday people like you. The obvious benefit is that it's free to use, but it has also become a major player in crisis mapping (i.e. use of OSM data to coordinate earthquake relief efforts in Haiti). Accuracy of this data is critical, and we hope you are able to volunteer some of your time!</p>
+                  <p><b>Why OpenStreetMap?</b> OSM is a mapping service in which all data is constantly updated and edited by everyday people like you. The obvious benefit is that it's free to use, but it has also become a major player in crisis mapping (e.g. use of OSM data to coordinate earthquake relief efforts in Haiti). Accuracy of this data is critical, and we hope you are able to volunteer some of your time!</p>
                 ]]>
               </mx:htmlText>
             </mx:Text>
@@ -90,7 +90,7 @@
             <mx:Text condenseWhite="true" width="100%">
               <mx:htmlText>
                 <![CDATA[
-                  <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here.</p>
+                  <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here to allow access to Potlatch 2 and begin editing.</p>
                 ]]>
               </mx:htmlText>
             </mx:Text>
@@ -117,7 +117,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem>
-            <mx:Label width="100%" text="MapStyle" styleName="helpHeaderText" />
+            <mx:Label width="100%" text="Map Style" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
             <mx:Text condenseWhite="true" width="100%">
@@ -137,7 +137,21 @@
             <mx:Text condenseWhite="true" width="100%">
               <mx:htmlText>
                 <![CDATA[
-                  <p>Create OSM map data from a GPS track you upload.</p>
+                  <p>Create OSM map data using other people's GPS tracks as a background</p>
+                ]]>
+              </mx:htmlText>
+            </mx:Text>
+          </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%">
+          <mx:GridItem>
+            <mx:Label width="100%" text="MyGPX" styleName="helpHeaderText" />
+          </mx:GridItem>
+          <mx:GridItem width="100%">
+            <mx:Text condenseWhite="true" width="100%">
+              <mx:htmlText>
+                <![CDATA[
+                  <p>Display GPS traces that you've previously uploaded to OpenStreetMap.</p>
                 ]]>
               </mx:htmlText>
             </mx:Text>
@@ -186,25 +200,25 @@
       <mx:Text condenseWhite="true" width="100%">
         <mx:htmlText>
           <![CDATA[
-            <p><i>Before you begin, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: Copyright - OpenStreetMap Wiki)</i></p>
+            <p><i>Before you begin, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: <a href="http://wiki.openstreetmap.org/wiki/Copyright">Copyright - OpenStreetMap Wiki</a>)</i></p>
             <p></p>
-            <p>Linear features such as streets, footpaths, railways and building outlines will hereby be referred to as ways.</p>
-            <p><b>To create a point (or node)</b>, just drag and drop the appropriate icon from the sidebar onto the map.</p>
+            <p>Linear features such as streets, footpaths, railways and building outlines will hereby be referred to as <b>ways</b>.</p>
+            <p><b>To create a point (or node)</b>, just drag and drop the appropriate icon from the sidebar onto the map. See Add POIs to learn more about creating a POI (Point of Interest)</p>
             <p><b>To create a way</b>, begin by clicking on the map at its start point, then click at each successive point. Double-click to finish the line or press Enter.</p>
-            <p><b>To create a polygon</b>, begin by clicking on the map at its start point, then click at each successive point (similar to creating a way), and finish by double-clicking on the very first point to close the polygon.</p>
+            <p><b>To create a polygon</b>, begin by clicking on the map at its start point, then click at each successive point (similar to creating a way), and finish by clicking on the very first point to close the polygon.</p>
             <p>Remember, if you make a mistake, you can always hit the Undo button. Pressing the Esc key will undo all your edits for the current feature.</p>
           ]]>
         </mx:htmlText>
       </mx:Text>
     </mx:VBox>
-    <mx:VBox label="Editing (Beg.)">
+    <mx:VBox label="Edit (Beg.)">
       <mx:Label text="Editing Features (Beginner)" textAlign="center" width="100%" styleName="helpPageHeader" />
       <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
           <![CDATA[
-            <p><b>To add a point to an existing way</b>, select the way and shift+click ad the desired location.</p>
-            <p><b>To delete a point or way</b>, select the way and click the Delete Item button in the bottom right corner or press Delete (Backspace) on your keyboard.</p>
-            <p><b>To delete a point in an existing way</b>, select the point and click the Delete Item button in the bottom right corner or press Delete (Backspace) on your keyboard.</p>
+            <p><b>To add a point to an existing way</b>, select the way and shift+click at the desired location.</p>
+            <p><b>To delete a point</b>, select the way and click the Delete Item button in the bottom right corner or press Delete (or Backspace) on your keyboard.</p>
+            <p><b>To delete a way</b>, select the way and click the Delete Item button in the bottom right corner or press shift+Delete (or shift+Backspace) on your keyboard.</p>
             <p><b>To move a point</b>, click and drag the point.</p>
             <p><b>To move a way</b>, click and drag the entire feature (hint: grab a segment where you won't accidentally move a node).</p>
             <p><b>To extend a way</b>, click on one of the end points of the way. Then continue drawing as usual.</p>
@@ -213,12 +227,12 @@
         </mx:htmlText>
       </mx:Text>
     </mx:VBox>
-    <mx:VBox label="Editing (Adv.)">
+    <mx:VBox label="Edit (Adv.)">
       <mx:Label text="Editing Features (Advanced)" textAlign="center" width="100%" styleName="helpPageHeader" />
       <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
           <![CDATA[
-            <p><b>To split a way</b>, select the point at which you want to cut, and click the Scissor tool or press X on your keyboard.</p>
+            <p><b>To split a way</b>, select the point at which you want to cut, and click the Scissor tool or press X on your keyboard. (Hint: Add a node first in order to cut between nodes.)</p>
             <p><b>To make a junction between two ways</b>, draw as usual until you need to make a junction. Then as you move your mouse over another way, the points will light up blue. Click on one of the blue points or any other desired location on the way to make a junction.</p>
             <p><b>To disconnect a junction</b>, select the point on the way you wish to alter. The press - on your keyboard to remove the point.</p>
             <p><b>To reverse the direction of a way</b>, click the Reverse Direction button in the bottom right corner. The direction of a way is only a concern for those features with a "oneway" tag - oneway streets, coastlines, islands, and so on.</p>
@@ -228,7 +242,7 @@
         </mx:htmlText>
       </mx:Text>
     </mx:VBox>
-    <mx:VBox label="Tagging">
+    <mx:VBox label="Tag">
     <mx:Label text="Tagging Features" textAlign="center" width="100%" styleName="helpPageHeader" />
       <mx:Text condenseWhite="true" width="100%" height="100%">
         <mx:htmlText>
@@ -237,7 +251,7 @@
             <p><b>Tagging a feature</b></p>
             <p>Select the point or way that you wish to edit, adn choose the appropriate tag from the left sidebar. After tagging the feature, some basic fields should appear such as Name, Speed Limit, and Width, depending on the tag you gave. Fill these out as best you can.</p>
             <p>Advanced users may notice the absence of a few tags and tag values they occasionally use. If this is the case, click on the Advanced tab at the bottom of the sidebar and edit/add as necessary.</p>
-            <p>The OpenStreetMap wiki also provides an <a href="http://wiki.openstreetmap.org/wiki/Map_features">extensive list of tags and tag values</a>. Please refer backt o the OSM documentation if you are unsure of which tag to use.</p>
+            <p>The OpenStreetMap wiki also provides an <a href="http://wiki.openstreetmap.org/wiki/Map_features">extensive list of tags and tag values</a>. Please refer back to the OSM documentation if you are unsure of which tag to use.</p>
           ]]>
         </mx:htmlText>
       </mx:Text>
