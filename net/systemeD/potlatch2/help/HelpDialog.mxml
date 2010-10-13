@@ -18,6 +18,8 @@
         // store whether the user has seen the help dialog before
         var obj:SharedObject = SharedObject.getLocal("user_state");
         obj.setProperty("help_shown","true");
+
+        buildShortCuts();
     }
 
     private function helpDialog_close(evt:CloseEvent):void {
@@ -46,6 +48,29 @@
           return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM and subsequently on " + site_name + ".</p>";
         }
         return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM.</p>"
+    }
+
+    private function buildShortCuts():void {
+        var text:Array = [["Click+Drag", "Drag the map to move around"],
+                          ["Single Click", "Start a new way"],
+                          ["Click+Drag at node or way", "Move the node or way"]];
+        var grid:Grid = new Grid()
+        grid.width="100%"
+        for each (var pair:Array in text) {
+          var gr:GridRow = new GridRow();
+          var left:GridItem = new GridItem();
+          var ltext:Text = new Text();
+          ltext.text = pair[0];
+          var right:GridItem = new GridItem();
+          var rtext:Text = new Text();
+          rtext.text = pair[1];
+          left.addChild(ltext);
+          right.addChild(rtext);
+          gr.addChild(left);
+          gr.addChild(right);
+          grid.addChild(gr);
+        }
+        foo.addChild(grid);
     }
 
               ]]>
@@ -255,6 +280,9 @@
           ]]>
         </mx:htmlText>
       </mx:Text>
+    </mx:VBox>
+    <mx:VBox label="Shortcuts" id="foo">
+      <mx:Label text="Keyboard Shortcuts" textAlign="center" width="100%" styleName="helpPageHeader" />
     </mx:VBox>
   </mx:TabNavigator>
 
