@@ -58,8 +58,7 @@
         return conn.getTraces();
     }
 
-    public function loadFile(e:Event):void {
-        var o:Object = traces[traceGrid.selectedIndex];
+    public function loadFile(o:Object):void {
         var vectorlayer:VectorLayer=new VectorLayer(o.name,map,"gpx.css");
         vectorlayer.url=o.url;
         map.addVectorLayer(vectorlayer);
@@ -88,7 +87,7 @@
                 <mx:Component>
                   <mx:VBox>
                     <mx:Button label="Load"
-                      click="parentDocument.loadFile(event)"/>
+                      click="parentDocument.loadFile(data)"/>
                   </mx:VBox>
                 </mx:Component>
               </mx:itemRenderer>
