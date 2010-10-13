@@ -339,7 +339,7 @@ package net.systemeD.halcyon.connection {
                 tags.push(String(tag));
               }
               t.tags = tags.join(" ");
-              t.url = Connection.apiBaseURL+"gpx/"+t.id+"/data";
+              t.url = Connection.apiBaseURL+"gpx/"+t.id+"/data.xml";
               addTrace(t);
             }
             trace("loaded gpx files");
