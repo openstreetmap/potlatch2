@@ -109,6 +109,12 @@ Quick documentation:
     <input type="freetext" presence="always" name="Name" key="name" description="The name" priority="highest" />
   </inputSet>
 
+  <inputSet id="source">
+    <!-- Can you do a combined freetext/dropdown? -->
+    <!-- Also need to make sure every object gets this -->
+    <input type="freetext" category="Misc" presence="always" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Yahoo, nearmap...)" priority="high" />
+  </inputSet>
+
   <inputSet id="names">
     <input type="freetext" presence="always"
         name="Name" category="Naming" priority="highest"
@@ -158,6 +164,7 @@ Quick documentation:
 
   <inputSet id="majorRoad">
     <inputSet ref="names"/>
+    <inputSet ref="source"/>
     <inputSet ref="roadRefs"/>
     <inputSet ref="roadRestrictions"/>
     <inputSet ref="roadPhysical"/>
@@ -172,6 +179,7 @@ Quick documentation:
 
     <inputSet id="minorRoad">
       <inputSet ref="names"/>
+      <inputSet ref="source"/>
       <inputSet ref="roadRestrictions"/>
       <inputSet ref="roadPhysical"/>
       <inputSet ref="cycle"/>
@@ -185,6 +193,7 @@ Quick documentation:
 
   <inputSet id="path">
     <inputSet ref="simpleName"/>
+    <inputSet ref="source"/>
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
     <inputSet ref="ldp"/>
@@ -194,6 +203,7 @@ Quick documentation:
 
   <inputSet id="junctionNode">
     <inputSet ref="turnRestrictions"/>
+    
   </inputSet>
 
   <inputSet id="roadRefs">

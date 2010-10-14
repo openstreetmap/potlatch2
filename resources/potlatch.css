@@ -54,6 +54,11 @@ way[highway=cycleway]  { color: Blue; width: 2; dashes: 4, 2; set .path;}
 way[railway=tram]      {z-index: 11; color: #999999; width: 2; casing-color: black; casing-width: 6; }
 way .path              {text:name; text-color: black; text-position: offset; text-offset: 3;}
 
+/* Could be improved */
+way[highway=proposed] { color: #88ffff; width: 6; dashes: 8, 4; }
+way[highway=construction] { color: #ffffbb; width: 6; dashes: 8, 4; casing-color: #0000aa; casing-width: 8; casing-dashes: 8,4;}
+
+
 way[waterway=river], 
 way[waterway=canal], 
 way[waterway=stream]   { color: blue; width: 2; text:name; text-color:blue; font-size:9; text-position: offset; text-offset: 7;}
