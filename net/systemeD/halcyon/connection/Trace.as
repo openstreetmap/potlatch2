@@ -66,13 +66,11 @@ package net.systemeD.halcyon.connection {
         }
 
         private function fetchFromServer():void {
-            trace("fetchfromServer");
             Connection.getConnectionInstance().fetchTrace(id, saveTraceData);
             dispatchEvent(new Event("loading_data"));
         }
 
         private function saveTraceData(event:Event):void {
-            trace("saveTraceData");
             _traceData = String(URLLoader(event.target).data);
             dispatchEvent(new Event("loaded_data"));
         }
@@ -96,12 +94,10 @@ package net.systemeD.halcyon.connection {
         }
 
         private function processEvent(e:Event):void {
-            trace("processEvent");
             process();
         }
 
         private function process():void {
-            trace("process");
             var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
             var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
             var raw:String = _traceData.replace(xmlnsPattern, "").replace(xsiPattern, "");

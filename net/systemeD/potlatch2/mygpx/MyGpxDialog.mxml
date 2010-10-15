@@ -60,10 +60,6 @@
 
     public function loadFile(t:Trace):void {
         t.addToMap();
-        //var vectorlayer:VectorLayer=new VectorLayer(t.filename,map,"gpx.css");
-        //vectorlayer.url=t.url;
-        //map.addVectorLayer(vectorlayer);
-        //var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [t.url], filesLoaded, false);
     }
 
     public function filesLoaded(success:Boolean,message:String=null):void {
