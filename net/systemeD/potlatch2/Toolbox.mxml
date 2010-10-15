@@ -15,19 +15,19 @@
 			click='doDelete();' 
 			enabled="{canDo('delete')}" 
 			alpha="{getAlpha('delete')}" 
-			toolTip="Delete item" 
+			toolTip="{deleteToolTipText()}" 
 			width="28" height="28" textAlign="left" y="4" x="6" paddingLeft="6" paddingRight="0" />
         <mx:Button icon="@Embed('../../../embedded/direction.svg')" 
             click='doReverseDirection();'
 			enabled="{canDo('reverseDirection')}" 
 			alpha="{getAlpha('reverseDirection')}" 
-			toolTip="Reverse direction" 
+			toolTip="Reverse direction (V)" 
 			width="28" height="28" textAlign="left" y="4" x="36" paddingLeft="8" paddingRight="0" />
         <mx:Button icon="@Embed('../../../embedded/cut.svg')" 
                click='doSplit();'
 			enabled="{canDo('split')}" 
 			alpha="{getAlpha('split')}" 
-			toolTip="Split way" 
+			toolTip="Split way (X)" 
 			width="28" height="28" textAlign="left" y="4" x="66" paddingLeft="8" paddingRight="0" />
         <mx:Button icon="@Embed('../../../embedded/straighten.svg')" 
 			click='doStraighten();' 
@@ -51,7 +51,7 @@
 			click='doParallelise();' 
 			enabled="{canDo('parallelise')}" 
 			alpha="{getAlpha('parallelise')}" 
-			toolTip="Create parallel way" 
+			toolTip="Create parallel way (P)" 
 			width="28" height="28" textAlign="left" y="4" x="186" paddingLeft="8" paddingRight="0" />
 
 	<mx:Script><![CDATA[
@@ -124,7 +124,14 @@
 			if (canDo(op)) { return 1; }
 			return 0.5;
 		}
-        
+
+        [Bindable(event="updateSkin")]
+        private function deleteToolTipText():String {
+            if (entity is Node) { return "Delete Node (Delete)"; }
+            if (entity is Way && Way(entity).isArea()) { return "Delete Area (Shift+Delete)"; }
+            if (entity is Way) { return "Delete Way (Shift+Delete)"; }
+            return "Delete Item"; // When nothing is selected
+        }
 
 		// --------------------------------------------------------------------------------
 		// Individual toolbox actions
