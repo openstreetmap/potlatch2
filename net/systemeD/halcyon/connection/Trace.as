@@ -16,7 +16,6 @@ package net.systemeD.halcyon.connection {
         private var tags:Array = []; // N.B. trace tags are NOT k/v pairs
         private var _isLoaded:Boolean;
         private var _filename:String;
-        private var _url:String; // migrate so that only XML connection knows this
         private var _traceData:String;
         private var map:Map;
         private var _layer:VectorLayer;
@@ -36,7 +35,6 @@ package net.systemeD.halcyon.connection {
             for each(var tag:XML in xml.tag) {
               tags.push(String(tag));
             }
-            _url = Connection.getConnectionInstance().apiBase+"gpx/"+_id+"/data.xml";
             return this;
         }
 
@@ -54,11 +52,6 @@ package net.systemeD.halcyon.connection {
 
         public function get tagsText():String {
             return tags.join(", ");
-        }
-
-        // I'd rather this wasn't public
-        public function get url():String {
-            return _url;
         }
 
         public function get traceData():XML {
