@@ -35,11 +35,6 @@ package net.systemeD.potlatch2.utils {
 			var sp:uint=0;
 			for each (var fn:String in filenames) {
 				Globals.vars.root.addDebug("requesting file "+fn);
-                var conn:Connection = Connection.getConnectionInstance();
-
-                if ( fn.indexOf(conn.apiBase) == 0 ) {
-                  fn = conn.signOAuthGet(fn);
-                }
 				var request:DebugURLRequest = new DebugURLRequest(fn);
 				var loader:ExtendedURLLoader = new ExtendedURLLoader();
 				loader.info['file']=sp;

@@ -143,10 +143,6 @@ package net.systemeD.halcyon.connection {
             loader.load(urlReq);
         }
 
-        override public function signOAuthGet(url:String):String {
-            return signedOAuthURL(url, "GET");
-        }
-        
         override public function uploadChanges():void {
             var changeset:Changeset = getActiveChangeset();
             var upload:XML = <osmChange version="0.6"/>
@@ -337,7 +333,6 @@ package net.systemeD.halcyon.connection {
               var t:Trace = new Trace().fromXML(traceData);
               addTrace(t);
             }
-            trace("loaded gpx files");
             dispatchEvent(new Event(LOAD_COMPLETED));
             dispatchEvent(new Event(TRACES_LOADED));
         }
