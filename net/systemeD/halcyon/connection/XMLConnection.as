@@ -334,21 +334,17 @@ package net.systemeD.halcyon.connection {
             clearTraces();
             var files:XML = new XML(URLLoader(event.target).data);
             for each(var traceData:XML in files.gpx_file) {
-              var t:Object = {};
-              t.id = Number(traceData.@id);
-              t.name = traceData.@name;
-              t.description = traceData.description;
-              var tags:Array = [];
-              for each(var tag:XML in traceData.tag) {
-                tags.push(String(tag));
-              }
-              t.tags = tags.join(" ");
-              t.url = Connection.apiBaseURL+"gpx/"+t.id+"/data.xml";
+              var t:Trace = new Trace().fromXML(traceData);
               addTrace(t);
             }
             trace("loaded gpx files");
             dispatchEvent(new Event(LOAD_COMPLETED));
             dispatchEvent(new Event(TRACES_LOADED));
+        }
+
+        override public function fetchTrace(id:Number, callback:Function):void {
+            sendOAuthGet(Connection.apiBaseURL+"gpx/"+id+"/data.xml", callback, errorOnMapLoad, mapLoadStatus); // needs error handlers
+            dispatchEvent(new Event(LOAD_STARTED)); //specifc to map or reusable?
         }
 	}
 }

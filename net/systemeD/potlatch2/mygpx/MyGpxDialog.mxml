@@ -58,11 +58,12 @@
         return conn.getTraces();
     }
 
-    public function loadFile(o:Object):void {
-        var vectorlayer:VectorLayer=new VectorLayer(o.name,map,"gpx.css");
-        vectorlayer.url=o.url;
-        map.addVectorLayer(vectorlayer);
-        var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [o.url], filesLoaded, false);
+    public function loadFile(t:Trace):void {
+        t.addToMap();
+        //var vectorlayer:VectorLayer=new VectorLayer(t.filename,map,"gpx.css");
+        //vectorlayer.url=t.url;
+        //map.addVectorLayer(vectorlayer);
+        //var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [t.url], filesLoaded, false);
     }
 
     public function filesLoaded(success:Boolean,message:String=null):void {
@@ -79,9 +80,9 @@
   <mx:DataGrid dataProvider="{traces}" width="100%" height="100%" id="traceGrid">
     <mx:columns>
             <mx:DataGridColumn editable="false" dataField="id" headerText="id" width="45"/>
-            <mx:DataGridColumn editable="false" dataField="name" headerText="filename"/>
+            <mx:DataGridColumn editable="false" dataField="filename" headerText="filename"/>
             <mx:DataGridColumn editable="false" dataField="description" headerText="description"/>
-            <mx:DataGridColumn editable="false" dataField="tags" headerText="tags"/>
+            <mx:DataGridColumn editable="false" dataField="tagsText" headerText="tags"/>
             <mx:DataGridColumn editable="false">
               <mx:itemRenderer>
                 <mx:Component>

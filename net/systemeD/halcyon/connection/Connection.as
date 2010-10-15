@@ -364,6 +364,7 @@ package net.systemeD.halcyon.connection {
 		public function closeChangeset():void {}
 	    public function uploadChanges():void {}
         public function fetchUserTraces():void {}
+        public function fetchTrace(id:Number, callback:Function):void {}
         public function signOAuthGet(url:String):String {return 'example.com';}
     }
 
