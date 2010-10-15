@@ -313,6 +313,10 @@ package net.systemeD.halcyon.connection {
             xml.@id = entity.id;
             xml.@version = entity.version;
             for each( var tag:Tag in entity.getTagArray() ) {
+              if (tag.key == 'created_by') {
+                entity.setTag('created_by', null, MainUndoStack.getGlobalStack().addAction);
+                continue;
+              }
               var tagXML:XML = <tag/>
               tagXML.@k = tag.key;
               tagXML.@v = tag.value;

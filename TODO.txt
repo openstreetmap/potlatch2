@@ -47,11 +47,6 @@ Potlatch 2: main outstanding issues
 * Deleting a way doesn't update the junction highlighting on the remaining junctions
 * Deleting a way also deletes POIs without warning (ooh, look I found a modal dialog in p1. Do I win a prize? :-) )
 
-
-== Miscellaneous data model ==
-
-* Remove created_by=* tags from any data touched
-
 == Rendering (Halcyon) ==
 
 * halcyon_viewer needs updating for new tileurl stuff
