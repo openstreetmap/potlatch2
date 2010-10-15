@@ -69,7 +69,6 @@ Potlatch 2: main outstanding issues
 * Rework the loading text
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
-* Refactor the importer.as so that downloading the files can be done via the connection, not just directly
 
 Requested enhancements
 ----------------------

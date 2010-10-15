@@ -54,11 +54,8 @@ package net.systemeD.halcyon.connection {
             return tags.join(", ");
         }
 
-        public function get traceData():XML {
-            return XML(_traceData);
-        }
-
         private function fetchFromServer():void {
+            // todo - needs proper error handling
             Connection.getConnectionInstance().fetchTrace(id, saveTraceData);
             dispatchEvent(new Event("loading_data"));
         }
@@ -77,6 +74,8 @@ package net.systemeD.halcyon.connection {
         }
 
         public function addToMap():void {
+            // this allows adding and removing traces from the map, without re-downloading
+            // the data from the server repeatedly.
             if (!_isLoaded) {
               addEventListener("loaded_data", processEvent);
               fetchFromServer();
@@ -84,6 +83,10 @@ package net.systemeD.halcyon.connection {
             } else {
               process();
             }
+        }
+
+        public function removeFromMap():void {
+            //todo
         }
 
         private function processEvent(e:Event):void {
