@@ -57,7 +57,11 @@ way .path              {text:name; text-color: black; text-position: offset; tex
 /* Could be improved */
 way[highway=proposed] { color: #88ffff; width: 6; dashes: 8, 4; }
 way[highway=construction] { color: #ffffbb; width: 6; dashes: 8, 4; casing-color: #0000aa; casing-width: 8; casing-dashes: 8,4;}
+way[construction=rail] 
+	{ z-index: 6; color: black; width: 5; dashes: 6, 6, 4, 8;}
+	{ z-index: 7; color: white; width: 3; dashes: 6,18; }
 
+	
 
 way[waterway=river], 
 way[waterway=canal], 
