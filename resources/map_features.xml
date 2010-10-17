@@ -261,6 +261,7 @@ Quick documentation:
         defaultName="Ground"/>
     </inputSet>
   <inputSet id="tunnel">
+    <!-- Not ideal, used for non-roads too. -->  
     <input type="choice" presence="onTagMatch"
         name="Tunnel" category="Physical" description="Road goes into a tunnel"
         key="tunnel" layout="horizontal">
@@ -1021,7 +1022,7 @@ Quick documentation:
     <line/>
     <tag k="waterway" v="canal"/>
     <inputSet ref="waterways" />
-
+    <inputSet ref="tunnel"/>
     <inputSet ref="common"/>
   </feature>
 
@@ -1034,12 +1035,14 @@ Quick documentation:
 
     <line/>
     <tag k="waterway" v="drain"/>
+    <inputSet ref="tunnel"/>
     <inputSet ref="common"/>
   </feature>
 
 
   <feature name="Dam">
-    <category>water</category>
+    <!-- Moved to "barrier" because this describes the dam wall, not the water. -->
+    <category>barrier</category>
     <icon image="features/waterway__dam.png">
       <font size="14pt">
         <b>${name}</b>
@@ -1047,6 +1050,7 @@ Quick documentation:
     </icon>
 
     <line/>
+    <area/>
     <tag k="waterway" v="dam"/>
     <inputSet ref="common"/>
   </feature>
