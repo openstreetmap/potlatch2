@@ -106,7 +106,6 @@ package net.systemeD.halcyon.connection {
 
             for each (var trk:XML in file.child("trk")) {
                 for each (var trkseg:XML in trk.child("trkseg")) {
-                    trace("trkseg");
                     var way:Way;
                     var nodestring:Array=[];
                     for each (var trkpt:XML in trkseg.child("trkpt")) {
