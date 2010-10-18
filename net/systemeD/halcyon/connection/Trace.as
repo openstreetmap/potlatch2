@@ -10,6 +10,11 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.Globals;
     import net.systemeD.halcyon.VectorLayer;
 
+    /**
+    * Implements trace objects loaded from the OSM API.
+    * See also potlatch2's utils GpxImporter.as and Importer.as classes, which can handle
+    * loading GPX files (and other formats) from arbitrary urls.
+    */
     public class Trace extends EventDispatcher {
         private var _id:Number;
         private var _description:String;

@@ -6,6 +6,10 @@ package net.systemeD.potlatch2.utils {
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.potlatch2.tools.Simplify;
 
+    /**
+    * Implements parsing and loading of GPX files.
+    * For loading GPX traces from the OSM API, see halcyon/connenction/Trace.as
+    */
 	public class GpxImporter extends Importer {
 
 		public function GpxImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
