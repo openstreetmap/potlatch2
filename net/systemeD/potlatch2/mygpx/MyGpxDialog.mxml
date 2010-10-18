@@ -20,37 +20,38 @@
     import mx.controls.Alert;
 
     private var map:Map;
+    private var conn:Connection;
 
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
 
+        conn = Connection.getConnectionInstance();
         map = Globals.vars.root;
+
+        SaveManager.getAccessSorted();
+        conn.addEventListener(Connection.TRACES_LOADED, onTracesLoaded);
         fetchList();
     }
 
     private function myGpxDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
+        conn.removeEventListener(Connection.TRACES_LOADED, onTracesLoaded);
     }
 
-    private function fetchList():void {
-        SaveManager.getAccessSorted();
-        var conn:Connection = Connection.getConnectionInstance();
-        conn.addEventListener(Connection.TRACES_LOADED, onTracesLoaded);
-        conn.fetchUserTraces();
-        
-        results.text = "fetching...";
+    private function fetchList(refresh:Boolean=false):void {
+        results.text = "Fetching Traces...";
+        conn.fetchUserTraces(refresh);
     }
 
     private function onTracesLoaded(e:Event):void {
-        results.text = "loaded!!";
+        results.text = "Traces Loaded";
         dispatchEvent(new Event("traces_loaded"));
     }
 
     [Bindable(event="traces_loaded")]
     private function get traces():Array {
-        var conn:Connection = Connection.getConnectionInstance();
         return conn.getTraces();
     }
 
@@ -68,7 +69,7 @@
               ]]>
   </mx:Script>
 
-  <mx:Text text="foo" id="results" />
+  <mx:Text text="Traces" id="results" />
   <mx:DataGrid dataProvider="{traces}" width="100%" height="100%" id="traceGrid">
     <mx:columns>
             <mx:DataGridColumn editable="false" dataField="id" headerText="id" width="45"/>
@@ -88,6 +89,6 @@
     </mx:columns>
   </mx:DataGrid>
   <mx:ControlBar>
-    <mx:Button label="Refresh List" click="fetchList()" />
+    <mx:Button label="Refresh List" click="fetchList(true)" />
   </mx:ControlBar>
 </mx:TitleWindow>

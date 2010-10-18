@@ -320,10 +320,14 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-        override public function fetchUserTraces():void {
-            sendOAuthGet(Connection.apiBaseURL+"user/gpx_files",
-                         tracesLoadComplete, errorOnMapLoad, mapLoadStatus); //needs error handlers
-            dispatchEvent(new Event(LOAD_STARTED)); //specific to map or reusable?
+        override public function fetchUserTraces(refresh:Boolean=false):void {
+            if (traces_loaded && !refresh) {
+              dispatchEvent(new Event(TRACES_LOADED));
+            } else {
+              sendOAuthGet(Connection.apiBaseURL+"user/gpx_files",
+                          tracesLoadComplete, errorOnMapLoad, mapLoadStatus); //needs error handlers
+              dispatchEvent(new Event(LOAD_STARTED)); //specific to map or reusable?
+            }
         }
 
         private function tracesLoadComplete(event:Event):void {
@@ -333,6 +337,7 @@ package net.systemeD.halcyon.connection {
               var t:Trace = new Trace().fromXML(traceData);
               addTrace(t);
             }
+            traces_loaded = true;
             dispatchEvent(new Event(LOAD_COMPLETED));
             dispatchEvent(new Event(TRACES_LOADED));
         }
