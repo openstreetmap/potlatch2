@@ -4,8 +4,9 @@ package net.systemeD.halcyon {
 	import flash.events.*;
 	import flash.net.*;
 	import flash.system.LoaderContext;
+	import flash.utils.Timer;
 	import net.systemeD.halcyon.MapEvent;
-	
+
     public class TileSet extends Sprite {
 
 		public var tile_l:int;
@@ -111,8 +112,17 @@ package net.systemeD.halcyon {
 		}
 
 		protected function doImgInit(event:Event):void {
+			event.target.loader.alpha=0;
+			var t:Timer=new Timer(10,10);
+			t.addEventListener(TimerEvent.TIMER,function():void { upFade(DisplayObject(event.target.loader)); });
+			t.start();
 			waiting--;
 			return;
+		}
+		
+		protected function upFade(s:DisplayObject):void {
+			s.alpha+=0.1;
+			trace(s+","+s.alpha);
 		}
 
 		
