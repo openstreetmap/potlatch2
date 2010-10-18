@@ -122,7 +122,6 @@ package net.systemeD.halcyon {
 		
 		protected function upFade(s:DisplayObject):void {
 			s.alpha+=0.1;
-			trace(s+","+s.alpha);
 		}
 
 		
