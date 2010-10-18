@@ -45,13 +45,9 @@
 
     private function onTracesLoaded(e:Event):void {
         results.text = "loaded!!";
-        // Although the connection emits a Connection.TRACES_LOADED event,
-        // I couldn't get the next binding to work properly. Emitting
-        // an event here does the trick
         dispatchEvent(new Event("traces_loaded"));
     }
 
-    // [Bindable(event=Connection.TRACES_LOADED)]
     [Bindable(event="traces_loaded")]
     private function get traces():Array {
         var conn:Connection = Connection.getConnectionInstance();
