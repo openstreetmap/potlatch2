@@ -63,10 +63,8 @@ Potlatch 2: main outstanding issues
 == MyGPX ==
 
 * Combine two GPX buttons
-* Shouldn't refetch just when opening dialog
 * Make the connection, not the savemanager, in charge of sorting out the oauth stuff?
 * Ensure the oauth dialog pops up if there's no oauth credentials
-* Rework the loading text
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
 * Figure out how to call P2/Simplify for halcyon-based code
