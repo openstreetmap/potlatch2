@@ -61,7 +61,7 @@ package net.systemeD.halcyon.connection {
 	    }
 
         /* Get the stored access token, or try setting it up from loader params or passed SharedObject */
-        /* todo: make this private */
+        /* todo: make this private, fix indentation */
         override public function getAccessToken(data:Object):OAuthToken {
           if (authToken == null) {
             var key:String = Connection.getParam("oauth_token", null);
@@ -77,6 +77,18 @@ package net.systemeD.halcyon.connection {
             }
           }
           return authToken;
+        }
+
+        override public function getConsumer():OAuthConsumer {
+            if (appID == null) {
+              var key:String = Connection.getParam("oauth_consumer_key", null);
+              var secret:String = Connection.getParam("oauth_consumer_secret", null);
+
+              if ( key != null && secret != null ) {
+                  appID =  new OAuthConsumer(key, secret);
+              }
+            }
+            return appID;
         }
 
         private var httpStatus:int = 0;

@@ -31,7 +31,7 @@ package net.systemeD.potlatch2.save {
         private function save(callback:Function):void {
             var conn:Connection = Connection.getConnectionInstance();
             if ( consumer == null )
-                consumer = getConsumer();
+                consumer = conn.getConsumer();
             if ( accessToken == null )
                 accessToken = conn.getAccessToken(SharedObject.getLocal("access_token").data);
         
@@ -41,16 +41,6 @@ package net.systemeD.potlatch2.save {
                 callback();
         }
 
-        private function getConsumer():OAuthConsumer {
-            var key:String = Connection.getParam("oauth_consumer_key", null);
-            var secret:String = Connection.getParam("oauth_consumer_secret", null);
-            
-            if ( key == null || secret == null )
-                return null;
-            else    
-                return new OAuthConsumer(key, secret);
-        }
-        
         private function getNewToken(onCompletion:Function):void {
             var oauthPanel:OAuthPanel = OAuthPanel(
                 PopUpManager.createPopUp(Application(Application.application), OAuthPanel, true));
