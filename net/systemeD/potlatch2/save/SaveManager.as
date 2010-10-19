@@ -15,13 +15,8 @@ package net.systemeD.potlatch2.save {
             instance.save(instance.saveData);
         }
 
-        public static function getAccessSorted():void {
-            // hacky hack of pond-like clarity
-            instance.save(instance.doNothing);
-        }
-
-        private function doNothing():void {
-            //hack hacky hack hack. Please look the other way...
+        public static function ensureAccess(callback:Function):void {
+            instance.save(callback);
         }
 
         private function save(callback:Function):void {

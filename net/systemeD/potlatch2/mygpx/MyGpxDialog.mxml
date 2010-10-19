@@ -30,9 +30,8 @@
         conn = Connection.getConnectionInstance();
         map = Globals.vars.root;
 
-        SaveManager.getAccessSorted();
         conn.addEventListener(Connection.TRACES_LOADED, onTracesLoaded);
-        fetchList();
+        SaveManager.ensureAccess(fetchList);
     }
 
     private function myGpxDialog_close(evt:CloseEvent):void {
