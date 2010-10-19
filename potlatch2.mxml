@@ -195,7 +195,7 @@
 
             // set the access token from saved cookie
             var tokenObject:SharedObject = SharedObject.getLocal("access_token");
-            conn.setAccessToken(tokenObject.data["key"], tokenObject.data["secret"]);
+            conn.setAccessToken(tokenObject.data["oauth_token"], tokenObject.data["oauth_token_secret"]);
 
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);

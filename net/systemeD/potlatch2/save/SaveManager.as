@@ -29,13 +29,11 @@ package net.systemeD.potlatch2.save {
 
         private function save(callback:Function):void {
             var conn:Connection = Connection.getConnectionInstance();
-            if ( accessToken == null )
-                accessToken = conn.getAccessToken();
-        
-            if ( accessToken == null )
-                getNewToken(callback);
-            else
+            if (conn.hasAccessToken()) {
                 callback();
+            } else {
+                getNewToken(callback);
+            }
         }
 
         private function getNewToken(onCompletion:Function):void {

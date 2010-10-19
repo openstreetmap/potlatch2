@@ -61,7 +61,8 @@ package net.systemeD.halcyon.connection {
         }
 
         override public function setAccessToken(key:String, secret:String):void {
-            if(key && secret) {
+            trace("setAccessToken "+key+" "+secret);
+            if (key && secret) {
               authToken = new OAuthToken(key, secret);
             }
         }
