@@ -360,7 +360,6 @@ package net.systemeD.halcyon.connection {
 								top:Number, bottom:Number):void {
 	    }
 	    
-	    public function setAppID(id:Object):void {}
 	    public function setAuthToken(id:Object):void {}
 	    public function createChangeset(tags:Object):void {}
 		public function closeChangeset():void {}
@@ -368,7 +367,6 @@ package net.systemeD.halcyon.connection {
         public function fetchUserTraces(refresh:Boolean=false):void {}
         public function fetchTrace(id:Number, callback:Function):void {}
         public function getAccessToken(data:Object):OAuthToken { return null; } //todo make private and remove import org.ioshtan etc
-        public function getConsumer():OAuthConsumer { return null; }
     }
 
 }

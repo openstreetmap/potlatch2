@@ -51,11 +51,7 @@ package net.systemeD.halcyon.connection {
 
         protected var appID:OAuthConsumer;
         protected var authToken:OAuthToken;
-        
-	    override public function setAppID(id:Object):void {
-	        appID = OAuthConsumer(id);
-	    }
-	    
+
 	    override public function setAuthToken(id:Object):void {
 	        authToken = OAuthToken(id);
 	    }
@@ -79,7 +75,7 @@ package net.systemeD.halcyon.connection {
             return authToken;
         }
 
-        override public function getConsumer():OAuthConsumer {
+        private function getConsumer():OAuthConsumer {
             if (appID == null) {
               var key:String = getParam("oauth_consumer_key", null);
               var secret:String = getParam("oauth_consumer_secret", null);
@@ -145,7 +141,7 @@ package net.systemeD.halcyon.connection {
         private function signedOAuthURL(url:String, method:String):String {
             // method should be PUT, GET, POST or DELETE
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
-            var oauthRequest:OAuthRequest = new OAuthRequest(method, url, null, appID, authToken);
+            var oauthRequest:OAuthRequest = new OAuthRequest(method, url, null, getConsumer(), authToken);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING);
             return String(urlStr);
         }

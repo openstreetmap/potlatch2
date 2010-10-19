@@ -25,13 +25,10 @@ package net.systemeD.potlatch2.save {
 
         private function doNothing():void {
             //hack hacky hack hack. Please look the other way...
-            Connection.getConnectionInstance().setAppID(consumer);
         }
 
         private function save(callback:Function):void {
             var conn:Connection = Connection.getConnectionInstance();
-            if ( consumer == null )
-                consumer = conn.getConsumer();
             if ( accessToken == null )
                 accessToken = conn.getAccessToken(SharedObject.getLocal("access_token").data);
         
@@ -66,8 +63,6 @@ package net.systemeD.potlatch2.save {
 
 			if (Connection.getConnectionInstance().getActiveChangeset()) {
 				saveDialog.dontPrompt();
-			} else {
-	            Connection.getConnectionInstance().setAppID(consumer);
 			}
         }
     }
