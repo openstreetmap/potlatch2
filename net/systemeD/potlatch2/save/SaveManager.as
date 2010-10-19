@@ -10,9 +10,6 @@ package net.systemeD.potlatch2.save {
     public class SaveManager {
     
         private static var instance:SaveManager = new SaveManager();
-        
-        private var accessToken:OAuthToken;
-        private var consumer:OAuthConsumer;
 
         public static function saveChanges():void {
             instance.save(instance.saveData);
@@ -42,7 +39,7 @@ package net.systemeD.potlatch2.save {
             PopUpManager.centerPopUp(oauthPanel);
             
             var listener:Function = function(event:Event):void {
-                accessToken = oauthPanel.accessToken;
+                var accessToken:OAuthToken = oauthPanel.accessToken;
                 if ( oauthPanel.shouldRemember ) {
                     var obj:SharedObject = SharedObject.getLocal("access_token");
                     obj.setProperty("oauth_token", accessToken.key);
