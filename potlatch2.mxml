@@ -200,6 +200,13 @@
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
 
+            // Force authentication on startup, if required
+            // force_auth == force => checks for access token, and displays OAuth panel if needed
+            var force_auth:String = loaderInfo.parameters["force_auth"];
+            if (!conn.hasAccessToken() && force_auth == 'force') {
+              SaveManager.ensureAccess(onAccessChecked);
+            }
+
             // show help dialog on startup, if required
             // show_help == always => on every startup
             // show_help == once => show on first startup only
@@ -370,6 +377,11 @@
 			Connection.getConnectionInstance().registerPOI(node);
 			MainUndoStack.getGlobalStack().addAction(createAction);
             theController.setState(new SelectedPOINode(node));
+        }
+
+        /* Called when forcing an initial access token check. */
+        private function onAccessChecked():void {
+            // Floaty panel message "You now have access";
         }
 
 	]]></mx:Script>
