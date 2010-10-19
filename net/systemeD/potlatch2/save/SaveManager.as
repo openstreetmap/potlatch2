@@ -26,7 +26,6 @@ package net.systemeD.potlatch2.save {
         private function doNothing():void {
             //hack hacky hack hack. Please look the other way...
             Connection.getConnectionInstance().setAppID(consumer);
-            Connection.getConnectionInstance().setAuthToken(accessToken);
         }
 
         private function save(callback:Function):void {
@@ -79,7 +78,6 @@ package net.systemeD.potlatch2.save {
 				saveDialog.dontPrompt();
 			} else {
 	            Connection.getConnectionInstance().setAppID(consumer);
-	            Connection.getConnectionInstance().setAuthToken(accessToken);
 			}
         }
     }

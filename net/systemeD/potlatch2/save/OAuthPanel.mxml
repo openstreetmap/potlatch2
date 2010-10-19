@@ -176,6 +176,7 @@
             PopUpManager.removePopUp(this);
             
             _accessToken = getResponseToken(URLLoader(event.target));
+            Connection.getConnectionInstance().setAuthToken(_accessToken);
             dispatchEvent(new Event(ACCESS_TOKEN_EVENT));
         }
         
