@@ -61,31 +61,31 @@ package net.systemeD.halcyon.connection {
 	    }
 
         /* Get the stored access token, or try setting it up from loader params or passed SharedObject */
-        /* todo: make this private, fix indentation */
+        /* todo: make this private */
         override public function getAccessToken(data:Object):OAuthToken {
-          if (authToken == null) {
-            var key:String = Connection.getParam("oauth_token", null);
-            var secret:String = Connection.getParam("oauth_token_secret", null);
+            if (authToken == null) {
+              var key:String = getParam("oauth_token", null);
+              var secret:String = getParam("oauth_token_secret", null);
 
-            if ( key == null || secret == null ) {
-                key = data["oauth_token"];
-                secret = data["oauth_token_secret"];
-            }
+              if ( key == null || secret == null ) {
+                  key = data["oauth_token"];
+                  secret = data["oauth_token_secret"];
+              }
 
-            if ( key != null && secret != null ) {
-                authToken = new OAuthToken(key, secret);
+              if ( key != null && secret != null ) {
+                  authToken = new OAuthToken(key, secret);
+              }
             }
-          }
-          return authToken;
+            return authToken;
         }
 
         override public function getConsumer():OAuthConsumer {
             if (appID == null) {
-              var key:String = Connection.getParam("oauth_consumer_key", null);
-              var secret:String = Connection.getParam("oauth_consumer_secret", null);
+              var key:String = getParam("oauth_consumer_key", null);
+              var secret:String = getParam("oauth_consumer_secret", null);
 
               if ( key != null && secret != null ) {
-                  appID =  new OAuthConsumer(key, secret);
+                  appID = new OAuthConsumer(key, secret);
               }
             }
             return appID;
