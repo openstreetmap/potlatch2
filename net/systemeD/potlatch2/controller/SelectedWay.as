@@ -115,6 +115,7 @@ package net.systemeD.potlatch2.controller {
 		}
         
 		public function deleteWay():ControllerState {
+            controller.map.setHighlightOnNodes(selectedWay, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}

@@ -28,7 +28,9 @@ package net.systemeD.halcyon.connection.actions {
 				node=nodeList.pop();
 				way.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, way, 0));
 				node.removeParent(way);
-				if (!node.hasParents) { node.remove(effects.push); }
+                if (!node.hasParents && !node.hasInterestingTags()) { //need to trigger redraw of new POIs?
+                  node.remove(effects.push);
+                }
 			}
 			effects.doAction();
 			setDeleted(true);

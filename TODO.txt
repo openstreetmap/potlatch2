@@ -44,8 +44,7 @@ Potlatch 2: main outstanding issues
 * small node hitzone when creating areas - hitzone and mouseover UI don't match up
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
-* Deleting a way doesn't update the junction highlighting on the remaining junctions
-* Deleting a way also deletes POIs without warning (ooh, look I found a modal dialog in p1. Do I win a prize? :-) )
+* Deleting a way containing POIs leaves the POIs in wrong state (black vs green) - sorts out on mouseover
 
 == Rendering (Halcyon) ==
 
