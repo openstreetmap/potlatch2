@@ -60,6 +60,22 @@ package net.systemeD.halcyon.connection {
 	        authToken = OAuthToken(id);
 	    }
 
+        override public function getAccessToken(data:Object):OAuthToken {
+            var key:String = Connection.getParam("oauth_token", null);
+            var secret:String = Connection.getParam("oauth_token_secret", null);
+
+            if ( key == null || secret == null ) {
+                //var data:Object = SharedObject.getLocal("access_token").data;
+                key = data["oauth_token"];
+                secret = data["oauth_token_secret"];
+            }
+
+            if ( key == null || secret == null )
+                return null;
+            else
+                return new OAuthToken(key, secret);
+        }
+
         private var httpStatus:int = 0;
         
         private function recordStatus(event:HTTPStatusEvent):void {

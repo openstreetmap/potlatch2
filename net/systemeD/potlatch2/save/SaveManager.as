@@ -30,31 +30,16 @@ package net.systemeD.potlatch2.save {
         }
 
         private function save(callback:Function):void {
+            var conn:Connection = Connection.getConnectionInstance();
             if ( consumer == null )
                 consumer = getConsumer();
             if ( accessToken == null )
-                accessToken = getAccessToken();
+                accessToken = conn.getAccessToken(SharedObject.getLocal("access_token").data);
         
             if ( accessToken == null )
                 getNewToken(callback);
             else
                 callback();
-        }
-
-        private function getAccessToken():OAuthToken {
-            var key:String = Connection.getParam("oauth_token", null);
-            var secret:String = Connection.getParam("oauth_token_secret", null);
-            
-            if ( key == null || secret == null ) {
-                var data:Object = SharedObject.getLocal("access_token").data;
-                key = data["oauth_token"];
-                secret = data["oauth_token_secret"];
-            }
-            
-            if ( key == null || secret == null )
-                return null;
-            else    
-                return new OAuthToken(key, secret);
         }
 
         private function getConsumer():OAuthConsumer {
