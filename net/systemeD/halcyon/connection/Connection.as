@@ -6,7 +6,6 @@ package net.systemeD.halcyon.connection {
     import flash.events.Event;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.actions.*;
-    import org.iotashan.oauth.*;
 
 	public class Connection extends EventDispatcher {
 
@@ -367,7 +366,6 @@ package net.systemeD.halcyon.connection {
 	    public function uploadChanges():void {}
         public function fetchUserTraces(refresh:Boolean=false):void {}
         public function fetchTrace(id:Number, callback:Function):void {}
-        public function getAccessToken():OAuthToken { return null; } //todo make private and remove import org.ioshtan etc
         public function hasAccessToken():Boolean { return false; }
     }
 
