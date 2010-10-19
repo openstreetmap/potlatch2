@@ -193,6 +193,10 @@
             conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
 			conn.addEventListener(MapEvent.ERROR, onMapError);
 
+            // set the access token from saved cookie
+            var tokenObject:SharedObject = SharedObject.getLocal("access_token");
+            conn.setAccessToken(tokenObject.data["key"], tokenObject.data["secret"]);
+
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
 

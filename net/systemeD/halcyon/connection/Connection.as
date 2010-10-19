@@ -361,12 +361,14 @@ package net.systemeD.halcyon.connection {
 	    }
 	    
 	    public function setAuthToken(id:Object):void {}
+        public function setAccessToken(key:String, secret:String):void {}
 	    public function createChangeset(tags:Object):void {}
 		public function closeChangeset():void {}
 	    public function uploadChanges():void {}
         public function fetchUserTraces(refresh:Boolean=false):void {}
         public function fetchTrace(id:Number, callback:Function):void {}
-        public function getAccessToken(data:Object):OAuthToken { return null; } //todo make private and remove import org.ioshtan etc
+        public function getAccessToken():OAuthToken { return null; } //todo make private and remove import org.ioshtan etc
+        public function hasAccessToken():Boolean { return false; }
     }
 
 }

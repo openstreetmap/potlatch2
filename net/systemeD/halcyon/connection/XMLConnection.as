@@ -56,17 +56,22 @@ package net.systemeD.halcyon.connection {
 	        authToken = OAuthToken(id);
 	    }
 
-        /* Get the stored access token, or try setting it up from loader params or passed SharedObject */
+        override public function hasAccessToken():Boolean {
+            return !(getAccessToken() == null);
+        }
+
+        override public function setAccessToken(key:String, secret:String):void {
+            if(key && secret) {
+              authToken = new OAuthToken(key, secret);
+            }
+        }
+
+        /* Get the stored access token, or try setting it up from loader params */
         /* todo: make this private */
-        override public function getAccessToken(data:Object):OAuthToken {
+        override public function getAccessToken():OAuthToken {
             if (authToken == null) {
               var key:String = getParam("oauth_token", null);
               var secret:String = getParam("oauth_token_secret", null);
-
-              if ( key == null || secret == null ) {
-                  key = data["oauth_token"];
-                  secret = data["oauth_token_secret"];
-              }
 
               if ( key != null && secret != null ) {
                   authToken = new OAuthToken(key, secret);

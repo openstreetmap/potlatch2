@@ -30,7 +30,7 @@ package net.systemeD.potlatch2.save {
         private function save(callback:Function):void {
             var conn:Connection = Connection.getConnectionInstance();
             if ( accessToken == null )
-                accessToken = conn.getAccessToken(SharedObject.getLocal("access_token").data);
+                accessToken = conn.getAccessToken();
         
             if ( accessToken == null )
                 getNewToken(callback);
