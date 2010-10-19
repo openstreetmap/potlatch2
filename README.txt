@@ -62,7 +62,12 @@ of a much larger swf file.. but we're developing so that doesn't matter!).
 
 * compile 1
   - type it again to compile again. You'll really wish that up-arrow,enter 
-    worked, but Adobe is going laughing at you RIGHT NOW.
+    worked, but Adobe is laughing at you RIGHT NOW.
+
+* rlwrap
+  - if you have it on your system (e.g. linux), rlwrap is a godsend. Launch
+    fcsh with 'rlwrap path/to/fcsh' and up arrows will work, even persistantly
+    across one fcsh session to the next.
 
 Running:
 
