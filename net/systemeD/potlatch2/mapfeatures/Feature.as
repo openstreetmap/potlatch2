@@ -4,6 +4,8 @@ package net.systemeD.potlatch2.mapfeatures {
     import flash.events.Event;
     import flash.net.*;
     import flash.utils.ByteArray;
+    import mx.core.BitmapAsset;
+    import mx.graphics.codec.PNGEncoder;
     
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.potlatch2.utils.CachedDataLoader;
@@ -15,6 +17,11 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _tags:Array;
 		private var _withins:Array;
         private var _editors:Array;
+
+        [Embed(source="../../../../embedded/missing_icon.png")]
+        [Bindable]
+        public var missingIconCls:Class;
+
 
         public function Feature(mapFeatures:MapFeatures, _xml:XML) {
             this.mapFeatures = mapFeatures;
@@ -95,14 +102,19 @@ package net.systemeD.potlatch2.mapfeatures {
         public function get image():ByteArray {
             var icon:XMLList = _xml.icon;
             var imageURL:String = null;
+            var img:ByteArray;
 
             if ( icon.length() > 0 && icon[0].hasOwnProperty("@image") )
                 imageURL = icon[0].@image;
-            
+
             if ( imageURL != null ) {
-                return CachedDataLoader.loadData(imageURL, imageLoaded);
+                img = CachedDataLoader.loadData(imageURL, imageLoaded);
             }
-            return null;
+            if (img) {
+              return img;
+            }
+            var bitmap:BitmapAsset = new missingIconCls() as BitmapAsset;
+            return new PNGEncoder().encode(bitmap.bitmapData);
         }
         
         private function imageLoaded(url:String, data:ByteArray):void {

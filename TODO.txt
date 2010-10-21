@@ -20,7 +20,6 @@ Potlatch 2: main outstanding issues
 == Tag editing ==
 
 * initialiseEditors is quite slow (typically 150ms)
-* Bug where the wrong feature is used, when an item that is dragged from the list when an POI has no icon.
 * Can't use + for second tag
 * Tag panel jumps up and down when number spinner is used on bike parking
 * New relation panel jumps up and down, but I haven't seen it on editing existing relations
