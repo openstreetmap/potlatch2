@@ -64,10 +64,10 @@ package net.systemeD.potlatch2.utils {
         
         private static function getMissingImage():ByteArray {
             if ( missingImage == null ) {
-                var bitmap:BitmapData = new BitmapData(16, 16, false);
-                for ( var i:uint = 0; i < 16; i++ ) {
+                var bitmap:BitmapData = new BitmapData(24, 24, false);
+                for ( var i:uint = 0; i < 24; i++ ) {
                     bitmap.setPixel(i, i, 0xff0000);
-                    bitmap.setPixel(15-i, i, 0xff0000);
+                    bitmap.setPixel(23-i, i, 0xff0000);
                 }
                 missingImage = new PNGEncoder().encode(bitmap);
             }
