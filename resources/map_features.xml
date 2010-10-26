@@ -1359,7 +1359,7 @@ Quick documentation:
 
   <feature name="Airport terminal">
     <category>transport</category>
-    <icon image="icons/transport_blank.png"/>
+    <icon image="features/pois/transport_airport_terminal.n.24.png"/>
     <tag k="aeroway" v="terminal"/>
     <area/>
     <point/>
@@ -1418,7 +1418,7 @@ Quick documentation:
 
   <feature name="Airport gate">
     <category>transport</category>
-    <icon image="icons/transport_blank.png"/>
+    <icon image="features/pois/transport_airport_gate.n.24.png"/>
     <tag k="aeroway" v="gate"/>
     <point/>
     <input type="freetext" presence="always" category="Naming" name="Gate number" key="ref" />
@@ -1549,7 +1549,7 @@ Quick documentation:
 
   <feature name="Attraction">
     <category>buildings</category>
-    <icon image="icons/tourist_blank.png">
+    <icon image="features/pois/tourist_attraction.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -2140,7 +2140,7 @@ Quick documentation:
     <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmotel</help>
     <point />
     <area />
-    <icon image="icons/accommodation_blank.png"/>
+    <icon image="features/pois/accommodation_motel.n.24.png"/>
     <tag k="tourism" v="motel"/>
     <inputSet ref="simpleName" />
     <inputSet ref="common"/>
@@ -2206,7 +2206,7 @@ Quick documentation:
 
   <feature name="Chalet">
     <category>accommodation</category>
-    <icon image="icons/accommodation_blank.png"/>
+    <icon image="features/pois/accommodation_chalet.n.24.png"/>
     <point />
     <area />
     <inputSet ref="simpleName" />
@@ -2365,7 +2365,7 @@ Quick documentation:
   <!-- icons needed-->
   <feature name="Information">
     <category>tourism</category>
-    <icon image="icons/tourist_information.png"/>
+    <icon image="features/pois/amenity_information.n.24.png"/>
     <point />
     <inputSet ref="simpleName" />
     <tag k="tourism" v="information"/>
@@ -2375,7 +2375,7 @@ Quick documentation:
 
   <feature name="Artwork">
     <category>tourism</category>
-    <icon image="icons/tourist_blank.png"/>
+    <icon image="features/pois/tourist_art_gallery2.n.24.png"/>
     <point />
     <inputSet ref="simpleName" />
     <tag k="tourism" v="artwork"/>
@@ -2386,7 +2386,7 @@ Quick documentation:
 
   <feature name="Theme park">
     <category>tourism</category>
-    <icon image="icons/tourist_blank.png"/>
+    <icon image="features/pois/tourist_theme_park.n.24.png"/>
     <point />
     <area />
     <inputSet ref="simpleName" />
@@ -2696,7 +2696,7 @@ Quick documentation:
 
   <feature name="Turning circle">
     <category>transport</category>
-    <icon image="icons/transport_blank.png" />
+    <icon image="features/pois/transport_turning_circle.n.24.png" />
     <help>
       http://wiki.openstreetmap.org/wiki/Tag:highway%3Dturning_circle
     </help>
