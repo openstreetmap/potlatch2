@@ -9,7 +9,7 @@
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
-    
+
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
@@ -20,6 +20,19 @@
         obj.setProperty("help_shown","true");
 
         buildShortCuts();
+
+        ss.parseCSS(hoverStyles);
+    }
+
+    // Styling the text within an mx:Text can't be done with the Flex style system. Instead the flash.text styleSheet system must be used
+    // and the stylesheet applied to each mx:Text that requires it after its been initialized
+    private var hoverStyles:String = "a:hover { color: #0000ff; text-decoration: underline; } a { color: #0000aa; text-decoration: underline; }";
+    private var ss:StyleSheet = new StyleSheet();
+
+    // perhaps a better way would be to iterate over the TabNavigator and find all the mx:Text children.
+    // If so, you need to do that after all the children have been created. For now, each Text object can call this when initialized
+    private function applyTextStyle(t:Text):void {
+        t.styleSheet = ss;
     }
 
     private function helpDialog_close(evt:CloseEvent):void {
@@ -145,7 +158,7 @@
         </mx:GridRow>
         <mx:GridRow width="100%">
           <mx:GridItem width="100%">
-            <mx:Text condenseWhite="true" width="100%">
+            <mx:Text condenseWhite="true" width="100%" id="newMembersText" initialize="applyTextStyle(newMembersText)">
               <mx:htmlText>
                 <![CDATA[
                   <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/user/new" target="_blank">http://www.openstreetmap.org</a> to create an account, log in, then return here to allow access to Potlatch 2 and begin editing.</p>
@@ -248,14 +261,14 @@
             <mx:Label width="100%" text="Save" styleName="helpHeaderText" />
           </mx:GridItem>
           <mx:GridItem width="100%">
-            <mx:Text condenseWhite="true" width="100%" htmlText="{getSaveText()}" />
+            <mx:Text id="saveText" condenseWhite="true" width="100%" htmlText="{getSaveText()}" initialize="applyTextStyle(saveText)" />
           </mx:GridItem>
         </mx:GridRow>
       </mx:Grid>
     </mx:VBox>
     <mx:VBox label="Adding">
       <mx:Label text="Adding Features" textAlign="center" width="100%" styleName="helpPageHeader" />
-      <mx:Text condenseWhite="true" width="100%">
+      <mx:Text condenseWhite="true" width="100%" id="addingFeaturesText" initialize="applyTextStyle(addingFeaturesText)">
         <mx:htmlText>
           <![CDATA[
             <p><i>Before you begin, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: <a href="http://wiki.openstreetmap.org/wiki/Copyright" target="_blank">Copyright - OpenStreetMap Wiki</a>)</i></p>
@@ -303,7 +316,7 @@
     </mx:VBox>
     <mx:VBox label="Tag">
     <mx:Label text="Tagging Features" textAlign="center" width="100%" styleName="helpPageHeader" />
-      <mx:Text condenseWhite="true" width="100%" height="100%">
+      <mx:Text condenseWhite="true" width="100%" height="100%" id="taggingFeaturesText" initialize="applyTextStyle(taggingFeaturesText)">
         <mx:htmlText>
           <![CDATA[
             <p>With Potlatch2, tagging features has become relatively easy with its use of graphical menus and dedicated fields/icons.</p>
