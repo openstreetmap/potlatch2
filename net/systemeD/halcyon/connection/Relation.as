@@ -6,19 +6,19 @@ package net.systemeD.halcyon.connection {
         private var members:Array;
 		public static var entity_type:String = 'relation';
 
-        public function Relation(id:Number, version:uint, tags:Object, loaded:Boolean, members:Array) {
-            super(id, version, tags, loaded);
+        public function Relation(id:Number, version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null) {
+            super(id, version, tags, loaded, uid, timestamp);
             this.members = members;
 			for each (var member:RelationMember in members)
 			    member.entity.addParent(this);
         }
 
-        public function update(version:uint, tags:Object, loaded:Boolean, members:Array):void {
+        public function update(version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null):void {
 			var member:RelationMember;
 			for each (member in this.members)
 			    member.entity.removeParent(this);
 
-			updateEntityProperties(version,tags,loaded);
+			updateEntityProperties(version,tags,loaded,uid,timestamp);
 			this.members=members;
 			for each (member in members)
 			    member.entity.addParent(this);

@@ -17,7 +17,7 @@ package net.systemeD.halcyon.connection {
 		private var locked:Boolean = false;
 		public var deleted:Boolean = false;
 
-        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number = NaN, timestamp:String = null) {
+        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
             this._id = id;
             this._version = version;
             this._uid = uid;
@@ -43,7 +43,7 @@ package net.systemeD.halcyon.connection {
             return _loaded;
         }
 
-		public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, uid:Number = NaN, timestamp:String = null):void {
+		public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String):void {
 			_version=version; this.tags=tags; _loaded=loaded; _uid = uid; _timestamp = timestamp;
 		}
 

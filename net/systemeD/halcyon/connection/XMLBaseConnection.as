@@ -31,6 +31,8 @@ package net.systemeD.halcyon.connection {
             for each(var relData:XML in map.relation) {
                 id = Number(relData.@id);
                 version = uint(relData.@version);
+                uid = Number(relData.@uid);
+                timestamp = relData.@timestamp;
                 
                 var rel:Relation = getRelation(id);
                 if ( rel == null || !rel.loaded ) {
@@ -66,9 +68,9 @@ package net.systemeD.halcyon.connection {
                     }
                     
                     if ( rel == null )
-                        setRelation(new Relation(id, version, tags, true, members), false);
+                        setRelation(new Relation(id, version, tags, true, members, uid, timestamp), false);
                     else {
-                        rel.update(version,tags,true,members);
+                        rel.update(version, tags, true, members, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_RELATION, rel), false);
                     }
                 }
