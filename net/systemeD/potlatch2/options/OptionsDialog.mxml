@@ -8,6 +8,7 @@
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import net.systemeD.halcyon.Globals;
     
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
@@ -21,6 +22,11 @@
         PopUpManager.removePopUp(this);
     }
 
+    private function tigerToggle():void {
+        Globals.vars.highlightTiger = tigercheck.selected;
+        Application.application.theMap.redraw();
+    }
+
               ]]>
   </mx:Script>
 	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
@@ -28,6 +34,9 @@
 
 	<mx:CheckBox width="100%" label="Use custom cursors" selected="true" id="cursorcheck"
 	    change="Application.application.theController.cursorsEnabled=cursorcheck.selected" />
+
+    <mx:CheckBox width="100%" label="Highlight Unedited TIGER" selected="false" id="tigercheck"
+        change="tigerToggle()" />
 
   <mx:ControlBar>
     <mx:Spacer width="100%"/>

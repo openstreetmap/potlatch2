@@ -8,6 +8,8 @@ package net.systemeD.halcyon.connection {
     public class Entity extends EventDispatcher {
         private var _id:Number;
         private var _version:uint;
+        private var _uid:Number;
+        private var _timestamp:String;
         private var tags:Object = {};
         private var modified:Boolean = false;
 		private var _loaded:Boolean = true;
@@ -15,9 +17,11 @@ package net.systemeD.halcyon.connection {
 		private var locked:Boolean = false;
 		public var deleted:Boolean = false;
 
-        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean) {
+        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number = NaN, timestamp:String = null) {
             this._id = id;
             this._version = version;
+            this._uid = uid;
+            this._timestamp = timestamp;
             this.tags = tags;
 			this._loaded = loaded;
             modified = id < 0;
@@ -31,12 +35,16 @@ package net.systemeD.halcyon.connection {
             return _version;
         }
 
+        public function get uid():Number {
+            return _uid;
+        }
+
         public function get loaded():Boolean {
             return _loaded;
         }
 
-		public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean):void {
-			_version=version; this.tags=tags; _loaded=loaded;
+		public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, uid:Number = NaN, timestamp:String = null):void {
+			_version=version; this.tags=tags; _loaded=loaded; _uid = uid; _timestamp = timestamp;
 		}
 
 		// Tag-handling methods
@@ -53,6 +61,13 @@ package net.systemeD.halcyon.connection {
                 //trace(key);
                 return true;
               }
+            }
+            return false;
+        }
+
+        public function isUneditedTiger():Boolean {
+            if (this is Way && (uid == 110 || uid == 17)) {//todo fixme etc
+              return true;
             }
             return false;
         }

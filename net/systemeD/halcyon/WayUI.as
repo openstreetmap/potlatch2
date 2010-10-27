@@ -188,6 +188,7 @@ package net.systemeD.halcyon {
             var tags:Object = entity.getTagsCopy();
 			tags=applyStateClasses(tags);
 			if (Way(entity).isArea()) { tags[':area']='yes'; }
+            if (entity.isUneditedTiger() && Globals.vars.highlightTiger) { tags[':tiger']='yes'; }
 
 			// Which layer?
 			layer=0;

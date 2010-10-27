@@ -24,6 +24,8 @@ package net.systemeD.halcyon.connection {
             var map:XML = new XML(URLLoader(event.target).data);
             var id:Number;
             var version:uint;
+            var uid:Number;
+            var timestamp:String;
             var tags:Object;
 
             for each(var relData:XML in map.relation) {
@@ -75,6 +77,8 @@ package net.systemeD.halcyon.connection {
             for each(var nodeData:XML in map.node) {
                 id = Number(nodeData.@id);
                 version = uint(nodeData.@version);
+                uid = Number(nodeData.@uid);
+                timestamp = nodeData.@timestamp;
 
                 var node:Node = getNode(id);
                 if ( node == null || !node.loaded ) {
@@ -82,9 +86,9 @@ package net.systemeD.halcyon.connection {
                     var lon:Number = Number(nodeData.@lon);
                     tags = parseTags(nodeData.tag);
                     if ( node == null )
-                        setNode(new Node(id, version, tags, true, lat, lon),false);
+                        setNode(new Node(id, version, tags, true, lat, lon, uid, timestamp),false);
                     else {
-                        node.update(version, tags, true, lat, lon);
+                        node.update(version, tags, true, lat, lon, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_NODE, node), false);
                     }
                 }
@@ -93,6 +97,8 @@ package net.systemeD.halcyon.connection {
             for each(var data:XML in map.way) {
                 id = Number(data.@id);
                 version = uint(data.@version);
+                uid = Number(data.@uid);
+                timestamp = data.@timestamp;
 
                 var way:Way = getWay(id);
                 if ( way == null || !way.loaded ) {
@@ -101,9 +107,9 @@ package net.systemeD.halcyon.connection {
                         nodes.push(getNode(Number(nd.@ref)));
                     tags = parseTags(data.tag);
                     if ( way == null )
-                        setWay(new Way(id, version, tags, true, nodes),false);
+                        setWay(new Way(id, version, tags, true, nodes, uid, timestamp),false);
                     else {
-                        way.update(version, tags, true, nodes);
+                        way.update(version, tags, true, nodes, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }
