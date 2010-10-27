@@ -14,8 +14,12 @@
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, optionsDialog_close);
-		tbcheck.selected=Application.application.toolbox.visible;
-		cursorcheck.selected=Application.application.theController.cursorsEnabled;
+
+        var obj:SharedObject = SharedObject.getLocal("user_state");
+
+        tbcheck.selected = Application.application.toolbox.visible;
+        cursorcheck.selected = Application.application.theController.cursorsEnabled;
+        tigercheck.selected = obj.data['tiger_highlighted'];
     }
     
     private function optionsDialog_close(evt:CloseEvent):void {
@@ -25,6 +29,10 @@
     private function tigerToggle():void {
         Globals.vars.highlightTiger = tigercheck.selected;
         Application.application.theMap.redraw();
+
+        var obj:SharedObject = SharedObject.getLocal("user_state");
+        obj.setProperty("tiger_highlighted",tigercheck.selected);
+        obj.flush();
     }
 
               ]]>

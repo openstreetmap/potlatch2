@@ -215,6 +215,9 @@
             if (show_help == 'always' || (show_help == 'once' && obj.data["help_shown"] != "true")) {
               new HelpDialog().init();
             }
+
+            // Check if Tiger highlighting should be enabled from saved object
+            Globals.vars.highlightTiger = obj.data['tiger_highlighted'];
 		}
 		
 		public function onMapError(event:MapEvent):void {
