@@ -66,7 +66,9 @@ package net.systemeD.halcyon.connection {
         }
 
         public function isUneditedTiger():Boolean {
-            if (this is Way && (uid == 110 || uid == 17)) {//todo fixme etc
+            // todo: make this match the rules from the tiger edited map
+            // http://github.com/MapQuest/TIGER-Edited-map/blob/master/inc/layer-tiger.xml.inc
+            if (this is Way && (uid == 7168 || uid == 15169 || uid == 20587)) {//todo fixme etc
               return true;
             }
             return false;
