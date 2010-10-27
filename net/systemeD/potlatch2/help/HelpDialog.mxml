@@ -45,9 +45,9 @@
     private function getSaveText():String {
         var site_name:String = loaderInfo.parameters["site_name"];
         if (site_name) {
-          return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM and subsequently on " + site_name + ".</p>";
+          return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\" target=\"_blank\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM and subsequently on " + site_name + ".</p>";
         }
-        return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM.</p>"
+        return "<p>If you feel confident with your edits, hit save to publish to <a href=\"http://www.openstreetmap.org\" target=\"_blank\">http://www.openstreetmap.org</a>. Most edits take a few hours to show up on OSM.</p>"
     }
 
     private function buildGrid(text:Array):Grid {
@@ -148,7 +148,7 @@
             <mx:Text condenseWhite="true" width="100%">
               <mx:htmlText>
                 <![CDATA[
-                  <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/">http://www.openstreetmap.org</a> to create an account, log in, then return here to allow access to Potlatch 2 and begin editing.</p>
+                  <p><b>+ For new members</b>, please visit <a href="http://www.openstreetmap.org/user/new" target="_blank">http://www.openstreetmap.org</a> to create an account, log in, then return here to allow access to Potlatch 2 and begin editing.</p>
                 ]]>
               </mx:htmlText>
             </mx:Text>
@@ -258,7 +258,7 @@
       <mx:Text condenseWhite="true" width="100%">
         <mx:htmlText>
           <![CDATA[
-            <p><i>Before you begin, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: <a href="http://wiki.openstreetmap.org/wiki/Copyright">Copyright - OpenStreetMap Wiki</a>)</i></p>
+            <p><i>Before you begin, the first rule you need to know is the use of proprietary data. Data from copyrighted maps or any other proprietary data is strictly prohibited! Copying, tracing or any reproduction of copyrighted work is not allowed! (Source: <a href="http://wiki.openstreetmap.org/wiki/Copyright" target="_blank">Copyright - OpenStreetMap Wiki</a>)</i></p>
             <p></p>
             <p>Linear features such as streets, footpaths, railways and building outlines will hereby be referred to as <b>ways</b>.</p>
             <p>If you suddenly realize your sidebar with all the icons have gone missing, it's because you have a feature selected on the map. Simply deselect by clicking on a blank area of the map to bring up the icons again.</p>
@@ -310,7 +310,7 @@
             <p><b>Tagging a feature</b></p>
             <p>Select the point or way that you wish to edit, adn choose the appropriate tag from the left sidebar. After tagging the feature, some basic fields should appear such as Name, Speed Limit, and Width, depending on the tag you gave. Fill these out as best you can.</p>
             <p>Advanced users may notice the absence of a few tags and tag values they occasionally use. If this is the case, click on the Advanced tab at the bottom of the sidebar and edit/add as necessary.</p>
-            <p>The OpenStreetMap wiki also provides an <a href="http://wiki.openstreetmap.org/wiki/Map_features">extensive list of tags and tag values</a>. Please refer back to the OSM documentation if you are unsure of which tag to use.</p>
+            <p>The OpenStreetMap wiki also provides an <a href="http://wiki.openstreetmap.org/wiki/Map_features" target="_blank">extensive list of tags and tag values</a>. Please refer back to the OSM documentation if you are unsure of which tag to use.</p>
           ]]>
         </mx:htmlText>
       </mx:Text>
