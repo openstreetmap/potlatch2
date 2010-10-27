@@ -257,7 +257,7 @@ way :restrictto { z-index: -1; width: eval('_width+10'); color: blue; opacity: 0
 way !:drawn { z-index:9; width: 2; color: black; dashes: 4,0;} { z-index:10; width: 2; color: #ffff00; dashes: 0, 4, 4, 0;}
  /*IMHO (Steve Bennett), in early testing we want to highlight ways that aren't triggering rules */
 /* way !:drawn { z-index:10; width: 0.5; color: gray; } was like this */
-way :tiger { width: eval('_width+2'); color: #ff00ff;}
+way :tiger { casing-color: #ff00ff;}
 
 
 relation[type=restriction] node { z-index:11; icon-image: icons/restriction.png; }
