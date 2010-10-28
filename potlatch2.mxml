@@ -273,6 +273,8 @@
 			var saved_url:String = SharedObject.getLocal("user_state").data['background_url'];
 			var saved_name:String= SharedObject.getLocal("user_state").data['background_name'];
 			var xml_url:String, xml_name:String, isSet:Boolean=false;
+            var backgroundSet:Boolean = false;
+
             theController.imagery=new Array(
 				{ label: "None", data: "" },
 				{ label: "Yahoo", data: "yahoo" } );
@@ -291,8 +293,14 @@
 			for each (var bg:Object in theController.imagery) {
 				if (bg['label']==saved_name || bg['data']==saved_url) {
 					setBackground(bg['label'], bg['data']);
+                    backgroundSet = true;
 				}
 			}
+
+            // For most contributors it's useful to set the background to yahoo by default, I reckon, but lets make it a config
+            if (!backgroundSet && loaderInfo.parameters['yahoo_default'] == 'true') {
+                setBackground("Yahoo", "yahoo");
+            }
 		}
 		
 		public function setBackground(name:String,url:String):void {
