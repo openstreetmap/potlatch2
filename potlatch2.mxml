@@ -282,7 +282,11 @@
                 theController.imagery.push({ label:xml_name, data:xml_url });
 				if (xml_url==saved_url || (xml_name==saved_name && xml_name!='Custom')) { isSet=true; }
 			}
-			if (!isSet) { theController.imagery.push({ label:saved_name, data:saved_url }); }
+
+            if (!isSet && saved_name != null && saved_url != null && saved_url != '' && saved_url != 'yahoo') {
+                theController.imagery.push({ label:saved_name, data:saved_url });
+                isSet=true;
+            }
 
 			for each (var bg:Object in theController.imagery) {
 				if (bg['label']==saved_name || bg['data']==saved_url) {
