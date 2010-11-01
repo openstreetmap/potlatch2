@@ -29,8 +29,14 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-        <mx:Button label="GPS" click="trackLoader.load();"/>
-        <mx:Button label="MyGpx" click="new MyGpxDialog().init();" />
+		<mx:PopUpMenuButton id="gpsButton" itemClick="if (event.index==0) { trackLoader.load(); } else { new MyGpxDialog().init(); }">
+			<mx:dataProvider>
+				<mx:Array>
+					<mx:Object label="GPS data" />
+					<mx:Object label="My tracks" />
+				</mx:Array>
+			</mx:dataProvider>
+		</mx:PopUpMenuButton>
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>

@@ -58,7 +58,6 @@ Potlatch 2: main outstanding issues
 
 == MyGPX ==
 
-* Combine two GPX buttons
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
 * Figure out how to call P2/Simplify for halcyon-based code
