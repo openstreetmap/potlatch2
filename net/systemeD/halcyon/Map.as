@@ -133,7 +133,10 @@ package net.systemeD.halcyon {
 				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
 				paint.ruleset.loadFromCSS(styleurl);
 			}
-			if (startscale>0) { scale=startscale; }
+			if (startscale>0) {
+				scale=startscale;
+				this.dispatchEvent(new MapEvent(MapEvent.SCALE, {scale:scale}));
+			}
 
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			baselon    =startlon          -(mapwidth /2)/scalefactor;
@@ -332,6 +335,7 @@ package net.systemeD.halcyon {
 		private function changeScale(newscale:uint):void {
 			addDebug("new scale "+newscale);
 			scale=newscale;
+			this.dispatchEvent(new MapEvent(MapEvent.SCALE, {scale:scale}));
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			updateCoordsFromLatLon((edge_t+edge_b)/2,(edge_l+edge_r)/2);	// recentre
 			tileset.changeScale(scale);

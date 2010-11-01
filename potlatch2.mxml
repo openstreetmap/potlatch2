@@ -59,9 +59,9 @@
             top="0" left="0" width="100%" height="100%" dragEnter="dragEnterHandler(event);" dragDrop="dragDropHandler(event);">
         </mx:Canvas>
         <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
-            rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
+            rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom in - currently z'+getScale()}" />
         <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
-            rollOverEffect="glowImage" rollOutEffect="unglowImage"/>
+            rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom out - currently z'+getScale()}" />
         <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
@@ -155,6 +155,7 @@
 			_root.addChild(yahoo);
 			_root.addChild(theMap);
             theMap.updateSize(w,h);
+			theMap.addEventListener(MapEvent.SCALE, scaleHandler);
 
 			// add mask for map
 			var s:Sprite=new Sprite();
@@ -366,6 +367,14 @@
 			obj.flush();
 		}
 
+		private function scaleHandler(event:MapEvent):void {
+			dispatchEvent(new Event("rescale"));
+		}
+		
+		[Bindable(event="rescale")]
+		private function getScale():String {
+			return String(theMap.scale);
+		}
 
         private function dragEnterHandler(event:DragEvent):void {
             // Get the drop target component from the event object.
