@@ -38,6 +38,7 @@ package net.systemeD.potlatch2 {
             map.parent.addEventListener(MouseEvent.MOUSE_MOVE, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_DOWN, mapMouseEvent);
+            map.parent.addEventListener(MouseEvent.MOUSE_WHEEL, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.CLICK, mapMouseEvent);
             map.parent.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
             map.parent.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);

@@ -103,7 +103,13 @@ package net.systemeD.potlatch2.controller {
 				controller.map.setHighlight(focus, { hover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
 				controller.map.setHighlight(focus, { hover: false });
-			}
+            } else if ( event.type == MouseEvent.MOUSE_WHEEL ) {
+                if (event.delta > 0) {
+                  map.zoomIn();
+                } else if (event.delta < 0) {
+                  map.zoomOut();
+                }
+            }
 			return null;
 		}
 

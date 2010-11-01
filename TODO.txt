@@ -81,7 +81,6 @@ Requested enhancements
 
 == UI ==
 
-* Mouse wheel zooming
 * Bbox-sensitive menu for background imagery
 * CSS editing
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
