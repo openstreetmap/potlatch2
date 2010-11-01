@@ -22,9 +22,19 @@ package net.systemeD.halcyon.connection.actions {
 					selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
 					push);
 
-                // we reverse the list, which is already sorted by position. This way positions aren't affected
-                // for previous inserts when all the inserts are eventually executed
-                for each (var o:Object in selectedWay.memberships.reverse()) {
+				// we reverse the list, which is already sorted by position. This way positions aren't affected
+				// for previous inserts when all the inserts are eventually executed
+				for each (var o:Object in selectedWay.memberships.reverse()) {
+					// don't add a turn restriction to the relation if it's no longer relevant
+					if (o.relation.tagIs('type','restriction')) {
+						var vias:Array=o.relation.findMembersByRole('via');
+						if (vias.length && vias[0] is Node) {
+							if (newWay.indexOfNode(Node(vias[0]))==-1) { 
+								continue;
+							}
+						}
+					}
+
                   // newWay should be added immediately after the selectedWay, unless the setup
                   // is arse-backwards. By that I mean either:
                   // a) The first node (0) of selectedWay is in the subsequentWay, or
@@ -65,6 +75,17 @@ package net.systemeD.halcyon.connection.actions {
                 
                 // now that we're done with the selectedWay, remove the nodes
                 selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
+
+				// and remove from any turn restrictions that aren't relevant
+				for each (var r:Relation in selectedWay.findParentRelationsOfType('restriction')) {
+					vias=r.findMembersByRole('via');
+					if (vias.length && vias[0] is Node) {
+						if (selectedWay.indexOfNode(Node(vias[0]))==-1) { 
+							r.removeMember(selectedWay,push);
+						}
+					}
+				}
+
             }
             newWay.suspend();
             selectedWay.suspend();

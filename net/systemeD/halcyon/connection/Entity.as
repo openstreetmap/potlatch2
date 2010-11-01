@@ -213,10 +213,10 @@ package net.systemeD.halcyon.connection {
 			return a;
 		}
 		
-		public function findParentRelationsOfType(type:String, role:String=""):Array {
+		public function findParentRelationsOfType(type:String, role:String=null):Array {
 			var a:Array=[];
 			for (var o:Object in parents) {
-				if (o is Relation && Relation(o).tagIs('type',type) && Relation(o).hasMemberInRole(this,role)) { 
+				if (o is Relation && Relation(o).tagIs('type',type) && (role==null || Relation(o).hasMemberInRole(this,role))) { 
 					a.push(o);
 				}
 			}

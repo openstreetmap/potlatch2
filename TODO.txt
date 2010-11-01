@@ -79,10 +79,6 @@ Requested enhancements
 * The area of pois for dragging on to the map should have a search, with synonyms.
 * If you have both inputSets names and buildingAddress, and name= key is filled in then the basic tab will get both, surely only name should be shown and building name should be ignored e.g. cafes. [Actually this was an issue of addr: being missing from one of them, however this may still be a problem for other overlapping inputSets]
 
-== Turn restrictions ==
-
-* Splitting a way should have smart turn restriction behaviour - i.e. only retain the relation in that part of the way which joins the via point.
-
 == UI ==
 
 * Mouse wheel zooming
