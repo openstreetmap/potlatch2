@@ -6,7 +6,6 @@ Potlatch 2: main outstanding issues
 * purgeOutside simply doesn't work - WayUIs stay around. To investigate
 * Some combination of zoom / pan / purge leaves a copy of the selected WayUI around
 * P1-style J (join) / shift-J (unjoin)
-* Make parallelise properly undoable
 
 == Vector background layers ==
 
