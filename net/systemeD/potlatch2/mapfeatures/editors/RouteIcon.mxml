@@ -11,6 +11,8 @@
     <mx:ComboBox id="dir" color="black" dataProvider="{routeDirs}" selectedItem="{findSelected(role)}"
         click="event.stopPropagation()"
         change="setRole(dir.selectedItem.data)" />
+	<mx:Image source="@Embed('../../../../../embedded/delete.svg')" click='event.stopPropagation();removeFromRelation()'
+        buttonMode="true" useHandCursor="true" />
     
     <mx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
@@ -90,6 +92,10 @@
         var member:RelationMember = new RelationMember(_route["entity"], role);
         _route["relation"].setMember(_route["index"], member);
     }
+
+	private function removeFromRelation():void {
+		_route["relation"].removeMember(_route["entity"], MainUndoStack.getGlobalStack().addAction);
+	}
     
     ]]></mx:Script>
 </mx:HBox>
