@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	Advanced tag grid
+	** TODO: the 'X' button should be positioned more prettily
+-->
+
+<mx:DataGrid editable="true" doubleClickEnabled="true" doubleClick="addNewTag()"
+	xmlns:controls="net.systemeD.controls.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:columns>
+
+		<!-- Key -->
+
+		<mx:DataGridColumn editable="true" dataField="key" headerText="Key">
+			<mx:itemEditor>
+				<mx:Component>
+					<controls:AutoComplete 
+						dataProvider="{MapFeatures.getInstance().getAutoCompleteKeys(outerDocument.getEntityType())}" 
+						labelField="name" 
+						rowCount="10"
+						typedText="{outerDocument.selectedItem.key}">
+					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
+					</controls:AutoComplete>
+				</mx:Component>
+			</mx:itemEditor>
+		</mx:DataGridColumn>
+
+		<!-- Value -->
+
+		<mx:DataGridColumn editable="true" dataField="value" headerText="Value">
+			<mx:itemEditor>
+				<mx:Component>
+					<controls:AutoComplete 
+						dataProvider="{MapFeatures.getInstance().getAutoCompleteValues(outerDocument.getEntityType(),outerDocument.selectedItem.key)}" 
+						labelField="name" 
+						rowCount="10"
+						typedText="{outerDocument.selectedItem.value}">
+					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
+					</controls:AutoComplete>
+				</mx:Component>
+			</mx:itemEditor>
+		</mx:DataGridColumn>
+
+		<!-- Delete button -->
+
+		<mx:DataGridColumn width="12" editable="false">
+			<mx:itemRenderer>
+				<mx:Component>
+					<mx:Image source="@Embed('../../../embedded/delete_small.svg')" 
+						click='event.stopPropagation();outerDocument.removeTag();'
+						buttonMode="true" useHandCursor="true">
+					</mx:Image>
+				</mx:Component>
+			</mx:itemRenderer>
+		</mx:DataGridColumn>
+	</mx:columns>
+
+	<mx:Script><![CDATA[
+
+		import net.systemeD.halcyon.connection.*;
+		import mx.collections.*;
+
+		private var selectedEntity:Entity;
+		private var tagDataProvider:ArrayCollection;
+
+		public function init(entity:Entity):void {
+			if ( tagDataProvider == null ) {
+				tagDataProvider = new ArrayCollection();
+				dataProvider = tagDataProvider;
+			}
+
+			selectedEntity=entity;
+			updateTagDataProvider();
+		}
+
+		private function updateTagDataProvider():void {
+			tagDataProvider.removeAll();
+			if (selectedEntity==null) { return; }
+			var tags:Array = selectedEntity.getTagArray();
+			tags.sortOn("key");
+			for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
+		}
+
+		public function addNewTag():void {
+			var newKey:String = "(new tag)";
+			var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
+			tagDataProvider.addItem(newTag);
+			editedItemPosition = {rowIndex: tagDataProvider.getItemIndex(newTag), columnIndex: 0};
+		}
+
+		public function removeTag():void {
+			var k:String = selectedItem.key;
+			selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
+			updateTagDataProvider();
+		}
+		
+		public function getEntityType():String {
+			return selectedEntity.getType();
+		}
+
+	]]></mx:Script>
+</mx:DataGrid>

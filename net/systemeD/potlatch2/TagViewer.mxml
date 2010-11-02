@@ -3,6 +3,7 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexlib="flexlib.containers.*"
 	xmlns:controls="net.systemeD.controls.*"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	horizontalScrollPolicy="off"
     backgroundColor="white"
     initialize="loadFeatures()">
@@ -62,68 +63,11 @@
           <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
         </mx:Label>
 
-		<!-- ** FIXME:
-		
-			 This needs finishing and refactoring to:
-			 a) be a nice custom control which can be dropped in anywhere
-			 b) do autocomplete on values as well as keys
-			 c) do autocomplete on keys _properly_
-			 d) have proper lovely callback methods and events and stuff, rather than horrible parent.parent.parent.parent.badger.badger.badger hacks
-			 e) replace the big (X) with a little one
-			 f) be styled attractively
-			 g) generally suck less
-			
-		-->
-
-        <mx:DataGrid editable="true" width="100%" height="75%" id="advancedTagGrid" 
-            doubleClickEnabled="true"
-            doubleClick="if (event.target.parent==advancedTagGrid) { addNewTag(); }">
-                <mx:columns>
-                    <mx:DataGridColumn editable="true" dataField="key" headerText="Key">
-						<mx:itemEditor>
-							<mx:Component>
-								<controls:AutoComplete 
-								  dataProvider="{autoCompleteKeys()}" 
-								  labelField="name" 
-								  rowCount="10"
-								  typedText="{getSelectedKey()}">
-									<mx:Script><![CDATA[
-										import net.systemeD.potlatch2.mapfeatures.MapFeatures;
-										import mx.collections.ArrayCollection;
-										import mx.controls.DataGrid;
-
-										public function autoCompleteKeys():Array {
-											var a:Array=[];
-											for each (var k:String in MapFeatures.getInstance().getAutoCompleteKeys()) {
-												a.push( { name: k } );
-											}
-											return a;
-										}
-
-										internal function getSelectedKey():String {
-											return DataGrid(this.parent.parent).selectedItem.key;
-										}
-									]]></mx:Script>
-								</controls:AutoComplete>
-							</mx:Component>
-						</mx:itemEditor>
-					</mx:DataGridColumn>
-                    <mx:DataGridColumn editable="true" dataField="value" headerText="Value" />
-					<mx:DataGridColumn width="20" editable="false">
-						<mx:itemRenderer>
-							<mx:Component>
-								<mx:Image source="@Embed('../../../embedded/delete.svg')" 
- 									click='event.stopPropagation();TagViewer(this.parent.parent.parent.parent.parent.parent.parent).removeTag();'
-        							buttonMode="true" useHandCursor="true" />
-							</mx:Component>
-						</mx:itemRenderer>
-					</mx:DataGridColumn>
-                </mx:columns>
-        </mx:DataGrid>
+		<potlatch2:TagGrid id="advancedTagGrid" width="100%" height="75%" />
 
         <mx:HBox horizontalAlign="right" width="100%">
-          <mx:LinkButton label="Delete" click="removeTag()" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
-          <mx:LinkButton label="Add" click="addNewTag()"/>
+          <mx:LinkButton label="Delete" click="advancedTagGrid.removeTag()" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
+          <mx:LinkButton label="Add" click="advancedTagGrid.addNewTag()"/>
         </mx:HBox>
         
         <mx:DataGrid editable="true" width="100%" height="25%" id="relationsGrid"
@@ -418,42 +362,37 @@
       private var listeningToRelations:Array = [];
       
       private function setupAdvanced(entity:Entity):void {
-          if ( tagDataProvider == null ) {
-              tagDataProvider = new ArrayCollection();
-              advancedTagGrid.dataProvider = tagDataProvider;
-          }
+		advancedTagGrid.init(entity);
 
-          tagDataProvider.removeAll();
-          
-          if ( entity == null ) {
-              advancedID.htmlText = "";
-          } else {
-              var entityText:String = "xx";
-              if ( entity is Node ) entityText = "Node";
-              else if ( entity is Way ) entityText = "Way";
-              else if ( entity is Relation ) entityText = "Relation";
-              advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
+		if ( entity == null ) {
+			advancedID.htmlText = "";
+		} else {
+			var entityText:String = "xx";
+			if      ( entity is Node     ) entityText = "Node";
+			else if ( entity is Way      ) entityText = "Way";
+			else if ( entity is Relation ) entityText = "Relation";
+			advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
+		}
 
-              var tags:Array = entity.getTagArray();
-              tags.sortOn("key");
-              for each(var tag:Tag in tags)
-                  tagDataProvider.addItem(tag);
-          }
-                    
-          removeRelationListeners();
-          if ( selectedEntity != null ) {
-              selectedEntity.removeEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
-              selectedEntity.removeEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
-          }
-          
-          if ( entity == null ) {
-              relationsGrid.dataProvider = null;
-          } else {
-              resetRelationsGrid(entity);
-              entity.addEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
-              entity.addEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
-          }
+		removeRelationListeners();
+		if ( selectedEntity != null ) {
+			selectedEntity.removeEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
+			selectedEntity.removeEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
+		}
+
+		if ( entity == null ) {
+			relationsGrid.dataProvider = null;
+		} else {
+			resetRelationsGrid(entity);
+			entity.addEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
+			entity.addEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
+		}
       }
+
+	  public function addNewTag():void {
+		if (stack.selectedChild!=advancedContainer) { return; }
+		advancedTagGrid.addNewTag();
+	  }
       
       private function addedToRelation(event:RelationMemberEvent):void {
          resetRelationsGrid(selectedEntity);
@@ -620,19 +559,6 @@
           }
       }
 
-      public function addNewTag():void {
-          if (stack.selectedChild!=advancedContainer || selectedEntity == null) { return; }
-          var newKey:String = "(new tag)";
-          var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
-          tagDataProvider.addItem(newTag);
-          advancedTagGrid.editedItemPosition = {rowIndex: tagDataProvider.getItemIndex(newTag), columnIndex: 0};
-      }
-
-      public function removeTag():void {
-          var k:String = advancedTagGrid.selectedItem.key;
-          selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
-      }
-      
       public function addToRelation():void {
           new RelationSelectPanel().init(selectedEntity,new Object());
       }
