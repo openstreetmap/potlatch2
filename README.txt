@@ -45,6 +45,9 @@ Compiling Halcyon as standalone viewer:
 
 * mxmlc halcyon_viewer.as
 
+If you're using Mac OS X, you may need to tell ant to use more memory, by
+typing export ANT_OPTS=-Xmx500M beforehand (you can put this in your .profile).
+
 
 Compiling during development:
 
