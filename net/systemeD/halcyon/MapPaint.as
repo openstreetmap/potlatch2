@@ -4,8 +4,7 @@ package net.systemeD.halcyon {
 	import flash.display.DisplayObject;
 	import net.systemeD.halcyon.NodeUI;
 	import net.systemeD.halcyon.WayUI;
-	import net.systemeD.halcyon.connection.Node;
-	import net.systemeD.halcyon.connection.Way;
+    import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.styleparser.RuleSet;
 	import net.systemeD.halcyon.Globals;
 
@@ -146,8 +145,15 @@ package net.systemeD.halcyon {
 		}
 
 		public function createWayUI(way:Way):WayUI {
-			if (!wayuis[way.id]) { wayuis[way.id]=new WayUI(way,this); }
+			if (!wayuis[way.id]) {
+				wayuis[way.id]=new WayUI(way,this);
+				way.addEventListener(Connection.WAY_DELETED, wayDeleted);
+			}
 			return wayuis[way.id];
+		}
+
+		public function wayDeleted(event:EntityEvent):void {
+			deleteWayUI(event.entity as Way);
 		}
 
         public function createNodeUI(node:Node):NodeUI {
@@ -160,9 +166,13 @@ package net.systemeD.halcyon {
         }
 
 		public function deleteWayUI(way:Way):void {
-			if (!wayuis[way.id]) { return; }
-			wayuis[way.id].removeSprites();
-			delete wayuis[way.id];
+			way.removeEventListener(Connection.WAY_DELETED, wayDeleted);
+			if (wayuis[way.id]) {
+				wayuis[way.id].redrawMultis();
+				wayuis[way.id].removeSprites();
+				wayuis[way.id].removeEventListeners();
+				delete wayuis[way.id];
+			}
 			for (var i:uint=0; i<way.length; i++) {
 				var node:Node=way.getNode(i);
 				if (nodeuis[node.id]) { deleteNodeUI(node); }

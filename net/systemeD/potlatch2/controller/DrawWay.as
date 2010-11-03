@@ -52,7 +52,7 @@ package net.systemeD.potlatch2.controller {
 					lastClick=node;
 				} else if ( entity is Node ) {
 					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
-						if (selectedWay.length==1 && selectedWay.getNode(0).parentWays.length==1) {
+						if (Way(firstSelected).length==1 && Way(firstSelected).getNode(0).parentWays.length==1) {
 							// double-click to create new POI
                             stopDrawing();
                             MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
@@ -75,18 +75,18 @@ package net.systemeD.potlatch2.controller {
 						controller.map.setHighlight(entity, { selectedway: true });
 						resetElastic(entity as Node);
 						lastClick=entity;
-						if (selectedWay.getNode(0)==selectedWay.getNode(selectedWay.length-1)) {
-							return new SelectedWay(selectedWay);
+						if (Way(firstSelected).getNode(0)==Way(firstSelected).getLastNode()) {
+							return new SelectedWay(firstSelected as Way);
 						}
 					}
 				} else if ( entity is Way ) {
-					if (entity as Way==selectedWay) {
+					if (entity==firstSelected) {
 						// add junction node - self-intersecting way
 			            var lat:Number = controller.map.coord2lat(event.localY);
 			            var lon:Number = controller.map.coord2lon(event.localX);
 			            var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
 			            node = controller.connection.createNode({}, lat, lon, undo.push);
-			            selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
+			            Way(firstSelected).insertNodeAtClosestPosition(node, true, undo.push);
 						appendNode(node,undo.push);
 			            MainUndoStack.getGlobalStack().addAction(undo);
 					} else {
@@ -101,7 +101,7 @@ package net.systemeD.potlatch2.controller {
 					resetElastic(node);
 					lastClick=node;
 					controller.map.setHighlightOnNodes(entity as Way, { hoverway: false });
-					controller.map.setHighlightOnNodes(selectedWay, { selectedway: true });
+					controller.map.setHighlightOnNodes(firstSelected as Way, { selectedway: true });
 				}
 				lastClickTime=new Date();
 			} else if ( event.type == MouseEvent.MOUSE_MOVE && elastic ) {
@@ -110,20 +110,20 @@ package net.systemeD.potlatch2.controller {
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
 			} else if ( event.type == MouseEvent.ROLL_OVER && !isBackground ) {
-				if (focus is Way && focus!=selectedWay) {
+				if (focus is Way && focus!=firstSelected) {
 					hoverEntity=focus;
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
 				}
 				if (entity is Node && focus is Way && Way(focus).endsWith(Node(entity))) {
-					if (focus==selectedWay) { controller.setCursor(controller.pen_so); }
-					                   else { controller.setCursor(controller.pen_o); }
+					if (focus==firstSelected) { controller.setCursor(controller.pen_so); }
+					                     else { controller.setCursor(controller.pen_o); }
 				} else if (entity is Node) {
 					controller.setCursor(controller.pen_x);
 				} else {
 					controller.setCursor(controller.pen_plus);
 				}
 			} else if ( event.type == MouseEvent.MOUSE_OUT && !isBackground ) {
-				if (focus is Way && entity!=selectedWay) {
+				if (focus is Way && entity!=firstSelected) {
 					hoverEntity=null;
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
 					// ** We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
@@ -143,12 +143,12 @@ package net.systemeD.potlatch2.controller {
 
         /* Fix up the elastic after a WayNode event - e.g. triggered by undo */
         private function fixElastic(event:Event):void {
-            if (selectedWay == null) return;
-            var node:Node
+            if (firstSelected == null) return;
+            var node:Node;
             if (editEnd) {
-              node = selectedWay.getNode(selectedWay.length-1);
+              node = Way(firstSelected).getLastNode();
             } else {
-              node = selectedWay.getNode(0);
+              node = Way(firstSelected).getNode(0);
             }
             if (node) { //maybe selectedWay doesn't have any nodes left
               elastic.start = new Point(node.lon, node.latp);
@@ -161,7 +161,7 @@ package net.systemeD.potlatch2.controller {
 				case 27:					return keyExitDrawing();
 				case Keyboard.DELETE:		return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
-				case 82:					repeatTags(selectedWay); return this;
+				case 82:					repeatTags(firstSelected); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
@@ -185,9 +185,9 @@ package net.systemeD.potlatch2.controller {
 			}
 
 			if ( leaveNodeSelected ) {
-			    return new SelectedWayNode(selectedWay, editEnd ? selectedWay.length - 1 : 0);
+			    return new SelectedWayNode(firstSelected as Way, editEnd ? Way(firstSelected).length-1 : 0);
 			} else {
-			    return new SelectedWay(selectedWay);
+			    return new SelectedWay(firstSelected as Way);
 			}
 		}
 
@@ -205,9 +205,9 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function appendNode(node:Node, performAction:Function):void {
 			if ( editEnd )
-				selectedWay.appendNode(node, performAction);
+				Way(firstSelected).appendNode(node, performAction);
 			else
-				selectedWay.insertNode(0, node, performAction);
+				Way(firstSelected).insertNode(0, node, performAction);
 		}
 		
 		protected function backspaceNode(performAction:Function):ControllerState {
@@ -217,26 +217,26 @@ package net.systemeD.potlatch2.controller {
             var state:ControllerState;
 
 			if (editEnd) {
-				node=selectedWay.getNode(selectedWay.length-1);
-				selectedWay.removeNodeByIndex(selectedWay.length-1, undo.push);
-				newDraw=selectedWay.length-2;
+				node=Way(firstSelected).getLastNode();
+				Way(firstSelected).removeNodeByIndex(Way(firstSelected).length-1, undo.push);
+				newDraw=Way(firstSelected).length-2;
 			} else {
-				node=selectedWay.getNode(0);
-				selectedWay.removeNodeByIndex(0, undo.push);
+				node=Way(firstSelected).getNode(0);
+				Way(firstSelected).removeNodeByIndex(0, undo.push);
 				newDraw=0;
 			}
-			if (node.numParentWays==1 && selectedWay.hasOnceOnly(node)) {
+			if (node.numParentWays==1 && Way(firstSelected).hasOnceOnly(node)) {
 				controller.map.setPurgable(node, true);
 				controller.connection.unregisterPOI(node);
 				node.remove(undo.push);
 			}
 
-			if (newDraw>=0 && newDraw<=selectedWay.length-2) {
-				var mouse:Point = new Point(selectedWay.getNode(newDraw).lon, selectedWay.getNode(newDraw).latp);
+			if (newDraw>=0 && newDraw<=Way(firstSelected).length-2) {
+				var mouse:Point = new Point(Way(firstSelected).getNode(newDraw).lon, Way(firstSelected).getNode(newDraw).latp);
 				elastic.start = mouse;
 				state = this;
 			} else {
-                selectedWay.remove(undo.push);
+                Way(firstSelected).remove(undo.push);
                 state = new NoSelection();
 			}
 
@@ -251,7 +251,7 @@ package net.systemeD.potlatch2.controller {
 		override public function enterState():void {
 			super.enterState();
 			
-			var node:Node = selectedWay.getNode(editEnd ? selectedWay.length - 1 : 0);
+			var node:Node = Way(firstSelected).getNode(editEnd ? Way(firstSelected).length-1 : 0);
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
 			controller.setCursor(controller.pen);

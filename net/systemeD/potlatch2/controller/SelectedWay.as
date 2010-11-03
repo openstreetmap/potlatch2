@@ -19,23 +19,23 @@ package net.systemeD.potlatch2.controller {
         }
  
         protected function selectWay(way:Way):void {
-            if ( way == selectedWay )
+            if ( firstSelected is Way && Way(firstSelected)==way )
                 return;
 
             clearSelection(this);
-            controller.setSelectedEntity(way);
             controller.map.setHighlight(way, { selected: true, hover: false });
             controller.map.setHighlightOnNodes(way, { selectedway: true });
-            selectedWay = way;
+            selection = [way];
+            controller.updateSelectionUI();
             initWay = way;
         }
 
         protected function clearSelection(newState:ControllerState):void {
-            if ( selectedWay != null ) {
-            	controller.map.setHighlight(selectedWay, { selected: false, hover: false });
-            	controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
-                if (!newState.isSelectionState()) { controller.setSelectedEntity(null); }
-                selectedWay = null;
+            if ( selectCount ) {
+            	controller.map.setHighlight(firstSelected, { selected: false, hover: false });
+            	controller.map.setHighlightOnNodes(firstSelected as Way, { selectedway: false });
+                selection = [];
+                if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
         }
         
@@ -47,9 +47,9 @@ package net.systemeD.potlatch2.controller {
 				// start new way
 				var way:Way = controller.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
 				return new DrawWay(way, true, false);
-			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==selectedWay && event.shiftKey) {
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==firstSelected && event.shiftKey) {
 				// insert node within way (shift-click)
-                var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
+                var d:DragWayNode=new DragWayNode(firstSelected as Way, -1, event, true);
 				d.forceDragStart();
 				return d;
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && event.shiftKey ) {
@@ -62,11 +62,11 @@ package net.systemeD.potlatch2.controller {
         
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 80:					return new SelectedParallelWay(selectedWay);
-				case 81:					Quadrilateralise.quadrilateralise(selectedWay); return this;
-				case 82:					repeatTags(selectedWay); return this;
-                case 86:                    selectedWay.reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
-                case 89:                    Simplify.simplify(selectedWay, controller.map, true); return this;         
+				case 80:					return new SelectedParallelWay(firstSelected as Way);
+				case 81:					Quadrilateralise.quadrilateralise(firstSelected as Way); return this;
+				case 82:					repeatTags(firstSelected); return this;
+                case 86:                    Way(firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
+                case 89:                    Simplify.simplify(firstSelected as Way, controller.map, true); return this;         
 				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
 			}
@@ -74,33 +74,15 @@ package net.systemeD.potlatch2.controller {
 			return cs ? cs : this;
 		}
 
-        protected function addNode(event:MouseEvent):int {
-			// find which other ways are under the mouse
-			var ways:Array=[]; var w:Way;
-			for each (var wayui:WayUI in controller.map.paint.wayuis) {
-				w=wayui.hitTest(event.stageX, event.stageY);
-				if (w && w!=selectedWay) { ways.push(w); }
-			}
-
-            var lat:Number = controller.map.coord2lat(event.localY);
-            var lon:Number = controller.map.coord2lon(event.localX);
-            var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
-            var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
-            var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
-			for each (w in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
-            MainUndoStack.getGlobalStack().addAction(undo);
-			return index;
-        }
-
 		protected function mergeWith(otherWay:Way):ControllerState {
 			var way1:Way;
 			var way2:Way;
-			if ( selectedWay.id < otherWay.id && selectedWay.id >= 0 ) {
-			    way1 = selectedWay;
+			if ( firstSelected.id < otherWay.id && firstSelected.id >= 0 ) {
+			    way1 = firstSelected as Way;
 			    way2 = otherWay;
 			} else {
 			    way1 = otherWay;
-			    way2 = selectedWay;
+			    way2 = firstSelected as Way;
 			}
 			
 			var undo:Function = MainUndoStack.getGlobalStack().addAction;
@@ -115,19 +97,19 @@ package net.systemeD.potlatch2.controller {
 		}
         
 		public function deleteWay():ControllerState {
-            controller.map.setHighlightOnNodes(selectedWay, {selectedway: false});
+            controller.map.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 
         override public function enterState():void {
             selectWay(initWay);
-			controller.map.setPurgable(selectedWay,false);
-			Globals.vars.root.addDebug("**** -> "+this+" "+selectedWay.id);
+			controller.map.setPurgable(firstSelected,false);
+			Globals.vars.root.addDebug("**** -> "+this+" "+firstSelected.id);
         }
         override public function exitState(newState:ControllerState):void {
-			controller.clipboards['way']=selectedWay.getTagsCopy();
-			controller.map.setPurgable(selectedWay,true);
+			controller.clipboards['way']=firstSelected.getTagsCopy();
+			controller.map.setPurgable(firstSelected,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }

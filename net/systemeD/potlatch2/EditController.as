@@ -57,7 +57,8 @@ package net.systemeD.potlatch2 {
             return _connection;
         }
         
-        public function setSelectedEntity(entity:Entity):void {
+        public function updateSelectionUI():void {
+			var entity:Entity=state.firstSelected;
             tagViewer.setEntity(entity);
 			toolbox.setEntity(entity);
         }

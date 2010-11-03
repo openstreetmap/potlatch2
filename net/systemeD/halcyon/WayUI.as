@@ -28,13 +28,22 @@ package net.systemeD.halcyon {
             entity.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             entity.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
             entity.addEventListener(Connection.WAY_REORDERED, wayReordered);
-			entity.addEventListener(Connection.WAY_DELETED, wayDeleted);
             entity.addEventListener(Connection.WAY_DRAGGED, wayDragged);
             attachNodeListeners();
             attachRelationListeners();
             recalculate();
 			redraw();
 			redrawMultis();
+		}
+		
+		public function removeEventListeners():void {
+            entity.removeEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
+            entity.removeEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
+            entity.removeEventListener(Connection.WAY_REORDERED, wayReordered);
+            entity.removeEventListener(Connection.WAY_DRAGGED, wayDragged);
+            for (var i:uint = 0; i < Way(entity).length; i++ ) {
+                Way(entity).getNode(i).removeEventListener(Connection.NODE_MOVED, nodeMoved);
+            }
 		}
 		
 		private function attachNodeListeners():void {
@@ -68,10 +77,6 @@ package net.systemeD.halcyon {
             redraw();
 			redrawMultis();
         }
-		private function wayDeleted(event:EntityEvent):void {
-			redraw();
-			redrawMultis();
-		}
         private function wayReordered(event:EntityEvent):void {
             redraw();
 			redrawMultis();
@@ -104,7 +109,7 @@ package net.systemeD.halcyon {
 			super.resumeRedraw(event);
 		}
 
-		private function redrawMultis():void {
+		public function redrawMultis():void {
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','inner');
 			for each (var m:Relation in multis) {
 				var outers:Array=m.findMembersByRole('outer');

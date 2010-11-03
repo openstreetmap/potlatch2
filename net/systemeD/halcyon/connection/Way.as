@@ -47,7 +47,7 @@ package net.systemeD.halcyon.connection {
 			if ((edge_l<left   && edge_r<left  ) ||
 			    (edge_l>right  && edge_r>right ) ||
 			    (edge_b<bottom && edge_t<bottom) ||
-			    (edge_b>top    && edge_b>top   )) { return false; }
+			    (edge_b>top    && edge_b>top   ) || deleted) { return false; }
 			return true;
 		}
         

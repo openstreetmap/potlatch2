@@ -266,19 +266,19 @@ package net.systemeD.halcyon {
         }
 
         public function setHighlightOnNodes(way:Way, settings:Object):void {
-			paint.wayuis[way.id].setHighlightOnNodes(settings);
+			if (paint.wayuis[way.id]) paint.wayuis[way.id].setHighlightOnNodes(settings);
         }
 
 		public function setPurgable(entity:Entity, purgable:Boolean):void {
 			if ( entity is Way  ) {
 				var way:Way=entity as Way;
-				paint.wayuis[way.id].purgable=purgable;
+				if (paint.wayuis[way.id]) { paint.wayuis[way.id].purgable=purgable; }
 				for (var i:uint=0; i<way.length; i++) {
 					if (paint.nodeuis[way.getNode(i).id]) {
 						paint.nodeuis[way.getNode(i).id].purgable=purgable;
 					}
 				}
-			} else if ( entity is Node ) { 
+			} else if ( entity is Node && paint.nodeuis[entity.id]) { 
 				paint.nodeuis[entity.id].purgable=purgable;
 			}
 		}

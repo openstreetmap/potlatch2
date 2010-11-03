@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.WayUI;
 
     public class DragWayNode extends ControllerState {
         private var draggingNode:Node;
@@ -18,35 +19,56 @@ package net.systemeD.potlatch2.controller {
 		private const NOT_DRAGGING:uint=0;
 		private const NOT_MOVED:uint=1;
 		private const DRAGGING:uint=2;
+		
+		private var parentWay:Way;
+		private var initEvent:MouseEvent;
         
         public function DragWayNode(way:Way, index:int, event:MouseEvent, newNode:Boolean) {
-            selectedWay = way;
-			draggingIndex = index;
-            draggingNode = way.getNode(index);
-			originalLat = draggingNode.lat;
-			originalLon = draggingNode.lon;
+			parentWay=way;
+			draggingIndex=index;
             downX = event.localX;
             downY = event.localY;
 			isNew = newNode;
+			initEvent=event;
+			// the rest of the init will be done during enterState, because we need the controller to be initialised
         }
+
+        private function addNode(selectedWay:Way,event:MouseEvent):int {
+			// find which other ways are under the mouse
+			var ways:Array=[]; var w:Way;
+			for each (var wayui:WayUI in controller.map.paint.wayuis) {
+				w=wayui.hitTest(event.stageX, event.stageY);
+				if (w && w!=selectedWay) { ways.push(w); }
+			}
+
+            var lat:Number = controller.map.coord2lat(event.localY);
+            var lon:Number = controller.map.coord2lon(event.localX);
+            var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+            var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
+            var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
+			for each (w in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
+            MainUndoStack.getGlobalStack().addAction(undo);
+			return index;
+        }
+
  
        override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 
             if (event.type==MouseEvent.MOUSE_UP) {
  				if (dragstate==DRAGGING) {
 					// mouse-up while dragging, so end drag
-                	return new SelectedWayNode(selectedWay,draggingIndex);
+                	return new SelectedWayNode(parentWay,draggingIndex);
 				} else if (event.shiftKey && !isNew) {
 					// start new way
 					var way:Way = controller.connection.createWay({}, [entity],
 					    MainUndoStack.getGlobalStack().addAction);
 					return new DrawWay(way, true, false);
 				} else if (event.shiftKey && isNew) {
-                	return new SelectedWayNode(selectedWay,draggingIndex);
+                	return new SelectedWayNode(parentWay,draggingIndex);
 				} else {
 					// select node
 					dragstate=NOT_DRAGGING;
-                	return SelectedWayNode.selectOrEdit(selectedWay, draggingIndex);
+                	return SelectedWayNode.selectOrEdit(parentWay, draggingIndex);
 				}
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
@@ -68,7 +90,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==27) {
 				draggingNode.setLatLon( originalLat, originalLon, MainUndoStack.getGlobalStack().addAction );
-               	return new SelectedWayNode(selectedWay,draggingIndex);
+               	return new SelectedWayNode(parentWay,draggingIndex);
 			}
 			return this;
 		}
@@ -83,14 +105,23 @@ package net.systemeD.potlatch2.controller {
 		public function forceDragStart():void {
 			dragstate=NOT_MOVED;
 		}
+		
+		override public function get selectedWay():Way {
+			return parentWay;
+		}
 
         override public function enterState():void {
-			controller.map.setHighlightOnNodes(selectedWay, { selectedway: true } );
+			if (isNew && draggingIndex==-1) { draggingIndex=addNode(parentWay,initEvent); }
+            draggingNode = parentWay.getNode(draggingIndex);
+			originalLat = draggingNode.lat;
+			originalLon = draggingNode.lon;
+
+			controller.map.setHighlightOnNodes(parentWay, { selectedway: true } );
 			controller.map.setHighlight(draggingNode, { selected: true } );
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-			controller.map.setHighlightOnNodes(selectedWay, { selectedway: false } );
+			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
 			controller.map.setHighlight(draggingNode, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);
         }

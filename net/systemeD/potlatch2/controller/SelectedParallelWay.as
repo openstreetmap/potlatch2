@@ -15,8 +15,8 @@ package net.systemeD.potlatch2.controller {
         public function SelectedParallelWay(originalWay:Way) {
 			this.originalWay = originalWay;
 			parallelise = new Parallelise(originalWay);
-			selectedWay=parallelise.parallelWay;
-			super (selectedWay);
+			selection=[parallelise.parallelWay];
+			super (firstSelected as Way);
         }
 
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
@@ -25,14 +25,14 @@ package net.systemeD.potlatch2.controller {
 				var latp:Number=controller.map.coord2latp(controller.map.mouseY);
 				parallelise.draw(distanceFromWay(lon,latp));
 			} else if (event.type==MouseEvent.MOUSE_UP) {
-				return new SelectedWay(selectedWay);
+				return new SelectedWay(firstSelected as Way);
 			}
 			return this;
         }
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==27) {			// Escape
-				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
+				Way(firstSelected).remove(MainUndoStack.getGlobalStack().addAction);
 				return new NoSelection();
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
@@ -72,7 +72,7 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function enterState():void {
-			controller.map.paint.createWayUI(selectedWay);
+			controller.map.paint.createWayUI(firstSelected as Way);
 			startlon =controller.map.coord2lon(controller.map.mouseX);
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
 			Globals.vars.root.addDebug("**** -> "+this);

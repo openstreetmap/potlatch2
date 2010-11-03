@@ -17,7 +17,7 @@ package net.systemeD.potlatch2.controller {
 		private const DRAGGING:uint=2;
         
         public function DragWay(way:Way, event:MouseEvent) {
-            selectedWay = way;
+            selection = [way];
             downX = event.localX;
             downY = event.localY;
 			enterTime = (new Date()).getTime();
@@ -28,9 +28,9 @@ package net.systemeD.potlatch2.controller {
             if (event.type==MouseEvent.MOUSE_UP) {
                 if (dragstate==DRAGGING) { 
                   MainUndoStack.getGlobalStack().addAction(
-                          new MoveWayAction(selectedWay, downX, downY, event.localX, event.localY, controller.map)); 
+                          new MoveWayAction(firstSelected as Way, downX, downY, event.localX, event.localY, controller.map)); 
                 }
-                return new SelectedWay(selectedWay);
+                return new SelectedWay(firstSelected as Way);
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
 				// dragging
@@ -53,14 +53,14 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==27) {
-				selectedWay.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, selectedWay, 0, 0));
-				return new SelectedWay(selectedWay);
+				firstSelected.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, firstSelected as Way, 0, 0));
+				return new SelectedWay(firstSelected as Way);
 			}
 			return this;
 		}
 
         private function dragTo(event:MouseEvent):ControllerState {
-			selectedWay.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, selectedWay, event.localX-downX, event.localY-downY));
+			firstSelected.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, firstSelected as Way, event.localX-downX, event.localY-downY));
             return this;
         }
         
@@ -69,11 +69,11 @@ package net.systemeD.potlatch2.controller {
 		}
 
         override public function enterState():void {
-            controller.map.setHighlight(selectedWay, { selected: true } );
+            controller.map.setHighlight(firstSelected, { selected: true } );
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-            controller.map.setHighlight(selectedWay, { selected: false } );
+            controller.map.setHighlight(firstSelected, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);
         }
         override public function toString():String {

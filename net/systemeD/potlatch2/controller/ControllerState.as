@@ -13,8 +13,7 @@ package net.systemeD.potlatch2.controller {
         protected var controller:EditController;
         protected var previousState:ControllerState;
 
-        protected var selectedNode:Node;
-        public var selectedWay:Way;
+		protected var _selection:Array=[];
 
         public function ControllerState() {}
  
@@ -56,7 +55,6 @@ package net.systemeD.potlatch2.controller {
 				case 68:	controller.map.paint.alpha=1.3-controller.map.paint.alpha; return null;	// D - dim
 				case 83:	SaveManager.saveChanges(); break;										// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
-				case 87:	if (selectedWay) { return new SelectedWay(selectedWay); }; return null;	// W - select way
 				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z - undo
 				case 187:	controller.tagViewer.addNewTag(); return null;							// + - add tag
 			}
@@ -152,6 +150,53 @@ package net.systemeD.potlatch2.controller {
 			MainUndoStack.getGlobalStack().addAction(undo);
 
 			object.resume();
+		}
+		
+		// Selection getters
+		
+		public function get selectCount():uint {
+			return _selection.length;
+		}
+		
+		public function get selection():Array {
+			return _selection;
+		}
+		
+		public function get firstSelected():Entity {
+			if (_selection.length==0) { return null; }
+			return _selection[0];
+		}
+
+		public function get selectedWay():Way {
+			if (firstSelected is Way) { return firstSelected as Way; }
+			return null;
+		}
+		
+		// Selection setters
+		
+		public function set selection(items:Array):void {
+			_selection=items;
+		}
+		
+		public function addToSelection(items:Array):void {
+			for each (var item:Entity in items) {
+				if (_selection.indexOf(item)==-1) { _selection.push(item); }
+			}
+		}
+		
+		public function removeFromSelection(items:Array):void {
+			for each (var item:Entity in items) {
+				if (_selection.indexOf(item)>-1) {
+					_selection.splice(_selection.indexOf(item),1);
+				}
+			}
+		}
+		
+		public function toggleSelection(item:Entity):Boolean {
+			if (_selection.indexOf(item)==-1) {
+				_selection.push(item); return true;
+			}
+			_selection.splice(_selection.indexOf(item),1); return false;
 		}
     }
 }

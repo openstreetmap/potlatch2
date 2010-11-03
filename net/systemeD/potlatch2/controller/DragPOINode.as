@@ -16,7 +16,7 @@ package net.systemeD.potlatch2.controller {
 		private const DRAGGING:uint=2;
         
         public function DragPOINode(node:Node, event:MouseEvent, newNode:Boolean) {
-            selectedNode = node;
+            selection = [node];
             downX = event.localX;
             downY = event.localY;
 			isNew = newNode;
@@ -25,7 +25,7 @@ package net.systemeD.potlatch2.controller {
        override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 
             if (event.type==MouseEvent.MOUSE_UP) {
-               	return new SelectedPOINode(selectedNode);
+               	return new SelectedPOINode(firstSelected as Node);
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
 				// dragging
@@ -44,8 +44,8 @@ package net.systemeD.potlatch2.controller {
         }
 
         private function dragTo(event:MouseEvent):ControllerState {
-            selectedNode.lat = controller.map.coord2lat(event.localY);
-            selectedNode.lon = controller.map.coord2lon(event.localX);
+            (firstSelected as Node).lat = controller.map.coord2lat(event.localY);
+            (firstSelected as Node).lon = controller.map.coord2lon(event.localX);
             return this;
         }
         
@@ -54,11 +54,11 @@ package net.systemeD.potlatch2.controller {
 		}
 
         override public function enterState():void {
-            controller.map.setHighlight(selectedNode, { selected: true } );
+            controller.map.setHighlight(firstSelected, { selected: true } );
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-            controller.map.setHighlight(selectedNode, { selected: false } );
+            controller.map.setHighlight(firstSelected, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);
         }
         override public function toString():String {

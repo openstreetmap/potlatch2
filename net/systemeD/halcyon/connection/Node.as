@@ -68,7 +68,7 @@ package net.systemeD.halcyon.connection {
 		}
 
 		public override function within(left:Number,right:Number,top:Number,bottom:Number):Boolean {
-			if (_lon<left || _lon>right || _lat<bottom || _lat>top) { return false; }
+			if (_lon<left || _lon>right || _lat<bottom || _lat>top || deleted) { return false; }
 			return true;
 		}
 		

@@ -6,38 +6,37 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
 
-    public class SelectedWayNode extends SelectedWay {
-		protected var selectedIndex:int;
-		protected var initIndex:int;
+    public class SelectedWayNode extends ControllerState {
+		private var parentWay:Way;
+		private var initIndex:int;
+		private var selectedIndex:int;
         
         public function SelectedWayNode(way:Way,index:int) {
-			super (way);
+            parentWay = way;
 			initIndex = index;
         }
  
         protected function selectNode(way:Way,index:int):void {
 			var node:Node=way.getNode(index);
-            if ( way == selectedWay && node == selectedNode )
+            if ( way == parentWay && node == firstSelected )
                 return;
 
             clearSelection(this);
-            controller.setSelectedEntity(node);
             controller.map.setHighlight(way, { hover: false });
             controller.map.setHighlight(node, { selected: true });
             controller.map.setHighlightOnNodes(way, { selectedway: true });
-            selectedWay = way; initWay = way;
+            selection = [node]; parentWay = way;
+            controller.updateSelectionUI();
 			selectedIndex = index; initIndex = index;
-            selectedNode = node;
         }
                 
-        override protected function clearSelection(newState:ControllerState):void {
-            if ( selectedNode != null ) {
-            	controller.map.setHighlight(selectedWay, { selected: false });
-				controller.map.setHighlight(selectedNode, { selected: false });
-				controller.map.setHighlightOnNodes(selectedWay, { selectedway: false });
-                if (!newState.isSelectionState()) { controller.setSelectedEntity(null); }
-                selectedNode = null;
-				selectedWay = null;
+        protected function clearSelection(newState:ControllerState):void {
+            if ( selectCount ) {
+            	controller.map.setHighlight(parentWay, { selected: false });
+				controller.map.setHighlight(firstSelected, { selected: false });
+				controller.map.setHighlightOnNodes(parentWay, { selectedway: false });
+				selection = []; parentWay = null;
+                if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
         }
         
@@ -50,12 +49,12 @@ package net.systemeD.potlatch2.controller {
                 var way:Way = controller.connection.createWay({}, [entity],
                     MainUndoStack.getGlobalStack().addAction);
                 return new DrawWay(way, true, false);
-			} else if ( event.type == MouseEvent.MOUSE_UP && entity is Node && focus == selectedWay ) {
+			} else if ( event.type == MouseEvent.MOUSE_UP && entity is Node && focus == parentWay ) {
 				// select node within way
-				return selectOrEdit(selectedWay, getNodeIndex(selectedWay,Node(entity)));
-            } else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==selectedWay && event.shiftKey) {
+				return selectOrEdit(parentWay, getNodeIndex(parentWay,Node(entity)));
+            } else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==parentWay && event.shiftKey) {
 				// insert node within way (shift-click)
-          		var d:DragWayNode=new DragWayNode(selectedWay, addNode(event), event, true);
+          		var d:DragWayNode=new DragWayNode(parentWay, -1, event, true);
 				d.forceDragStart();
 				return d;
 			}
@@ -67,22 +66,27 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 189:					return removeNode();					// '-'
 				case 88:					return splitWay();						// 'X'
-				case 82:					repeatTags(selectedNode); return this;	// 'R'
+				case 82:					repeatTags(firstSelected); return this;	// 'R'
+				case 87:					return new SelectedWay(parentWay);		// 'W'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}
-		
+
+		override public function get selectedWay():Way {
+			return parentWay;
+		}
+
 		override public function enterState():void {
-            selectNode(initWay,initIndex);
-			controller.map.setPurgable(selectedNode,false);
+            selectNode(parentWay,initIndex);
+			controller.map.setPurgable(firstSelected,false);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
 		override public function exitState(newState:ControllerState):void {
-			controller.clipboards['node']=selectedNode.getTagsCopy();
-			controller.map.setPurgable(selectedNode,true);
+			controller.clipboards['node']=firstSelected.getTagsCopy();
+			controller.map.setPurgable(firstSelected,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
@@ -91,12 +95,12 @@ package net.systemeD.potlatch2.controller {
             return "SelectedWayNode";
         }
 
-        public static function selectOrEdit(selectedWay:Way, index:int):ControllerState {
-        	var isFirst:Boolean = false;
+		public static function selectOrEdit(selectedWay:Way, index:int):ControllerState {
+			var isFirst:Boolean = false;
 			var isLast:Boolean = false;
 			var node:Node = selectedWay.getNode(index);
 			isFirst = selectedWay.getNode(0) == node;
-			isLast = selectedWay.getNode(selectedWay.length - 1) == node;
+			isLast = selectedWay.getLastNode() == node;
 			if ( isFirst == isLast )    // both == looped, none == central node 
 			    return new SelectedWayNode(selectedWay, index);
 			else
@@ -105,28 +109,28 @@ package net.systemeD.potlatch2.controller {
 
 		public function splitWay():ControllerState {
 			// abort if start or end
-			if (selectedWay.getNode(0                   ) == selectedNode) { return this; }
-			if (selectedWay.getNode(selectedWay.length-1) == selectedNode) { return this; }
+			if (parentWay.getNode(0)    == firstSelected) { return this; }
+			if (parentWay.getLastNode() == firstSelected) { return this; }
 
-			controller.map.setHighlightOnNodes(selectedWay, { selectedway: false } );
-			controller.map.setPurgable(selectedWay,true);
-            MainUndoStack.getGlobalStack().addAction(new SplitWayAction(selectedWay, selectedNode));
+			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
+			controller.map.setPurgable(parentWay,true);
+            MainUndoStack.getGlobalStack().addAction(new SplitWayAction(parentWay, firstSelected as Node));
 
-			return new SelectedWay(selectedWay);
+			return new SelectedWay(parentWay);
 		}
 		
 		public function removeNode():ControllerState {
-			if (selectedNode.numParentWays==1 && selectedWay.hasOnceOnly(selectedNode)) {
+			if (firstSelected.numParentWays==1 && parentWay.hasOnceOnly(firstSelected as Node)) {
 				return deleteNode();
 			}
-			selectedWay.removeNodeByIndex(selectedIndex, MainUndoStack.getGlobalStack().addAction);
-			return new SelectedWay(selectedWay);
+			parentWay.removeNodeByIndex(selectedIndex, MainUndoStack.getGlobalStack().addAction);
+			return new SelectedWay(parentWay);
 		}
 		
 		public function deleteNode():ControllerState {
-			controller.map.setPurgable(selectedNode,true);
-			selectedNode.remove(MainUndoStack.getGlobalStack().addAction);
-			return new SelectedWay(selectedWay);
+			controller.map.setPurgable(firstSelected,true);
+			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);
+			return new SelectedWay(parentWay);
 		}
 
     }

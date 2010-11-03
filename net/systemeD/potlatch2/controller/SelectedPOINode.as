@@ -13,21 +13,21 @@ package net.systemeD.potlatch2.controller {
         }
  
         protected function selectNode(node:Node):void {
-            if ( node == selectedNode )
+            if ( firstSelected is Node && Node(firstSelected)==node )
                 return;
 
             clearSelection(this);
-            controller.setSelectedEntity(node);
             controller.map.setHighlight(node, { selected: true });
-            selectedNode = node;
+            selection = [node];
+            controller.updateSelectionUI();
             initNode = node;
         }
                 
         protected function clearSelection(newState:ControllerState):void {
-            if ( selectedNode != null ) {
-                controller.map.setHighlight(selectedNode, { selected: false });
-                if (!newState.isSelectionState()) { controller.setSelectedEntity(null); }
-                selectedNode = null;
+            if ( selectCount ) {
+                controller.map.setHighlight(firstSelected, { selected: false });
+                selection = [];
+                if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
         }
         
@@ -41,26 +41,26 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case Keyboard.BACKSPACE:	return deletePOI();
 				case Keyboard.DELETE:		return deletePOI();
-				case 82:					repeatTags(selectedNode); return this;	// 'R'
+				case 82:					repeatTags(firstSelected); return this;	// 'R'
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}
 		
 		public function deletePOI():ControllerState {
-			controller.connection.unregisterPOI(selectedNode);
-			selectedNode.remove(MainUndoStack.getGlobalStack().addAction);
+			controller.connection.unregisterPOI(firstSelected as Node);
+			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 
         override public function enterState():void {
             selectNode(initNode);
-			controller.map.setPurgable(selectedNode,false);
+			controller.map.setPurgable(firstSelected,false);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-			controller.clipboards['node']=selectedNode.getTagsCopy();
-			controller.map.setPurgable(selectedNode,true);
+			controller.clipboards['node']=firstSelected.getTagsCopy();
+			controller.map.setPurgable(firstSelected,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
