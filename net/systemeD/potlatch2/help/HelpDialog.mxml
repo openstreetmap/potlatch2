@@ -339,6 +339,7 @@
   </mx:TabNavigator>
 
   <mx:ControlBar>
+    <mx:Label text="Version: {Application.application.version} Build: {Application.application.build_number}" />
     <mx:Spacer width="100%"/>
     <mx:Button label="Ok" click="PopUpManager.removePopUp(this);"/>
   </mx:ControlBar>

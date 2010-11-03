@@ -8,6 +8,7 @@
   <mx:ArrayCollection id="changesetTags">
     <mx:Object k="created_by" v="Potlatch 2"/>
     <mx:Object k="version" v="{Application.application.version}"/>
+    <mx:Object k="build" v="{Application.application.build_number}"/>
     <mx:Object k="comment" v=""/>
   </mx:ArrayCollection>
   
@@ -135,7 +136,7 @@
     private function allowForEdit(event:DataGridEvent):void {
         /* check before editing the tag grid that it's neither created_by nor version tags */
         var item:Object = ((event.currentTarget as DataGrid).dataProvider as ArrayCollection)[event.rowIndex];
-        if(item.k == 'created_by' || item.k == 'version') {
+        if(item.k == 'created_by' || item.k == 'version' || item.k == 'build') {
           event.preventDefault();
         }
     }
@@ -148,7 +149,7 @@
         var editor:TextInput = (event.currentTarget as DataGrid).itemEditorInstance as TextInput;
 
         if( event.dataField == "k" ) {
-          if( editor.text == 'created_by' || editor.text == 'version' ) {
+          if( editor.text == 'created_by' || editor.text == 'version' || editor.text == 'build') {
             event.preventDefault();
           }
         }
