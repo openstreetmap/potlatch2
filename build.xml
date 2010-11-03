@@ -1,0 +1,52 @@
+<project name="Potlatch2 über compile system" default="debug">
+
+  <!-- load previously defined configuration properties file -->
+  <property file="build.properties" />
+
+  <!-- flexTasks comes with flex, but apparently it's good practice to put in the libs folder -->
+  <taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar"/>
+
+  <!-- if you are running git-svn, you need to run "git tag -a 0.4 0ac0de" where 0ac0de corresponds to the commitid of
+      potlatch2 v0.4 . You need to do this for each point release while we're still in SVN.
+      If you don't, then expect "git describe" to fail miserably.
+      Produces a build number of the form 0.4-1-g9692243 which means 1 commit later than 0.4, latest commit was 9692243 -->
+  <available file=".git" type="dir" property="git.present"/>
+  <target name="git-buildnumber" description="Store output from git-describe in ${buildnumber}" if="git.present">
+    <exec outputproperty="build_number" executable="git" dir="${basedir}">
+      <arg value="describe" />
+    </exec>
+  </target>
+
+  <!-- if you are running svn ("I pity the fool", etc) then svnversion will give the svn revision number, and the
+       build number will be of the form 24041 -->
+  <available file=".svn" type="dir" property="svn.present"/>
+  <target name="svn-buildnumber" description="Store output from svnversion in ${buildnumber}" if="svn.present">
+    <exec outputproperty="build_number" executable="svnversion" dir="${basedir}" />
+  </target>
+
+  <!-- delete and create the DEPLOY dir again -->
+  <target name="init" depends="git-buildnumber,svn-buildnumber">
+    <echo>Build Number ${build_number}</echo>
+    <copy file="version.as.template" tofile="version.as" overwrite="true" />
+    <replace file="version.as" token="@@@buildnumber@@@" value="${build_number}" />
+  </target>
+
+  <!-- Build and output potlatch2.swf in debug mode -->
+  <target name="debug" depends="init">
+    <mxmlc file="potlatch2.mxml">
+      <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+      <load-config filename="debug-config.xml"/>
+      <source-path path-element="${FLEX_HOME}/frameworks"/>
+      <compiler.debug>true</compiler.debug>
+    </mxmlc>
+  </target>
+
+  <!-- Build and output potlatch2.swf in release mode -->
+  <target name="release" depends="init">
+    <mxmlc file="potlatch2.mxml">
+      <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+      <source-path path-element="${FLEX_HOME}/frameworks"/>
+      <compiler.debug>false</compiler.debug>
+    </mxmlc>
+  </target>
+</project>

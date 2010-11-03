@@ -14,6 +14,7 @@ Many icons used in halcyon/potlatch2 are based on the awesome CC0-licensed SJJB 
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
+* Ant
 
 ***Do not use FlexSDK <= 3.3 or > 4***. There are compatibility errors with version 4, and 3.3
 and earlier have this bug: http://bugs.adobe.com/jira/browse/SDK-16705 which is a major issue for the
@@ -28,11 +29,17 @@ for development and testing.
 
 Compiling Potlatch 2:
 
-The following command will compile potlatch2 in optimized configuration
+Before you start, copy the properties template file, and edit the FLEX_HOME variable
+  cp build.properties.template build.properties
+
+The following command will compile potlatch2 in debug configuration
 The result is put at resources/potlatch2.swf
 
-* mxmlc potlatch2.mxml
+* ant
 
+The following command will compile potlatch2 in release configuration
+
+* ant release
 
 Compiling Halcyon as standalone viewer:
 

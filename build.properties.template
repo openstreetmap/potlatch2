@@ -1,0 +1,10 @@
+# change this to your Flex SDK directory path
+# e.g. FLEX_HOME=/home/andy/bin/flex/
+# e.g. FLEX_HOME=C:/Program Files/Adobe/Flex Builder 3/sdks/3.5.0
+FLEX_HOME=/path/to/your/flex/sdk
+
+# this points to your project's src directory
+# {$basedir} is a default variable that can be used in any Ant script
+# SRC_DIR =${basedir}/src
+# points to the project's libs directory
+# LIBS_DIR =${basedir}/lib

@@ -1,0 +1,6 @@
+// This template file is copied to version.as, and variables are substituted,
+// during ant builds. I expect the version to become a variable (read from git tags)
+// at some point in the future.
+
+public var build_number:String="@@@buildnumber@@@";
+public var version:String="0.4";
