@@ -1,5 +1,8 @@
 <project name="Potlatch2 über compile system" default="debug">
 
+  <!-- load properties from the environment -->
+  <property environment="env" />
+
   <!-- load previously defined configuration properties file -->
   <property file="build.properties" />
 
