@@ -42,9 +42,13 @@ package net.systemeD.halcyon.connection.actions {
         }
             
         public override function undoAction():uint {
-            trace("fail");
+            node.suspend();
+            selectedWay.suspend();
+            super.undoAction();
+            selectedWay.resume();
+            node.resume();
             
-            return FAIL;
+            return SUCCESS;
         }
     }
 }
