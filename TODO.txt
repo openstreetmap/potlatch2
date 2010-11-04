@@ -53,9 +53,6 @@ Potlatch 2: main outstanding issues
 * Multipolygon rendering for dashedLine, lineDecoration, and WayBitmapFiller
 * Multipolygons should take their tags from the relation, not the way
 
-== Other ==
-* should have build numbers available somehow
-
 == MyGPX ==
 
 * Have a remove button for removing loaded traces
