@@ -19,8 +19,11 @@ package net.systemeD.halcyon.connection.actions {
               return NO_CHANGE;
             }
 
+            var ways:Array=[];
             for each (var way:Way in node.parentWays) {
+              way.suspend(); ways.push(way);
               if (way == selectedWay) {
+            	way.dispatchEvent(new EntityEvent(Connection.WAY_REORDERED, way));	// no longer a junction, so force redraw
                 continue;
               } else {
                 var newNode:Node = Connection.getConnection().createNode(node.getTagsCopy(), node.lat, node.lon, push);
@@ -32,11 +35,8 @@ package net.systemeD.halcyon.connection.actions {
                 }
               }
             }
-            node.suspend();
-            selectedWay.suspend();
             super.doAction();
-            selectedWay.resume();
-            node.resume();
+            for each (way in ways) { way.resume(); }
 
             return SUCCESS;
         }
