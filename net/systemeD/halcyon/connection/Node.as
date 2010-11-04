@@ -71,6 +71,14 @@ package net.systemeD.halcyon.connection {
 			if (_lon<left || _lon>right || _lat<bottom || _lat>top || deleted) { return false; }
 			return true;
 		}
+
+        public function unjoin(selectedWay:Way, performAction:Function):void {
+            if (parentWays.length > 1) {
+              performAction(new UnjoinNodeAction(this, selectedWay));
+            } else {
+              trace("not enough ways");
+            }
+        }
 		
 		internal override function isEmpty():Boolean {
 			return deleted;
