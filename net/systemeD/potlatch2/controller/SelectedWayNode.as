@@ -68,7 +68,7 @@ package net.systemeD.potlatch2.controller {
 				case 88:					return splitWay();						// 'X'
 				case 82:					repeatTags(firstSelected); return this;	// 'R'
 				case 87:					return new SelectedWay(parentWay);		// 'W'
-                case 74:                    if (event.shiftKey) { return unjoin() };// 'J'
+                case 74:                    if (event.shiftKey) { return unjoin() }; return this;// 'J'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
 			}
