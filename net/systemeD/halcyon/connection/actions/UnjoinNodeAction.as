@@ -39,7 +39,9 @@ package net.systemeD.halcyon.connection.actions {
               }
               way.resume();
             }
+            super.doAction();
             node.resume();
+
             return SUCCESS;
         }
             
