@@ -15,31 +15,27 @@ package net.systemeD.halcyon.connection.actions {
         }
             
         public override function doAction():uint {
-            trace("unjoining node "+node.id);
             if (node.parentWays.length < 2) {
               return NO_CHANGE;
             }
 
-            node.suspend();
             for each (var way:Way in node.parentWays) {
-              way.suspend();
               if (way == selectedWay) {
-                trace("skipping selected way");
                 continue;
               } else {
-                trace("need to fettle way: "+way);
                 var newNode:Node = Connection.getConnection().createNode(node.getTagsCopy(), node.lat, node.lon, push);
                 for (var i:int = 0; i < way.length; i++) {
                   if(way.getNode(i) == node) {
                     way.removeNodeByIndex(i, push);
                     way.insertNode(i, newNode, push);
-                    trace("inserted node at" +i); 
                   }
                 }
               }
-              way.resume();
             }
+            node.suspend();
+            selectedWay.suspend();
             super.doAction();
+            selectedWay.resume();
             node.resume();
 
             return SUCCESS;
