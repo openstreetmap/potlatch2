@@ -49,4 +49,8 @@
       <compiler.debug>false</compiler.debug>
     </mxmlc>
   </target>
+
+  <target name="halcyon">
+    <mxmlc file="halcyon_viewer.as" />
+  </target>
 </project>
