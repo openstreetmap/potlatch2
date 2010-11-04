@@ -15,8 +15,7 @@ package net.systemeD.potlatch2.controller {
         public function SelectedParallelWay(originalWay:Way) {
 			this.originalWay = originalWay;
 			parallelise = new Parallelise(originalWay);
-			selection=[parallelise.parallelWay];
-			super (firstSelected as Way);
+			super (parallelise.parallelWay);
         }
 
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
@@ -72,6 +71,7 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function enterState():void {
+			selection=[parallelise.parallelWay];
 			controller.map.paint.createWayUI(firstSelected as Way);
 			startlon =controller.map.coord2lon(controller.map.mouseX);
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
