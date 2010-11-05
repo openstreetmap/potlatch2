@@ -82,12 +82,12 @@ package net.systemeD.potlatch2.controller {
 
 		override public function enterState():void {
             selectNode(parentWay,initIndex);
-			controller.map.setPurgable(firstSelected,false);
+			controller.map.setPurgable(selection,false);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
 		override public function exitState(newState:ControllerState):void {
 			controller.clipboards['node']=firstSelected.getTagsCopy();
-			controller.map.setPurgable(firstSelected,true);
+			controller.map.setPurgable(selection,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
@@ -114,7 +114,7 @@ package net.systemeD.potlatch2.controller {
 			if (parentWay.getLastNode() == firstSelected) { return this; }
 
 			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
-			controller.map.setPurgable(parentWay,true);
+			controller.map.setPurgable([parentWay],true);
             MainUndoStack.getGlobalStack().addAction(new SplitWayAction(parentWay, firstSelected as Node));
 
 			return new SelectedWay(parentWay);
@@ -129,7 +129,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function deleteNode():ControllerState {
-			controller.map.setPurgable(firstSelected,true);
+			controller.map.setPurgable(selection,true);
 			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(parentWay);
 		}

@@ -60,7 +60,7 @@ package net.systemeD.potlatch2 {
         public function updateSelectionUI():void {
 			var entity:Entity=state.firstSelected;
             tagViewer.setEntity(entity);
-			toolbox.setEntity(entity);
+			toolbox.updateSelectionUI();
         }
         
         private function keyDownHandler(event:KeyboardEvent):void {

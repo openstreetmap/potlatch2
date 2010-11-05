@@ -29,19 +29,18 @@ package net.systemeD.halcyon {
 					if (stateClasses[state]) { this.stateClasses[state]=stateClasses[state]; }
 				}
 			}
-            entity.addEventListener(Connection.TAG_CHANGED, tagChanged);
 			entity.addEventListener(Connection.NODE_MOVED, nodeMoved);
-			entity.addEventListener(Connection.NODE_DELETED, nodeDeleted);
             attachRelationListeners();
 			redraw();
 		}
 		
-		public function nodeMoved(event:Event):void {
-		    updatePosition();
+		public function removeEventListeners():void {
+			removeGenericEventListeners();
+			entity.removeEventListener(Connection.NODE_MOVED, nodeMoved);
 		}
 
-		public function nodeDeleted(event:Event):void {
-			removeSprites();
+		public function nodeMoved(event:Event):void {
+		    updatePosition();
 		}
 
 		override public function doRedraw():Boolean {

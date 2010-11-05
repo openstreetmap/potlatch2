@@ -26,8 +26,8 @@ package net.systemeD.halcyon.connection.actions {
 			oldNodeList = nodeList.slice();
 			while (nodeList.length > 0) {
 				node=nodeList.pop();
-				way.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, way, 0));
 				node.removeParent(way);
+				way.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, node, way, 0));
                 if (!node.hasParents && !node.hasInterestingTags()) { //need to trigger redraw of new POIs?
                   node.remove(effects.push);
                 }
@@ -41,7 +41,7 @@ package net.systemeD.halcyon.connection.actions {
             } else {
               markDirty();
             }
-            way.dispatchEvent(new EntityEvent(Connection.WAY_DELETED, way));
+			way.dispatchEvent(new EntityEvent(Connection.WAY_DELETED, way));	// delete WayUI
 			way.resume();
 
             return SUCCESS;
@@ -56,13 +56,14 @@ package net.systemeD.halcyon.connection.actions {
             } else {
               markClean();
             }
-            way.dispatchEvent(new EntityEvent(Connection.NEW_WAY, way));
+            Connection.getConnection().dispatchEvent(new EntityEvent(Connection.NEW_WAY, way));
             effects.undoAction();
             for each(var node:Node in oldNodeList) {
                 nodeList.push(node);
+            	node.addParent(way);
                 way.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, node, way, 0));
             }
-            way.resume();
+			way.resume();
             return SUCCESS;
         }
     }

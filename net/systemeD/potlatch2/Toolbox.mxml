@@ -62,7 +62,6 @@
 	    import net.systemeD.potlatch2.controller.*;
 	    import net.systemeD.potlatch2.tools.*;
 
-		private var entity:Entity;
 		private var controller:EditController;
 
 		public function init(controller:EditController):void {
@@ -79,8 +78,7 @@
 			super.titleBar.addEventListener(MouseEvent.MOUSE_UP,handleUp);
 		}
 
-		public function setEntity(entity:Entity):void {
-			this.entity=entity;
+		public function updateSelectionUI():void {
 			dispatchEvent(new Event("updateSkin"));
 			dispatchEvent(new Event("updateAlpha"));
 		}
@@ -107,13 +105,16 @@
 		
         [Bindable(event="updateSkin")]
 		public function canDo(op:String):Boolean {
+			if (controller.state.selectCount==0) return false;
+
+			var entity:Entity=controller.state.firstSelected;
 			switch (op) {
-				case 'delete':				return (entity is Way || entity is Node);
+				case 'delete':				return true;
 				case 'reverseDirection':	return (entity is Way);
 				case 'quadrilateralise':	return (entity is Way && Way(entity).isArea());
 				case 'straighten':			return (entity is Way && !Way(entity).isArea());
 				case 'circularise':			return (entity is Way && Way(entity).isArea());
-				case 'split':				return (entity is Node && controller.state is SelectedWayNode);
+				case 'split':				return (controller.state is SelectedWayNode);
 				case 'parallelise':			return (entity is Way);
 			}
 			return false;
@@ -127,6 +128,7 @@
 
         [Bindable(event="updateSkin")]
         private function deleteToolTipText():String {
+			var entity:Entity=controller.state.firstSelected;
             if (entity is Node) { return "Delete Node (Delete)"; }
             if (entity is Way && Way(entity).isArea()) { return "Delete Area (Shift+Delete)"; }
             if (entity is Way) { return "Delete Way (Shift+Delete)"; }
@@ -137,8 +139,12 @@
 		// Individual toolbox actions
 
 		public function doDelete():void {
-			if (entity is Node) { controller.connection.unregisterPOI(Node(entity)); }
-			entity.remove(MainUndoStack.getGlobalStack().addAction);
+            var undo:CompositeUndoableAction = new CompositeUndoableAction("Delete objects");
+			for each (var entity:Entity in controller.state.selection) {
+				if (entity is Node) { controller.connection.unregisterPOI(Node(entity)); }
+				entity.remove(undo.push);
+			}
+            MainUndoStack.getGlobalStack().addAction(undo);
 
 			if (controller.state is SelectedWayNode) {
 				controller.setState(new SelectedWay(SelectedWayNode(controller.state).selectedWay));
@@ -148,38 +154,38 @@
 		}
 
         public function doReverseDirection():void {
-            if (entity is Way) { 
-                Way(entity).reverseNodes(MainUndoStack.getGlobalStack().addAction);
+			if (controller.state is SelectedWay) {
+                Way(controller.state.firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction);
             }
         }
 
 		public function doQuadrilateralise():void {
-			if (entity is Way) {
-				Quadrilateralise.quadrilateralise(Way(entity));
+			if (controller.state is SelectedWay) {
+				Quadrilateralise.quadrilateralise(Way(controller.state.firstSelected));
 			}
 		}
 
 		public function doStraighten():void {
-			if (entity is Way) {
-				Straighten.straighten(Way(entity),controller.map);
+			if (controller.state is SelectedWay) {
+				Straighten.straighten(Way(controller.state.firstSelected),controller.map);
 			}
 		}
 
 		public function doCircularise():void {
-			if (entity is Way) {
-				Circularise.circularise(Way(entity),controller.map);
+			if (controller.state is SelectedWay) {
+				Circularise.circularise(Way(controller.state.firstSelected),controller.map);
 			}
 		}
 
 		public function doSplit():void {
-			if (entity is Node && controller.state is SelectedWayNode) {
+			if (controller.state is SelectedWayNode) {
 				controller.setState(SelectedWayNode(controller.state).splitWay());
 			}
 		}
 		
 		public function doParallelise():void {
-			if (entity is Way) {
-				controller.setState(new SelectedParallelWay(Way(entity)));
+			if (controller.state is SelectedWay) {
+				controller.setState(new SelectedParallelWay(Way(controller.state.firstSelected)));
 			}
 		}
 

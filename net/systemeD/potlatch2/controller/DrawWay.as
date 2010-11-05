@@ -47,7 +47,7 @@ package net.systemeD.potlatch2.controller {
 				if ( entity == null || isBackground ) {
 					node = createAndAddNode(event, MainUndoStack.getGlobalStack().addAction);
                     controller.map.setHighlight(node, { selectedway: true });
-                    controller.map.setPurgable(node, false);
+                    controller.map.setPurgable([node], false);
 					resetElastic(node);
 					lastClick=node;
 				} else if ( entity is Node ) {
@@ -96,7 +96,7 @@ package net.systemeD.potlatch2.controller {
                         Way(entity).insertNodeAtClosestPosition(node, true, jnct.push);
                         MainUndoStack.getGlobalStack().addAction(jnct);
                         controller.map.setHighlight(node, { selectedway: true });
-                        controller.map.setPurgable(node, false);
+                        controller.map.setPurgable([node], false);
 					}
 					resetElastic(node);
 					lastClick=node;
@@ -226,7 +226,7 @@ package net.systemeD.potlatch2.controller {
 				newDraw=0;
 			}
 			if (node.numParentWays==1 && Way(firstSelected).hasOnceOnly(node)) {
-				controller.map.setPurgable(node, true);
+				controller.map.setPurgable([node], true);
 				controller.connection.unregisterPOI(node);
 				node.remove(undo.push);
 			}

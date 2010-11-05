@@ -34,7 +34,7 @@ package net.systemeD.halcyon.connection.actions {
             } else {
               markDirty();
             }
-            node.dispatchEvent(new EntityEvent(Connection.NODE_DELETED, node));
+            node.dispatchEvent(new EntityEvent(Connection.NODE_DELETED, node));	// delete NodeUI
             
             return SUCCESS;
         }
@@ -49,7 +49,7 @@ package net.systemeD.halcyon.connection.actions {
             } else {
               markClean();
             }
-            entity.dispatchEvent(new EntityEvent(Connection.NEW_NODE, entity));
+            Connection.getConnection().dispatchEvent(new EntityEvent(Connection.NEW_NODE, entity));
             if ( effects != null )
                 effects.undoAction();
             return SUCCESS;

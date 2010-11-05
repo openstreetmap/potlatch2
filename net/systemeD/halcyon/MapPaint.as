@@ -4,22 +4,23 @@ package net.systemeD.halcyon {
 	import flash.display.DisplayObject;
 	import net.systemeD.halcyon.NodeUI;
 	import net.systemeD.halcyon.WayUI;
-    import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.styleparser.RuleSet;
 	import net.systemeD.halcyon.Globals;
 
-    public class MapPaint extends Sprite {
+	public class MapPaint extends Sprite {
 
 		public var map:Map;
 		public var minlayer:int;
 		public var maxlayer:int;
 		public var ruleset:RuleSet;						// rules
 		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
-		public var nodeuis:Object=new Object();			//  |
+		public var nodeuis:Object=new Object();			//	|
 		public var isBackground:Boolean = true;			// is it a background layer or the core paint object?
 		public var sublayerIndex:Object={};				// hash of index->position
 
 		private const VERYBIG:Number=Math.pow(2,16);
+		private static const NO_LAYER:int=-99999;		// same as NodeUI
 
 		// Set up layering
 
@@ -34,21 +35,21 @@ package net.systemeD.halcyon {
 
 			// Add paint sprites
 			for (l=minlayer; l<=maxlayer; l++) {			// each layer (10 is +5, 0 is -5)
-				s = getPaintSprite();      					//  |
+				s = getPaintSprite();						//	|
 				s.addChild(getPaintSprite());				//	| 0 fill
 				s.addChild(getPaintSprite());				//	| 1 casing
-				var t:Sprite = getPaintSprite();			//  | 2 stroke
-				t.addChild(getPaintSprite());				//  |  | sublayer
-				s.addChild(t);								//  |  |
+				var t:Sprite = getPaintSprite();			//	| 2 stroke
+				t.addChild(getPaintSprite());				//	|  | sublayer
+				s.addChild(t);								//	|  |
 				s.addChild(getPaintSprite());				//	| 3 names
-				addChild(s);								//  |
+				addChild(s);								//	|
 			}
 			
 			// Add hit sprites
 			for (l=minlayer; l<=maxlayer; l++) {			// each layer (21 is +5, 11 is -5)
-				s = getHitSprite();							//  |
+				s = getHitSprite();							//	|
 				s.addChild(getHitSprite());					//	| 0 way hit tests
-				s.addChild(getHitSprite());				    //	| 1 node hit tests
+				s.addChild(getHitSprite());					//	| 1 node hit tests
 				addChild(s);
 			}
 		}
@@ -95,7 +96,7 @@ package net.systemeD.halcyon {
 			
 				// update index
 				// (we do it in this rather indirect way because if you alter sublayerIndex directly
-				//  within the loop, it confuses the iterator)
+				//	within the loop, it confuses the iterator)
 				var toUpdate:Array=[];
 				for (index in sublayerIndex) {
 					ix=Number(index);
@@ -156,15 +157,6 @@ package net.systemeD.halcyon {
 			deleteWayUI(event.entity as Way);
 		}
 
-        public function createNodeUI(node:Node):NodeUI {
-            if (!nodeuis[node.id]) {
-              nodeuis[node.id]=new NodeUI(node,this,0);
-            } else {
-              nodeuis[node.id].redraw();
-            }
-            return nodeuis[node.id];
-        }
-
 		public function deleteWayUI(way:Way):void {
 			way.removeEventListener(Connection.WAY_DELETED, wayDeleted);
 			if (wayuis[way.id]) {
@@ -179,10 +171,28 @@ package net.systemeD.halcyon {
 			}
 		}
 
+		public function createNodeUI(node:Node,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):NodeUI {
+			if (!nodeuis[node.id]) {
+				nodeuis[node.id]=new NodeUI(node,this,rotation,layer,stateClasses);
+				node.addEventListener(Connection.NODE_DELETED, nodeDeleted);
+			} else {
+				for (var state:String in stateClasses) {
+					nodeuis[node.id].setStateClass(state,stateClasses[state]);
+				}
+				nodeuis[node.id].redraw();
+			}
+			return nodeuis[node.id];
+		}
+
+		public function nodeDeleted(event:EntityEvent):void {
+			deleteNodeUI(event.entity as Node);
+		}
+
 		public function deleteNodeUI(node:Node):void {
 			if (!nodeuis[node.id]) { return; }
-			if (!nodeuis[node.id].purgable) { return; }
+			node.removeEventListener(Connection.NODE_DELETED, nodeDeleted);
 			nodeuis[node.id].removeSprites();
+			nodeuis[node.id].removeEventListeners();
 			delete nodeuis[node.id];
 		}
 		
@@ -198,21 +208,21 @@ package net.systemeD.halcyon {
 			delete nodeuis[oldID];
 		}
 
-        private function getPaintSprite():Sprite {
-            var s:Sprite = new Sprite();
-            s.mouseEnabled = false;
-            s.mouseChildren = false;
-            return s;
-        }
+		private function getPaintSprite():Sprite {
+			var s:Sprite = new Sprite();
+			s.mouseEnabled = false;
+			s.mouseChildren = false;
+			return s;
+		}
 
-        private function getHitSprite():Sprite {
-            var s:Sprite = new Sprite();
-            return s;
-        }
+		private function getHitSprite():Sprite {
+			var s:Sprite = new Sprite();
+			return s;
+		}
 
 		public function redraw():void {
 			for each (var w:WayUI in wayuis) { w.recalculate(); w.invalidateStyleList(); w.redraw(); }
-            /* sometimes (e.g. in Map.setStyle) Mappaint.redrawPOIs() is called immediately afterwards anyway. FIXME? */
+			/* sometimes (e.g. in Map.setStyle) Mappaint.redrawPOIs() is called immediately afterwards anyway. FIXME? */
 			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
 		}
 

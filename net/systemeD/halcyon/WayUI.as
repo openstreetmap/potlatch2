@@ -37,6 +37,7 @@ package net.systemeD.halcyon {
 		}
 		
 		public function removeEventListeners():void {
+			removeGenericEventListeners();
             entity.removeEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             entity.removeEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
             entity.removeEventListener(Connection.WAY_REORDERED, wayReordered);
@@ -289,16 +290,7 @@ package net.systemeD.halcyon {
 //				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
 				// ** FIXME - heading isn't currently applied
 				nodeStateClasses['junction']=(node.numParentWays>1);
-
-				if (paint.nodeuis[node.id]) {
-					var nodeui:NodeUI=paint.nodeuis[node.id];
-					for (var state:String in nodeStateClasses) {
-						nodeui.setStateClass(state,nodeStateClasses[state]);
-					}
-					nodeui.redraw();
-				} else {
-					paint.nodeuis[node.id]=new NodeUI(node,paint,r,layer,nodeStateClasses);
-				}
+				paint.createNodeUI(node,r,layer,nodeStateClasses);
 			}
 			if (!drawn) { return false; }
 			

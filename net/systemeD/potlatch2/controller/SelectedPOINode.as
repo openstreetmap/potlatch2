@@ -55,12 +55,12 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectNode(initNode);
-			controller.map.setPurgable(firstSelected,false);
+			controller.map.setPurgable(selection,false);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
 			controller.clipboards['node']=firstSelected.getTagsCopy();
-			controller.map.setPurgable(firstSelected,true);
+			controller.map.setPurgable(selection,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }

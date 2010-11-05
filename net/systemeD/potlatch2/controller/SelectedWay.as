@@ -55,6 +55,9 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && event.shiftKey ) {
 				// merge way
 				return mergeWith(entity as Way);
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && entity!=firstSelected) {
+				// multiple selection
+				return new SelectedMultiple([firstSelected,entity]);
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
@@ -97,19 +100,19 @@ package net.systemeD.potlatch2.controller {
 		}
         
 		public function deleteWay():ControllerState {
-            controller.map.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
+			controller.map.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 
         override public function enterState():void {
             selectWay(initWay);
-			controller.map.setPurgable(firstSelected,false);
+			controller.map.setPurgable(selection,false);
 			Globals.vars.root.addDebug("**** -> "+this+" "+firstSelected.id);
         }
         override public function exitState(newState:ControllerState):void {
 			controller.clipboards['way']=firstSelected.getTagsCopy();
-			controller.map.setPurgable(firstSelected,true);
+			controller.map.setPurgable(selection,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }

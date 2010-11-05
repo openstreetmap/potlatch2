@@ -55,6 +55,20 @@ package net.systemeD.halcyon {
 			listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
 		}
 
+		protected function removeGenericEventListeners():void {
+            entity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
+			entity.removeEventListener(Connection.ADDED_TO_RELATION, relationAdded);
+			entity.removeEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved);
+			entity.removeEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
+			entity.removeEventListener(Connection.RESUME_REDRAW, resumeRedraw);
+			listenSprite.removeEventListener(MouseEvent.CLICK, mouseEvent);
+			listenSprite.removeEventListener(MouseEvent.DOUBLE_CLICK, mouseEvent);
+			listenSprite.removeEventListener(MouseEvent.ROLL_OVER, mouseEvent);
+			listenSprite.removeEventListener(MouseEvent.MOUSE_OUT, mouseEvent);
+			listenSprite.removeEventListener(MouseEvent.MOUSE_DOWN, mouseEvent);
+			listenSprite.removeEventListener(MouseEvent.MOUSE_UP, mouseEvent);
+			listenSprite.removeEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
+		}
 
 		// -----------------------------------------------------------------
 		// Event listeners
