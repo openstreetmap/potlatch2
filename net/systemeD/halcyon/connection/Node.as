@@ -79,7 +79,16 @@ package net.systemeD.halcyon.connection {
               trace("not enough ways");
             }
         }
-		
+
+        public function isDupe():Boolean {
+            // need to rethink this, since nodes can be on different layers
+            var connection:Connection = Connection.getConnection();
+            if (connection.nodePositions[lat+","+lon] && connection.nodePositions[lat+","+lon].length > 1) {
+              return true;
+            }
+            return false;
+        }
+
 		internal override function isEmpty():Boolean {
 			return deleted;
 		}

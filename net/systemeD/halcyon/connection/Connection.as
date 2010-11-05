@@ -97,6 +97,7 @@ package net.systemeD.halcyon.connection {
 		public var waycount:int=0;
 		public var relationcount:int=0;
         private var traces:Array = [];
+        public var nodePositions:Object = {};
         protected var traces_loaded:Boolean = false;
 
         protected function get nextNegative():Number {
@@ -106,6 +107,11 @@ package net.systemeD.halcyon.connection {
         protected function setNode(node:Node, queue:Boolean):void {
 			if (!nodes[node.id]) { nodecount++; }
             nodes[node.id] = node;
+            var a:String = node.lat+","+node.lon
+            if(!nodePositions[a]) {
+              nodePositions[a] = [];
+            }
+            nodePositions[a].push(node.id);
             if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node),queue); }
         }
 

@@ -262,7 +262,7 @@ way :tiger { casing-color: #ff00ff;}
 
 relation[type=restriction] node { z-index:11; icon-image: icons/restriction.png; }
 
-
+node :dupe { z-index: 9; icon-image: circle; icon-width:8; color: white; opacity: 0.4; casing-opacity: 0.4; casing-color: red; casing-width: 3; }
 node :hoverway { z-index: 9; icon-image: square; icon-width: 7; color: blue; }
 node !:drawn :poi { z-index: 2; icon-image: circle; icon-width: 4; color: green; casing-color: black; casing-width: 1; }
 node !:drawn :hasTags { z-index: 9; icon-image: circle; icon-width: 4; color: black; }

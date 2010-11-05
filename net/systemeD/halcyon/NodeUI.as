@@ -51,6 +51,7 @@ package net.systemeD.halcyon {
 			tags=applyStateClasses(tags);
 			if (!entity.hasParentWays) { tags[':poi']='yes'; }
             if (entity.hasInterestingTags()) { tags[':hasTags']='yes'; }
+            if (Node(entity).isDupe()) { tags[':dupe']='yes'; }
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
 				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
 			}
