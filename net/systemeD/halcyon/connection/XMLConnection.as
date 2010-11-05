@@ -374,7 +374,11 @@ package net.systemeD.halcyon.connection {
         }
 
         override public function fetchTrace(id:Number, callback:Function):void {
-            sendOAuthGet(Connection.apiBaseURL+"gpx/"+id+"/data.xml", callback, errorOnMapLoad, mapLoadStatus); // needs error handlers
+            sendOAuthGet(Connection.apiBaseURL+"gpx/"+id+"/data.xml", 
+				function(e:Event):void { 
+            		dispatchEvent(new Event(LOAD_COMPLETED));
+					callback(e);
+				}, errorOnMapLoad, mapLoadStatus); // needs error handlers
             dispatchEvent(new Event(LOAD_STARTED)); //specifc to map or reusable?
         }
 	}
