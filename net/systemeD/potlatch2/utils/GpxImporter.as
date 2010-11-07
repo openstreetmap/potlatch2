@@ -8,7 +8,7 @@ package net.systemeD.potlatch2.utils {
 
     /**
     * Implements parsing and loading of GPX files.
-    * For loading GPX traces from the OSM API, see halcyon/connenction/Trace.as
+    * For loading GPX traces from the OSM API, see halcyon/connection/Trace.as
     */
 	public class GpxImporter extends Importer {
 
@@ -40,7 +40,8 @@ package net.systemeD.potlatch2.utils {
 				for each (var tag:XML in wpt.children()) {
 					tags[tag.name()]=tag.toString();
 				}
-				container.createNode(tags, wpt.@lat, wpt.@lon);
+				var node:Node=container.createNode(tags, wpt.@lat, wpt.@lon);
+				container.registerPOI(node);
 			}
 		}
 	}

@@ -122,7 +122,8 @@ package net.systemeD.halcyon.connection {
                 for each (var tag:XML in wpt.children()) {
                     tags[tag.name()]=tag.toString();
                 }
-                layer.createNode(tags, wpt.@lat, wpt.@lon);
+                var node:Node=layer.createNode(tags, wpt.@lat, wpt.@lon);
+				layer.registerPOI(node);
             }
             layer.paint.redraw();
         }

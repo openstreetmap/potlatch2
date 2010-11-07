@@ -18,6 +18,7 @@ package net.systemeD.halcyon {
 		public var ways:Object=new Object();			// geodata
 		public var nodes:Object=new Object();			//  |
 		public var relations:Object=new Object();		//  |
+		private var pois:Array=[];						//  |
         private var negativeID:Number = -1;
 
 		public function VectorLayer(n:String,m:Map,s:String) {
@@ -48,6 +49,13 @@ package net.systemeD.halcyon {
 			relations[negativeID]=relation; negativeID--;
             return relation;
 		}
+        public function registerPOI(node:Node):void {
+            if (pois.indexOf(node)<0) { pois.push(node); }
+        }
+        public function unregisterPOI(node:Node):void {
+			var index:uint = pois.indexOf(node);
+			if ( index >= 0 ) { pois.splice(index,1); }
+        }
 
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
 			// ** FIXME: this is just copied-and-pasted from Connection.as, which really isn't very
@@ -57,10 +65,9 @@ package net.systemeD.halcyon {
 				if (way.within(left,right,top,bottom)) { o.waysInside.push(way); }
 				                                  else { o.waysOutside.push(way); }
 			}
-			// ** FIXME: this needs to do POIs, not nodes (i.e. we need registerPOI for vector layers too)
-			for each (var poi:Node in nodes) {
+			for each (var poi:Node in pois) {
 				if (poi.within(left,right,top,bottom)) { o.poisInside.push(poi); }
-				                                   else { o.poisOutside.push(poi); }
+				                                  else { o.poisOutside.push(poi); }
 			}
 			return o;
 		}
@@ -97,7 +104,8 @@ package net.systemeD.halcyon {
 			} else if (entity is Node && !entity.hasParentWays) {
 				// copy node through to main layer
 				// ** should be properly undoable
-				oldNode=Node(entity)
+				oldNode=Node(entity);
+				unregisterPOI(oldNode);
 				var newPoiAction:CreatePOIAction = new CreatePOIAction(
 					oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
 				MainUndoStack.getGlobalStack().addAction(newPoiAction);
@@ -111,7 +119,7 @@ package net.systemeD.halcyon {
 		public function blank():void {
 			for each (var node:Node in nodes) { paint.deleteNodeUI(node); }
 			for each (var way:Way in ways) { paint.deleteWayUI(way); }
-			relations={}; nodes={}; ways={};
+			relations={}; nodes={}; ways={}; pois=[];
 		}
 
 	}
