@@ -196,16 +196,19 @@ package net.systemeD.halcyon {
 			if (Way(entity).isArea()) { tags[':area']='yes'; }
             if (entity.isUneditedTiger() && Globals.vars.highlightTiger) { tags[':tiger']='yes'; }
 
-			// Which layer?
-			layer=0;
-			if (tags['layer']) { layer=Math.min(Math.max(tags['layer'],paint.minlayer),paint.maxlayer); }
-
 			// Keep track of maximum stroke width for hitzone
 			var maxwidth:Number=4;
 
 			// Create styleList if not already drawn
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
 				styleList=paint.ruleset.getStyles(entity, tags, paint.map.scale);
+			}
+
+			// Which layer?
+			layer=styleList.layerOverride();
+			if (isNaN(layer)) {
+				layer=0;
+				if (tags['layer']) { layer=Math.min(Math.max(tags['layer'],paint.minlayer),paint.maxlayer); }
 			}
 
 			// Iterate through each sublayer, drawing any styles on that layer

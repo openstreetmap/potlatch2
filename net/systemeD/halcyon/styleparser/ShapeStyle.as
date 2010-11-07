@@ -21,11 +21,13 @@ package net.systemeD.halcyon.styleparser {
 		public var casing_opacity:Number;
 		public var casing_dashes:Array=[];
 		
+		public var layer:Number;				// optional layer override (usually set by OSM tag)
+		
 		override public function get properties():Array {
 			return [
 				'width','color','opacity','dashes','linecap','linejoin','line_style',
 				'fill_color','fill_opacity','fill_image',
-				'casing_width','casing_color','casing_opacity','casing_dashes'
+				'casing_width','casing_color','casing_opacity','casing_dashes','layer'
 			];
 		}
 		

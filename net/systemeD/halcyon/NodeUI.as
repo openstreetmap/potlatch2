@@ -56,6 +56,9 @@ package net.systemeD.halcyon {
 				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
 			}
 
+			var suggestedLayer:Number=styleList.layerOverride();
+			if (!isNaN(suggestedLayer)) { layer=suggestedLayer; }
+
 			var inWay:Boolean=entity.hasParentWays;
 			var hasStyles:Boolean=styleList.hasStyles();
 			
