@@ -52,14 +52,15 @@ package net.systemeD.halcyon {
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
 			// ** FIXME: this is just copied-and-pasted from Connection.as, which really isn't very
 			// good practice. Is there a more elegant way of doing it?
-			var o:Object = { nodesInside: [], nodesOutside: [], waysInside: [], waysOutside: [] };
+			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [] };
 			for each (var way:Way in ways) {
 				if (way.within(left,right,top,bottom)) { o.waysInside.push(way); }
 				                                  else { o.waysOutside.push(way); }
 			}
-			for each (var node:Node in nodes) {
-				if (node.within(left,right,top,bottom)) { o.nodesInside.push(node); }
-				                                   else { o.nodesOutside.push(node); }
+			// ** FIXME: this needs to do POIs, not nodes (i.e. we need registerPOI for vector layers too)
+			for each (var poi:Node in nodes) {
+				if (poi.within(left,right,top,bottom)) { o.poisInside.push(poi); }
+				                                   else { o.poisOutside.push(poi); }
 			}
 			return o;
 		}

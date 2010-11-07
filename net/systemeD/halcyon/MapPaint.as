@@ -112,7 +112,7 @@ package net.systemeD.halcyon {
 		}
 
 		public function updateEntityUIs(o:Object, redraw:Boolean, remove:Boolean):void {
-			var way:Way, node:Node;
+			var way:Way, poi:Node;
 
 			for each (way in o.waysInside) {
 				if (!wayuis[way.id]) { createWayUI(way); }
@@ -129,17 +129,17 @@ package net.systemeD.halcyon {
 				}
 			}
 
-			for each (node in o.nodesInside) {
-				if (!nodeuis[node.id]) { createNodeUI(node); }
-				else if (redraw) { nodeuis[node.id].redraw(); }
+			for each (poi in o.poisInside) {
+				if (!nodeuis[poi.id]) { createNodeUI(poi); }
+				else if (redraw) { nodeuis[poi.id].redraw(); }
 			}
 
 			if (remove) {
-				for each (node in o.nodesOutside) { 
-					if (nodeuis[node.id] && !nodeuis[node.id].purgable) {
-						if (redraw) { nodeuis[node.id].redraw(); }
+				for each (poi in o.poisOutside) { 
+					if (nodeuis[poi.id] && !nodeuis[poi.id].purgable) {
+						if (redraw) { nodeuis[poi.id].redraw(); }
 					} else {
-						deleteNodeUI(node);
+						deleteNodeUI(poi);
 					}
 				}
 			}
