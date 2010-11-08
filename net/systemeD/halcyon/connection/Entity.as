@@ -145,9 +145,11 @@ package net.systemeD.halcyon.connection {
 		    deleted = isDeleted;
             if (this is Node) {
               var n:Node = Node(this);
-              Connection.getConnection().removeDupe(n);
-            } else if (this is Node) {
+              if (isDeleted) {
+                Connection.getConnection().removeDupe(n);
+              } else {
               Connection.getConnection().addDupe(n.id, n.lat, n.lon);
+              }
             }
 		}
 		
