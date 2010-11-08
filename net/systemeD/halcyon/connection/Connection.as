@@ -69,6 +69,7 @@ package net.systemeD.halcyon.connection {
         public static var RELATION_RENUMBERED:String = "relation_renumbered";
         public static var TAG_CHANGED:String = "tag_change";
         public static var NODE_MOVED:String = "node_moved";
+        public static var NODE_ALTERED:String = "node_altered";
         public static var WAY_NODE_ADDED:String = "way_node_added";
         public static var WAY_NODE_REMOVED:String = "way_node_removed";
         public static var WAY_REORDERED:String = "way_reordered";
@@ -365,6 +366,9 @@ package net.systemeD.halcyon.connection {
               nodePositions[a] = [];
             }
             nodePositions[a].push(node);
+            for each (var n:Node in nodePositions[a]) {
+              n.dispatchEvent(new Event(Connection.NODE_ALTERED));
+            }
         }
 
         public function removeDupe(node:Node):void {
@@ -377,6 +381,9 @@ package net.systemeD.halcyon.connection {
               }
             }
             nodePositions[a] = dupes;
+            for each (var n:Node in nodePositions[a]) {
+              n.dispatchEvent(new Event(Connection.NODE_ALTERED));
+            }
         }
 
         public function nodesAtPosition(lat:Number, lon:Number):uint {

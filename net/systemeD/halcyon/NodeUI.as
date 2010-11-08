@@ -30,6 +30,7 @@ package net.systemeD.halcyon {
 				}
 			}
 			entity.addEventListener(Connection.NODE_MOVED, nodeMoved);
+            entity.addEventListener(Connection.NODE_ALTERED, nodeAltered);
             attachRelationListeners();
 			redraw();
 		}
@@ -37,11 +38,16 @@ package net.systemeD.halcyon {
 		public function removeEventListeners():void {
 			removeGenericEventListeners();
 			entity.removeEventListener(Connection.NODE_MOVED, nodeMoved);
+            entity.removeEventListener(Connection.NODE_ALTERED, nodeAltered);
 		}
 
 		public function nodeMoved(event:Event):void {
 		    updatePosition();
 		}
+
+        private function nodeAltered(event:Event):void {
+            redraw();
+        }
 
 		override public function doRedraw():Boolean {
 			if (!paint.ready) { return false; }
