@@ -32,12 +32,11 @@ package net.systemeD.halcyon.connection {
 
         private function setLatLonImmediate(lat:Number, lon:Number):void {
             var connection:Connection = Connection.getConnection();
-            if (connection.getNode(this.id) == this) { // don't do this for nodes in Vector Backgrounds
-              connection.updateDupes(this.id, this._lat, this._lon, lat, lon);
-            }
+            connection.removeDupe(this);
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;
+            connection.addDupe(this);
 			for each (var way:Way in this.parentWays) {
 				way.expandBbox(this);
 			}

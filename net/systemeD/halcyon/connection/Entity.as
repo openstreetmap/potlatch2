@@ -148,7 +148,7 @@ package net.systemeD.halcyon.connection {
               if (isDeleted) {
                 Connection.getConnection().removeDupe(n);
               } else {
-              Connection.getConnection().addDupe(n.id, n.lat, n.lon);
+                Connection.getConnection().addDupe(n);
               }
             }
 		}
