@@ -97,7 +97,7 @@ package net.systemeD.halcyon.connection {
 		public var waycount:int=0;
 		public var relationcount:int=0;
         private var traces:Array = [];
-        public var nodePositions:Object = {};
+        private var nodePositions:Object = {};
         protected var traces_loaded:Boolean = false;
 
         protected function get nextNegative():Number {
@@ -386,6 +386,13 @@ package net.systemeD.halcyon.connection {
               }
             }
             nodePositions[a] = dupes;
+        }
+
+        public function nodesAtPosition(lat:Number, lon:Number):uint {
+            if (nodePositions[lat+","+lon]) {
+              return nodePositions[lat+","+lon].length;
+            }
+            return 0;
         }
 
         // these are functions that the Connection implementation is expected to

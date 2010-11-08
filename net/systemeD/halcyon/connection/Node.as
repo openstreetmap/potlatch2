@@ -87,7 +87,7 @@ package net.systemeD.halcyon.connection {
         public function isDupe():Boolean {
             var connection:Connection = Connection.getConnection();
             if (connection.getNode(this.id) == this // node could be part of a vector layer
-                && connection.nodePositions[lat+","+lon] && connection.nodePositions[lat+","+lon].length > 1) {
+                && connection.nodesAtPosition(lat, lon) > 1) {
               return true;
             }
             return false;
