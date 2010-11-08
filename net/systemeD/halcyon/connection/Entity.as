@@ -143,6 +143,12 @@ package net.systemeD.halcyon.connection {
 		
 		public function setDeletedState(isDeleted:Boolean):void {
 		    deleted = isDeleted;
+            if (this is Node) {
+              var n:Node = Node(this);
+              Connection.getConnection().removeDupe(n);
+            } else if (this is Node) {
+              Connection.getConnection().addDupe(n.id, n.lat, n.lon);
+            }
 		}
 		
 		internal function isEmpty():Boolean {

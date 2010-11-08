@@ -31,6 +31,10 @@ package net.systemeD.halcyon.connection {
         }
 
         private function setLatLonImmediate(lat:Number, lon:Number):void {
+            var connection:Connection = Connection.getConnection();
+            if (connection.getNode(this.id) == this) { // don't do this for nodes in Vector Backgrounds
+              connection.updateDupes(this.id, this._lat, this._lon, lat, lon);
+            }
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;
@@ -81,9 +85,9 @@ package net.systemeD.halcyon.connection {
         }
 
         public function isDupe():Boolean {
-            // need to rethink this, since nodes can be on different layers
             var connection:Connection = Connection.getConnection();
-            if (connection.nodePositions[lat+","+lon] && connection.nodePositions[lat+","+lon].length > 1) {
+            if (connection.getNode(this.id) == this // node could be part of a vector layer
+                && connection.nodePositions[lat+","+lon] && connection.nodePositions[lat+","+lon].length > 1) {
               return true;
             }
             return false;

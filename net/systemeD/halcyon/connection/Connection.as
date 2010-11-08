@@ -107,11 +107,7 @@ package net.systemeD.halcyon.connection {
         protected function setNode(node:Node, queue:Boolean):void {
 			if (!nodes[node.id]) { nodecount++; }
             nodes[node.id] = node;
-            var a:String = node.lat+","+node.lon
-            if(!nodePositions[a]) {
-              nodePositions[a] = [];
-            }
-            nodePositions[a].push(node.id);
+            addDupe(node.id, node.lat, node.lon);
             if (node.loaded) { sendEvent(new EntityEvent(NEW_NODE, node),queue); }
         }
 
@@ -360,6 +356,36 @@ package net.systemeD.halcyon.connection {
 
         public function getTraces():Array {
             return traces;
+        }
+
+        public function updateDupes(id:Number, origLat:Number, origLon:Number, newLat:Number, newLon:Number):void {
+            var dupes:Array = [];
+            for each (var dupe:Number in nodePositions[origLat+","+origLon]) {
+              if (dupe != id) {
+                dupes.push(dupe)
+              }
+            }
+            nodePositions[origLat+","+origLon] = dupes;
+            addDupe(id, newLat, newLon);
+        }
+
+        public function addDupe(id:Number, lat:Number, lon:Number):void {
+            var a:String = lat+","+lon;
+            if(!nodePositions[a]) {
+              nodePositions[a] = [];
+            }
+            nodePositions[a].push(id);
+        }
+
+        public function removeDupe(node:Node):void {
+            var a:String = node.lat+","+node.lon;
+            var dupes:Array = [];
+            for each (var dupe:Number in nodePositions[a]) {
+              if (dupe != node.id) {
+                dupes.push(dupe)
+              }
+            }
+            nodePositions[a] = dupes;
         }
 
         // these are functions that the Connection implementation is expected to
