@@ -39,7 +39,10 @@ Potlatch 2: main outstanding issues
 * small node hitzone when creating areas - hitzone and mouseover UI don't match up
 * GPS loading should have a loading... label
 * Pressing undo/redo sometimes doesn't change controllerstate. (e.g. create POI + undo leaves the tag panel still referring to POI)
+* The standard keyboard shortcut of cmd+z doesn't work for undo, instead it just enters a z.
 * Deleting a way containing POIs leaves the POIs in wrong state (black vs green) - sorts out on mouseover
+* In the advanced tag view if you use the back delete key to delete it will delete the first one or two characters and then jump to the end of the text field. (Tested in Mac OS X and Windows) (Build 24127 geowiki.com)
+* Draw a new way, assign a road type to it, and then switch to advanced view and note that the tags are not there. (Build 24127 geowiki.com)
 
 == Rendering (Halcyon) ==
 
