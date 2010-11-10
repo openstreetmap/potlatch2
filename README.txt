@@ -45,6 +45,10 @@ Compiling Halcyon as standalone viewer:
 
 * ant halcyon
 
+You can create class documentation (in resources/docs) using asdoc
+
+* ant docs
+
 If you're using Mac OS X, you may need to tell ant to use more memory, by
 typing export ANT_OPTS=-Xmx500M beforehand (you can put this in your .profile).
 

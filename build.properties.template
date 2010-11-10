@@ -4,6 +4,9 @@
 # e.g. FLEX_HOME=${env.FLEX_HOME}
 FLEX_HOME=/path/to/your/flex/sdk
 
+# asdocs binary
+# e.g. ASDOC=${FLEX_HOME}/bin/asdoc.exe
+ASDOC=${FLEX_HOME}/bin/asdoc
 # this points to your project's src directory
 # {$basedir} is a default variable that can be used in any Ant script
 # SRC_DIR =${basedir}/src

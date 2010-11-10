@@ -56,4 +56,67 @@
   <target name="halcyon">
     <mxmlc file="halcyon_viewer.as" />
   </target>
+
+  <!-- note that there's an asdoc target in Flex 4, if/when we move to that -->
+  <target name="docs" depends="manifests">
+    <exec executable="${ASDOC}" failonerror="true">
+      <arg line="-source-path ."/>
+      <arg line="-doc-sources net/systemeD/"/>
+      <arg line="-external-library-path=lib/"/>
+      <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes}"/>
+      <arg line="-output resources/docs/"/>
+      <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
+      <arg line="-main-title 'Halcyon and Poltatch2 Developer documentation'" />
+      <arg line="-footer 'Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
+      <arg line="-package net.systemeD.halcyon 'The AS3 rendering library'" />
+      <arg line="-package net.systemeD.potlatch2 'The OpenStreetMap editor'" />
+      <arg line="-left-frameset-width 300" />
+    </exec>
+  </target>
+
+  <target name="manifests">
+        <!-- Adapted from http://dreamingwell.com/articles/archives/2009/12/excluding-direc.php -->
+        <!-- Generating documentation for a class generates all the dependant documentation too. We
+             don't want to do this for certain projects like org.vanrijkom etc (.swc files are
+             automatically ignored). Unfortunately asdoc only has options for excluding particular
+             classes, and there's lots of them - so this stuff autogenerates the class lists that
+             we want to ignore. -->
+
+        <!-- Get the list of all files in the org directory -->
+        <fileset id="org_sources" dir="${basedir}/org/" />
+        <!-- convert the names of excluded classes to packages with class names -->
+        <pathconvert property="org_classes" pathsep=" " refid="org_sources">
+                <chainedmapper>
+                        <globmapper from="${basedir}/*" to="*"/>
+                        <mapper type="package" from="*.as" to="*"/>
+                </chainedmapper>
+        </pathconvert>
+
+        <fileset id="it_sources" dir="${basedir}/it/" />
+        <!-- convert the names of excluded classes to packages with class names -->
+        <pathconvert property="it_classes" pathsep=" " refid="it_sources">
+                <chainedmapper>
+                        <globmapper from="${basedir}/*" to="*"/>
+                        <mapper type="package" from="*.as" to="*"/>
+                </chainedmapper>
+        </pathconvert>
+
+        <fileset id="hxasm_sources" dir="${basedir}/hxasm/" />
+        <!-- convert the names of excluded classes to packages with class names -->
+        <pathconvert property="hxasm_classes" pathsep=" " refid="hxasm_sources">
+                <chainedmapper>
+                        <globmapper from="${basedir}/*" to="*"/>
+                        <mapper type="package" from="*.as" to="*"/>
+                </chainedmapper>
+        </pathconvert>
+
+        <!-- if we end up with third-party stuff in the net/ folder, then do something like this -->
+        <!-- <fileset id="net_sources" dir="${basedir}/net/">
+               <exclude name="**net.systemeD**"/>
+        </fileset> -->
+
+        <!-- echo the exlcusions for debugging purposes -->
+        <!--<echo message="manifests = ${org_classes} ${it_classes} ${hxasm_classes}"/>-->
+  </target>
+
 </project>
