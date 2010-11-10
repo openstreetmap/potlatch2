@@ -7,6 +7,12 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.RuleSet;
 
+    /** The VectorLayer class is used for the concept of Vector Background Layers.
+    * It is similar in concept to the various Connection layers used for the core
+    * OpenStreetMap data, and as such it stores its own list of nodes, ways and relations.
+    * The most interesting function is pullThrough which allows moving entities out
+    * of a VectorLayer and into the main map layer
+    */
 	public class VectorLayer extends Object {
 
 		public var map:Map;
@@ -21,6 +27,11 @@ package net.systemeD.halcyon {
 		private var pois:Array=[];						//  |
         private var negativeID:Number = -1;
 
+        /** Create a new VectorLayer
+        * @param n The name of the VectorLayer (eg 'GPS tracks')
+        * @param m The map. You probably have a global reference to this
+        * @param s The style you wish to use (eg 'gpx.css')
+        */
 		public function VectorLayer(n:String,m:Map,s:String) {
 			name=n;
 			map=m;
@@ -71,7 +82,14 @@ package net.systemeD.halcyon {
 			}
 			return o;
 		}
-		
+
+        /**
+        * Transfers an entity from the VectorLayer into the main layer
+        * @param entity The entity from the VectorLayer that you want to transfer.
+        * @param connection The Connection instance to transfer to (eg Connection.getConnection() )
+        *
+        * @return either the newly created entity, or null
+        */
 		public function pullThrough(entity:Entity,connection:Connection):Entity {
 			var i:uint=0;
 			var oldNode:Node, newNode:Node;
@@ -115,7 +133,11 @@ package net.systemeD.halcyon {
 			}
 			return null;
 		}
-		
+
+        /**
+        * Remove all the nodes, ways, and relations from the VectorLayer.
+        * Also removes the associated NodeUIs, WayUIs and POIs
+        */
 		public function blank():void {
 			for each (var node:Node in nodes) { paint.deleteNodeUI(node); }
 			for each (var way:Way in ways) { paint.deleteWayUI(way); }
