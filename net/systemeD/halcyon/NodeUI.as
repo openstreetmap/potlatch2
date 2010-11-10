@@ -127,6 +127,7 @@ package net.systemeD.halcyon {
 					var name:Sprite=new Sprite();
 					addToLayer(name,NAMESPRITE);
 					t.writeNameLabel(name,a,0,0);
+                    loaded=true;
 				}
 			}
 			if (!r) { return false; }
