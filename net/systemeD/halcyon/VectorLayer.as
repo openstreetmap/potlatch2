@@ -41,20 +41,35 @@ package net.systemeD.halcyon {
 		}
 
 		public function redrawFromCSS(style:String):void {
-			paint.ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,paint.redraw);
+			paint.ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,paint.redraw,paint.redrawPOIs);
 			paint.ruleset.loadFromCSS(style);
 		}
-		
+
+        /** Create a new node on the vector layer. Note that the node won't show up until on the map
+        * until the the relevant nodeUI is created, so you will need to instruct the paint to create one
+        *
+        * e.g. layer.paint.updateEntityUIs(layer.getObjectsByBbox(...)...);
+        */
 		public function createNode(tags:Object,lat:Number,lon:Number):Node {
 			var node:Node = new Node(negativeID, 0, tags, true, lat, lon);
 			nodes[negativeID]=node; negativeID--;
 			return node;
 		}
+
+        /**
+        * @param tags The tags for the new Way
+        * @param nodes An array of Node objects
+        */
 		public function createWay(tags:Object,nodes:Array):Way {
 			var way:Way = new Way(negativeID, 0, tags, true, nodes.concat());
 			ways[negativeID]=way; negativeID--;
 			return way;
 		}
+
+        /**
+        * @param tags The tags for the new relation
+        * @param members An array of RelationMember objects
+        */
 		public function createRelation(tags:Object,members:Array):Relation {
             var relation:Relation = new Relation(negativeID, 0, tags, true, members.concat());
 			relations[negativeID]=relation; negativeID--;
