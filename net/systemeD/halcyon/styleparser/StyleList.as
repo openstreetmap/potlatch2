@@ -1,15 +1,14 @@
 package net.systemeD.halcyon.styleparser {
 
+    /**
+    * A StyleList object is the full list of all styles applied to
+    * a drawn entity (i.e. node/way).
+    *
+    * Each array element applies to that sublayer (z-index). If there
+    * is no element, nothing is drawn on that sublayer.
+    */
+
 	public class StyleList {
-
-		/*
-			A StyleList object is the full list of all styles applied to 
-			a drawn entity (i.e. node/way).
-			
-			Each array element applies to that sublayer (z-index). If there
-			is no element, nothing is drawn on that sublayer.
-
-		*/
 
 		public var shapeStyles:Object={};
 		public var textStyles:Object={};
@@ -17,7 +16,10 @@ package net.systemeD.halcyon.styleparser {
 		public var shieldStyles:Object={};
 		public var maxwidth:Number=0;
 		public var sublayers:Array=[];
-		public var validAt:int=-1;				// zoom level at which this StyleList is valid, or -1 for all
+        /**
+        * zoom level at which this StyleList is valid, or -1 for all
+        */
+		public var validAt:int=-1;
 
 		public function hasStyles():Boolean {
 			return ( hasShapeStyles() || hasTextStyles() || hasPointStyles() || hasShieldStyles() );
