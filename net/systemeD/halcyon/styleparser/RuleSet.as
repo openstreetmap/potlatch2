@@ -287,8 +287,8 @@ package net.systemeD.halcyon.styleparser {
 					loader.info['filename']=filename;
 					loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
 					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
-					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler,	false, 0, true);
-					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler,			false, 0, true);
+					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	onImageLoadSecurityError,	false, 0, true);
+					loader.addEventListener(IOErrorEvent.IO_ERROR,				onImageLoadioError,			false, 0, true);
 					loader.load(request.request);
 				}
 			}
@@ -311,9 +311,23 @@ package net.systemeD.halcyon.styleparser {
 			imageWidths[fn]=event.target.width;
 			// ** do we need to explicitly remove the loader object now?
 
-			iconsToLoad--;
-			if (iconsToLoad==0 && iconCallback!=null) { iconCallback(); }
+			oneLessImageToLoad();
 		}
+
+        private function oneLessImageToLoad():void {
+            iconsToLoad--;
+            if (iconsToLoad<=0 && iconCallback!=null) { iconCallback(); }
+        }
+
+        private function onImageLoadioError ( event:IOErrorEvent ):void {
+            trace("ioerrorevent: "+event.target.info['filename']);
+            oneLessImageToLoad();
+        }
+
+        private function onImageLoadSecurityError ( event:SecurityErrorEvent ):void {
+            trace("securityerrorevent: "+event.target.info['filename']);
+            oneLessImageToLoad();
+        }
 
 		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
 		private function securityErrorHandler( event:SecurityErrorEvent ):void { Globals.vars.root.addDebug("securityerrorevent"); }
