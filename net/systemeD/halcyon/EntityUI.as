@@ -169,6 +169,7 @@ package net.systemeD.halcyon {
         }
 
         public function setStateClass(stateType:String, isOn:*):Boolean {
+			if ( isOn == true ) { isOn='yes'; }
             if ( isOn && stateClasses[stateType] != isOn ) {
                 stateClasses[stateType] = isOn;
 				invalidateStyleList();

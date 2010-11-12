@@ -54,10 +54,10 @@ package net.systemeD.halcyon {
 			if (entity.deleted) { return false; }
 
 			var tags:Object = entity.getTagsCopy();
+			setStateClass('poi', !entity.hasParentWays);
+            setStateClass('hasTags', entity.hasInterestingTags());
+            setStateClass('dupe', Node(entity).isDupe());
 			tags=applyStateClasses(tags);
-			if (!entity.hasParentWays) { tags[':poi']='yes'; }
-            if (entity.hasInterestingTags()) { tags[':hasTags']='yes'; }
-            if (Node(entity).isDupe()) { tags[':dupe']='yes'; }
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
 				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
 			}
