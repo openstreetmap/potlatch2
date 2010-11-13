@@ -57,11 +57,10 @@ package net.systemeD.potlatch2 {
             return _connection;
         }
         
-        public function updateSelectionUI():void {
-			var entity:Entity=state.firstSelected;
-            tagViewer.setEntity(entity);
+		public function updateSelectionUI():void {
+			tagViewer.setEntity(state.selection);
 			toolbox.updateSelectionUI();
-        }
+		}
         
         private function keyDownHandler(event:KeyboardEvent):void {
 			keys[event.keyCode]=true;

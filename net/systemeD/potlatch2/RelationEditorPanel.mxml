@@ -24,7 +24,7 @@
 
         public function checkRelation():void {
             if ( _relation != null )
-                tagViewer.setEntity(_relation);
+                tagViewer.setEntity([_relation]);
         }
     ]]></mx:Script>	
 </mx:TitleWindow>

@@ -120,6 +120,10 @@
 			enabled="{editorStack is SuperTabNavigator &amp;&amp; stack.selectedIndex==0}" />
 	  </mx:HBox>
   </mx:VBox>
+
+  <mx:VBox id="multiplePanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <mx:Text id="multiplePanelText" text="You have selected multiple items." width="100%" styleName="helpInfo" />
+  </mx:VBox>
 </mx:ViewStack>
 
   <mx:Script><![CDATA[
@@ -150,29 +154,36 @@
       private var tw:CategorySelector = null;
       private var feature:Feature = null;
 
-      public function setEntity(entity:Entity):void {
-          UIComponent.suspendBackgroundProcessing();
-          if ( selectedEntity != entity ) {
-              if ( selectedEntity != null )
-                  selectedEntity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
-              selectedEntity = entity;
-              if ( selectedEntity != null )
-                  selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged);
-          }
-
-          if ( advancedID != null )
-              setupAdvanced(entity);
-          if (entity is Relation) {
-              stack.addChild(membersVBox);
-          }
-          refreshFeatureIcon(); 
-          if (selectedEntity == null) {
-            sidebar.selectedChild = dndPanel;
-          } else {
-            initialiseEditors();
-            sidebar.selectedChild = tagsPanel;
-          }
-          UIComponent.resumeBackgroundProcessing();
+	  public function setEntity(entities:Array):void {
+		UIComponent.suspendBackgroundProcessing();
+		
+		var firstSelected:Entity=null;
+		if (entities.length==1) { firstSelected=entities[0]; }
+		
+		if (selectedEntity!=firstSelected && selectedEntity!=null) {
+			selectedEntity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
+		}
+		
+		if (entities.length==0) {
+			// Nothing selected, so show drag-and-drop panel
+			sidebar.selectedChild = dndPanel;
+		
+		} else if (entities.length==1) {
+			// Single entity selected, so show tag panel
+			selectedEntity=firstSelected;
+			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
+			if (advancedID!=null) { setupAdvanced(firstSelected); }
+			if (firstSelected is Relation) { stack.addChild(membersVBox); }
+			refreshFeatureIcon(); 
+			initialiseEditors();
+			sidebar.selectedChild = tagsPanel;
+		
+		} else {
+			// Multiple selection, so for now show a largely blank panel/
+			// ** TODO - proper multiple selection tagging
+			sidebar.selectedChild = multiplePanel;
+		}
+		UIComponent.resumeBackgroundProcessing();
       }
 
       private function refreshFeatureIcon():void {
