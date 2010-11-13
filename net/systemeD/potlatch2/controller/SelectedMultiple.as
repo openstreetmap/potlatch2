@@ -41,6 +41,11 @@ package net.systemeD.potlatch2.controller {
 			return cs ? cs : this;
 		}
 
+		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+			var cs:ControllerState = sharedKeyboardEvents(event);
+			return cs ? cs : this;
+		}
+
 		override public function enterState():void {
 			selection=initSelection.concat();
 			for each (var entity:Entity in selection) {

@@ -13,13 +13,13 @@ package net.systemeD.potlatch2.tools {
      * thought it was successful and false if it failed. If it fails it does not
      * modify the way.
      */
-    public static function quadrilateralise(way:Way):Boolean {
+    public static function quadrilateralise(way:Way,performAction:Function):Boolean {
       // needs a closed way to work properly.
       if (!way.isArea()) {
 	return false;
       }
 
-      var functor:Quadrilateralise = new Quadrilateralise(way);
+      var functor:Quadrilateralise = new Quadrilateralise(way,performAction);
       var score:Number = functor.goodness;
       for (var i:uint = 0; i < NUM_STEPS; ++i) {
 	functor.step();
@@ -40,10 +40,12 @@ package net.systemeD.potlatch2.tools {
 
     private var way:Way;
     private var points:Array;
+    private var performAction:Function;
     
     // i wanted this to be private, but AS3 doesn't allow that. so please don't use it outside this package!
-    public function Quadrilateralise(way_:Way) {
+    public function Quadrilateralise(way_:Way, performAction_:Function) {
       way = way_;
+      performAction = performAction_;
       points = way.sliceNodes(0, way.length - 1).map(function (n:Node, i:int, a:Array) : Point {
 	  return new Point(n.lon, n.latp);
 	});
@@ -116,7 +118,7 @@ package net.systemeD.potlatch2.tools {
       for (var i:uint = 0; i < points.length; ++i) {
         way.getNode(i).setLonLatp( points[i].x, points[i].y, moveAction.push);
       }
-      MainUndoStack.getGlobalStack().addAction( moveAction );
+      performAction(moveAction);
     }
   }
 }

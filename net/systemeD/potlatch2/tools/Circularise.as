@@ -7,18 +7,19 @@ package net.systemeD.potlatch2.tools {
 
 	public class Circularise {
 
-		public static function circularise(way:Way,map:Map):void {
+		public static function circularise(way:Way,map:Map,performAction:Function):void {
 			if (way.length<4) { return; }
 
 			var a:Node=way.getNode(0);
 			var b:Node=way.getNode(way.length-1);
 			if (a!=b) { return; }
 
-            new Circularise(way, map).run();
+            new Circularise(way, map, performAction).run();
         }
         
         private var way:Way;
         private var map:Map;
+		private var performAction:Function;
         
         // centre
         private var cx:Number=0;
@@ -34,9 +35,10 @@ package net.systemeD.potlatch2.tools {
         private var lats:Array = [];
 		private var lons:Array = [];
 
-        function Circularise(way:Way, map:Map) {
+        function Circularise(way:Way, map:Map, performAction:Function) {
             this.way = way;
             this.map = map;
+			this.performAction = performAction;
         }
         
         private function run():void {
@@ -93,7 +95,7 @@ package net.systemeD.potlatch2.tools {
 				i++;
 			}
 
-			MainUndoStack.getGlobalStack().addAction(action);
+			performAction(action);
 		}
 
         private function calculateCentre():void {

@@ -172,6 +172,35 @@ package net.systemeD.potlatch2.controller {
 			return null;
 		}
 		
+		public function get selectedWays():Array {
+			var selectedWays:Array=[];
+			for each (var item:Entity in _selection) {
+				if (item is Way) { selectedWays.push(item); }
+			}
+			return selectedWays;
+		}
+		
+		public function hasSelectedWays():Boolean {
+			for each (var item:Entity in _selection) {
+				if (item is Way) { return true; }
+			}
+			return false;
+		}
+		
+		public function hasSelectedAreas():Boolean {
+			for each (var item:Entity in _selection) {
+				if (item is Way && Way(item).isArea()) { return true; }
+			}
+			return false;
+		}
+		
+		public function hasSelectedUnclosedWays():Boolean {
+			for each (var item:Entity in _selection) {
+				if (item is Way && !Way(item).isArea()) { return true; }
+			}
+			return false;
+		}
+			
 		// Selection setters
 		
 		public function set selection(items:Array):void {

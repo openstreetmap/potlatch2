@@ -7,7 +7,7 @@ package net.systemeD.potlatch2.tools {
 
 	public class Straighten {
 
-		public static function straighten(way:Way,map:Map):void {
+		public static function straighten(way:Way,map:Map,performAction:Function):void {
 			if (way.length<3) { return; }
 
 			var a:Node=way.getNode(0);
@@ -41,7 +41,7 @@ package net.systemeD.potlatch2.tools {
 			}
 			for each (n in todelete) { n.remove(action.push); }
 			
-			MainUndoStack.getGlobalStack().addAction(action);
+			performAction(action);
 		}
 	}
 }
