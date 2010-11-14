@@ -93,14 +93,14 @@
     private function buildShortCuts():void {
         var text:Array = [["Click+Drag", "Drag the map to move around"],
                           ["Single Click", "Start a new way"],
+                          ["Double-Click or Return", "Finish drawing way"],
                           ["Click+Drag at node or way", "Move the node or way"],
                           ["Shift+Click", "Insert point in a way"],
                           ["Shift+Click at point", "Create new way from point"],
-                          ["Shift+Click on another way", "Merge ways if they share a common endpoint (current way must already be highlighted)"],
-                          ["Double-Click or Return", "Finish drawing way"],
                           ["-","Delete point from selected way"],
                           ["Backspace/Delete", "Delete point"],
                           ["Shift+Backspace/Delete", "Delete way"]
+                          ["Ctrl+Click", "Select multiple nodes or ways (Command+Click on Mac)"],
                           ];
         var text2:Array =  [["D", "Dim features"],
                             ["R", "Repeat tags"],
