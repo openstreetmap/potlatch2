@@ -51,6 +51,7 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
+				case 66:	setSourceTag(); break;													// B - set source tag for current object
 				case 67:	controller.connection.closeChangeset(); break;							// C - close changeset
 				case 68:	controller.map.paint.alpha=1.3-controller.map.paint.alpha; return null;	// D - dim
 				case 83:	SaveManager.saveChanges(); break;										// S - save
@@ -150,6 +151,13 @@ package net.systemeD.potlatch2.controller {
 			MainUndoStack.getGlobalStack().addAction(undo);
 
 			object.resume();
+		}
+		
+		protected function setSourceTag():void {
+			if (selectCount!=1) { return; }
+			if (controller.imagerySelected && controller.imagerySelected.sourcetag) {
+				firstSelected.setTag('source',controller.imagerySelected.sourcetag, MainUndoStack.getGlobalStack().addAction);
+			}
 		}
 		
 		// Selection getters

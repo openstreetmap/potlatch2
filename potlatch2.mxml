@@ -277,48 +277,55 @@
 		
         private function onImageryLoad(event:Event):void {
 			var xml:XML = new XML(URLLoader(event.target).data);
-			var saved_url:String = SharedObject.getLocal("user_state").data['background_url'];
-			var saved_name:String= SharedObject.getLocal("user_state").data['background_name'];
+			var saved:Object;
+			if (SharedObject.getLocal("user_state").data['background_url']) {
+				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
+						url:  SharedObject.getLocal("user_state").data['background_url' ] };
+			} else {
+				saved={};
+			}
+
 			var isSet:Boolean=false;
             var backgroundSet:Boolean = false;
 
             theController.imagery=new Array(
 				{ name: "None", url: "" },
-				{ name: "Yahoo", url: "yahoo" } );
+				{ name: "Yahoo", url: "yahoo", sourcetag: "Yahoo" } );
 			for each(var set:XML in xml.set) {
 				var obj:Object={};
 				for (var a:String in set.children()) {
 					obj[set.child(a).name()]=set.child(a);
 				}
                 theController.imagery.push(obj);
-				if (obj['url']==saved_url || (obj['name']==saved_name && obj['name']!='Custom')) { isSet=true; }
+				if ((obj.url ==saved.url) ||
+				    (obj.name==saved.name && obj.name!='Custom')) { isSet=true; }
 			}
 
-            if (!isSet && saved_name != null && saved_url != null && saved_url != '' && saved_url != 'yahoo') {
-                theController.imagery.push({ name:saved_name, url:saved_url });
+            if (!isSet && saved.name && saved.url && saved.url!='' && saved.url!='yahoo') {
+                theController.imagery.push(saved);
                 isSet=true;
             }
 
 			for each (var bg:Object in theController.imagery) {
-				if (bg['name']==saved_name || bg['url']==saved_url) {
-					setBackground(bg['name'], bg['url']);
+				if (bg.name==saved.name || bg.url==saved.url) {
+					setBackground(bg);
                     backgroundSet = true;
 				}
 			}
 
             // For most contributors it's useful to set the background to yahoo by default, I reckon, but lets make it a config
             if (!backgroundSet && loaderInfo.parameters['yahoo_default'] == 'true') {
-                setBackground("Yahoo", "yahoo");
+                setBackground(theController.imagery[1]);
             }
 		}
 		
-		public function setBackground(name:String,url:String):void {
-			// ** this should take an object with all parameters (source tag, etc.)
-			if (url=='yahoo') { theMap.setBackground('') ; yahoo.show(); }
-			             else { theMap.setBackground(url); yahoo.hide(); }
+		public function setBackground(bg:Object):void {
+			if (bg.url=='yahoo') { theMap.setBackground(''    ); yahoo.show(); }
+			                else { theMap.setBackground(bg.url); yahoo.hide(); }
+			theController.imagerySelected=bg;
 			var obj:SharedObject = SharedObject.getLocal("user_state");
-			obj.setProperty("background_url",url );
-			obj.setProperty("background_name",name);
+			obj.setProperty('background_url' ,String(bg.url));
+			obj.setProperty('background_name',String(bg.name));
 			obj.flush();
 		}
 
@@ -337,7 +344,7 @@
 					obj[set.child(a).name()]=set.child(a);
 				}
                 theController.stylesheets.push(obj);
-				if (obj['url']==saved_url || (obj['name']==saved_name && obj['name']!='Custom')) { isInMenu=true; }
+				if (obj.url==saved_url || (obj.name==saved_name && obj.name!='Custom')) { isInMenu=true; }
 			}
 			if (saved_url && !isInMenu) { theController.stylesheets.push({ name:saved_name, url:saved_url }); }
 
@@ -345,8 +352,8 @@
             // or alternatively the first one on the menu,
             // or finally try 'potlatch.css'
 			for each (var ss:Object in theController.stylesheets) {
-				if (ss['name']==saved_name || ss['url']==saved_url) {
-					setStylesheet(ss['name'], ss['url']);
+				if (ss.name==saved_name || ss.url==saved_url) {
+					setStylesheet(ss.name, ss.url);
                     isSet = true;
                     break;
 				}
@@ -354,7 +361,7 @@
             if (!isSet) {
               if(theController.stylesheets.length > 0) {
                 var s:Object = theController.stylesheets[0];
-                setStylesheet(s['name'], s['url']);
+                setStylesheet(s.name, s.url);
               } else {
                 //hit and hope. FIXME should this be an error state?
                 theController.stylesheets.push({ name:'Potlatch', url:'potlatch.css'});

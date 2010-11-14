@@ -19,6 +19,7 @@ package net.systemeD.potlatch2 {
 		private var keys:Object={};
 		public var clipboards:Object={};
 		public var imagery:Array=[];
+		public var imagerySelected:Object={};
 		public var stylesheets:Array=[];
 		public var cursorsEnabled:Boolean=true;
 

@@ -6,14 +6,14 @@
 	
 	<mx:List width="100%" height="100%" id="background" verticalScrollPolicy="on" 
 			labelField="name"
-			change="Application.application.setBackground(background.selectedItem.name, background.selectedItem.url);" 			
+			change="Application.application.bgButton.close(); Application.application.setBackground(background.selectedItem);" 			
 	        dataProvider="{Application.application.theController.imagery}" />
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
 	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
 	<mx:HBox>
-	<mx:Button label="Edit..." click="new BackgroundDialog().init('Background imagery',background,Application.application.theController.imagery);" />
-	<mx:Button label="Vector file..." click="new VectorSourceDialog().init();" />
+	<mx:Button label="Edit..." click="Application.application.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Application.application.theController.imagery);" />
+	<mx:Button label="Vector file..." click="Application.application.bgButton.close(); new VectorSourceDialog().init();" />
 	</mx:HBox>
 
 	<mx:Script><![CDATA[
