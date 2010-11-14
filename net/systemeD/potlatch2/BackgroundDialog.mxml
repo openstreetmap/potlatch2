@@ -7,10 +7,10 @@
 
   <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid">
     <mx:columns>
-        <mx:DataGridColumn editable="true" dataField="label" headerText="Name"/>
-        <mx:DataGridColumn editable="true" dataField="data" headerText="URL"/>
+        <mx:DataGridColumn editable="true" dataField="name" headerText="Name"/>
+        <mx:DataGridColumn editable="true" dataField="url" headerText="URL"/>
     </mx:columns>
-  </mx:DataGrid>        
+  </mx:DataGrid>
 
   <mx:HBox horizontalAlign="right" width="100%">
     <mx:LinkButton label="Delete" click="removeSource()" enabled="{dataGrid.selectedItem != null? true : false}"/>
@@ -54,7 +54,7 @@
     }
 
 	private function addNewSource():void {
-		dataCollection.addItemAt( {label:'(new name)',data:'(new URL)'} , dataCollection.length);
+		dataCollection.addItemAt( {name:'(new name)',url:'(new URL)'} , dataCollection.length);
 		dataGrid.validateNow();
 		dataGrid.verticalScrollPosition=dataGrid.maxVerticalScrollPosition;
 		dataGrid.editedItemPosition = {rowIndex: dataCollection.length-1, columnIndex: 0};

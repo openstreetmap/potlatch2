@@ -4,6 +4,7 @@ Potlatch 2: main outstanding issues
 == Core geometry ==
 
 * P1-style J (join) / shift-J (unjoin)
+* Doing a '-' to remove a point from a junction doesn't redraw the point on other ways
 
 == Vector background layers ==
 
@@ -32,6 +33,7 @@ Potlatch 2: main outstanding issues
 * Failing to parse map_features should be an error state
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Potlatch 1-style "floaty warnings"
+* Repeat tags (R) doesn't update the advanced tag panel
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * B keypress for background source tag
@@ -59,6 +61,8 @@ Potlatch 2: main outstanding issues
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
 * Figure out how to call P2/Simplify for halcyon-based code
+* When a GPX is loaded, it's not actually drawn until you pan the map
+
 
 Requested enhancements
 ----------------------
