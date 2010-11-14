@@ -115,6 +115,18 @@ package net.systemeD.potlatch2 {
             state.enterState();
         }
 
+		public function findStateForSelection(sel:Array):ControllerState {
+			if (sel.length==0) { return new NoSelection(); }
+			else if (sel.length>1) { return new SelectedMultiple(sel); }
+			else if (sel[0] is Way) { return new SelectedWay(sel[0]); }
+			else if (sel[0] is Node && Node(sel[0]).hasParentWays) {
+				var way:Way=sel[0].parentWays[0] as Way;
+				return new SelectedWayNode(way, way.indexOfNode(sel[0] as Node));
+			} else {
+				return new SelectedPOINode(sel[0] as Node);
+			}
+		}
+
 		public function setCursor(cursor:Class):void {
 			CursorManager.removeAllCursors();
 			if (cursor && cursorsEnabled) { CursorManager.setCursor(cursor,2,-4,0); }

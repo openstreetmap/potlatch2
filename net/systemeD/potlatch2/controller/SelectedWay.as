@@ -51,9 +51,6 @@ package net.systemeD.potlatch2.controller {
                 var d:DragWayNode=new DragWayNode(firstSelected as Way, -1, event, true);
 				d.forceDragStart();
 				return d;
-			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && event.shiftKey ) {
-				// merge way
-				return mergeWith(entity as Way);
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && entity!=firstSelected) {
 				// multiple selection
 				return new SelectedMultiple([firstSelected,entity]);
@@ -73,28 +70,6 @@ package net.systemeD.potlatch2.controller {
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
-		}
-
-		protected function mergeWith(otherWay:Way):ControllerState {
-			var way1:Way;
-			var way2:Way;
-			if ( firstSelected.id < otherWay.id && firstSelected.id >= 0 ) {
-			    way1 = firstSelected as Way;
-			    way2 = otherWay;
-			} else {
-			    way1 = otherWay;
-			    way2 = firstSelected as Way;
-			}
-			
-			var undo:Function = MainUndoStack.getGlobalStack().addAction;
-			
-			// find common point
-			if (way1 == way2) { return this; }
-			if      (way1.getNode(0)   ==way2.getNode(0)   ) { way1.mergeWith(way2,0,0,undo); }
-			else if (way1.getNode(0)   ==way2.getLastNode()) { way1.mergeWith(way2,0,way2.length-1,undo); }
-			else if (way1.getLastNode()==way2.getNode(0)   ) { way1.mergeWith(way2,way1.length-1,0,undo); }
-			else if (way1.getLastNode()==way2.getLastNode()) { way1.mergeWith(way2,way1.length-1,way2.length-1,undo); }
-			return new SelectedWay(way1);
 		}
         
 		public function deleteWay():ControllerState {

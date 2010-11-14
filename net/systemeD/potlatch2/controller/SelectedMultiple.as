@@ -22,20 +22,10 @@ package net.systemeD.potlatch2.controller {
 			if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey ) {
 				// modify selection
 				controller.map.setHighlight(entity, { selected: toggleSelection(entity) });
+				controller.updateSelectionUI();
 
-				if      (selectCount> 1) { return this; }
-				else if (selectCount==1) {
-					if (firstSelected is Way) {
-						return new SelectedWay(firstSelected as Way);
-					} else if (firstSelected is Node && Node(firstSelected).hasParentWays) {
-						var way:Way=firstSelected.parentWays[0] as Way;
-						return new SelectedWayNode(way, way.indexOfNode(firstSelected as Node));
-					} else {
-						return new SelectedPOINode(firstSelected as Node);
-					}
-				} else {
-					return new NoSelection();
-				}
+				if (selectCount>1) { return this; }
+				return controller.findStateForSelection(selection);
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;

@@ -2,14 +2,16 @@
 <mx:Panel
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
-	height="46" width="219" 
+	height="76" width="129" 
 	headerHeight="6" headerColors="[black, gray]" 
 	borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
 	paddingLeft="4" paddingTop="4" layout="absolute" >
 
 		<mx:Image data="@Embed('../../../embedded/close_small.png')"
 			includeInLayout="false" id="toolboxClose" click="toggle();" 
-			y="-6" x="205" />
+			y="-6" x="115" />
+
+		<!-- Top row -->
 
 		<mx:Button icon="@Embed('../../../embedded/delete.svg')"
 			click='doDelete();' 
@@ -24,41 +26,51 @@
 			toolTip="Reverse direction (V)" 
 			width="28" height="28" textAlign="left" y="4" x="36" paddingLeft="8" paddingRight="0" />
 		<mx:Button icon="@Embed('../../../embedded/cut.svg')" 
-			   click='doSplit();'
+			click='doSplit();'
 			enabled="{canDo('split')}" 
 			alpha="{getAlpha('split')}" 
 			toolTip="Split way (X)" 
 			width="28" height="28" textAlign="left" y="4" x="66" paddingLeft="8" paddingRight="0" />
+		<mx:Button icon="@Embed('../../../embedded/merge.svg')" 
+			click='doMerge();'
+			enabled="{canDo('merge')}" 
+			alpha="{getAlpha('merge')}" 
+			toolTip="Merge ways" 
+			width="28" height="28" textAlign="left" y="4" x="96" paddingLeft="3" paddingRight="0" />
+
+		<!-- Second row -->
+
 		<mx:Button icon="@Embed('../../../embedded/straighten.svg')" 
 			click='doStraighten();' 
 			enabled="{canDo('straighten')}" 
 			alpha="{getAlpha('straighten')}" 
 			toolTip="Straighten way" 
-			width="28" height="28" textAlign="left" y="4" x="96" paddingLeft="5" paddingRight="0" />
+			width="28" height="28" textAlign="left" y="34" x="6" paddingLeft="5" paddingRight="0" />
 		<mx:Button icon="@Embed('../../../embedded/circle.svg')" 
 			click='doCircularise();' 
 			enabled="{canDo('circularise')}" 
 			alpha="{getAlpha('circularise')}" 
 			toolTip="Make circular" 
-			width="28" height="28" textAlign="left" y="4" x="126" paddingLeft="4" paddingRight="0" />
+			width="28" height="28" textAlign="left" y="34" x="36" paddingLeft="4" paddingRight="0" />
 		<mx:Button icon="@Embed('../../../embedded/quadrilateralise.svg')" 
 			click='doQuadrilateralise();' 
 			enabled="{canDo('quadrilateralise')}" 
 			alpha="{getAlpha('quadrilateralise')}" 
 			toolTip="Make right-angled" 
-			width="28" height="28" textAlign="left" y="4" x="156" paddingLeft="6" paddingRight="0" />
+			width="28" height="28" textAlign="left" y="34" x="66" paddingLeft="6" paddingRight="0" />
 		<mx:Button icon="@Embed('../../../embedded/parallel.svg')" 
 			click='doParallelise();' 
 			enabled="{canDo('parallelise')}" 
 			alpha="{getAlpha('parallelise')}" 
 			toolTip="Create parallel way (P)" 
-			width="28" height="28" textAlign="left" y="4" x="186" paddingLeft="8" paddingRight="0" />
+			width="28" height="28" textAlign="left" y="34" x="96" paddingLeft="8" paddingRight="0" />
 
 	<mx:Script><![CDATA[
 
 		import flash.events.Event;
 		import flash.events.MouseEvent;
 		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.halcyon.connection.actions.*;
 		import net.systemeD.potlatch2.controller.*;
 		import net.systemeD.potlatch2.tools.*;
 
@@ -115,6 +127,7 @@
 				case 'circularise':			return controller.state.hasSelectedAreas();
 				case 'split':				return (controller.state is SelectedWayNode);
 				case 'parallelise':			return (controller.state is SelectedWay);
+				case 'merge':				return controller.state.hasAdjoiningWays();
 			}
 			return false;
 		}
@@ -150,6 +163,56 @@
 			} else {
 				controller.setState(new NoSelection());
 			}
+		}
+		
+		public function doMerge():void {
+			var changed:Boolean;
+			var waylist:Array=controller.state.selectedWays;
+			do {
+				// ** FIXME - we should have one CompositeUndoableAction for the whole caboodle,
+				// but that screws up the execution order and can make the merge not work
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Merge ways");
+				changed=tryMerge(waylist, undo);
+				MainUndoStack.getGlobalStack().addAction(undo);
+			} while (changed==true);
+			controller.setState(controller.findStateForSelection(waylist));
+		}
+		
+		private function tryMerge(waylist:Array, undo:CompositeUndoableAction):Boolean {
+			var way1:Way, way2:Way, del:uint;
+			for (var i:uint=0; i<waylist.length; i++) {
+				for (var j:uint=0; j<waylist.length; j++) {
+					if (waylist[i]!=waylist[j]) {
+
+						// Preserve positive IDs if we can
+						if (waylist[i].id < waylist[j].id && waylist[i].id >= 0) {
+							way1=waylist[i]; way2=waylist[j]; del=j;
+						} else {
+							way1=waylist[j]; way2=waylist[i]; del=i;
+						}
+
+						// Merge as appropriate
+						if (way1.getNode(0)==way2.getNode(0)) {
+							waylist.splice(del,1);
+							undo.push(new MergeWaysAction(way1,way2,0,0));
+							return true;
+						} else if (way1.getNode(0)==way2.getLastNode()) { 
+							waylist.splice(del,1);
+							undo.push(new MergeWaysAction(way1,way2,0,way2.length-1));
+							return true;
+						} else if (way1.getLastNode()==way2.getNode(0)) {
+							waylist.splice(del,1);
+							undo.push(new MergeWaysAction(way1,way2,way1.length-1,0));
+							return true;
+						} else if (way1.getLastNode()==way2.getLastNode()) { 
+							waylist.splice(del,1);
+							undo.push(new MergeWaysAction(way1,way2,way1.length-1,way2.length-1));
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 
 		public function doReverseDirection():void {
