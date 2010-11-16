@@ -155,7 +155,6 @@
 
       public var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
-      private var tagDataProvider:ArrayCollection;
       private var tw:CategorySelector = null;
       private var feature:Feature = null;
 
@@ -537,29 +536,6 @@
       
       private function tagChanged(event:TagEvent):void {
           refreshFeatureIcon();
-          
-          if ( tagDataProvider != null ) {
-              // check to see if the key is already in our list
-              var exists:Boolean = false;
-              var tag:Tag = null;
-              var i:uint;
-              for ( i = 0; i < tagDataProvider.length && !exists; i++ ) {
-                  tag = Tag(tagDataProvider.getItemAt(i));
-                  exists = tag.key == event.key;
-              }
-              if ( !exists ) {
-                  tag = new Tag(selectedEntity, event.key, event.newValue);
-                  tagDataProvider.addItem(tag);
-                  tagDataProvider.refresh();
-              } else {
-                  if ( event.newValue == null ) {
-                      tagDataProvider.removeItemAt(i-1);
-                      tagDataProvider.refresh();
-                  } else {
-                      tagDataProvider.itemUpdated(tag, "value");
-                  }
-              }
-          }
       }
 
       public function loadFeatures():void {
