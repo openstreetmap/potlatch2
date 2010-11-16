@@ -124,6 +124,11 @@
   <mx:VBox id="multiplePanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
     <mx:Text id="multiplePanelText" text="You have selected multiple items." width="100%" styleName="helpInfo" />
   </mx:VBox>
+
+  <mx:VBox id="markerPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <potlatch2:MarkerPanel id="markerPanelContents" width="100%"/>
+  </mx:VBox>
+
 </mx:ViewStack>
 
   <mx:Script><![CDATA[
@@ -174,9 +179,14 @@
 			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
-			refreshFeatureIcon(); 
-			initialiseEditors();
-			sidebar.selectedChild = tagsPanel;
+            if (selectedEntity is Marker) {
+              markerPanelContents.init(selectedEntity);
+              sidebar.selectedChild = markerPanel;
+            } else {
+              refreshFeatureIcon();
+              initialiseEditors();
+              sidebar.selectedChild = tagsPanel;
+            }
 		
 		} else {
 			// Multiple selection, so for now show a largely blank panel/

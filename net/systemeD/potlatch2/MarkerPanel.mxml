@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Marker Panel
+-->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" >
+  <mx:Text id="markerPanelText" text="You have selected a marker." width="100%" styleName="helpInfo" />
+  <mx:DataGrid editable="false" dataProvider="tagDataProvider" id="markerPanelDG" width="100%">
+    <mx:columns>
+      <mx:DataGridColumn editable="false" dataField="key" headerText="key" />
+      <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
+    </mx:columns>
+  </mx:DataGrid>
+  <mx:Script><![CDATA[
+
+      import net.systemeD.halcyon.connection.*;
+      import mx.collections.*;
+
+      private var selectedEntity:Entity;
+      private var tagDataProvider:ArrayCollection;
+
+      public function init(entity:Entity):void {
+            if ( tagDataProvider == null ) {
+                tagDataProvider = new ArrayCollection();
+                markerPanelDG.dataProvider = tagDataProvider;
+            }
+
+            selectedEntity=entity;
+            updateTagDataProvider();
+      }
+
+      private function updateTagDataProvider():void {
+            tagDataProvider.removeAll();
+            if (selectedEntity==null) { return; }
+            var tags:Array = selectedEntity.getTagArray();
+            tags.sortOn("key");
+            for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
+        }
+      ]]>
+  </mx:Script>
+</mx:VBox>

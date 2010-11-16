@@ -72,6 +72,8 @@ package net.systemeD.potlatch2.controller {
 					var newEntity:Entity=paint.findSource().pullThrough(entity,controller.connection);
 					if (entity is Way) { return new SelectedWay(newEntity as Way); }
 					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
+                } else if (event.type == MouseEvent.MOUSE_DOWN && entity is Marker) {
+                    return new SelectedMarker(entity as Marker);
 				} else if ( event.type == MouseEvent.MOUSE_UP ) { 
 					return (this is NoSelection) ? null : new NoSelection();
 				} else { return null; }
