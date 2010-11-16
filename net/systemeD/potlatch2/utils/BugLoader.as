@@ -27,24 +27,26 @@ package net.systemeD.potlatch2.utils {
             loader.addEventListener(Event.COMPLETE, parseJSON);
         }
 
-        public function parseJSON(event:Event):void {
-            trace("parseJSON");
+        private function parseJSON(event:Event):void {
             var result:String = String(event.target.data);
             var featureCollection:Object = JSON.decode(result);
-            trace(featureCollection);
-            trace(featureCollection.type);
-            trace(featureCollection.features[0].type);
-            trace(featureCollection.features.length);
+
             for each (var feature:Object in featureCollection.features) {
               // geoJSON spec is x,y,z i.e. lon, lat, ele
               var lon:Number = feature.geometry.coordinates[0];
               var lat:Number = feature.geometry.coordinates[1];
-              trace(lat, lon);
-              var marker:Marker = layer.createMarker({"name":feature.properties.description,"bug_id":feature.id}, lat, lon);
-              //layer.registerPOI(node);
+              var tags:Object = {};
+              tags["name"] = String(feature.properties.description).substr(0,10)+'...';
+              tags["description"] = feature.properties.description;
+              tags["bug_id"] = feature.id;
+              tags["nickname"] = feature.properties.nickname;
+              tags["type"] = feature.properties.type;
+              tags["date_created"] = feature.properties.date_created;
+              tags["date_updated"] = feature.properties.date_updated;
+              tags["source"] = feature.properties.source;
+              var marker:Marker = layer.createMarker(tags, lat, lon);
             }
             layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
-            //var json:Array =
         }
 
         private function get layer():VectorLayer {
