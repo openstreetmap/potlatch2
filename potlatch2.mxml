@@ -37,6 +37,7 @@
 				</mx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
+        <mx:Button label="Bugs" click="bugLoader.load();" />
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
@@ -98,6 +99,7 @@
 		public var yahoo:Yahoo;
 		public var trackLoader:TrackLoader;
 		public var toolbox:Toolbox;
+        public var bugLoader:BugLoader;
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
@@ -206,6 +208,9 @@
 
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
+
+            // create Bug loader
+            bugLoader = new BugLoader(theMap,'', 'fooKey456789');
 
             // Force authentication on startup, if required
             // force_auth == force => checks for access token, and displays OAuth panel if needed
