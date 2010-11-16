@@ -37,7 +37,7 @@
 				</mx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
-        <mx:Button label="Bugs" click="bugLoader.load();" />
+        <mx:Button id="bugsButton" label="Bugs" click="bugLoader.load();" visible="false"/>
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
@@ -210,7 +210,10 @@
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
 
             // create Bug loader
-            bugLoader = new BugLoader(theMap,'', 'fooKey456789');
+            if (loaderInfo.parameters["bugs_url"] && loaderInfo.parameters["bugs_apikey"]) {
+              bugsButton.visible = true;
+              bugLoader = new BugLoader(theMap, loaderInfo.parameters["bugs_url"], loaderInfo.parameters["bugs_apikey"]);
+            }
 
             // Force authentication on startup, if required
             // force_auth == force => checks for access token, and displays OAuth panel if needed
