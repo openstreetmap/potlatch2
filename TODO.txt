@@ -58,8 +58,6 @@ Potlatch 2: main outstanding issues
 * Have a remove button for removing loaded traces
 * Have a check button for simplifying traces
 * Figure out how to call P2/Simplify for halcyon-based code
-* When a GPX is loaded, it's not actually drawn until you pan the map
-
 
 Requested enhancements
 ----------------------

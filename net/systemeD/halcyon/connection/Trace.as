@@ -125,7 +125,7 @@ package net.systemeD.halcyon.connection {
                 var node:Node=layer.createNode(tags, wpt.@lat, wpt.@lon);
 				layer.registerPOI(node);
             }
-            layer.paint.redraw();
+            layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
         }
     }
 }
