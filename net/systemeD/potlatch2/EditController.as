@@ -31,10 +31,11 @@ package net.systemeD.potlatch2 {
 		
         public function EditController(map:Map, tagViewer:TagViewer, toolbox:Toolbox) {
             this._map = map;
+            setState(new NoSelection());
             this.tagViewer = tagViewer;
 			this.toolbox = toolbox;
 			this.toolbox.init(this);
-            setState(new NoSelection());
+
             
             map.parent.addEventListener(MouseEvent.MOUSE_MOVE, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
