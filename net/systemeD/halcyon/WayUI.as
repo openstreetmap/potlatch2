@@ -192,9 +192,9 @@ package net.systemeD.halcyon {
 
             // Copy tags object, and add states
             var tags:Object = entity.getTagsCopy();
-			tags=applyStateClasses(tags);
-			if (Way(entity).isArea()) { tags[':area']='yes'; }
-            if (entity.isUneditedTiger() && Globals.vars.highlightTiger) { tags[':tiger']='yes'; }
+            setStateClass('area', Way(entity).isArea());
+            setStateClass('tiger', (entity.isUneditedTiger() && Globals.vars.highlightTiger));
+            tags=applyStateClasses(tags);
 
 			// Keep track of maximum stroke width for hitzone
 			var maxwidth:Number=4;

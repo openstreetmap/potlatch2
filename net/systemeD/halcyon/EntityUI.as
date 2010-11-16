@@ -168,6 +168,10 @@ package net.systemeD.halcyon {
 			if (changed) redraw();
         }
 
+        /**
+        * Sets a state class (eg :hover, :dupe) for this entityUI. If the state class has changed it will
+        * invalidate the style list to force the style to be recalculated during redraw.
+        */
         public function setStateClass(stateType:String, isOn:*):Boolean {
 			if ( isOn == true ) { isOn='yes'; }
             if ( isOn && stateClasses[stateType] != isOn ) {
@@ -182,6 +186,10 @@ package net.systemeD.halcyon {
 			return false;
         }
 
+        /**
+        * applies the state classes (eg :hover, :area) for this entityUI to the given list of 'real' tags.
+        * This then gives you a modified list of tags used for styling the entityUI.
+        */
 		public function applyStateClasses(tags:Object):Object {
             for (var stateKey:String in stateClasses) {
                 tags[":"+stateKey] = 'yes';
