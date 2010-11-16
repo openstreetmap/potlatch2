@@ -40,7 +40,7 @@ package net.systemeD.potlatch2.utils {
               var lon:Number = feature.geometry.coordinates[0];
               var lat:Number = feature.geometry.coordinates[1];
               trace(lat, lon);
-              var node:Node = layer.createNode({"name":feature.properties.description,"bug_id":feature.id}, lat, lon);
+              var node:Node = layer.createMarker({"name":feature.properties.description,"bug_id":feature.id}, lat, lon);
               layer.registerPOI(node);
             }
             layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), false, false);

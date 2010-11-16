@@ -25,6 +25,8 @@ package net.systemeD.halcyon {
 		public var nodes:Object=new Object();			//  |
 		public var relations:Object=new Object();		//  |
 		private var pois:Array=[];						//  |
+
+        private var markers:Object=new Object();        // markers
         private var negativeID:Number = -1;
 
         /** Create a new VectorLayer
@@ -75,6 +77,13 @@ package net.systemeD.halcyon {
 			relations[negativeID]=relation; negativeID--;
             return relation;
 		}
+
+        public function createMarker(tags:Object,lat:Number,lon:Number:Marker {
+            var marker:Marker = new Marker(negativeID, 0, tags, true, lat, lon);
+            markers[negativeID]=node; negativeID--;
+            return marker;
+        }
+
         public function registerPOI(node:Node):void {
             if (pois.indexOf(node)<0) { pois.push(node); }
         }
