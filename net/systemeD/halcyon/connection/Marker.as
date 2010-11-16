@@ -29,6 +29,11 @@ package net.systemeD.halcyon.connection {
             return _lon;
         }
 
+        public override function within(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+            if (_lon<left || _lon>right || _lat<bottom || _lat>top || deleted) { return false; }
+            return true;
+        }
+
         public static function lat2latp(lat:Number):Number {
             return 180/Math.PI * Math.log(Math.tan(Math.PI/4+lat*(Math.PI/180)/2));
         }

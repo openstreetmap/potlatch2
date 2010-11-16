@@ -277,10 +277,12 @@ package net.systemeD.halcyon {
 			for each (var w:WayUI in wayuis) { w.recalculate(); w.invalidateStyleList(); w.redraw(); }
 			/* sometimes (e.g. in Map.setStyle) Mappaint.redrawPOIs() is called immediately afterwards anyway. FIXME? */
 			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
+            for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 
 		public function redrawPOIs():void {
 			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
+            for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 		
 		public function findSource():VectorLayer {
