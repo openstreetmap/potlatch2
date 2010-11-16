@@ -366,14 +366,17 @@ package net.systemeD.halcyon.connection {
               nodePositions[a] = [];
             }
             nodePositions[a].push(node);
-            for each (var n:Node in nodePositions[a]) {
-              n.dispatchEvent(new Event(Connection.NODE_ALTERED));
+            if (nodePositions[a].length > 1) { // don't redraw if it's the only node in town
+              for each (var n:Node in nodePositions[a]) {
+                n.dispatchEvent(new Event(Connection.NODE_ALTERED));
+              }
             }
         }
 
         public function removeDupe(node:Node):void {
             if (getNode(node.id) != node) { return; } // make sure it's on this connection
             var a:String = node.lat+","+node.lon;
+            if (node.isDupe()) { node.dispatchEvent(new Event(Connection.NODE_ALTERED)); } //redraw the one being moved
             var dupes:Array = [];
             for each (var dupe:Node in nodePositions[a]) {
               if (dupe != node) {
@@ -381,7 +384,7 @@ package net.systemeD.halcyon.connection {
               }
             }
             nodePositions[a] = dupes;
-            for each (var n:Node in nodePositions[a]) {
+            for each (var n:Node in nodePositions[a]) { // redraw any nodes remaining
               n.dispatchEvent(new Event(Connection.NODE_ALTERED));
             }
         }
