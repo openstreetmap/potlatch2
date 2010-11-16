@@ -536,6 +536,9 @@
       
       private function tagChanged(event:TagEvent):void {
           refreshFeatureIcon();
+          // if the advancedTagGrid has already been set up, it needs to be refreshed.
+          // FIXME make this better, maybe advancedTagGrid should be event listening.
+          setupAdvanced(selectedEntity);
       }
 
       public function loadFeatures():void {
