@@ -16,6 +16,7 @@ package net.systemeD.halcyon {
 		public var ruleset:RuleSet;						// rules
 		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
 		public var nodeuis:Object=new Object();			//	|
+        public var markeruis:Object=new Object();
 		public var isBackground:Boolean = true;			// is it a background layer or the core paint object?
 		public var sublayerIndex:Object={};				// hash of index->position
 
@@ -111,8 +112,20 @@ package net.systemeD.halcyon {
 			return ((o as Sprite).getChildAt(sublayerIndex[sublayer]) as Sprite);
 		}
 
+        /**
+        * Update, and if necessary, create / remove UIs for the given objects.
+        * The object is effectively lists of objects split into inside/outside pairs, e.g.
+        * { waysInside: [], waysOutside: [] } where each is a array of entities either inside
+        * or outside this current view window. UIs for the entities on "inside" lists will be created if necessary.
+        * Flags control redrawing existing entities and removing UIs from entities no longer in view.
+        *
+        * @param o The object containing all the relevant entites.
+        * @param redraw If true, all UIs for entities on "inside" lists will be redrawn
+        * @param remove If true, all UIs for entites on "outside" lists will be removed. The purgable flag on UIs
+                        can override this, for example for selected objects.
+        */
 		public function updateEntityUIs(o:Object, redraw:Boolean, remove:Boolean):void {
-			var way:Way, poi:Node;
+			var way:Way, poi:Node, marker:Marker;
 
 			for each (way in o.waysInside) {
 				if (!wayuis[way.id]) { createWayUI(way); }
@@ -143,6 +156,21 @@ package net.systemeD.halcyon {
 					}
 				}
 			}
+
+            for each (marker in o.markersInside) {
+                if (!markeruis[marker.id]) { createMarkerUI(marker); }
+                else if (redraw) { markeruis[marker.id].redraw(); }
+            }
+
+            if (remove) {
+                for each (marker in o.markersOutside) {
+                    if (markeruis[marker.id] && !markeruis[marker.id].purgable) {
+                        if (redraw) { markeruis[marker.id].redraw(); }
+                    } else {
+                        deleteMarkerUI(marker);
+                    }
+                }
+            }
 		}
 
 		public function createWayUI(way:Way):WayUI {
@@ -195,6 +223,31 @@ package net.systemeD.halcyon {
 			nodeuis[node.id].removeEventListeners();
 			delete nodeuis[node.id];
 		}
+
+        public function createMarkerUI(marker:Marker,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):MarkerUI {
+            if (!markeruis[marker.id]) {
+                markeruis[marker.id]=new MarkerUI(marker,this,rotation,layer,stateClasses);
+                marker.addEventListener(Connection.NODE_DELETED, markerDeleted);
+            } else {
+                for (var state:String in stateClasses) {
+                    markeruis[marker.id].setStateClass(state,stateClasses[state]);
+                }
+                markeruis[marker.id].redraw();
+            }
+            return markeruis[marker.id];
+        }
+
+        public function markerDeleted(event:EntityEvent):void {
+            deleteMarkerUI(event.entity as Marker);
+        }
+
+        public function deleteMarkerUI(marker:Marker):void {
+            if (!markeruis[marker.id]) { return; }
+            marker.removeEventListener(Connection.NODE_DELETED, markerDeleted);
+            markeruis[marker.id].removeSprites();
+            markeruis[marker.id].removeEventListeners();
+            delete markeruis[marker.id];
+        }
 		
 		public function renumberWayUI(way:Way,oldID:Number):void {
 			if (!wayuis[oldID]) { return; }

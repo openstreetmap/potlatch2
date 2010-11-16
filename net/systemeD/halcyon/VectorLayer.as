@@ -95,7 +95,9 @@ package net.systemeD.halcyon {
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
 			// ** FIXME: this is just copied-and-pasted from Connection.as, which really isn't very
 			// good practice. Is there a more elegant way of doing it?
-			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [] };
+			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [],
+                              markersInside: [], markersOutside: [] };
+                              
 			for each (var way:Way in ways) {
 				if (way.within(left,right,top,bottom)) { o.waysInside.push(way); }
 				                                  else { o.waysOutside.push(way); }
@@ -104,6 +106,10 @@ package net.systemeD.halcyon {
 				if (poi.within(left,right,top,bottom)) { o.poisInside.push(poi); }
 				                                  else { o.poisOutside.push(poi); }
 			}
+            for each (var marker:Marker in markers) {
+                if (marker.within(left,right,top,bottom)) { o.markersInside.push(marker); }
+                                                     else { o.markersOutside.push(marker); }
+            }
 			return o;
 		}
 
