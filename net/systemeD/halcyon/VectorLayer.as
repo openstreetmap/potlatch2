@@ -78,9 +78,9 @@ package net.systemeD.halcyon {
             return relation;
 		}
 
-        public function createMarker(tags:Object,lat:Number,lon:Number:Marker {
+        public function createMarker(tags:Object,lat:Number,lon:Number):Marker {
             var marker:Marker = new Marker(negativeID, 0, tags, true, lat, lon);
-            markers[negativeID]=node; negativeID--;
+            markers[negativeID]=marker; negativeID--;
             return marker;
         }
 

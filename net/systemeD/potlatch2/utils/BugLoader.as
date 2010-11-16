@@ -2,7 +2,7 @@ package net.systemeD.potlatch2.utils {
 
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.VectorLayer;
-    import net.systemeD.halcyon.connection.Node;
+    import net.systemeD.halcyon.connection.Marker;
     import flash.net.*;
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
@@ -40,8 +40,8 @@ package net.systemeD.potlatch2.utils {
               var lon:Number = feature.geometry.coordinates[0];
               var lat:Number = feature.geometry.coordinates[1];
               trace(lat, lon);
-              var node:Node = layer.createMarker({"name":feature.properties.description,"bug_id":feature.id}, lat, lon);
-              layer.registerPOI(node);
+              var marker:Marker = layer.createMarker({"name":feature.properties.description,"bug_id":feature.id}, lat, lon);
+              //layer.registerPOI(node);
             }
             layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), false, false);
             //var json:Array =
