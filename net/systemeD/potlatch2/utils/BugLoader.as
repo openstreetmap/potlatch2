@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.utils {
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.halcyon.connection.Marker;
+    import net.systemeD.potlatch2.BugLayer;
     import flash.net.*;
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
@@ -52,7 +53,7 @@ package net.systemeD.potlatch2.utils {
         private function get layer():VectorLayer {
             if (!_layer) {
                 var n:String='Bugs';
-                _layer=new VectorLayer(n,map,STYLESHEET);
+                _layer=new BugLayer(n,map,STYLESHEET,bugBaseURL,bugApiKey);
                 map.addVectorLayer(_layer);
             }
             return _layer;
