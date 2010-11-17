@@ -2,6 +2,7 @@ package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.MapController;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.potlatch2.controller.*;
 	import mx.managers.CursorManager;
 	import flash.events.*;
@@ -58,9 +59,15 @@ package net.systemeD.potlatch2 {
         public function get connection():Connection {
             return _connection;
         }
-        
-		public function updateSelectionUI():void {
-			tagViewer.setEntity(state.selection);
+
+        /**
+        * Updates the various user interfaces that change when the selection changes.
+        * Currently this is the TagViewer and the Toolbox
+        *
+        * @param layer Optionally pass the layer of the currently selected entity, eg for BugLayers
+        */
+		public function updateSelectionUI(layer:VectorLayer = null):void {
+			tagViewer.setEntity(state.selection, layer);
 			toolbox.updateSelectionUI();
 		}
         

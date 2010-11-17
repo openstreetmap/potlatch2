@@ -3,13 +3,16 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.VectorLayer;
 	import net.systemeD.halcyon.Globals;
 
     public class SelectedMarker extends ControllerState {
         protected var initMarker:Marker;
+        protected var layer:VectorLayer;
 
-        public function SelectedMarker(marker:Marker) {
+        public function SelectedMarker(marker:Marker, layer:VectorLayer) {
             initMarker = marker;
+            this.layer = layer;
         }
 
         protected function selectMarker(marker:Marker):void {
@@ -19,7 +22,7 @@ package net.systemeD.potlatch2.controller {
             clearSelection(this);
             controller.map.setHighlight(marker, { selected: true });
             selection = [marker];
-            controller.updateSelectionUI();
+            controller.updateSelectionUI(layer);
             initMarker = marker;
         }
 

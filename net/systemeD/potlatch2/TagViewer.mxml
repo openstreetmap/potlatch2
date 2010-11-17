@@ -133,6 +133,7 @@
 
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
+      import net.systemeD.halcyon.VectorLayer;
       import net.systemeD.potlatch2.mapfeatures.*;
 
       import mx.collections.*;
@@ -158,7 +159,7 @@
       private var tw:CategorySelector = null;
       private var feature:Feature = null;
 
-	  public function setEntity(entities:Array):void {
+	  public function setEntity(entities:Array, layer:VectorLayer=null):void {
 		UIComponent.suspendBackgroundProcessing();
 		
 		var firstSelected:Entity=null;
@@ -179,7 +180,7 @@
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
             if (selectedEntity is Marker) {
-              markerPanelContents.init(selectedEntity);
+              markerPanelContents.init(selectedEntity, layer);
               sidebar.selectedChild = markerPanel;
             } else {
               refreshFeatureIcon();
