@@ -108,6 +108,11 @@ package net.systemeD.halcyon.connection {
 			performAction(new DeleteRelationAction(this, setDeletedState, members));
 		}
 
+		public override function nullify():void {
+			nullifyEntity();
+			members=[];
+		}
+		
 		internal override function isEmpty():Boolean {
 			return (deleted || (members.length==0));
 		}

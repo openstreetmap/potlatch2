@@ -156,6 +156,20 @@ package net.systemeD.halcyon.connection {
 		internal function isEmpty():Boolean {
 			return false;	// to be overridden
 		}
+
+		public function nullify():void {
+			// this retains a dummy entity in memory, for entities that we no longer need
+			// but which are part of a still-in-memory relation
+			nullifyEntity();
+		}
+		
+		protected function nullifyEntity():void {
+			// this is the common nullify behaviour for all entity types (we'd call this by super() if ActionScript let us)
+			_version=0;
+			_loaded=false;
+			tags={};
+		}
+		
 		
 		public function within(left:Number,right:Number,top:Number,bottom:Number):Boolean {
 			return true;	// to be overridden

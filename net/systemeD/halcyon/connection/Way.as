@@ -181,6 +181,11 @@ package net.systemeD.halcyon.connection {
 			performAction(new DeleteWayAction(this, setDeletedState, nodes));
 		}
 
+		public override function nullify():void {
+			nullifyEntity();
+			nodes=[];
+		}
+		
 		public function get clockwise():Boolean {
 			var lowest:uint=0;
 			var xmin:Number=-999999; var ymin:Number=-999999;

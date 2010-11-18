@@ -186,7 +186,7 @@ package net.systemeD.halcyon.connection {
             nodes[id].dispatchEvent(new EntityEvent(Connection.NODE_DELETED, nodes[id]));
 			removeDupe(nodes[id]);
 			if (nodes[id].parentRelations.length>0) {
-				nodes[id]=new Node(id,0,{},false,0,0);
+				nodes[id].nullify();
 			} else {
 				delete nodes[id];
 			}
@@ -197,7 +197,7 @@ package net.systemeD.halcyon.connection {
 			if (!ways[id]) return;
             ways[id].dispatchEvent(new EntityEvent(Connection.WAY_DELETED, ways[id]));
 			if (ways[id].parentRelations.length>0) {
-				ways[id]=new Way(id,0,{},false,[]);
+				ways[id].nullify();
 			} else {
 				delete ways[id];
 			}
@@ -208,7 +208,7 @@ package net.systemeD.halcyon.connection {
 			if (!relations[id]) return;
             relations[id].dispatchEvent(new EntityEvent(Connection.RELATION_DELETED, relations[id]));
 			if (relations[id].parentRelations.length>0) {
-				relations[id]=new Relation(id,0,{},false,[]);
+				relations[id].nullify();
 			} else {
 				delete relations[id];
 			}
