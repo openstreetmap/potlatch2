@@ -125,7 +125,9 @@ package net.systemeD.halcyon.connection {
         }
 
         protected function renumberNode(oldID:Number, node:Node, queue:Boolean):void {
+            removeDupe(node, oldID);
             nodes[node.id] = node;
+            addDupe(node);
             if (node.loaded) { sendEvent(new EntityRenumberedEvent(NODE_RENUMBERED, node, oldID),queue); }
             delete nodes[oldID];
         }
@@ -182,6 +184,7 @@ package net.systemeD.halcyon.connection {
 		protected function killNode(id:Number):void {
 			if (!nodes[id]) return;
             nodes[id].dispatchEvent(new EntityEvent(Connection.NODE_DELETED, nodes[id]));
+			removeDupe(nodes[id]);
 			if (nodes[id].parentRelations.length>0) {
 				nodes[id]=new Node(id,0,{},false,0,0);
 			} else {
@@ -373,13 +376,16 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-        public function removeDupe(node:Node):void {
-            if (getNode(node.id) != node) { return; } // make sure it's on this connection
+        public function removeDupe(node:Node, id:int=0):void {
+            if (id==0) {
+                id=node.id;
+                if (getNode(id) != node) { return; } // make sure it's on this connection
+            }
             var a:String = node.lat+","+node.lon;
             if (node.isDupe()) { node.dispatchEvent(new Event(Connection.NODE_ALTERED)); } //redraw the one being moved
             var dupes:Array = [];
             for each (var dupe:Node in nodePositions[a]) {
-              if (dupe != node) {
+              if (dupe.id != id) {
                 dupes.push(dupe)
               }
             }
