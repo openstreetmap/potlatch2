@@ -16,6 +16,7 @@ package net.systemeD.potlatch2.utils {
         private var bugApiKey:String;
         private var _layer:VectorLayer;
         private static const STYLESHEET:String="bugs.css";
+        private static const status:Array = ["", "open", "fixed", "invalid"];
 
         public function BugLoader(map:Map, url:String, bugApiKey:String):void {
             this.map = map;
@@ -53,6 +54,7 @@ package net.systemeD.potlatch2.utils {
               tags["date_created"] = feature.properties.date_created;
               tags["date_updated"] = feature.properties.date_updated;
               tags["source"] = feature.properties.source;
+              tags["status"] = status[int(feature.properties.status)];
               var marker:Marker = layer.createMarker(tags, lat, lon);
             }
             layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
