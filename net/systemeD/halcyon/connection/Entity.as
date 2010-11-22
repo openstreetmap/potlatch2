@@ -47,6 +47,11 @@ package net.systemeD.halcyon.connection {
 			_version=version; this.tags=tags; _loaded=loaded; _uid = uid; _timestamp = timestamp;
 		}
 
+		public function renumber(newID:Number, newVersion:uint):void {
+			this._id = newID;
+			this._version = newVersion;
+		}
+
 		// Tag-handling methods
 
         public function hasTags():Boolean {
@@ -121,9 +126,7 @@ package net.systemeD.halcyon.connection {
             return modified;
         }
 
-        public function markClean(newID:Number, newVersion:uint):void {
-            this._id = newID;
-            this._version = newVersion;
+        public function markClean():void {
             modified = false;
         }
 

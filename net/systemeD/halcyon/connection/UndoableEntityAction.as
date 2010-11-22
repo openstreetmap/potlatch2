@@ -28,7 +28,7 @@ package net.systemeD.halcyon.connection {
             if ( !initialised ) init();
 
             if ( !wasDirty ) {
-              entity.markClean(entity.id, entity.version);
+              entity.markClean();
             }
 
             if ( !connectionWasDirty ) {

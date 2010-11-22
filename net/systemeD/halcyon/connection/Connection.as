@@ -124,25 +124,34 @@ package net.systemeD.halcyon.connection {
             if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation),queue); }
         }
 
-        protected function renumberNode(oldID:Number, node:Node, queue:Boolean):void {
-            removeDupe(node, oldID);
-            nodes[node.id] = node;
-            addDupe(node);
-            if (node.loaded) { sendEvent(new EntityRenumberedEvent(NODE_RENUMBERED, node, oldID),queue); }
-            delete nodes[oldID];
-        }
+		protected function renumberNode(oldID:Number, newID:Number, version:uint):void {
+			var node:Node=nodes[oldID];
+			if (oldID!=newID) { removeDupe(node); }
+			node.renumber(newID, version);
+			if (oldID==newID) return;					// if only a version change, return
+			nodes[newID]=node;
+			addDupe(node);
+			if (node.loaded) { sendEvent(new EntityRenumberedEvent(NODE_RENUMBERED, node, oldID),false); }
+			delete nodes[oldID];
+		}
 
-        protected function renumberWay(oldID:Number, way:Way, queue:Boolean):void {
-            ways[way.id] = way;
-            if (way.loaded) { sendEvent(new EntityRenumberedEvent(WAY_RENUMBERED, way, oldID),queue); }
-            delete ways[oldID];
-        }
+		protected function renumberWay(oldID:Number, newID:Number, version:uint):void {
+			var way:Way=ways[oldID];
+			way.renumber(newID, version);
+			if (oldID==newID) return;
+			ways[newID]=way;
+			if (way.loaded) { sendEvent(new EntityRenumberedEvent(WAY_RENUMBERED, way, oldID),false); }
+			delete ways[oldID];
+		}
 
-        protected function renumberRelation(oldID:Number, relation:Relation, queue:Boolean):void {
-            relations[relation.id] = relation;
-            if (relation.loaded) { sendEvent(new EntityRenumberedEvent(RELATION_RENUMBERED, relation, oldID),queue); }
-            delete relations[oldID];
-        }
+		protected function renumberRelation(oldID:Number, newID:Number, version:uint):void {
+			var relation:Relation=relations[oldID];
+			relation.renumber(newID, version);
+			if (oldID==newID) return;
+			relations[newID] = relation;
+			if (relation.loaded) { sendEvent(new EntityRenumberedEvent(RELATION_RENUMBERED, relation, oldID),false); }
+			delete relations[oldID];
+		}
 
 
 		public function sendEvent(e:*,queue:Boolean):void {
@@ -376,23 +385,19 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-        public function removeDupe(node:Node, id:int=0):void {
-            if (id==0) {
-                id=node.id;
-                if (getNode(id) != node) { return; } // make sure it's on this connection
-            }
+        public function removeDupe(node:Node):void {
+            if (getNode(node.id) != node) { return; } // make sure it's on this connection
             var a:String = node.lat+","+node.lon;
-            if (node.isDupe()) { node.dispatchEvent(new Event(Connection.NODE_ALTERED)); } //redraw the one being moved
+            var redraw:Boolean=node.isDupe();
             var dupes:Array = [];
             for each (var dupe:Node in nodePositions[a]) {
-              if (dupe.id != id) {
-                dupes.push(dupe)
-              }
+              if (dupe!=node) { dupes.push(dupe); }
             }
             nodePositions[a] = dupes;
             for each (var n:Node in nodePositions[a]) { // redraw any nodes remaining
               n.dispatchEvent(new Event(Connection.NODE_ALTERED));
             }
+            if (redraw) { node.dispatchEvent(new Event(Connection.NODE_ALTERED)); } //redraw the one being moved
         }
 
         public function nodesAtPosition(lat:Number, lon:Number):uint {

@@ -218,23 +218,15 @@ package net.systemeD.halcyon.connection {
 
 				if (newID==0) {
 					// delete
-	                if ( type == "node" ) killNode(oldID);
-	                else if ( type == "way" ) killWay(oldID);
-	                else if ( type == "relation" ) killRelation(oldID);
+	                if      (type == "node"    ) { killNode(oldID); }
+	                else if (type == "way"     ) { killWay(oldID); }
+	                else if (type == "relation") { killRelation(oldID); }
 					
 				} else {
 					// create/update
-	                var entity:Entity;
-	                if ( type == "node" ) entity = getNode(oldID);
-	                else if ( type == "way" ) entity = getWay(oldID);
-	                else if ( type == "relation" ) entity = getRelation(oldID);
-	                entity.markClean(newID, version);
-                
-	                if ( oldID != newID ) {
-	                    if ( type == "node" ) renumberNode(oldID, entity as Node, false);
-	                    else if ( type == "way" ) renumberWay(oldID, entity as Way, false);
-	                    else if ( type == "relation" ) renumberRelation(oldID, entity as Relation, false);
-	                }
+	                if      (type == "node"    ) { renumberNode(oldID, newID, version); getNode(newID).markClean(); }
+	                else if (type == "way"     ) { renumberWay(oldID, newID, version); getWay(newID).markClean(); }
+	                else if (type == "relation") { renumberRelation(oldID, newID, version); getRelation(newID).markClean(); }
 				}
             }
 
