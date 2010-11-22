@@ -39,25 +39,27 @@ package net.systemeD.potlatch2.utils {
 
         private function parseJSON(event:Event):void {
             var result:String = String(event.target.data);
-            var featureCollection:Object = JSON.decode(result);
+            if (result) { // api returns 204 no content for no bugs, and the JSON parser treats '' as an error
+              var featureCollection:Object = JSON.decode(result);
 
-            for each (var feature:Object in featureCollection.features) {
-              // geoJSON spec is x,y,z i.e. lon, lat, ele
-              var lon:Number = feature.geometry.coordinates[0];
-              var lat:Number = feature.geometry.coordinates[1];
-              var tags:Object = {};
-              tags["name"] = String(feature.properties.description).substr(0,10)+'...';
-              tags["description"] = feature.properties.description;
-              tags["bug_id"] = feature.id;
-              tags["nickname"] = feature.properties.nickname;
-              tags["type"] = feature.properties.type;
-              tags["date_created"] = feature.properties.date_created;
-              tags["date_updated"] = feature.properties.date_updated;
-              tags["source"] = feature.properties.source;
-              tags["status"] = status[int(feature.properties.status)];
-              var marker:Marker = layer.createMarker(tags, lat, lon);
+              for each (var feature:Object in featureCollection.features) {
+                // geoJSON spec is x,y,z i.e. lon, lat, ele
+                var lon:Number = feature.geometry.coordinates[0];
+                var lat:Number = feature.geometry.coordinates[1];
+                var tags:Object = {};
+                tags["name"] = String(feature.properties.description).substr(0,10)+'...';
+                tags["description"] = feature.properties.description;
+                tags["bug_id"] = feature.id;
+                tags["nickname"] = feature.properties.nickname;
+                tags["type"] = feature.properties.type;
+                tags["date_created"] = feature.properties.date_created;
+                tags["date_updated"] = feature.properties.date_updated;
+                tags["source"] = feature.properties.source;
+                tags["status"] = status[int(feature.properties.status)];
+                var marker:Marker = layer.createMarker(tags, lat, lon);
+              }
+              layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
             }
-            layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
         }
 
         private function get layer():VectorLayer {
