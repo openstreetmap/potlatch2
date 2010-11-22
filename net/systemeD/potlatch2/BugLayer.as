@@ -25,12 +25,15 @@ package net.systemeD.potlatch2 {
         public function closeBug(m:Marker):void {
             var id:String = m.getTag('bug_id');
             var status:String = BUG_STATUS_FIXED;
-            var comment:String = "no comment";
+            var comment:String = "NoComment";
             var nickname:String = "NoName";
 
-            //TODO make this a post request
+            //TODO urlencode stuff
+            var urlReq:URLRequest = new URLRequest(baseUrl+"changeBugStatus?id="+id+"&status="+status+"&comment="+comment+"&nickname="+nickname+"&key="+apiKey);
+            urlReq.method = "POST";
+            urlReq.data = '    '; // dear Adobe, this is nuts, kthxbye (you can't POST with an empty payload)
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(baseUrl+"changeBugStatus?&id="+id+"&status="+status+"&comment="+comment+"&nickname="+nickname+"&key="+apiKey));
+            loader.load(urlReq);
             loader.addEventListener(Event.COMPLETE, bugClosed);
         }
 

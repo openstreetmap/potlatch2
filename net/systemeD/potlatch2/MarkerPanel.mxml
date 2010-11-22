@@ -6,7 +6,7 @@
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
   <mx:Text id="markerPanelText" text="You have selected a marker." width="100%" styleName="helpInfo" />
-  <mx:DataGrid editable="false" id="markerPanelDG" width="100%" height="100%">
+  <mx:DataGrid editable="false" id="markerPanelDG" width="100%" height="50%">
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="key" headerText="key" />
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />

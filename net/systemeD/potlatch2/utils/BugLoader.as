@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.utils {
     import flash.net.*;
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
+    import flash.system.Security;
 
     public class BugLoader {
 
@@ -20,12 +21,19 @@ package net.systemeD.potlatch2.utils {
             this.map = map;
             this.bugBaseURL = url;
             this.bugApiKey = bugApiKey;
+            var policyFile:String = bugBaseURL+"crossdomain.xml";
+            Security.loadPolicyFile(policyFile);
         }
 
         public function load():void {
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(bugBaseURL+"getBugs.json?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+bugApiKey));
+            loader.load(new URLRequest(bugBaseURL+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+bugApiKey));
+            loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, balls);
             loader.addEventListener(Event.COMPLETE, parseJSON);
+        }
+
+        public function balls(event:SecurityErrorEvent):void {
+            trace(event);
         }
 
         private function parseJSON(event:Event):void {
