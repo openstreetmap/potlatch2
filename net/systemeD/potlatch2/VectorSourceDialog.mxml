@@ -24,8 +24,9 @@
 					<mx:Component>
 					<mx:ComboBox
 							selectedItem="{outerDocument.whichStyle(data)}"
-					        change="outerDocument.styleEdited(data.name,selectedItem.data)"
-					        dataProvider="{outerDocument.styles}" />
+					        change="outerDocument.styleEdited(data.name,selectedItem.url)"
+					        dataProvider="{outerDocument.styles}" 
+							labelField="name" />
 					</mx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
@@ -86,7 +87,7 @@
 
 	public function whichStyle(item:Object):Object {
 		for each (var style:Object in styles) {
-			if (style.data==item.style) { return style; }
+			if (style.url==item.style) { return style; }
 		}
 		return {};
 	}
