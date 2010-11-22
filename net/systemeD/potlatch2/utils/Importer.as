@@ -34,12 +34,12 @@ package net.systemeD.potlatch2.utils {
 
 			var sp:uint=0;
 			for each (var fn:String in filenames) {
+				var thissp:uint=sp;		// scope within this block for the URLLoader 'complete' closure
 				Globals.vars.root.addDebug("requesting file "+fn);
 				var request:DebugURLRequest = new DebugURLRequest(fn);
-				var loader:ExtendedURLLoader = new ExtendedURLLoader();
-				loader.info['file']=sp;
+				var loader:URLLoader = new URLLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
-				loader.addEventListener(Event.COMPLETE,fileLoaded);
+				loader.addEventListener(Event.COMPLETE,function(e:Event):void { fileLoaded(e,thissp); });
 				if (callback!=null) {
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
@@ -49,9 +49,9 @@ package net.systemeD.potlatch2.utils {
 			}
 		}
 		
-		protected function fileLoaded(e:Event):void {
-			Globals.vars.root.addDebug("loaded file "+e.target.info['file']); 
-			files[e.target.info['file']]=e.target.data;
+		protected function fileLoaded(e:Event,filenum:uint):void {
+			Globals.vars.root.addDebug("loaded file "+filenum); 
+			files[filenum]=e.target.data;
 			filesloaded++;
 			if (filesloaded==filenames.length) { 
 				doImport();
