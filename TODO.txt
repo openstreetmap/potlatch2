@@ -57,6 +57,13 @@ Potlatch 2: main outstanding issues
 * Have a check button for simplifying traces
 * Figure out how to call P2/Simplify for halcyon-based code
 
+== Bug Layer ==
+
+* Keep fetching new bugs when panning around
+* sort out the z-ordering so they appear above polygons/lines in halcyon
+* finish the delete bug code
+* Add comments etc
+
 Requested enhancements
 ----------------------
 
