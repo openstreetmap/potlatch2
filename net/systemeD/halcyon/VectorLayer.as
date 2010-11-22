@@ -174,5 +174,13 @@ package net.systemeD.halcyon {
 			relations={}; nodes={}; ways={}; pois=[];
 		}
 
+        /**
+        * Load more data, eg during panning of the map. This can be overridden by
+        * vector layers if it makes sense to support it.
+        */
+        public function loadBbox(left:Number, right:Number,
+                                top:Number, bottom:Number):void {
+        }
+
 	}
 }

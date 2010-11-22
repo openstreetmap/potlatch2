@@ -220,10 +220,9 @@ package net.systemeD.halcyon {
             }
 		}
 
-		// ------------------------------------------------------------------------------------------
-		// Download map data
-		// (typically from whichways, but will want to add more connections)
-
+        /** Download map data. Data is downloaded for the connection and the vector layers, where supported.
+        * The bounding box for the download is taken from the current map edges.
+        */
 		public function download():void {
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			
@@ -236,6 +235,11 @@ package net.systemeD.halcyon {
 			}
 			addDebug("Calling download with "+edge_l+"-"+edge_r+", "+edge_t+"-"+edge_b);
 			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+
+            // Do the same for vector layers
+            for each (var layer:VectorLayer in vectorlayers) {
+              layer.loadBbox(edge_l,edge_r,edge_t,edge_b);
+            }
 		}
 
         private function newWayCreated(event:EntityEvent):void {
