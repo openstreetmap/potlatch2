@@ -73,7 +73,10 @@ package net.systemeD.potlatch2.tools {
 				}
 			}
 
-			if (originalWay.isArea()) { parallelWay.appendNode(nodes[0],undo.push); }
+            if  ( originalWay.isArea() && parallelWay.getLastNode() != parallelWay.getNode(0) ) {
+                parallelWay.appendNode(nodes[0],undo.push);
+            }
+
 			parallelWay.resume();
 			undo.doAction();		// don't actually add it to the undo stack, just do it!
 		}
