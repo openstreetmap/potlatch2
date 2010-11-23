@@ -33,7 +33,6 @@ Potlatch 2: main outstanding issues
 * Failing to parse map_features should be an error state
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Potlatch 1-style "floaty warnings"
-* Repeat tags (R) doesn't update the advanced tag panel
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * GPS loading should have a loading... label
@@ -41,6 +40,7 @@ Potlatch 2: main outstanding issues
 * The standard keyboard shortcut of cmd+z doesn't work for undo, instead it just enters a z.
 * In the advanced tag view if you use the back delete key to delete it will delete the first one or two characters and then jump to the end of the text field. (Tested in Mac OS X and Windows) (Build 24127 geowiki.com)
 * If you get a map error (e.g. too many nodes in bbox) you don't get a helpful dialog
+* Changing tags throws a null reference error (advancedTagGrid) if it's the very first thing you do.
 
 == Rendering (Halcyon) ==
 
