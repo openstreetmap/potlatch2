@@ -295,7 +295,7 @@
 				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
 						url:  SharedObject.getLocal("user_state").data['background_url' ] };
 			} else {
-				saved={};
+				saved={ url: ''};
 			}
 
 			var isSet:Boolean=false;
