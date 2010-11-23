@@ -66,8 +66,8 @@ package net.systemeD.halcyon {
 		public var initparams:Object;					// object containing HTML page parameters
 
 		public var backdrop:Object;						// reference to backdrop sprite
-		public var tileset:TileSet;						// 900913 tile background
-		private var tileurl:String='';					// internal tile URL
+		public var tileset:TileSet;						// background tile object
+		private var tileparams:Object={ url:'' };		// background tile URL, name and scheme
 		private var styleurl:String='';					// internal style URL
 		public var showall:Boolean=true;				// show all objects, even if unstyled?
 		
@@ -120,7 +120,7 @@ package net.systemeD.halcyon {
 
 			tileset=new TileSet(this);					// 0 - 900913 background
 			addChild(tileset);							//   |
-			tileset.init(tileurl);						//   |
+			tileset.init(tileparams);					//   |
 
 			vectorbg = new Sprite();					// 1 - vector background layers
 			addChild(vectorbg);							//   |
@@ -361,9 +361,9 @@ package net.systemeD.halcyon {
 			}
         }
 
-		public function setBackground(url:String):void {
-			tileurl=url;
-			if (tileset) { tileset.init(url, url!=''); }
+		public function setBackground(bg:Object):void {
+			tileparams=bg;
+			if (tileset) { tileset.init(bg, bg.url!=''); }
 		}
 
 		public function setDimming(dim:Boolean):void {

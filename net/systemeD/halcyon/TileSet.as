@@ -21,6 +21,7 @@ package net.systemeD.halcyon {
 		private var tiles:Object={};		// key is "z,x,y"; value "true" (needed) or reference to sprite
 		private var waiting:int=0;			// number of tiles currently being downloaded
 		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
+		private var scheme:String;			// 900913 or microsoft
 
 		private var map:Map;
 
@@ -32,8 +33,9 @@ package net.systemeD.halcyon {
 			map.addEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
 	
-		public function init(url:String=null, update:Boolean=false):void {
-			baseurl=url;
+		public function init(params:Object, update:Boolean=false):void {
+			baseurl=params.url;
+			scheme =params.scheme ? params.scheme : '900913';
 			tiles={};
 			offset_lon=offset_lat=x=y=0;
 			while (numChildren) { removeChildAt(0); }
@@ -95,7 +97,7 @@ package net.systemeD.halcyon {
 					var loader:Loader = new Loader();
 					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit);
             		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError);
-					loader.load(new URLRequest(tileURL(tx,ty)), 
+					loader.load(new URLRequest(tileURL(tx,ty,tz)), 
 					            new LoaderContext(true));
 					l=this.getChildAt(map.scale-map.MINSCALE);
 					Sprite(l).addChild(loader);
@@ -127,8 +129,23 @@ package net.systemeD.halcyon {
 		
 		// Assemble tile URL
 		
-		private function tileURL(tx:int,ty:int):String {
-			return baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+		private function tileURL(tx:int,ty:int,tz:uint):String {
+			switch (scheme.toLowerCase()) {
+
+				case 'microsoft':
+					var u:String='';
+					for (var zoom:uint=tz; zoom>0; zoom--) {
+						var byte:uint=0;
+						var mask:uint=1<<(zoom-1);
+						if ((tx & mask)!=0) byte++;
+						if ((ty & mask)!=0) byte+=2;
+						u+=String(byte);
+					}
+					return baseurl.replace('$quadkey',u);
+
+				default:
+					return baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+			}	
 		}
 		
 		public function get url():String {
