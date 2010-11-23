@@ -61,7 +61,6 @@ Potlatch 2: main outstanding issues
 == Bug Layer ==
 
 * sort out the z-ordering so they appear above polygons/lines in halcyon
-* finish the delete bug code
 * Add comments etc
 
 Requested enhancements

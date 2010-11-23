@@ -2,7 +2,8 @@ package net.systemeD.potlatch2 {
 
     import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.halcyon.Map;
-    import net.systemeD.halcyon.connection.Marker;
+    import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.connection.actions.*;
     import flash.net.*;
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
@@ -36,12 +37,12 @@ package net.systemeD.potlatch2 {
             urlReq.data = '    '; // dear Adobe, this is nuts, kthxbye (you can't POST with an empty payload)
             var loader:URLLoader = new URLLoader();
             loader.load(urlReq);
-            loader.addEventListener(Event.COMPLETE, bugClosed);
+            loader.addEventListener(Event.COMPLETE, function(e:Event):void { bugClosed(e, m); } );
         }
 
-        private function bugClosed(event:Event):void {
-            trace("bug closed");
-            // remove it from the layer, redraw, fix selection etc.
+        private function bugClosed(event:Event, marker:Marker):void {
+            var action:UndoableEntityAction = new SetTagAction(marker, "status", status[int(BUG_STATUS_FIXED)]);
+            action.doAction(); // just do it, don't add to undo stack
         }
 
         public override function loadBbox(left:Number, right:Number,
