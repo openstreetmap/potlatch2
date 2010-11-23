@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Bug Panel
+-->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
+  <mx:Text id="markerPanelText" text="You have selected a BUG!!1!." width="100%" styleName="helpInfo" />
+  <mx:DataGrid editable="false" id="markerPanelDG" width="100%" height="50%">
+    <mx:columns>
+      <mx:DataGridColumn editable="false" dataField="key" headerText="key" />
+      <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
+    </mx:columns>
+  </mx:DataGrid>
+  <mx:HBox id="bugControl" horizontalAlign="right" width="100%" visible="false">
+    <mx:LinkButton label="Add Comment" enabled="false" />
+    <mx:LinkButton label="Close Bug" click="closeBug()" />
+  </mx:HBox>
+  <mx:Script><![CDATA[
+
+      import net.systemeD.halcyon.connection.*;
+      import net.systemeD.halcyon.VectorLayer;
+      import net.systemeD.potlatch2.BugLayer;
+      import mx.collections.*;
+
+      private var selectedEntity:Entity;
+      private var tagDataProvider:ArrayCollection;
+      private var layer:VectorLayer;
+
+      public function init(entity:Entity, layer:VectorLayer):void {
+            this.layer = layer;
+            if ( tagDataProvider == null ) {
+                tagDataProvider = new ArrayCollection();
+                markerPanelDG.dataProvider = tagDataProvider;
+            }
+
+            selectedEntity=entity;
+            updateTagDataProvider();
+            if (layer is BugLayer) {
+              bugControl.visible = true;
+            }
+      }
+
+      private function updateTagDataProvider():void {
+            tagDataProvider.removeAll();
+            if (selectedEntity==null) { return; }
+            var tags:Array = selectedEntity.getTagArray();
+            tags.sortOn("key");
+            for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
+      }
+
+      private function closeBug():void {
+            if (layer is BugLayer) {
+              BugLayer(layer).closeBug(selectedEntity as Marker);
+            }
+      }
+      ]]>
+  </mx:Script>
+</mx:VBox>

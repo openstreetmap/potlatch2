@@ -4,6 +4,7 @@
 	xmlns:flexlib="flexlib.containers.*"
 	xmlns:controls="net.systemeD.controls.*"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
+    xmlns:sidepanel="net.systemeD.potlatch2.panels.*"
 	horizontalScrollPolicy="off"
     backgroundColor="white"
     initialize="loadFeatures()">
@@ -126,7 +127,11 @@
   </mx:VBox>
 
   <mx:VBox id="markerPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
-    <potlatch2:MarkerPanel id="markerPanelContents" width="100%"/>
+    <sidepanel:MarkerPanel id="markerPanelContents" width="100%"/>
+  </mx:VBox>
+
+  <mx:VBox id="bugPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <sidepanel:BugPanel id="bugPanelContents" width="100%"/>
   </mx:VBox>
 
 </mx:ViewStack>
@@ -179,7 +184,10 @@
 			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
-            if (selectedEntity is Marker) {
+            if (selectedEntity is Marker && layer is BugLayer) {
+              bugPanelContents.init(selectedEntity, layer);
+              sidebar.selectedChild = bugPanel;
+            } else if (selectedEntity is Marker) {
               markerPanelContents.init(selectedEntity, layer);
               sidebar.selectedChild = markerPanel;
             } else {
