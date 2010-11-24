@@ -14,10 +14,10 @@ package net.systemeD.potlatch2 {
         private var apiKey:String;
 
         // as strings, since that's how they are in tags and http calls
-        private var BUG_STATUS_OPEN:String = "1";
-        private var BUG_STATUS_FIXED:String = "2";
-        private var BUG_STATUS_INVALID:String = "3"; // or 'non-reproduceable'
-        private static const status:Array = ["", "open", "fixed", "invalid"];
+        public static var BUG_STATUS_OPEN:String = "1";
+        public static var BUG_STATUS_FIXED:String = "2";
+        public static var BUG_STATUS_INVALID:String = "3"; // or 'non-reproduceable'
+        public static const status:Array = ["", "open", "fixed", "invalid"];
 
         public function BugLayer(n:String, map:Map, s:String, baseUrl:String, apiKey:String) {
             this.baseUrl = baseUrl;
