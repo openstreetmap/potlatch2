@@ -12,10 +12,24 @@
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
-  <mx:HBox id="bugControl" horizontalAlign="right" width="100%" visible="false">
-    <mx:LinkButton label="Add Comment" enabled="false" />
-    <mx:LinkButton label="Close Bug" click="closeBug()" />
-  </mx:HBox>
+  <mx:ViewStack id="bugControlStack" resizeToContent="true">
+    <mx:HBox id="bugControl" horizontalAlign="right" width="100%" visible="false">
+      <mx:LinkButton label="Add Comment" enabled="false" />
+      <mx:LinkButton label="Close Bug" click="bugControlStack.selectedChild=closeBugVBox;" />
+    </mx:HBox>
+
+    <mx:VBox id="closeBugVBox" visible="false">
+      <mx:Text><mx:text>Add your comment and close the bug</mx:text></mx:Text>
+      <mx:Label><mx:text>NickName</mx:text></mx:Label>
+      <mx:TextInput id="nickName" restrict="a-zA-Z0-9.\-_"/>
+      <mx:Text><mx:text>Comment form</mx:text></mx:Text>
+      <mx:TextArea id="closeComment" />
+      <mx:HBox horizontalAlign="right" width="100%">
+          <mx:LinkButton label="Cancel" click="bugControlStack.selectedChild=bugControl;" />
+          <mx:LinkButton label="Close Bug" click="closeBug()" />
+      </mx:HBox>
+    </mx:VBox>
+  </mx:ViewStack>
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
@@ -51,7 +65,7 @@
 
       private function closeBug():void {
             if (layer is BugLayer) {
-              BugLayer(layer).closeBug(selectedEntity as Marker);
+              BugLayer(layer).closeBug(selectedEntity as Marker, nickName.text, closeComment.text);
             }
       }
       ]]>
