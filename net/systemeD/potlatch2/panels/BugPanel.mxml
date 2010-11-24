@@ -10,12 +10,12 @@
     <mx:Text text="{bugTitle}" fontWeight="bold" fontSize="18" />
   </mx:HBox>
   <mx:HBox>
-    <mx:Text text="Created:" />
-    <mx:Text text="{bugCreated}" />
+    <mx:Text text="Created: " />
+    <mx:Text text="{bugCreated.toLocaleString()}" />
   </mx:HBox>
   <mx:HBox>
     <mx:Text text="Updated:" />
-    <mx:Text text="{bugUpdated}" />
+    <mx:Text text="{bugUpdated.toLocaleString()}" />
   </mx:HBox>
   <mx:HBox>
     <mx:Text text="Type of bug: " />
@@ -59,6 +59,7 @@
       import net.systemeD.halcyon.VectorLayer;
       import net.systemeD.potlatch2.BugLayer;
       import mx.collections.*;
+      import com.adobe.utils.DateUtil;
 
       private var selectedEntity:Entity;
       private var layer:VectorLayer;
@@ -69,8 +70,8 @@
       [Bindable] private var bugType:String;
       [Bindable] private var bugImage:String;
       [Bindable] private var bugTitle:String;
-      [Bindable] private var bugCreated:String;
-      [Bindable] private var bugUpdated:String;
+      [Bindable] private var bugCreated:Date;
+      [Bindable] private var bugUpdated:Date;
 
       public function init(entity:Entity, layer:VectorLayer):void {
             this.layer = layer;
@@ -82,8 +83,8 @@
             bugDescription = selectedEntity.getTag("description");
             bugType = selectedEntity.getTag("type").replace(/_/g, " ");
             bugImage = 'features/bugs/'+bugStatus+'.png';
-            bugCreated = selectedEntity.getTag("date_created");
-            bugUpdated = selectedEntity.getTag("date_updated");
+            bugCreated = DateUtil.parseW3CDTF(selectedEntity.getTag("date_created"));
+            bugUpdated = DateUtil.parseW3CDTF(selectedEntity.getTag("date_updated"));
 
             if ( bugStatus == BugLayer.status[int(BugLayer.BUG_STATUS_FIXED)] ) {
               bugControlStack.selectedChild = bugFixed;
