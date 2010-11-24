@@ -61,7 +61,10 @@ Potlatch 2: main outstanding issues
 == Bug Layer ==
 
 * sort out the z-ordering so they appear above polygons/lines in halcyon
-* Add comments etc
+* View comments and add new comments
+* Reopen?
+* Handle errors when closing bugs (especially nickname-based errors)
+* Multiple downloads create multiple copies of the same bug...
 
 Requested enhancements
 ----------------------
