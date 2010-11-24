@@ -145,7 +145,15 @@
 		if (type=='gpx') { stylesheet="gpx.css"; }
 		var vectorlayer:VectorLayer=new VectorLayer(name,map,stylesheet);
 		vectorlayer.url=url;
-		map.addVectorLayer(vectorlayer);
+
+                var filesLoaded:Function = function(success:Boolean,message:String=null):void {
+                        if (success) {
+                                map.addVectorLayer(vectorlayer);
+                                dispatchEvent(new Event("layers_changed"));
+                        } else {
+                                Alert.show(message, 'Error', mx.controls.Alert.OK);
+                        }
+                }
 
 		if (type=='gpx') {
 			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
@@ -158,14 +166,6 @@
 			var shp:ShpImporter=new ShpImporter(vectorlayer,
 			                                    vectorlayer.paint,
 			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify);
-		}
-	}
-	
-	public function filesLoaded(success:Boolean,message:String=null):void {
-		if (success) {
-			dispatchEvent(new Event("layers_changed"));
-		} else {
-			Alert.show(message, 'Error', mx.controls.Alert.OK);
 		}
 	}
 
