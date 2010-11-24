@@ -10,7 +10,7 @@ package net.systemeD.potlatch2.tools {
 		private static const TOLERANCE:Number=0.00005;
 
 		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean):void {
-			if (way.length<3 || way.isArea()) { return; }
+			if (way.length<3) { return; }
 
 			var action:CompositeUndoableAction = new CompositeUndoableAction("Simplify");
 			
