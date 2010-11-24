@@ -44,11 +44,11 @@ package net.systemeD.potlatch2.utils {
                 }
 
                 for each (var linestring:XML in placemark.LineString) {
-                    importWay(linestring.coordinates, tags);
+                    importWay(linestring.coordinates, tags, false);
                 }
 
                 for each (var linearring:XML in placemark.LinearRing) {
-                    importWay(linearring.coordinates, tags);
+                    importWay(linearring.coordinates, tags, true);
                 }
 
                 for each (var polygon:XML in placemark.Polygon) {
@@ -56,11 +56,11 @@ package net.systemeD.potlatch2.utils {
                         var members:Array = [];
                         var way:Way;
 
-                        way = importWay(polygon.outerBoundaryIs.LinearRing.coordinates, {});
+                        way = importWay(polygon.outerBoundaryIs.LinearRing.coordinates, {}, true);
                         members.push(new RelationMember(way, "outer"));
 
                         for each (var inner:XML in polygon.innerBoundaryIs) {
-                            way = importWay(inner.LinearRing.coordinates, {});
+                            way = importWay(inner.LinearRing.coordinates, {}, true);
                             members.push(new RelationMember(way, "inner"));
                         }
 
@@ -68,7 +68,7 @@ package net.systemeD.potlatch2.utils {
 
                         container.createRelation(tags, members);
                     } else {
-                        importWay(polygon.outerBoundaryIs.LinearRing.coordinates, tags);
+                        importWay(polygon.outerBoundaryIs.LinearRing.coordinates, tags, true);
                     }
                 }
             }
@@ -87,9 +87,13 @@ package net.systemeD.potlatch2.utils {
             return node;
         }
 
-        private function importWay(coordinates:String, tags:Object): Way {
+        private function importWay(coordinates:String, tags:Object, polygon:Boolean): Way {
             var way:Way;
             var nodestring:Array = [];
+
+            if (polygon) {
+                coordinates = coordinates.slice(0, coordinates.lastIndexOf(" "));
+            }
 
             for each (var tuple:String in coordinates.split(" ")) {
                 var coords:Array = tuple.split(",");
@@ -98,6 +102,10 @@ package net.systemeD.potlatch2.utils {
                 //var ele:Number = coords[2];
 
                 nodestring.push(container.createNode({}, lat, lon));
+            }
+
+            if (polygon) {
+                nodestring.push(nodestring[0]);
             }
 
             if (nodestring.length > 0) {
