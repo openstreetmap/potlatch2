@@ -78,9 +78,25 @@ package net.systemeD.halcyon {
             return relation;
 		}
 
-        public function createMarker(tags:Object,lat:Number,lon:Number):Marker {
-            var marker:Marker = new Marker(negativeID, 0, tags, true, lat, lon);
-            markers[negativeID]=marker; negativeID--;
+        /**
+        * Create a new Marker on the VectorLayer. If you pass in an id it'll check first whether that
+        * marker has been created already, and won't duplicate it.
+        *
+        * @param tags The tags for the new Marker
+        * @param lat The latitude
+        * @param lon The longitude
+        * @param id Use this id for the marker, useful for when layer might be reloaded during panning
+        */
+        public function createMarker(tags:Object,lat:Number,lon:Number,id:Number=NaN):Marker {
+            if (!id) {
+              id = negativeID;
+              negativeID--;
+            }
+            var marker:Marker = markers[id];
+            if (marker == null) {
+              marker = new Marker(id, 0, tags, true, lat, lon);
+              markers[id]=marker;
+            }
             return marker;
         }
 

@@ -64,7 +64,6 @@ Potlatch 2: main outstanding issues
 * View comments and add new comments
 * Reopen?
 * Handle errors when closing bugs (especially nickname-based errors)
-* Multiple downloads create multiple copies of the same bug...
 
 Requested enhancements
 ----------------------

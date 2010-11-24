@@ -67,7 +67,7 @@ package net.systemeD.potlatch2 {
                 tags["date_updated"] = feature.properties.date_updated;
                 tags["source"] = feature.properties.source;
                 tags["status"] = status[int(feature.properties.status)];
-                var marker:Marker = createMarker(tags, lat, lon);
+                var marker:Marker = createMarker(tags, lat, lon, Number(feature.id));
               }
               paint.updateEntityUIs(getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
             }
