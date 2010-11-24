@@ -12,10 +12,6 @@
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
-  <mx:HBox id="bugControl" horizontalAlign="right" width="100%" visible="false">
-    <mx:LinkButton label="Add Comment" enabled="false" />
-    <mx:LinkButton label="Close Bug" click="closeBug()" />
-  </mx:HBox>
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
@@ -36,9 +32,6 @@
 
             selectedEntity=entity;
             updateTagDataProvider();
-            if (layer is BugLayer) {
-              bugControl.visible = true;
-            }
       }
 
       private function updateTagDataProvider():void {
@@ -47,12 +40,6 @@
             var tags:Array = selectedEntity.getTagArray();
             tags.sortOn("key");
             for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
-      }
-
-      private function closeBug():void {
-            if (layer is BugLayer) {
-              BugLayer(layer).closeBug(selectedEntity as Marker);
-            }
       }
       ]]>
   </mx:Script>
