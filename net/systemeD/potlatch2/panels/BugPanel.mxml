@@ -24,22 +24,28 @@
   <mx:TextArea editable="false" text="{bugDescription}" width="100%" fontSize="14" minHeight="100" maxHeight="400"/>
 
   <mx:ViewStack id="bugControlStack" resizeToContent="true" width="100%">
-    <mx:HBox id="bugFixed" backgroundColor="#ddffdd" width="100%" padding>
+    <mx:HBox id="bugFixed" backgroundColor="#ddffdd" width="100%">
       <mx:Text text="This bug has been marked as Fixed" width="100%"/>
     </mx:HBox>
+
     <mx:HBox id="bugInvalid" backgroundColor="#dddddd" width="100%">
       <mx:Text text="This bug has been marked as Invalid" width="100%"/>
     </mx:HBox>
+
     <mx:HBox id="bugControl" horizontalAlign="right" width="100%">
       <mx:LinkButton label="Add Comment" enabled="false" />
       <mx:LinkButton label="Close Bug" click="bugControlStack.selectedChild=closeBugVBox;" />
     </mx:HBox>
+
     <mx:VBox id="closeBugVBox" visible="false">
       <mx:Text><mx:text>Add your comment and close the bug</mx:text></mx:Text>
-      <mx:Label><mx:text>NickName</mx:text></mx:Label>
-      <mx:TextInput id="nickName" restrict="a-zA-Z0-9.\-_"/>
-      <mx:Text><mx:text>Comment form</mx:text></mx:Text>
-      <mx:TextArea id="closeComment" />
+      <mx:Label><mx:text>Your NickName (3-16 chars):</mx:text></mx:Label>
+      <mx:TextInput id="nickName" restrict="a-zA-Z0-9.\-_" width="100%"/>
+      <mx:Text><mx:text>Comment:</mx:text></mx:Text>
+      <mx:TextArea id="closeComment" width="100%"/>
+      <mx:Text text="Mark bug as:"/>
+      <mx:RadioButton groupName="status" id="option_fixed" label="Fixed" selected="true"/>
+      <mx:RadioButton groupName="status" id="option_invalid" label="Invalid" />
       <mx:HBox horizontalAlign="right" width="100%">
           <mx:LinkButton label="Cancel" click="bugControlStack.selectedChild=bugControl;" />
           <mx:LinkButton label="Close Bug" click="closeBug()" />
@@ -89,11 +95,12 @@
       }
 
       private function closeBug():void {
-            if (layer is BugLayer) {
-              BugLayer(layer).closeBug(selectedEntity as Marker, nickName.text, closeComment.text);
-            }
+            var status:String = option_invalid.selected ? BugLayer.BUG_STATUS_INVALID : BugLayer.BUG_STATUS_FIXED;
+            trace(status);
+            BugLayer(layer).closeBug(selectedEntity as Marker, nickName.text, closeComment.text, status);
             bugStatus = selectedEntity.getTag("status");
-            bugControlStack.selectedChild = bugFixed;
+            // this should really be a 'saving...' state, with a callback depending on the server result
+            bugControlStack.selectedChild = option_invalid.selected ? bugInvalid : bugFixed;
       }
 
       ]]>

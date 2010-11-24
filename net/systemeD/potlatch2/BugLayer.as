@@ -25,21 +25,19 @@ package net.systemeD.potlatch2 {
             super(n,map,s);
         }
 
-        public function closeBug(m:Marker, nickname:String = "NoName", comment:String = "No Comment"):void {
+        public function closeBug(m:Marker, nickname:String = "NoName", comment:String = "No Comment", status:String = null):void {
             var id:String = m.getTag('bug_id');
-            var status:String = BUG_STATUS_FIXED;
-
-            //TODO urlencode stuff
+            status ||= BUG_STATUS_FIXED;
             var urlReq:URLRequest = new URLRequest(baseUrl+"changeBugStatus?id="+id+"&status="+status+"&comment="+encodeURIComponent(comment)+"&nickname="+encodeURIComponent(nickname)+"&key="+apiKey);
             urlReq.method = "POST";
             urlReq.data = '    '; // dear Adobe, this is nuts, kthxbye (you can't POST with an empty payload)
             var loader:URLLoader = new URLLoader();
             loader.load(urlReq);
-            loader.addEventListener(Event.COMPLETE, function(e:Event):void { bugClosed(e, m); } );
+            loader.addEventListener(Event.COMPLETE, function(e:Event):void { bugClosed(e, m, status); } );
         }
 
-        private function bugClosed(event:Event, marker:Marker):void {
-            var action:UndoableEntityAction = new SetTagAction(marker, "status", status[int(BUG_STATUS_FIXED)]);
+        private function bugClosed(event:Event, marker:Marker, s:String):void {
+            var action:UndoableEntityAction = new SetTagAction(marker, "status", status[int(s)]);
             action.doAction(); // just do it, don't add to undo stack
         }
 
