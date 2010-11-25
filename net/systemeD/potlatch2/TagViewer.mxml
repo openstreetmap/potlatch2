@@ -560,7 +560,9 @@
           refreshFeatureIcon();
           // if the advancedTagGrid has already been set up, it needs to be refreshed.
           // FIXME make this better, maybe advancedTagGrid should be event listening.
-          setupAdvanced(selectedEntity);
+          if(advancedContainer.initialized) {
+            checkAdvanced();
+          }
       }
 
       public function loadFeatures():void {

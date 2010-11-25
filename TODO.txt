@@ -39,7 +39,6 @@ Potlatch 2: main outstanding issues
 * The standard keyboard shortcut of cmd+z doesn't work for undo, instead it just enters a z.
 * In the advanced tag view if you use the back delete key to delete it will delete the first one or two characters and then jump to the end of the text field. (Tested in Mac OS X and Windows) (Build 24127 geowiki.com)
 * If you get a map error (e.g. too many nodes in bbox) you don't get a helpful dialog
-* Changing tags throws a null reference error (advancedTagGrid) if it's the very first thing you do.
 
 == Rendering (Halcyon) ==
 
