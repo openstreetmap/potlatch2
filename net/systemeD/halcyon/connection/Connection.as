@@ -312,12 +312,12 @@ package net.systemeD.halcyon.connection {
 
 		public function purgeOutside(left:Number, right:Number, top:Number, bottom:Number):void {
 			for each (var way:Way in ways) {
-				if (!way.within(left,right,top,bottom) && !way.isDirty) {
+				if (!way.within(left,right,top,bottom) && !way.isDirty && !way.locked && !way.hasLockedNodes()) {
 					killWayWithNodes(way.id);
 				}
 			}
 			for each (var poi:Node in pois) {
-				if (!poi.within(left,right,top,bottom) && !poi.isDirty) {
+				if (!poi.within(left,right,top,bottom) && !poi.isDirty && !poi.locked) {
 					killNode(poi.id);
 				}
 			}

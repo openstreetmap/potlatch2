@@ -81,6 +81,13 @@ package net.systemeD.halcyon.connection {
 		public function hasOnceOnly(node:Node):Boolean {
 			return nodes.indexOf(node)==nodes.lastIndexOf(node);
 		}
+		
+		public function hasLockedNodes():Boolean {
+			for each (var node:Node in nodes) {
+				if (node.locked) { return true; }
+			}
+			return false;
+		}
 
 		public function removeNode(node:Node, performAction:Function):void {
 			performAction(new RemoveNodeFromWayAction(this, node, nodes));

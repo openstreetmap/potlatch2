@@ -14,7 +14,7 @@ package net.systemeD.halcyon.connection {
         private var modified:Boolean = false;
 		private var _loaded:Boolean = true;
 		private var parents:Dictionary = new Dictionary();
-		private var locked:Boolean = false;
+		public var locked:Boolean = false;						// lock against purging when off-screen
 		public var deleted:Boolean = false;
 
         public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {

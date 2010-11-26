@@ -274,15 +274,19 @@ package net.systemeD.halcyon {
 			if (paint.wayuis[way.id]) paint.wayuis[way.id].setHighlightOnNodes(settings);
         }
 
+		/* Protect Entities and EntityUIs against purging. This prevents the currently selected items
+		   from being purged even though they're off-screen. */
+
 		public function setPurgable(entities:Array, purgable:Boolean):void {
 			for each (var entity:Entity in entities) {
+				entity.locked=!purgable;
 				if ( entity is Way  ) {
 					var way:Way=entity as Way;
 					if (paint.wayuis[way.id]) { paint.wayuis[way.id].purgable=purgable; }
 					for (var i:uint=0; i<way.length; i++) {
-						if (paint.nodeuis[way.getNode(i).id]) {
-							paint.nodeuis[way.getNode(i).id].purgable=purgable;
-						}
+						var node:Node=way.getNode(i)
+						node.locked=!purgable;
+						if (paint.nodeuis[node.id]) { paint.nodeuis[node.id].purgable=purgable; }
 					}
 				} else if ( entity is Node && paint.nodeuis[entity.id]) { 
 					paint.nodeuis[entity.id].purgable=purgable;
