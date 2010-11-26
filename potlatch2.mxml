@@ -153,6 +153,12 @@
 
 			// create map and Yahoo
 			theMap=new Map(this.loaderInfo.parameters);
+
+            // Auto-load vector backgrounds from config
+            // This could go spectacularly wrong if map.init completes before the event listener below is added
+            var vectorloader:AutoVectorBackground = new AutoVectorBackground(theMap);
+            theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void {vectorloader.load();});
+
 			theMap.backdrop=b;
 			yahoo=new Yahoo(w,h,theMap);
 			yahoo.hide();
