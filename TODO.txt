@@ -82,7 +82,6 @@ Requested enhancements
 
 == UI ==
 
-* Bbox-sensitive menu for background imagery
 * CSS editing
 * Quick-search on add-relations-to-way dialog (RelationSelectPanel)
 * i18n
