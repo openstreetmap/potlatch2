@@ -42,6 +42,7 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
+** Entities need some sort of .purgable attribute (like EntityUIs) - currently you can select an item, then pan off-screen, and the entity is deleted at next purge, causing an exception whenever P2 tries to access it (e.g. via the selection)
 * halcyon_viewer needs updating for new tileurl stuff
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
