@@ -306,9 +306,9 @@
 				{ name: "Yahoo", url: "yahoo", sourcetag: "Yahoo" } );
 			for each(var set:XML in xml.set) {
 				var obj:Object={};
-				for (var a:String in set.children()) {
-					obj[set.child(a).name()]=set.child(a);
-				}
+				var a:XML;
+				for each (a in set.@*) { obj[a.name().localName]=a.toString(); }
+				for each (a in set.* ) { obj[a.name()          ]=a.toString(); }
                 theController.imagery.push(obj);
 				if ((obj.url ==saved.url) ||
 				    (obj.name==saved.name && obj.name!='Custom')) { isSet=true; }
@@ -340,6 +340,27 @@
 			obj.setProperty('background_url' ,String(bg.url));
 			obj.setProperty('background_name',String(bg.name));
 			obj.flush();
+		}
+
+		public function getAvailableImagery():Array {
+			var available:Array=[];
+			for each (var bg:Object in theController.imagery) {
+				if (bg.minlon) {
+					// if there's a bbox, check the current viewport intersects it
+					if (((theMap.edge_l>bg.minlon && theMap.edge_l<bg.maxlon) ||
+					     (theMap.edge_r>bg.minlon && theMap.edge_r<bg.maxlon) ||
+					     (theMap.edge_l<bg.minlon && theMap.edge_r>bg.maxlon)) &&
+					    ((theMap.edge_b>bg.minlat && theMap.edge_b<bg.maxlat) ||
+					     (theMap.edge_t>bg.minlat && theMap.edge_t<bg.maxlat) ||
+					     (theMap.edge_b<bg.minlat && theMap.edge_t>bg.maxlat))) {
+						available.push(bg);
+					}
+				} else {
+					// if there's no bbox (i.e. global set), include it anyway
+					available.push(bg);
+				}
+			}
+			return available;
 		}
 
 		private function onStylesheetsLoad(event:Event):void {

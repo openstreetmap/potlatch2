@@ -7,7 +7,7 @@
 	<mx:List width="100%" height="100%" id="background" verticalScrollPolicy="on" 
 			labelField="name"
 			change="Application.application.bgButton.close(); Application.application.setBackground(background.selectedItem);" 			
-	        dataProvider="{Application.application.theController.imagery}" />
+	        dataProvider="{Application.application.getAvailableImagery()}" />
 	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
 	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
 
