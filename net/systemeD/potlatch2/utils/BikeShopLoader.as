@@ -30,9 +30,6 @@ package net.systemeD.potlatch2.utils {
         public function BikeShopLoader(map:Map, url:String) {
             this.map = map;
             this.bikeShopBaseURL = url;
-            var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
-            trace(policyFile)
-            Security.loadPolicyFile(policyFile);
         }
 
         public function load():void {
@@ -69,6 +66,10 @@ package net.systemeD.potlatch2.utils {
         private function get layer():VectorLayer {
             if (!_layer) {
                 var n:String='Bike Shops';
+
+                var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
+                Security.loadPolicyFile(policyFile);
+
                 _layer=new VectorLayer(n,map,STYLESHEET);
                 map.addVectorLayer(_layer);
             }

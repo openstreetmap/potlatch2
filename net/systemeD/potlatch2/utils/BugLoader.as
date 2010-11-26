@@ -21,8 +21,6 @@ package net.systemeD.potlatch2.utils {
             this.map = map;
             this.bugBaseURL = url;
             this.bugApiKey = bugApiKey;
-            var policyFile:String = bugBaseURL+"crossdomain.xml";
-            Security.loadPolicyFile(policyFile);
         }
 
         public function load():void {
@@ -33,6 +31,10 @@ package net.systemeD.potlatch2.utils {
         private function get layer():VectorLayer {
             if (!_layer) {
                 var n:String='Bugs';
+
+                var policyFile:String = bugBaseURL+"crossdomain.xml";
+                Security.loadPolicyFile(policyFile);
+
                 _layer=new BugLayer(n,map,STYLESHEET,bugBaseURL,bugApiKey);
                 map.addVectorLayer(_layer);
             }
