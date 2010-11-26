@@ -143,6 +143,7 @@ package net.systemeD.halcyon {
 			basey      =lat2latp(startlat)+(mapheight/2)/scalefactor;
 			addDebug("Baselon "+baselon+", basey "+basey);
 			updateCoords(0,0);
+            this.dispatchEvent(new Event(MapEvent.INITIALISED));
 			download();
 			
         }

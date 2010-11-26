@@ -10,6 +10,7 @@ package net.systemeD.halcyon {
 		public static const SCALE:String = "scale";
 		public static const NUDGE_BACKGROUND:String = "nudge_background";
 		public static const ERROR:String = "error";
+        public static const INITIALISED:String = "initialized";
 
 		public var params:Object;
 
