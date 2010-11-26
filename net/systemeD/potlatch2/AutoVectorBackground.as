@@ -6,7 +6,7 @@ package net.systemeD.potlatch2 {
         import flash.net.*
         import net.systemeD.halcyon.Map;
         import net.systemeD.halcyon.DebugURLRequest;
-        import net.systemeD.potlatch2.utils.BugLoader;
+        import net.systemeD.potlatch2.utils.*;
 
         private var map:Map;
 
@@ -30,6 +30,7 @@ package net.systemeD.potlatch2 {
                   break;
                 case "KMLImporter":
                   break;
+
                 case "BugLoader":
                   if (set.url && set.apiKey) {
                     var bugLoader:BugLoader = new BugLoader(map, String(set.url), String(set.apikey));
@@ -40,6 +41,18 @@ package net.systemeD.potlatch2 {
                     trace("AutoVectorBackground: error with BugLoader");
                   }
                   break;
+
+                case "BikeShopLoader":
+                  if (set.url) {
+                    var bikeShopLoader:BikeShopLoader = new BikeShopLoader(map, String(set.url));
+                    if (set.@loaded == "true") {
+                      bikeShopLoader.load();
+                    }
+                  } else {
+                    trace("AutoVectorBackground: no url for BikeShopLoader");
+                  }
+                  break;
+
                 default:
                   trace("AutoVectorBackground: unknown loader");
               }

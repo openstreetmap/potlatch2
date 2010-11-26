@@ -37,8 +37,6 @@
 				</mx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
-        <mx:Button id="bugsButton" label="Bugs" click="bugLoader.load();" visible="false"/>
-        <mx:Button id="bikeButton" label="Bike Shops" click="bikeShopLoader.load();" visible="false" />
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
@@ -216,15 +214,6 @@
 
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
-
-            // create Bug loader
-            if (loaderInfo.parameters["bugs_url"] && loaderInfo.parameters["bugs_apikey"]) {
-              bugsButton.visible = true;
-              bugLoader = new BugLoader(theMap, loaderInfo.parameters["bugs_url"], loaderInfo.parameters["bugs_apikey"]);
-            }
-
-            // create Bike Shop loader
-            bikeShopLoader = new BikeShopLoader(theMap, 'http://shaunmcdonald.dev.openstreetmap.org/bike-shop-locator/');
 
             // Force authentication on startup, if required
             // force_auth == force => checks for access token, and displays OAuth panel if needed
