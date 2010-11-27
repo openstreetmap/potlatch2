@@ -328,8 +328,8 @@
 		}
 		
 		public function setBackground(bg:Object):void {
-			if (bg.url=='yahoo') { theMap.setBackground(''); yahoo.show(); }
-			                else { theMap.setBackground(bg); yahoo.hide(); }
+			if (bg.url=='yahoo') { theMap.setBackground({url:''}); yahoo.show(); }
+			                else { theMap.setBackground(bg      ); yahoo.hide(); }
 			theController.imagerySelected=bg;
 			var obj:SharedObject = SharedObject.getLocal("user_state");
 			obj.setProperty('background_url' ,String(bg.url));
