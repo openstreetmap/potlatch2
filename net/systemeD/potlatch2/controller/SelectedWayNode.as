@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	import flash.ui.Keyboard;
+	import flash.geom.Point;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
@@ -68,6 +69,7 @@ package net.systemeD.potlatch2.controller {
 				case 88:					return splitWay();						// 'X'
 				case 82:					repeatTags(firstSelected); return this;	// 'R'
 				case 87:					return new SelectedWay(parentWay);		// 'W'
+				case 191:					return cycleWays();						// '/'
                 case 74:                    if (event.shiftKey) { return unjoin() }; return this;// 'J'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
@@ -78,6 +80,15 @@ package net.systemeD.potlatch2.controller {
 
 		override public function get selectedWay():Way {
 			return parentWay;
+		}
+
+		private function cycleWays():ControllerState {
+			var wayList:Array=firstSelected.parentWays;
+			wayList.splice(wayList.indexOf(parentWay),1);
+			return new SelectedWay(wayList[0],
+			                       new Point(controller.map.lon2coord(Node(firstSelected).lon),
+			                                 controller.map.latp2coord(Node(firstSelected).latp)),
+			                       wayList.concat(parentWay));
 		}
 
 		override public function enterState():void {

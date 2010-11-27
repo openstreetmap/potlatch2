@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.geom.Point;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
@@ -30,7 +31,7 @@ package net.systemeD.potlatch2.controller {
                   MainUndoStack.getGlobalStack().addAction(
                           new MoveWayAction(firstSelected as Way, downX, downY, event.localX, event.localY, controller.map)); 
                 }
-                return new SelectedWay(firstSelected as Way);
+                return new SelectedWay(firstSelected as Way, new Point(event.stageX,event.stageY));
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
 				// dragging

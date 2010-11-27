@@ -99,8 +99,9 @@
                           ["Shift+Click at point", "Create new way from point"],
                           ["-","Delete point from selected way"],
                           ["Backspace/Delete", "Delete point"],
-                          ["Shift+Backspace/Delete", "Delete way"]
+                          ["Shift+Backspace/Delete", "Delete way"],
                           ["Ctrl+Click", "Select multiple nodes or ways (Command+Click on Mac)"],
+                          ["/", "Cycle through overlapping ways"],
                           ];
         var text2:Array =  [["D", "Dim features"],
                             ["R", "Repeat tags"],

@@ -46,7 +46,7 @@ package net.systemeD.potlatch2.controller {
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}
-		
+
 		public function deletePOI():ControllerState {
 			controller.connection.unregisterPOI(firstSelected as Node);
 			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);

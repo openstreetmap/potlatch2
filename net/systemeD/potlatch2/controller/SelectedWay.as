@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	import flash.display.DisplayObject;
 	import flash.ui.Keyboard;
+	import flash.geom.Point;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.potlatch2.tools.Parallelise;
     import net.systemeD.potlatch2.tools.Simplify;
@@ -12,9 +13,13 @@ package net.systemeD.potlatch2.controller {
 
     public class SelectedWay extends ControllerState {
         protected var initWay:Way;
+        private var clicked:Point;		// did the user enter this state by clicking at a particular point?
+		private var wayList:Array;		// list of ways to cycle through with '/' keypress
         
-        public function SelectedWay(way:Way) {
+        public function SelectedWay(way:Way, point:Point=null, ways:Array=null) {
             initWay = way;
+			clicked = point;
+			wayList = ways;
         }
  
         protected function selectWay(way:Way):void {
@@ -65,6 +70,7 @@ package net.systemeD.potlatch2.controller {
 				case 82:					repeatTags(firstSelected); return this;
                 case 86:                    Way(firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
                 case 89:                    Simplify.simplify(firstSelected as Way, controller.map, true); return this;         
+				case 191:					return cycleWays();
 				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
 			}
@@ -72,6 +78,20 @@ package net.systemeD.potlatch2.controller {
 			return cs ? cs : this;
 		}
         
+		private function cycleWays():ControllerState {
+			if (!clicked || (wayList && wayList.length<2)) { return this; }
+
+			if (!wayList) {
+				wayList=[initWay];
+				for each (var wayui:WayUI in controller.map.paint.wayuis) {
+					var w:Way=wayui.hitTest(clicked.x, clicked.y);
+					if (w && w!=initWay) { wayList.push(w); }
+				}
+			}
+			wayList=wayList.slice(1).concat(wayList[0]);
+			return new SelectedWay(wayList[0], clicked, wayList);
+		}
+
 		public function deleteWay():ControllerState {
 			controller.map.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
