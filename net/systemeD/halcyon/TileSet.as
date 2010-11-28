@@ -5,6 +5,7 @@ package net.systemeD.halcyon {
 	import flash.net.*;
 	import flash.system.LoaderContext;
 	import flash.utils.Timer;
+	import flash.filters.*;
 	import net.systemeD.halcyon.MapEvent;
 
     public class TileSet extends Sprite {
@@ -25,6 +26,12 @@ package net.systemeD.halcyon {
 
 		private var map:Map;
 
+		private var sharpenFilter:BitmapFilter = new ConvolutionFilter(3, 3, 
+			[0, -1, 0,
+            -1, 5, -1,
+             0, -1, 0], 0);
+		private var sharpening:Boolean = false;
+		// http://flylib.com/books/en/2.701.1.170/1/
 
         public function TileSet(map:Map) {
 			this.map=map;
@@ -51,6 +58,17 @@ package net.systemeD.halcyon {
 
 		public function setDimming(dim:Boolean):void {
 			alpha=dim ? 0.5 : 1;
+		}
+
+		public function setSharpen(sharpen:Boolean):void {
+			var f:Array=[]; if (sharpen) { f=[sharpenFilter]; }
+			for (var i:uint=0; i<numChildren; i++) {
+				var s:Sprite=Sprite(getChildAt(i));
+				for (var j:uint=0; j<s.numChildren; j++) {
+					s.getChildAt(j).filters=f;
+				}
+			}
+			sharpening=sharpen;
 		}
 
 		public function changeScale(scale:uint):void {
@@ -103,6 +121,7 @@ package net.systemeD.halcyon {
 					Sprite(l).addChild(loader);
 					loader.x=map.lon2coord(tile2lon(tx));
 					loader.y=map.lat2coord(tile2lat(ty));
+					if (sharpening) { loader.filters=[sharpenFilter]; }
 //					loader.alpha=0.5;
 				}
 			}

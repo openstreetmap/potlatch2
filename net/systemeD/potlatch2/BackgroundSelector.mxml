@@ -8,8 +8,12 @@
 			labelField="name"
 			change="Application.application.bgButton.close(); Application.application.setBackground(background.selectedItem);" 			
 	        dataProvider="{Application.application.getAvailableImagery()}" />
-	<mx:CheckBox width="100%" label="Dim background" selected="true" id="dim"
+	<mx:HBox>
+	<mx:CheckBox width="100%" label="Dim" selected="true" id="dim"
 	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
+	<mx:CheckBox width="100%" label="Sharpen" selected="false" id="sharpen"
+	    change="Application.application.theMap.setSharpen(sharpen.selected);" />
+	</mx:HBox>
 
 	<mx:HBox>
 	<mx:Button label="Edit..." click="Application.application.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Application.application.theController.imagery);" />

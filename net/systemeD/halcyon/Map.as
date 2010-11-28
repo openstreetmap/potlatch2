@@ -375,6 +375,10 @@ package net.systemeD.halcyon {
 			if (tileset) { tileset.setDimming(dim); }
 		}
 
+		public function setSharpen(sharpen:Boolean):void {
+			if (tileset) { tileset.setSharpen(sharpen); }
+		}
+
 		// ------------------------------------------------------------------------------------------
 		// Export (experimental)
 		// ** just a bit of fun for now!
