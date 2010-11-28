@@ -84,6 +84,7 @@ package net.systemeD.potlatch2.controller {
 
 		private function cycleWays():ControllerState {
 			var wayList:Array=firstSelected.parentWays;
+			if (wayList.length==1) { return this; }
 			wayList.splice(wayList.indexOf(parentWay),1);
 			return new SelectedWay(wayList[0],
 			                       new Point(controller.map.lon2coord(Node(firstSelected).lon),
