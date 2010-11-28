@@ -7,8 +7,18 @@
 
   <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid">
     <mx:columns>
-        <mx:DataGridColumn editable="true" dataField="name" headerText="Name"/>
-        <mx:DataGridColumn editable="true" dataField="url" headerText="URL"/>
+        <mx:DataGridColumn editable="true"  dataField="name" headerText="Name"/>
+        <mx:DataGridColumn editable="true"  dataField="url" headerText="URL"/>
+        <mx:DataGridColumn editable="false" headerText="Key" width="70">
+			<mx:itemRenderer>
+				<mx:Component>
+				<mx:ComboBox
+					selectedItem="{FunctionKeyManager.instance().getKeyFor(outerDocument.title,data.name)}"
+				    dataProvider="{FunctionKeyManager.fkeysCollection}"
+ 					change="FunctionKeyManager.instance().setKeyFromFString(selectedItem as String,outerDocument.title,data.name)" />
+				</mx:Component>
+			</mx:itemRenderer>
+		</mx:DataGridColumn>
     </mx:columns>
   </mx:DataGrid>
 
@@ -21,7 +31,6 @@
 
 	/*
 		Still to do:
-		- editable hotkeys for each layer
 		- editable source tag for each layer
 		- editable bbox for each layer
 		- ability to use this dialogue to select as well as edit
@@ -34,6 +43,7 @@
     import mx.core.Application;
 	import mx.collections.ArrayCollection;
 	import mx.controls.List;
+	import net.systemeD.potlatch2.FunctionKeyManager;
 
 	public var dataCollection:ArrayCollection;
 	private var menu:List;

@@ -4,6 +4,7 @@ package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.potlatch2.controller.*;
+    import net.systemeD.potlatch2.FunctionKeyManager;
 	import mx.managers.CursorManager;
 	import flash.events.*;
 	import flash.geom.*;
@@ -78,6 +79,7 @@ package net.systemeD.potlatch2 {
         private function keyUpHandler(event:KeyboardEvent):void {
             trace("key code "+event.keyCode);
 			if (keys[event.keyCode]) { delete keys[event.keyCode]; }
+			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
             var newState:ControllerState = state.processKeyboardEvent(event);
             setState(newState);            
 		}

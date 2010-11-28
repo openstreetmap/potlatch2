@@ -325,6 +325,8 @@
             if (!backgroundSet && loaderInfo.parameters['yahoo_default'] == 'true') {
                 setBackground(theController.imagery[1]);
             }
+			FunctionKeyManager.instance().registerListener('Background imagery',
+				function(o:String):void { setBackground(findBackgroundWithName(o)); });
 		}
 		
 		public function setBackground(bg:Object):void {
@@ -335,6 +337,13 @@
 			obj.setProperty('background_url' ,String(bg.url));
 			obj.setProperty('background_name',String(bg.name));
 			obj.flush();
+		}
+		
+		private function findBackgroundWithName(name:String):Object {
+			for each (var bg:Object in theController.imagery) {
+				if (bg.name==name) { return bg; }
+			}
+			return { url:'' };
 		}
 
 		public function getAvailableImagery():Array {
@@ -397,6 +406,8 @@
                 setStylesheet('Potlatch','potlatch.css');
               }
             }
+			FunctionKeyManager.instance().registerListener('Map style',
+				function(o:String):void { setStylesheet(o,findStylesheetURLWithName(o)); });
 		}
 
 		public function setStylesheet(name:String,url:String):void {
@@ -405,6 +416,13 @@
 			obj.setProperty("stylesheet_url",url);
 			obj.setProperty("stylesheet_name",name);
 			obj.flush();
+		}
+
+		private function findStylesheetURLWithName(name:String):String {
+			for each (var ss:Object in theController.stylesheets) {
+				if (ss.name==name) { return ss.url; }
+			}
+			return '';
 		}
 
 		private function scaleHandler(event:MapEvent):void {
