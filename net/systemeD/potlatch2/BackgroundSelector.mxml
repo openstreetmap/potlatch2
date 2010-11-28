@@ -6,8 +6,8 @@
 	
 	<mx:List width="100%" height="100%" id="background" verticalScrollPolicy="on" 
 			labelField="name"
-			change="Application.application.bgButton.close(); Application.application.setBackground(background.selectedItem);" 			
-	        dataProvider="{Application.application.getAvailableImagery()}" />
+			change="Application.application.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);" 			
+	        dataProvider="{Imagery.instance().getAvailableImagery()}" />
 	<mx:HBox>
 	<mx:CheckBox width="100%" label="Dim" selected="true" id="dim"
 	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
@@ -16,7 +16,7 @@
 	</mx:HBox>
 
 	<mx:HBox>
-	<mx:Button label="Edit..." click="Application.application.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Application.application.theController.imagery);" />
+	<mx:Button label="Edit..." click="Application.application.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
 	<mx:Button label="Vector file..." click="Application.application.bgButton.close(); new VectorSourceDialog().init();" />
 	</mx:HBox>
 
@@ -24,6 +24,7 @@
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
+		import net.systemeD.potlatch2.collections.Imagery;
 		import mx.core.*;
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;

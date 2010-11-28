@@ -63,6 +63,7 @@
 	import net.systemeD.potlatch2.utils.KmlImporter;
 	import net.systemeD.potlatch2.utils.ShpImporter;
 	import net.systemeD.potlatch2.utils.OsmImporter;
+	import net.systemeD.potlatch2.collections.Stylesheets;
     import mx.managers.PopUpManager;
     import mx.events.DataGridEvent;
     import mx.events.CloseEvent;
@@ -96,7 +97,7 @@
 
 	[Bindable(event="bogus")]
 	public function get styles():ArrayCollection {
-		return new ArrayCollection(Application.application.theController.stylesheets);
+		return new ArrayCollection(Stylesheets.instance().collection);
 	}
 
 	[Bindable(event="layers_changed")]

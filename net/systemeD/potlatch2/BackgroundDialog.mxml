@@ -5,7 +5,7 @@
         horizontalAlign="center" 
         width="500" height="300" verticalGap="0">
 
-  <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid">
+  <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" itemEditEnd="updateSource()">
     <mx:columns>
         <mx:DataGridColumn editable="true"  dataField="name" headerText="Name"/>
         <mx:DataGridColumn editable="true"  dataField="url" headerText="URL"/>
@@ -47,11 +47,13 @@
 
 	public var dataCollection:ArrayCollection;
 	private var menu:List;
+	private var collection:Object;
 
-    public function init(title:String, menu:List, source:Array):void {
+    public function init(title:String, menu:List, source:Object):void {
 		this.title=title;
 		this.menu=menu;
-		dataCollection=new ArrayCollection(source);
+		collection=source;
+		dataCollection=new ArrayCollection(source.collection);
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
@@ -71,6 +73,9 @@
 	}
 	private function removeSource():void {
 		dataCollection.removeItemAt(dataGrid.selectedIndex);
+	}
+	public function updateSource():void {
+		collection.dispatchEvent(new Event("collection_changed"));
 	}
 
   ]]>

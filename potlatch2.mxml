@@ -75,6 +75,7 @@
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.save.SaveManager;
+		import net.systemeD.potlatch2.collections.*;
 		import net.systemeD.potlatch2.controller.*;
 		import net.systemeD.potlatch2.help.*;
 		import net.systemeD.potlatch2.options.*;
@@ -128,17 +129,6 @@
 			}
 			if (objChanged) { obj.flush(); }
 
-			// load imagery and style XML
-	        var request:DebugURLRequest = new DebugURLRequest("imagery.xml");
-	        var loader:URLLoader = new URLLoader();
-	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
-	        loader.load(request.request);
-
-			var request2:DebugURLRequest = new DebugURLRequest("stylesheets.xml");
-			var loader2:URLLoader = new URLLoader();
-	        loader2.addEventListener(Event.COMPLETE, onStylesheetsLoad);
-	        loader2.load(request2.request);
-
 			// map backdrop object
             var w:uint = map_area.width;
             var h:uint = map_area.height;
@@ -177,6 +167,10 @@
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
+
+			// initialise imagery and stylesheets
+			Imagery.instance().init(theMap,yahoo,loaderInfo.parameters['yahoo_default'] == 'true');
+			Stylesheets.instance().init(theMap);
 
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
@@ -283,147 +277,7 @@
             }
 		}
 		
-        private function onImageryLoad(event:Event):void {
-			var xml:XML = new XML(URLLoader(event.target).data);
-			var saved:Object;
-			if (SharedObject.getLocal("user_state").data['background_url']) {
-				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
-						url:  SharedObject.getLocal("user_state").data['background_url' ] };
-			} else {
-				saved={ url: ''};
-			}
 
-			var isSet:Boolean=false;
-            var backgroundSet:Boolean = false;
-
-            theController.imagery=new Array(
-				{ name: "None", url: "" },
-				{ name: "Yahoo", url: "yahoo", sourcetag: "Yahoo" } );
-			for each(var set:XML in xml.set) {
-				var obj:Object={};
-				var a:XML;
-				for each (a in set.@*) { obj[a.name().localName]=a.toString(); }
-				for each (a in set.* ) { obj[a.name()          ]=a.toString(); }
-                theController.imagery.push(obj);
-				if ((obj.url ==saved.url) ||
-				    (obj.name==saved.name && obj.name!='Custom')) { isSet=true; }
-			}
-
-            if (!isSet && saved.name && saved.url && saved.url!='' && saved.url!='yahoo') {
-                theController.imagery.push(saved);
-                isSet=true;
-            }
-
-			for each (var bg:Object in theController.imagery) {
-				if (bg.name==saved.name || bg.url==saved.url) {
-					setBackground(bg);
-                    backgroundSet = true;
-				}
-			}
-
-            // For most contributors it's useful to set the background to yahoo by default, I reckon, but lets make it a config
-            if (!backgroundSet && loaderInfo.parameters['yahoo_default'] == 'true') {
-                setBackground(theController.imagery[1]);
-            }
-			FunctionKeyManager.instance().registerListener('Background imagery',
-				function(o:String):void { setBackground(findBackgroundWithName(o)); });
-		}
-		
-		public function setBackground(bg:Object):void {
-			if (bg.url=='yahoo') { theMap.setBackground({url:''}); yahoo.show(); }
-			                else { theMap.setBackground(bg      ); yahoo.hide(); }
-			theController.imagerySelected=bg;
-			var obj:SharedObject = SharedObject.getLocal("user_state");
-			obj.setProperty('background_url' ,String(bg.url));
-			obj.setProperty('background_name',String(bg.name));
-			obj.flush();
-		}
-		
-		private function findBackgroundWithName(name:String):Object {
-			for each (var bg:Object in theController.imagery) {
-				if (bg.name==name) { return bg; }
-			}
-			return { url:'' };
-		}
-
-		public function getAvailableImagery():Array {
-			var available:Array=[];
-			for each (var bg:Object in theController.imagery) {
-				if (bg.minlon) {
-					// if there's a bbox, check the current viewport intersects it
-					if (((theMap.edge_l>bg.minlon && theMap.edge_l<bg.maxlon) ||
-					     (theMap.edge_r>bg.minlon && theMap.edge_r<bg.maxlon) ||
-					     (theMap.edge_l<bg.minlon && theMap.edge_r>bg.maxlon)) &&
-					    ((theMap.edge_b>bg.minlat && theMap.edge_b<bg.maxlat) ||
-					     (theMap.edge_t>bg.minlat && theMap.edge_t<bg.maxlat) ||
-					     (theMap.edge_b<bg.minlat && theMap.edge_t>bg.maxlat))) {
-						available.push(bg);
-					}
-				} else {
-					// if there's no bbox (i.e. global set), include it anyway
-					available.push(bg);
-				}
-			}
-			return available;
-		}
-
-		private function onStylesheetsLoad(event:Event):void {
-			var xml:XML = new XML(URLLoader(event.target).data);
-			var saved_url:String = SharedObject.getLocal("user_state").data['stylesheet_url'];
-			var saved_name:String= SharedObject.getLocal("user_state").data['stylesheet_name'];
-			var isInMenu:Boolean=false, isSet:Boolean=false;
-
-            // first, build the menu from the stylesheet list.
-            // Also ensure the saved_url is in the menu (might be either saved from before, or supplied via loaderInfo)
-            theController.stylesheets=new Array();
-			for each(var set:XML in xml.stylesheet) {
-				var obj:Object={};
-				for (var a:String in set.children()) {
-					obj[set.child(a).name()]=set.child(a);
-				}
-                theController.stylesheets.push(obj);
-				if (obj.url==saved_url || (obj.name==saved_name && obj.name!='Custom')) { isInMenu=true; }
-			}
-			if (saved_url && !isInMenu) { theController.stylesheets.push({ name:saved_name, url:saved_url }); }
-
-            // pick a stylesheet to be set. It should be the saved one, if it is in the menu
-            // or alternatively the first one on the menu,
-            // or finally try 'potlatch.css'
-			for each (var ss:Object in theController.stylesheets) {
-				if (ss.name==saved_name || ss.url==saved_url) {
-					setStylesheet(ss.name, ss.url);
-                    isSet = true;
-                    break;
-				}
-			}
-            if (!isSet) {
-              if(theController.stylesheets.length > 0) {
-                var s:Object = theController.stylesheets[0];
-                setStylesheet(s.name, s.url);
-              } else {
-                //hit and hope. FIXME should this be an error state?
-                theController.stylesheets.push({ name:'Potlatch', url:'potlatch.css'});
-                setStylesheet('Potlatch','potlatch.css');
-              }
-            }
-			FunctionKeyManager.instance().registerListener('Map style',
-				function(o:String):void { setStylesheet(o,findStylesheetURLWithName(o)); });
-		}
-
-		public function setStylesheet(name:String,url:String):void {
-			theMap.setStyle(url);
-			var obj:SharedObject = SharedObject.getLocal("user_state");
-			obj.setProperty("stylesheet_url",url);
-			obj.setProperty("stylesheet_name",name);
-			obj.flush();
-		}
-
-		private function findStylesheetURLWithName(name:String):String {
-			for each (var ss:Object in theController.stylesheets) {
-				if (ss.name==name) { return ss.url; }
-			}
-			return '';
-		}
 
 		private function scaleHandler(event:MapEvent):void {
 			dispatchEvent(new Event("rescale"));

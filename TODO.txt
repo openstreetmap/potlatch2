@@ -63,10 +63,6 @@ Potlatch 2: main outstanding issues
 * Reopen?
 * Handle errors when closing bugs (especially nickname-based errors)
 
-== Code tidying ==
-
-* The imagery and stylesheet collections should each be singletons, rather than clogging up the EditController and application
-
 
 Requested enhancements
 ----------------------

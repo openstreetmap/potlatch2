@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.MapPaint;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.potlatch2.collections.Imagery;
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.potlatch2.save.SaveManager;
@@ -157,8 +158,8 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function setSourceTag():void {
 			if (selectCount!=1) { return; }
-			if (controller.imagerySelected && controller.imagerySelected.sourcetag) {
-				firstSelected.setTag('source',controller.imagerySelected.sourcetag, MainUndoStack.getGlobalStack().addAction);
+			if (Imagery.instance().selected && Imagery.instance().selected.sourcetag) {
+				firstSelected.setTag('source',Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
 			}
 		}
 		
