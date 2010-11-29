@@ -24,6 +24,7 @@ package net.systemeD.potlatch2 {
         public function onConfigLoad(e:Event):void {
             var xml:XML = XML(e.target.data);
             for each(var set:XML in xml.set) {
+              var name:String = (set.name == undefined) ? null : String(set.name);
               var loader:String = set.loader;
               switch (loader) {
                 case "TrackLoader":
@@ -33,7 +34,8 @@ package net.systemeD.potlatch2 {
 
                 case "BugLoader":
                   if (set.url && set.apiKey) {
-                    var bugLoader:BugLoader = new BugLoader(map, String(set.url), String(set.apikey));
+                    name ||= 'Bugs';
+                    var bugLoader:BugLoader = new BugLoader(map, String(set.url), String(set.apikey), name);
                     if (set.@loaded == "true") {
                       bugLoader.load();
                     }
@@ -44,7 +46,8 @@ package net.systemeD.potlatch2 {
 
                 case "BikeShopLoader":
                   if (set.url) {
-                    var bikeShopLoader:BikeShopLoader = new BikeShopLoader(map, String(set.url));
+                    name ||= 'Missing Bike Shops'
+                    var bikeShopLoader:BikeShopLoader = new BikeShopLoader(map, String(set.url), name);
                     if (set.@loaded == "true") {
                       bikeShopLoader.load();
                     }

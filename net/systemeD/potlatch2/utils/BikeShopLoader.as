@@ -24,12 +24,14 @@ package net.systemeD.potlatch2.utils {
 
         private var map:Map;
         private var bikeShopBaseURL:String;
+        private var name:String;
         private var _layer:VectorLayer;
         private static const STYLESHEET:String="bikeshops.css";
 
-        public function BikeShopLoader(map:Map, url:String) {
+        public function BikeShopLoader(map:Map, url:String, name:String) {
             this.map = map;
             this.bikeShopBaseURL = url;
+            this.name = name;
         }
 
         public function load():void {
@@ -65,12 +67,10 @@ package net.systemeD.potlatch2.utils {
 
         private function get layer():VectorLayer {
             if (!_layer) {
-                var n:String='Bike Shops';
-
                 var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
                 Security.loadPolicyFile(policyFile);
 
-                _layer=new VectorLayer(n,map,STYLESHEET);
+                _layer=new VectorLayer(name,map,STYLESHEET);
                 map.addVectorLayer(_layer);
             }
             return _layer;
