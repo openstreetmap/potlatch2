@@ -6,7 +6,7 @@
 	
 	<mx:List width="100%" height="100%" id="mapStyle" 
 	        labelField="name"
-	        change="Application.application.styleButton.close(); Application.application.setStylesheet(mapStyle.selectedItem.name, mapStyle.selectedItem.url);"
+	        change="Application.application.styleButton.close(); Stylesheets.instance().setStylesheet(mapStyle.selectedItem.name, mapStyle.selectedItem.url);"
 	        dataProvider="{Stylesheets.instance().getCollection()}" />
 
 	<mx:Button label="Edit..." click="new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
