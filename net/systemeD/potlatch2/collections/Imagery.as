@@ -1,7 +1,6 @@
 package net.systemeD.potlatch2.collections {
 
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
+	import flash.events.*;
 	import flash.display.*;
 	import flash.net.*;
 	import flash.text.TextField;
@@ -213,9 +212,15 @@ package net.systemeD.potlatch2.collections {
 		private function setLogo():void {
 			if (!selected.logoData) return;
 			while (_overlay.numChildren>1) { _overlay.removeChildAt(1); }
-			var logo:Bitmap=new Bitmap(selected.logoData);
+			var logo:Sprite=new Sprite();
+			logo.addChild(new Bitmap(selected.logoData));
 			logo.x=5; logo.y=_map.mapheight-5-selected.logoHeight;
+			if (selected.logo_url) { logo.buttonMode=true; logo.addEventListener(MouseEvent.CLICK, launchLogoLink, false, 0, true); }
 			_overlay.addChild(logo);
+		}
+		private function launchLogoLink(e:Event):void {
+			if (!selected.logo_url) return;
+			navigateToURL(new URLRequest(selected.logo_url), '_blank');
 		}
 
 		[Bindable(event="collection_changed")]
