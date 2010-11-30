@@ -28,7 +28,15 @@ package net.systemeD.potlatch2 {
         public function closeBug(m:Marker, nickname:String, comment:String, status:String = null):void {
             var id:String = m.getTag('bug_id');
             nickname ||= 'NoName';
+            // nicknames have length and character restictions. The character restrictions should be taken care of
+            // by the BugPanel.mxml restriction.
+            if (nickname.length < 3 || nickname.length > 16) {
+              nickname = 'NoName';
+            }
             comment ||= 'No Comment';
+            if (comment.length > 1000) {
+              comment = comment.substr(0,1000); // that's index, length
+            }
             status ||= BUG_STATUS_FIXED;
             var urlReq:URLRequest = new URLRequest(baseUrl+"changeBugStatus?id="+id+"&status="+status+"&comment="+encodeURIComponent(comment)+"&nickname="+encodeURIComponent(nickname)+"&key="+apiKey);
             urlReq.method = "POST";
