@@ -25,8 +25,10 @@ package net.systemeD.potlatch2 {
             super(n,map,s);
         }
 
-        public function closeBug(m:Marker, nickname:String = "NoName", comment:String = "No Comment", status:String = null):void {
+        public function closeBug(m:Marker, nickname:String, comment:String, status:String = null):void {
             var id:String = m.getTag('bug_id');
+            nickname ||= 'NoName';
+            comment ||= 'No Comment';
             status ||= BUG_STATUS_FIXED;
             var urlReq:URLRequest = new URLRequest(baseUrl+"changeBugStatus?id="+id+"&status="+status+"&comment="+encodeURIComponent(comment)+"&nickname="+encodeURIComponent(nickname)+"&key="+apiKey);
             urlReq.method = "POST";
