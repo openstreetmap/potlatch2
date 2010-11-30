@@ -6,7 +6,8 @@ package net.systemeD.potlatch2 {
     import net.systemeD.potlatch2.controller.*;
     import net.systemeD.potlatch2.FunctionKeyManager;
 	import mx.managers.CursorManager;
-	import flash.events.*;
+    import flash.external.ExternalInterface;
+    import flash.events.*;
 	import flash.geom.*;
 
     public class EditController implements MapController {
@@ -21,6 +22,9 @@ package net.systemeD.potlatch2 {
 		private var keys:Object={};
 		public var clipboards:Object={};
 		public var cursorsEnabled:Boolean=true;
+        private var maximised:Boolean=false;
+        private var maximiseFunction:String;
+        private var minimiseFunction:String;
 
 		[Embed(source="../../../embedded/pen.png")] 		public var pen:Class;
 		[Embed(source="../../../embedded/pen_x.png")] 		public var pen_x:Class;
@@ -34,7 +38,8 @@ package net.systemeD.potlatch2 {
             this.tagViewer = tagViewer;
 			this.toolbox = toolbox;
 			this.toolbox.init(this);
-
+            this.maximiseFunction = Connection.getParam("maximise_function", null);
+            this.minimiseFunction = Connection.getParam("minimise_function", null);
             
             map.parent.addEventListener(MouseEvent.MOUSE_MOVE, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
@@ -77,6 +82,7 @@ package net.systemeD.potlatch2 {
             trace("key code "+event.keyCode);
 			if (keys[event.keyCode]) { delete keys[event.keyCode]; }
 			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
+            if (event.keyCode == 77) { toggleSize(); }
             var newState:ControllerState = state.processKeyboardEvent(event);
             setState(newState);            
 		}
@@ -139,8 +145,22 @@ package net.systemeD.potlatch2 {
 			if (cursor && cursorsEnabled) { CursorManager.setCursor(cursor,2,-4,0); }
 		}
 
-    }
+        private function toggleSize():void {
+            if (maximised) {
+                if (minimiseFunction) {
+                    ExternalInterface.call(minimiseFunction);
+                }
 
+                maximised = false;
+            } else {
+                if (maximiseFunction) {
+                    ExternalInterface.call(maximiseFunction);
+                }
+
+                maximised = true;
+            }
+        }
+
+    }
     
 }
-
