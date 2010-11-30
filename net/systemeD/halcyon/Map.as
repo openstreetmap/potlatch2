@@ -12,6 +12,7 @@ package net.systemeD.halcyon {
 	import flash.utils.ByteArray;
 	import flash.events.*;
 	import flash.net.*;
+    import flash.external.ExternalInterface;
 
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.EntityEvent;
@@ -145,7 +146,11 @@ package net.systemeD.halcyon {
 			updateCoords(0,0);
             this.dispatchEvent(new Event(MapEvent.INITIALISED));
 			download();
-			
+
+            ExternalInterface.addCallback("setPosition", function (lat:Number,lon:Number,zoom:uint):void {
+                updateCoordsFromLatLon(lat, lon);
+                changeScale(zoom);
+            });
         }
 
 		// ------------------------------------------------------------------------------------------
