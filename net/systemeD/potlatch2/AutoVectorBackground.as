@@ -60,7 +60,7 @@ package net.systemeD.potlatch2 {
                 case "BugLoader":
                   if (set.url && set.apiKey) {
                     name ||= 'Bugs';
-                    var bugLoader:BugLoader = new BugLoader(map, String(set.url), String(set.apikey), name);
+                    var bugLoader:BugLoader = new BugLoader(map, String(set.url), String(set.apikey), name, String(set.details));
                     if (set.@loaded == "true") {
                       bugLoader.load();
                     }

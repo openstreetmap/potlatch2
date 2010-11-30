@@ -21,6 +21,9 @@
     <mx:Text text="Type of bug: " />
     <mx:Text text="{bugType}" fontWeight="bold"/>
   </mx:HBox>
+  <mx:HBox id="bugDetailsHbox" visible="false">
+    <mx:Text fontWeight="bold" text="View full details on website..." click="navigateToURL(new URLRequest(bugDetails), 'potlatch_browse')" />
+  </mx:HBox>
   <mx:TextArea editable="false" text="{bugDescription}" width="100%" fontSize="14" minHeight="100" maxHeight="400"/>
 
   <mx:ViewStack id="bugControlStack" resizeToContent="true" width="100%">
@@ -72,6 +75,7 @@
       [Bindable] private var bugTitle:String;
       [Bindable] private var bugCreated:Date;
       [Bindable] private var bugUpdated:Date;
+      [Bindable] private var bugDetails:String;
 
       public function init(entity:Entity, layer:VectorLayer):void {
             this.layer = layer;
@@ -92,6 +96,12 @@
               bugControlStack.selectedChild = bugInvalid;
             } else {
               bugControlStack.selectedChild = bugControl;
+            }
+
+            var u:String = BugLayer(layer).bugDetailsUrl(Marker(selectedEntity));
+            if (u) {
+              bugDetails = u;
+              bugDetailsHbox.visible=true;
             }
       }
 

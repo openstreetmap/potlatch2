@@ -5,6 +5,7 @@
       <name>Mapdust Bugs</name>
       <loader>BugLoader</loader>
       <url>http://www.mapdust.com/api/</url>
+      <details>http://www.mapdust.com/detail/</details>
       <apikey>e4d47b6b8c26e822a62d747b802f98ac</apikey>
     </set>
     <set>

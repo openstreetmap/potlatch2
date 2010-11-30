@@ -12,6 +12,7 @@ package net.systemeD.potlatch2 {
 
         private var baseUrl:String;
         private var apiKey:String;
+        private var detailsUrl:String;
 
         // as strings, since that's how they are in tags and http calls
         public static var BUG_STATUS_OPEN:String = "1";
@@ -19,9 +20,10 @@ package net.systemeD.potlatch2 {
         public static var BUG_STATUS_INVALID:String = "3"; // or 'non-reproduceable'
         public static const status:Array = ["", "open", "fixed", "invalid"];
 
-        public function BugLayer(n:String, map:Map, s:String, baseUrl:String, apiKey:String) {
+        public function BugLayer(n:String, map:Map, s:String, baseUrl:String, apiKey:String, detailsURL:String) {
             this.baseUrl = baseUrl;
             this.apiKey = apiKey;
+            this.detailsUrl = detailsURL;
             super(n,map,s);
         }
 
@@ -81,6 +83,12 @@ package net.systemeD.potlatch2 {
               }
               paint.updateEntityUIs(getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
             }
+        }
+
+        public function bugDetailsUrl(m:Marker):String {
+            if (detailsUrl == '')
+              return null;
+            return detailsUrl+m.id;
         }
 
     }
