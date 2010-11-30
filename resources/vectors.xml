@@ -20,6 +20,7 @@
     <set disabled="true">
       <name>A particular GPX file</name>
       <loader>GPXImporter</loader>
-      <url></url>
+      <policyfile>http://gravitystorm.dev.openstreetmap.org/gpx/crossdomain.xml</policyfile>
+      <url>http://gravitystorm.dev.openstreetmap.org/gpx/112.gpx</url>
     </set>
 </vectors>
