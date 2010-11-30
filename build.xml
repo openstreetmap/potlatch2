@@ -68,8 +68,24 @@
       <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
       <arg line="-main-title 'Halcyon and Poltatch2 Developer documentation'" />
       <arg line="-footer 'Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
+      <arg line="-package net.systemeD.controls 'Custom-built controls used in Poltatch2'" />
       <arg line="-package net.systemeD.halcyon 'The AS3 rendering library'" />
+      <arg line="-package net.systemeD.halcyon.connection 'The connection to the main OSM server, and the entities'" />
+      <arg line="-package net.systemeD.halcyon.connection.actions 'The undoable actions that apply to OSM data'" />
+      <arg line="-package net.systemeD.halcyon.styleparser 'The logic for parsing MapCSS stylesheets'" />
       <arg line="-package net.systemeD.potlatch2 'The OpenStreetMap editor'" />
+      <arg line="-package net.systemeD.potlatch2.collections 'Singletons for handling collections loaded from config files'" />
+      <arg line="-package net.systemeD.potlatch2.controller 'The various controller states that p2 can be in'" />
+      <arg line="-package net.systemeD.potlatch2.help 'The Help dialog'" />
+      <arg line="-package net.systemeD.potlatch2.mapfeatures 'The engine behind the mapfeatures parsing'" />
+      <arg line="-package net.systemeD.potlatch2.mapfeatures.editors 'The various widgets used in the Simple panel'" />
+      <arg line="-package net.systemeD.potlatch2.mygpx 'The dialog for loading GPX files from the server'" />
+      <arg line="-package net.systemeD.potlatch2.options 'The options dialog'" />
+      <arg line="-package net.systemeD.potlatch2.panels 'The panels for the left-hand pane of p2'" />
+      <arg line="-package net.systemeD.potlatch2.save 'The save dialog and SaveManager'" />
+      <arg line="-package net.systemeD.potlatch2.tools 'Data manipulation tools'" />
+      <arg line="-package net.systemeD.potlatch2.utils 'Data loading utilities'" />
+      
       <arg line="-left-frameset-width 300" />
     </exec>
   </target>
