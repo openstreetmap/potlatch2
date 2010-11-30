@@ -161,6 +161,7 @@ package net.systemeD.potlatch2.controller {
 				case 27:					return keyExitDrawing();
 				case Keyboard.DELETE:		return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				case 189:					return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case 82:					repeatTags(firstSelected); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
