@@ -36,12 +36,13 @@ package net.systemeD.halcyon {
 
         public function TileSet(map:Map) {
 			this.map=map;
-			alpha=0.5;
 			createSprites();
 			map.addEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
 	
-		public function init(params:Object, update:Boolean=false):void {
+		public function init(params:Object, update:Boolean=false, dim:Boolean=true, sharpen:Boolean=false):void {
+			setDimming(dim);
+			sharpening=sharpen;
 			baseurl=params.url;
 			scheme =params.scheme ? params.scheme : '900913';
 			tiles={};
@@ -60,6 +61,9 @@ package net.systemeD.halcyon {
 		public function setDimming(dim:Boolean):void {
 			alpha=dim ? 0.5 : 1;
 		}
+		public function getDimming():Boolean {
+			return (alpha<1);
+		}
 
 		public function setSharpen(sharpen:Boolean):void {
 			var f:Array=[]; if (sharpen) { f=[sharpenFilter]; }
@@ -70,6 +74,9 @@ package net.systemeD.halcyon {
 				}
 			}
 			sharpening=sharpen;
+		}
+		public function getSharpen():Boolean {
+			return sharpening;
 		}
 
 		public function changeScale(scale:uint):void {

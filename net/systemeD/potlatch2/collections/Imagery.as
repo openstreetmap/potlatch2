@@ -50,13 +50,11 @@ package net.systemeD.potlatch2.collections {
 
         private function onImageryLoad(event:Event):void {
 			var xml:XML = new XML(URLLoader(event.target).data);
-			var saved:Object;
+			var saved:Object = {};
 			var bg:Object;
 			if (SharedObject.getLocal("user_state").data['background_url']) {
 				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
 						url:  SharedObject.getLocal("user_state").data['background_url' ] };
-			} else {
-				saved={ url: ''};
 			}
 
 			var isSet:Boolean=false;
@@ -72,8 +70,8 @@ package net.systemeD.potlatch2.collections {
 				for each (a in set.@*) { obj[a.name().localName]=a.toString(); }
 				for each (a in set.* ) { obj[a.name()          ]=a.toString(); }
                 collection.push(obj);
-				if ((obj.url ==saved.url) ||
-				    (obj.name==saved.name && obj.name!='Custom')) { isSet=true; }
+				if ((saved.url  && obj.url ==saved.url) ||
+				    (saved.name && obj.name==saved.name && obj.name!='Custom')) { isSet=true; }
 			}
 
 			// Add user's previous preference (from SharedObject) if we didn't find it in the XML file

@@ -139,12 +139,15 @@
             b.graphics.endFill();
 			_root.addChild(b);
 
-			// hard-coded block on Google tiles
-			var params:Object={};
-			for (var k:String in this.loaderInfo.parameters) {
+			// pass additional parameters to map
+			var params:Object={}; var k:String;
+			for (k in this.loaderInfo.parameters) {
 				params[k]=this.loaderInfo.parameters[k];
 			}
-			params['tileblocks']=[new RegExp("google","i")];
+			for (k in SharedObject.getLocal('user_state').data) {
+				params[k]=SharedObject.getLocal('user_state').data[k];
+			}
+			params['tileblocks']=[new RegExp("google","i")];	// hard-coded block on Google tiles
 
 			// create map and Yahoo
 			theMap=new Map(params);

@@ -116,7 +116,7 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Initialise map at a given lat/lon
 
-        public function init(startlat:Number,startlon:Number,startscale:uint=0):void {
+        public function init(startlat:Number, startlon:Number, startscale:uint=0):void {
 			while (numChildren) { removeChildAt(0); }
 
 			tileset=new TileSet(this);					// 0 - 900913 background
@@ -124,7 +124,9 @@ package net.systemeD.halcyon {
 				tileset.blocks=initparams['tileblocks'];//   |
 			}											//   |
 			addChild(tileset);							//   |
-			tileset.init(tileparams);					//   |
+			tileset.init(tileparams, false, 
+			             initparams['background_dim']    ==null ? true  : initparams['background_dim'],
+			             initparams['background_sharpen']==null ? false : initparams['background_sharpen']);
 
 			vectorbg = new Sprite();					// 1 - vector background layers
 			addChild(vectorbg);							//   |
@@ -384,9 +386,17 @@ package net.systemeD.halcyon {
 		public function setDimming(dim:Boolean):void {
 			if (tileset) { tileset.setDimming(dim); }
 		}
+		public function getDimming():Boolean {
+			if (tileset) { return tileset.getDimming(); }
+			return true;
+		}
 
 		public function setSharpen(sharpen:Boolean):void {
 			if (tileset) { tileset.setSharpen(sharpen); }
+		}
+		public function getSharpen():Boolean {
+			if (tileset) { return tileset.getSharpen(); }
+			return false;
 		}
 
 		// ------------------------------------------------------------------------------------------

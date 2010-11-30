@@ -9,10 +9,10 @@
 			change="Application.application.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);" 			
 	        dataProvider="{Imagery.instance().getAvailableImagery()}" />
 	<mx:HBox>
-	<mx:CheckBox width="100%" label="Dim" selected="true" id="dim"
-	    change="Application.application.theMap.setDimming(dim.selected); Application.application.yahoo.alpha = dim.selected ? 0.5 : 1" />
-	<mx:CheckBox width="100%" label="Sharpen" selected="false" id="sharpen"
-	    change="Application.application.theMap.setSharpen(sharpen.selected);" />
+	<mx:CheckBox width="100%" label="Dim" selected="{Application.application.theMap.getDimming()}" id="dim"
+	    change="setDimming(dim.selected)" />
+	<mx:CheckBox width="100%" label="Sharpen" selected="{Application.application.theMap.getSharpen()}" id="sharpen"
+	    change="setSharpen(sharpen.selected)" />
 	</mx:HBox>
 
 	<mx:HBox>
@@ -29,6 +29,20 @@
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
 		import net.systemeD.halcyon.Globals;
+
+		public function setDimming(v:Boolean):void {
+			Application.application.theMap.setDimming(dim.selected);
+			Application.application.yahoo.alpha = dim.selected ? 0.5 : 1;
+			var obj:SharedObject=SharedObject.getLocal("user_state");
+			obj.setProperty('background_dim',v);
+			obj.flush();
+		}
+		public function setSharpen(v:Boolean):void {
+			Application.application.theMap.setSharpen(sharpen.selected);
+			var obj:SharedObject=SharedObject.getLocal("user_state");
+			obj.setProperty('background_sharpen',v);
+			obj.flush();
+		}
     ]]></mx:Script>	
 </mx:VBox>
 
