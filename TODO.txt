@@ -24,6 +24,7 @@ Potlatch 2: main outstanding issues
 * Changing type of relation doesn't update the main tagviewer until the entity is reselected
 * Adding a relation via the advanced panel doesn't update the simple panel
 * 'Select relation' panel doesn't indicate that the list is being filtered (e.g. simple -> add to a route)
+* 'Select relation' panel could be sorted by something useful (e.g. ref for route relations)
 * Checkbox needs a clear button, or to be changed to a ✓✗? triplet
 * Relations should talk to FunctionKeyManager too, so you can assign a route to a particular key
 
