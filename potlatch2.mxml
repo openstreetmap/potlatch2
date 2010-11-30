@@ -223,6 +223,16 @@
             var tokenObject:SharedObject = SharedObject.getLocal("access_token");
             conn.setAccessToken(tokenObject.data["oauth_token"], tokenObject.data["oauth_token_secret"]);
 
+            // Load any requested GPX track
+            if (loaderInfo.parameters['gpx']) {
+                var id:Number = loaderInfo.parameters['gpx'];
+                if (conn.hasAccessToken()) { 
+                    loadTrace(id);
+                } else {
+                    SaveManager.ensureAccess(function ():void { loadTrace(id); });
+                }
+            }
+
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
 
@@ -346,6 +356,16 @@
         /* Called when forcing an initial access token check. */
         private function onAccessChecked():void {
             // Floaty panel message "You now have access";
+        }
+
+        private function loadTrace(id:Number):void {
+            var conn:Connection = Connection.getConnectionInstance();
+            conn.addEventListener(Connection.TRACES_LOADED, function (e:Event):void {
+                for each (var trace:Trace in conn.getTraces()) {
+                    if (trace.id == id) { trace.addToMap(); }
+                }
+            });
+            conn.fetchUserTraces();
         }
 
 	]]></mx:Script>
