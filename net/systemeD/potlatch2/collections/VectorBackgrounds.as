@@ -1,22 +1,23 @@
-package net.systemeD.potlatch2 {
+package net.systemeD.potlatch2.collections {
 
-    public class AutoVectorBackground {
+    import flash.events.*
+    import flash.net.*
+    import flash.system.Security;
+    import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.DebugURLRequest;
+    import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.potlatch2.utils.*;
+        
+    public class VectorBackgrounds extends EventDispatcher {
 
-        import flash.events.*
-        import flash.net.*
-        import flash.system.Security;
-        import net.systemeD.halcyon.Map;
-        import net.systemeD.halcyon.DebugURLRequest;
-        import net.systemeD.halcyon.VectorLayer;
-        import net.systemeD.potlatch2.utils.*;
+        private static const GLOBAL_INSTANCE:VectorBackgrounds = new VectorBackgrounds();
+        public static function instance():VectorBackgrounds { return GLOBAL_INSTANCE; }
 
-        private var map:Map;
+        private var _map:Map;
 
-        public function AutoVectorBackground(map:Map) {
-            this.map = map;
-        }
 
-        public function load():void {
+        public function init(map:Map):void {
+            _map = map;
             var request:DebugURLRequest = new DebugURLRequest("vectors.xml");
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, onConfigLoad);
@@ -46,8 +47,8 @@ package net.systemeD.potlatch2 {
                   if (set.url) {
                     if (set.@loaded == "true") {
                       name ||= 'GPX file';
-                      var layer:VectorLayer = new VectorLayer(name, map, 'gpx.css');
-                      map.addVectorLayer(layer);
+                      var layer:VectorLayer = new VectorLayer(name, _map, 'gpx.css');
+                      _map.addVectorLayer(layer);
                       var gpxImporter:GpxImporter = new GpxImporter(layer, layer.paint, [String(set.url)]);
                     } else {
                       trace("configured but not loaded isn't supported yet");
@@ -60,7 +61,7 @@ package net.systemeD.potlatch2 {
                 case "BugLoader":
                   if (set.url && set.apiKey) {
                     name ||= 'Bugs';
-                    var bugLoader:BugLoader = new BugLoader(map, String(set.url), String(set.apikey), name, String(set.details));
+                    var bugLoader:BugLoader = new BugLoader(_map, String(set.url), String(set.apikey), name, String(set.details));
                     if (set.@loaded == "true") {
                       bugLoader.load();
                     }
@@ -72,7 +73,7 @@ package net.systemeD.potlatch2 {
                 case "BikeShopLoader":
                   if (set.url) {
                     name ||= 'Missing Bike Shops'
-                    var bikeShopLoader:BikeShopLoader = new BikeShopLoader(map, String(set.url), name);
+                    var bikeShopLoader:BikeShopLoader = new BikeShopLoader(_map, String(set.url), name);
                     if (set.@loaded == "true") {
                       bikeShopLoader.load();
                     }
