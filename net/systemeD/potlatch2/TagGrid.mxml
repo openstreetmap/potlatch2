@@ -75,6 +75,7 @@
 		}
 
 		private function updateTagDataProvider():void {
+			validateNow();
 			tagDataProvider.removeAll();
 			if (selectedEntity==null) { return; }
 			var tags:Array = selectedEntity.getTagArray();
