@@ -26,18 +26,16 @@ package net.systemeD.potlatch2.collections {
 		public var collection:Array=[];
 		public var selected:Object={};
 
-		private var _yahooDefault:Boolean=false;
 		private var _map:Map;
 		private var _overlay:Sprite;
 		private var _yahoo:Yahoo;
 
 		/* Load catalogue file */
 
-		public function init(map:Map, overlay:Sprite, yahoo:Yahoo, yahooDefault:Boolean):void {
+		public function init(map:Map, overlay:Sprite, yahoo:Yahoo):void {
 			_map = map;
 			_overlay = overlay;
 			_yahoo = yahoo;
-			_yahooDefault = yahooDefault;
 
 			// load imagery file
 	        var request:DebugURLRequest = new DebugURLRequest("imagery.xml");
@@ -85,16 +83,19 @@ package net.systemeD.potlatch2.collections {
             }
 
 			// Automatically select the user's previous preference
+			var defaultBackground:Object=null;
 			for each (bg in collection) {
 				if (bg.name==saved.name || bg.url==saved.url) {
 					setBackground(bg);
                     backgroundSet = true;
+				} else if (bg.default) {
+					defaultBackground=bg;
 				}
 			}
 
-            // Otherwise, set Yahoo as default (if this was passed in as an option from the embedding page)
-            if (!backgroundSet && _yahooDefault) {
-                setBackground(collection[1]);
+            // Otherwise, set whatever's specified as default
+            if (!backgroundSet && defaultBackground) {
+                setBackground(defaultBackground);
             }
 
 			// Get any attribution and logo details

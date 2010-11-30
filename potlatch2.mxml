@@ -192,7 +192,7 @@
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
 			// initialise imagery and stylesheets
-			Imagery.instance().init(theMap, overlay, yahoo, loaderInfo.parameters['yahoo_default'] == 'true');
+			Imagery.instance().init(theMap, overlay, yahoo);
 			Stylesheets.instance().init(theMap);
 			Imagery.instance().addEventListener(MapEvent.BUMP, bumpHandler);
 
