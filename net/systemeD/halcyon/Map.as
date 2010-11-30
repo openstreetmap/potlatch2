@@ -150,10 +150,12 @@ package net.systemeD.halcyon {
             this.dispatchEvent(new Event(MapEvent.INITIALISED));
 			download();
 
-            ExternalInterface.addCallback("setPosition", function (lat:Number,lon:Number,zoom:uint):void {
-                updateCoordsFromLatLon(lat, lon);
-                changeScale(zoom);
-            });
+            if (ExternalInterface.available) {
+              ExternalInterface.addCallback("setPosition", function (lat:Number,lon:Number,zoom:uint):void {
+                  updateCoordsFromLatLon(lat, lon);
+                  changeScale(zoom);
+              });
+            }
         }
 
 		// ------------------------------------------------------------------------------------------
