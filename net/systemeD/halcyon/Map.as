@@ -172,7 +172,7 @@ package net.systemeD.halcyon {
 		private function setCentre():void {
 			centre_lat=coord2lat(-y+mapheight/2);
 			centre_lon=coord2lon(-x+mapwidth/2);
-			this.dispatchEvent(new MapEvent(MapEvent.MOVE, {lat:centre_lat, lon:centre_lon, scale:scale}));
+			this.dispatchEvent(new MapEvent(MapEvent.MOVE, {lat:centre_lat, lon:centre_lon, scale:scale, minlon:edge_l, maxlon:edge_r, minlat:edge_b, maxlat:edge_t}));
 		}
 		
 		public function nudgeBackground(x:Number,y:Number):void {

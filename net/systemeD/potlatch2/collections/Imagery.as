@@ -2,9 +2,12 @@ package net.systemeD.potlatch2.collections {
 
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
+	import flash.display.*;
 	import flash.net.*;
+	import flash.text.TextField;
 	import net.systemeD.halcyon.DebugURLRequest;
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.MapEvent;
 	import net.systemeD.potlatch2.FunctionKeyManager;
 	import net.systemeD.potlatch2.Yahoo;
 	import mx.collections.ArrayCollection;
@@ -23,25 +26,35 @@ package net.systemeD.potlatch2.collections {
 
 		public var collection:Array=[];
 		public var selected:Object={};
+
 		private var _yahooDefault:Boolean=false;
 		private var _map:Map;
+		private var _overlay:Sprite;
 		private var _yahoo:Yahoo;
 
 		/* Load catalogue file */
 
-		public function init(map:Map,yahoo:Yahoo,yahooDefault:Boolean):void {
+		public function init(map:Map, overlay:Sprite, yahoo:Yahoo, yahooDefault:Boolean):void {
 			_map = map;
+			_overlay = overlay;
 			_yahoo = yahoo;
 			_yahooDefault = yahooDefault;
+
+			// load imagery file
 	        var request:DebugURLRequest = new DebugURLRequest("imagery.xml");
 	        var loader:URLLoader = new URLLoader();
 	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
 	        loader.load(request.request);
+
+			// create map listeners
+			map.addEventListener(MapEvent.MOVE, moveHandler);
+			map.addEventListener(MapEvent.RESIZE, resizeHandler);
 		}
 
         private function onImageryLoad(event:Event):void {
 			var xml:XML = new XML(URLLoader(event.target).data);
 			var saved:Object;
+			var bg:Object;
 			if (SharedObject.getLocal("user_state").data['background_url']) {
 				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
 						url:  SharedObject.getLocal("user_state").data['background_url' ] };
@@ -52,6 +65,7 @@ package net.systemeD.potlatch2.collections {
 			var isSet:Boolean=false;
             var backgroundSet:Boolean = false;
 
+			// Read all values from XML file
             collection=new Array(
 				{ name: "None", url: "" },
 				{ name: "Yahoo", url: "yahoo", sourcetag: "Yahoo" } );
@@ -65,31 +79,99 @@ package net.systemeD.potlatch2.collections {
 				    (obj.name==saved.name && obj.name!='Custom')) { isSet=true; }
 			}
 
+			// Add user's previous preference (from SharedObject) if we didn't find it in the XML file
             if (!isSet && saved.name && saved.url && saved.url!='' && saved.url!='yahoo') {
                 collection.push(saved);
                 isSet=true;
             }
 
-			for each (var bg:Object in collection) {
+			// Automatically select the user's previous preference
+			for each (bg in collection) {
 				if (bg.name==saved.name || bg.url==saved.url) {
 					setBackground(bg);
                     backgroundSet = true;
 				}
 			}
 
-            // For most contributors it's useful to set the background to yahoo by default, I reckon, but lets make it a config
+            // Otherwise, set Yahoo as default (if this was passed in as an option from the embedding page)
             if (!backgroundSet && _yahooDefault) {
                 setBackground(collection[1]);
             }
+
+			// Get any attribution and logo details
+			for each (bg in collection) {
+				if (bg.logo) {
+					// load the logo
+					var loader:Loader = new Loader();
+					var thisbg1:Object = bg;			// scope it for the closure
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { onLogoLoad(e,thisbg1); });
+					loader.load(new URLRequest(bg.logo));
+				}
+				if (bg.attribution_url) {
+					// load the attribution
+					trace("requesting "+bg.attribution_url);
+			        var urlloader:URLLoader = new URLLoader();
+					var thisbg2:Object = bg;			// scope it for the closure
+					urlloader.addEventListener(Event.COMPLETE, function(e:Event):void { onAttributionLoad(e,thisbg2); });
+			        urlloader.load(new URLRequest(bg.attribution_url));
+				}
+			}
+
+			// Tell the function key manager that we'd like to receive function key calls
 			FunctionKeyManager.instance().registerListener('Background imagery',
 				function(o:String):void { setBackground(findBackgroundWithName(o)); });
 			dispatchEvent(new Event("collection_changed"));
 		}
 		
+		public function onLogoLoad(e:Event, bg:Object):void {
+			bg.logoData  = Bitmap(LoaderInfo(e.target).content).bitmapData;
+			bg.logoWidth = e.target.loader.width;
+			bg.logoHeight= e.target.loader.height;
+			setLogo();
+		}
+		
+		public function onAttributionLoad(e:Event,bg: Object):void {
+			trace ("onAttributionLoad");
+			// if we ever need to cope with non-Microsoft attribution, then this should look at bg.scheme
+			// someone who actually likes XML can replace the following with the 'proper' way of doing it
+			var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
+			var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
+			var s:String=e.target.data;
+			var xml:XML = new XML(s.replace(xmlnsPattern, "").replace(xsiPattern, ""));
+			var attribution:Object = {};
+			for each (var ResourceSets:XML in xml.child("ResourceSets")) {
+				for each (var ResourceSet:XML in ResourceSets.child("ResourceSet")) {
+					for each (var Resources:XML in ResourceSet.child("Resources")) {
+						for each (var ImageryMetadata:XML in Resources.child("ImageryMetadata")) {
+							for each (var ImageryProvider:XML in ImageryMetadata.child("ImageryProvider")) {
+								var areas:Array=[];
+								for each (var CoverageArea:XML in ImageryProvider.child("CoverageArea")) {
+									areas.push([CoverageArea.ZoomMin,
+									            CoverageArea.ZoomMax,
+									            CoverageArea.BoundingBox.SouthLatitude,
+									            CoverageArea.BoundingBox.WestLongitude,
+									            CoverageArea.BoundingBox.NorthLatitude,
+									            CoverageArea.BoundingBox.EastLongitude]);
+								}
+								attribution[ImageryProvider.Attribution]=areas;
+							}
+						}
+					}
+				}
+			}
+			bg.attribution=attribution;
+			setAttribution();
+		}
+
 		public function setBackground(bg:Object):void {
+			// set background
+			selected=bg;
 			if (bg.url=='yahoo') { _map.setBackground({url:''}); _yahoo.show(); }
 			                else { _map.setBackground(bg      ); _yahoo.hide(); }
-			selected=bg;
+			// update attribution and logo
+			_overlay.visible=bg.attribution || bg.logo;
+			setLogo(); setAttribution();
+			// save as SharedObject for next time
 			var obj:SharedObject = SharedObject.getLocal("user_state");
 			obj.setProperty('background_url' ,String(bg.url));
 			obj.setProperty('background_name',String(bg.name));
@@ -101,6 +183,39 @@ package net.systemeD.potlatch2.collections {
 				if (bg.name==name) { return bg; }
 			}
 			return { url:'' };
+		}
+
+		private function moveHandler(event:MapEvent):void {
+			setAttribution();
+		}
+		private function setAttribution():void {
+			if (!selected.attribution) return;
+			var attr:Array=[];
+			for (var provider:String in selected.attribution) {
+				for each (var bounds:Array in selected.attribution[provider]) {
+					if (_map.scale>=bounds[0] && _map.scale<=bounds[1] &&
+					  ((_map.edge_l>bounds[3] && _map.edge_l<bounds[5]) ||
+					   (_map.edge_r>bounds[3] && _map.edge_r<bounds[5]) ||
+			     	   (_map.edge_l<bounds[3] && _map.edge_r>bounds[5])) &&
+					  ((_map.edge_b>bounds[2] && _map.edge_b<bounds[4]) ||
+					   (_map.edge_t>bounds[2] && _map.edge_t<bounds[4]) ||
+					   (_map.edge_b<bounds[2] && _map.edge_t>bounds[4]))) {
+						attr.push(provider);
+					}
+				}
+			}
+			TextField(_overlay.getChildAt(0)).text="Background "+attr.join(", ");
+		}
+		private function resizeHandler(event:MapEvent):void {
+			if (!selected.logoData) return;
+			_overlay.getChildAt(1).y=event.params.height-5-selected.logoHeight;
+		}
+		private function setLogo():void {
+			if (!selected.logoData) return;
+			while (_overlay.numChildren>1) { _overlay.removeChildAt(1); }
+			var logo:Bitmap=new Bitmap(selected.logoData);
+			logo.x=5; logo.y=_map.mapheight-5-selected.logoHeight;
+			_overlay.addChild(logo);
 		}
 
 		[Bindable(event="collection_changed")]

@@ -163,13 +163,25 @@
 			_root.addChild(s);
 			theMap.mask=s;
 
+			// add attribution/logo sprite
+			var overlay:Sprite=new Sprite();
+			var attribution:TextField=new TextField();
+			attribution.width=200; attribution.height=300;
+			attribution.multiline=true;
+			attribution.wordWrap=true;
+			attribution.selectable=false;
+			attribution.defaultTextFormat=new TextFormat("_sans", 9, 0, false, false, false);
+			attribution.x=5; attribution.y=5;
+			overlay.addChild(attribution);
+			_root.addChild(overlay);
+
 			// mouse-up handler attached to stage, so the user can release outside the map
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
 			// initialise imagery and stylesheets
-			Imagery.instance().init(theMap,yahoo,loaderInfo.parameters['yahoo_default'] == 'true');
+			Imagery.instance().init(theMap, overlay, yahoo, loaderInfo.parameters['yahoo_default'] == 'true');
 			Stylesheets.instance().init(theMap);
 
 			// keyboard event attached to stage
