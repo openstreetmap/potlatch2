@@ -168,8 +168,8 @@ package net.systemeD.potlatch2.collections {
 			if (bg.url=='yahoo') { _map.setBackground({url:''}); _yahoo.show(); }
 			                else { _map.setBackground(bg      ); _yahoo.hide(); }
 			// update attribution and logo
-			_overlay.visible=bg.attribution || bg.logo;
-			setLogo(); setAttribution();
+			_overlay.visible=bg.attribution || bg.logo || bg.terms_url;
+			setLogo(); setAttribution(); setTerms();
 			// save as SharedObject for next time
 			var obj:SharedObject = SharedObject.getLocal("user_state");
 			obj.setProperty('background_url' ,String(bg.url));
@@ -188,6 +188,8 @@ package net.systemeD.potlatch2.collections {
 			setAttribution();
 		}
 		private function setAttribution():void {
+			var tf:TextField=TextField(_overlay.getChildAt(0));
+			tf.text='';
 			if (!selected.attribution) return;
 			var attr:Array=[];
 			for (var provider:String in selected.attribution) {
@@ -203,24 +205,39 @@ package net.systemeD.potlatch2.collections {
 					}
 				}
 			}
-			TextField(_overlay.getChildAt(0)).text="Background "+attr.join(", ");
+			if (attr.length==0) return;
+			tf.text="Background "+attr.join(", ");
+			tf.x=_map.mapwidth  - 5 - tf.textWidth;
+			tf.y=_map.mapheight - 5 - tf.textHeight;
+			dispatchEvent(new MapEvent(MapEvent.BUMP, { y: tf.textHeight }));	// don't let the toolbox obscure it
 		}
 		private function resizeHandler(event:MapEvent):void {
 			if (!selected.logoData) return;
-			_overlay.getChildAt(1).y=event.params.height-5-selected.logoHeight;
+			_overlay.getChildAt(2).y=event.params.height - 5 - selected.logoHeight - (selected.terms_url ? 10 : 0);
 		}
 		private function setLogo():void {
+			while (_overlay.numChildren>2) { _overlay.removeChildAt(2); }
 			if (!selected.logoData) return;
-			while (_overlay.numChildren>1) { _overlay.removeChildAt(1); }
 			var logo:Sprite=new Sprite();
 			logo.addChild(new Bitmap(selected.logoData));
-			logo.x=5; logo.y=_map.mapheight-5-selected.logoHeight;
+			logo.x=5; logo.y=_map.mapheight - 5 - selected.logoHeight - (selected.terms_url ? 10 : 0);
 			if (selected.logo_url) { logo.buttonMode=true; logo.addEventListener(MouseEvent.CLICK, launchLogoLink, false, 0, true); }
 			_overlay.addChild(logo);
 		}
 		private function launchLogoLink(e:Event):void {
 			if (!selected.logo_url) return;
 			navigateToURL(new URLRequest(selected.logo_url), '_blank');
+		}
+		private function setTerms():void {
+			var terms:TextField=TextField(_overlay.getChildAt(1));
+			if (!selected.terms_url) { terms.text=''; return; }
+			terms.text="Background terms of use";
+			terms.x=5; terms.y=_map.mapheight - 15;
+			terms.addEventListener(MouseEvent.CLICK, launchTermsLink, false, 0, true);
+		}
+		private function launchTermsLink(e:Event):void {
+			if (!selected.terms_url) return;
+			navigateToURL(new URLRequest(selected.terms_url), '_blank');
 		}
 
 		[Bindable(event="collection_changed")]

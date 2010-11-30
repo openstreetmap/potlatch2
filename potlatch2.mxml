@@ -166,13 +166,17 @@
 			// add attribution/logo sprite
 			var overlay:Sprite=new Sprite();
 			var attribution:TextField=new TextField();
-			attribution.width=200; attribution.height=300;
+			attribution.width=220; attribution.height=300;
 			attribution.multiline=true;
 			attribution.wordWrap=true;
 			attribution.selectable=false;
 			attribution.defaultTextFormat=new TextFormat("_sans", 9, 0, false, false, false);
-			attribution.x=5; attribution.y=5;
 			overlay.addChild(attribution);
+			var terms:TextField=new TextField();
+			terms.width=200; terms.height=15;
+			terms.selectable=false;
+			terms.defaultTextFormat=new TextFormat("_sans", 9, 0, false, false, true);
+			overlay.addChild(terms);
 			_root.addChild(overlay);
 
 			// mouse-up handler attached to stage, so the user can release outside the map
@@ -183,6 +187,7 @@
 			// initialise imagery and stylesheets
 			Imagery.instance().init(theMap, overlay, yahoo, loaderInfo.parameters['yahoo_default'] == 'true');
 			Stylesheets.instance().init(theMap);
+			Imagery.instance().addEventListener(MapEvent.BUMP, bumpHandler);
 
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
@@ -190,8 +195,8 @@
 			// position toolbox
 			toolbox=Toolbox(PopUpManager.createPopUp(this,Toolbox,false));
 			toolbox.init(theController);
-			toolbox.x=stage.stageWidth-toolbox.width-15;
-			toolbox.y=stage.stageHeight-toolbox.height-15;
+			toolbox.x=stage.stageWidth-toolbox.width-5;
+			toolbox.y=stage.stageHeight-toolbox.height-5;
 
 			// add debug field
 			var t:TextField=new TextField();
@@ -250,10 +255,15 @@
                 theMap.updateSize(map_area.width, map_area.height);
 
 			if (toolbox) {
-				toolbox.x=Math.min(toolbox.x,stage.stageWidth-toolbox.width-15);
-				toolbox.y=Math.min(toolbox.y,stage.stageHeight-toolbox.height-15);
+				toolbox.x=Math.min(toolbox.x,stage.stageWidth-toolbox.width-5);
+				toolbox.y=Math.min(toolbox.y,stage.stageHeight-toolbox.height-5);
 			}
         }
+		private function bumpHandler(e:MapEvent):void {
+			if (toolbox) {
+				toolbox.y=Math.min(toolbox.y,stage.stageHeight-toolbox.height-10-e.params.y);
+			}
+		}
 
         private function onDataStart(event:Event):void {
 			switch (event.type) {

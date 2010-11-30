@@ -11,6 +11,7 @@ package net.systemeD.halcyon {
 		public static const NUDGE_BACKGROUND:String = "nudge_background";
 		public static const ERROR:String = "error";
         public static const INITIALISED:String = "initialized";
+		public static const BUMP:String = "bump";
 
 		public var params:Object;
 
