@@ -139,8 +139,15 @@
             b.graphics.endFill();
 			_root.addChild(b);
 
+			// hard-coded block on Google tiles
+			var params:Object={};
+			for (var k:String in this.loaderInfo.parameters) {
+				params[k]=this.loaderInfo.parameters[k];
+			}
+			params['tileblocks']=[new RegExp("google","i")];
+
 			// create map and Yahoo
-			theMap=new Map(this.loaderInfo.parameters);
+			theMap=new Map(params);
 
             // Auto-load vector backgrounds from config
             // This could go spectacularly wrong if map.init completes before the event listener below is added

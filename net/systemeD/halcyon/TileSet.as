@@ -23,6 +23,7 @@ package net.systemeD.halcyon {
 		private var waiting:int=0;			// number of tiles currently being downloaded
 		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
 		private var scheme:String;			// 900913 or microsoft
+		public var blocks:Array;			// array of regexes which are verboten
 
 		private var map:Map;
 
@@ -149,6 +150,7 @@ package net.systemeD.halcyon {
 		// Assemble tile URL
 		
 		private function tileURL(tx:int,ty:int,tz:uint):String {
+			var t:String='';
 			switch (scheme.toLowerCase()) {
 
 				case 'microsoft':
@@ -160,17 +162,24 @@ package net.systemeD.halcyon {
 						if ((ty & mask)!=0) byte+=2;
 						u+=String(byte);
 					}
-					return baseurl.replace('$quadkey',u);
+					t=baseurl.replace('$quadkey',u); break;
 
 				default:
-					return baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
-			}	
+					if (baseurl.indexOf('$x')>-1) {
+						t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+					} else {
+						t=baseurl.replace('!',map.scale).replace('!',tx).replace('!',ty);
+					}
+					break;
+
+			}
+			for each (var block:* in blocks) { if (t.match(block)) return ''; }
+			return t;
 		}
 		
 		public function get url():String {
 			return baseurl ? baseurl : '';
 		}
-
 
 		// Update offset
 		

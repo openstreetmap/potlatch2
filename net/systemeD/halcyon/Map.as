@@ -120,6 +120,9 @@ package net.systemeD.halcyon {
 			while (numChildren) { removeChildAt(0); }
 
 			tileset=new TileSet(this);					// 0 - 900913 background
+			if (initparams['tileblocks']) {				//   | option to block dodgy tile sources
+				tileset.blocks=initparams['tileblocks'];//   |
+			}											//   |
 			addChild(tileset);							//   |
 			tileset.init(tileparams);					//   |
 
