@@ -104,7 +104,9 @@ package net.systemeD.potlatch2.controller {
 			Globals.vars.root.addDebug("**** -> "+this+" "+firstSelected.id);
         }
         override public function exitState(newState:ControllerState):void {
-			controller.clipboards['way']=firstSelected.getTagsCopy();
+			if (firstSelected.hasTags()) {
+              controller.clipboards['way']=firstSelected.getTagsCopy();
+            }
 			controller.map.setPurgable(selection,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
