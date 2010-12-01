@@ -59,7 +59,6 @@ package net.systemeD.potlatch2.controller {
         }
 
         override public function exitState(newState:ControllerState):void {
-			controller.clipboards['marker']=firstSelected.getTagsCopy();
 			controller.map.setPurgable(selection,true);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
