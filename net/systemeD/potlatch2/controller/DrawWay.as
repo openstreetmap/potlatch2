@@ -67,6 +67,9 @@ package net.systemeD.potlatch2.controller {
 							// double-click at end of way
 							return stopDrawing();
 						}
+                    } else if (entity==lastClick) {
+                        // clicked slowly on the end node - do nothing
+                        return this;
 					} else {
 						appendNode(entity as Node, MainUndoStack.getGlobalStack().addAction);
 						if (focus is Way) {
