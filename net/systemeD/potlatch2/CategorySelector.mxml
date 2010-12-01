@@ -87,6 +87,7 @@
           if ( feature != null ) {
               var primaryCategory:Category = feature.findFirstCategory();
               index = MapFeatures.getInstance().getCategoriesForType(limit).indexOf(primaryCategory);
+              if (index==-1) { index=0; }	// not found, so just show the default for now
           }
           var event:IndexChangedEvent = new IndexChangedEvent(IndexChangedEvent.CHANGE);
           event.oldIndex = _formerIndex;
