@@ -45,7 +45,7 @@
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" />
         <mx:Button label="Options" click="new OptionsDialog().init();" /> 
-        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" click="SaveManager.saveChanges();" id="saveButton" 
+        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" disabledIcon="@Embed('embedded/save_disabled.svg')" click="SaveManager.saveChanges();" id="saveButton"
 			enabled="false"/>
     </mx:ApplicationControlBar>
     
