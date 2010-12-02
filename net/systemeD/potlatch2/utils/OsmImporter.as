@@ -12,10 +12,7 @@ package net.systemeD.potlatch2.utils {
 		}
 
 		override protected function doImport():void {
-			var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
-			var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
-			files[0] = String(files[0]).replace(xmlnsPattern, "").replace(xsiPattern, "");
-			var map:XML=new XML(files[0]);
+			var map:XML = new XML(files[0]);
 			var data:XML;
 			
             var oldid:Number;
