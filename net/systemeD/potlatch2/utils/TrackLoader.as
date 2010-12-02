@@ -47,29 +47,26 @@ package net.systemeD.potlatch2.utils {
 		}
 
 		public function parseGPX(event:Event):void {
-			var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
-			var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
-			var raw:String = String(event.target.data).replace(xmlnsPattern, "").replace(xsiPattern, "");
-			var file:XML=new XML(raw);
+            default xml namespace = new Namespace("http://www.topografix.com/GPX/1/0/");
+			var file:XML = new XML(event.target.data);
 
-			for each (var trk:XML in file.child("trk")) {
-				for each (var trkseg:XML in trk.child("trkseg")) {
-					var nodestring:Array=[];
-					var lat:Number=NaN, lastlat:Number=NaN;
-					var lon:Number=NaN, lastlon:Number=NaN;
-					for each (var trkpt:XML in trkseg.child("trkpt")) {
-						lat=trkpt.@lat;
-						lon=trkpt.@lon;
-						if (lastlat && nodestring.length>0 && greatCircle(lat,lon,lastlat,lastlon)>30) {
-							layer.createWay({}, nodestring);
-							nodestring=[];
-						}
-						nodestring.push(layer.createNode({}, lat, lon));
-						lastlat=lat; lastlon=lon;
-					}
-					if (nodestring.length>0) { layer.createWay({}, nodestring); }
+			for each (var trkseg:XML in file..trkseg) {
+				var nodestring:Array = [];
+				var lat:Number = NaN, lastlat:Number = NaN;
+				var lon:Number = NaN, lastlon:Number = NaN;
+                for each (var trkpt:XML in trkseg.trkpt) {
+					lat = trkpt.@lat;
+                    lon = trkpt.@lon;
+                    if (lastlat && nodestring.length > 0 && greatCircle(lat, lon, lastlat, lastlon) > 30) {
+                        layer.createWay({}, nodestring);
+                        nodestring = [];
+                    }
+                    nodestring.push(layer.createNode({}, lat, lon));
+                    lastlat = lat; lastlon = lon;
 				}
+                if (nodestring.length > 0) { layer.createWay({}, nodestring); }
 			}
+            
 			layer.paint.updateEntityUIs(layer.getObjectsByBbox(left,right,top,bottom), false, false);
 		}
 

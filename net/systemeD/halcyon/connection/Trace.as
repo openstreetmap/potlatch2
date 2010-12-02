@@ -99,32 +99,30 @@ package net.systemeD.halcyon.connection {
         }
 
         private function process():void {
-            var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
-            var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
-            var raw:String = _traceData.replace(xmlnsPattern, "").replace(xsiPattern, "");
-            var file:XML=new XML(raw);
+            default xml namespace = new Namespace("http://www.topografix.com/GPX/1/0");
+            var file:XML = new XML(_traceData);
 
-            for each (var trk:XML in file.child("trk")) {
-                for each (var trkseg:XML in trk.child("trkseg")) {
-                    var way:Way;
-                    var nodestring:Array=[];
-                    for each (var trkpt:XML in trkseg.child("trkpt")) {
-                        nodestring.push(layer.createNode({}, trkpt.@lat, trkpt.@lon));
-                    }
-                    if (nodestring.length>0) {
-                        way=layer.createWay({}, nodestring);
-                        //if (simplify) { Simplify.simplify(way, paint.map, false); }
-                    }
+            for each (var trkseg:XML in file..trkseg) {
+                var way:Way;
+                var nodestring:Array = [];
+                for each (var trkpt:XML in trkseg.trkpt) {
+                    nodestring.push(layer.createNode({}, trkpt.@lat, trkpt.@lon));
+                }
+                if (nodestring.length > 0) {
+                    way = layer.createWay({}, nodestring);
+                    //if (simplify) { Simplify.simplify(way, paint.map, false); }
                 }
             }
-            for each (var wpt:XML in file.child("wpt")) {
-                var tags:Object={};
+
+            for each (var wpt:XML in file.wpt) {
+                var tags:Object = {};
                 for each (var tag:XML in wpt.children()) {
                     tags[tag.name()]=tag.toString();
                 }
-                var node:Node=layer.createNode(tags, wpt.@lat, wpt.@lon);
+                var node:Node = layer.createNode(tags, wpt.@lat, wpt.@lon);
 				layer.registerPOI(node);
             }
+
             layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
         }
     }
