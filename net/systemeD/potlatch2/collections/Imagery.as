@@ -206,22 +206,27 @@ package net.systemeD.potlatch2.collections {
 			}
 			if (attr.length==0) return;
 			tf.text="Background "+attr.join(", ");
-			tf.x=_map.mapwidth  - 5 - tf.textWidth;
-			tf.y=_map.mapheight - 5 - tf.textHeight;
+			positionAttribution();
 			dispatchEvent(new MapEvent(MapEvent.BUMP, { y: tf.textHeight }));	// don't let the toolbox obscure it
 		}
-		private function resizeHandler(event:MapEvent):void {
-			if (!selected.logoData) return;
-			_overlay.getChildAt(2).y=event.params.height - 5 - selected.logoHeight - (selected.terms_url ? 10 : 0);
+		private function positionAttribution():void {
+			var tf:TextField=TextField(_overlay.getChildAt(0));
+			tf.x=_map.mapwidth  - 5 - tf.textWidth;
+			tf.y=_map.mapheight - 5 - tf.textHeight;
 		}
+
 		private function setLogo():void {
 			while (_overlay.numChildren>2) { _overlay.removeChildAt(2); }
 			if (!selected.logoData) return;
 			var logo:Sprite=new Sprite();
 			logo.addChild(new Bitmap(selected.logoData));
-			logo.x=5; logo.y=_map.mapheight - 5 - selected.logoHeight - (selected.terms_url ? 10 : 0);
 			if (selected.logo_url) { logo.buttonMode=true; logo.addEventListener(MouseEvent.CLICK, launchLogoLink, false, 0, true); }
 			_overlay.addChild(logo);
+			positionLogo();
+		}
+		private function positionLogo():void {
+			_overlay.getChildAt(2).x=5;
+			_overlay.getChildAt(2).y=_map.mapheight - 5 - selected.logoHeight - (selected.terms_url ? 10 : 0);
 		}
 		private function launchLogoLink(e:Event):void {
 			if (!selected.logo_url) return;
@@ -231,12 +236,22 @@ package net.systemeD.potlatch2.collections {
 			var terms:TextField=TextField(_overlay.getChildAt(1));
 			if (!selected.terms_url) { terms.text=''; return; }
 			terms.text="Background terms of use";
-			terms.x=5; terms.y=_map.mapheight - 15;
+			positionTerms();
 			terms.addEventListener(MouseEvent.CLICK, launchTermsLink, false, 0, true);
+		}
+		private function positionTerms():void {
+			_overlay.getChildAt(1).x=5;
+			_overlay.getChildAt(1).y=_map.mapheight - 15;
 		}
 		private function launchTermsLink(e:Event):void {
 			if (!selected.terms_url) return;
 			navigateToURL(new URLRequest(selected.terms_url), '_blank');
+		}
+
+		private function resizeHandler(event:MapEvent):void {
+			if (selected.logoData) positionLogo();
+			if (selected.terms_url) positionTerms();
+			if (selected.attribution) positionAttribution();
 		}
 
 		[Bindable(event="collection_changed")]
