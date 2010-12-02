@@ -5,14 +5,14 @@
 	backgroundColor="white" borderStyle="inset">
 
   <mx:HBox horizontalGap="0"> 
-  <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical"/>
+  <mx:ToggleButtonBar height="100%" dataProvider="{categoryStack}" direction="vertical" styleName="catToggleButtonBar"/>
   <mx:ViewStack id="categoryStack" width="100%" height="100%"
       change="_formerIndex=event.newIndex;" 
       creationComplete="setSelectedFeature(_selectedType);">
       <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType(limit)}">
           <mx:VBox label="{catRep.currentItem.name}">
           <mx:TileList dataProvider="{catRep.currentItem.getFeaturesForType(limit)}"
-                       width="100%" height="100%" change="itemSelected(event);"
+                       width="100%" height="100%" change="itemSelected(event);" styleName="catToggleTiles"
                        creationComplete="ensureSelection();">
               <mx:itemRenderer>
                   <mx:Component>

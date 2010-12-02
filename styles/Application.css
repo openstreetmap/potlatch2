@@ -70,7 +70,7 @@ TitleWindow {
   paddingRight: 3;
 }
 
-.editorContainer {
+.dndEditorContainer {
   verticalGap: 4;
   paddingTop: 3;
   paddingLeft: 3;
@@ -97,4 +97,8 @@ TitleWindow {
 
 .dndPanelCategoryLabel {
   paddingTop: 6px;
+}
+
+.dndTagHeader {
+  paddingBottom: 15;
 }

@@ -49,15 +49,15 @@
   
   <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto">
     <mx:ViewStack id="stack" width="100%" height="100%">
-      <mx:VBox width="100%" height="100%" label="Simple" id="editorContainer" creationComplete="initEditorStackUIs()">
-        <mx:HBox width="100%" id="iconContainer" styleName="featureSelector">
+      <mx:VBox width="100%" height="100%" label="Simple" id="editorContainer" creationComplete="initEditorStackUIs()" styleName="dndPanelVbox">
+        <mx:VBox width="100%" verticalGap="1" styleName="dndTagHeader">
+          <mx:HBox width="100%" id="iconContainer" styleName="featureSelector">
             <mx:Image id="iconImage"/>
-            <mx:VBox width="100%" verticalGap="1">
-              <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%"/>
-              <mx:Text condenseWhite="true" width="100%" id="iconText"/>
-            </mx:VBox>
+            <mx:Text condenseWhite="true" width="100%" id="iconText" styleName="dndIconText"/>
             <mx:LinkButton label="?" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
-        </mx:HBox>
+          </mx:HBox>
+          <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%" styleName="dndTagPopUpMenu"/>
+        </mx:VBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
         <mx:Label id="advancedID" click="openEntityPage()">
@@ -260,7 +260,7 @@
 			iconText.htmlText = "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
             tw.setSelectedFeature(null);
 		  } else {
-			iconText.htmlText = "<b>No tags set</b><br/>Use the menu above to say what this "+entity.getType()+" is";
+			iconText.htmlText = "<b>No tags set</b><br/>Please use the menu below to define what this "+entity.getType()+" is";
             tw.setSelectedFeature(null);
           }
           helpLabel.visible = false;
@@ -308,7 +308,7 @@
           var box:VBox = new VBox();
           box.percentWidth = 100;
           box.percentHeight = 100;
-          box.styleName = "editorContainer";
+          box.styleName = "dndEditorContainer";
           return box;
       }
 
@@ -330,11 +330,15 @@
 		editorStackTabNavigator.creationPolicy="auto";
 		editorStackTabNavigator.percentWidth=100;
 		editorStackTabNavigator.percentHeight=100;
+		editorStackTabNavigator.styleName="dndStackTab";
+		editorStackTabNavigator.popUpButtonPolicy="off"
+
 
 		editorStackAccordion = new Accordion();
 		editorStackAccordion.percentWidth=100;
 		editorStackAccordion.percentHeight=100;
 		editorStackAccordion.creationPolicy="auto";
+		editorStackAccordion.styleName="dndStackAccordion";
 
 		setEditorStackUI(true);
 	}
