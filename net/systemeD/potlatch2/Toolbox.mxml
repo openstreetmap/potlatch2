@@ -5,7 +5,8 @@
 	height="76" width="129" 
 	headerHeight="6" headerColors="[black, gray]" 
 	borderThicknessRight="0" borderThicknessLeft="0" borderThicknessBottom="0" 
-	paddingLeft="4" paddingTop="4" layout="absolute" >
+	paddingLeft="4" paddingTop="4" layout="absolute"
+	styleName="theToolBox">
 
 		<mx:Image data="@Embed('../../../embedded/close_small.png')"
 			includeInLayout="false" id="toolboxClose" click="toggle();" 
