@@ -113,7 +113,7 @@ package net.systemeD.halcyon.connection {
         }
 
         protected function setWay(way:Way, queue:Boolean):void {
-			if (!ways[way.id]) { waycount++; }
+			if (!ways[way.id] && way.loaded) { waycount++; }
             ways[way.id] = way;
             if (way.loaded) { sendEvent(new EntityEvent(NEW_WAY, way),queue); }
         }

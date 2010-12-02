@@ -108,9 +108,10 @@ package net.systemeD.halcyon.connection {
                     for each(var nd:XML in data.nd)
                         nodes.push(getNode(Number(nd.@ref)));
                     tags = parseTags(data.tag);
-                    if ( way == null )
+                    if ( way == null ) {
                         setWay(new Way(id, version, tags, true, nodes, uid, timestamp),false);
-                    else {
+                    } else {
+						waycount++;
                         way.update(version, tags, true, nodes, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }

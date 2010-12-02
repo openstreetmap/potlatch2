@@ -44,7 +44,8 @@ package net.systemeD.halcyon.connection {
 		}
 		
 		public override function within(left:Number,right:Number,top:Number,bottom:Number):Boolean {
-			if ((edge_l<left   && edge_r<left  ) ||
+			if (!edge_l ||
+				(edge_l<left   && edge_r<left  ) ||
 			    (edge_l>right  && edge_r>right ) ||
 			    (edge_b<bottom && edge_t<bottom) ||
 			    (edge_b>top    && edge_b>top   ) || deleted) { return false; }
@@ -191,6 +192,7 @@ package net.systemeD.halcyon.connection {
 		public override function nullify():void {
 			nullifyEntity();
 			nodes=[];
+			edge_l=edge_r=edge_t=edge_b=NaN;
 		}
 		
 		public function get clockwise():Boolean {
