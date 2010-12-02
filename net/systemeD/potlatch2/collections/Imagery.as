@@ -131,32 +131,21 @@ package net.systemeD.potlatch2.collections {
 		public function onAttributionLoad(e:Event,bg: Object):void {
 			trace ("onAttributionLoad");
 			// if we ever need to cope with non-Microsoft attribution, then this should look at bg.scheme
-			// someone who actually likes XML can replace the following with the 'proper' way of doing it
-			var xmlnsPattern:RegExp = new RegExp("xmlns[^\"]*\"[^\"]*\"", "gi");
-			var xsiPattern:RegExp = new RegExp("xsi[^\"]*\"[^\"]*\"", "gi");
-			var s:String=e.target.data;
-			var xml:XML = new XML(s.replace(xmlnsPattern, "").replace(xsiPattern, ""));
+            default xml namespace = Namespace("http://schemas.microsoft.com/search/local/ws/rest/v1");
+            var xml:XML = new XML(e.target.data);
 			var attribution:Object = {};
-			for each (var ResourceSets:XML in xml.child("ResourceSets")) {
-				for each (var ResourceSet:XML in ResourceSets.child("ResourceSet")) {
-					for each (var Resources:XML in ResourceSet.child("Resources")) {
-						for each (var ImageryMetadata:XML in Resources.child("ImageryMetadata")) {
-							for each (var ImageryProvider:XML in ImageryMetadata.child("ImageryProvider")) {
-								var areas:Array=[];
-								for each (var CoverageArea:XML in ImageryProvider.child("CoverageArea")) {
-									areas.push([CoverageArea.ZoomMin,
-									            CoverageArea.ZoomMax,
-									            CoverageArea.BoundingBox.SouthLatitude,
-									            CoverageArea.BoundingBox.WestLongitude,
-									            CoverageArea.BoundingBox.NorthLatitude,
-									            CoverageArea.BoundingBox.EastLongitude]);
-								}
-								attribution[ImageryProvider.Attribution]=areas;
-							}
-						}
-					}
-				}
-			}
+            for each (var ImageryProvider:XML in xml..ImageryProvider) {
+                var areas:Array=[];
+                for each (var CoverageArea:XML in ImageryProvider.CoverageArea) {
+                    areas.push([CoverageArea.ZoomMin,
+                                CoverageArea.ZoomMax,
+                                CoverageArea.BoundingBox.SouthLatitude,
+                                CoverageArea.BoundingBox.WestLongitude,
+                                CoverageArea.BoundingBox.NorthLatitude,
+                                CoverageArea.BoundingBox.EastLongitude]);
+                }
+                attribution[ImageryProvider.Attribution]=areas;
+            }
 			bg.attribution=attribution;
 			setAttribution();
 		}
