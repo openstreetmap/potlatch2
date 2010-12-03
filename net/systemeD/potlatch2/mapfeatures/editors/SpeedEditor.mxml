@@ -28,7 +28,7 @@
               _choices = new ArrayCollection();
               for each(var sp:String in
                   ["5mph", "10mph", "15mph", "20mph", "25mph", "30mph", "35mph",
-                   "40mph", "45mph", "50mph", "55mph", "60mph", "65mph", "70mph", "75mph"
+                   "40mph", "45mph", "50mph", "55mph", "60mph", "65mph", "70mph", "75mph",
                    "10", "20", "50", "60", "90", "100", "110", "130"])
                   _choices.addItem(new SpeedChoice(sp));
               _choices.addItem(new SpeedChoice(null));
