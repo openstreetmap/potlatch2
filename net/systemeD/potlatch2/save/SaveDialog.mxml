@@ -13,7 +13,7 @@
   </mx:ArrayCollection>
   
   <mx:ViewStack id="processSequence" width="100%" height="100%" 
-      creationPolicy="all" creationComplete="if (doSkip) skipInput();">
+      creationPolicy="all" creationComplete="if (doSkip) skipInput() else comment.setFocus()">
   
     <!-- section for entering tags -->
     <mx:VBox width="100%" height="100%" verticalGap="0">
