@@ -17,7 +17,7 @@ package net.systemeD.halcyon {
 		protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
 		protected var hitzone:Sprite;					// hitzone for above
 		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
-		protected var layer:int=0;						// map layer
+		protected var layer:Number=0;					// map layer
 		protected var suspended:Boolean=false;			// suspend redrawing?
 		protected var redrawDue:Boolean=false;			// redraw called while suspended?
 		public var paint:MapPaint;						// reference to parent MapPaint
