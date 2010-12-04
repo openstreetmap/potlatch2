@@ -407,6 +407,7 @@
       private var listeningToRelations:Array = [];
       
       private function setupAdvanced(entity:Entity):void {
+		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
 		advancedTagGrid.init(entity);
         advancedAddButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent);
 
