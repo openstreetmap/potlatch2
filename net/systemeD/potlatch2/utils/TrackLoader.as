@@ -47,8 +47,12 @@ package net.systemeD.potlatch2.utils {
 		}
 
 		public function parseGPX(event:Event):void {
-            default xml namespace = new Namespace("http://www.topografix.com/GPX/1/0");
 			var file:XML = new XML(event.target.data);
+			for each (var ns:Namespace in file.namespaceDeclarations()) {
+				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
+					default xml namespace = ns;
+				}
+			}
 
 			for each (var trkseg:XML in file..trkseg) {
 				var nodestring:Array = [];

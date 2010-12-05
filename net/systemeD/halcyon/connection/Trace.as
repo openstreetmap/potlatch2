@@ -99,8 +99,12 @@ package net.systemeD.halcyon.connection {
         }
 
         private function process():void {
-            default xml namespace = new Namespace("http://www.topografix.com/GPX/1/0");
             var file:XML = new XML(_traceData);
+			for each (var ns:Namespace in file.namespaceDeclarations()) {
+				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
+					default xml namespace = ns;
+				}
+			}
 
             for each (var trkseg:XML in file..trkseg) {
                 var way:Way;
@@ -117,7 +121,7 @@ package net.systemeD.halcyon.connection {
             for each (var wpt:XML in file.wpt) {
                 var tags:Object = {};
                 for each (var tag:XML in wpt.children()) {
-                    tags[tag.name()]=tag.toString();
+                    tags[tag.name().localName]=tag.toString();
                 }
                 var node:Node = layer.createNode(tags, wpt.@lat, wpt.@lon);
 				layer.registerPOI(node);

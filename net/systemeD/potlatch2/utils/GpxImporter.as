@@ -17,8 +17,12 @@ package net.systemeD.potlatch2.utils {
 		}
 
 		override protected function doImport(): void {
-            default xml namespace = new Namespace("http://www.topografix.com/GPX/1/0");
 			var file:XML = new XML(files[0]);
+			for each (var ns:Namespace in file.namespaceDeclarations()) {
+				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
+					default xml namespace = ns;
+				}
+			}
 
 			for each (var trkseg:XML in file..trkseg) {
 				var way:Way;
@@ -35,7 +39,7 @@ package net.systemeD.potlatch2.utils {
             for each (var wpt:XML in file.wpt) {
 				var tags:Object = {};
 				for each (var tag:XML in wpt.children()) {
-					tags[tag.name()]=tag.toString();
+					tags[tag.name().localName]=tag.toString();
 				}
 				var node:Node = container.createNode(tags, wpt.@lat, wpt.@lon);
 				container.registerPOI(node);
