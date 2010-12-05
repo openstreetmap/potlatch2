@@ -71,6 +71,7 @@ package net.systemeD.potlatch2.utils {
                 if (nodestring.length > 0) { layer.createWay({}, nodestring); }
 			}
             
+			default xml namespace = new Namespace("");
 			layer.paint.updateEntityUIs(layer.getObjectsByBbox(left,right,top,bottom), false, false);
 		}
 

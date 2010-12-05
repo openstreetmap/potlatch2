@@ -72,6 +72,7 @@ package net.systemeD.potlatch2.utils {
                     }
                 }
             }
+			default xml namespace = new Namespace("");
         }
 
         private function importNode(coordinates:String, tags:Object): Node {

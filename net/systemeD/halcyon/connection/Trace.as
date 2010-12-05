@@ -127,6 +127,7 @@ package net.systemeD.halcyon.connection {
 				layer.registerPOI(node);
             }
 
+			default xml namespace = new Namespace("");
             layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
         }
     }

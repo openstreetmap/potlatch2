@@ -44,6 +44,8 @@ package net.systemeD.potlatch2.utils {
 				var node:Node = container.createNode(tags, wpt.@lat, wpt.@lon);
 				container.registerPOI(node);
 			}
+
+			default xml namespace = new Namespace("");
 		}
 	}
 }

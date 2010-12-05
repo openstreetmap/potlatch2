@@ -146,6 +146,7 @@ package net.systemeD.potlatch2.collections {
                 }
                 attribution[ImageryProvider.Attribution]=areas;
             }
+			default xml namespace = new Namespace("");
 			bg.attribution=attribution;
 			setAttribution();
 		}
