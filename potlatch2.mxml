@@ -242,6 +242,18 @@
                 }
             }
 
+			// Load arbitrary GPX from provided URL
+			if (loaderInfo.parameters['gpx_url']) {
+				var vectorlayer:VectorLayer=new VectorLayer(name,theMap,"gpx.css");
+				vectorlayer.url=loaderInfo.parameters['gpx_url'];
+				var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [vectorlayer.url], 
+				                                    function(success:Boolean,message:String=null):void {
+					if (!success) return;
+					theMap.addVectorLayer(vectorlayer);
+					dispatchEvent(new Event("layers_changed"));
+				                                    }, false);
+			}
+
 			// create GPS trackloader
 			trackLoader=new TrackLoader(theMap,conn.apiBase);
 
