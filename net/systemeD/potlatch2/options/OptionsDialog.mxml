@@ -43,12 +43,12 @@
 	<mx:CheckBox width="100%" label="Use custom cursors" selected="true" id="cursorcheck"
 	    change="Application.application.theController.cursorsEnabled=cursorcheck.selected" />
 
-    <mx:CheckBox width="100%" label="Highlight Unedited TIGER" selected="false" id="tigercheck"
+    <mx:CheckBox width="100%" label="Highlight unedited TIGER (US roads)" selected="false" id="tigercheck"
         change="tigerToggle()" />
 
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
-    <mx:Button label="Ok" click="PopUpManager.removePopUp(this);"/>
+    <mx:Button label="Ok" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
   </mx:ControlBar>
 
 </mx:TitleWindow>

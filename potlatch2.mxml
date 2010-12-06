@@ -25,11 +25,12 @@
     <mx:WipeRight id="wipeIn" duration="250"/>
 
     <mx:ApplicationControlBar dock="true">
-        <mx:PopUpButton id="bgButton" label="Background" openAlways="true"
+        <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton"
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
-        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true"
+        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-		<mx:PopUpMenuButton id="gpsButton" itemClick="if (event.index==0) { trackLoader.load(); } else { new MyGpxDialog().init(); }">
+		<mx:PopUpMenuButton id="gpsButton" styleName="appBarButton"
+		    itemClick="if (event.index==0) { trackLoader.load(); } else { new MyGpxDialog().init(); }">
 			<mx:dataProvider>
 				<mx:Array>
 					<mx:Object label="GPS data" />
@@ -38,15 +39,15 @@
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
         <mx:Spacer width="100%"/>
-        <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();"
+        <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
-        <mx:Button label="Redo" click="MainUndoStack.getGlobalStack().redo();"
+        <mx:Button label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
-        <mx:Button label="Help" click="new HelpDialog().init();" />
-        <mx:Button label="Options" click="new OptionsDialog().init();" /> 
-        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" disabledIcon="@Embed('embedded/save_disabled.svg')" click="SaveManager.saveChanges();" id="saveButton"
-			enabled="false"/>
+        <mx:Button label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
+        <mx:Button label="Options" click="new OptionsDialog().init();" styleName="appBarButton" /> 
+        <mx:Button label="Save" icon="@Embed('embedded/save.svg')" disabledIcon="@Embed('embedded/save_disabled.svg')" styleName="appBarButton"
+			click="SaveManager.saveChanges();" id="saveButton" enabled="false"/>
     </mx:ApplicationControlBar>
     
     <mx:HDividedBox width="100%" height="100%">

@@ -62,8 +62,8 @@
 	        indeterminate="true"/>
         <mx:Spacer width="100%"/>
 
-	    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);"/>
-	    <mx:Button id="tryAccessButton" label="Try Access" click="getAccessToken()" enabled="false"/>
+	    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+	    <mx:Button id="tryAccessButton" label="Try Access" click="getAccessToken()" enabled="false" styleName="titleWindowButton" />
 	</mx:ControlBar>
 	
 	<mx:Script><![CDATA[

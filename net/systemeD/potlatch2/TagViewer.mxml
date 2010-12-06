@@ -12,8 +12,10 @@
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
   <mx:VBox id="dndPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
     <mx:Text id="dndPanelText" text="{dndPrompt}" width="100%" styleName="helpInfo" />
-	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}">
-		<mx:HBox width="100%"><mx:Label text="{dndRep.currentItem.name}:" styleName="dndPanelCategoryLabel"/></mx:HBox>
+	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}" styleName="dndRepeater">
+		<mx:HBox width="100%" styleName="dndPanelCategory">
+			<mx:Label text="{dndRep.currentItem.name}:" styleName="dndPanelCategoryLabel"/>
+		</mx:HBox>
 
 		<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point')}" width="100%" height="1"
 			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)" styleName="dndPanelTileList">
@@ -54,9 +56,11 @@
           <mx:HBox width="100%" id="iconContainer" styleName="featureSelector">
             <mx:Image id="iconImage"/>
             <mx:Text condenseWhite="true" width="100%" id="iconText" styleName="dndIconText"/>
-            <mx:LinkButton label="?" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
           </mx:HBox>
-          <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%" styleName="dndTagPopUpMenu"/>
+          <mx:HBox width="100%">
+            <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%" styleName="dndTagPopUpMenu"/>
+            <mx:LinkButton icon="@Embed('../../../embedded/information.svg')" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
+          </mx:HBox>
         </mx:VBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
@@ -257,10 +261,10 @@
 			iconText.htmlText = "<i>Nothing selected</i>";
             tw.setNoSelectedFeature();
 		  } else if (entity.hasTags()) {
-			iconText.htmlText = "<b>Not recognised</b><br/>Try looking at the tags under the advanced properties";
+			iconText.htmlText = "<b>Not recognised</b><br/><font size='10pt'>Try looking at the tags under the advanced properties</font>";
             tw.setSelectedFeature(null);
 		  } else {
-			iconText.htmlText = "<b>No tags set</b><br/>Please use the menu below to define what this "+entity.getType()+" is";
+			iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
             tw.setSelectedFeature(null);
           }
           helpLabel.visible = false;
