@@ -117,10 +117,15 @@ package net.systemeD.potlatch2.controller {
 			originalLon = draggingNode.lon;
 
 			controller.map.setHighlightOnNodes(parentWay, { selectedway: true } );
+			controller.map.limitWayDrawing(parentWay, draggingIndex);
 			controller.map.setHighlight(draggingNode, { selected: true } );
+			controller.map.protectWay(parentWay);
+			controller.map.limitWayDrawing(parentWay, NaN, draggingIndex);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
+			controller.map.unprotectWay(parentWay);
+			controller.map.limitWayDrawing(parentWay);
 			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
 			controller.map.setHighlight(draggingNode, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);

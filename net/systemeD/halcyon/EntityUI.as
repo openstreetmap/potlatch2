@@ -20,6 +20,7 @@ package net.systemeD.halcyon {
 		protected var layer:Number=0;					// map layer
 		protected var suspended:Boolean=false;			// suspend redrawing?
 		protected var redrawDue:Boolean=false;			// redraw called while suspended?
+		protected var clearLimit:uint=0;				// sprite to clear back to
 		public var paint:MapPaint;						// reference to parent MapPaint
 		public var ruleset:RuleSet;						// reference to ruleset in operation
 		public var interactive:Boolean=true;			// does object respond to clicks?
@@ -146,13 +147,18 @@ package net.systemeD.halcyon {
 		}
 
 		public function removeSprites():void {
-			while (sprites.length>0) {
+			while (sprites.length>clearLimit) {
 				var d:DisplayObject=sprites.pop();
 				if (d.parent) { d.parent.removeChild(d); }
 			}
-			listenSprite.hitArea=null;
-			hitzone=null;
+			if (clearLimit==0) {
+				listenSprite.hitArea=null;
+				hitzone=null;
+			}
 		}
+		
+		public function protectSprites():void { clearLimit=sprites.length; }
+		public function unprotectSprites():void { clearLimit=0; }
 
 		protected function offsetSprites(x:Number, y:Number):void {
 			for each (var d:DisplayObject in sprites) {
@@ -205,7 +211,9 @@ package net.systemeD.halcyon {
 		
 		public function redraw():Boolean {
 			if (suspended) { redrawDue=true; return false; }
-			return doRedraw();
+			var r:Boolean=doRedraw();
+			cacheSpritesAsBitmap(true);
+			return r;
 		}
 		
 		public function doRedraw():Boolean {
@@ -228,6 +236,12 @@ package net.systemeD.halcyon {
 		
 		public function invalidateStyleList():void {
 			styleList=null;
+		}
+		
+		private function cacheSpritesAsBitmap(cache:Boolean):void {
+			for each (var s:DisplayObject in sprites) {
+				if (s!=listenSprite) s.cacheAsBitmap=cache;
+			}
 		}
 
 	}

@@ -1,6 +1,7 @@
 package net.systemeD.halcyon {
 
 	import flash.text.TextField;
+	import flash.geom.Rectangle;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.display.Sprite;
@@ -89,6 +90,7 @@ package net.systemeD.halcyon {
 			gotEnvironment(null);
 
 			addEventListener(Event.ENTER_FRAME, everyFrame);
+			scrollRect=new Rectangle(0,0,800,600);
         }
 
 		public function gotEnvironment(r:Object):void {
@@ -164,12 +166,12 @@ package net.systemeD.halcyon {
 		// Recalculate co-ordinates from new Flash origin
 
 		public function updateCoords(tx:Number,ty:Number):void {
-			x=tx; y=ty;
+			setScrollRectXY(tx,ty);
 
-			edge_t=coord2lat(-y          );
-			edge_b=coord2lat(-y+mapheight);
-			edge_l=coord2lon(-x          );
-			edge_r=coord2lon(-x+mapwidth );
+			edge_t=coord2lat(-ty          );
+			edge_b=coord2lat(-ty+mapheight);
+			edge_l=coord2lon(-tx          );
+			edge_r=coord2lon(-tx+mapwidth );
 			setCentre();
 
 			tileset.update();
@@ -181,9 +183,23 @@ package net.systemeD.halcyon {
 			updateCoords(cx,cy);
 		}
 		
+		private function setScrollRectXY(tx:Number,ty:Number):void {
+			var w:Number=scrollRect.width;
+			var h:Number=scrollRect.height;
+			scrollRect=new Rectangle(-tx,-ty,w,h);
+		}
+		private function setScrollRectSize(width:Number,height:Number):void {
+			var sx:Number=scrollRect.x ? scrollRect.x : 0;
+			var sy:Number=scrollRect.y ? scrollRect.y : 0;
+			scrollRect=new Rectangle(sx,sy,width,height);
+		}
+		
+		private function getX():Number { return -scrollRect.x; }
+		private function getY():Number { return -scrollRect.y; }
+		
 		private function setCentre():void {
-			centre_lat=coord2lat(-y+mapheight/2);
-			centre_lon=coord2lon(-x+mapwidth/2);
+			centre_lat=coord2lat(-getY()+mapheight/2);
+			centre_lon=coord2lon(-getX()+mapwidth/2);
 			this.dispatchEvent(new MapEvent(MapEvent.MOVE, {lat:centre_lat, lon:centre_lon, scale:scale, minlon:edge_l, maxlon:edge_r, minlat:edge_b, maxlat:edge_t}));
 		}
 		
@@ -192,7 +208,7 @@ package net.systemeD.halcyon {
 		}
 
 		private function moveMap(dx:Number,dy:Number):void {
-			updateCoords(x+dx,y+dy);
+			updateCoords(getX()+dx,getY()+dy);
 			updateEntityUIs(false, false);
 			download();
 		}
@@ -210,16 +226,14 @@ package net.systemeD.halcyon {
 		public function lat2coord(a:Number):Number	{ return -(lat2latp(a)-basey)*scalefactor; }
 		public function coord2lat(a:Number):Number	{ return latp2lat(a/-scalefactor+basey); }
 
-//		public function centrelat(o) { return coord2lat((yradius-_root.map._y-o)/Math.pow(2,_root.scale-13)); }
-//		public function centrelon(o) { return coord2lon((xradius-_root.map._x-o)/Math.pow(2,_root.scale-13)); }
-
 
 		// ------------------------------------------------------------------------------------------
 		// Resize map size based on current stage and height
 
 		public function updateSize(w:uint, h:uint):void {
-			mapwidth = w; centre_lon=coord2lon(-x+w/2);
-			mapheight= h; centre_lat=coord2lat(-y+h/2);
+			mapwidth = w; centre_lon=coord2lon(-getX()+w/2);
+			mapheight= h; centre_lat=coord2lat(-getY()+h/2);
+			setScrollRectSize(w,h);
 
 			this.dispatchEvent(new MapEvent(MapEvent.RESIZE, {width:w, height:h}));
 			
@@ -285,6 +299,21 @@ package net.systemeD.halcyon {
         public function setHighlightOnNodes(way:Way, settings:Object):void {
 			if (paint.wayuis[way.id]) paint.wayuis[way.id].setHighlightOnNodes(settings);
         }
+
+		public function protectWay(way:Way):void {
+			if (paint.wayuis[way.id]) paint.wayuis[way.id].protectSprites();
+		}
+
+		public function unprotectWay(way:Way):void {
+			if (paint.wayuis[way.id]) paint.wayuis[way.id].unprotectSprites();
+		}
+		
+		public function limitWayDrawing(way:Way,except:Number=NaN,only:Number=NaN):void {
+			if (!paint.wayuis[way.id]) return;
+			paint.wayuis[way.id].drawExcept=except;
+			paint.wayuis[way.id].drawOnly  =only;
+			paint.wayuis[way.id].redraw();
+		}
 
 		/* Protect Entities and EntityUIs against purging. This prevents the currently selected items
 		   from being purged even though they're off-screen. */
@@ -432,13 +461,13 @@ package net.systemeD.halcyon {
 		public function mouseDownHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
 			dragstate=NOT_MOVED;
-			lastxmouse=mouseX; downX=stage.mouseX;
-			lastymouse=mouseY; downY=stage.mouseY;
+			lastxmouse=stage.mouseX; downX=stage.mouseX;
+			lastymouse=stage.mouseY; downY=stage.mouseY;
 			downTime=new Date().getTime();
 		}
         
 		public function mouseUpHandler(event:MouseEvent=null):void {
-			if (dragstate==DRAGGING) { moveMap(0,0); }
+			if (dragstate==DRAGGING) { moveMap(x,y); }
 			dragstate=NOT_DRAGGING;
 		}
         
@@ -455,9 +484,8 @@ package net.systemeD.halcyon {
 				dragstate=DRAGGING;
 			}
 			
-			x+=mouseX-lastxmouse;
-			y+=mouseY-lastymouse;
-			lastxmouse=mouseX; lastymouse=mouseY;
+			setScrollRectXY(getX()+stage.mouseX-lastxmouse,getY()+stage.mouseY-lastymouse);
+			lastxmouse=stage.mouseX; lastymouse=stage.mouseY;
 			setCentre();
 		}
         

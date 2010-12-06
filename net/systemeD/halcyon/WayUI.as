@@ -18,6 +18,10 @@ package net.systemeD.halcyon {
 		public var centroid_x:Number;				// centroid
 		public var centroid_y:Number;				//  |
 		public var heading:Array=new Array();		// angle at each node
+		public var drawExcept:Number;				// vertex to draw exclusively, or not at all (used by DragWayNode)
+		public var drawOnly:Number;					//  |
+		private var indexStart:uint;				//  |
+		private var indexEnd:uint;					//  |
 		public var nameformat:TextFormat;
 		private var recalculateDue:Boolean=false;
 
@@ -211,6 +215,14 @@ package net.systemeD.halcyon {
 				if (tags['layer']) { layer=Math.min(Math.max(tags['layer'],paint.minlayer),paint.maxlayer); }
 			}
 
+			// Do we have to draw all nodes in the way?
+			if (isNaN(drawOnly)) {
+				indexStart=0; indexEnd=Way(entity).length; 
+			} else {
+				indexStart=Math.max(0,drawOnly-1);
+				indexEnd  =Math.min(drawOnly+2,Way(entity).length);
+			}
+
 			// Iterate through each sublayer, drawing any styles on that layer
 			var drawn:Boolean;
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
@@ -286,7 +298,7 @@ package net.systemeD.halcyon {
 			// Draw icons
 			var r:Number;
 			var nodeSelected:int=stateClasses["nodeSelected"];
-			for (var i:uint = 0; i < Way(entity).length; i++) {
+			for (var i:uint = indexStart; i < indexEnd; i++) {
                 var node:Node = Way(entity).getNode(i);
 				var nodeStateClasses:Object={};
 //				if (i==0) { nodetags['_heading']= heading[i]; }
@@ -315,16 +327,33 @@ package net.systemeD.halcyon {
 		// Draw solid polyline
 		
 		public function solidLines(g:Graphics,inners:Array):void {
-			solidLine(g,entity as Way);
-			for each (var w:Way in inners) { solidLine(g,w); }
+			solidLine(g);
+			for each (var w:Way in inners) { solidLineOtherWay(g,w); }
 		}
 
-		private function solidLine(g:Graphics,w:Way):void {
-			if (w.length==0) { return; }
-            var node:Node = w.getNode(0);
+		private function solidLine(g:Graphics):void {
+			if (indexEnd==0) { return; }
+			var way:Way=entity as Way;
+			
+            var node:Node = way.getNode(indexStart);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
-			for (var i:uint = 1; i < w.length; i++) {
-                node = w.getNode(i);
+			for (var i:uint = indexStart+1; i < indexEnd; i++) {
+                node = way.getNode(i);
+				if (!isNaN(drawExcept) && (i-1==drawExcept || i==drawExcept)) {
+					g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
+				} else {
+					g.lineTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
+				}
+			}
+		}
+
+		private function solidLineOtherWay(g:Graphics,way:Way):void {
+			if (way.length==0) { return; }
+			
+			var node:Node = way.getNode(indexStart);
+ 			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
+			for (var i:uint = 1; i < way.length; i++) {
+				node = way.getNode(i);
 				g.lineTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			}
 		}
@@ -338,18 +367,19 @@ package net.systemeD.halcyon {
 			var a:Number, xc:Number, yc:Number;
 			var curx:Number, cury:Number;
 			var dx:Number, dy:Number, segleft:Number=0;
- 			var i:int=0;
+ 			var i:int=indexStart;
 
-            var node:Node = way.getNode(0);
-            var nextNode:Node = way.getNode(0);
+            var node:Node = way.getNode(i);
+            var nextNode:Node = way.getNode(i);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
-			while (i < way.length-1 || segleft>0) {
+			while (i < indexEnd-1 || segleft>0) {
 				if (dashleft<=0) {	// should be ==0
 					if (dc.length==0) { dc=dashes.slice(0); }
 					dashleft=dc.shift();
 					if (draw) { segments.push([curx,cury,dx,dy]); }
 					draw=!draw;
 				}
+				if (i==drawExcept || i==drawExcept+1) { draw=false; }
 				if (segleft<=0) {	// should be ==0
                     node = way.getNode(i);
                     nextNode = way.getNode(i+1);
