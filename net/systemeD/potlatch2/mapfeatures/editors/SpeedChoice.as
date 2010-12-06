@@ -68,7 +68,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                 _scalar = speed.scalar;
                 _unit = speed.unit;
                 _description = String(_scalar) + " "+_unit;
-                _value = String(_scalar) + (_unit == "km/h" ? "":_unit);
+                _value = String(_scalar) + (_unit == "km/h" ? "":" "+_unit);
             } else {
                 _value = speedStr;
             }
