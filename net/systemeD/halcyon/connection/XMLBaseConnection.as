@@ -27,6 +27,8 @@ package net.systemeD.halcyon.connection {
             var uid:Number;
             var timestamp:String;
             var tags:Object;
+            var node:Node, newNode:Node;
+            var unusedNodes:Object={};
 
             for each(var relData:XML in map.relation) {
                 id = Number(relData.@id);
@@ -48,6 +50,8 @@ package net.systemeD.halcyon.connection {
                             if ( member == null ) {
                                 member = new Node(memberID,0,{},false,0,0);
                                 setNode(Node(member),true);
+                            } else if (member.isDeleted()) {
+                                member.setDeletedState(false);
                             }
                         } else if ( type == "way" ) {
                             member = getWay(memberID);
@@ -75,27 +79,27 @@ package net.systemeD.halcyon.connection {
                     }
                 }
             }
-            
+
             for each(var nodeData:XML in map.node) {
-                id = Number(nodeData.@id);
-                version = uint(nodeData.@version);
-                uid = Number(nodeData.@uid);
-                timestamp = nodeData.@timestamp;
-
-                var node:Node = getNode(id);
-                if ( node == null || !node.loaded ) {
-                    var lat:Number = Number(nodeData.@lat);
-                    var lon:Number = Number(nodeData.@lon);
-                    tags = parseTags(nodeData.tag);
-                    if ( node == null )
-                        setNode(new Node(id, version, tags, true, lat, lon, uid, timestamp),false);
-                    else {
-                        node.update(version, tags, true, lat, lon, uid, timestamp);
-                        sendEvent(new EntityEvent(NEW_NODE, node), false);
-                    }
-                }
-            }
-
+				id = Number(nodeData.@id);
+				node = getNode(id);
+				newNode = new Node(id, 
+				                   uint(nodeData.@version), 
+				                   parseTags(nodeData.tag),
+				                   true, 
+				                   Number(nodeData.@lat),
+				                   Number(nodeData.@lon),
+				                   Number(nodeData.@uid),
+				                   nodeData.@timestamp);
+				
+				if ( node == null || !node.loaded) {
+					setOrUpdateNode(newNode, true);
+				} else {
+					// the node's already in memory, but store it in case one of the new ways needs it
+					unusedNodes[id]=newNode;
+				}
+			}
+            
             for each(var data:XML in map.way) {
                 id = Number(data.@id);
                 version = uint(data.@version);
@@ -105,8 +109,13 @@ package net.systemeD.halcyon.connection {
                 var way:Way = getWay(id);
                 if ( way == null || !way.loaded ) {
                     var nodes:Array = [];
-                    for each(var nd:XML in data.nd)
-                        nodes.push(getNode(Number(nd.@ref)));
+                    for each(var nd:XML in data.nd) {
+						var nodeid:Number=Number(nd.@ref)
+						if (getNode(nodeid).isDeleted() && unusedNodes[nodeid]) { 
+							setOrUpdateNode(unusedNodes[nodeid], true); 
+						}
+                        nodes.push(getNode(nodeid));
+					}
                     tags = parseTags(data.tag);
                     if ( way == null ) {
                         setWay(new Way(id, version, tags, true, nodes, uid, timestamp),false);

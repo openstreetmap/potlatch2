@@ -43,8 +43,13 @@ package net.systemeD.halcyon.connection {
             return _loaded;
         }
 
+		public function get timestamp():String {
+			return _timestamp;
+		}
+
 		public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String):void {
 			_version=version; this.tags=tags; _loaded=loaded; _uid = uid; _timestamp = timestamp;
+			deleted=false;
 		}
 
 		public function renumber(newID:Number, newVersion:uint):void {
