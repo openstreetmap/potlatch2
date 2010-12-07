@@ -88,16 +88,8 @@ package net.systemeD.halcyon.connection {
 			performAction(new RemoveEntityFromRelationAction(this, entity, members));
 		}
 
-        public function removeMemberByIndex(index:uint):void {
-            var removed:Array=members.splice(index, 1);
-			var entity:Entity=removed[0].entity;
-			
-			// only remove as parent if this was only reference
-			if (findEntityMemberIndex(entity)==-1)
-			    entity.removeParent(this);
-			    
-			markDirty();
-            dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, entity, this, index));
+        public function removeMemberByIndex(index:uint, performAction:Function):void {
+            performAction(new RemoveMemberByIndexAction(this, members, index));
         }
 
 		public override function remove(performAction:Function):void {
