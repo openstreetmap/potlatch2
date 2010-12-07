@@ -83,6 +83,33 @@ package net.systemeD.halcyon.connection {
             }
         }
 
+        /**
+        * Insert this node into the list of ways, and remove dupes at the same time.
+        * Please, don't call this on a node from a vector background, chaos will ensue.
+        */
+        public function join(ways:Array, performAction:Function):void {
+            if (this.isDupe() || ways.length > 0) {
+              var connection:Connection = Connection.getConnection();
+              var nodes:Array = connection.getNodesAtPosition(lat,lon);
+              // filter the nodes array to remove any occurances of this.
+              // Pass "this" as thisObject to get "this" into the callback function
+              var dupes:Array = nodes.filter(
+                  function(element:*, index:int, arr:Array):Boolean {
+                    return (element != this);
+                  },
+                  this
+                );
+              performAction(new JoinNodeAction(this, dupes, ways));
+            }
+        }
+
+        /**
+        * Replace all occurances of this node with the given target node
+        */
+        public function replaceWith(target:Node, performAction:Function):void {
+            performAction(new ReplaceNodeAction(this, target));
+        }
+
         public function isDupe():Boolean {
             var connection:Connection = Connection.getConnection();
             if (connection.getNode(this.id) == this // node could be part of a vector layer

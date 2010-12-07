@@ -417,6 +417,13 @@ package net.systemeD.halcyon.connection {
             return 0;
         }
 
+        public function getNodesAtPosition(lat:Number, lon:Number):Array {
+            if (nodePositions[lat+","+lon]) {
+              return nodePositions[lat+","+lon];
+            }
+            return [];
+        }
+
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
 		public function loadBbox(left:Number, right:Number,

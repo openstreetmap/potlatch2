@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
 	import flash.geom.Point;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.halcyon.WayUI;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
@@ -70,7 +71,7 @@ package net.systemeD.potlatch2.controller {
 				case 82:					repeatTags(firstSelected); return this;	// 'R'
 				case 87:					return new SelectedWay(parentWay);		// 'W'
 				case 191:					return cycleWays();						// '/'
-                case 74:                    if (event.shiftKey) { return unjoin() }; return this;// 'J'
+                case 74:                    if (event.shiftKey) { return unjoin() }; return join();// 'J'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
 			}
@@ -153,5 +154,19 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+        public function join():ControllerState {
+            // detect the ways that overlap this node
+            var p:Point = new Point(controller.map.lon2coord(Node(firstSelected).lon),
+                                             controller.map.latp2coord(Node(firstSelected).latp));
+            var q:Point = map.localToGlobal(p);
+            var ways:Array=[]; var w:Way;
+            for each (var wayui:WayUI in controller.map.paint.wayuis) {
+                w=wayui.hitTest(q.x, q.y);
+                if (w && w!=selectedWay) { ways.push(w); }
+            }
+
+            Node(firstSelected).join(ways,MainUndoStack.getGlobalStack().addAction);
+            return this;
+        }
     }
 }
