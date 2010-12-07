@@ -8,7 +8,7 @@ package net.systemeD.halcyon.connection.actions {
         private var member:RelationMember;
         private var memberList:Array;
         
-        public function AddMemberToRelationAction(rel:Relation, index:uint, member:RelationMember, memberList:Array) {
+        public function AddMemberToRelationAction(rel:Relation, index:int, member:RelationMember, memberList:Array) {
             super(rel, "Add " + member.entity.getType() + " " + member.entity.id + " at position " + index + " to ");
             this.rel = rel;
             this.index = index;

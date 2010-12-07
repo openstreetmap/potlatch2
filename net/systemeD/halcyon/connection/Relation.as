@@ -79,13 +79,9 @@ package net.systemeD.halcyon.connection {
             performAction(new AddMemberToRelationAction(this, index, member, members));
         }
 
-        public function appendMember(member:RelationMember):uint {
-            members.push(member);
- 			member.entity.addParent(this);
-			markDirty();
-
-			dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_ADDED, member.entity, this, members.length-1));
-            return members.length;
+        public function appendMember(member:RelationMember, performAction:Function):uint {
+            performAction(new AddMemberToRelationAction(this, -1, member, members));
+            return members.length + 1;
         }
 
 		public function removeMember(entity:Entity, performAction:Function):void {

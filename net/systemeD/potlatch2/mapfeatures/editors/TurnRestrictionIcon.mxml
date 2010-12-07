@@ -106,11 +106,11 @@
 		for each (var memberEntity:Entity in old) {
 			rel.removeMember(memberEntity, undo.push);
 		}
-		undo.doAction();
 
 		// now add new entity
-		// ** FIXME - appendMember should be undoable
-		rel.appendMember(new RelationMember(entity,role))
+		rel.appendMember(new RelationMember(entity,role), undo.push);
+
+        undo.doAction();
 
 		if (show.label=='Hide') { setHighlights(true); }
 	}

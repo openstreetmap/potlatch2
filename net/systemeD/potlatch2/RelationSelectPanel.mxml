@@ -41,7 +41,7 @@
         
         public function updateEntityAndClose():void {
           var relation:Relation = conn.getRelation(relationSelector.selectedItem.relId);
-          relation.appendMember(new RelationMember(entity, ''));
+          relation.appendMember(new RelationMember(entity, ''), MainUndoStack.getGlobalStack().addAction);
           PopUpManager.removePopUp(this);
         }
         

@@ -46,7 +46,7 @@ package net.systemeD.halcyon.connection.actions {
 			for each (var r:Relation in way2.parentRelations) {
 				// ** needs to copy roles as well
 				if (r.findEntityMemberIndex(way1)==-1) {
-					r.appendMember(new RelationMember(way1, ''));
+					r.appendMember(new RelationMember(way1, ''), push);
 				}
 			}
         }

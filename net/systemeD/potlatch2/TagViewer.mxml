@@ -537,6 +537,7 @@
           
           var conn:Connection = Connection.getConnectionInstance();
           var rel:Relation = selectedEntity as Relation
+          var action:CompositeUndoableAction = new CompositeUndoableAction("Rearrange relation members for "+rel);
           
           // drop members
           for (var i:int=rel.length-1 ; i>=0; i--) {
@@ -554,8 +555,9 @@
             } else if (memberObject.type == 'relation') {
               e = conn.getRelation(id);
             }
-            rel.appendMember(new RelationMember(e, memberObject.role));
+            rel.appendMember(new RelationMember(e, memberObject.role), action.push);
           }
+          MainUndoStack.getGlobalStack().addAction(action);
       }
       
       private function editRelation(id:Number):void {

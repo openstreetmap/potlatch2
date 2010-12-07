@@ -53,7 +53,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       
       public function addMember(relation:Relation, role:String):void {
           if (_entity != null && !_entity.hasParent(relation))
-              relation.appendMember(new RelationMember(_entity, role));
+              relation.appendMember(new RelationMember(_entity, role), MainUndoStack.getGlobalStack().addAction);
       }
 
       public function set factory(factory:RelationMemberEditorFactory):void {
