@@ -16,6 +16,7 @@ package net.systemeD.halcyon.connection {
 		private var parents:Dictionary = new Dictionary();
 		public var locked:Boolean = false;						// lock against purging when off-screen
 		public var deleted:Boolean = false;
+//		public var parentsLoaded:Boolean = true;				// are all its parents in memory?
 
         public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
             this._id = id;

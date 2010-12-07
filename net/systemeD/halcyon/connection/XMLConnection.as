@@ -265,6 +265,7 @@ package net.systemeD.halcyon.connection {
                     continue;
                     
                 var xml:XML = serialise(entity);
+                // ** if parentsLoaded==false, do a soft delete only
                 xml.@changeset = changeset.id;
                 del.appendChild(xml);
             }

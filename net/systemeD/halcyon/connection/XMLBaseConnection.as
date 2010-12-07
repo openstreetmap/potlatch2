@@ -30,6 +30,11 @@ package net.systemeD.halcyon.connection {
             var node:Node, newNode:Node;
             var unusedNodes:Object={};
 
+			var minlon:Number=map.bounds.@minlon;
+			var maxlon:Number=map.bounds.@maxlon;
+			var minlat:Number=map.bounds.@minlat;
+			var maxlat:Number=map.bounds.@maxlat;
+
             for each(var relData:XML in map.relation) {
                 id = Number(relData.@id);
                 version = uint(relData.@version);
@@ -93,9 +98,12 @@ package net.systemeD.halcyon.connection {
 				                   nodeData.@timestamp);
 				
 				if ( node == null || !node.loaded) {
+//					newNode.parentsLoaded=newNode.within(minlon,maxlon,minlat,maxlat);
+//					** updateEntityProperties will need to do parentsLoaded as well
 					setOrUpdateNode(newNode, true);
 				} else {
 					// the node's already in memory, but store it in case one of the new ways needs it
+//					if (newNode.within(minlon,maxlon,minlat,maxlat)) newNode.parentsLoaded=true;
 					unusedNodes[id]=newNode;
 				}
 			}
