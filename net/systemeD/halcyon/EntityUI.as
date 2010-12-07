@@ -211,9 +211,7 @@ package net.systemeD.halcyon {
 		
 		public function redraw():Boolean {
 			if (suspended) { redrawDue=true; return false; }
-			var r:Boolean=doRedraw();
-			cacheSpritesAsBitmap(true);
-			return r;
+			return doRedraw();
 		}
 		
 		public function doRedraw():Boolean {
@@ -238,12 +236,6 @@ package net.systemeD.halcyon {
 			styleList=null;
 		}
 		
-		private function cacheSpritesAsBitmap(cache:Boolean):void {
-			for each (var s:DisplayObject in sprites) {
-				if (s!=listenSprite) s.cacheAsBitmap=cache;
-			}
-		}
-
 	}
 
 }
