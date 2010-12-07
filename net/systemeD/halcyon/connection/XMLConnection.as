@@ -200,7 +200,7 @@ package net.systemeD.halcyon.connection {
             var loader:URLLoader = new URLLoader();
             loader.dataFormat = URLLoaderDataFormat.BINARY;
             loader.addEventListener(Event.COMPLETE, diffUploadComplete);
-            loader.addEventListener(IOErrorEvent.IO_ERROR, diffUploadError);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, function(event:IOErrorEvent):void { trace(urlReq.data); diffUploadError(event); } );
             loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, recordStatus);
 	        loader.load(urlReq);
 	        
