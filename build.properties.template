@@ -11,4 +11,12 @@ ASDOC=${FLEX_HOME}/bin/asdoc
 # {$basedir} is a default variable that can be used in any Ant script
 # SRC_DIR =${basedir}/src
 # points to the project's libs directory
-# LIBS_DIR =${basedir}/lib
+LIBS_DIR =${basedir}/lib
+
+test.application.name = HalcyonTestRunner
+
+test.src.dir = ${basedir}/tests/src
+test.fakeroot.dir = ${basedir}/tests/fakeroot
+test.bin.dir = ${basedir}/tests/bin
+report.dir = ${basedir}/tests/report
+report.html.dir = ${basedir}/tests/report/html

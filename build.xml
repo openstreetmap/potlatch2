@@ -135,4 +135,61 @@
         <!--<echo message="manifests = ${org_classes} ${it_classes} ${hxasm_classes}"/>-->
   </target>
 
+  <!-- ======================================= -->
+  <!-- Unit Test Targets -->
+  <!-- ======================================= -->
+ 
+  <target name="compileTestRunner" depends="init" description="Compiles the test runner application.">
+   
+    <!-- Compile TestRunner MXML as a SWF -->
+    <mxmlc file="${test.src.dir}/${test.application.name}.mxml"
+      output="${test.bin.dir}/${test.application.name}.swf">
+     
+      <!--<load-config filename="${FLEX_HOME}/frameworks/air-config.xml" />-->
+
+      <!-- we need to supply source paths for the real source and the test source. But passing
+          the potlatch2 top-level directory causes a problem since that also contains the test source.
+          We could move every source folder (net, org, it and hxasm) into a src/ folder, or alternatively
+          set up a fake root folder in the test folder with symlinks to the four directories concerned.
+          It's a bodge, but it works. -->
+      <source-path path-element="${test.fakeroot.dir}" />
+      <source-path path-element="${test.src.dir}" />
+       
+      <!-- The TestRunner needs the flexunit libraries in the build/libs folder -->
+      <library-path dir="${LIBS_DIR}" append="true">
+         <include name="*.swc" />
+      </library-path>
+
+       
+      <!-- Sets java.awt.headless=true so font compilation works in headless environments -->
+      <compiler.headless-server>true</compiler.headless-server>
+     </mxmlc>
+     
+     <echo message="The ${test.application.name}.swf test runner has been created in ${test.bin.dir}" />
+  </target>
+   
+  <target name="runTestsAndReport" depends="init" description="Launches the test runner, captures results, generates test report artifacts.">
+
+      <mkdir dir="${report.dir}" />
+      <mkdir dir="${report.html.dir}" />
+  
+     <!-- Run FlexUnit Ant Task to execute the unit tests and capture reporting data -->
+     <!-- on linux, make sure that gflashplayer is in your PATH and launches a standalone flashplayer binary -->
+     <taskdef resource="flexUnitTasks.tasks" classpath="${LIBS_DIR}/flexUnitTasks-4.0.0.jar" />
+     <flexunit swf="${test.bin.dir}/${test.application.name}.swf" toDir="${report.dir}"
+       haltonfailure="false" verbose="false" localTrusted="true" player="flash" />
+       
+      <!-- Generate html JUnit-style reports based on test results -->
+      <junitreport todir="${report.dir}">
+        <fileset dir="${report.dir}">
+          <include name="TEST-*.xml" />
+        </fileset>
+        <report format="frames" todir="${report.html.dir}" />
+      </junitreport>
+         
+         <echo message="The unit test reports have been created in ${report.dir}" />
+  </target>
+
+  <target name="test" depends="init, compileTestRunner, runTestsAndReport" description="Compiles unit tests and generates test report artifacts." />
+
 </project>
