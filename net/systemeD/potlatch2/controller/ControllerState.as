@@ -97,6 +97,12 @@ package net.systemeD.potlatch2.controller {
 					// drag map
 					return new DragBackground(event);
 				}
+            } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING) {
+                // this is identical to the below, but needed for unselecting markers on vector background layers.
+                // Deselecting a POI or way on the main layer emits both CLICK and MOUSE_UP, but markers only CLICK
+                // I'll leave it to someone who understands to decide whether they are the same thing and should be
+                // combined with a (CLICK || MOUSE_UP)
+                return (this is NoSelection) ? null : new NoSelection();
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING) {
 				return (this is NoSelection) ? null : new NoSelection();
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus && map.dragstate!=map.NOT_DRAGGING) {
