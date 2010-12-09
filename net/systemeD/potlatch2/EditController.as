@@ -99,7 +99,7 @@ package net.systemeD.potlatch2 {
 		}
 
         private function mapMouseEvent(event:MouseEvent):void {
-            if (event.type!=MouseEvent.ROLL_OVER) map.stage.focus = map.parent;
+            if (isInteractionEvent(event)) map.stage.focus = map.parent;
             if (event.type==MouseEvent.MOUSE_UP && map.dragstate==map.DRAGGING) { return; }
             
             var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
@@ -111,8 +111,7 @@ package net.systemeD.potlatch2 {
         }
         
         public function entityMouseEvent(event:MouseEvent, entity:Entity):void {
-            if (event.type!=MouseEvent.ROLL_OVER) map.stage.focus = map.parent;
-            //if ( event.type == MouseEvent.MOUSE_DOWN )
+            if (isInteractionEvent(event)) map.stage.focus = map.parent;
             event.stopPropagation();
                 
             var mapLoc:Point = map.globalToLocal(new Point(event.stageX, event.stageY));
@@ -122,7 +121,18 @@ package net.systemeD.potlatch2 {
             var newState:ControllerState = state.processMouseEvent(event, entity);
             setState(newState);
         }
-        
+
+		private function isInteractionEvent(event:MouseEvent):Boolean {
+			switch (event.type) {
+				case MouseEvent.ROLL_OUT:	return false;
+				case MouseEvent.ROLL_OVER:	return false;
+				case MouseEvent.MOUSE_OUT:	return false;
+				case MouseEvent.MOUSE_OVER:	return false;
+				case MouseEvent.MOUSE_MOVE:	return false;
+        	}
+			return true;
+		}
+
         public function setState(newState:ControllerState):void {
             if ( newState == state )
                 return;
