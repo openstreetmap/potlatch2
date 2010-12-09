@@ -8,7 +8,7 @@
 			labelField="name"
 			change="Application.application.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);"
 	        dataProvider="{Imagery.instance().getAvailableImagery()}"
-	        updateComplete="{background.width=background.measureWidthOfItems()+2;background.height=background.measureHeightOfItems()+2}"/>
+	        rowCount="{Imagery.instance().getAvailableImagery().length}"/>
 	<mx:HBox>
 	<mx:CheckBox width="100%" label="Dim" selected="{Application.application.theMap.getDimming()}" id="dim"
 	    change="setDimming(dim.selected)" />
