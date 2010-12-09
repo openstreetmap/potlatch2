@@ -79,7 +79,7 @@ package net.systemeD.halcyon.connection {
                     if ( rel == null )
                         setRelation(new Relation(id, version, tags, true, members, uid, timestamp), false);
                     else {
-                        rel.update(version, tags, true, members, uid, timestamp);
+                        rel.update(version, tags, true, false, members, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_RELATION, rel), false);
                     }
                 }
@@ -98,12 +98,11 @@ package net.systemeD.halcyon.connection {
 				                   nodeData.@timestamp);
 				
 				if ( node == null || !node.loaded) {
-//					newNode.parentsLoaded=newNode.within(minlon,maxlon,minlat,maxlat);
-//					** updateEntityProperties will need to do parentsLoaded as well
+					newNode.parentsLoaded=newNode.within(minlon,maxlon,minlat,maxlat);
 					setOrUpdateNode(newNode, true);
 				} else {
 					// the node's already in memory, but store it in case one of the new ways needs it
-//					if (newNode.within(minlon,maxlon,minlat,maxlat)) newNode.parentsLoaded=true;
+					if (newNode.within(minlon,maxlon,minlat,maxlat)) newNode.parentsLoaded=true;
 					unusedNodes[id]=newNode;
 				}
 			}
@@ -129,7 +128,7 @@ package net.systemeD.halcyon.connection {
                         setWay(new Way(id, version, tags, true, nodes, uid, timestamp),false);
                     } else {
 						waycount++;
-                        way.update(version, tags, true, nodes, uid, timestamp);
+                        way.update(version, tags, true, true, nodes, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }

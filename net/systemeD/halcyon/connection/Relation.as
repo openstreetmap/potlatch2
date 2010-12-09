@@ -13,12 +13,12 @@ package net.systemeD.halcyon.connection {
 			    member.entity.addParent(this);
         }
 
-        public function update(version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null):void {
+        public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null):void {
 			var member:RelationMember;
 			for each (member in this.members)
 			    member.entity.removeParent(this);
 
-			updateEntityProperties(version,tags,loaded,uid,timestamp);
+			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp);
 			this.members=members;
 			for each (member in members)
 			    member.entity.addParent(this);

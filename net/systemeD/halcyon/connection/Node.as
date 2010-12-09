@@ -14,8 +14,8 @@ package net.systemeD.halcyon.connection {
             this._lon = lon;
         }
 
-		public function update(version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null):void {
-			updateEntityProperties(version,tags,loaded,uid,timestamp); setLatLonImmediate(lat,lon);
+		public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null):void {
+			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp); setLatLonImmediate(lat,lon);
 		}
 
         public function get lat():Number {

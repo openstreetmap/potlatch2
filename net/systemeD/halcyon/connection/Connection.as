@@ -127,7 +127,7 @@ package net.systemeD.halcyon.connection {
 		protected function setOrUpdateNode(newNode:Node, queue:Boolean):void {
         	if (nodes[newNode.id]) {
 				var wasDeleted:Boolean=nodes[newNode.id].isDeleted();
-				nodes[newNode.id].update(newNode.version, newNode.getTagsHash(), true, newNode.lat, newNode.lon, newNode.uid, newNode.timestamp);
+				nodes[newNode.id].update(newNode.version, newNode.getTagsHash(), true, newNode.parentsLoaded, newNode.lat, newNode.lon, newNode.uid, newNode.timestamp);
 				if (wasDeleted) sendEvent(new EntityEvent(NEW_NODE, nodes[newNode.id]), false);
 			} else {
 				setNode(newNode, queue);

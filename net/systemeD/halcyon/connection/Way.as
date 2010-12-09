@@ -18,10 +18,10 @@ package net.systemeD.halcyon.connection {
 			calculateBbox();
         }
 
-		public function update(version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null):void {
+		public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null):void {
 			var node:Node;
 			for each (node in this.nodes) { node.removeParent(this); }
-			updateEntityProperties(version,tags,loaded,uid,timestamp); this.nodes=nodes;
+			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp); this.nodes=nodes;
 			for each (node in nodes) { node.addParent(this); }
 			calculateBbox();
 		}
