@@ -215,6 +215,8 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		protected function backspaceNode(performAction:Function):ControllerState {
+			if (selectedWay.length==1) return keyExitDrawing();
+
 			var node:Node;
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Remove node");
 			var newDraw:int;
