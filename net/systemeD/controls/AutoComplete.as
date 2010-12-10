@@ -81,6 +81,7 @@ package net.systemeD.controls {
 			setStyle("paddingLeft",0);
 			setStyle("paddingRight",0);
 			rowCount = 7;
+			restrict="\u0020-\uFFFF";
 		}
 		
 		//--------------------------------------------------------------------------

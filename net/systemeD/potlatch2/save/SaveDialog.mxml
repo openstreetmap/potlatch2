@@ -36,8 +36,12 @@
               itemEditBeginning="allowForEdit(event)"
               itemEditEnd="verifyInput(event)">
             <mx:columns>
-                <mx:DataGridColumn editable="true" dataField="k" headerText="Key"/>
-                <mx:DataGridColumn editable="true" dataField="v" headerText="Value"/>
+                <mx:DataGridColumn editable="true" dataField="k" headerText="Key">
+                    <mx:itemEditor><mx:Component><mx:TextInput restrict="\u0020-\uFFFF" /></mx:Component></mx:itemEditor>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn editable="true" dataField="v" headerText="Value">
+                    <mx:itemEditor><mx:Component><mx:TextInput restrict="\u0020-\uFFFF" /></mx:Component></mx:itemEditor>
+                </mx:DataGridColumn>
             </mx:columns>
           </mx:DataGrid>        
 		  <mx:HBox horizontalAlign="right" width="100%">

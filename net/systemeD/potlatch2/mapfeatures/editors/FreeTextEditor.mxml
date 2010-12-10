@@ -8,7 +8,7 @@
     direction="{fieldDirection}" styleName="titledEditor">
 
   <mx:Label text="{fieldName}:"/>
-  <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" change="value = inputBox.text"/>
+  <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" restrict="\u0020-\uFFFF" change="value = inputBox.text"/>
 
   <mx:Script><![CDATA[
   
