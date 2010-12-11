@@ -83,7 +83,7 @@
                 <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
                 <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
                 <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
-<!--                    <mx:itemEditor><mx:Component><mx:TextInput restrict="\u0020-\uFFFF" /></mx:Component></mx:itemEditor> -->
+                    <mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
                 </mx:DataGridColumn>
             </mx:columns>
         </mx:DataGrid>
@@ -104,7 +104,7 @@
             <mx:DataGridColumn editable="false" dataField="type" headerText="Type"/>
             <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
             <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
-<!--				<mx:itemEditor><mx:Component><mx:TextInput restrict="\u0020-\uFFFF" /></mx:Component></mx:itemEditor> -->
+				<mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
 			</mx:DataGridColumn>
           </mx:columns>
         </mx:DataGrid>

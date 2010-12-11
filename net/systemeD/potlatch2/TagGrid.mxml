@@ -19,6 +19,7 @@
 						dataProvider="{MapFeatures.getInstance().getAutoCompleteKeys(outerDocument.getEntityType())}" 
 						labelField="name" 
 						rowCount="10"
+						restrict="&#x0020;-&#x10FFFF;"
 						typedText="{outerDocument.selectedItem.key}">
 					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
 					</controls:AutoComplete>
@@ -35,6 +36,7 @@
 						dataProvider="{MapFeatures.getInstance().getAutoCompleteValues(outerDocument.getEntityType(),outerDocument.selectedItem.key)}" 
 						labelField="name" 
 						rowCount="10"
+						restrict="&#x0020;-&#x10FFFF;"
 						typedText="{outerDocument.selectedItem.value}">
 					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
 					</controls:AutoComplete>
