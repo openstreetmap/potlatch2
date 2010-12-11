@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        xmlns:mx="http://www.adobe.com/2006/mxml"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="{getTitleText()}"
         width="600" height="400"
@@ -10,6 +10,7 @@
     import mx.events.CloseEvent;
     import mx.core.Application;
 
+    /** Pops up a multi-tabbed help window in the middle of the screen, then remembers that the user has seen it. */
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
         PopUpManager.centerPopUp(this);
