@@ -15,9 +15,9 @@
 		<mx:DataGridColumn editable="true" dataField="key" headerText="Key">
 			<mx:itemEditor>
 				<mx:Component>
-					<controls:AutoComplete 
-						dataProvider="{MapFeatures.getInstance().getAutoCompleteKeys(outerDocument.getEntityType())}" 
-						labelField="name" 
+					<controls:AutoComplete
+						dataProvider="{MapFeatures.getInstance().getAutoCompleteKeys(outerDocument.getEntityType())}"
+						labelField="name"
 						rowCount="10"
 						restrict="&#x0020;-&#x10FFFF;"
 						typedText="{outerDocument.selectedItem.key}">
@@ -32,9 +32,9 @@
 		<mx:DataGridColumn editable="true" dataField="value" headerText="Value">
 			<mx:itemEditor>
 				<mx:Component>
-					<controls:AutoComplete 
-						dataProvider="{MapFeatures.getInstance().getAutoCompleteValues(outerDocument.getEntityType(),outerDocument.selectedItem.key)}" 
-						labelField="name" 
+					<controls:AutoComplete
+						dataProvider="{MapFeatures.getInstance().getAutoCompleteValues(outerDocument.getEntityType(),outerDocument.selectedItem.key)}"
+						labelField="name"
 						rowCount="10"
 						restrict="&#x0020;-&#x10FFFF;"
 						typedText="{outerDocument.selectedItem.value}">
@@ -49,7 +49,7 @@
 		<mx:DataGridColumn width="12" editable="false">
 			<mx:itemRenderer>
 				<mx:Component>
-					<mx:Image source="@Embed('../../../embedded/delete_small.svg')" 
+					<mx:Image source="@Embed('../../../embedded/delete_small.svg')"
 						click='event.stopPropagation();outerDocument.removeTag();'
 						buttonMode="true" useHandCursor="true">
 					</mx:Image>
@@ -66,6 +66,7 @@
 		private var selectedEntity:Entity;
 		private var tagDataProvider:ArrayCollection;
 
+		/** Assign a new selected Entity, and update editing controls appropriately. */
 		public function init(entity:Entity):void {
 			if ( tagDataProvider == null ) {
 				tagDataProvider = new ArrayCollection();
@@ -85,6 +86,7 @@
 			for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
 		}
 
+		/** Create editing controls for a new key/value pair, with default values. */
 		public function addNewTag():void {
 			var newKey:String = "(new tag)";
 			var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
@@ -92,12 +94,14 @@
 			editedItemPosition = {rowIndex: tagDataProvider.getItemIndex(newTag), columnIndex: 0};
 		}
 
+		/** Remove the selected tag from the selected entity. */
 		public function removeTag():void {
 			var k:String = selectedItem.key;
 			selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
 			updateTagDataProvider();
 		}
-		
+
+		/** Return the type ("node", "way", "relation") of the selected entity. */
 		public function getEntityType():String {
 			return selectedEntity.getType();
 		}
