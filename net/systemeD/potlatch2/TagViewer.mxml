@@ -604,6 +604,11 @@
 		  }
 
           refreshFeatureIcon();
+
+          // Steve Bennett: I added this line 12 Dec because there was an update bug (majorly changing tags on Advanced tab doesn't update simple view)
+          // but I know how to use listeners.
+          initialiseEditors();//SB
+
           // if the advancedTagGrid has already been set up, it needs to be refreshed.
           // FIXME make this better, maybe advancedTagGrid should be event listening.
           if(advancedContainer.initialized) {
@@ -616,11 +621,13 @@
           stack.removeChild(membersVBox); // remove by default, will be added if relation
       }
 
+      /** Open up a new browser page, showing the help page as defined in Map Features XML file .*/
       public function openDescription():void {
           if ( feature != null && feature.hasHelpURL() )
               navigateToURL(new URLRequest(feature.helpURL), "potlatch_help");
       }
 
+      /** Open up a new browser page showing OSM's view of the current entity. */
       public function openEntityPage():void {
           if (selectedEntity != null && selectedEntity.id >= 0) {
               // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
