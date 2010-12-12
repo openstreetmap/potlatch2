@@ -17,7 +17,7 @@ package net.systemeD.potlatch2.controller {
 		protected var _selection:Array=[];
 
         public function ControllerState() {}
- 
+
         public function setController(controller:EditController):void {
             this.controller = controller;
         }
@@ -26,7 +26,7 @@ package net.systemeD.potlatch2.controller {
             if ( this.previousState == null )
                 this.previousState = previousState;
         }
-   
+
 		public function isSelectionState():Boolean {
 			return true;
 		}
@@ -34,7 +34,7 @@ package net.systemeD.potlatch2.controller {
         public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
             return this;
         }
-        
+
         public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
             return this;
         }
@@ -49,7 +49,7 @@ package net.systemeD.potlatch2.controller {
 		public function toString():String {
 			return "(No state)";
 		}
-		
+
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
@@ -62,7 +62,7 @@ package net.systemeD.potlatch2.controller {
 			}
 			return null;
 		}
-		
+
 		protected function sharedMouseEvents(event:MouseEvent, entity:Entity):ControllerState {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);
@@ -75,7 +75,7 @@ package net.systemeD.potlatch2.controller {
 					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
                 } else if (event.type == MouseEvent.MOUSE_DOWN && entity is Marker) {
                     return new SelectedMarker(entity as Marker, paint.findSource());
-				} else if ( event.type == MouseEvent.MOUSE_UP ) { 
+				} else if ( event.type == MouseEvent.MOUSE_UP ) {
 					return (this is NoSelection) ? null : new NoSelection();
 				} else { return null; }
 			}
@@ -141,14 +141,14 @@ package net.systemeD.potlatch2.controller {
 			}
 			return null;
 		}
-		
+
 		protected function getNodeIndex(way:Way,node:Node):uint {
 			for (var i:uint=0; i<way.length; i++) {
 				if (way.getNode(i)==node) { return i; }
 			}
 			return null;
 		}
-		
+
 		protected function repeatTags(object:Entity):void {
 			if (!controller.clipboards[object.getType()]) { return; }
 			object.suspend();
@@ -158,27 +158,30 @@ package net.systemeD.potlatch2.controller {
 				object.setTag(k, controller.clipboards[object.getType()][k], undo.push)
 			}
 			MainUndoStack.getGlobalStack().addAction(undo);
-
+                        controller.updateSelectionUI();
 			object.resume();
+
+
 		}
-		
+
 		protected function setSourceTag():void {
 			if (selectCount!=1) { return; }
 			if (Imagery.instance().selected && Imagery.instance().selected.sourcetag) {
 				firstSelected.setTag('source',Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
 			}
+			controller.updateSelectionUI();
 		}
-		
+
 		// Selection getters
-		
+
 		public function get selectCount():uint {
 			return _selection.length;
 		}
-		
+
 		public function get selection():Array {
 			return _selection;
 		}
-		
+
 		public function get firstSelected():Entity {
 			if (_selection.length==0) { return null; }
 			return _selection[0];
@@ -188,7 +191,7 @@ package net.systemeD.potlatch2.controller {
 			if (firstSelected is Way) { return firstSelected as Way; }
 			return null;
 		}
-		
+
 		public function get selectedWays():Array {
 			var selectedWays:Array=[];
 			for each (var item:Entity in _selection) {
@@ -196,28 +199,28 @@ package net.systemeD.potlatch2.controller {
 			}
 			return selectedWays;
 		}
-		
+
 		public function hasSelectedWays():Boolean {
 			for each (var item:Entity in _selection) {
 				if (item is Way) { return true; }
 			}
 			return false;
 		}
-		
+
 		public function hasSelectedAreas():Boolean {
 			for each (var item:Entity in _selection) {
 				if (item is Way && Way(item).isArea()) { return true; }
 			}
 			return false;
 		}
-		
+
 		public function hasSelectedUnclosedWays():Boolean {
 			for each (var item:Entity in _selection) {
 				if (item is Way && !Way(item).isArea()) { return true; }
 			}
 			return false;
 		}
-		
+
 		public function hasAdjoiningWays():Boolean {
 			if (_selection.length<2) { return false; }
 			var endNodes:Object={};
@@ -231,19 +234,19 @@ package net.systemeD.potlatch2.controller {
 			}
 			return false;
 		}
-			
+
 		// Selection setters
-		
+
 		public function set selection(items:Array):void {
 			_selection=items;
 		}
-		
+
 		public function addToSelection(items:Array):void {
 			for each (var item:Entity in items) {
 				if (_selection.indexOf(item)==-1) { _selection.push(item); }
 			}
 		}
-		
+
 		public function removeFromSelection(items:Array):void {
 			for each (var item:Entity in items) {
 				if (_selection.indexOf(item)>-1) {
@@ -251,7 +254,7 @@ package net.systemeD.potlatch2.controller {
 				}
 			}
 		}
-		
+
 		public function toggleSelection(item:Entity):Boolean {
 			if (_selection.indexOf(item)==-1) {
 				_selection.push(item); return true;
