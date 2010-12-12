@@ -59,6 +59,7 @@ package net.systemeD.potlatch2.controller {
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z - undo
 				case 187:	controller.tagViewer.addNewTag(); return null;							// + - add tag
+				case 107:       controller.tagViewer.addNewTag(); return null;							// numpad + - add tag
 			}
 			return null;
 		}
