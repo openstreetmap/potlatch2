@@ -91,6 +91,7 @@
         import mx.containers.Canvas;
 		import mx.core.Application;
         import mx.events.DragEvent;
+        import mx.events.CloseEvent;
         import mx.managers.DragManager;
         import mx.core.DragSource;
         import mx.controls.Alert;
@@ -228,6 +229,7 @@
             conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
             conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
 			conn.addEventListener(MapEvent.ERROR, onMapError);
+			conn.addEventListener(MapEvent.ATTENTION, onAttention);
 
             // set the access token from saved cookie
             var tokenObject:SharedObject = SharedObject.getLocal("access_token");
@@ -278,8 +280,54 @@
             Globals.vars.highlightTiger = obj.data['tiger_highlighted'];
 		}
 		
-		public function onMapError(event:MapEvent):void {
-			Alert.show(event.params.message, 'Error', mx.controls.Alert.OK);
+		public function onMapError(mapEvent:MapEvent):void {
+			var buttons:uint=0;
+			if (mapEvent.params.no) { trace("no is set"); }
+			if (mapEvent.params.yes             ) buttons|=mx.controls.Alert.YES;
+			if (mapEvent.params.no              ) buttons|=mx.controls.Alert.NO;
+			if (mapEvent.params.cancel          ) buttons|=mx.controls.Alert.CANCEL;
+			if (mapEvent.params.ok || buttons==0) buttons|=mx.controls.Alert.OK;
+			trace("showing alert with "+buttons);
+			Alert.show(mapEvent.params.message, 'Error', buttons, null, function(closeEvent:CloseEvent):void { 
+				switch (closeEvent.detail) {
+					case mx.controls.Alert.CANCEL:	mapEvent.params.cancel(); break;
+					case mx.controls.Alert.YES:		mapEvent.params.yes(); break;
+					case mx.controls.Alert.NO:		mapEvent.params.no(); break;
+					default:						if (mapEvent.params.ok) mapEvent.params.ok();
+				}
+			});
+		}
+
+		/* Highlight an entity in response to an 'attention' event */
+
+		public function onAttention(mapEvent:MapEvent):void {
+			var entity:Entity=mapEvent.params.entity;
+			if (entity is Relation) {
+				// If it's a relation, just bring up the editor panel
+				var panel:RelationEditorPanel = RelationEditorPanel(
+					PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+				panel.setRelation(entity as Relation);
+				PopUpManager.centerPopUp(panel);
+				return;
+			}
+
+			var lat:Number, lon:Number;
+			var panTo:Boolean=true;
+			if (entity is Way) {
+				// If it's a way, find if it's on-screen
+				for (var i:uint=0; i<Way(entity).length; i++) {
+					var node:Node=Way(entity).getNode(i)
+					if (node.within(theMap.edge_l,theMap.edge_r,theMap.edge_t,theMap.edge_b)) { panTo=false; }
+					lat=node.lat; lon=node.lon;
+				}
+			} else if (entity is Node) {
+				// If it's a node, check if it's on-screen
+				if (entity.within(theMap.edge_l,theMap.edge_r,theMap.edge_t,theMap.edge_b)) { panTo=false; }
+				lat=Node(entity).lat; lon=Node(entity).lon;
+			}
+			// Pan if required, and select the object
+			if (panTo) { theMap.moveMapFromLatLon(lat,lon); }
+			theController.setState(theController.findStateForSelection([entity]));
 		}
 
         public function onResizeMap():void {

@@ -178,7 +178,7 @@
         else
             fail("Failure when uploading data");
 
-        saveButton.parent.removeChild(saveButton);
+        if (saveButton && saveButton.parent) saveButton.parent.removeChild(saveButton);
         cancelButton.label = "Close";
     }
     

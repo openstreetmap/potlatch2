@@ -212,6 +212,12 @@ package net.systemeD.halcyon {
 			updateEntityUIs(false, false);
 			download();
 		}
+		
+		public function moveMapFromLatLon(lat:Number,lon:Number):void {
+			updateCoordsFromLatLon(lat,lon);
+			updateEntityUIs(false,false);
+			download();
+		}
 
 		// Co-ordinate conversion functions
 

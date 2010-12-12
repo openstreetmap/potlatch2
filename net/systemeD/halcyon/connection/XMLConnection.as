@@ -197,10 +197,12 @@ package net.systemeD.halcyon.connection {
             urlReq.method = "POST";
             urlReq.data = upload.toXMLString();
             urlReq.contentType = "text/xml";
+            // ** FIXME: change this to whatever header we decide upon
+            urlReq.requestHeaders = [new URLRequestHeader("X-Cloak-Errors-As-200","true")];
             var loader:URLLoader = new URLLoader();
             loader.dataFormat = URLLoaderDataFormat.BINARY;
             loader.addEventListener(Event.COMPLETE, diffUploadComplete);
-            loader.addEventListener(IOErrorEvent.IO_ERROR, function(event:IOErrorEvent):void { trace(urlReq.data); diffUploadError(event); } );
+            loader.addEventListener(IOErrorEvent.IO_ERROR, function(event:IOErrorEvent):void { trace(urlReq.data); diffUploadIOError(event); } );
             loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, recordStatus);
 	        loader.load(urlReq);
 	        
@@ -208,8 +210,18 @@ package net.systemeD.halcyon.connection {
         }
 
         private function diffUploadComplete(event:Event):void {
+			// check if we've received a cloaked error
+			// ** FIXME: change this if we start returning errors as XML
+			var response:String=URLLoader(event.target).data;
+			var matches:Array=response.match(/^ERROR: (.+?): (.+)/);
+			if (matches) {
+		        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
+				diffUploadAPIError(matches[1],matches[2]);
+				return;
+			}
+
             // response should be XML describing the progress
-            var results:XML = new XML((URLLoader(event.target).data));
+            var results:XML = new XML(response);
             
             for each( var update:XML in results.child("*") ) {
                 var oldID:Number = Number(update.@old_id);
@@ -237,10 +249,55 @@ package net.systemeD.halcyon.connection {
             MainUndoStack.getGlobalStack().breakUndo(); // so, for now, break the undo stack
         }
 
-        private function diffUploadError(event:IOErrorEvent):void {
+        private function diffUploadIOError(event:IOErrorEvent):void {
 			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't upload data: "+httpStatus+" "+event.text } ));
 	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
         }
+
+		private function diffUploadAPIError(status:String, message:String):void {
+			var matches:Array;
+			switch (status) {
+
+				case 'conflict':
+					if (message.match(/changeset/i)) { throwChangesetError(message); return; }
+					matches=message.match(/mismatch.+had (\d+) of (\w+) (\d+)/i);
+					if (matches) { throwConflictError(findEntity(matches[3],matches[2]), Number(matches[1]), message); return; }
+					break;
+				
+				case 'gone':
+					matches=message.match(/The (\w+) with the id (\d+)/i);
+					if (matches) { throwAlreadyDeletedError(findEntity(matches[1],matches[2]), message); return; }
+					break;
+				
+				case 'precondition_failed':
+					matches=message.match(/Node (\d+) is still used/i);
+					if (matches) { throwInUseError(findEntity('Node',matches[1]), message); return; }
+					matches=message.match(/relation (\d+) is used/i);
+					if (matches) { throwInUseError(findEntity('Relation',matches[1]), message); return; }
+					matches=message.match(/Way (\d+) still used/i);
+					if (matches) { throwInUseError(findEntity('Way',matches[1]), message); return; }
+					matches=message.match(/Cannot update (\w+) (\d+)/i);
+					if (matches) { throwEntityError(findEntity(matches[1],matches[2]), message); return; }
+					matches=message.match(/Relation with id (\d+)/i);
+					if (matches) { throwEntityError(findEntity('Relation',matches[1]), message); return; }
+					matches=message.match(/Way (\d+) requires the nodes/i);
+					if (matches) { throwEntityError(findEntity('Way',matches[1]), message); return; }
+					throwBugError(message); return;
+				
+				case 'not_found':
+					throwBugError(message); return;
+					
+				case 'bad_request':
+					matches=message.match(/Element (\w+)\/(\d+)/i);
+					if (matches) { throwEntityError(findEntity(matches[1],matches[2]), message); return; }
+					matches=message.match(/You tried to add \d+ nodes to way (\d+)/i);
+					if (matches) { throwEntityError(findEntity('Way',matches[1]), message); return; }
+					throwBugError(message); return;
+			}
+
+			// Not caught, so just throw a generic server error
+			throwServerError(message);
+		}
 
         private function addCreated(changeset:Changeset, getIDs:Function, get:Function, serialise:Function):XML {
             var create:XML = <create version="0.6"/>

@@ -9,9 +9,10 @@ package net.systemeD.halcyon {
 		public static const MOVE:String = "move";
 		public static const SCALE:String = "scale";
 		public static const NUDGE_BACKGROUND:String = "nudge_background";
-		public static const ERROR:String = "error";
         public static const INITIALISED:String = "initialized";
 		public static const BUMP:String = "bump";
+		public static const ERROR:String = "error";				// ** FIXME - this should be a dedicated ErrorEvent class
+		public static const ATTENTION:String = "attention";		// ** FIXME - this should be a dedicated AttentionEvent class
 
 		public var params:Object;
 

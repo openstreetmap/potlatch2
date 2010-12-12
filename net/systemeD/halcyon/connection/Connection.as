@@ -6,6 +6,7 @@ package net.systemeD.halcyon.connection {
     import flash.events.Event;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.actions.*;
+	import net.systemeD.halcyon.MapEvent;
 
 	public class Connection extends EventDispatcher {
 
@@ -195,6 +196,16 @@ package net.systemeD.halcyon.connection {
             return relations[id];
         }
 
+		protected function findEntity(type:String, id:*):Entity {
+			var i:Number=Number(id);
+			switch (type.toLowerCase()) {
+				case 'node':     return getNode(id);
+				case 'way':      return getWay(id);
+				case 'relation': return getRelation(id);
+				default:         return null;
+			}
+		}
+
 		// Remove data from Connection
 		// These functions are used only internally to stop redundant data hanging around
 		// (either because it's been deleted on the server, or because we have panned away
@@ -249,7 +260,11 @@ package net.systemeD.halcyon.connection {
 			killWay(id);
 		}
 		
-
+		protected function killEntity(entity:Entity):void {
+			if (entity is Way) { killWay(entity.id); }
+			else if (entity is Node) { killNode(entity.id); }
+			else if (entity is Relation) { killRelation(entity.id); }
+		}
 
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
@@ -423,6 +438,70 @@ package net.systemeD.halcyon.connection {
             }
             return [];
         }
+
+		// Error-handling
+		
+		protected function throwConflictError(entity:Entity,serverVersion:uint,message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "An item you edited has been changed by another mapper. Download their version and try again? (The server said: "+message+")",
+				yes: function():void { revertBeforeUpload(entity) },
+				no: cancelUpload }));
+			// ** FIXME: this should also offer the choice of 'overwrite?'
+		}
+		protected function throwAlreadyDeletedError(entity:Entity,message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "You tried to delete something that's already been deleted. Forget it and try again? (The server said: "+message+")",
+				yes: function():void { deleteBeforeUpload(entity) },
+				no: cancelUpload }));
+		}
+		protected function throwInUseError(entity:Entity,message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "You tried to delete something that's since been used elsewhere. Restore it and try again? (The server said: "+message+")",
+				yes: function():void { revertBeforeUpload(entity) },
+				no: cancelUpload }));
+		}
+		protected function throwEntityError(entity:Entity,message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "There is a problem with your changes which needs to be fixed before you can save: "+message+". Click 'OK' to see the offending item.",
+				ok: function():void { goToEntity(entity) } }));
+		}
+		protected function throwChangesetError(message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "The changeset in which you're saving changes is no longer valid. Start a new one and retry? (The server said: "+message+")",
+				yes: retryUploadWithNewChangeset,
+				no: cancelUpload }));
+		}
+		protected function throwBugError(message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "An unexpected error occurred, probably due to a bug in Potlatch 2. Do you want to retry? (The server said: "+message+")",
+				yes: retryUpload,
+				no: cancelUpload }));
+		}
+		protected function throwServerError(message:String):void {
+			dispatchEvent(new MapEvent(MapEvent.ERROR, {
+				message: "A server error occurred. Do you want to retry? (The server said: "+message+")",
+				yes: retryUpload,
+				no: cancelUpload }));
+		}
+
+		public function retryUpload():void { uploadChanges(); }
+		public function cancelUpload():void { return; }
+		public function retryUploadWithNewChangeset():void { 
+			// ** FIXME: we need to move the create-changeset-then-upload logic out of SaveDialog
+		}
+		public function goToEntity(entity:Entity):void { 
+			dispatchEvent(new MapEvent(MapEvent.ATTENTION, { entity: entity }));
+		}
+		public function revertBeforeUpload(entity:Entity):void { 
+			// ** FIXME: implement a 'revert entity' method, then retry upload on successful download
+		}
+		public function deleteBeforeUpload(entity:Entity):void {
+            var a:CompositeUndoableAction = new CompositeUndoableAction("Delete refs");            
+            entity.remove(a.push);
+            a.doAction();
+			killEntity(entity);
+			uploadChanges();
+		}
 
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
