@@ -13,12 +13,12 @@ package net.systemeD.potlatch2.mapfeatures {
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.DebugURLRequest;
 
-        /** All the information about all available map features that can be selected by the user or matched against entities in the map.
-        * The list of map features is populated from an XML file the first time the MapFeatures instance is accessed.
-        *
-        * <p>There are four "types" of features: point, line, area, relation. However, the autocomplete functions refer to these as node,
-        * way (line/area) and relation.</p>
-        */
+    /** All the information about all available map features that can be selected by the user or matched against entities in the map.
+    * The list of map features is populated from an XML file the first time the MapFeatures instance is accessed.
+    *
+    * <p>There are four "types" of features: point, line, area, relation. However, the autocomplete functions refer to these as node,
+    * way (line/area) and relation.</p>
+    */
 	public class MapFeatures extends EventDispatcher {
         private static var instance:MapFeatures;
 
@@ -75,7 +75,8 @@ package net.systemeD.potlatch2.mapfeatures {
             }
             dispatchEvent(new Event("featuresLoaded"));
         }
-                /** Add one item to tagList index, which will end up being a list like: ["way"]["highway"]["residential"] */
+
+        /** Add one item to tagList index, which will end up being a list like: ["way"]["highway"]["residential"] */
 		private function addToTagList(type:String,tag:Object):void {
 			if (tag.v=='*') { return; }
 			if (!_tags[type][tag.k]) { _tags[type][tag.k]=new Array(); }
@@ -123,20 +124,20 @@ package net.systemeD.potlatch2.mapfeatures {
             return null;
         }
 
-        [Bindable(event="featuresLoaded")]
+
         /** Array of every Category found in the map features file. */
+        [Bindable(event="featuresLoaded")]
         public function get categories():Array {
             if ( xml == null )
                 return null;
             return _categories;
         }
 
-        [Bindable(event="featuresLoaded")]
         /** Categories that contain at least one Feature corresponding to a certain type, such as "area" or "point".
         *
         * @return Filtered Array of Category objects, possibly empty. null if XML file is not yet processed.
         */
-
+        [Bindable(event="featuresLoaded")]
         public function getCategoriesForType(type:String):Array {
             if ( xml == null )
                 return null;
@@ -151,22 +152,21 @@ package net.systemeD.potlatch2.mapfeatures {
             return filteredCategories;
         }
 
-        [Bindable(event="featuresLoaded")]
         /** All features.
         *
         * @return null if XML file not yet processed. */
+        [Bindable(event="featuresLoaded")]
         public function get features():Array {
             if ( xml == null )
                 return null;
             return _features;
         }
 
-        [Bindable(event="featuresLoaded")]
         /** All Features of type "point".
         *
         * @return null if XML file not yet processed.
         */
-
+        [Bindable(event="featuresLoaded")]
         public function get pois():Array {
             if (xml == null )
                 return null;
@@ -180,11 +180,11 @@ package net.systemeD.potlatch2.mapfeatures {
             return pois;
         }
 
-        [Bindable(event="featuresLoaded")]
         /** A list of all Keys for all features of the given type, sorted.
          * @example <listing version="3.0">getAutoCompleteKeys ("way")</listing>
          * Returns: [{name: "building"}, {name: "highway"}...]
          */
+        [Bindable(event="featuresLoaded")]
         public function getAutoCompleteKeys(type:String):Array {
             var list:Array=[];
             var a:Array=[];
@@ -196,13 +196,13 @@ package net.systemeD.potlatch2.mapfeatures {
                     return a;
                 }
 
-        [Bindable(event="featuresLoaded")]
         /** Get all the possible values that could go with a given key and type.
         * TODO: Include values previously entered by the user, but not existent in XML file.
         *
         * @example <listing version="3.0">getAutoCompleteValues("way", "highway")</listing>
         * Returns: [{name: "motorway"}, {name: "residential"}...]
         */
+        [Bindable(event="featuresLoaded")]
         public function getAutoCompleteValues(type:String,key:String):Array {
             var a:Array=[];
             if (_tags[type][key]) {
