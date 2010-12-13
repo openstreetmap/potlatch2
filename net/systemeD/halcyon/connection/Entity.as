@@ -102,7 +102,7 @@ package net.systemeD.halcyon.connection {
             return tags[key];
         }
 
-        /** @return true iff there exists key=value */
+        /** @return true if there exists key=value */
         public function tagIs(key:String,value:String):Boolean {
             if (!tags[key]) { return false; }
             return tags[key]==value;
@@ -110,7 +110,7 @@ package net.systemeD.halcyon.connection {
 
         /** Set key=value, with optional undoability.
          * @param key Name of key to set
-         * @parame value Value to set tag to
+         * @param value Value to set tag to
          * @param performAction Single-argument function to pass a SetTagAction to.
          * @example setTag("highway", "residential", MainUndoStack.getGlobalStack().addAction);
          */
@@ -161,12 +161,12 @@ package net.systemeD.halcyon.connection {
             return modified;
         }
 
-        /** Reset modified flag. */
+        /** Reset modified flag. You should not be calling this directly, instead you should be calling markClean from your UndoableEntityAction */
         public function markClean():void {
             modified = false;
         }
 
-        /** Set entity as modified. */
+        /** Set entity as modified. You should not be calling this directly, instead you should be calling markDirty from your UndoableEntityAction */
         internal function markDirty():void {
             modified = true;
         }
@@ -195,7 +195,7 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-	/** Whether entity is "empty" - to be overridden by subclass. */
+        /** Whether entity is "empty" - to be overridden by subclass. */
         internal function isEmpty():Boolean {
             return false;
         }
