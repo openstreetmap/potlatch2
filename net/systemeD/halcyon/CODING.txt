@@ -1,0 +1,28 @@
+== Coding guidelines ==
+
+* Be sensible
+* Be tolerant
+
+== Whitespace ==
+
+* Use space, not tabs. You can only get away with tabs if your name is Richard Fairhurst
+* Set your editor to treat tabs as two spaces when viewing them, otherwise you'll go mad
+* Blank lines shouldn't have whitespace
+* No trailing whitespace
+* Only "fix" whitespace errors while changing that line of code for other reasons. Otherwise, it's not worth fixing.
+
+== Indentation ==
+
+package net.systemed.potlatch2.indentation {
+
+    class IndentedByFourSpaces {
+
+        public function IndentedByFourMoreSpaces:void {
+            if (indentedCodeWithinFunction) {
+              justIndentByTwoSpaces = true;
+            } else {
+              shotAtDawn = true;
+            }
+        }
+    }
+}
