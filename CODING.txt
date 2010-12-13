@@ -3,6 +3,12 @@
 * Be sensible
 * Be tolerant
 
+== Dependencies and targets ==
+
+* We target Flash Player 9 at present. Please don't add FP10-specific code yet.
+* Potlatch 2 requires Flex; the Halcyon rendering component doesn't. Don't add Flex stuff (import mx.*) to anything in net.systemeD.halcyon.
+* Both Potlatch 2 and Halcyon can be deployed locally (i.e. not on openstreetmap.org), and indeed can talk to databases other than the main OSM instance. So don't be too OSM-specific
+
 == Whitespace ==
 
 * Use space, not tabs. You can only get away with tabs if your name is Richard Fairhurst
