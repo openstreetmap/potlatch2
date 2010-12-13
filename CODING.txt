@@ -17,12 +17,18 @@ package net.systemed.potlatch2.indentation {
 
     class IndentedByFourSpaces {
 
-        public function IndentedByFourMoreSpaces:void {
-            if (indentedCodeWithinFunction) {
-              justIndentByTwoSpaces = true;
+        public function IndentedByFourMoreSpaces():void {
+            if (indentedCodeWithinFunctionHasTwoSpaceIndents) {
+              // lots of places in the codebase have two-space indents within functions
+              // like this. Don't mix and match like this example!
+              beConsistent = true;
             } else {
-              shotAtDawn = true;
+                useFourSpaceIndents = true;
             }
         }
     }
 }
+
+== MXML ==
+
+* Indentation is like the wild west in there. Consistency is king.
