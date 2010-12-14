@@ -8,7 +8,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.potlatch2.save.SaveManager;
-
     public class ControllerState {
 
         protected var controller:EditController;
@@ -98,11 +97,15 @@ package net.systemeD.potlatch2.controller {
 					// drag map
 					return new DragBackground(event);
 				}
-            } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING) {
+            } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && this is SelectedMarker) {
                 // this is identical to the below, but needed for unselecting markers on vector background layers.
                 // Deselecting a POI or way on the main layer emits both CLICK and MOUSE_UP, but markers only CLICK
                 // I'll leave it to someone who understands to decide whether they are the same thing and should be
                 // combined with a (CLICK || MOUSE_UP)
+                
+                // "&& this is SelectedMarker" added by Steve Bennett. The CLICK event being processed for SelectedWay state
+                // causes way to get unselected...so restrict the double processing as much as possible.  
+                
                 return (this is NoSelection) ? null : new NoSelection();
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING) {
 				return (this is NoSelection) ? null : new NoSelection();
