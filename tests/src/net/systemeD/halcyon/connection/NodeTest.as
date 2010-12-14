@@ -25,6 +25,16 @@ package net.systemeD.halcyon.connection {
           Assert.assertEquals(n.lat, 14);
           Assert.assertEquals(n.lon, 41);
       }
-     
+
+      [Test]
+      public function within():void {
+          var n:Node = new Node(1,1,{},true,5,10);
+          Assert.assertTrue(n.within(9,11,6,4));
+          Assert.assertFalse(n.within(9,11,1,2));
+          Assert.assertFalse(n.within(11,12,6,4));
+          n.remove(function(action:UndoableAction):void { action.doAction(); });
+          Assert.assertFalse(n.within(9,11,6,4));
+      }
+
     }
 }
