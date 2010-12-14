@@ -2095,6 +2095,10 @@ Quick documentation:
     <point/>
     <tag k="amenity" v="hospital"/>
     <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
+    <input type="choice" presence="always" category="Hospital" name="Emergency treatment available" key="emergency" description="Are there accident and emergency facilities at this hospital?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+    </input>
     <inputSet ref="common"/>
   </feature>
 
