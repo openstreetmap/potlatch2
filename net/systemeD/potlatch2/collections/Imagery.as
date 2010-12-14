@@ -175,6 +175,7 @@ package net.systemeD.potlatch2.collections {
 
 		private function moveHandler(event:MapEvent):void {
 			setAttribution();
+			dispatchEvent(new Event("collection_changed"));
 		}
 		private function setAttribution():void {
 			var tf:TextField=TextField(_overlay.getChildAt(0));
