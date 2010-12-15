@@ -51,6 +51,10 @@ You can create class documentation (in resources/docs) using asdoc
 
 * ant docs
 
+You can create and run the unit tests (not that there are that many) using flexunit
+
+* ant test
+
 If you're using Mac OS X, you may need to tell ant to use more memory, by
 typing export ANT_OPTS=-Xmx500M beforehand (you can put this in your .profile).
 
