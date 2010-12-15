@@ -12,7 +12,7 @@ Many icons used in halcyon/potlatch2 are based on the awesome CC0-licensed SJJB 
 
 * Flex SDK 3.4 or 3.5 
 ** Product page: http://www.adobe.com/products/flex/ 
-** Flex 4 Download page: http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+3 (free, OS X/Windows/Linux)
+** Flex 3 Download page: http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+3 (free, OS X/Windows/Linux)
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
