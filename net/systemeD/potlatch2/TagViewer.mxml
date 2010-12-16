@@ -604,10 +604,9 @@
 		  }
 
           refreshFeatureIcon();
-
-          // Steve Bennett: I added this line 12 Dec because there was an update bug (majorly changing tags on Advanced tab doesn't update simple view)
-          // but I know how to use listeners.
-          initialiseEditors();//SB
+          // ** FIXME - changing tags on Advanced tab should update simple view
+          // (but putting initialiseEditors here breaks other stuff, because it causes
+          // the Basic pane to be selected)
 
           // if the advancedTagGrid has already been set up, it needs to be refreshed.
           // FIXME make this better, maybe advancedTagGrid should be event listening.
