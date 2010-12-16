@@ -11,17 +11,24 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.Globals;
 
+    /** Behaviour that takes place while a way is selected includes: adding a node to the way, straightening/reshaping the way, dragging it... */
     public class SelectedWay extends ControllerState {
+        /** The selected way itself. */
         protected var initWay:Way;
         private var clicked:Point;		// did the user enter this state by clicking at a particular point?
 		private var wayList:Array;		// list of ways to cycle through with '/' keypress
         
+        /** 
+        * @param way The way that is now selected.
+        * @param point The location that was clicked.
+        * @param ways An ordered list of ways sharing a node, to make "way cycling" work. */
         public function SelectedWay(way:Way, point:Point=null, ways:Array=null) {
             initWay = way;
 			clicked = point;
 			wayList = ways;
         }
  
+        /** Make this way selected, and update UI appropriately. */
         protected function selectWay(way:Way):void {
             if ( firstSelected is Way && Way(firstSelected)==way )
                 return;
@@ -34,6 +41,7 @@ package net.systemeD.potlatch2.controller {
             initWay = way;
         }
 
+        /** Tidy up UI as we transition to a new state without the current selection. */
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
             	controller.map.setHighlight(firstSelected, { selected: false, hover: false });
@@ -43,6 +51,7 @@ package net.systemeD.potlatch2.controller {
             }
         }
         
+        /** Behaviour includes: start drawing a new way, insert a node within this way, select an additional way */
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
             var focus:Entity = getTopLevelFocusEntity(entity);
@@ -64,14 +73,15 @@ package net.systemeD.potlatch2.controller {
 			return cs ? cs : this;
         }
         
+		/** Behaviour includes: parallel way, repeat tags, reverse direction, simplify, cycle way selection, delete */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 80:					return new SelectedParallelWay(firstSelected as Way);
-				case 82:					repeatTags(firstSelected); return this;
-                case 86:                    Way(firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
-                case 89:                    Simplify.simplify(firstSelected as Way, controller.map, true); return this;         
-				case 191:					return cycleWays();
-				case Keyboard.BACKSPACE:	if (event.shiftKey) { return deleteWay(); } break;
+				case 80:  /* P */           return new SelectedParallelWay(firstSelected as Way); 
+				case 82:  /* R */           repeatTags(firstSelected); return this;
+                case 86:  /* V */           Way(firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
+                case 89:  /* Y */           Simplify.simplify(firstSelected as Way, controller.map, true); return this;         
+				case 191: /* / */           return cycleWays();
+				case Keyboard.BACKSPACE:	
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
@@ -92,17 +102,21 @@ package net.systemeD.potlatch2.controller {
 			return new SelectedWay(wayList[0], clicked, wayList);
 		}
 
+		/** Perform deletion of currently selected way. */
 		public function deleteWay():ControllerState {
 			controller.map.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 
+        /** Officially enter this state by marking the previously nominated way as selected. */
         override public function enterState():void {
             selectWay(initWay);
 			controller.map.setPurgable(selection,false);
 			Globals.vars.root.addDebug("**** -> "+this+" "+firstSelected.id);
         }
+        /** Officially leave the state, remembering the current way's tags for future repeats. */
+        // TODO: tweak this so that repeat tags aren't remembered if you only select a way in order to branch off it. (a la PL1) 
         override public function exitState(newState:ControllerState):void {
 			if (firstSelected.hasTags()) {
               controller.clipboards['way']=firstSelected.getTagsCopy();
@@ -112,6 +126,7 @@ package net.systemeD.potlatch2.controller {
 			Globals.vars.root.addDebug("**** <- "+this);
         }
 
+        /** @return "SelectedWay" */
         override public function toString():String {
             return "SelectedWay";
         }

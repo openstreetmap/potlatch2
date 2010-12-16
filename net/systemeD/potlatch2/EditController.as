@@ -10,6 +10,7 @@ package net.systemeD.potlatch2 {
     import flash.external.ExternalInterface;
     import flash.events.*;
 	import flash.geom.*;
+	import flash.ui.Keyboard;
 
     public class EditController implements MapController {
 
@@ -89,7 +90,8 @@ package net.systemeD.potlatch2 {
             trace("key code "+event.keyCode);
 			if (keys[event.keyCode]) { delete keys[event.keyCode]; }
 			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
-            if (event.keyCode == 77) { toggleSize(); }
+            
+            if (event.keyCode == 77) { toggleSize(); } // 'M'
             var newState:ControllerState = state.processKeyboardEvent(event);
             setState(newState);            
 		}

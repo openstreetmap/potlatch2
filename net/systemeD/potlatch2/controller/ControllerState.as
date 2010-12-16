@@ -8,6 +8,12 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.potlatch2.save.SaveManager;
+	import flash.ui.Keyboard;
+    /** Represents a particular state of the controller, such as "dragging a way" or "nothing selected". Key methods are 
+    * processKeyboardEvent and processMouseEvent which take some action, and return a new state for the controller. 
+    * 
+    * This abstract class has some behaviour that applies in most states, and lots of 'null' behaviour. 
+    * */
     public class ControllerState {
 
         protected var controller:EditController;
@@ -30,10 +36,12 @@ package net.systemeD.potlatch2.controller {
 			return true;
 		}
 
+        /** When triggered by a mouse action such as a click, perform an action on the given entity, then move to a new state. */
         public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
             return this;
         }
-
+		
+		/** When triggered by a keypress, perform an action on the given entity, then move to a new state. */
         public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
             return this;
         }
@@ -45,10 +53,11 @@ package net.systemeD.potlatch2.controller {
         public function enterState():void {}
         public function exitState(newState:ControllerState):void {}
 
+		/** Represent the state in text for debugging. */
 		public function toString():String {
 			return "(No state)";
 		}
-
+		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
@@ -58,11 +67,12 @@ package net.systemeD.potlatch2.controller {
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z - undo
 				case 187:	controller.tagViewer.addNewTag(); return null;							// + - add tag
-				case 107:       controller.tagViewer.addNewTag(); return null;							// numpad + - add tag
+				case Keyboard.NUMPAD_ADD:       controller.tagViewer.addNewTag(); return null;							// numpad + - add tag
 			}
 			return null;
 		}
 
+		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */
 		protected function sharedMouseEvents(event:MouseEvent, entity:Entity):ControllerState {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);
@@ -125,6 +135,7 @@ package net.systemeD.potlatch2.controller {
 			return null;
 		}
 
+		/** Gets the way that the selected node is part of, if that makes sense. If not, return the node, or the way, or nothing. */
 		public static function getTopLevelFocusEntity(entity:Entity):Entity {
 			if ( entity is Node ) {
 				for each (var parent:Entity in entity.parentWays) {
@@ -153,6 +164,7 @@ package net.systemeD.potlatch2.controller {
 			return null;
 		}
 
+		/** Create a "repeat tags" action on the current entity, if possible. */
 		protected function repeatTags(object:Entity):void {
 			if (!controller.clipboards[object.getType()]) { return; }
 			object.suspend();
@@ -168,6 +180,7 @@ package net.systemeD.potlatch2.controller {
 
 		}
 
+		/** Create an action to add "source=*" tag to current entity based on background imagery. This is a convenient shorthand for users. */
 		protected function setSourceTag():void {
 			if (selectCount!=1) { return; }
 			if (Imagery.instance().selected && Imagery.instance().selected.sourcetag) {
