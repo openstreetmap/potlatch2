@@ -183,9 +183,12 @@ package net.systemeD.halcyon.connection {
             upload.appendChild(addModified(changeset, getAllNodeIDs, getNode, serialiseNode));
             upload.appendChild(addModified(changeset, getAllWayIDs, getWay, serialiseWay));
             upload.appendChild(addModified(changeset, getAllRelationIDs, getRelation, serialiseRelation));
-            upload.appendChild(addDeleted(changeset, getAllRelationIDs, getRelation, serialiseEntityRoot));
-            upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot));
-            upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot));
+            upload.appendChild(addDeleted(changeset, getAllRelationIDs, getRelation, serialiseEntityRoot, false));
+            upload.appendChild(addDeleted(changeset, getAllRelationIDs, getRelation, serialiseEntityRoot, true));
+            upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot, false));
+            upload.appendChild(addDeleted(changeset, getAllWayIDs, getWay, serialiseEntityRoot, true));
+            upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot, false));
+            upload.appendChild(addDeleted(changeset, getAllNodeIDs, getNode, serialiseEntityRoot, true));
 
             // now actually upload them
             // make an OAuth query
@@ -197,8 +200,7 @@ package net.systemeD.halcyon.connection {
             urlReq.method = "POST";
             urlReq.data = upload.toXMLString();
             urlReq.contentType = "text/xml";
-            // ** FIXME: change this to whatever header we decide upon
-            urlReq.requestHeaders = [new URLRequestHeader("X-Cloak-Errors-As-200","true")];
+            urlReq.requestHeaders = [new URLRequestHeader("X-Error-Format","xml")];
             var loader:URLLoader = new URLLoader();
             loader.dataFormat = URLLoaderDataFormat.BINARY;
             loader.addEventListener(Event.COMPLETE, diffUploadComplete);
@@ -210,18 +212,16 @@ package net.systemeD.halcyon.connection {
         }
 
         private function diffUploadComplete(event:Event):void {
-			// check if we've received a cloaked error
-			// ** FIXME: change this if we start returning errors as XML
-			var response:String=URLLoader(event.target).data;
-			var matches:Array=response.match(/^ERROR: (.+?): (.+)/);
-			if (matches) {
+			var results:XML = new XML(URLLoader(event.target).data);
+
+			// was it an error document?
+			if (results.name().localName=='osmError') {
 		        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
-				diffUploadAPIError(matches[1],matches[2]);
+				diffUploadAPIError(results.status, results.message);
 				return;
 			}
 
             // response should be XML describing the progress
-            var results:XML = new XML(response);
             
             for each( var update:XML in results.child("*") ) {
                 var oldID:Number = Number(update.@old_id);
@@ -258,18 +258,18 @@ package net.systemeD.halcyon.connection {
 			var matches:Array;
 			switch (status) {
 
-				case 'conflict':
+				case '409 Conflict':
 					if (message.match(/changeset/i)) { throwChangesetError(message); return; }
-					matches=message.match(/mismatch.+had (\d+) of (\w+) (\d+)/i);
+					matches=message.match(/mismatch.+had: (\d+) of (\w+) (\d+)/i);
 					if (matches) { throwConflictError(findEntity(matches[3],matches[2]), Number(matches[1]), message); return; }
 					break;
 				
-				case 'gone':
+				case '410 Gone':
 					matches=message.match(/The (\w+) with the id (\d+)/i);
 					if (matches) { throwAlreadyDeletedError(findEntity(matches[1],matches[2]), message); return; }
 					break;
 				
-				case 'precondition_failed':
+				case '412 Precondition Failed':
 					matches=message.match(/Node (\d+) is still used/i);
 					if (matches) { throwInUseError(findEntity('Node',matches[1]), message); return; }
 					matches=message.match(/relation (\d+) is used/i);
@@ -284,10 +284,10 @@ package net.systemeD.halcyon.connection {
 					if (matches) { throwEntityError(findEntity('Way',matches[1]), message); return; }
 					throwBugError(message); return;
 				
-				case 'not_found':
+				case '404 Not Found':
 					throwBugError(message); return;
 					
-				case 'bad_request':
+				case '400 Bad Request':
 					matches=message.match(/Element (\w+)\/(\d+)/i);
 					if (matches) { throwEntityError(findEntity(matches[1],matches[2]), message); return; }
 					matches=message.match(/You tried to add \d+ nodes to way (\d+)/i);
@@ -313,16 +313,16 @@ package net.systemeD.halcyon.connection {
             return create.hasComplexContent() ? create : <!-- blank create section -->;
         }
 
-		private function addDeleted(changeset:Changeset, getIDs:Function, get:Function, serialise:Function):XML {
+		private function addDeleted(changeset:Changeset, getIDs:Function, get:Function, serialise:Function, ifUnused:Boolean):XML {
             var del:XML = <delete version="0.6"/>
+            if (ifUnused) del.@["if-unused"] = "true";
             for each( var id:Number in getIDs() ) {
                 var entity:Entity = get(id);
                 // creates are already included
-                if ( id < 0 || !entity.deleted )
+                if ( id < 0 || !entity.deleted || entity.parentsLoaded==ifUnused)
                     continue;
                     
                 var xml:XML = serialise(entity);
-                if (!entity.parentsLoaded) xml.@silent = "true";
                 xml.@changeset = changeset.id;
                 del.appendChild(xml);
             }
