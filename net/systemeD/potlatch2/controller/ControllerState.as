@@ -103,8 +103,8 @@ package net.systemeD.potlatch2.controller {
 				} else if ( entity is Node && focus is Way ) {
 					// select way node
 					return new DragWayNode(focus as Way, getNodeIndex(focus as Way,entity as Node), event, false);
-				} else if ( controller.keyDown(32) ) {
-					// drag map
+				} else if ( controller.keyDown(Keyboard.SPACE) ) {
+					// drag the background imagery to compensate for poor alignment
 					return new DragBackground(event);
 				}
             } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && this is SelectedMarker) {

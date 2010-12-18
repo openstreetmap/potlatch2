@@ -11,7 +11,7 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.Globals;
 
-    /** Behaviour that takes place while a way is selected includes: adding a node to the way, straightening/reshaping the way, dragging it... */
+    /** Behaviour that takes place while a way is selected includes: adding a node to the way, straightening/reshaping the way, dragging it. */
     public class SelectedWay extends ControllerState {
         /** The selected way itself. */
         protected var initWay:Way;

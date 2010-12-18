@@ -19,23 +19,32 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.EntityEvent;
 	import net.systemeD.halcyon.styleparser.*;
 	import net.systemeD.halcyon.Globals;
+	import flash.ui.Keyboard;
 
 //	for experimental export function:
 //	import flash.net.FileReference;
 //	import com.adobe.images.JPGEncoder;
 
+    /** The representation of part of the map on the screen, including information about coordinates, background imagery, paint properties etc. */
     public class Map extends Sprite {
 
-		public const MASTERSCALE:Number=5825.4222222222;// master map scale - how many Flash pixels in 1 degree longitude
-														// (for Landsat, 5120)
-		public const MINSCALE:uint=13;					// don't zoom out past this
-		public const MAXSCALE:uint=23;					// don't zoom in past this
+		/** master map scale - how many Flash pixels in 1 degree longitude (for Landsat, 5120) */
+		public const MASTERSCALE:Number=5825.4222222222; 
+												
+		/** don't zoom out past this */
+		public const MINSCALE:uint=13; 
+		/** don't zoom in past this */
+		public const MAXSCALE:uint=23; 
 
-		public var paint:MapPaint;						// sprite for ways and (POI/tagged) nodes in core layer
-		public var vectorbg:Sprite;						// sprite for vector background layers
+		/** sprite for ways and (POI/tagged) nodes in core layer */
+		public var paint:MapPaint;						 
+		/** sprite for vector background layers */
+		public var vectorbg:Sprite;
 
-		public var scale:uint=14;						// map scale
-		public var scalefactor:Number=MASTERSCALE;		// current scaling factor for lon/latp
+		/** map scale */
+		public var scale:uint=14;						 
+		/** current scaling factor for lon/latp */
+		public var scalefactor:Number=MASTERSCALE;
 		public var bigedge_l:Number= 999999;			// area of largest whichways
 		public var bigedge_r:Number=-999999;			//  |
 		public var bigedge_b:Number= 999999;			//  |
@@ -48,12 +57,18 @@ package net.systemeD.halcyon {
 		public var centre_lat:Number;					// centre lat/lon
 		public var centre_lon:Number;					//  |
 
-		public var baselon:Number;						// urllon-xradius/masterscale;
-		public var basey:Number;						// lat2lat2p(urllat)+yradius/masterscale;
-		public var mapwidth:uint;						// width (Flash pixels)
-		public var mapheight:uint;						// height (Flash pixels)
+		/** urllon-xradius/masterscale; */ 
+		public var baselon:Number;
+		/** lat2lat2p(urllat)+yradius/masterscale; */
+		public var basey:Number; 
+		/** width (Flash pixels) */
+		public var mapwidth:uint; 
+		/** height (Flash pixels) */
+		public var mapheight:uint; 
 
-		public var dragstate:uint=NOT_DRAGGING;			// dragging map
+		/** Is the map being panned */
+		public var dragstate:uint=NOT_DRAGGING;			// dragging map (panning)
+		/** Can the map be panned */
 		private var _draggable:Boolean=true;			//  |
 		private var lastxmouse:Number;					//  |
 		private var lastymouse:Number;					//  |
@@ -63,22 +78,30 @@ package net.systemeD.halcyon {
 		public const NOT_DRAGGING:uint=0;				//  |
 		public const NOT_MOVED:uint=1;					//  |
 		public const DRAGGING:uint=2;					//  |
+		/** How far the map can be dragged without actually triggering a pan. */
 		public const TOLERANCE:uint=7;					//  |
 		
-		public var initparams:Object;					// object containing HTML page parameters
+		/** object containing HTML page parameters */
+		public var initparams:Object; 
 
-		public var backdrop:Object;						// reference to backdrop sprite
-		public var tileset:TileSet;						// background tile object
-		private var tileparams:Object={ url:'' };		// background tile URL, name and scheme
-		private var styleurl:String='';					// internal style URL
-		public var showall:Boolean=true;				// show all objects, even if unstyled?
+		/** reference to backdrop sprite */
+		public var backdrop:Object; 
+		/** background tile object */
+		public var tileset:TileSet; 
+		/** background tile URL, name and scheme */
+		private var tileparams:Object={ url:'' }; 
+		/** internal style URL */
+		private var styleurl:String=''; 
+		/** show all objects, even if unstyled? */
+		public var showall:Boolean=true; 
 		
-		public var connection:Connection;				// server connection
-		public var vectorlayers:Object={};				// VectorLayer objects 
+		/** server connection */
+		public var connection:Connection; 
+		/** VectorLayer objects */
+		public var vectorlayers:Object={};  
 		
 		// ------------------------------------------------------------------------------------------
-		// Map constructor function
-
+		/** Map constructor function */
         public function Map(initparams:Object) {
 
 			this.initparams=initparams;
@@ -116,8 +139,7 @@ package net.systemeD.halcyon {
 		}
 
 		// ------------------------------------------------------------------------------------------
-		// Initialise map at a given lat/lon
-
+		/** Initialise map at a given lat/lon */
         public function init(startlat:Number, startlon:Number, startscale:uint=0):void {
 			while (numChildren) { removeChildAt(0); }
 
@@ -163,7 +185,7 @@ package net.systemeD.halcyon {
         }
 
 		// ------------------------------------------------------------------------------------------
-		// Recalculate co-ordinates from new Flash origin
+		/** Recalculate co-ordinates from new Flash origin */
 
 		public function updateCoords(tx:Number,ty:Number):void {
 			setScrollRectXY(tx,ty);
@@ -177,6 +199,7 @@ package net.systemeD.halcyon {
 			tileset.update();
 		}
 		
+		/** Move the map to centre on a given latitude/longitude. */
 		public function updateCoordsFromLatLon(lat:Number,lon:Number):void {
 			var cy:Number=-(lat2coord(lat)-mapheight/2);
 			var cx:Number=-(lon2coord(lon)-mapwidth/2);
@@ -203,6 +226,7 @@ package net.systemeD.halcyon {
 			this.dispatchEvent(new MapEvent(MapEvent.MOVE, {lat:centre_lat, lon:centre_lon, scale:scale, minlon:edge_l, maxlon:edge_r, minlat:edge_b, maxlat:edge_t}));
 		}
 		
+		/** Sets the offset between the background imagery and the map. */
 		public function nudgeBackground(x:Number,y:Number):void {
 			this.dispatchEvent(new MapEvent(MapEvent.NUDGE_BACKGROUND, { x: x, y: y }));
 		}
@@ -213,6 +237,7 @@ package net.systemeD.halcyon {
 			download();
 		}
 		
+		/** Recentre map at given lat/lon, updating the UI and downloading entities. */
 		public function moveMapFromLatLon(lat:Number,lon:Number):void {
 			updateCoordsFromLatLon(lat,lon);
 			updateEntityUIs(false,false);
@@ -234,7 +259,7 @@ package net.systemeD.halcyon {
 
 
 		// ------------------------------------------------------------------------------------------
-		// Resize map size based on current stage and height
+		/** Resize map size based on current stage and height */
 
 		public function updateSize(w:uint, h:uint):void {
 			mapwidth = w; centre_lon=coord2lon(-getX()+w/2);
@@ -297,6 +322,7 @@ package net.systemeD.halcyon {
 			paint.renumberNodeUI(node,event.oldID);
 		}
 
+        /** Visually mark an entity as highlighted. */
         public function setHighlight(entity:Entity, settings:Object):void {
 			if      ( entity is Way  && paint.wayuis[entity.id] ) { paint.wayuis[entity.id].setHighlight(settings);  }
 			else if ( entity is Node && paint.nodeuis[entity.id]) { paint.nodeuis[entity.id].setHighlight(settings); }
@@ -321,7 +347,7 @@ package net.systemeD.halcyon {
 			paint.wayuis[way.id].redraw();
 		}
 
-		/* Protect Entities and EntityUIs against purging. This prevents the currently selected items
+		/** Protect Entities and EntityUIs against purging. This prevents the currently selected items
 		   from being purged even though they're off-screen. */
 
 		public function setPurgable(entities:Array, purgable:Boolean):void {
@@ -344,6 +370,7 @@ package net.systemeD.halcyon {
         // Handle mouse events on ways/nodes
         private var mapController:MapController = null;
 
+        /** Assign map controller. */
         public function setController(controller:MapController):void {
             this.mapController = controller;
         }
@@ -371,20 +398,24 @@ package net.systemeD.halcyon {
 				v.paint.updateEntityUIs(v.getObjectsByBbox(edge_l, edge_r, edge_t, edge_b), redraw, remove);
 			}
 		}
+		/** Redraw everything, including in every vector layer. */
 		public function redraw():void {
 			paint.redraw();
 			for each (var v:VectorLayer in vectorlayers) { v.paint.redraw(); }
 		}
+		/** Redraw POI's, including in every vector layer. */
 		public function redrawPOIs():void { 
 			paint.redrawPOIs();
 			for each (var v:VectorLayer in vectorlayers) { v.paint.redrawPOIs(); }
 		}
 		
+		/** Increase scale. */
 		public function zoomIn():void {
 			if (scale==MAXSCALE) { return; }
 			changeScale(scale+1);
 		}
 
+		/** Decrease scale. */
 		public function zoomOut():void {
 			if (scale==MINSCALE) { return; }
 			changeScale(scale-1);
@@ -405,6 +436,7 @@ package net.systemeD.halcyon {
 			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
 		
+		/** Switch to new MapCSS. */
 		public function setStyle(url:String):void {
 			styleurl=url;
 			if (paint) { 
@@ -413,22 +445,28 @@ package net.systemeD.halcyon {
 			}
         }
 
+		/** Select a new background imagery. */
 		public function setBackground(bg:Object):void {
 			tileparams=bg;
 			if (tileset) { tileset.init(bg, bg.url!=''); }
 		}
 
+		/** Set background dimming on/off. */
 		public function setDimming(dim:Boolean):void {
 			if (tileset) { tileset.setDimming(dim); }
 		}
+		
+		/** Return background dimming. */
 		public function getDimming():Boolean {
 			if (tileset) { return tileset.getDimming(); }
 			return true;
 		}
 
+		/** Set background sharpening on/off. */
 		public function setSharpen(sharpen:Boolean):void {
 			if (tileset) { tileset.setSharpen(sharpen); }
 		}
+		/** Return background sharpening. */
 		public function getSharpen():Boolean {
 			if (tileset) { return tileset.getSharpen(); }
 			return false;
@@ -459,11 +497,13 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Mouse events
 		
+		/** Should map be allowed to pan? */
 		public function set draggable(draggable:Boolean):void {
 			_draggable=draggable;
 			dragstate=NOT_DRAGGING;
 		}
 
+		/** Prepare for being dragged by recording start time and location of mouse. */
 		public function mouseDownHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
 			dragstate=NOT_MOVED;
@@ -472,11 +512,13 @@ package net.systemeD.halcyon {
 			downTime=new Date().getTime();
 		}
         
+		/** Respond to mouse up by possibly moving map. */
 		public function mouseUpHandler(event:MouseEvent=null):void {
 			if (dragstate==DRAGGING) { moveMap(x,y); }
 			dragstate=NOT_DRAGGING;
 		}
         
+		/** Respond to mouse movement, dragging the map if tolerance threshold met. */
 		public function mouseMoveHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
 			if (dragstate==NOT_DRAGGING) { return; }
@@ -505,19 +547,21 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Miscellaneous events
 		
+		/** Respond to cursor movements and zoom in/out.*/
 		public function keyUpHandler(event:KeyboardEvent):void {
 			if (event.target is TextField) return;				// not meant for us
 			switch (event.keyCode) {
-				case 33:	zoomIn(); break;					// Page Up - zoom in
-				case 34:	zoomOut(); break;					// Page Down - zoom out
-				case 37:	moveMap(mapwidth/2,0); break;		// left cursor
-				case 38:	moveMap(0,mapheight/2); break;		// up cursor
-				case 39:	moveMap(-mapwidth/2,0); break;		// right cursor
-				case 40:	moveMap(0,-mapheight/2); break;		// down cursor
+				case Keyboard.PAGE_UP:	zoomIn(); break;                 // Page Up - zoom in
+				case Keyboard.PAGE_DOWN:	zoomOut(); break;            // Page Down - zoom out
+				case Keyboard.LEFT:	moveMap(mapwidth/2,0); break;        // left cursor
+				case Keyboard.UP:	moveMap(0,mapheight/2); break;		 // up cursor
+				case Keyboard.RIGHT:	moveMap(-mapwidth/2,0); break;   // right cursor
+				case Keyboard.DOWN:	moveMap(0,-mapheight/2); break;      // down cursor
 //				case 76:	reportPosition(); break;			// L - report lat/long
 			}
 		}
 
+		/** What to do if an error with the network connection happens. */
 		public function connectionError(err:Object=null): void {
 			addDebug("got error"); 
 		}

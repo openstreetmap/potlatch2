@@ -8,8 +8,9 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.styleparser.RuleSet;
 	import net.systemeD.halcyon.Globals;
 
+	/** Manages the drawing of map entities, allocating their sprites etc. */
 	public class MapPaint extends Sprite {
-
+		
 		public var map:Map;
 		public var minlayer:int;
 		public var maxlayer:int;
@@ -173,6 +174,7 @@ package net.systemeD.halcyon {
             }
 		}
 
+		/** Make a UI object representing a way. */
 		public function createWayUI(way:Way):WayUI {
 			if (!wayuis[way.id]) {
 				wayuis[way.id]=new WayUI(way,this);
@@ -185,6 +187,7 @@ package net.systemeD.halcyon {
 			deleteWayUI(event.entity as Way);
 		}
 
+		/** Remove a way's UI object. */
 		public function deleteWayUI(way:Way):void {
 			way.removeEventListener(Connection.WAY_DELETED, wayDeleted);
 			if (wayuis[way.id]) {
@@ -199,6 +202,7 @@ package net.systemeD.halcyon {
 			}
 		}
 
+		/** Make a UI object representing a node. */
 		public function createNodeUI(node:Node,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):NodeUI {
 			if (!nodeuis[node.id]) {
 				nodeuis[node.id]=new NodeUI(node,this,rotation,layer,stateClasses);
@@ -216,6 +220,7 @@ package net.systemeD.halcyon {
 			deleteNodeUI(event.entity as Node);
 		}
 
+		/** Remove a node's UI object. */
 		public function deleteNodeUI(node:Node):void {
 			if (!nodeuis[node.id]) { return; }
 			node.removeEventListener(Connection.NODE_DELETED, nodeDeleted);
@@ -224,6 +229,7 @@ package net.systemeD.halcyon {
 			delete nodeuis[node.id];
 		}
 
+        /** Make a UI object representing a marker. */
         public function createMarkerUI(marker:Marker,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):MarkerUI {
             if (!markeruis[marker.id]) {
                 markeruis[marker.id]=new MarkerUI(marker,this,rotation,layer,stateClasses);
@@ -241,6 +247,7 @@ package net.systemeD.halcyon {
             deleteMarkerUI(event.entity as Marker);
         }
 
+        /** Remove a marker's UI object. */
         public function deleteMarkerUI(marker:Marker):void {
             if (!markeruis[marker.id]) { return; }
             marker.removeEventListener(Connection.NODE_DELETED, markerDeleted);
@@ -280,6 +287,7 @@ package net.systemeD.halcyon {
             for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 
+		/** Redraw nodes and markers */
 		public function redrawPOIs():void {
 			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
             for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }

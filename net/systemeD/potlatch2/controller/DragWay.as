@@ -1,11 +1,13 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	import flash.geom.Point;
+    import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
 
+    /** The state of moving a way around with the mouse. */
     public class DragWay extends ControllerState {
         private var isDraggingStarted:Boolean = false;
 		private var enterTime:Number;
@@ -13,10 +15,16 @@ package net.systemeD.potlatch2.controller {
         private var downX:Number;
         private var downY:Number;
 		private var dragstate:uint=NOT_MOVED;
+		/** Not used? */
 		private const NOT_DRAGGING:uint=0;
+		
+		/** "Dragging" but hasn't actually moved yet. */
 		private const NOT_MOVED:uint=1;
+		
+		/** While moving. */
 		private const DRAGGING:uint=2;
         
+        /** Start the drag by recording the dragged way, where it started, and when. */
         public function DragWay(way:Way, event:MouseEvent) {
             selection = [way];
             downX = event.localX;
@@ -24,8 +32,8 @@ package net.systemeD.potlatch2.controller {
 			enterTime = (new Date()).getTime();
         }
  
+       /** Handle dragging and end drag events. Filters out very short or quick drags. */
        override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
-
             if (event.type==MouseEvent.MOUSE_UP) {
                 if (dragstate==DRAGGING) { 
                   MainUndoStack.getGlobalStack().addAction(
@@ -40,7 +48,6 @@ package net.systemeD.potlatch2.controller {
 				} else if (dragstate==NOT_MOVED && 
 					       ((Math.abs(downX - event.localX) < 3 && Math.abs(downY - event.localY) < 3) ||
 					        (new Date().getTime()-enterTime)<300)) {
-					// ** add time check too
 					return this;
 				}
 				dragstate=DRAGGING;
@@ -52,8 +59,9 @@ package net.systemeD.potlatch2.controller {
 			}
         }
 
+		/** Abort dragging if ESC pressed. */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if (event.keyCode==27) {
+			if (event.keyCode==Keyboard.ESCAPE) {
 				firstSelected.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, firstSelected as Way, 0, 0));
 				return new SelectedWay(firstSelected as Way);
 			}
@@ -69,14 +77,18 @@ package net.systemeD.potlatch2.controller {
 			dragstate=NOT_MOVED;
 		}
 
+        /** Highlight the dragged way. */
         override public function enterState():void {
             controller.map.setHighlight(firstSelected, { selected: true } );
 			Globals.vars.root.addDebug("**** -> "+this);
         }
+        
+        /** Un-highlight the dragged way. */
         override public function exitState(newState:ControllerState):void {
             controller.map.setHighlight(firstSelected, { selected: false } );
 			Globals.vars.root.addDebug("**** <- "+this);
         }
+        /** "DragWay" */
         override public function toString():String {
             return "DragWay";
         }
