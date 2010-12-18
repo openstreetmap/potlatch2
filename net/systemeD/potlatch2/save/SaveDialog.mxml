@@ -26,7 +26,7 @@
             </mx:text>
           </mx:Text>
           <mx:Label text="Comment:"/>
-          <mx:TextArea id="comment" width="100%" height="100%" change="commentChanged(event);" />
+          <mx:TextArea id="comment" width="100%" height="100%" change="commentChanged(event);" textInput="monitorEnter(event);" />
         </mx:VBox>
         
         <mx:VBox width="100%" height="100%" label="Advanced">
@@ -110,6 +110,10 @@
 		}
 		changesetTags.addItem( { k:'comment', v: event.target.text } );
     }
+
+	private function monitorEnter(event:TextEvent):void {
+		if (event.text=="\n") { event.preventDefault(); startSave(); }
+	}
 
 	private function addNewTag():void {
 		changesetTags.addItem( { k:'(new key)', v:'(new value)' } );
