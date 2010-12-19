@@ -120,7 +120,6 @@ package net.systemeD.potlatch2.controller {
 				if (focus is Way && focus!=firstSelected) {
 					// floating over another way, highlight its nodes
 					hoverEntity=focus;
-					// FIXME this call is incredibly slow for long ways, really hurts usability
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
 				}
 				// set cursor depending on whether we're floating over the start of this way, 

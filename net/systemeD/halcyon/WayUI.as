@@ -173,7 +173,7 @@ package net.systemeD.halcyon {
         }
 
 		// ------------------------------------------------------------------------------------------
-		/** Calculate pathlength, patharea, centroid_x, centroid_y, heading[] 
+		/** Calculate pathlength, patharea, centroid_x, centroid_y, heading[]. 
 		* ** this could be made scale-independent - would speed up redraw
 		*/
 		public function recalculate():void {

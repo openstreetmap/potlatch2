@@ -12,6 +12,7 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
 	
+	/** The graphical representation of a Node (including POIs and nodes that are part of Ways). */
 	public class NodeUI extends EntityUI {
 		
 		public var loaded:Boolean=false;
@@ -20,6 +21,12 @@ package net.systemeD.halcyon {
 		private var rotation:Number=0;				// rotation applied to this POI
 		private static const NO_LAYER:int=-99999;
 
+		/**
+		 * @param node The corresponding Node.
+		 * @param paint MapPaint object to attach this NodeUI to.
+		 * @param heading Optional angle.
+		 * @param layer Which layer on the MapPaint object it sits on. @default Top layer
+		 * @param stateClasses A settings object definining the initial state of the node (eg, highlighted, hover...) */
 		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, layer:int=NO_LAYER, stateClasses:Object=null) {
 			super(node,paint);
 			if (layer==NO_LAYER) { this.layer=paint.maxlayer; } else { this.layer=layer; }
@@ -41,6 +48,7 @@ package net.systemeD.halcyon {
             entity.removeEventListener(Connection.NODE_ALTERED, nodeAltered);
 		}
 
+		/** Respond to movement event. */
 		public function nodeMoved(event:Event):void {
 		    updatePosition();
 		}
@@ -49,6 +57,7 @@ package net.systemeD.halcyon {
             redraw();
         }
 
+		/** Update settings then draw node. */
 		override public function doRedraw():Boolean {
 			if (!paint.ready) { return false; }
 			if (entity.deleted) { return false; }

@@ -2,6 +2,7 @@ package net.systemeD.halcyon {
 
     import flash.events.Event;
 
+    /** Defines map-related events. */
     public class MapEvent extends Event {
 
 		public static const DOWNLOAD:String = "download";

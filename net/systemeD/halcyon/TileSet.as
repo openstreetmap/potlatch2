@@ -2,11 +2,10 @@ package net.systemeD.halcyon {
 
 	import flash.display.*;
 	import flash.events.*;
+	import flash.filters.*;
 	import flash.net.*;
 	import flash.system.LoaderContext;
 	import flash.utils.Timer;
-	import flash.filters.*;
-	import net.systemeD.halcyon.MapEvent;
 
     public class TileSet extends Sprite {
 
@@ -19,13 +18,14 @@ package net.systemeD.halcyon {
 		private var offset_lat:Number=0;
 
 		private var requests:Array=[];
-		private var tiles:Object={};		// key is "z,x,y"; value "true" (needed) or reference to sprite
+		private var tiles:Object={};		// key is "z,x,y"; value "true" if queued, or reference to loader object if requested
 		private var waiting:int=0;			// number of tiles currently being downloaded
 		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
 		private var scheme:String;			// 900913 or microsoft
 		public var blocks:Array;			// array of regexes which are verboten
 
 		private var map:Map;
+		private const MAXTILEREQUESTS:int= 4;
 
 		private var sharpenFilter:BitmapFilter = new ConvolutionFilter(3, 3, 
 			[0, -1, 0,
@@ -40,6 +40,11 @@ package net.systemeD.halcyon {
 			map.addEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
 	
+		/** @param params Currently includes "url" and "scheme"
+		 * @param update Trigger update now?
+		 * @param dim Start with imagery faded?
+		 * @param sharpen Start with sharpen filter applied?
+		 */
 		public function init(params:Object, update:Boolean=false, dim:Boolean=true, sharpen:Boolean=false):void {
 			setDimming(dim);
 			sharpening=sharpen;
@@ -58,13 +63,16 @@ package net.systemeD.halcyon {
 			}
 		}
 
+		/** Toggle fading of imagery. */
 		public function setDimming(dim:Boolean):void {
 			alpha=dim ? 0.5 : 1;
 		}
+		/** Is imagery currently set faded? */
 		public function getDimming():Boolean {
 			return (alpha<1);
 		}
 
+        /** Toggle sharpen filter. */
 		public function setSharpen(sharpen:Boolean):void {
 			var f:Array=[]; if (sharpen) { f=[sharpenFilter]; }
 			for (var i:uint=0; i<numChildren; i++) {
@@ -75,10 +83,13 @@ package net.systemeD.halcyon {
 			}
 			sharpening=sharpen;
 		}
+		
+		/** Is sharpen filter applied? */
 		public function getSharpen():Boolean {
 			return sharpening;
 		}
 
+		/** Set zoom scale (no update triggerd). */
 		public function changeScale(scale:uint):void {
 			for (var i:uint=map.MINSCALE; i<=map.MAXSCALE; i++) {
 				this.getChildAt(i-map.MINSCALE).visible=(scale==i);
@@ -87,7 +98,7 @@ package net.systemeD.halcyon {
 			y=map.lat2coord(map.centre_lat+offset_lat)-map.lat2coord(map.centre_lat);
 		}
 			
-		// Update bounds - called on every move
+		/** Update bounds of tile area, and request new tiles if needed.  */
 		
 		public function update():void {
 			if (!baseurl) { return; }
@@ -102,25 +113,26 @@ package net.systemeD.halcyon {
 			}
 		}
 
-		// Mark that a tile needs to be loaded
+		/** Mark that a tile needs to be loaded*/
 		
 		public function addRequest(tx:int,ty:int):void {
 			tiles[map.scale+','+tx+','+ty]=true;
 			requests.push([map.scale,tx,ty]);
 		}
 
-		// Service tile queue - called on every frame to download new tiles
+		/** Service tile queue - called on every frame to download new tiles */
 		
 		public function serviceQueue():void {
-			if (waiting==4 || requests.length==0) { return; }
+			if (waiting==MAXTILEREQUESTS || requests.length==0) { return; } //SB
 			var r:Array, tx:int, ty:int, tz:int, l:DisplayObject;
 
-			for (var i:uint=0; i<Math.min(requests.length, 4-waiting); i++) {
+			for (var i:uint=0; i<Math.min(requests.length, MAXTILEREQUESTS-waiting); i++) {
 				r=requests.shift(); tz=r[0]; tx=r[1]; ty=r[2];
 				if (tx>=tile_l && tx<=tile_r && ty>=tile_t && ty<=tile_b) {
 					// Tile is on-screen, so load
 					waiting++;
 					var loader:Loader = new Loader();
+					tiles[map.scale+','+tx+','+ty]=loader;
 					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit);
             		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError);
 					loader.load(new URLRequest(tileURL(tx,ty,tz)), 
@@ -130,16 +142,40 @@ package net.systemeD.halcyon {
 					loader.x=map.lon2coord(tile2lon(tx));
 					loader.y=map.lat2coord(tile2lat(ty));
 					if (sharpening) { loader.filters=[sharpenFilter]; }
-//					loader.alpha=0.5;
+                    /*
+                    var timer:Timer = new Timer(5000, 1);
+                    timer.addEventListener(TimerEvent.TIMER, function(){checkTileLoaded(map.scale,tx,ty);});
+                    timer.start();
+					*/
+
+				} else {
+					tiles[tz+','+tx+','+ty]=false; // Map has moved between the time we wanted this tile and now, so make 
+					                               //it available for a future request
 				}
 			}
 		}
 
+/* We may need something like this in the future, not sure. Trouble is if a tile doesn't get loaded on first go,
+   it will never get loaded. 
+        private function checkTileLoaded(z,x,y) {
+            if (tiles[z+','+x+','+y]==true){
+            	trace("Didn't even start getting tile: " + z+','+x+','+y);
+            	requests.push([z,x,y]);
+            	return; 
+            }	
+        	var l:Loader = tiles[z+','+x+','+y];
+        	if (l.alpha < 0.1) { 
+        		trace('Broken tile:' + z+','+x+','+y); 
+        	}
+
+        }
+        */
         private function missingTileError(event:Event):void {
 			waiting--;
 			return;
 		}
 
+		/** Tile image has been downloaded, so start displaying it. */
 		protected function doImgInit(event:Event):void {
 			event.target.loader.alpha=0;
 			var t:Timer=new Timer(10,10);
@@ -188,8 +224,7 @@ package net.systemeD.halcyon {
 			return baseurl ? baseurl : '';
 		}
 
-		// Update offset
-		
+		/** Respond to nudge event by updating offset between imagery and map. */
 		public function nudgeHandler(event:MapEvent):void {
 			if (!baseurl) { return; }
 			this.x+=event.params.x; this.y+=event.params.y;
