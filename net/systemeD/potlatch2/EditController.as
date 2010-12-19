@@ -12,6 +12,8 @@ package net.systemeD.potlatch2 {
 	import flash.geom.*;
 	import flash.ui.Keyboard;
 
+    /** Controller for the main map editing window itself. The logic that responds to mouse and keyboard events is all 
+    * buried in various ControllerState classes. */
     public class EditController implements MapController {
 
         private var _map:Map;
@@ -35,6 +37,7 @@ package net.systemeD.potlatch2 {
 		[Embed(source="../../../embedded/pen_so.png")] 		public var pen_so:Class;
 		[Embed(source="../../../embedded/pen_plus.png")] 	public var pen_plus:Class;
 		
+        /** Constructor function: needs the map information, a panel to edit tags with, and the toolbox to manipulate ways with. */
         public function EditController(map:Map, tagViewer:TagViewer, toolbox:Toolbox) {
             this._map = map;
             setState(new NoSelection());
@@ -63,10 +66,12 @@ package net.systemeD.potlatch2 {
             _connection = map.connection;
         }
 
+        /** Accesses map object. */
         public function get map():Map {
             return _map;
         }
         
+        /** Accesss connection object. */
         public function get connection():Connection {
             return _connection;
         }
@@ -96,6 +101,7 @@ package net.systemeD.potlatch2 {
             setState(newState);            
 		}
 
+		/** Is the given key currently pressed? */
 		public function keyDown(key:Number):Boolean {
 			return Boolean(keys[key]);
 		}
@@ -135,6 +141,7 @@ package net.systemeD.potlatch2 {
 			return true;
 		}
 
+        /** Exit the current state and switch to a new one. */
         public function setState(newState:ControllerState):void {
             if ( newState == state )
                 return;
@@ -147,6 +154,7 @@ package net.systemeD.potlatch2 {
             state.enterState();
         }
 
+		/** Given what is currently selected (or not), find the matching ControllerState. */
 		public function findStateForSelection(sel:Array):ControllerState {
 			if (sel.length==0) { return new NoSelection(); }
 			else if (sel.length>1) { return new SelectedMultiple(sel); }
@@ -159,6 +167,7 @@ package net.systemeD.potlatch2 {
 			}
 		}
 
+		/** Set a mouse pointer. */
 		public function setCursor(cursor:Class):void {
 			CursorManager.removeAllCursors();
 			if (cursor && cursorsEnabled) { CursorManager.setCursor(cursor,2,-4,0); }

@@ -44,7 +44,7 @@ package net.systemeD.potlatch2.controller {
 
 			if ( event.type == MouseEvent.MOUSE_UP ) {
                 controller.map.mouseUpHandler(); // in case you're still in the drag-tolerance zone, and mouse up over something.
-				if ( entity == null || isBackground ) {
+				if ( entity == null || isBackground ) { // didn't hit anything: extend the way by one node.
 					node = createAndAddNode(event, MainUndoStack.getGlobalStack().addAction);
                     controller.map.setHighlight(node, { selectedway: true });
                     controller.map.setPurgable([node], false);
@@ -53,7 +53,7 @@ package net.systemeD.potlatch2.controller {
 				} else if ( entity is Node ) {
 					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
 						if (Way(firstSelected).length==1 && Way(firstSelected).getNode(0).parentWays.length==1) {
-							// double-click to create new POI
+							// Actually the user double-clicked to make a new node, they didn't want to draw a way at all.
                             stopDrawing();
                             MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
                             
@@ -71,6 +71,7 @@ package net.systemeD.potlatch2.controller {
                         // clicked slowly on the end node - do nothing
                         return this;
 					} else {
+						// hit a node, add it to this way and carry on
 						appendNode(entity as Node, MainUndoStack.getGlobalStack().addAction);
 						if (focus is Way) {
                           controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
@@ -79,6 +80,7 @@ package net.systemeD.potlatch2.controller {
 						resetElastic(entity as Node);
 						lastClick=entity;
 						if (Way(firstSelected).getNode(0)==Way(firstSelected).getLastNode()) {
+							// the node just hit completes a loop, so stop drawing.
 							return new SelectedWay(firstSelected as Way);
 						}
 					}
@@ -108,15 +110,21 @@ package net.systemeD.potlatch2.controller {
 				}
 				lastClickTime=new Date();
 			} else if ( event.type == MouseEvent.MOUSE_MOVE && elastic ) {
+				// mouse is roaming around freely
 				mouse = new Point(
 						  controller.map.coord2lon(event.localX),
 						  controller.map.coord2latp(event.localY));
 				elastic.end = mouse;
 			} else if ( event.type == MouseEvent.ROLL_OVER && !isBackground ) {
+				// mouse has floated over something
 				if (focus is Way && focus!=firstSelected) {
+					// floating over another way, highlight its nodes
 					hoverEntity=focus;
+					// FIXME this call is incredibly slow for long ways, really hurts usability
 					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
 				}
+				// set cursor depending on whether we're floating over the start of this way, 
+				// another random node, a possible junction...
 				if (entity is Node && focus is Way && Way(focus).endsWith(Node(entity))) {
 					if (focus==firstSelected) { controller.setCursor(controller.pen_so); }
 					                     else { controller.setCursor(controller.pen_o); }
@@ -160,12 +168,12 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 13:					return keyExitDrawing();
-				case 27:					return keyExitDrawing();
+				case Keyboard.ENTER:					return keyExitDrawing();
+				case Keyboard.ESCAPE:					return keyExitDrawing();
 				case Keyboard.DELETE:		return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
-				case 189:					return backspaceNode(MainUndoStack.getGlobalStack().addAction);
-				case 82:					repeatTags(firstSelected); return this;
+				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				case 82: /* R */            repeatTags(firstSelected); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;

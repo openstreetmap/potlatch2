@@ -11,19 +11,29 @@ package net.systemeD.halcyon {
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
 
+	/** The graphical representation of a Way. */ 
 	public class WayUI extends EntityUI {
 
-		public var pathlength:Number;				// length of path
-		public var patharea:Number;					// area of path
-		public var centroid_x:Number;				// centroid
+		/** Total length of way */
+		public var pathlength:Number;
+		/** Area of the way */
+		public var patharea:Number;
+		/** X coord of the centre of the area */
+		public var centroid_x:Number;
+		/** Y coord of the centre of the area */
 		public var centroid_y:Number;				//  |
-		public var heading:Array=new Array();		// angle at each node
-		public var drawExcept:Number;				// vertex to draw exclusively, or not at all (used by DragWayNode)
-		public var drawOnly:Number;					//  |
-		private var indexStart:uint;				//  |
-		private var indexEnd:uint;					//  |
+		/** Angle at each node */
+		public var heading:Array=new Array();
+		/** vertex to draw exclusively, or not at all (used by DragWayNode) */ 
+		public var drawExcept:Number;
+		/** " */
+		public var drawOnly:Number;
+		private var indexStart:uint;
+		private var indexEnd:uint;
 		public var nameformat:TextFormat;
 		private var recalculateDue:Boolean=false;
+		// Store the temporary highlight settings applied to all nodes.
+		private var nodehighlightsettings: Object={};
 
 		private const NODESIZE:uint=6;
 
@@ -103,17 +113,20 @@ package net.systemeD.halcyon {
 			redrawMultis();
 		}
 
+		/** Don't redraw until further notice. */
 		override public function suspendRedraw(event:EntityEvent):void {
 			super.suspendRedraw(event);
 			recalculateDue=false;
 		}
 		
+		/** Continue redrawing as normal. */
 		override public function resumeRedraw(event:EntityEvent):void {
 			suspended=false;
 			if (recalculateDue) { recalculate(); }
 			super.resumeRedraw(event);
 		}
 
+		/** Redraw other ways that are the "outer" part of a multipolygon of which we are the "inner" */
 		public function redrawMultis():void {
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','inner');
 			for each (var m:Relation in multis) {
@@ -125,21 +138,44 @@ package net.systemeD.halcyon {
 				}
 			}
 		}
-
+        
+        /** Mark every node in this way as highlighted, and redraw it. 
+        * 
+        * @param settings Style state that it applies to. @see EntityUI#setStateClass()
+        *  */
         public function setHighlightOnNodes(settings:Object):void {
 			for (var i:uint = 0; i < Way(entity).length; i++) {
                 var node:Node = Way(entity).getNode(i);
 				if (paint.nodeuis[node.id]) {
-					paint.nodeuis[node.id].setHighlight(settings);
-					paint.nodeuis[node.id].redraw();
+					// Speed things up a bit by only setting the highlight if it's either:
+					// a) an "un-highlight" (so we don't leave mess behind when scrolling)
+					// b) currently onscreen
+					// Currently this means if you highlight an object then scroll, nodes will scroll
+					// into view that should be highlighted but aren't.
+					if (settings.hoverway==false || 
+					    settings.selectedway==false || 
+					    node.lat >=  paint.map.edge_b && node.lat <= paint.map.edge_t &&
+					    node.lon >= paint.map.edge_l && node.lon <= paint.map.edge_r) {
+					    paint.nodeuis[node.id].setHighlight(settings); // Triggers redraw if required
+					}
+					if (settings.selectedway  || settings.hoverway)
+						nodehighlightsettings=settings;
+					else
+					   nodehighlightsettings={}; 
 				}
 			}
         }
+        
+        // An ugly hack to allow nodes that have recently scrolled into view to get highlighted.
+        public function updateHighlights():void {
+        	if (nodehighlightsettings)
+        	   setHighlightOnNodes(nodehighlightsettings);
+        }
 
 		// ------------------------------------------------------------------------------------------
-		// Calculate length etc.
-		// ** this could be made scale-independent - would speed up redraw
-		
+		/** Calculate pathlength, patharea, centroid_x, centroid_y, heading[] 
+		* ** this could be made scale-independent - would speed up redraw
+		*/
 		public function recalculate():void {
 			if (suspended) { recalculateDue=true; return; }
 			
@@ -186,8 +222,8 @@ package net.systemeD.halcyon {
 		}
 
 		// ------------------------------------------------------------------------------------------
-		// Redraw
-
+	
+		/** Go through the complex process of drawing this way, including applying styles, casings, fills, fonts... */
 		override public function doRedraw():Boolean {
 			interactive=false;
 			removeSprites();
@@ -324,7 +360,7 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Drawing support functions
 
-		// Draw solid polyline
+		/** Draw solid polyline */
 		
 		public function solidLines(g:Graphics,inners:Array):void {
 			solidLine(g);
@@ -358,7 +394,7 @@ package net.systemeD.halcyon {
 			}
 		}
 
-		// Draw dashed polyline
+		/** Draw dashed polyline */
 		
 		private function dashedLine(g:Graphics,dashes:Array):Array {
 			var way:Way=entity as Way;
@@ -413,7 +449,7 @@ package net.systemeD.halcyon {
 				 else { g.moveTo(x,y); }
 		}
 
-		// Draw decoration (arrows etc.)
+		/** Draw decoration (arrows etc.) */
 		
 		private function lineDecoration(g:Graphics,s:ShapeStyle,segments:Array):void {
 			var c:int=s.color ? s.color : 0;
@@ -442,9 +478,9 @@ package net.systemeD.halcyon {
 		}
 
 		
-		// Find point partway (0-1) along a path
-		// returns (x,y,angle)
-		// inspired by senocular's Path.as
+		/** Find point partway (0-1) along a path
+		  * @return (x,y,angle)
+		  * inspired by senocular's Path.as */
 		
 		private function pointAt(t:Number):Array {
 			var way:Way=entity as Way;
@@ -463,8 +499,9 @@ package net.systemeD.halcyon {
 			return new Array(0, 0, 0);
 		}
 
-		// Draw name along path
-		// based on code by Tom Carden
+		/** Draw name along path
+		 * based on code by Tom Carden
+		 * */
 		
 		private function writeNameOnPath(s:Sprite,a:String,textOffset:Number=0):void {
 
@@ -539,8 +576,8 @@ package net.systemeD.halcyon {
 		}
 
 		// ------------------------------------------------------------------------------------------
-		// Interaction
-
+		/* Interaction */
+        // TODO: can this be sped up? Hit testing for long ways (that go off the screen) seems to be very slow. */
 		public function hitTest(x:Number, y:Number):Way {
 			if (hitzone.hitTestPoint(x,y,true)) { return entity as Way; }
 			return null;

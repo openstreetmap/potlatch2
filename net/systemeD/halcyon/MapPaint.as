@@ -11,15 +11,25 @@ package net.systemeD.halcyon {
 	/** Manages the drawing of map entities, allocating their sprites etc. */
 	public class MapPaint extends Sprite {
 		
+		/** Access Map object */
 		public var map:Map;
+		/** Entities on layers below minlayer will not be shown by this paint object. (Confirm?) */
 		public var minlayer:int;
+		/** Entities on layers above maxlayer will not be shown by this paint object. (Confirm?) */
 		public var maxlayer:int;
-		public var ruleset:RuleSet;						// rules
+		/** The MapCSS rules used for drawing entities. */
+		public var ruleset:RuleSet;						
+		/** WayUI objects attached to Way entities that are currently visible. */
 		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
-		public var nodeuis:Object=new Object();			//	|
+		/** NodeUI objects attached to POI/tagged node entities that are currently visible. */
+		// confirm this - it seems to me all nodes in ways get nodeuis? --Steve B
+		public var nodeuis:Object=new Object();
+		/** MarkerUI objects attached to Marker entities that are currently visible. */
         public var markeruis:Object=new Object();
-		public var isBackground:Boolean = true;			// is it a background layer or the core paint object?
-		public var sublayerIndex:Object={};				// hash of index->position
+        /** Is this a background layer or the core paint object? */
+		public var isBackground:Boolean = true;
+		/** Hash of index->position */
+		public var sublayerIndex:Object={};
 
 		private const VERYBIG:Number=Math.pow(2,16);
 		private static const NO_LAYER:int=-99999;		// same as NodeUI
@@ -56,6 +66,7 @@ package net.systemeD.halcyon {
 			}
 		}
 		
+		/** Returns the paint surface for the given layer. */
 		public function getPaintSpriteAt(l:int):Sprite {
 			return getChildAt(l-minlayer) as Sprite;
 		}
@@ -64,6 +75,7 @@ package net.systemeD.halcyon {
 			return getChildAt((l-minlayer) + (maxlayer-minlayer+1)) as Sprite;
 		}
 		
+		/** Is ruleset loaded? */
 		public function get ready():Boolean {
 			if (!ruleset) { return false; }
 			if (!ruleset.loaded) { return false; }
@@ -124,6 +136,8 @@ package net.systemeD.halcyon {
         * @param redraw If true, all UIs for entities on "inside" lists will be redrawn
         * @param remove If true, all UIs for entites on "outside" lists will be removed. The purgable flag on UIs
                         can override this, for example for selected objects.
+        * fixme? add smarter behaviour for way nodes - remove NodeUIs from way nodes off screen, create them for ones
+        * that scroll onto screen (for highlights etc)
         */
 		public function updateEntityUIs(o:Object, redraw:Boolean, remove:Boolean):void {
 			var way:Way, poi:Node, marker:Marker;
@@ -131,6 +145,7 @@ package net.systemeD.halcyon {
 			for each (way in o.waysInside) {
 				if (!wayuis[way.id]) { createWayUI(way); }
 				else if (redraw) { wayuis[way.id].recalculate(); wayuis[way.id].redraw(); }
+				else wayuis[way.id].updateHighlights();//dubious
 			}
 
 			if (remove) {
@@ -183,6 +198,7 @@ package net.systemeD.halcyon {
 			return wayuis[way.id];
 		}
 
+		/** Respond to event by removing the WayUI. */
 		public function wayDeleted(event:EntityEvent):void {
 			deleteWayUI(event.entity as Way);
 		}
@@ -216,6 +232,7 @@ package net.systemeD.halcyon {
 			return nodeuis[node.id];
 		}
 
+		/** Respond to event by deleting NodeUI. */
 		public function nodeDeleted(event:EntityEvent):void {
 			deleteNodeUI(event.entity as Node);
 		}
@@ -243,6 +260,7 @@ package net.systemeD.halcyon {
             return markeruis[marker.id];
         }
 
+        /** Respond to event by deleting MarkerUI. */
         public function markerDeleted(event:EntityEvent):void {
             deleteMarkerUI(event.entity as Marker);
         }

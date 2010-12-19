@@ -9,22 +9,37 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.styleparser.RuleSet;
     import net.systemeD.halcyon.connection.*;
 
+	/** Parent class of representations of map Entities, with properties about how they should be drawn. */ 
 	public class EntityUI {
 
+		/** The entity represented by this class. */
 		protected var entity:Entity;
-		protected var styleList:StyleList;				// current StyleList for this entity
-		protected var sprites:Array=new Array();		// instances in display list
-		protected var listenSprite:Sprite=new Sprite();	// clickable sprite to receive events
-		protected var hitzone:Sprite;					// hitzone for above
-		protected var stateClasses:Object=new Object();	// special context-sensitive classes, e.g. :hover
-		protected var layer:Number=0;					// map layer
-		protected var suspended:Boolean=false;			// suspend redrawing?
-		protected var redrawDue:Boolean=false;			// redraw called while suspended?
-		protected var clearLimit:uint=0;				// sprite to clear back to
-		public var paint:MapPaint;						// reference to parent MapPaint
-		public var ruleset:RuleSet;						// reference to ruleset in operation
-		public var interactive:Boolean=true;			// does object respond to clicks?
-		public var purgable:Boolean=true;				// can it be deleted when offscreen?
+		/** Current StyleList for this entity. */
+		protected var styleList:StyleList;
+		/** Instances in display list */
+		protected var sprites:Array=new Array();
+		/** The clickable sprite that will receive events. */
+		protected var listenSprite:Sprite=new Sprite();
+		/** Hitzone for the sprite */
+		protected var hitzone:Sprite;
+		/** Special context-sensitive classes such as :hover. */
+		protected var stateClasses:Object=new Object();
+		/** Map layer */
+		protected var layer:Number=0;
+		/** Is drawing suspended? */
+		protected var suspended:Boolean=false;	
+		/** Redraw called while suspended? */
+		protected var redrawDue:Boolean=false;
+		/** Sprite to clear back to */
+		protected var clearLimit:uint=0;
+		/** Reference to parent MapPaint */
+		public var paint:MapPaint;	
+		/** Reference to ruleset (MapCSS) in operation */
+		public var ruleset:RuleSet;
+		/** Does object respond to clicks? */
+		public var interactive:Boolean=true;
+		/** Can it be deleted when offscreen? */
+		public var purgable:Boolean=true;
 
 		protected const FILLSPRITE:uint=0;
 		protected const CASINGSPRITE:uint=1;
@@ -39,6 +54,7 @@ package net.systemeD.halcyon {
 			gridFitType: GridFitType.NONE
 		};
 
+		/** Constructor function, adds a bunch of event listeners. */
 		public function EntityUI(entity:Entity, paint:MapPaint) {
 			this.entity=entity;
 			this.paint=paint;
@@ -56,6 +72,7 @@ package net.systemeD.halcyon {
 			listenSprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
 		}
 
+		/** Remove the default event listeners. */
 		protected function removeGenericEventListeners():void {
             entity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
 			entity.removeEventListener(Connection.ADDED_TO_RELATION, relationAdded);
@@ -110,7 +127,7 @@ package net.systemeD.halcyon {
 
 		// -----------------------------------------------------------------
 
-		// Add object (stroke/fill/roadname) to layer sprite
+		/** Add object (stroke/fill/roadname) to layer sprite*/
 		
 		protected function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
 			var l:Sprite, o:Sprite;
@@ -146,6 +163,7 @@ package net.systemeD.halcyon {
 			}
 		}
 
+		/** Remove all sprites associated with this entity, and clear hitzone. */
 		public function removeSprites():void {
 			while (sprites.length>clearLimit) {
 				var d:DisplayObject=sprites.pop();
@@ -207,23 +225,25 @@ package net.systemeD.halcyon {
 			return "[EntityUI "+entity+"]";
 		}
 
-		// Redraw control
+		/** Request redraw */
 		
 		public function redraw():Boolean {
 			if (suspended) { redrawDue=true; return false; }
 			return doRedraw();
 		}
 		
+		/** Actually do the redraw. To be overwritten. */
 		public function doRedraw():Boolean {
-			// to be overwritten
 			return false;
 		}
 		
+		/** Temporarily suspend redrawing of object. */
 		public function suspendRedraw(event:EntityEvent):void {
 			suspended=true;
 			redrawDue=false;
 		}
 		
+		/** Resume redrawing. */
 		public function resumeRedraw(event:EntityEvent):void {
 			suspended=false;
 			if (redrawDue) { 

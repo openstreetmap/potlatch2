@@ -72,6 +72,7 @@ package net.systemeD.halcyon {
 			return renderFromStyle(tags);
 		}
 
+		/** Assemble the layers of icons to draw the node, with hit zone if interactive. */
 		private function renderFromStyle(tags:Object):Boolean {
 			var r:Boolean=false;			// ** rendered
 			var maxwidth:Number=4;			// biggest width
