@@ -343,7 +343,7 @@ package net.systemeD.halcyon {
 				nodeStateClasses['junction']=(node.numParentWays>1);
 				paint.createNodeUI(node,r,layer,nodeStateClasses);
 			}
-			if (!drawn) { return false; }
+			if (!drawn) { return false; } // If not visible, no hitzone.
 			
             // create a generic "way" hitzone sprite
 			if (interactive && drawn) {

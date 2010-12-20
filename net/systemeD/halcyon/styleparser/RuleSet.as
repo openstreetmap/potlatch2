@@ -11,11 +11,15 @@ package net.systemeD.halcyon.styleparser {
 	import net.systemeD.halcyon.Globals;
 //	import bustin.dev.Inspector;
 	
+	/** A set of rules for rendering a map, as retrieved from a MapCSS file. */
 	public class RuleSet {
 
-		public var loaded:Boolean=false;			// has it loaded yet?
-		public var images:Object=new Object();		// loaded images
-		public var imageWidths:Object=new Object();	// width of each bitmap image
+		/** Has it loaded yet? */
+		public var loaded:Boolean=false; 
+		/** Loaded images */
+		public var images:Object=new Object();
+		/** Width of each bitmap image. */
+		public var imageWidths:Object=new Object();	
 		private var redrawCallback:Function=null;	// function to call when CSS loaded
 		private var iconCallback:Function=null;		// function to call when all icons loaded
 		private var iconsToLoad:uint=0;				// number of icons left to load (fire iconCallback when ==0)
@@ -219,6 +223,7 @@ package net.systemeD.halcyon.styleparser {
 			yellow:0xffff00,
 			yellowgreen:0x9acd32 };
 
+		/** Constructor */
 		public function RuleSet(mins:uint,maxs:uint,redrawCall:Function=null,iconLoadedCallback:Function=null):void {
 			minscale = mins;
 			maxscale = maxs;
@@ -226,7 +231,7 @@ package net.systemeD.halcyon.styleparser {
 			iconCallback = iconLoadedCallback;
 		}
 
-		// Get styles for an object
+		/** Get styles for an object*/
 
 		public function getStyles(obj:Entity, tags:Object, zoom:uint):StyleList {
 			var sl:StyleList=new StyleList();
@@ -239,6 +244,7 @@ package net.systemeD.halcyon.styleparser {
 		// ---------------------------------------------------------------------------------------------------------
 		// Loading stylesheet
 
+        /** Load ruleset the MapCSS file referenced in <code>str</code>.*/
 		public function loadFromCSS(str:String):void {
 			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); loaded=true; redrawCallback(); return; }
 
@@ -267,7 +273,7 @@ package net.systemeD.halcyon.styleparser {
 
 
 		// ------------------------------------------------------------------------------------------------
-		// Load all referenced images
+		/** Load all referenced images*/
 		// ** will duplicate if referenced twice, shouldn't
 		
 		public function loadImages():void {
@@ -336,6 +342,7 @@ package net.systemeD.halcyon.styleparser {
 		// ------------------------------------------------------------------------------------------------
 		// Parse CSS
 
+		/** Parse the given MapCSS file by repeatedly throwing regular expressions at it. */
 		public function parse(css:String):void {
 			var previous:uint=0;					// what was the previous CSS word?
 			var sc:StyleChooser=new StyleChooser();	// currently being assembled
@@ -467,7 +474,7 @@ package net.systemeD.halcyon.styleparser {
 			ss.sublayer=ps.sublayer=ts.sublayer=hs.sublayer=sub;
 			xs.sublayer=10;
 			
-			// Find interactive
+			// Find "interactive" property - it's true unless explicitly set false.
 			var inter:Boolean=true;
 			if (t['interactive']) { inter=t['interactive'].match(FALSE) ? false : true; delete t['interactive']; }
 			ss.interactive=ps.interactive=ts.interactive=hs.interactive=xs.interactive=inter;
@@ -533,6 +540,8 @@ package net.systemeD.halcyon.styleparser {
 			return null;
 		}
 
+        /** Convert a color string given as either descriptive ("blue"), short hex ("#abc") or long hex ("#a0b0c0"), to an integer. 
+        * @default 0*/
         public static function parseCSSColor(colorStr:String):uint {
             colorStr = colorStr.toLowerCase();
             if (CSSCOLORS[colorStr]) {

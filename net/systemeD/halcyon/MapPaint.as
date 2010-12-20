@@ -36,6 +36,15 @@ package net.systemeD.halcyon {
 
 		// Set up layering
 
+		/** Creates paint sprites and hit sprites for all layers in range. This object ends up with a series of child sprites
+		 * as follows: p0,p1,p2..px, h0,h1,h2..hx where p are "paint sprites" and "h" are "hit sprites". There is one of each type for each layer.
+		 * <p>Each paint sprite has 4 child sprites (fill, casing, stroke, names). Each hit sprite has 2 child sprites (way hit tests, node hit tests).</p>  
+		 * <p>Thus if layers range from -5 to +5, there will be 11 top level paint sprites followed by 11 top level hit sprites.</p>
+		 * 
+		 * @param map The map to be rendered.
+		 * @param minlayer The lowest layer in that map that will be rendered.
+		 * @param maxlayer The top layer in that map that will be rendered.
+		 * */ 
 		public function MapPaint(map:Map,minlayer:int,maxlayer:int) {
 			mouseEnabled=false;
 
@@ -71,6 +80,7 @@ package net.systemeD.halcyon {
 			return getChildAt(l-minlayer) as Sprite;
 		}
 
+		/** Returns the hit sprite for the given layer. */
 		public function getHitSpriteAt(l:int):Sprite {
 			return getChildAt((l-minlayer) + (maxlayer-minlayer+1)) as Sprite;
 		}
@@ -286,6 +296,7 @@ package net.systemeD.halcyon {
 			delete nodeuis[oldID];
 		}
 
+		/** Make a new sprite for painting on */
 		private function getPaintSprite():Sprite {
 			var s:Sprite = new Sprite();
 			s.mouseEnabled = false;

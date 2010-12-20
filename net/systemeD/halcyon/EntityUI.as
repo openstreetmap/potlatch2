@@ -20,7 +20,7 @@ package net.systemeD.halcyon {
 		protected var sprites:Array=new Array();
 		/** The clickable sprite that will receive events. */
 		protected var listenSprite:Sprite=new Sprite();
-		/** Hitzone for the sprite */
+		/** Hitzone for the sprite - must be set by subclass-specific code. */
 		protected var hitzone:Sprite;
 		/** Special context-sensitive classes such as :hover. */
 		protected var stateClasses:Object=new Object();
@@ -145,6 +145,7 @@ package net.systemeD.halcyon {
             }
 		}
 
+		// What does this do, could someone please document?
 		protected function setListenSprite():void {
 			var l:Sprite=paint.getHitSpriteAt(layer);
 			var s:Sprite;

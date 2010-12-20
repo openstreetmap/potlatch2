@@ -149,6 +149,7 @@ package net.systemeD.potlatch2.controller {
 			}
 		}
 
+		/** Find the MapPaint object that this DisplayObject belongs to. */
 		protected function getMapPaint(d:DisplayObject):MapPaint {
 			while (d) {
 				if (d is MapPaint) { return MapPaint(d); }

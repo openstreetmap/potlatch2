@@ -5,14 +5,17 @@ package net.systemeD.halcyon.styleparser {
 
 	public class Style {
 
+		/** Has this style had another style merged into it? */
 		public var merged:Boolean=false;
-		public var edited:Boolean=false;		// true once a property has been set from a string
+		/** true once a property has been set from a string */
+		public var edited:Boolean=false;
+		/** Z-index */
 		public var sublayer:Number=5;
+		/** Should entities with this style respond to interaction like mouse movement? */
 		public var interactive:Boolean=true;	
-		public var evals:Object={};				// compiled SWFs for each eval. We keep it here, not in the property 
-												//  | itself, so that we can retain typing for each property
-
-		// Return an exact copy of this object
+		/** Compiled SWFs for each eval. We keep it here, not in the property itself, so that we can retain typing for each property */
+		public var evals:Object={};
+		/** Return an exact copy of this object */
 		// ** this needs some benchmarking - may be quicker to iterate over .properties, copying each one
 
 		public function deepCopy():* {
@@ -27,7 +30,7 @@ package net.systemeD.halcyon.styleparser {
 			return (a.readObject());
 		}
 
-		// Add properties from another object
+		/** Add properties from another object */
 
 		public function mergeWith(additional:Style):void {
 			for each (var prop:String in properties) {
@@ -38,34 +41,35 @@ package net.systemeD.halcyon.styleparser {
 			this.merged=true;
 		}
 
-		// Getters (to be overridden)
+		/** Getters (to be overridden) */
 
 		public function get properties():Array {
 			return [];
 		}
 		
+		/** Does this style require anything to be drawn? (To be overridden.) */
 		public function get drawn():Boolean {
 			return false;
 		}
 		
-		// Eval handling
-		
+		/** Are there any eval functions defined? */
 		public function hasEvals():Boolean {
 			for (var k:String in evals) { return true; }
 			return false;
 		}
 		
+		/** If the stylesheet has width=eval('_width+2'), then this will set Style.width to 7 (say). */
 		public function runEvals(tags:Object):void {
 			for (var k:String in evals) {
 				// ** Do we need to do typing here?
 				this[k]=evals[k].exec(tags);
 				
-				// ** If the stylesheet has width=eval('_width+2'), then this will set Style.width to 7 (say).
+				
 				//    
 			}
 		}
 
-		// Set property and cast as correct type (used in stylesheet imports)
+		/** Set property and cast as correct type (used in stylesheet imports)*/
 		
 		public function setPropertyFromString(k:String,v:*):Boolean {
 			if (!this.hasOwnProperty(k)) { return false; }
@@ -92,6 +96,7 @@ package net.systemeD.halcyon.styleparser {
 			return false;
 		}
 
+		/** Serialise properties to a string. */
 		public function toString():String {
 			var str:String='';
             for each (var k:String in this.properties) {

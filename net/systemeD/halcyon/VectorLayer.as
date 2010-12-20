@@ -50,7 +50,7 @@ package net.systemeD.halcyon {
         /** Create a new node on the vector layer. Note that the node won't show up until on the map
         * until the the relevant nodeUI is created, so you will need to instruct the paint to create one
         *
-        * e.g. layer.paint.updateEntityUIs(layer.getObjectsByBbox(...)...);
+        * e.g. <code>layer.paint.updateEntityUIs(layer.getObjectsByBbox(...)...);</code>
         */
 		public function createNode(tags:Object,lat:Number,lon:Number):Node {
 			var node:Node = new Node(negativeID, 0, tags, true, lat, lon);
