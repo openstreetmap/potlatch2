@@ -11,22 +11,16 @@
 */
 
 package net.systemeD.controls {
-	import flash.events.KeyboardEvent;
 	import flash.events.Event;
 	import flash.events.FocusEvent;
-	import flash.events.MouseEvent;
-	import flash.net.SharedObject;
+	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
-	import mx.core.UIComponent;
+	
 	import mx.controls.ComboBox;
 	import mx.controls.DataGrid;
 	import mx.controls.listClasses.ListBase;
-	import mx.collections.ArrayCollection;
-	import mx.collections.ListCollectionView;
-	import mx.events.DropdownEvent;
+	import mx.core.UIComponent;
 	import mx.events.ListEvent;
-	import mx.events.FlexEvent;
-	import mx.managers.IFocusManagerComponent;
 
 	[Event(name="filterFunctionChange", type="flash.events.Event")]
 	[Event(name="typedTextChange", type="flash.events.Event")]
@@ -57,11 +51,16 @@ package net.systemeD.controls {
 	 *	/&gt;
 	 *	</pre>
 	 *
-	 *	@includeExample ../../../../../../docs/com/adobe/flex/extras/controls/example/AutoCompleteCountriesData/AutoCompleteCountriesData.mxml
+	 * 
+	 *  #includeExample ../../../../../../docs/com/adobe/flex/extras/controls/example/AutoCompleteCountriesData/AutoCompleteCountriesData.mxml
 	 *
 	 *	@see mx.controls.ComboBox
 	 *
 	 */
+	 // Comment from Steve Bennett: this class is kind of nightmarish because of complicated event sequences, where 
+	 // setting one property triggers an event which sets more properties... If someone can get their head around it,
+	 // it would be nice to document what are the fundamental properties that should be set, and what sequences of events
+	 // cascade out of that. textinput, text, selectedindex...
 	public class AutoComplete extends ComboBox 
 	{
 
@@ -87,21 +86,33 @@ package net.systemeD.controls {
 		//	Variables
 		//--------------------------------------------------------------------------
 
+		// Tracks cursor position. Because the text field has to be changed so often (to compensate for unwanted changes),
+		// and because changing the text field moves the cursor, we need to keep track of where the cursor position should be
+		// in order to restore it all the time. (Could be done more gracefully though.)
 		private var cursorPosition:Number=0;
+		// The previous state of selectedIndex - appears not to be used, though.
 		private var prevIndex:Number = -1;
+		/** Indicates that at the next UpdateDisplayList, the dropdown will be opened. */
 		private var showDropdown:Boolean=false;
+		/** Set by UpdateDisplayList, indicates that the dropdown is currently open. */
 		private var showingDropdown:Boolean=false;
 		private var tempCollection:Object;
+		// Very confusing - why is there a dropdownClosed *and* a showingDropdown? They appear to be used by different functions
+		// ...but why?
 		private var dropdownClosed:Boolean=true;
+		// produce spammy UI output
+		private var dbg:Boolean = false;
 
 		//--------------------------------------------------------------------------
 		//	Overridden Properties
 		//--------------------------------------------------------------------------
 
+		/** Hardcoded to set value to true. */
 		override public function set editable(value:Boolean):void {
 			//This is done to prevent user from resetting the value to false
 			super.editable = true;
 		}
+		/** This whole function is a temporary patch for the bug described inside. */
 		override public function set dataProvider(value:Object):void {
 			super.dataProvider = value;
 			tempCollection = value;
@@ -140,7 +151,12 @@ package net.systemeD.controls {
 		[Inspectable(category="Data")]
 		public function get typedText():String { return _typedText; }
 
+		/** Records text that was actually typed by the user, as distinct from text automatically populated 
+		 * from the drop down list. This turns out to be pretty important as the TextInput field constantly
+		 * gets populated, unexpectedly.. */ 
 		public function set typedText(input:String):void {
+			
+			if (dbg) trace("set typedText("+input+")");
 			_typedText = input;
 			typedTextChanged = true;
 			
@@ -159,6 +175,7 @@ package net.systemeD.controls {
 			selectNextField();
 		}
 
+		/** Finds the next field to send focus to when user is done with this one. */
 		protected function selectNextField():void {
 			if (this.parent.parent is DataGrid) {
 				this.parent.parent.dispatchEvent(new FocusEvent("keyFocusChange",true,true,null,false,9));
@@ -176,6 +193,7 @@ package net.systemeD.controls {
 
 			if (dropdown) {
 				if (typedTextChanged) {
+					if (dbg) trace ("commitProperties: Move cursor from " + cursorPosition + " to " + textInput.selectionBeginIndex);  
 					cursorPosition = textInput.selectionBeginIndex;
 					updateDataProvider();
 
@@ -184,14 +202,15 @@ package net.systemeD.controls {
 						dropdownClosed=true;
 						showDropdown=false;
 						showingDropdown=false;
+						selectedIndex=-1; //correct state when nothing in dropdown is selected
 					} else {
 						// show dropdown
 						showDropdown = true;
-						selectedIndex = 0;
+						selectedIndex = 0; // select first item in dropdown
 					}
 				}
 			} else {
-				selectedIndex=-1
+				selectedIndex=-1 // There is no list of suggestions at all, so don't select anything in it
 			}
 		}
 		
@@ -199,33 +218,60 @@ package net.systemeD.controls {
 								  unscaledHeight:Number):void {
 
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
+			if (dbg) trace ("updateDisplayList. textInput.text: " + textInput.text + 
+			"; typedText: " + typedText + 
+			"; selectedLabel: " + selectedLabel + 
+			"; cursorPosition: " + cursorPosition);
+			if (dbg) trace("   Showing/show/_dropdown: " + showingDropdown+ ", " + showDropdown +","+ dropdown + ". selectedIndex: " + selectedIndex + ". typedTextChanged: " + typedTextChanged);
 			
 			if(selectedIndex == -1 && typedTextChanged && textInput.text!=typedText) { 
 				// not in menu
-				// trace("not in menu"); trace("- restoring to "+typedText);
+				if (dbg) { trace("   not in menu"); trace("- restoring to "+typedText); }
 				textInput.text = typedText;
-				textInput.setSelection(textInput.text.length, textInput.text.length);
+			    textInput.setSelection(cursorPosition, cursorPosition);
+				if (dbg) trace("   setSelection: textinput.text.length:" + textInput.text.length);
+				//textInput.setSelection(textInput.text.length, textInput.text.length);
+				if (dbg) trace ("   Option 1");
 			} else if (dropdown && typedTextChanged && textInput.text!=typedText) {
-				// in menu, but user has typed
-				// trace("in menu, but user has typed"); trace("- restoring to "+typedText);
+				// "in menu, but user has typed"
+				
+				if (dbg) { trace("   in menu, but user has typed"); trace("- restoring to "+typedText); }
 				textInput.text = typedText;
 				textInput.setSelection(cursorPosition, cursorPosition);
+                if (dbg) trace ("   Option 2");				
 			} else if (showingDropdown && textInput.text==selectedLabel) {
-				// force update if Flex has fucked up again
-				// trace("should force update");
+				// "force update if Flex has fucked up again"
+				
+				// this option happens when user types the last character of an autocomplete match
+				// the whole string also gets selected, which is a usability issue (makes it very hard 
+				// to keep typing, eg "motorway_link" 
+				if (dbg) trace("   should force update");
 				textInput.htmlText=selectedLabel;
 				textInput.validateNow();
+                if (dbg) trace ("   Option 3");				
 			} else if (showingDropdown && textInput.text!=selectedLabel && !typedTextChanged) {
 				// in menu, user has navigated with cursor keys/mouse
-				// trace("in menu, user has navigated with cursor keys/mouse");
+				if (dbg) trace("   in menu, user has navigated with cursor keys/mouse");
 				textInput.text = selectedLabel;
 				textInput.setSelection(0, textInput.text.length);
+                if (dbg) trace ("   Option 4");				
 			} else if (textInput.text!="") {
+				// This is the most common situation when user is typing and it's not matching. But
+				// it's very complicated to predict when this one happens or when option 1. For example,
+				// sometimes you type 4 characters (Option 5) then suddenly the next character is option 1.
+				if (dbg) trace ("   Option 5, cursorPosition:" + cursorPosition);
 				textInput.setSelection(cursorPosition, cursorPosition);
-			}
+                 				
+			} else // occurs while keyboarding up and down menu, maybe also when exiting menu.
+			if (dbg) trace ("   Option else");
+            if (dbg) trace ("Result. textInput.text: " + textInput.text + 
+            "; typedText: " + typedText + 
+            "; selectedLabel: " + selectedLabel + 
+            "; cursorPosition " + cursorPosition + "\n\n\n");
 
 			if (showDropdown && !dropdown.visible) {
 				// controls the open duration of the dropdown
+				if (dbg) trace("   (Now open the drop down.)");
 				super.open();
 				showDropdown = false;
 				showingDropdown = true;
@@ -249,6 +295,10 @@ package net.systemeD.controls {
 
 			} else if (event.keyCode == Keyboard.ENTER) {
 				// ENTER pressed, so select the topmost item (if it exists)
+				// there is a usability issue here if the user is trying to type only part of an entry
+				// and there is only one matching item in the dropdown. (eg, they want to type 'foo' but
+				// there is 'footway'). It's not a killer because you can still escape by clicking somewhere
+				// else, but it's unsettling. Not too common, fortunately.
 				if (selectedIndex>-1) { textInput.text = selectedLabel; }
 				dropdownClosed=true;
 				
@@ -257,6 +307,7 @@ package net.systemeD.controls {
 				selectNextField();
 
 			} else if (event.ctrlKey && event.keyCode == Keyboard.UP) {
+				// Let the user manually shut the dropdown. fixme: cursor jumps
 				dropdownClosed=true;
 			}
 		
@@ -273,7 +324,9 @@ package net.systemeD.controls {
 		}
 
 		override protected function textInput_changeHandler(event:Event):void {
+			if (dbg) trace("textInput_changeHandler, text was: " + text);
 			super.textInput_changeHandler(event);
+			if (dbg) trace("textInput_changeHandler, text is now: " + text + ". Cursor: " + cursorPosition);
 			typedText = text;
 			typedTextChanged = true;
 		}
@@ -284,8 +337,10 @@ package net.systemeD.controls {
 		}
 
 		override public function set selectedIndex(value:int):void {
+			if (dbg) trace ("setSelectedIndex to " + value + ".");
 			var prevtext:String=text;
 			super.selectedIndex=value;
+			if (dbg) trace ("   This made " + prevtext + " become " + text + " (now back again).");
 			text=prevtext;
 		}
 
@@ -334,8 +389,9 @@ package net.systemeD.controls {
 			return _filterFunction;
 		}
 
+		/** An empty filterFunction is allowed but not a null filterFunction*/
 		public function set filterFunction(value:Function):void {
-			//An empty filterFunction is allowed but not a null filterFunction
+			
 			if(value!=null) {
 				_filterFunction = value;
 				filterFunctionChanged = true;
@@ -361,8 +417,9 @@ package net.systemeD.controls {
 			return flag;
 		}
 
-		// Updates the dataProvider used for showing suggestions
+		/** Updates the dataProvider used for showing suggestions*/
 		private function updateDataProvider():void {
+			if (dbg) trace("updateDataProvider");
 			dataProvider = tempCollection;
 			collection.filterFunction = templateFilterFunction;
 			collection.refresh();
