@@ -815,7 +815,7 @@ Quick documentation:
     <icon image="features/paths__footway.png">
       ${name} <i>${ref}</i>
     </icon>
-
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dfootway</help>
     <line/>
     <tag k="highway" v="footway"/>
     <inputSet ref="path"/>
@@ -827,12 +827,26 @@ Quick documentation:
     <icon image="features/paths__bike.png">
       ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
-
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dcycleway</help>
     <line/>
     <tag k="highway" v="cycleway"/>
     <inputSet ref="path"/>
     <inputSet ref="common"/>
   </feature>
+
+  <feature name="Generic path">
+    <category>paths</category>
+    <icon >
+      ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dpath</help>
+
+    <line/>
+    <tag k="highway" v="path"/>
+    <inputSet ref="path"/>
+    <inputSet ref="common"/>
+  </feature>
+
 
   <feature name="Pedestrian street">
     <category>paths</category>
