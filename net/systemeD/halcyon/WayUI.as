@@ -264,7 +264,7 @@ package net.systemeD.halcyon {
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
 			for each (var m:Relation in multis) {
-				inners=inners.concat(m.findMembersByRole('inner'));
+				inners=inners.concat(m.findMembersByRole('inner',Way));
 			}
 
 			for each (var sublayer:Number in styleList.sublayers) {

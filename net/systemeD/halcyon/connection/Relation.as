@@ -60,10 +60,10 @@ package net.systemeD.halcyon.connection {
 			markDirty();
         }
 
-		public function findMembersByRole(role:String):Array {
+		public function findMembersByRole(role:String, entityType:Class=null):Array {
 			var a:Array=[];
             for (var index:uint = 0; index < members.length; index++) {
-                if (members[index].role==role) { a.push(members[index].entity); }
+                if (members[index].role==role && (!entityType || members[index].entity is entityType)) { a.push(members[index].entity); }
             }
 			return a;
 		}
