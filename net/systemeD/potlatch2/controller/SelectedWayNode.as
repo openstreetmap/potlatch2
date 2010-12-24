@@ -37,7 +37,7 @@ package net.systemeD.potlatch2.controller {
             	controller.map.setHighlight(parentWay, { selected: false });
 				controller.map.setHighlight(firstSelected, { selected: false });
 				controller.map.setHighlightOnNodes(parentWay, { selectedway: false });
-				selection = []; parentWay = null;
+				selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
         }
