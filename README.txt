@@ -22,6 +22,9 @@ Many icons used in halcyon/potlatch2 are based on the awesome CC0-licensed SJJB 
 and earlier have this bug: http://bugs.adobe.com/jira/browse/SDK-16705 which is a major issue for the
 tag editors.
 
+If you happen to have Adobe Flex Builder 3/Flash Builder 4, you can create a project and import files into it. 
+See http://wiki.openstreetmap.org/wiki/Potlatch_2/Developer_Documentation for details.
+
 You'll only need OSM Rails port installed on your local machine if you are doing hard-core 
 server-communication coding, but if generally you can use the dev server at api06.dev.openstreetmap.org
 for development and testing.
@@ -31,8 +34,13 @@ for development and testing.
 
 Compiling Potlatch 2:
 
-Before you start, copy the properties template file, and edit the FLEX_HOME variable
+1) Copy the properties template file
   cp build.properties.template build.properties
+  
+2) Edit the FLEX_HOME variable in build.properties  
+ eg, FLEX_HOME=c:/flex_sdk/3.5.0.12683
+ 
+3) ant
 
 The following command will compile potlatch2 in debug configuration
 The result is put at resources/potlatch2.swf
@@ -94,7 +102,11 @@ Running:
 * Flash security model sucks. If you want to use internet resource (e.g. map calls to the dev
   server) the binary must have been served from "teh internets". Run resources/server.rb to launch a local 
   server, then go to http://localhost:3333/potlatch2.html to get started (or if you're already running e.g. 
-  Apache locally, feel free to use that instead.
+  Apache locally, feel free to use that instead.)
+  
+  Alternatively, you can update your global Flash security settings to "always trust files" in your local dev area:
+  http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html
+  Then you can run the swf file directly.
   
 * If you are doing offline development, you will need a rails_port install. You 
   will need to add an OAuth application by going to 
