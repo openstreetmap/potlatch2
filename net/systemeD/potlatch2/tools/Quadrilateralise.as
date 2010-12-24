@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.tools {
   import flash.geom.Point;
   import net.systemeD.halcyon.connection.*;
 
+  /** Tool to transform a closed way by making corners right-angled, if possible. Call the static function quadrilateralise(). */
   public class Quadrilateralise {
     private static const NUM_STEPS:uint = 1000;
     private static const TOLERANCE:Number = 1.0e-8;
@@ -12,26 +13,28 @@ package net.systemeD.potlatch2.tools {
      * Attempts to make all corners of a way right angles. Returns true if it
      * thought it was successful and false if it failed. If it fails it does not
      * modify the way.
+     * @param way Way to be transformed.
+     * @performAction Function that will be passed a CompositeUndoableAction parameter representing the transformation.
      */
     public static function quadrilateralise(way:Way,performAction:Function):Boolean {
       // needs a closed way to work properly.
       if (!way.isArea()) {
-	return false;
+        return false;
       }
 
       var functor:Quadrilateralise = new Quadrilateralise(way,performAction);
       var score:Number = functor.goodness;
       for (var i:uint = 0; i < NUM_STEPS; ++i) {
-	functor.step();
-	var newScore:Number = functor.goodness;
-	if (newScore > score) {
-	  trace("Quadrilateralise blew up! " + newScore + " > " + score);
-	  return false;
-	}
-	score = newScore;
-	if (score < TOLERANCE) {
-	  break;
-	}
+        functor.step();
+        var newScore:Number = functor.goodness;
+        if (newScore > score) {
+          trace("Quadrilateralise blew up! " + newScore + " > " + score);
+          return false;
+	    }
+        score = newScore;
+        if (score < TOLERANCE) {
+        break;
+        }
       }
 
       functor.updateWay();
@@ -42,7 +45,7 @@ package net.systemeD.potlatch2.tools {
     private var points:Array;
     private var performAction:Function;
     
-    // i wanted this to be private, but AS3 doesn't allow that. so please don't use it outside this package!
+    /** Private function that had to be declared public - do not call from outside this package. */
     public function Quadrilateralise(way_:Way, performAction_:Function) {
       way = way_;
       performAction = performAction_;

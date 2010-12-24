@@ -5,10 +5,17 @@ package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.MainUndoStack;
 
+	/** Tool to reduce the number of nodes in a way by filtering out the "least important" ones, using the Douglas-Peucker algorithm. */
 	public class Simplify {
 
 		private static const TOLERANCE:Number=0.00005;
 
+		/** Carries out simplification on a way, adding an entry to global undo stack.
+		 * @param way Way to be simplified.
+		 * @param map Map it belongs to, for computing offscreen-ness.
+		 * @param keepOffscreen If true, don't delete any nodes that are not currently visible. 
+		 * */ 
+		  
 		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean):void {
 			if (way.length<3) { return; }
 

@@ -2,6 +2,10 @@ package net.systemeD.potlatch2.tools {
 
     import net.systemeD.halcyon.connection.*;
 
+	  /** Tool to create a parallel copy of an existing way. First call the constructor Parallelise() passing it the 
+	  * way that will be parallelised. This performs some initialisation. Then call draw(), passing it an offset,
+	  * as many times as you like. Each time it recomputes the parallel way. There is no finalisation. 
+	  * <p>This is intended to work with the SelectedParallelWay controller state.</p>*/
 	public class Parallelise {
 		private var originalWay:Way;
 		public var parallelWay:Way;
@@ -11,6 +15,9 @@ package net.systemeD.potlatch2.tools {
 		private var df:Array=[];
 		private var nodes:Object={};
 		
+		/** Initialises parallelisation process, adding an entry to global undo stack.
+		 * @param way The way to be duplicated. 
+		 * */
 		public function Parallelise(way:Way) {
 			var a:Number, b:Number, h:Number, i:uint, j:uint, k:int;
 			connection  = Connection.getConnection();
@@ -44,6 +51,8 @@ package net.systemeD.potlatch2.tools {
 
 		}
 
+		/** Compute the shape of the parallel way, implicitly causing it to be drawn if onscreen. Closed ways are ok. 
+		 * @param offset How far, in lon/latp units, should the parallel way be. Can be negative. */
 		public function draw(offset:Number):void {
 			var x:Number, y:Number;
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Draw parallel way");
@@ -81,6 +90,7 @@ package net.systemeD.potlatch2.tools {
 			undo.doAction();		// don't actually add it to the undo stack, just do it!
 		}
 		
+		/** Compute determinant. */
 		private function det(a:Number,b:Number,c:Number,d:Number):Number { return a*d-b*c; }
 
 	}

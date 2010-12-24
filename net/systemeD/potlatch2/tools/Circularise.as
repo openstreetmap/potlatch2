@@ -5,8 +5,14 @@ package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.MainUndoStack;
 
+	/** Tool to transform a closed way of at least 3 distinct points into a circular shape, inserting more nodes as necessary. Call only the static function circularise(). */
 	public class Circularise {
 
+		/** Carries out the circularisation of a way.
+		 * @param way The way to be made round: must be closed, must have at least 3 distinct points.
+		 * @param map The map that the way belongs to.
+		 * @param performAction A function that will be passed a CompositeUndoableAction representing the transformation. In other words, a function that will push the result onto an undo stack.
+		 * */ 
 		public static function circularise(way:Way,map:Map,performAction:Function):void {
 			if (way.length<4) { return; }
 

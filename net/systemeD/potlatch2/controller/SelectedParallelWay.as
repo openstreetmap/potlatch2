@@ -6,12 +6,15 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.potlatch2.tools.Parallelise;
 	import net.systemeD.halcyon.Globals;
 
+    /** The state midway during the use of the "parallelise tool", where a parallel way has been created but is stuck to the 
+    * mouse cursor, allowing the user to choose how far from the original way it should go. This transforms it in the process. */
     public class SelectedParallelWay extends SelectedWay {
 		private var startlon:Number;
 		private var startlatp:Number;
 		private var parallelise:Parallelise;
 		private var originalWay:Way;
 
+        /** Initialises by parallelising the originalWay. */
         public function SelectedParallelWay(originalWay:Way) {
 			this.originalWay = originalWay;
 			parallelise = new Parallelise(originalWay);
@@ -29,6 +32,7 @@ package net.systemeD.potlatch2.controller {
 			return this;
         }
 
+		/** Cancel parallel way creation if ESC pressed. */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==27) {			// Escape
 				Way(firstSelected).remove(MainUndoStack.getGlobalStack().addAction);
@@ -70,6 +74,7 @@ package net.systemeD.potlatch2.controller {
 			return furthdist*furthsgn;
 		}
 
+		/** Creates the WayUI for the parallel way. */
 		override public function enterState():void {
 			selection=[parallelise.parallelWay];
 			controller.map.paint.createWayUI(firstSelected as Way);
@@ -77,6 +82,7 @@ package net.systemeD.potlatch2.controller {
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
 			Globals.vars.root.addDebug("**** -> "+this);
         }
+		/** Unselects. */
 		override public function exitState(newState:ControllerState):void {
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
