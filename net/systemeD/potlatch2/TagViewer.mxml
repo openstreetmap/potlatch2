@@ -416,6 +416,11 @@
 		}
 	}
 
+	public function selectAdvancedPanel():void {
+		checkAdvanced();
+		stack.selectedChild=advancedContainer;
+	}
+
       private function checkAdvanced():void {
           if ( selectedEntity != null )
              setupAdvanced(selectedEntity);
