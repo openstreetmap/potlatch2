@@ -983,7 +983,7 @@ Quick documentation:
 
   <feature name="Forest">
     <category>natural</category>
-    <icon image="icons/natural_blank.png"/>
+    <icon image="/features/pois/landuse_coniferous.n.24.png"/>
 
     <area/>
     <tag k="landuse" v="forest"/>
@@ -1197,6 +1197,8 @@ Quick documentation:
 
   <feature name="Slipway">
     <category>water</category>
+    <!-- icon from http://www.clker.com/clipart-map-symbols-boat-launch-white.html, feel free to (re)move this notice -->
+    <icon image="features/pois/boat-launch-24.png"/>
     <point />
     <tag k="leisure" v="slipway"/>
     <inputSet ref="names"/>
@@ -1367,7 +1369,7 @@ Quick documentation:
 
   <feature name="Bus station">
     <category>transport</category>
-    <icon image="icons/transport_blank.png">
+    <icon image="/features/pois/transport_bus_station.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1581,20 +1583,6 @@ Quick documentation:
   </feature>
 
 
-  <feature name="Attraction">
-    <category>buildings</category>
-    <icon image="features/pois/tourist_attraction.n.24.png">
-      <b>${name} ${addr:housename}</b><br/>
-      ${addr:housenumber} ${addr:street} ${addr:postcode}
-    </icon>
-
-    <area/>
-    <tag k="tourism" v="attraction"/>
-    <inputSet ref="names"/>
-    <inputSet ref="buildingAddress"/>
-    <inputSet ref="common"/>
-  </feature>
-
 
   <feature name="Museum">
     <category>buildings</category>
@@ -1659,7 +1647,7 @@ Quick documentation:
 
   <feature name="Sports centre">
     <category>buildings</category>
-    <icon >
+    <icon image="features/pois/sport_leisure_centre.n.24.png">
       <b>${name} ${addr:housename}</b><br/>
       ${addr:housenumber} ${addr:street} ${addr:postcode}
     </icon>
@@ -1810,7 +1798,7 @@ Quick documentation:
     <category>sport</category>
     <area/>
     <point/>
-    <icon image="features/pois/sport_leisure_centre.n.24.png">
+    <icon image="features/pois/amenity_playground.n.24.png">
       <b>${name}</b>
     </icon>
     <tag k="leisure" v="playground"/>
@@ -2110,7 +2098,9 @@ Quick documentation:
 
   <feature name="Library">
     <category>amenity</category>
-    <icon/>
+    <icon image="features/pois/amenity_library.n.24.png">
+      ${name}
+    </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dlibrary</help>
     <point/>
     <area/>
@@ -2214,7 +2204,7 @@ Quick documentation:
   <feature name="Kindergarten">
     <category>amenity</category>
     <category>buildings</category>
-    <icon >
+    <icon image="features/pois/education_nursery3.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dkindergarten</help>
@@ -2255,6 +2245,9 @@ Quick documentation:
   <feature name="Post Office">
     <category>amenity</category>
     <category>buildings</category>
+    <icon image="features/pois/amenity_post_office.n.24.png">
+      ${name}
+    </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity=post_office</help>
     <point/>
     <area/>
@@ -2267,7 +2260,7 @@ Quick documentation:
 
   <feature name="Trash/rubbish bin">
     <category>amenity</category>
-    <icon>
+    <icon image="features/pois/amenity_waste_bin.n.24.png">
       ${ref}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity=waste_basket</help>
@@ -2279,6 +2272,9 @@ Quick documentation:
 
   <feature name="Toilets">
     <category>amenity</category>
+    <icon image="features/pois/amenity_toilets.n.24.png">
+      ${ref}
+    </icon>
     <point/>
     <tag k="amenity" v="toilets"/>
     <inputSet ref="common"/>
@@ -2288,6 +2284,9 @@ Quick documentation:
     <category>amenity</category>
     <category>water</category>
     <category>foodanddrink</category>
+    <icon image="features/pois/food_drinkingtap.n.24.png">
+      ${ref}
+    </icon>
     <point/>
     <tag k="amenity" v="drinking_water"/>
     <inputSet ref="common"/>
@@ -2295,10 +2294,12 @@ Quick documentation:
 
   <feature name="Shelter">
     <category>amenity</category>
-    <icon>A simple mountain shelter.</icon>
+    <icon image="features/pois/accommodation_shelter2.n.24.png">
+      ${name}
+    </icon>    
     <point/>
     <area/>
-    <tag k="amenity" v="shelterl"/>
+    <tag k="amenity" v="shelter"/>
     <inputset ref="names"/>
     <inputSet ref="common"/>
   </feature>
@@ -2306,6 +2307,8 @@ Quick documentation:
 
   <feature name="Barbecue">
     <category>amenity</category>
+    <icon image="features/pois/tourist_picnic.n.24.png"/>
+    <!-- specific icon needed -->
     <point/>
     <tag k="amenity" v="bbq"/>
     <inputSet ref="common"/>
@@ -2314,6 +2317,7 @@ Quick documentation:
   <feature name="Hunting stand">
     <category>amenity</category>
     <category>sport</category>
+    <!-- icon needed -->
     <point/>
     <tag k="amenity" v="hunting_stand"/>
     <inputSet ref="common"/>
@@ -2323,6 +2327,7 @@ Quick documentation:
 
   <feature name="Park bench">
     <category>amenity</category>
+    <icon image="features/pois/amenity_bench.n.24.png" />
     <point/>
     <tag k="amenity" v="bench"/>
     <inputSet ref="common"/>
@@ -2330,6 +2335,7 @@ Quick documentation:
 
   <feature name="Public telephone">
     <category>amenity</category>
+    <icon image="features/pois/amenity_telephone.n.24.png" />
     <point/>
     <tag k="amenity" v="telephone"/>
     <inputSet ref="common"/>
@@ -2337,6 +2343,8 @@ Quick documentation:
 
   <feature name="Emergency phone">
     <category>amenity</category>
+    <icon image="features/pois/emergency-telephone-24.png" />
+    <!-- icon from http://www.clker.com/clipart-emergency-telephone-blue.html, feel free to (re)move this notice -->
     <point/>
     <tag k="amenity" v="emergency_phone"/>
     <inputSet ref="common"/>
@@ -2347,6 +2355,9 @@ Quick documentation:
   <feature name="Swimming pool">
     <category>amenity</category>
     <category>sport</category>
+    <icon image="features/pois/sport_swimming_outdoor.n.24.png">
+      ${name}
+    </icon>
     <point/>
     <area/>
     <tag k="amenity" v="swimming_pool"/>
@@ -2357,7 +2368,9 @@ Quick documentation:
 
   <feature name="Fountain">
     <category>amenity</category>
-    <icon>A decorative fountain.</icon>
+    <icon image="features/pois/amenity_fountain2.n.24.png">
+    ${name}
+    </icon>
     <point/>
     <tag k="amenity" v="fountain"/>
     <inputSet ref="common"/>
@@ -2368,6 +2381,7 @@ Quick documentation:
     <category>amenity</category>
     <category>foodanddrink</category>
     <icon>A vending machine.</icon>
+    <!-- icon needed -->
     <point/>
     <tag k="amenity" v="vending_machine"/>
     <inputSet ref="common"/>
@@ -2473,20 +2487,19 @@ Quick documentation:
 
 
   <!-- ========= Tourism ========= -->
-
-  <!-- This is a very popular tag, can't be left out -->
   <feature name="Attraction">
     <category>tourism</category>
-    <icon image="icons/tourist_blank.png"/>
-    <point/>
+    <icon image="features/pois/tourist_attraction.n.24.png">
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
     <area/>
-    <inputSet ref="simpleName"/>
     <tag k="tourism" v="attraction"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
     <inputSet ref="common"/>
   </feature>
-
-
-
 
   <feature name="Museum">
     <category>tourism</category>
@@ -2611,20 +2624,19 @@ Quick documentation:
     <category>tourism</category>
     <point/>
     <area/>
-    <inputSet ref="simpleName"/>
     <icon image="features/pois/tourist_zoo.n.24.png"/>
     <tag k="tourism" v="zoo"/>
+    <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
   </feature>
 
 
-  <!-- icons needed-->
   <feature name="Information">
     <category>tourism</category>
     <icon image="features/pois/amenity_information.n.24.png"/>
     <point/>
-    <inputSet ref="simpleName"/>
     <tag k="tourism" v="information"/>
+    <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
   </feature>
 
@@ -3500,6 +3512,7 @@ Quick documentation:
   <feature name="Administrative Boundary">
     <category>places</category>
     <line/>
+    <icon image="features/pois/poi_boundary_administrative.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:boundary=administrative</help>
     <tag k="boundary" v="administrative"/>
     <input type="number" minimum="2" maximum="10" presence="always" name="Admin Level" key="admin_level" description="The Administrative level" />
