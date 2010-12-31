@@ -40,19 +40,35 @@
         }
         
         public function updateEntityAndClose():void {
-          var relation:Relation = conn.getRelation(relationSelector.selectedItem.relId);
-          relation.appendMember(new RelationMember(entity, ''), MainUndoStack.getGlobalStack().addAction);
-          PopUpManager.removePopUp(this);
+			var relation:Relation = conn.getRelation(relationSelector.selectedItem.relId);
+			if (entity is EntityCollection) {
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Add to relation");
+				for each (var e:Entity in EntityCollection(entity).entities) {
+					if (relation.findEntityMemberIndex(e)==-1) {
+						relation.appendMember(new RelationMember(e, ''), undo.push);
+					}
+				}
+				MainUndoStack.getGlobalStack().addAction(undo);
+			} else {
+				relation.appendMember(new RelationMember(entity, ''), MainUndoStack.getGlobalStack().addAction);
+			}
+			PopUpManager.removePopUp(this);
         }
         
         public function closeAndNewRelation():void {
-          var relation:Relation = conn.createRelation(tags, [new RelationMember(entity, '')],
-              MainUndoStack.getGlobalStack().addAction)
-          PopUpManager.removePopUp(this);
-          var panel:RelationEditorPanel = RelationEditorPanel(
-              PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-          panel.setRelation(relation);
-          PopUpManager.centerPopUp(panel);
+			var members:Array=[];
+			if (entity is EntityCollection) {
+				for each (var e:Entity in EntityCollection(entity).entities) {
+					members.push(new RelationMember(e, ''));
+				}
+			} else members.push(new RelationMember(entity, ''));
+			var relation:Relation = conn.createRelation(tags, members, MainUndoStack.getGlobalStack().addAction);
+
+			PopUpManager.removePopUp(this);
+			var panel:RelationEditorPanel = RelationEditorPanel(
+			    PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+			panel.setRelation(relation);
+			PopUpManager.centerPopUp(panel);
         }
         
     ]]></mx:Script> 

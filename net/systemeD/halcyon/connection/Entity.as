@@ -300,6 +300,22 @@ package net.systemeD.halcyon.connection {
             return a;
         }
 
+		public function getRelationMemberships():Array {
+			var memberships:Array = [];
+			for each( var rel:Relation in parentRelations ) {
+				for each( var memberIndex:int in rel.findEntityMemberIndexes(this)) {
+					memberships.push({
+						relation: rel,
+						id: rel.id,
+						index: memberIndex,
+						role: rel.getMember(memberIndex).role,
+						description: rel.getDescription(),
+						id_idx: rel.id + "/"+memberIndex });
+				}
+			}
+			return memberships;
+		}
+
         /** How many parents does this entity have that satisfy the "within" constraint? */
         public function countParentObjects(within:Object):uint {
             var count:uint=0;
