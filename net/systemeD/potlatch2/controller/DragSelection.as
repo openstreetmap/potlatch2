@@ -7,8 +7,8 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Globals;
 
-    /** The state of moving a way around with the mouse. */
-    public class DragWay extends ControllerState {
+    /** The state of moving a selection around with the mouse. */
+    public class DragSelection extends ControllerState {
         private var isDraggingStarted:Boolean = false;
 		private var enterTime:Number;
 
@@ -25,8 +25,8 @@ package net.systemeD.potlatch2.controller {
 		private const DRAGGING:uint=2;
         
         /** Start the drag by recording the dragged way, where it started, and when. */
-        public function DragWay(way:Way, event:MouseEvent) {
-            selection = [way];
+        public function DragSelection(sel:Array, event:MouseEvent) {
+            selection = sel.concat();
             downX = event.localX;
             downY = event.localY;
 			enterTime = (new Date()).getTime();
@@ -36,10 +36,22 @@ package net.systemeD.potlatch2.controller {
        override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
             if (event.type==MouseEvent.MOUSE_UP) {
                 if (dragstate==DRAGGING) { 
-                  MainUndoStack.getGlobalStack().addAction(
-                          new MoveWayAction(firstSelected as Way, downX, downY, event.localX, event.localY, controller.map)); 
+					var undo:CompositeUndoableAction = new CompositeUndoableAction("Move items");
+					var lonDelta:Number = controller.map.coord2lon(downX)-controller.map.coord2lon(event.localX);
+					var latDelta:Number = controller.map.coord2lat(downY)-controller.map.coord2lat(event.localY);
+					var moved:Object = {};
+					for each (var entity:Entity in selection) {
+						if (entity is Node) {
+							var node:Node=Node(entity);
+							node.setLatLon(node.lat-latDelta, node.lon-lonDelta, undo.push);
+							moved[node.id]=true;
+						} else if (entity is Way) {
+							undo.push(new MoveWayAction(Way(entity), latDelta, lonDelta, moved));
+						}
+					}
+					MainUndoStack.getGlobalStack().addAction(undo);
                 }
-                return new SelectedWay(firstSelected as Way, new Point(event.stageX,event.stageY));
+				return controller.findStateForSelection(selection);
 
 			} else if ( event.type == MouseEvent.MOUSE_MOVE) {
 				// dragging
@@ -62,14 +74,18 @@ package net.systemeD.potlatch2.controller {
 		/** Abort dragging if ESC pressed. */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==Keyboard.ESCAPE) {
-				firstSelected.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, firstSelected as Way, 0, 0));
-				return new SelectedWay(firstSelected as Way);
+				for each (var entity:Entity in selection) {
+					entity.dispatchEvent(new EntityDraggedEvent(Connection.ENTITY_DRAGGED, entity, 0, 0));
+				}
+				return controller.findStateForSelection(selection);
 			}
 			return this;
 		}
 
         private function dragTo(event:MouseEvent):ControllerState {
-			firstSelected.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, firstSelected as Way, event.localX-downX, event.localY-downY));
+			for each (var entity:Entity in selection) {
+				entity.dispatchEvent(new EntityDraggedEvent(Connection.ENTITY_DRAGGED, entity, event.localX-downX, event.localY-downY));
+			}
             return this;
         }
         
@@ -77,20 +93,24 @@ package net.systemeD.potlatch2.controller {
 			dragstate=NOT_MOVED;
 		}
 
-        /** Highlight the dragged way. */
+        /** Highlight the dragged selection. */
         override public function enterState():void {
-            controller.map.setHighlight(firstSelected, { selected: true } );
+			for each (var entity:Entity in selection) {
+				controller.map.setHighlight(entity, { selected: true });
+			}
 			Globals.vars.root.addDebug("**** -> "+this);
         }
         
-        /** Un-highlight the dragged way. */
+        /** Un-highlight the dragged selection. */
         override public function exitState(newState:ControllerState):void {
-            controller.map.setHighlight(firstSelected, { selected: false } );
+			for each (var entity:Entity in selection) {
+				controller.map.setHighlight(entity, { selected: false });
+			}
 			Globals.vars.root.addDebug("**** <- "+this);
         }
-        /** "DragWay" */
+        /** "DragSelection" */
         override public function toString():String {
-            return "DragWay";
+            return "DragSelection";
         }
 
 

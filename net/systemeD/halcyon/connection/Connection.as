@@ -74,7 +74,7 @@ package net.systemeD.halcyon.connection {
         public static var WAY_NODE_ADDED:String = "way_node_added";
         public static var WAY_NODE_REMOVED:String = "way_node_removed";
         public static var WAY_REORDERED:String = "way_reordered";
-        public static var WAY_DRAGGED:String = "way_dragged";
+        public static var ENTITY_DRAGGED:String = "entity_dragged";
 		public static var NODE_DELETED:String = "node_deleted";
 		public static var WAY_DELETED:String = "way_deleted";
 		public static var RELATION_DELETED:String = "relation_deleted";

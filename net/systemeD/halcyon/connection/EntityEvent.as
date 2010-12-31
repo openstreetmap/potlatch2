@@ -3,7 +3,7 @@ package net.systemeD.halcyon.connection {
     import flash.events.Event;
 
     public class EntityEvent extends Event {
-        private var item:Entity;
+        protected var item:Entity;
 
         public function EntityEvent(type:String, item:Entity) {
             super(type);

@@ -92,13 +92,7 @@ package net.systemeD.potlatch2.controller {
 			}
 
 			if ( event.type == MouseEvent.MOUSE_DOWN ) {
-				if ( entity is Way ) {
-					// click way
-					return new DragWay(focus as Way, event);
-				} else if ( focus is Node ) {
-					// select POI node
-					return new DragPOINode(entity as Node,event,false);
-				} else if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
+				if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
 					// select node within this way
                 	return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
 				} else if ( entity is Node && focus is Way ) {
@@ -107,6 +101,10 @@ package net.systemeD.potlatch2.controller {
 				} else if ( controller.keyDown(Keyboard.SPACE) ) {
 					// drag the background imagery to compensate for poor alignment
 					return new DragBackground(event);
+				} else if (entity && selection.indexOf(entity)>-1) {
+					return new DragSelection(selection, event);
+				} else if (entity) {
+					return new DragSelection([entity], event);
 				}
             } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && this is SelectedMarker) {
                 // this is identical to the below, but needed for unselecting markers on vector background layers.

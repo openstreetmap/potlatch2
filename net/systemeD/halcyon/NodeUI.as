@@ -38,6 +38,7 @@ package net.systemeD.halcyon {
 			}
 			entity.addEventListener(Connection.NODE_MOVED, nodeMoved);
             entity.addEventListener(Connection.NODE_ALTERED, nodeAltered);
+            entity.addEventListener(Connection.ENTITY_DRAGGED, nodeDragged);
             attachRelationListeners();
 			redraw();
 		}
@@ -46,6 +47,7 @@ package net.systemeD.halcyon {
 			removeGenericEventListeners();
 			entity.removeEventListener(Connection.NODE_MOVED, nodeMoved);
             entity.removeEventListener(Connection.NODE_ALTERED, nodeAltered);
+            entity.removeEventListener(Connection.ENTITY_DRAGGED, nodeDragged);
 		}
 
 		/** Respond to movement event. */
@@ -56,6 +58,10 @@ package net.systemeD.halcyon {
         private function nodeAltered(event:Event):void {
             redraw();
         }
+
+		private function nodeDragged(event:EntityDraggedEvent):void {
+			updatePosition(event.xDelta,event.yDelta);
+		}
 
 		/** Update settings then draw node. */
 		override public function doRedraw():Boolean {
@@ -185,9 +191,11 @@ package net.systemeD.halcyon {
 			updatePosition();
 		}
 
-		private function updatePosition():void {
+		private function updatePosition(xDelta:Number=0,yDelta:Number=0):void {
 			if (!loaded) { return; }
 
+			var baseX:Number=paint.map.lon2coord(Node(entity).lon);
+			var baseY:Number=paint.map.latp2coord(Node(entity).latp);
 			for (var i:uint=0; i<sprites.length; i++) {
 				var d:DisplayObject=sprites[i];
 				d.x=0; d.y=0; d.rotation=0;
@@ -195,7 +203,7 @@ package net.systemeD.halcyon {
 				var m:Matrix=new Matrix();
 				m.translate(-d.width/2,-d.height/2);
 				m.rotate(rotation);
-				m.translate(paint.map.lon2coord(Node(entity).lon),paint.map.latp2coord(Node(entity).latp));
+				m.translate(baseX+xDelta,baseY+yDelta);
 				d.transform.matrix=m;
 			}
 		}

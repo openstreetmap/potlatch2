@@ -42,7 +42,7 @@ package net.systemeD.halcyon {
             entity.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             entity.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
             entity.addEventListener(Connection.WAY_REORDERED, wayReordered);
-            entity.addEventListener(Connection.WAY_DRAGGED, wayDragged);
+            entity.addEventListener(Connection.ENTITY_DRAGGED, wayDragged);
             attachNodeListeners();
             attachRelationListeners();
             recalculate();
@@ -55,7 +55,7 @@ package net.systemeD.halcyon {
             entity.removeEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
             entity.removeEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
             entity.removeEventListener(Connection.WAY_REORDERED, wayReordered);
-            entity.removeEventListener(Connection.WAY_DRAGGED, wayDragged);
+            entity.removeEventListener(Connection.ENTITY_DRAGGED, wayDragged);
             for (var i:uint = 0; i < Way(entity).length; i++ ) {
                 Way(entity).getNode(i).removeEventListener(Connection.NODE_MOVED, nodeMoved);
             }
@@ -96,7 +96,7 @@ package net.systemeD.halcyon {
             redraw();
 			redrawMultis();
         }
-		private function wayDragged(event:WayDraggedEvent):void {
+		private function wayDragged(event:EntityDraggedEvent):void {
 			offsetSprites(event.xDelta,event.yDelta);
 		}
 

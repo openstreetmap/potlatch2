@@ -6,28 +6,21 @@ package net.systemeD.halcyon.connection.actions {
     public class MoveWayAction extends CompositeUndoableAction {
     
         private var way:Way;
-        private var downX:Number;
-        private var downY:Number;
-        private var x:Number;
-        private var y:Number;
-        private var map:Map;
+        private var lonDelta:Number;
+        private var latDelta:Number;
+		private var moved:Object;
     
-        public function MoveWayAction(way:Way, downX:Number, downY:Number, x:Number, y:Number, map:Map) {
+        public function MoveWayAction(way:Way, latDelta:Number, lonDelta:Number, moved:Object) {
             super("Drag way "+way.id);
             this.way = way;
-            this.downX = downX;
-            this.downY = downY;
-            this.x = x;
-            this.y = y;
-            this.map = map;
+            this.lonDelta = lonDelta;
+            this.latDelta = latDelta;
+			this.moved = moved;
         }
     
         public override function doAction():uint {
-            var lonDelta:Number = map.coord2lon(downX)-map.coord2lon(x);
-            var latDelta:Number = map.coord2lat(downY)-map.coord2lat(y);
-            var moved:Object = {};
             way.suspend();
-            way.dispatchEvent(new WayDraggedEvent(Connection.WAY_DRAGGED, way, 0, 0));
+            way.dispatchEvent(new EntityDraggedEvent(Connection.ENTITY_DRAGGED, way, 0, 0));
             for (var i:uint=0; i<way.length; i++) {
                 var n:Node=way.getNode(i);
                 if (!moved[n.id]) {
