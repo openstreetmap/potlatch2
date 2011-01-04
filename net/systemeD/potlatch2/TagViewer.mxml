@@ -76,7 +76,7 @@
 		<potlatch2:TagGrid id="advancedTagGrid" width="100%" height="75%" />
 
         <mx:HBox horizontalAlign="right" width="100%">
-          <mx:LinkButton label="Delete" click="advancedTagGrid.removeTag()" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
+          <mx:LinkButton label="Delete" click="advancedTagGrid.removeTag()" id="advancedDeleteButton" enabled="{advancedTagGrid.selectedItem != null? true : false}"/>
           <mx:LinkButton label="Add" click="advancedTagGrid.addNewTag()" id="advancedAddButton"/>
         </mx:HBox>
 
@@ -478,7 +478,8 @@
       private function setupAdvanced(entity:Entity):void {
 		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
 		advancedTagGrid.init(entity);
-        advancedAddButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent);
+        advancedAddButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent, false, 0, true);
+        advancedDeleteButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent, false, 0, true);
 
 		if ( entity == null ) {
 			advancedID.htmlText = "";
