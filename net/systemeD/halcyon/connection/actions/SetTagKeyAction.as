@@ -5,6 +5,7 @@ package net.systemeD.halcyon.connection.actions {
     public class SetTagKeyAction extends UndoableEntityAction {
         private var oldKey:String;
         private var newKey:String;
+        private var oldValue:String;
         
         public function SetTagKeyAction(entity:Entity, oldKey:String, newKey:String) {
             super(entity, "Rename tag "+oldKey+"->"+newKey);
@@ -14,12 +15,18 @@ package net.systemeD.halcyon.connection.actions {
             
         public override function doAction():uint {
             var tags:Object = entity.getTagsHash();
-            var value:String = tags[oldKey];
+            oldValue = tags[oldKey];
+            var newValue:String;
             if ( oldKey != newKey ) {
                 delete tags[oldKey];
-                tags[newKey] = value;
+                if (newKey=='') {
+                    newValue = null;
+                } else {
+                    tags[newKey] = oldValue;
+                    newValue = oldValue;
+				} 
                 markDirty();
-                entity.dispatchEvent(new TagEvent(Connection.TAG_CHANGED, entity, oldKey, newKey, value, value));
+                entity.dispatchEvent(new TagEvent(Connection.TAG_CHANGED, entity, oldKey, newKey, oldValue, newValue));
                 return SUCCESS;
             } else {
                 return NO_CHANGE;
@@ -28,11 +35,10 @@ package net.systemeD.halcyon.connection.actions {
             
         public override function undoAction():uint {
             var tags:Object = entity.getTagsHash();
-            var value:String = tags[newKey];
             delete tags[newKey];
-            tags[oldKey] = value;
+            tags[oldKey] = oldValue;
             markClean();
-            entity.dispatchEvent(new TagEvent(Connection.TAG_CHANGED, entity, newKey, oldKey, value, value));
+            entity.dispatchEvent(new TagEvent(Connection.TAG_CHANGED, entity, newKey, oldKey, oldValue, oldValue));
             
             return SUCCESS;
         }
