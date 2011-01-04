@@ -40,7 +40,8 @@
 		</mx:PopUpMenuButton>
         <mx:Spacer width="100%"/>
         <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
-            enabled="{MainUndoStack.getGlobalStack().canUndo()}"/>
+            enabled="{MainUndoStack.getGlobalStack().canUndo()}"
+            toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
         <mx:Button label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>

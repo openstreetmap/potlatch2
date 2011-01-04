@@ -104,6 +104,13 @@ package net.systemeD.halcyon.connection {
 			}
 		}
 
+        [Bindable(event="new_undo_item")]
+		public function getUndoDescription():String {
+			if (undoActions.length==0) return null;
+			if (undoActions[undoActions.length-1].name) return undoActions[undoActions.length-1].name;
+			return null;
+		}
+
         /**
         * Takes the action most recently undone, does it, and adds it to the undo stack
         */
