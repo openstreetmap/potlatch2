@@ -58,7 +58,12 @@ package net.systemeD.potlatch2 {
             var loader:URLLoader = new URLLoader();
             loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey));
             loader.addEventListener(Event.COMPLETE, parseJSON);
+            loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, handleError);
         }
+
+		private function handleError(event:Event):void {
+		}
 
         private function parseJSON(event:Event):void {
             var result:String = String(event.target.data);
