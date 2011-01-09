@@ -57,7 +57,7 @@ package net.systemeD.potlatch2.mapfeatures {
             _features = [];
             _tags = { relation:{}, way:{}, node:{} };
 
-            for each(var feature:XML in xml.feature) {
+            for each(var feature:XML in xml..feature) {
                 f=new Feature(this,feature);
                 _features.push(f);
                 for each (var tag:Object in f.tags) {
