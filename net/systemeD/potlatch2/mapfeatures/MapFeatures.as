@@ -11,7 +11,7 @@ package net.systemeD.potlatch2.mapfeatures {
 	import mx.controls.DataGrid;
 
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.DebugURLRequest;
+	import net.systemeD.halcyon.NestedXMLLoader;
 
     /** All the information about all available map features that can be selected by the user or matched against entities in the map.
     * The list of map features is populated from an XML file the first time the MapFeatures instance is accessed.
@@ -39,10 +39,9 @@ package net.systemeD.potlatch2.mapfeatures {
 
         /** Loads list of map features from XML file which it first retrieves. */
         protected function loadFeatures():void {
-            var request:DebugURLRequest = new DebugURLRequest("map_features.xml");
-            var loader:URLLoader = new URLLoader();
-            loader.addEventListener(Event.COMPLETE, onFeatureLoad);
-            loader.load(request.request);
+            var xmlLoader:NestedXMLLoader = new NestedXMLLoader();
+            xmlLoader.addEventListener(Event.COMPLETE, onFeatureLoad);
+            xmlLoader.load("map_features.xml");
         }
 
         /** The loaded source XML file itself. */
@@ -54,7 +53,7 @@ package net.systemeD.potlatch2.mapfeatures {
         private function onFeatureLoad(event:Event):void {
 			var f:Feature;
 
-            xml = new XML(URLLoader(event.target).data);
+            xml = NestedXMLLoader(event.target).xml;
             _features = [];
             _tags = { relation:{}, way:{}, node:{} };
 
