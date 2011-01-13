@@ -120,7 +120,7 @@
 			switch (op) {
 				case 'delete':				return true;
 				case 'reverseDirection':	return controller.state.hasSelectedWays();
-				case 'quadrilateralise':	return controller.state.hasSelectedAreas();
+				case 'quadrilateralise':	return (controller.state.hasSelectedAreas() || controller.state.hasSelectedWayNodesInAreas());
 				case 'straighten':			return controller.state.hasSelectedUnclosedWays();
 				case 'circularise':			return controller.state.hasSelectedAreas();
 				case 'split':				return (controller.state is SelectedWayNode);
@@ -226,6 +226,11 @@
 			for each (var way:Way in controller.state.selectedWays) {
 				Quadrilateralise.quadrilateralise(way, undo.push);
 			}
+            for each (var node:Node in controller.state.selectedNodes) {
+                for each (var parentWay:Way in node.parentWays) {
+                  Quadrilateralise.quadrilateralise(parentWay, undo.push);
+                }
+            }
 			MainUndoStack.getGlobalStack().addAction(undo);
 		}
 

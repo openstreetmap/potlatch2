@@ -217,6 +217,14 @@ package net.systemeD.potlatch2.controller {
 			return selectedWays;
 		}
 
+        public function get selectedNodes():Array {
+            var selectedNodes:Array=[];
+            for each (var item:Entity in _selection) {
+                if (item is Node) { selectedNodes.push(item); }
+            }
+            return selectedNodes;
+        }
+
 		public function hasSelectedWays():Boolean {
 			for each (var item:Entity in _selection) {
 				if (item is Way) { return true; }
@@ -237,6 +245,19 @@ package net.systemeD.potlatch2.controller {
 			}
 			return false;
 		}
+
+        /** Determine whether or not any nodes are selected, and if so whether any of them belong to areas. */
+        public function hasSelectedWayNodesInAreas():Boolean {
+            for each (var item:Entity in _selection) {
+                if (item is Node) {
+                    var parentWays:Array = Node(item).parentWays;
+                    for each (var way:Entity in parentWays) {
+                        if (Way(way).isArea()) { return true; }
+                    }
+                }
+            }
+            return false;
+        }
 
 		public function hasAdjoiningWays():Boolean {
 			if (_selection.length<2) { return false; }

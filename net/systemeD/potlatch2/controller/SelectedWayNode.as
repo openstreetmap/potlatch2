@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
 	import flash.geom.Point;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.potlatch2.tools.Quadrilateralise;
     import net.systemeD.halcyon.WayUI;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
@@ -68,6 +69,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 189:					return removeNode();					// '-'
 				case 88:					return splitWay();						// 'X'
+                case 81:  /* Q */           Quadrilateralise.quadrilateralise(parentWay, MainUndoStack.getGlobalStack().addAction); return this;
 				case 82:					repeatTags(firstSelected); return this;	// 'R'
 				case 87:					return new SelectedWay(parentWay);		// 'W'
 				case 191:					return cycleWays();						// '/'

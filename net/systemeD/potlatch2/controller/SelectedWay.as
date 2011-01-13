@@ -5,6 +5,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.geom.Point;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.potlatch2.tools.Parallelise;
+    import net.systemeD.potlatch2.tools.Quadrilateralise;
     import net.systemeD.potlatch2.tools.Simplify;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.MapPaint;
@@ -77,6 +78,7 @@ package net.systemeD.potlatch2.controller {
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
 				case 80:  /* P */           return new SelectedParallelWay(firstSelected as Way); 
+				case 81:  /* Q */           Quadrilateralise.quadrilateralise(firstSelected as Way, MainUndoStack.getGlobalStack().addAction); return this;
 				case 82:  /* R */           repeatTags(firstSelected); return this;
                 case 86:  /* V */           Way(firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
                 case 89:  /* Y */           Simplify.simplify(firstSelected as Way, controller.map, true); return this;         
