@@ -8,11 +8,19 @@ package net.systemeD.potlatch2 {
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
 
+    /** A VectorLayer that can be used to load and display bugs from MapDust-compatible APIs.
+        See utils/BugLoader.as for the corresponding loader. */
+
     public class BugLayer extends VectorLayer {
 
         private var baseUrl:String;
         private var apiKey:String;
         private var detailsUrl:String;
+        /** A comma-separated list of statuses that we wish to fetch. But TBH we only want open ones. */
+        private var filter_status:String = BUG_STATUS_OPEN;
+        /** A comma-separated list of types of bugs. We don't want ones classed as routing problems, they are likely to be skobbler-app specific. */
+        /* Possible values: wrong_turn,bad_routing,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other */
+        private var filter_type:String = "wrong_turn,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other";
 
         // as strings, since that's how they are in tags and http calls
         public static var BUG_STATUS_OPEN:String = "1";
@@ -56,7 +64,7 @@ package net.systemeD.potlatch2 {
         public override function loadBbox(left:Number, right:Number,
                                 top:Number, bottom:Number):void {
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey));
+            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type));
             loader.addEventListener(Event.COMPLETE, parseJSON);
             loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
             loader.addEventListener(IOErrorEvent.IO_ERROR, handleError);
