@@ -108,7 +108,8 @@
                             ["R", "Repeat tags"],
                             ["T", "Toggle between simple and advanced tags"],
                             ["P", "Create parallel way"],
-                            ["V", "Reverse direction of way"]
+                            ["V", "Reverse direction of way"],
+                            ["Q", "Make area right-angled"]
                             ];
         var text3:Array =  [["S", "Save"],
                             ["X", "Cut way at node"],

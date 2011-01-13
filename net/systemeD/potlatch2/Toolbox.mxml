@@ -54,7 +54,7 @@
 			click='doQuadrilateralise();' 
 			enabled="{canDo('quadrilateralise')}" 
 			alpha="{getAlpha('quadrilateralise')}" 
-			toolTip="Make right-angled" 
+			toolTip="Make right-angled (Q)"
 			width="28" height="28" textAlign="left" y="34" x="66" paddingLeft="6" paddingRight="0" />
 		<mx:Button icon="@Embed('../../../embedded/parallel.svg')" 
 			click='doParallelise();' 
