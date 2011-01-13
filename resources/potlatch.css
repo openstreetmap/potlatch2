@@ -241,7 +241,7 @@ way[tunnel=yes][!waterway]
     { z-index: 3; color: black; width: eval('_width+6'); dashes: 4,4; }
 
 way[embankment=yes], way[cutting=yes]
-    { z-index: 8; opacity: 0.5; color: grey; width: eval('_width+5'); dashes: 2, 2; }
+    { z-index: 3; opacity: 0.5; color: grey; width: eval('_width+5'); dashes: 2, 2; }
 
 /* Oneway */
 way[oneway=yes], way[junction=roundabout] { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows; }
