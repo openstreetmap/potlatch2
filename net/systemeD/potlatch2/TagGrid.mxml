@@ -2,7 +2,6 @@
 
 <!--
 	Advanced tag grid
-	** TODO: the 'X' button should be positioned more prettily
 -->
 
 <mx:DataGrid editable="true" doubleClickEnabled="true" doubleClick="addNewTag()"
@@ -46,13 +45,15 @@
 
 		<!-- Delete button -->
 
-		<mx:DataGridColumn width="12" editable="false">
+		<mx:DataGridColumn width="20" editable="false">
 			<mx:itemRenderer>
 				<mx:Component>
-					<mx:Image source="@Embed('../../../embedded/delete_small.svg')"
-						click='event.stopPropagation();outerDocument.removeTag();'
-						buttonMode="true" useHandCursor="true">
-					</mx:Image>
+                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
+                      <mx:Image source="@Embed('../../../embedded/delete_small.svg')"
+                          click='event.stopPropagation();outerDocument.removeTag();'
+                          buttonMode="true" useHandCursor="true" width="12" height="12">
+                      </mx:Image>
+					</mx:HBox>
 				</mx:Component>
 			</mx:itemRenderer>
 		</mx:DataGridColumn>
