@@ -7,7 +7,8 @@
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off"
 	horizontalAlign="center" 
-	addedToStage="initApp()">
+	addedToStage="initApp()"
+	preloader="net.systemeD.potlatch2.Preloader">
 	
 	<mx:Style source="styles/Application.css"/>
 
