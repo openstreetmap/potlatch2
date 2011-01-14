@@ -97,6 +97,11 @@ package net.systemeD.potlatch2
         {
             _bytesLoaded = event.bytesLoaded;
             _bytesExpected = event.bytesTotal;
+
+            // Some browsers got nuts when the swf is served with gzip encoding and report bytesTotal as zero
+            if(_bytesExpected == 0) {
+                _bytesExpected = _bytesLoaded; // This is how Firefox behaves anyway in such cases
+            }
             _fractionLoaded = Number(_bytesLoaded) / Number(_bytesExpected);
 
             draw();
