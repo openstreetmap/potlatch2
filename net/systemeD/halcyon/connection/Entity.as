@@ -31,7 +31,7 @@ package net.systemeD.halcyon.connection {
             modified = id < 0;
         }
 
-        /** ID for the entity. */
+        /** OSM ID. */
         public function get id():Number {
             return _id;
         }
@@ -41,16 +41,22 @@ package net.systemeD.halcyon.connection {
             return _version;
         }
 
-        /** User identifier associated with the entity. (?) */
+        /** User ID who last edited this entity (from OSM API). */
         public function get uid():Number {
             return _uid;
         }
 
+		/** Is entity fully loaded, or is it just a placeholder reference (as a relation member)? */
         public function get loaded():Boolean {
             return _loaded;
         }
 
-        /** Most recent modification of the entity. */
+		/** List of entities. Overridden by EntityCollection. */
+		public function get entities():Array {
+			return [this];
+		}
+
+        /** Most recent modification of the entity (from OSM API). */
         public function get timestamp():String {
             return _timestamp;
         }

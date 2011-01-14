@@ -32,7 +32,7 @@ package net.systemeD.halcyon.connection {
 			}
         }
 		
-		public function get entities():Array {
+		public override function get entities():Array {
 			return _entities;
 		}
 		

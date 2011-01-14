@@ -28,6 +28,15 @@ package net.systemeD.halcyon.connection {
             return members.length;
         }
 
+		public function get memberEntities():Array {
+			var list:Array=[];
+			for (var index:uint = 0; index < members.length; index++) {
+				var e:Entity=members[index].entity;
+				if (list.indexOf(e)==-1) list.push(e);
+			}
+			return list;
+		}
+
         public function findEntityMemberIndex(entity:Entity):int {
             for (var index:uint = 0; index < members.length; index++) {
                 var member:RelationMember = members[index];

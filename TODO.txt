@@ -27,6 +27,7 @@ Potlatch 2: main outstanding issues
 * 'Select relation' panel could be sorted by something useful (e.g. ref for route relations)
 * Checkbox needs a clear button, or to be changed to a ✓✗? triplet
 * Relations should talk to FunctionKeyManager too, so you can assign a route to a particular key
+* RelationsGrid should be a discrete component, so we don't repeat ourselves so much in TagViewer.mxml
 
 == UI ==
 

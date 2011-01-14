@@ -90,6 +90,17 @@
                 <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
                     <mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
                 </mx:DataGridColumn>
+				<mx:DataGridColumn width="20" editable="false">
+					<mx:itemRenderer>
+						<mx:Component>
+		                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
+								<mx:PopUpButton arrowButtonWidth="12" paddingLeft="0" paddingRight="0" width="12" height="12" 
+								                open="{outerDocument.updateRelationMenu(event);}" 
+								                creationComplete="{outerDocument.createRelationMenu(PopUpButton(event.target));}"/>
+							</mx:HBox>
+						</mx:Component>
+					</mx:itemRenderer>
+				</mx:DataGridColumn>
             </mx:columns>
         </mx:DataGrid>
 
@@ -154,6 +165,17 @@
             <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
                 <mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
             </mx:DataGridColumn>
+			<mx:DataGridColumn width="20" editable="false">
+				<mx:itemRenderer>
+					<mx:Component>
+	                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
+							<mx:PopUpButton arrowButtonWidth="12" paddingLeft="0" paddingRight="0" width="12" height="12" 
+							                open="{outerDocument.updateRelationMenu(event);}" 
+							                creationComplete="{outerDocument.createRelationMenu(PopUpButton(event.target));}"/>
+						</mx:HBox>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
         </mx:columns>
     </mx:DataGrid>
     <mx:HBox horizontalAlign="right" width="100%">
@@ -194,6 +216,7 @@
       import mx.events.*;
       import mx.core.*;
       import mx.managers.PopUpManager;
+      import mx.controls.Menu;
       import flash.geom.Point;
       import flash.net.*;
       import mx.events.DragEvent;
@@ -211,6 +234,8 @@
       private var selectedEntity:Entity;
       private var tw:CategorySelector = null;
       private var feature:Feature = null;
+
+      private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
 
 	  public function setEntity(entities:Array, layer:VectorLayer=null):void {
 		UIComponent.suspendBackgroundProcessing();
@@ -635,6 +660,66 @@
           panel.setRelation(Connection.getConnectionInstance().getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
+
+	/** Create relation actions menu */
+
+	public function createRelationMenu(button:PopUpButton):void {
+		var menu:Menu = new Menu(); 
+		var dp:Object = [ {label: "Select all members"}, 
+						  {label: "Deselect all members"}, 
+						  {label: "Add selection to this relation", enabled: false} ]; 
+		menu.dataProvider = dp; 
+		menu.addEventListener("itemClick", selectRelationMenu); 
+		button.popUp = menu;
+	}
+
+	/** Enable 'add selection to...' entry only if some of the selection isn't in the relation.
+	    Called each time the menu is clicked. */
+	
+	public function updateRelationMenu(event:Event):void {
+		rowData=event.target.parent.data;	// this makes it accessible from selectRelationMenu
+		var menu:Menu = Menu(event.target.popUp);
+		var enable:Boolean = false;
+		if (selectedEntity != null && selectedEntity is EntityCollection) {
+			// Enable only if some entities aren't a member of the relation
+			enable=!rowData.universal;
+		}
+		if (enable==menu.dataProvider[2].enabled) return;
+		menu.dataProvider[2].enabled=enable;
+		menu.invalidateList();
+	}
+
+	/** Do the action selected in the relation actions menu */
+
+	public function selectRelationMenu(event:MenuEvent):void {
+		var rel:Relation=rowData.relation;
+		var entities:Array;
+		var controller:EditController=Application.application.theController;
+		switch (event.index) {
+			case 0: // Select all members
+				entities=selectedEntity.entities.concat(rel.memberEntities);
+				entities=entities.filter(function(e:*, i:int, arr:Array):Boolean { return arr.indexOf(e) == i } );	// remove duplicates
+				// ** FIXME: This is a really horrible way of changing the controller state
+				controller.setState(controller.findStateForSelection(entities));
+				break;
+
+			case 1: // Deselect all members
+				entities=selectedEntity.entities;
+				entities=entities.filter(function(e:*, i:int, arr:Array):Boolean { return !e.hasParent(rel) } );
+				controller.setState(controller.findStateForSelection(entities));
+				break;
+
+			case 2: // Add selection to this relation
+				var undo:CompositeUndoableAction=new CompositeUndoableAction("Remove selection from relations");
+				for each (var entity:Entity in selectedEntity.entities) {
+					if (!entity.hasParent(rel)) {
+						rel.appendMember(new RelationMember(entity,''), undo.push);
+					}
+				}
+				MainUndoStack.getGlobalStack().addAction(undo);
+				break;
+		}
+	}
 
       private function tagChanged(event:TagEvent):void {
 	      if(selectedEntity != null && selectedEntity is EntityCollection) {
