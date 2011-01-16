@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalGap="0">
+	<mx:ViewStack id="videoStack" width="100%" height="100%">
+		<mx:Box id="previewContainer">
+			<mx:Image id="preview" width="100%" height="100%" source="{previewImage}" 
+				click="playVideo()" />
+		</mx:Box>
+		<mx:Box id="videoContainer">
+			<mx:VideoDisplay id="video" 
+				metadataReceived="prepareVideo()"
+				click="playVideo()"
+				autoPlay="false"
+				width="100%" height="100%" />
+		</mx:Box>
+	</mx:ViewStack>
+	<mx:HBox backgroundColor="#6495ED" width="100%" height="16"> 
+		<mx:Image id="playButton" width="16" height="16" source="{playImage}" click="playVideo()" />
+		<mx:HSlider width="100%" id="progressBar" liveDragging="true" 
+			allowTrackClick="false" 
+			thumbPress="progressThumbPress(event);" 
+			thumbRelease="progressThumbRelease(event);" />
+	</mx:HBox> 
+
+	<mx:Script> 
+		<![CDATA[ 
+
+			/** VideoPlayer component for P2 help dialog.
+				Embed like this:
+
+				<help:VideoPlayer width="400" height="300" 
+					file="videos/test.flv" 
+					previewImage="videos/test_preview.png" />
+					
+				previewImage is the image that will be shown in the video pane
+				before the user clicks 'play' - usually a still of the first frame
+				of the video. (This means the video file won't be downloaded unless 
+				the user actually wants it.)
+			*/
+
+			[Bindable] public var file:String;
+			[Bindable] public var previewImage:String; 
+
+			[Bindable] [Embed(source="../../../../embedded/video_play.png" )] public var playImage:Class;
+			[Bindable] [Embed(source="../../../../embedded/video_pause.png")] public var pauseImage:Class;
+
+			public function playVideo():void {
+				if (videoStack.selectedChild==previewContainer) {
+					preview.alpha=0.5;
+					video.source=file;
+					video.play();
+					playButton.source=pauseImage;
+				} else if (video.playing) {
+					video.pause();
+					playButton.source=playImage;
+				} else {
+					video.play();
+					playButton.source=pauseImage;
+				}
+			}
+			public function prepareVideo():void {
+				videoStack.selectedChild=videoContainer;
+				progressBar.maximum=video.totalTime;
+			}
+			public function progressThumbPress(event:Event):void { 
+				video.pause();
+				playButton.source=playImage;
+			}
+			public function progressThumbRelease(event:Event):void { 
+				video.playheadTime = event.currentTarget.value; 
+			} 
+
+		]]> 
+	</mx:Script>
+</mx:VBox>
