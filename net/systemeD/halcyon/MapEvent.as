@@ -13,7 +13,6 @@ package net.systemeD.halcyon {
         public static const INITIALISED:String = "initialized";
 		public static const BUMP:String = "bump";
 		public static const ERROR:String = "error";				// ** FIXME - this should be a dedicated ErrorEvent class
-		public static const ATTENTION:String = "attention";		// ** FIXME - this should be a dedicated AttentionEvent class
 
 		public var params:Object;
 
