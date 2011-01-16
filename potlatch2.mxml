@@ -169,14 +169,6 @@
             theMap.updateSize(w,h);
 			theMap.addEventListener(MapEvent.SCALE, scaleHandler);
 
-			// add mask for map
-			var s:Sprite=new Sprite();
-			s.graphics.beginFill(0xFFFFFF,100);
-			s.graphics.drawRect(0,0,w,h);
-			s.graphics.endFill();
-			_root.addChild(s);
-			theMap.mask=s;
-
 			// add attribution/logo sprite
 			var overlay:Sprite=new Sprite();
 			var attribution:TextField=new TextField();
