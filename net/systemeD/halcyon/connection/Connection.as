@@ -6,6 +6,7 @@ package net.systemeD.halcyon.connection {
     import flash.events.Event;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.actions.*;
+	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.MapEvent;
 
 	public class Connection extends EventDispatcher {
@@ -484,16 +485,22 @@ package net.systemeD.halcyon.connection {
 				no: cancelUpload }));
 		}
 
-		public function retryUpload():void { uploadChanges(); }
-		public function cancelUpload():void { return; }
+		public function retryUpload(e:Event=null):void { 
+			removeEventListener(LOAD_COMPLETED,retryUpload);
+			uploadChanges(); 
+		}
+		public function cancelUpload():void {
+			return;
+		}
 		public function retryUploadWithNewChangeset():void { 
 			// ** FIXME: we need to move the create-changeset-then-upload logic out of SaveDialog
 		}
 		public function goToEntity(entity:Entity):void { 
-			dispatchEvent(new MapEvent(MapEvent.ATTENTION, { entity: entity }));
+			dispatchEvent(new AttentionEvent(AttentionEvent.ATTENTION, entity));
 		}
 		public function revertBeforeUpload(entity:Entity):void { 
-			// ** FIXME: implement a 'revert entity' method, then retry upload on successful download
+			addEventListener(LOAD_COMPLETED,retryUpload);
+			loadEntity(entity);
 		}
 		public function deleteBeforeUpload(entity:Entity):void {
             var a:CompositeUndoableAction = new CompositeUndoableAction("Delete refs");            
@@ -508,7 +515,7 @@ package net.systemeD.halcyon.connection {
 		public function loadBbox(left:Number, right:Number,
 								top:Number, bottom:Number):void {
 	    }
-	    
+	    public function loadEntity(entity:Entity):void {}
 	    public function setAuthToken(id:Object):void {}
         public function setAccessToken(key:String, secret:String):void {}
 	    public function createChangeset(tags:Object):void {}

@@ -204,6 +204,8 @@ package net.systemeD.halcyon {
 			if (!wayuis[way.id]) {
 				wayuis[way.id]=new WayUI(way,this);
 				way.addEventListener(Connection.WAY_DELETED, wayDeleted);
+			} else {
+				wayuis[way.id].redraw();
 			}
 			return wayuis[way.id];
 		}

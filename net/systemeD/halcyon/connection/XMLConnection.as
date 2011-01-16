@@ -6,6 +6,7 @@ package net.systemeD.halcyon.connection {
 	import flash.net.*;
     import org.iotashan.oauth.*;
 
+	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.MapEvent;
 
     /**
@@ -34,12 +35,22 @@ package net.systemeD.halcyon.connection {
             var mapRequest:URLRequest = new URLRequest(Connection.apiBaseURL+"map");
             mapRequest.data = mapVars;
 
-            var mapLoader:URLLoader = new URLLoader();
-            mapLoader.addEventListener(Event.COMPLETE, loadedMap);
-            mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
-            mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
-            mapLoader.load(mapRequest);
-            dispatchEvent(new Event(LOAD_STARTED));
+            sendLoadRequest(mapRequest);
+		}
+
+		override public function loadEntity(entity:Entity):void {
+			var url:String=Connection.apiBaseURL + entity.getType() + "/" + entity.id;
+			if (entity is Relation || entity is Way) url+="/full";
+			sendLoadRequest(new URLRequest(url));
+		}
+
+		private function sendLoadRequest(request:URLRequest):void {
+			var mapLoader:URLLoader = new URLLoader();
+			mapLoader.addEventListener(Event.COMPLETE, loadedMap);
+			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
+			mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
+			mapLoader.load(request);
+			dispatchEvent(new Event(LOAD_STARTED));
 		}
 
         private function errorOnMapLoad(event:Event):void {
@@ -138,9 +149,12 @@ package net.systemeD.halcyon.connection {
 			closeActiveChangeset();
 		}
 		
-		private function changesetCloseComplete(event:Event):void { }
-		private function changesetCloseError(event:Event):void { }
-		// ** TODO: when we get little floating warnings, we can send a happy or sad one up
+		private function changesetCloseComplete(event:Event):void { 
+			dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Changeset closed"));
+		}
+		private function changesetCloseError(event:Event):void { 
+			dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't close changeset", 1));
+		}
 
         private function signedOAuthURL(url:String, method:String):String {
             // method should be PUT, GET, POST or DELETE
@@ -261,7 +275,7 @@ package net.systemeD.halcyon.connection {
 				case '409 Conflict':
 					if (message.match(/changeset/i)) { throwChangesetError(message); return; }
 					matches=message.match(/mismatch.+had: (\d+) of (\w+) (\d+)/i);
-					if (matches) { throwConflictError(findEntity(matches[3],matches[2]), Number(matches[1]), message); return; }
+					if (matches) { throwConflictError(findEntity(matches[2],matches[3]), Number(matches[1]), message); return; }
 					break;
 				
 				case '410 Gone':
