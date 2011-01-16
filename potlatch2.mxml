@@ -84,6 +84,7 @@
 		import net.systemeD.potlatch2.options.*;
 		import net.systemeD.potlatch2.utils.*;
         import net.systemeD.potlatch2.mygpx.*;
+		import net.systemeD.controls.FloatingAlert;
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
@@ -231,7 +232,8 @@
             conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
             conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
 			conn.addEventListener(MapEvent.ERROR, onMapError);
-			conn.addEventListener(MapEvent.ATTENTION, onAttention);
+			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
+			conn.addEventListener(AttentionEvent.ALERT, onAlert);
 
             // set the access token from saved cookie
             var tokenObject:SharedObject = SharedObject.getLocal("access_token");
@@ -300,10 +302,10 @@
 			});
 		}
 
-		/* Highlight an entity in response to an 'attention' event */
+		/** Highlight an entity in response to an 'attention' event */
 
-		public function onAttention(mapEvent:MapEvent):void {
-			var entity:Entity=mapEvent.params.entity;
+		public function onAttention(event:AttentionEvent):void {
+			var entity:Entity=event.entity;
 			if (entity is Relation) {
 				// If it's a relation, just bring up the editor panel
 				var panel:RelationEditorPanel = RelationEditorPanel(
@@ -330,6 +332,13 @@
 			// Pan if required, and select the object
 			if (panTo) { theMap.moveMapFromLatLon(lat,lon); }
 			theController.setState(theController.findStateForSelection([entity]));
+		}
+
+		/** Display floating warning in response to an 'alert' event */
+
+		public function onAlert(event:AttentionEvent):void {
+			var alert:FloatingAlert=new FloatingAlert(event.message);
+			stage.addChild(alert);
 		}
 
         public function onResizeMap():void {
