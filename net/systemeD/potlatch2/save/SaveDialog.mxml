@@ -65,11 +65,6 @@
       <mx:Text width="100%" styleName="failText" text="{failureText}"/>
     </mx:VBox>
 
-    <mx:VBox width="100%" height="100%" id="successTab">
-      <mx:Text width="100%">
-        <mx:htmlText><![CDATA[<b>All data uploaded!</b>]]></mx:htmlText>
-      </mx:Text>
-    </mx:VBox>
   </mx:ViewStack>
 
   <mx:ControlBar>
@@ -87,6 +82,7 @@
     import mx.events.DataGridEventReason;
     
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.AttentionEvent;
     
     private var conn:Connection = Connection.getConnectionInstance();
 	private var doSkip:Boolean = false;
@@ -177,11 +173,12 @@
     }
     
     private function saveCompleted(event:SaveCompleteEvent):void {
-        if ( event.saveOK )
-            succeed("All Data Saved!");
-        else
+        if ( event.saveOK ) {
+			conn.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Changes successfully saved"));
+            close();
+        } else {
             fail("Failure when uploading data");
-
+		}
         if (saveButton && saveButton.parent) saveButton.parent.removeChild(saveButton);
         cancelButton.label = "Close";
     }
@@ -191,10 +188,6 @@
         label.text = text;
         
         infoBox.addChild(label);
-    }
-    
-    private function succeed(text:String):void {
-        processSequence.selectedChild = successTab;
     }
     
     private function fail(text:String):void {
