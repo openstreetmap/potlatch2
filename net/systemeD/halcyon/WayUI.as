@@ -252,7 +252,8 @@ package net.systemeD.halcyon {
 			}
 
 			// Do we have to draw all nodes in the way?
-			if (isNaN(drawOnly)) {
+			var hasFills:Boolean=styleList.hasFills();
+			if (isNaN(drawOnly) || hasFills) {
 				indexStart=0; indexEnd=Way(entity).length; 
 			} else {
 				indexStart=Math.max(0,drawOnly-1);
@@ -289,7 +290,7 @@ package net.systemeD.halcyon {
 					}
 
 					// Fill
-					if ((!isNaN(s.fill_color) || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0) {
+					if ((!isNaN(s.fill_color) || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0 && isNaN(drawExcept)) {
 						fill=new Shape(); addToLayer(fill,FILLSPRITE);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
@@ -311,7 +312,7 @@ package net.systemeD.halcyon {
 					}
 				}
 				
-				if (styleList.textStyles[sublayer]) {
+				if (styleList.textStyles[sublayer] && isNaN(drawExcept)) {
 					var t:TextStyle=styleList.textStyles[sublayer];
 					interactive||=t.interactive;
 					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);

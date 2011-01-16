@@ -25,6 +25,13 @@ package net.systemeD.halcyon.styleparser {
 			return ( hasShapeStyles() || hasTextStyles() || hasPointStyles() || hasShieldStyles() );
 		}
 
+		public function hasFills():Boolean {
+			for each (var ss:ShapeStyle in shapeStyles) {
+				if (!isNaN(ss.fill_color) || ss.fill_image) return true;
+			}
+			return false;
+		}
+
 		public function layerOverride():Number {
 			for each (var ss:ShapeStyle in shapeStyles) {
 				if (ss['layer']) return ss['layer'];
