@@ -103,6 +103,8 @@ package net.systemeD.potlatch2.collections {
 					var loader:Loader = new Loader();
 					var thisbg1:Object = bg;			// scope it for the closure
 					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { onLogoLoad(e,thisbg1); });
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
+					loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 					loader.load(new URLRequest(bg.logo));
 				}
 				if (bg.attribution_url) {
@@ -111,6 +113,8 @@ package net.systemeD.potlatch2.collections {
 			        var urlloader:URLLoader = new URLLoader();
 					var thisbg2:Object = bg;			// scope it for the closure
 					urlloader.addEventListener(Event.COMPLETE, function(e:Event):void { onAttributionLoad(e,thisbg2); });
+					urlloader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+					urlloader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 			        urlloader.load(new URLRequest(bg.attribution_url));
 				}
 			}
@@ -119,6 +123,10 @@ package net.systemeD.potlatch2.collections {
 			FunctionKeyManager.instance().registerListener('Background imagery',
 				function(o:String):void { setBackground(findBackgroundWithName(o)); });
 			dispatchEvent(new Event("collection_changed"));
+		}
+		
+		private function onError(e:Event):void {
+			// placeholder error routine so exception isn't thrown
 		}
 		
 		public function onLogoLoad(e:Event, bg:Object):void {
