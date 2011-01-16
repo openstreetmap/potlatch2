@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
         xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:help="net.systemeD.potlatch2.help.*"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="{getTitleText()}"
-        width="600" height="400"
+        width="600" height="500"
         verticalGap="0">
   <mx:Script><![CDATA[
     import mx.managers.PopUpManager;
