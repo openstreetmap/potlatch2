@@ -44,6 +44,7 @@ Potlatch 2: main outstanding issues
 
 == Rendering (Halcyon) ==
 
+** When deleting a tagged node from a way, the NodeUI sticks around (fairly critical bug)
 * halcyon_viewer needs updating for new tileurl stuff
 * Shields
 * More line decoration (cliffs etc.), and implied values for 'dashes' if not supplied
