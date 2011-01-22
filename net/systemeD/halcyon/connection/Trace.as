@@ -95,6 +95,7 @@ package net.systemeD.halcyon.connection {
         }
 
         private function processEvent(e:Event):void {
+            removeEventListener("loaded_data", processEvent);
             process();
         }
 

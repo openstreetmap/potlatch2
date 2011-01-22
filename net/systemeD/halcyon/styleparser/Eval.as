@@ -28,7 +28,7 @@ package net.systemeD.halcyon.styleparser {
 			var compiled:CompiledExpression=parser.parse();
 			var swfdata:ByteArray=compiled.compile();
 
-			this.contentLoaderInfo.addEventListener(Event.COMPLETE, swfLoaded);
+			this.contentLoaderInfo.addEventListener(Event.COMPLETE, swfLoaded, false, 0, true);
 			this.loadBytes(swfdata, new LoaderContext(false, new ApplicationDomain(ApplicationDomain.currentDomain)));
 		}
 		

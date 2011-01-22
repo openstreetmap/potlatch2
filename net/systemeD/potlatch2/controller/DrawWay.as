@@ -29,8 +29,6 @@ package net.systemeD.potlatch2.controller {
 				lastClick=way.getNode(0);
 				lastClickTime=new Date();
 			}
-            way.addEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
-            way.addEventListener(Connection.WAY_NODE_ADDED, fixElastic);
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
@@ -264,6 +262,9 @@ package net.systemeD.potlatch2.controller {
 		override public function enterState():void {
 			super.enterState();
 			
+            Way(firstSelected).addEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
+            Way(firstSelected).addEventListener(Connection.WAY_NODE_ADDED, fixElastic);
+
 			var node:Node = Way(firstSelected).getNode(editEnd ? Way(firstSelected).length-1 : 0);
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
@@ -271,6 +272,9 @@ package net.systemeD.potlatch2.controller {
 			Globals.vars.root.addDebug("**** -> "+this);
 		}
 		override public function exitState(newState:ControllerState):void {
+            Way(firstSelected).removeEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
+            Way(firstSelected).removeEventListener(Connection.WAY_NODE_ADDED, fixElastic);
+
 			super.exitState(newState);
 			controller.setCursor(null);
 			elastic.removeSprites();

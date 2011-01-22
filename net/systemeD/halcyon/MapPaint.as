@@ -251,8 +251,8 @@ package net.systemeD.halcyon {
 
 		/** Remove a node's UI object. */
 		public function deleteNodeUI(node:Node):void {
-			if (!nodeuis[node.id]) { return; }
 			node.removeEventListener(Connection.NODE_DELETED, nodeDeleted);
+			if (!nodeuis[node.id]) { return; }
 			nodeuis[node.id].removeSprites();
 			nodeuis[node.id].removeEventListeners();
 			delete nodeuis[node.id];
@@ -279,8 +279,8 @@ package net.systemeD.halcyon {
 
         /** Remove a marker's UI object. */
         public function deleteMarkerUI(marker:Marker):void {
-            if (!markeruis[marker.id]) { return; }
             marker.removeEventListener(Connection.NODE_DELETED, markerDeleted);
+            if (!markeruis[marker.id]) { return; }
             markeruis[marker.id].removeSprites();
             markeruis[marker.id].removeEventListeners();
             delete markeruis[marker.id];

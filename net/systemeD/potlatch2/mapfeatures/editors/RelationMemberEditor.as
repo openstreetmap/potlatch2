@@ -64,8 +64,8 @@ package net.systemeD.potlatch2.mapfeatures.editors {
       public function set entity(entity:Entity):void {
           _entity = entity;
           
-          entity.addEventListener(Connection.ADDED_TO_RELATION, relationsChanged);
-          entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationsChanged);
+          entity.addEventListener(Connection.ADDED_TO_RELATION, relationsChanged, false, 0, true);
+          entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationsChanged, false, 0, true);
           dispatchEvent(new Event("relations_changed"));
       }
       

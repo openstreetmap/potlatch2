@@ -36,9 +36,9 @@ package net.systemeD.halcyon {
 					if (stateClasses[state]) { this.stateClasses[state]=stateClasses[state]; }
 				}
 			}
-			entity.addEventListener(Connection.NODE_MOVED, nodeMoved);
-            entity.addEventListener(Connection.NODE_ALTERED, nodeAltered);
-            entity.addEventListener(Connection.ENTITY_DRAGGED, nodeDragged);
+			entity.addEventListener(Connection.NODE_MOVED, nodeMoved, false, 0, true);
+            entity.addEventListener(Connection.NODE_ALTERED, nodeAltered, false, 0, true);
+            entity.addEventListener(Connection.ENTITY_DRAGGED, nodeDragged, false, 0, true);
             attachRelationListeners();
 			redraw();
 		}
@@ -48,6 +48,7 @@ package net.systemeD.halcyon {
 			entity.removeEventListener(Connection.NODE_MOVED, nodeMoved);
             entity.removeEventListener(Connection.NODE_ALTERED, nodeAltered);
             entity.removeEventListener(Connection.ENTITY_DRAGGED, nodeDragged);
+			removeRelationListeners();
 		}
 
 		/** Respond to movement event. */
@@ -124,7 +125,7 @@ package net.systemeD.halcyon {
 							// 'load' icon (actually just from library)
 							var loader:ExtendedLoader = new ExtendedLoader();
 							loader.info['sublayer']=sublayer;
-							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon);
+							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon, false, 0, true);
 							loader.loadBytes(paint.ruleset.images[s.icon_image]);
 							iconnames[sublayer]=s.icon_image;
 						}

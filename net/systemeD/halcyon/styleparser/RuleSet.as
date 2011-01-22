@@ -434,7 +434,7 @@ package net.systemeD.halcyon.styleparser {
 		private function saveEval(expr:String):Eval {
 			evalsToLoad++;
 			var e:Eval=new Eval(expr);
-			e.addEventListener("swf_loaded",evalLoaded);
+			e.addEventListener("swf_loaded",evalLoaded, false, 0, true);
 			evals.push(e);
 			return e;
 		}

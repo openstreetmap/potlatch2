@@ -25,7 +25,7 @@
             var icon:RouteIcon = new RouteIcon();
             icon.setRoute(relation, RouteEditorFactory(_factory).icon);
             
-            icon.addEventListener(MouseEvent.CLICK, routeClicked);
+            icon.addEventListener(MouseEvent.CLICK, routeClicked, false, 0, true);
             routeIcons.addChild(icon);
         }
     }

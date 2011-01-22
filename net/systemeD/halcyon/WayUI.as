@@ -39,10 +39,10 @@ package net.systemeD.halcyon {
 
 		public function WayUI(way:Way, paint:MapPaint) {
 			super(way,paint);
-            entity.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded);
-            entity.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
-            entity.addEventListener(Connection.WAY_REORDERED, wayReordered);
-            entity.addEventListener(Connection.ENTITY_DRAGGED, wayDragged);
+            entity.addEventListener(Connection.WAY_NODE_ADDED, wayNodeAdded, false, 0, true);
+            entity.addEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved, false, 0, true);
+            entity.addEventListener(Connection.WAY_REORDERED, wayReordered, false, 0, true);
+            entity.addEventListener(Connection.ENTITY_DRAGGED, wayDragged, false, 0, true);
             attachNodeListeners();
             attachRelationListeners();
             recalculate();
@@ -56,20 +56,26 @@ package net.systemeD.halcyon {
             entity.removeEventListener(Connection.WAY_NODE_REMOVED, wayNodeRemoved);
             entity.removeEventListener(Connection.WAY_REORDERED, wayReordered);
             entity.removeEventListener(Connection.ENTITY_DRAGGED, wayDragged);
-            for (var i:uint = 0; i < Way(entity).length; i++ ) {
-                Way(entity).getNode(i).removeEventListener(Connection.NODE_MOVED, nodeMoved);
-            }
+			removeNodeListeners();
+			removeRelationListeners();
 		}
 		
 		private function attachNodeListeners():void {
 			var way:Way=entity as Way;
             for (var i:uint = 0; i < way.length; i++ ) {
-                way.getNode(i).addEventListener(Connection.NODE_MOVED, nodeMoved);
+                way.getNode(i).addEventListener(Connection.NODE_MOVED, nodeMoved, false, 0, true);
+            }
+		}
+		
+		private function removeNodeListeners():void {
+			var way:Way=entity as Way;
+            for (var i:uint = 0; i < way.length; i++ ) {
+                way.getNode(i).removeEventListener(Connection.NODE_MOVED, nodeMoved);
             }
 		}
 		
 		private function wayNodeAdded(event:WayNodeEvent):void {
-		    event.node.addEventListener(Connection.NODE_MOVED, nodeMoved);
+		    event.node.addEventListener(Connection.NODE_MOVED, nodeMoved, false, 0, true);
             recalculate();
 		    redraw();
 			redrawMultis();
