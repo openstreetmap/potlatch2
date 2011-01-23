@@ -12,7 +12,7 @@ package net.systemeD.potlatch2.controller {
 
 	public class DrawWay extends SelectedWay {
 		private var elastic:Elastic;
-		private var editEnd:Boolean;
+		private var editEnd:Boolean;            // if true, we're drawing from node[n-1], else "backwards" from node[0] 
 		private var leaveNodeSelected:Boolean;
 		private var lastClick:Entity=null;
 		private var lastClickTime:Date;
@@ -167,13 +167,17 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case Keyboard.ENTER:					return keyExitDrawing();
 				case Keyboard.ESCAPE:					return keyExitDrawing();
-				case Keyboard.DELETE:		return backspaceNode(MainUndoStack.getGlobalStack().addAction);
-				case Keyboard.BACKSPACE:	return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				//case 90: /* Z */             
+				case Keyboard.DELETE:		
+				case Keyboard.BACKSPACE:	
+				    
 				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case 82: /* R */            repeatTags(firstSelected); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
-			return cs ? cs : this;
+			//if (selectedWay.length == 0) return stopDrawing(); // to catch 'undo'ing the start of a draw.
+			return cs ? cs : this;7
+			
 		}
 		
 		protected function keyExitDrawing():ControllerState {
@@ -236,7 +240,8 @@ package net.systemeD.potlatch2.controller {
 				Way(firstSelected).removeNodeByIndex(0, undo.push);
 				newDraw=0;
 			}
-			if (node.numParentWays==1 && Way(firstSelected).hasOnceOnly(node)) {
+			// Only actually delete the node if it has no other tags, and is not part of other ways (or part of this way twice)
+			if (node.numParentWays==1 && Way(firstSelected).hasOnceOnly(node) && !node.hasInterestingTags()) {
 				controller.map.setPurgable([node], true);
 				controller.connection.unregisterPOI(node);
 				node.remove(undo.push);

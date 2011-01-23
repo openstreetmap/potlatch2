@@ -1,13 +1,13 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
-	import flash.ui.Keyboard;
 	import flash.geom.Point;
-    import net.systemeD.potlatch2.EditController;
-    import net.systemeD.potlatch2.tools.Quadrilateralise;
-    import net.systemeD.halcyon.WayUI;
-    import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.connection.actions.*;
+	import flash.ui.Keyboard;
+	
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.WayUI;
+	import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.connection.actions.*;
+	import net.systemeD.potlatch2.tools.Quadrilateralise;
 
     public class SelectedWayNode extends ControllerState {
 		private var parentWay:Way;
@@ -138,7 +138,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function removeNode():ControllerState {
-			if (firstSelected.numParentWays==1 && parentWay.hasOnceOnly(firstSelected as Node)) {
+			if (firstSelected.numParentWays==1 && parentWay.hasOnceOnly(firstSelected as Node) && !(firstSelected as Node).hasInterestingTags()) {
 				return deleteNode();
 			}
 			parentWay.removeNodeByIndex(selectedIndex, MainUndoStack.getGlobalStack().addAction);
