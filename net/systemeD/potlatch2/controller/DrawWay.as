@@ -167,16 +167,13 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case Keyboard.ENTER:					return keyExitDrawing();
 				case Keyboard.ESCAPE:					return keyExitDrawing();
-				//case 90: /* Z */             
 				case Keyboard.DELETE:		
 				case Keyboard.BACKSPACE:	
-				    
 				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case 82: /* R */            repeatTags(firstSelected); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
-			//if (selectedWay.length == 0) return stopDrawing(); // to catch 'undo'ing the start of a draw.
-			return cs ? cs : this;7
+			return cs ? cs : this;
 			
 		}
 		
