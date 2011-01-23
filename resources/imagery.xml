@@ -37,6 +37,7 @@
 		<name>OS OpenData Locator</name>
 		<url>http://tiles.itoworld.com/os_locator/$z/$x/$y.png</url>
 		<sourcetag>OS OpenData Locator</sourcetag>
+		<sourcekey>source:name</sourcekey>
 	</set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
 		<name>OS 1:25k historic</name>

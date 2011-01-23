@@ -188,7 +188,10 @@ package net.systemeD.potlatch2.controller {
 		protected function setSourceTag():void {
 			if (selectCount!=1) { return; }
 			if (Imagery.instance().selected && Imagery.instance().selected.sourcetag) {
-				firstSelected.setTag('source',Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
+				if ("sourcekey" in Imagery.instance().selected)
+				    firstSelected.setTag(Imagery.instance().selected.sourcekey,Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
+				else
+				    firstSelected.setTag('source',Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
 			}
 			controller.updateSelectionUI();
 		}
