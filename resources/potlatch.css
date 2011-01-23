@@ -288,7 +288,7 @@ relation[type=route][route=foot] way { z-index: 1; width: 10; color: #80ff80; op
 
 
 /* Show directions of highlighted ways */
-way[highway][!oneway][!junction=roundabout]:selected,
+way[highway][!oneway][junction!=roundabout]:selected,
 way[aerial_way]:selected { z-index: 14; color: #999922; width: 2; dashes: 3,60; line-style: arrows; }
 way[waterway]:selected { z-index: 14; color: #4444CC; width: 2; dashes: 5,60; line-style: arrows; }
 way[railway] :selected{ z-index: 14; color: #999999; width: 3; dashes: 4,92; line-style: arrows; }
