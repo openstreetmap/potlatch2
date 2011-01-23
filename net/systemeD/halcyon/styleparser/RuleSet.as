@@ -248,20 +248,13 @@ package net.systemeD.halcyon.styleparser {
 		public function loadFromCSS(str:String):void {
 			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); loaded=true; redrawCallback(); return; }
 
-			var request:DebugURLRequest=new DebugURLRequest(str);
-			var loader:URLLoader=new URLLoader();
-
-//			request.method=URLRequestMethod.GET;
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, 					doParseCSS);
-			loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
-			loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
-			loader.load(request.request);
+			var cssLoader:NestedCSSLoader=new NestedCSSLoader();
+			cssLoader.addEventListener(Event.COMPLETE, doParseCSS);
+			cssLoader.load(str);
 		}
 
 		private function doParseCSS(e:Event):void {
-			parseCSS(e.target.data);
+			parseCSS(e.target.css);
 		}
 
 		private function parseCSS(str:String):void {
