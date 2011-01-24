@@ -79,6 +79,7 @@ package net.systemeD.potlatch2.mapfeatures {
             var inputType:String = inputXML.@type;
             var presenceStr:String = inputXML.@presence;
             var sortOrderStr:String = inputXML.@priority;
+            _tags.push( { k:String(inputXML.@key) } ); /* add the key to tags so that e.g. addr:housenumber shows up on autocomplete */
             var editor:EditorFactory = EditorFactory.createFactory(inputType, inputXML);
             if ( editor != null ) {
                 editor.presence = Presence.getPresence(presenceStr);
