@@ -230,6 +230,39 @@ way[railway=subway]
         { z-index: 6; color: #444444; width: 5; }
         { z-index: 7; color: white; width: 3; dashes: 8,8; }
 
+way[railway=disused],way[railway=abandoned]
+    { z-index: 6; color: #444400; width: 3; dashes: 17, 2, 5, 0; }
+    { z-index: 7; color: #999999; width: 2; dashes: 12,12; }
+
+way[aeroway=aerodrome] :area
+    { z-index: 3; color: #bb44bb; width: 3; casing-color: #66066;  casing-width: 4;  }
+way|z-15[aeroway=aerodrome] :area
+    { z-index: 3; fill-color: #bb99bb;  fill-opacity: 0.5;}
+    
+    
+way[aeroway=taxiway] !:area { z-index: 8; color: #999999; width: 3; casing-color: #aa66aa; casing-width: 6; } 
+way[aeroway=taxiway]  :area { z-index: 8; color: #bb99bb; width: 3; fill-color: #ccaacc; } 
+way|z17-[aeroway=runway] !:area 
+    { z-index: 9; color: black; width: 11; casing-color: #aa66aa; casing-width: 12; } 
+    { z-index: 10; color: white; width: 9;  dashes: 0, 20, 4, 76; } 
+    { z-index: 11; color: black; width: 7; } 
+    { z-index: 12; color: white; width: 5;  dashes: 0, 20, 4, 76; } 
+    { z-index: 13; color: black; width: 3; } 
+    { z-index: 14; color: white; width: 1;  dashes: 4, 16; } 
+
+way|z15-16[aeroway=runway] !:area 
+    { z-index: 9; color: black; width: 5;  } 
+    { z-index: 12; color: white; width: 5;  dashes: 0, 20, 4, 76; } 
+    { z-index: 13; color: black; width: 3; } 
+    { z-index: 14; color: white; width: 1;  dashes: 4, 16; } 
+
+way|z-14[aeroway=runway] !:area 
+    { z-index: 9; color: #444444; width: 3;  } 
+
+way[aeroway=runway] :area { z-index: 9; color: black; width: 3; fill-color: #775577; } 
+way[aeroway=apron] :area { z-index: 4; color: #cc66cc; width: 1; fill-color: #ddaadd; fill-opacity: 0.5;} 
+
+
 /* Bridge */
 way[bridge=yes], way[bridge=viaduct], way[bridge=suspension]
     { z-index: 4; color: white; width: eval('_width+3'); }
