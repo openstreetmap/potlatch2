@@ -84,4 +84,10 @@
 		<url>http://hypercube.telascience.org/tiles/1.0.0/haiti-city/$z/$x/$y.jpg</url>
 		<sourcetag>Haiti streetnames</sourcetag>
 	</set>
+
+    <set minlat="54.44" minlon="7.81" maxlat="57.86" maxlon="15.49">
+        <name>Denmark - Fugro Aerial Imagery</name>
+        <url>http://fugro.findvej.dk/fugro2005/$z/$x/$y.jpg</url>
+        <sourcetag>Fugro (2005)</sourcetag>
+    </set>
 </imagery>
