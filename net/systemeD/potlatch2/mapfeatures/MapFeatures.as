@@ -189,11 +189,11 @@ package net.systemeD.potlatch2.mapfeatures {
             var a:Array=[];
 
             for (var k:String in _tags[type]) { list.push(k); }
-                list.sort();
+            list.sort();
 
-                for each (k in list) { a.push( { name: k } ); }
-                    return a;
-                }
+            for each (k in list) { a.push( { name: k } ); }
+            return a;
+        }
 
         /** Get all the possible values that could go with a given key and type.
         * TODO: Include values previously entered by the user, but not existent in XML file.
