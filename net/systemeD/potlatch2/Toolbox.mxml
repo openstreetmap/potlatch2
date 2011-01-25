@@ -5,6 +5,11 @@
 	height="76" width="129" layout="absolute"
 	styleName="theToolBox">
 
+        <!-- the animation effect that controls the rotation of the reverse arrow.
+              We could get more fancy by using previous angle in angleFrom, and a longer duration, to give a nice animated effect -->
+        <mx:Rotate id="rotate" angleFrom="{angle-1}" angleTo="{angle}" target="{arrowBox}" originX="{arrowBox.width/2}" originY="{arrowBox.height/2}" duration="4"/>
+
+
 		<mx:Image data="@Embed('../../../embedded/close_small.png')"
 			includeInLayout="false" id="toolboxClose" click="toggle();" 
 			y="-6" x="115" />
@@ -17,12 +22,32 @@
 			alpha="{getAlpha('delete')}" 
 			toolTip="{deleteToolTipText()}" 
 			width="28" height="28" textAlign="left" y="4" x="6" paddingLeft="6" paddingRight="0" />
-		<mx:Button icon="@Embed('../../../embedded/direction.svg')" 
-			click='doReverseDirection();'
-			enabled="{canDo('reverseDirection')}" 
-			alpha="{getAlpha('reverseDirection')}" 
-			toolTip="Reverse direction (V)" 
-			width="28" height="28" textAlign="left" y="4" x="36" paddingLeft="8" paddingRight="0" />
+
+        <mx:HBox width="28" height="28" y="4" x="36" borderStyle="solid" cornerRadius="4" click="reverseClicked();" horizontalAlign="center" verticalAlign="middle">
+            <mx:ViewStack id="rotateButtonStack">
+                <!-- I can totally recommend adding borderStyle="solid" to arrowBox when debugging -->
+                <mx:HBox id="arrowBox" horizontalAlign="center" verticalAlign="middle" width="24" height="24">
+                    <mx:Image id="arrow" source="@Embed('../../../embedded/arrow.svg')"
+                        alpha="{getAlpha('reverseDirection')}"
+                        toolTip="Reverse direction (V)"
+                        width="22" height="22"/>
+                </mx:HBox>
+                <mx:HBox id="clockwiseBox" horizontalAlign="center" verticalAlign="middle">
+                    <mx:Image id="clockwise" source="@Embed('../../../embedded/clockwise.svg')"
+                        alpha="{getAlpha('reverseDirection')}"
+                        toolTip="Reverse direction (V)"
+                        width="22" height="22" x="2" y="2"/>
+                </mx:HBox>
+                <mx:HBox id="antiClockwiseBox" horizontalAlign="center" verticalAlign="middle">
+                    <mx:Image id="anticlockwise" source="@Embed('../../../embedded/anti-clockwise.svg')"
+                        click='doReverseDirection();'
+                        enabled="{canDo('reverseDirection')}"
+                        alpha="{getAlpha('reverseDirection')}"
+                        toolTip="Reverse direction (V)"
+                        width="22" height="22" x="2" y="2"/>
+                </mx:HBox>
+            </mx:ViewStack>
+        </mx:HBox>
 		<mx:Button icon="@Embed('../../../embedded/cut.svg')" 
 			click='doSplit();'
 			enabled="{canDo('split')}" 
@@ -74,6 +99,9 @@
 
 		private var controller:EditController;
 
+        [Bindable]
+        public var angle:int=0;
+
 		public function init(controller:EditController):void {
 			this.controller=controller;
 			/* check if the toolbox was explictly turned off in a previous session */
@@ -91,6 +119,7 @@
 		public function updateSelectionUI():void {
 			dispatchEvent(new Event("updateSkin"));
 			dispatchEvent(new Event("updateAlpha"));
+			updateDirectionArrow();
 		}
 
 		private function handleDown(e:Event):void {
@@ -144,6 +173,38 @@
 			if (entity is Way) { return "Delete Way (Shift+Delete)"; }
 			return "Delete Item"; // When nothing is selected
 		}
+
+        private function updateDirectionArrow():void {
+            if (controller.state is SelectedWay) {
+                var w:Way = Way(controller.state.firstSelected);
+                if (w) { // not entirely sure why this protection is necessary, but it appears so
+                    if (w.isArea()) {
+                        trace("clockwise?: "+w.clockwise);
+                        w.clockwise? rotateButtonStack.selectedChild = clockwiseBox : rotateButtonStack.selectedChild = antiClockwiseBox;
+                    } else {
+                        rotateButtonStack.selectedChild = arrowBox;
+                        // reset and reposition back to the starting point relative to its parent
+                        rotate.end();
+                        angle = 0;
+                        rotate.play();
+                        arrowBox.x = 0;
+                        arrowBox.y = 0;
+
+                        // move
+                        trace("angle: " + w.angle);
+                        rotate.end();
+                        angle = w.angle;
+                        rotate.play();
+                    }
+                }
+            }
+        }
+
+        private function reverseClicked():void {
+            if(canDo('reverseDirection')) {
+                doReverseDirection();
+            }
+        }
 
 		// --------------------------------------------------------------------------------
 		// Individual toolbox actions
