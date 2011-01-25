@@ -14,8 +14,12 @@
       import org.flexunit.listeners.CIListener;
       import org.flexunit.listeners.UIListener;
       import org.flexunit.runner.FlexUnitCore;
+      import org.mockito.integrations.flexunit4.MockitoClassRunner;
+
       private var core:FlexUnitCore;
-      
+
+      private var mockitoRunner:MockitoClassRunner;
+
       private function onCreationComplete():void
       {
       core = new FlexUnitCore();
