@@ -175,7 +175,7 @@
   
      <!-- Run FlexUnit Ant Task to execute the unit tests and capture reporting data -->
      <!-- on linux, make sure that gflashplayer is in your PATH and launches a standalone flashplayer binary -->
-     <taskdef resource="flexUnitTasks.tasks" classpath="${LIBS_DIR}/flexUnitTasks-4.0.0.jar" />
+     <taskdef resource="flexUnitTasks.tasks" classpath="${LIBS_DIR}/flexUnitTasks-4.1.0_RC2-28.jar" />
      <flexunit swf="${test.bin.dir}/${test.application.name}.swf" toDir="${report.dir}"
        haltonfailure="false" verbose="false" localTrusted="true" player="flash" />
        
