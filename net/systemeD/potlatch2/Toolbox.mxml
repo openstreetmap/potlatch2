@@ -25,12 +25,14 @@
 
         <mx:HBox width="28" height="28" y="4" x="36" borderStyle="solid" cornerRadius="4" click="reverseClicked();" horizontalAlign="center" verticalAlign="middle">
             <mx:ViewStack id="rotateButtonStack">
-                <!-- I can totally recommend adding borderStyle="solid" to arrowBox when debugging -->
-                <mx:HBox id="arrowBox" horizontalAlign="center" verticalAlign="middle" width="24" height="24">
-                    <mx:Image id="arrow" source="@Embed('../../../embedded/arrow.svg')"
-                        alpha="{getAlpha('reverseDirection')}"
-                        toolTip="Reverse direction (V)"
-                        width="22" height="22"/>
+                <mx:HBox id="arrowBoxWrapper"><!-- changing the viewstack back onto a rotated hbox causes positioning glitches, hence this wrapper -->
+                    <!-- I can totally recommend adding borderStyle="solid" to arrowBox when debugging -->
+                    <mx:HBox id="arrowBox" horizontalAlign="center" verticalAlign="middle" width="24" height="24">
+                        <mx:Image id="arrow" source="@Embed('../../../embedded/arrow.svg')"
+                            alpha="{getAlpha('reverseDirection')}"
+                            toolTip="Reverse direction (V)"
+                            width="22" height="22"/>
+                    </mx:HBox>
                 </mx:HBox>
                 <mx:HBox id="clockwiseBox" horizontalAlign="center" verticalAlign="middle">
                     <mx:Image id="clockwise" source="@Embed('../../../embedded/clockwise.svg')"
@@ -182,7 +184,7 @@
                         trace("clockwise?: "+w.clockwise);
                         w.clockwise? rotateButtonStack.selectedChild = clockwiseBox : rotateButtonStack.selectedChild = antiClockwiseBox;
                     } else {
-                        rotateButtonStack.selectedChild = arrowBox;
+                        rotateButtonStack.selectedChild = arrowBoxWrapper;
                         // reset and reposition back to the starting point relative to its parent
                         rotate.end();
                         angle = 0;
@@ -191,7 +193,6 @@
                         arrowBox.y = 0;
 
                         // move
-                        trace("angle: " + w.angle);
                         rotate.end();
                         angle = w.angle;
                         rotate.play();

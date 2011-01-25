@@ -72,7 +72,6 @@ Potlatch 2: main outstanding issues
 * Doesn't look like a button
 * Clicking reverse doesn't update the toolbox (toolbox only recalculates itself on selection)
 * clockwise / anticlockwise are backwards
-* Click from area to line makes arrow displaced. click line again it sorts itself out.
 
 Requested enhancements
 ----------------------
