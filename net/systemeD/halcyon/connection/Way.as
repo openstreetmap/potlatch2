@@ -218,6 +218,16 @@ package net.systemeD.halcyon.connection {
 			return left;
 		}
 
+        public function get angle():Number {
+            var dx:Number = nodes[nodes.length-1].lon - nodes[0].lon;
+            var dy:Number = nodes[nodes.length-1].latp - nodes[0].latp;
+            if (dx != 0 || dy != 0) {
+                return Math.atan2(dx,dy)*(180/Math.PI);
+            } else {
+                return 0;
+            }
+        }
+
 		internal override function isEmpty():Boolean {
 			return (deleted || (nodes.length==0));
 		}
