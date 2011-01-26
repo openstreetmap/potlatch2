@@ -40,6 +40,11 @@ package net.systemeD.potlatch2.controller {
             selection = [way];
             controller.updateSelectionUI();
             initWay = way;
+            way.addEventListener(Connection.WAY_REORDERED, updateSelectionUI, false, 0, true);
+        }
+
+        private function updateSelectionUI(e:Event):void {
+            controller.updateSelectionUI();
         }
 
         /** Tidy up UI as we transition to a new state without the current selection. */
