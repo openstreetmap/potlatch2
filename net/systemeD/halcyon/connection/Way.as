@@ -1,7 +1,7 @@
 package net.systemeD.halcyon.connection {
     import flash.geom.Point;
-	import net.systemeD.halcyon.Globals;
-	import net.systemeD.halcyon.connection.actions.*;
+    
+    import net.systemeD.halcyon.connection.actions.*;
 
     public class Way extends Entity {
         private var nodes:Array;
@@ -59,6 +59,29 @@ package net.systemeD.halcyon.connection {
 		public function getLastNode():Node {
 			return nodes[nodes.length-1];
 		}
+		
+		/** Given one node, return the next in sequence, cycling around a loop if necessary. */
+		// TODO make behave correctly for P-shaped topologies?
+		public function getNextNode(node:Node):Node {
+			// If the last node in a loop is selected, this behaves correctly.
+		    var i:uint = indexOfNode(node);
+		    if(i < length-1)
+	            return nodes[i+1];
+	        return null;
+	        // What should happen for very short lengths?      
+		}
+        
+        // TODO make behave correctly for P-shaped topologies?
+        /** Given one node, return the previous, cycling around a loop if necessary. */
+        public function getPrevNode(node:Node):Node {
+            var i:uint = indexOfNode(node);
+            if(i > 0)
+                return nodes[i-1];
+            if(i == 0 && isArea() )
+                return nodes[nodes.length - 2]
+            return null;
+            // What should happen for very short lengths?      
+        }
 
         public function insertNode(index:uint, node:Node, performAction:Function):void {
 			performAction(new AddNodeToWayAction(this, node, nodes, index));
