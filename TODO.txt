@@ -70,7 +70,6 @@ Potlatch 2: main outstanding issues
 
 == Reverse Button ==
 * Doesn't look like a button
-* clockwise / anticlockwise are backwards
 
 Requested enhancements
 ----------------------

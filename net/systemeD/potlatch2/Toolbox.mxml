@@ -181,8 +181,8 @@
                 var w:Way = Way(controller.state.firstSelected);
                 if (w) { // not entirely sure why this protection is necessary, but it appears so
                     if (w.isArea()) {
-                        trace("clockwise?: "+w.clockwise);
-                        w.clockwise? rotateButtonStack.selectedChild = clockwiseBox : rotateButtonStack.selectedChild = antiClockwiseBox;
+                        // so Way.clockwise appears to give wrong results. Patches welcome, I guess, but for now...
+                        w.clockwise? rotateButtonStack.selectedChild = antiClockwiseBox : rotateButtonStack.selectedChild = clockwiseBox;
                     } else {
                         rotateButtonStack.selectedChild = arrowBoxWrapper;
                         // reset and reposition back to the starting point relative to its parent
