@@ -481,6 +481,19 @@ package net.systemeD.halcyon {
 						g.endFill();
 					}
 					break;
+                case 'triangle':
+                    w=s.width*10;   //triangle egde
+                    g.lineStyle(1,c);
+                    for each (seg in segments) {
+                        g.beginFill(c);
+                        angle0 = -Math.atan2(seg[3], seg[2]) + Math.PI / 2; //0
+                        angle1 = -Math.atan2(seg[3], seg[2]) - Math.PI/6;       //60
+                        g.moveTo(seg[0], seg[1]);//start 0,0
+                        g.lineTo(seg[0] - w * Math.sin(angle0), seg[1] - w * Math.cos(angle0));
+                        g.lineTo(seg[0] + w * Math.sin(angle1), seg[1] + w * Math.cos(angle1));
+                        g.endFill();
+                    }
+                    break;
 				}
 		}
 
