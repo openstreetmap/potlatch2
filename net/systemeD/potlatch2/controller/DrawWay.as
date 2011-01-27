@@ -263,73 +263,59 @@ package net.systemeD.potlatch2.controller {
             return state;
 		}
 		
-		/** Extends the current way by "following" an existing way, after the user has already selected two nodes in a row. */
+		/** Extends the current way by "following" an existing way, after the user has already selected two nodes in a row. 
+			If drawing way has at least two nodes, and both belong to another way, and those ways are the same,
+			then find the next node, add that node, update screen and scroll the new node into shot if necessary.
+			TODO: add a bit of feedback (FloatingAlert?) when following can't be carried out for some reason. */
 		protected function followWay():void {
-			// TODO add a bit of feedback when following can't be carried out for some reason. 
-			// Perhaps use the new FloatingAlert that I couldn't figure out how to use 
-			
-		  /*
-		  If drawing way has at least two nodes
-		  and both belong to another way
-		  and those ways are the same
-		  then find the next node
-		  then add that node
-		  then update screen and scroll the new node into shot if necessary */
-		  var curnode:Node;
-		  var prevnode:Node;
-		  if (Way(firstSelected).length < 2) {
-		      return;
-		  }
-		  if (editEnd) {
-		  	curnode = Way(firstSelected).getLastNode();
-		  	prevnode = Way(firstSelected).getNode(Way(firstSelected).length-2);
-		  } else {
-            curnode = Way(firstSelected).getNode(0);
-            prevnode = Way(firstSelected).getNode(1);
-	  	
-		  }
-		  if (curnode.numParentWays <2 || prevnode.numParentWays <2) 
-		      return;
-		  var followedWay:Way = null;
-		  for each (var way:Way in curnode.parentWays) {
-		  	if (way!=firstSelected && prevnode.hasParent(way)) {
-		  		// Could be slightly smarter when there are more than one candidate. Perhaps could see which
-		  		// of the 2+ ways is the most colinear with the currently drawn way.
-		  		followedWay = way;
-		  	}
-		  }
-		  if (!followedWay)
-		      return;
-		  var nextNode:Node;
-          if (followedWay.getNextNode(prevnode) == curnode) {
-              nextNode = followedWay.getNextNode(curnode);
-          } else if (followedWay.getNextNode(curnode) == prevnode){
-              nextNode = followedWay.getPrevNode(curnode);
-          } else // The two nodes selected aren't actually consecutive. Make a half-hearted
-                 // guess at which way to follow. Will be "incorrect" if the join in the loop
-                 // is between the two points. 
-            if (followedWay.indexOfNode(curnode) > followedWay.indexOfNode(prevnode)) {
-              nextNode = followedWay.getNextNode(curnode);
-            } else {
-              nextNode = followedWay.getPrevNode(curnode);
-            }
-          if (!nextNode) return;
-          if (nextNode.hasParent(firstSelected))
-            return;
-          
-          appendNode(nextNode as Node, MainUndoStack.getGlobalStack().addAction);
-          resetElastic(nextNode as Node);
-          lastClick=nextNode;
-          controller.map.setHighlight(nextNode, { selectedway: true });
-          
-          // recentre the map if the new lat/lon is offscreen
-          if (nextNode.lat > controller.map.edge_t ||
-              nextNode.lat < controller.map.edge_b ||  
-              nextNode.lon < controller.map.edge_l ||
-              nextNode.lon > controller.map.edge_r) {
-              	
-            controller.map.moveMapFromLatLon(nextNode.lat, nextNode.lon);
-          }
+			var curnode:Node;
+			var prevnode:Node;
+			if (Way(firstSelected).length < 2) return;
+
+			if (editEnd) {
+				curnode = Way(firstSelected).getLastNode();
+				prevnode = Way(firstSelected).getNode(Way(firstSelected).length-2);
+			} else {
+				curnode = Way(firstSelected).getNode(0);
+				prevnode = Way(firstSelected).getNode(1);
+			}
+			if (curnode.numParentWays <2 || prevnode.numParentWays <2) return;
+
+			var followedWay:Way;
+			for each (var way:Way in curnode.parentWays) {
+				if (way!=firstSelected && prevnode.hasParent(way))
+					followedWay = way;		// FIXME: could be smarter when there's more than one candidate
+			}
+			if (!followedWay) return;
+
+			var nextNode:Node;
+			if (followedWay.getNextNode(prevnode) == curnode) {
+				nextNode = followedWay.getNextNode(curnode);
+			} else if (followedWay.getNextNode(curnode) == prevnode){
+				nextNode = followedWay.getPrevNode(curnode);
+			} else if (followedWay.indexOfNode(curnode) > followedWay.indexOfNode(prevnode)) {
+				// The two nodes selected aren't actually consecutive. Make a half-hearted
+				// guess at which way to follow. Will be "incorrect" if the join in the loop
+				// is between the two points. 
+				nextNode = followedWay.getNextNode(curnode);
+			} else {
+				nextNode = followedWay.getPrevNode(curnode);
+			}
+			if (!nextNode) return;
+			if (nextNode.hasParent(firstSelected)) return;
+
+			appendNode(nextNode as Node, MainUndoStack.getGlobalStack().addAction);
+			resetElastic(nextNode as Node);
+			lastClick=nextNode;
+			controller.map.setHighlight(nextNode, { selectedway: true });
+
+			// recentre the map if the new lat/lon is offscreen
+			if (nextNode.lat > controller.map.edge_t ||
+				nextNode.lat < controller.map.edge_b ||  
+				nextNode.lon < controller.map.edge_l ||
+				nextNode.lon > controller.map.edge_r) {
+				controller.map.moveMapFromLatLon(nextNode.lat, nextNode.lon);
+			}
 		}
 		
 		override public function enterState():void {
