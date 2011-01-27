@@ -10,7 +10,7 @@
 	        dataProvider="{Stylesheets.instance().getCollection()}"
 	        rowCount="{Stylesheets.instance().getCollection().length}" />
 
-	<mx:Button label="Edit..." click="new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
+	<mx:Button label="Edit..." click="Application.application.styleButton.close(); new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;

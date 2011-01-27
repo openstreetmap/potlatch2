@@ -89,8 +89,11 @@ package net.systemeD.potlatch2.collections {
 		
 		[Bindable(event="collection_changed")]
 		public function getCollection():ArrayCollection {
-			return new ArrayCollection(collection);
+			var available:Array=[];
+			for each (var ss:Object in collection) {
+				if (!ss.corestyle || ss.corestyle!='no') available.push(ss);
+			}
+			return new ArrayCollection(available);
 		}
-
 	}
 }

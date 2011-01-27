@@ -16,9 +16,11 @@
     <stylesheet>
         <name>GPS</name>
         <url>stylesheets/gpx.css</url>
+        <corestyle>no</corestyle>
     </stylesheet>
     <stylesheet>
         <name>Bugs</name>
         <url>stylesheets/bugs.css</url>
+        <corestyle>no</corestyle>
     </stylesheet>
 </stylesheets>
