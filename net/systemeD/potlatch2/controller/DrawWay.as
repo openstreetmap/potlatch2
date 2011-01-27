@@ -145,9 +145,9 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		protected function resetElastic(node:Node):void {
-			var mouse:Point = new Point(node.lon, node.latp);
-			elastic.start = mouse;
-			elastic.end = mouse;
+			elastic.start = new Point(node.lon, node.latp);
+			elastic.end   = new Point(controller.map.coord2lon(controller.map.mouseX),
+			                          controller.map.coord2latp(controller.map.mouseY));
 		}
 
         /* Fix up the elastic after a WayNode event - e.g. triggered by undo */
@@ -264,7 +264,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		/** Extends the current way by "following" an existing way, after the user has already selected two nodes in a row. */
-		protected function followWay() {
+		protected function followWay():void {
 			// TODO add a bit of feedback when following can't be carried out for some reason. 
 			// Perhaps use the new FloatingAlert that I couldn't figure out how to use 
 			
@@ -291,11 +291,11 @@ package net.systemeD.potlatch2.controller {
 		  if (curnode.numParentWays <2 || prevnode.numParentWays <2) 
 		      return;
 		  var followedWay:Way = null;
-		  for (var i in curnode.parentWays) {
-		  	if (curnode.parentWays[i]!=firstSelected && prevnode.hasParent(curnode.parentWays[i])) {
+		  for each (var way:Way in curnode.parentWays) {
+		  	if (way!=firstSelected && prevnode.hasParent(way)) {
 		  		// Could be slightly smarter when there are more than one candidate. Perhaps could see which
 		  		// of the 2+ ways is the most colinear with the currently drawn way.
-		  		followedWay = curnode.parentWays[i];
+		  		followedWay = way;
 		  	}
 		  }
 		  if (!followedWay)
