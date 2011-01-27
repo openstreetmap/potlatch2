@@ -26,7 +26,7 @@ package net.systemeD.potlatch2.utils {
         private var bikeShopBaseURL:String;
         private var name:String;
         private var _layer:VectorLayer;
-        private static const STYLESHEET:String="bikeshops.css";
+        private static const STYLESHEET:String="stylesheets/bikeshops.css";
 
         public function BikeShopLoader(map:Map, url:String, name:String) {
             this.map = map;

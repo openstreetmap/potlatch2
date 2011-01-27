@@ -26,7 +26,7 @@ package net.systemeD.halcyon.connection {
         private var _layer:VectorLayer;
         private var simplify:Boolean = false;
 
-        private static const STYLESHEET:String="gpx.css";
+        private static const STYLESHEET:String="stylesheets/gpx.css";
 
         public function Trace() {
             map = Globals.vars.root;

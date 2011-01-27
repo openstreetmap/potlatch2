@@ -142,8 +142,8 @@
 
 	private function loadFiles(url:String,type:String,simplify:Boolean):void {
 		var names:Array=url.split('/'); var name:String=names[names.length-1];
-		var stylesheet:String="potlatch.css";
-		if (type=='gpx') { stylesheet="gpx.css"; }
+		var stylesheet:String="stylesheets/potlatch.css";
+		if (type=='gpx') { stylesheet="stylesheets/gpx.css"; }
 		var vectorlayer:VectorLayer=new VectorLayer(name,map,stylesheet);
 		vectorlayer.url=url;
 

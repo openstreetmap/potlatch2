@@ -47,7 +47,7 @@ package net.systemeD.potlatch2.collections {
                   if (set.url) {
                     if (set.@loaded == "true") {
                       name ||= 'GPX file';
-                      var layer:VectorLayer = new VectorLayer(name, _map, 'gpx.css');
+                      var layer:VectorLayer = new VectorLayer(name, _map, 'stylesheets/gpx.css');
                       _map.addVectorLayer(layer);
                       var gpxImporter:GpxImporter = new GpxImporter(layer, layer.paint, [String(set.url)]);
                     } else {

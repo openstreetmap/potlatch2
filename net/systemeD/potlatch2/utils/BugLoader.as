@@ -16,7 +16,7 @@ package net.systemeD.potlatch2.utils {
         private var bugDetailsURL:String;
         private var _layer:VectorLayer;
         private var name:String;
-        private static const STYLESHEET:String="bugs.css";
+        private static const STYLESHEET:String="stylesheets/bugs.css";
 
 
         public function BugLoader(map:Map, url:String, bugApiKey:String, name:String, details:String = ''):void {

@@ -22,7 +22,7 @@ package net.systemeD.potlatch2.utils {
 		private var map:Map;
 		private var apiBaseURL:String;
 
-		private static const STYLESHEET:String="gpx.css";
+		private static const STYLESHEET:String="stylesheets/gpx.css";
 		
 		public function TrackLoader(map:Map, url:String) {
 			this.map=map;
