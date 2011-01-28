@@ -86,6 +86,10 @@ package net.systemeD.potlatch2 {
 			tagViewer.setEntity(state.selection, layer);
 			toolbox.updateSelectionUI();
 		}
+
+		public function updateSelectionUIWithoutTagChange():void {
+			toolbox.updateSelectionUI();
+		}
         
         private function keyDownHandler(event:KeyboardEvent):void {
 			keys[event.keyCode]=true;
