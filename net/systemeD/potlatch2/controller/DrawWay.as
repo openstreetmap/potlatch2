@@ -48,7 +48,6 @@ package net.systemeD.potlatch2.controller {
                     controller.map.setPurgable([node], false);
 					resetElastic(node);
 					lastClick=node;
-					controller.updateSelectionUI();
 				} else if ( entity is Node ) {
 					if (entity==lastClick && (new Date().getTime()-lastClickTime.getTime())<1000) {
 						if (Way(firstSelected).length==1 && Way(firstSelected).getNode(0).parentWays.length==1) {
