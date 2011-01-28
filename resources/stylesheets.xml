@@ -9,6 +9,14 @@
 		<name>Wireframe</name>
 		<url>stylesheets/wireframe.css</url>
 	</stylesheet>
+	<stylesheet>
+		<name>Enhanced</name>
+		<url>stylesheets/enhanced.css</url>
+	</stylesheet>
+	<stylesheet>
+		<name>Network</name>
+		<url>stylesheets/network.css</url>
+	</stylesheet>
     <stylesheet>
         <name>OpenCycleMap</name>
         <url>stylesheets/opencyclemap.css</url>

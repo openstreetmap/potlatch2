@@ -23,7 +23,7 @@ package net.systemeD.halcyon.styleparser {
 		private var url:String;
 		private var count:int;
 
-		private static const IMPORT:RegExp=/@import [^'"]*['"]([^'"]+)['"][^;]*;/g;		// '
+		private static const IMPORT:RegExp=/@import\s*[^'"]*['"]([^'"]+)['"][^;]*;/g;		// '
 
 		public function NestedCSSLoader() {
 		}
@@ -65,6 +65,7 @@ package net.systemeD.halcyon.styleparser {
 
 		private function fileError(event:Event):void {
 			// just fire a complete event so we don't get an error dialogue
+			trace("Error while trying to load "+url);
 			fireComplete();
 		}
 		
