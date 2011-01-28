@@ -40,18 +40,20 @@
         }
         
         public function updateEntityAndClose():void {
-			var relation:Relation = conn.getRelation(relationSelector.selectedItem.relId);
-			if (entity is EntityCollection) {
-				var undo:CompositeUndoableAction = new CompositeUndoableAction("Add to relation");
-				for each (var e:Entity in EntityCollection(entity).entities) {
-					if (relation.findEntityMemberIndex(e)==-1) {
-						relation.appendMember(new RelationMember(e, ''), undo.push);
+			var undo:CompositeUndoableAction = new CompositeUndoableAction("Add to relation");
+			for each (var relObject:Object in relationSelector.selectedItems) {
+				var relation:Relation = conn.getRelation(relObject.relId);
+				if (entity is EntityCollection) {
+					for each (var e:Entity in EntityCollection(entity).entities) {
+						if (relation.findEntityMemberIndex(e)==-1) {
+							relation.appendMember(new RelationMember(e, ''), undo.push);
+						}
 					}
+				} else {
+					relation.appendMember(new RelationMember(entity, ''), undo.push);
 				}
-				MainUndoStack.getGlobalStack().addAction(undo);
-			} else {
-				relation.appendMember(new RelationMember(entity, ''), MainUndoStack.getGlobalStack().addAction);
 			}
+			MainUndoStack.getGlobalStack().addAction(undo);
 			PopUpManager.removePopUp(this);
         }
         
@@ -73,11 +75,11 @@
         
     ]]></mx:Script> 
     <mx:Text id="warning" text="" />
-    <mx:List width="100%" height="100%" id="relationSelector" verticalScrollPolicy="on"> 
+    <mx:List width="100%" height="100%" id="relationSelector" verticalScrollPolicy="on" allowMultipleSelection="true" > 
     </mx:List>
     <mx:ControlBar>
       <mx:Button label="New Relation..." click="closeAndNewRelation();" styleName="titleWindowButton" />
       <mx:Spacer width="100%"/>
-      <mx:Button label="Select" click="updateEntityAndClose();" enabled="{relationSelector.selectedItem != null? true : false}" styleName="titleWindowButton" />
+      <mx:Button label="Select" click="updateEntityAndClose();" enabled="{relationSelector.selectedItems.length>0}" styleName="titleWindowButton" />
     </mx:ControlBar>
 </mx:TitleWindow>
