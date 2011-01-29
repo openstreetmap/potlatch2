@@ -28,23 +28,9 @@ package net.systemeD.potlatch2.controller {
 			clicked = point;
 			wayList = ways;
         }
- 
-        /** Make this way selected, and update UI appropriately. */
-        protected function selectWay(way:Way):void {
-            if ( firstSelected is Way && Way(firstSelected)==way )
-                return;
-
-            clearSelection(this);
-            controller.map.setHighlight(way, { selected: true, hover: false });
-            controller.map.setHighlightOnNodes(way, { selectedway: true });
-            selection = [way];
-            controller.updateSelectionUI();
-            initWay = way;
-            way.addEventListener(Connection.WAY_REORDERED, updateSelectionUI, false, 0, true);
-        }
 
         private function updateSelectionUI(e:Event):void {
-            controller.updateSelectionUI();
+            controller.updateSelectionUIWithoutTagChange();
         }
 
         /** Tidy up UI as we transition to a new state without the current selection. */
@@ -118,7 +104,14 @@ package net.systemeD.potlatch2.controller {
 
         /** Officially enter this state by marking the previously nominated way as selected. */
         override public function enterState():void {
-            selectWay(initWay);
+            if (firstSelected!=initWay) {
+	            clearSelection(this);
+	            controller.map.setHighlight(initWay, { selected: true, hover: false });
+	            controller.map.setHighlightOnNodes(initWay, { selectedway: true });
+	            selection = [initWay];
+	            controller.updateSelectionUI();
+	            initWay.addEventListener(Connection.WAY_REORDERED, updateSelectionUI, false, 0, true);
+			}
 			controller.map.setPurgable(selection,false);
 			Globals.vars.root.addDebug("**** -> "+this+" "+firstSelected.id);
         }
@@ -129,6 +122,7 @@ package net.systemeD.potlatch2.controller {
               controller.clipboards['way']=firstSelected.getTagsCopy();
             }
 			controller.map.setPurgable(selection,true);
+            firstSelected.removeEventListener(Connection.WAY_REORDERED, updateSelectionUI);
             clearSelection(newState);
 			Globals.vars.root.addDebug("**** <- "+this);
         }
