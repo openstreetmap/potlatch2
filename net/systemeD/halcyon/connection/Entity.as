@@ -391,7 +391,7 @@ package net.systemeD.halcyon.connection {
         }
 
 		/** Compare type against supplied string */
-		public function isType(str:String):String {
+		public function isType(str:String):Boolean {
 			return getType()==str;
 		}
 

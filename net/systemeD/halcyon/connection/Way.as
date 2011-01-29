@@ -259,7 +259,7 @@ package net.systemeD.halcyon.connection {
 			return 'way';
 		}
 		
-		public override function isType(str:String):String {
+		public override function isType(str:String):Boolean {
 			if (str=='way') return true;
 			if (str=='line' && !isArea()) return true;
 			if (str=='area' &&  isArea()) return true;
