@@ -6,7 +6,6 @@ package net.systemeD.halcyon {
 	import flash.text.GridFitType;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.StyleList;
-	import net.systemeD.halcyon.styleparser.RuleSet;
     import net.systemeD.halcyon.connection.*;
 
 	/** Parent class of representations of map Entities, with properties about how they should be drawn. */ 
@@ -34,8 +33,6 @@ package net.systemeD.halcyon {
 		protected var clearLimit:uint=0;
 		/** Reference to parent MapPaint */
 		public var paint:MapPaint;	
-		/** Reference to ruleset (MapCSS) in operation */
-		public var ruleset:RuleSet;
 		/** Does object respond to clicks? */
 		public var interactive:Boolean=true;
 		/** Can it be deleted when offscreen? */

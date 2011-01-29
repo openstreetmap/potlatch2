@@ -9,16 +9,20 @@ package net.systemeD.halcyon.styleparser {
 
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.Globals;
-//	import bustin.dev.Inspector;
 	
-	/** A set of rules for rendering a map, as retrieved from a MapCSS file. */
+	/** A complete stylesheet, as loaded from a MapCSS file. It contains all selectors, declarations, 
+		and embedded images are contained.																		</p><p>
+		
+		The RuleSet class contains the main getStyles method for finding the styles to apply to an entity,
+		plus the MapCSS parser. */
+
 	public class RuleSet {
 
-		/** Has it loaded yet? */
+		/** Is the RuleSet fully loaded and available for use? */
 		public var loaded:Boolean=false; 
-		/** Loaded images */
+		/** Hash of loaded images. Hash key is filename, value is BitmapData for the image. */
 		public var images:Object=new Object();
-		/** Width of each bitmap image. */
+		/** Hash of image widths. Hash key is filename, value is pixel width. */
 		public var imageWidths:Object=new Object();	
 		private var redrawCallback:Function=null;	// function to call when CSS loaded
 		private var iconCallback:Function=null;		// function to call when all icons loaded
@@ -244,7 +248,10 @@ package net.systemeD.halcyon.styleparser {
 		// ---------------------------------------------------------------------------------------------------------
 		// Loading stylesheet
 
-        /** Load ruleset the MapCSS file referenced in <code>str</code>.*/
+        /** Load and then parse a MapCSS stylesheet. Usually you will supply a filename, but you can also pass 
+			a complete stylesheet in the string parameter. (Any string containing space characters will be 
+			assumed to be a stylesheet rather than a filename.) */
+
 		public function loadFromCSS(str:String):void {
 			if (str.match(/[\s\n\r\t]/)!=null) { parseCSS(str); loaded=true; redrawCallback(); return; }
 
@@ -265,9 +272,9 @@ package net.systemeD.halcyon.styleparser {
 		}
 
 
-		// ------------------------------------------------------------------------------------------------
-		/** Load all referenced images*/
-		// ** will duplicate if referenced twice, shouldn't
+		/// ------------------------------------------------------------------------------------------------
+		/** Load all images referenced in the RuleSet (for example, icons or bitmap fills).
+			FIXME: if an image is referenced twice, it'll be requested twice. */
 		
 		public function loadImages():void {
 			var filename:String;
@@ -284,16 +291,14 @@ package net.systemeD.halcyon.styleparser {
 					var loader:ExtendedURLLoader=new ExtendedURLLoader();
 					loader.dataFormat=URLLoaderDataFormat.BINARY;
 					loader.info['filename']=filename;
-					loader.addEventListener(Event.COMPLETE, 					loadedImage,			false, 0, true);
-					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,		false, 0, true);
+					loader.addEventListener(Event.COMPLETE, 					loadedImage,				false, 0, true);
+					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,			false, 0, true);
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	onImageLoadSecurityError,	false, 0, true);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				onImageLoadioError,			false, 0, true);
 					loader.load(request.request);
 				}
 			}
 		}
-
-		// data handler
 
 		private function loadedImage(event:Event):void {
 			var fn:String=event.target.info['filename'];
@@ -335,7 +340,8 @@ package net.systemeD.halcyon.styleparser {
 		// ------------------------------------------------------------------------------------------------
 		// Parse CSS
 
-		/** Parse the given MapCSS file by repeatedly throwing regular expressions at it. */
+		/** Parse a MapCSS stylesheet into a set of StyleChoosers. The parser is regular expression-based 
+			and runs sequentially through the file from start to end. */
 		public function parse(css:String):void {
 			var previous:uint=0;					// what was the previous CSS word?
 			var sc:StyleChooser=new StyleChooser();	// currently being assembled
@@ -533,8 +539,11 @@ package net.systemeD.halcyon.styleparser {
 			return null;
 		}
 
-        /** Convert a color string given as either descriptive ("blue"), short hex ("#abc") or long hex ("#a0b0c0"), to an integer. 
-        * @default 0*/
+        /** Convert a colour string from CSS colour name ("blue"), short hex ("#abc") or long hex ("#a0b0c0"), 
+			to an integer. 
+			
+        	@default 0 */
+
         public static function parseCSSColor(colorStr:String):uint {
             colorStr = colorStr.toLowerCase();
             if (CSSCOLORS[colorStr]) {

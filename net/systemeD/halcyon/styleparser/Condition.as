@@ -1,23 +1,33 @@
 package net.systemeD.halcyon.styleparser {
 
-	// valid conditions:
-	// _type_	_params_
-	// regex	key, regex
-	// eq		key, value
+	/**	A single tag test that forms part of a MapCSS selector.
+		For example, "highway==primary" or "population>1000".
+		Conditions are grouped in Rules.
+		
+		@see net.systemeD.halcyon.styleparser.Rule */
 
 	public class Condition {
-		public var type:String;		// eq, regex, lt, gt etc.
-		public var params:Array;	// e.g. ('highway','primary')
+		public var type:String;
+		public var params:Array;
+
+		/** Create a new Condition.														<p>
+		  
+			Valid types:															</p><p>
+			eq,'highway','trunk'		- simple equality test						</p><p>
+			ne,'highway','trunk'		- not equals								</p><p>
+			regex,'highway','trunk.+'	- regular expression						</p><p>
+			true,'bridge'				- value is true/yes/1						</p><p>
+			untrue,'bridge'				- value is not true/yes/1					</p><p>
+			set,'highway'				- tag exists and is not ''					</p><p>
+			unset,'highway'				- tag does not exist, or is ''				</p><p>
+			<,'population','5000'		- numeric comparison (also <=, >, >=)		</p>
+		 */
 		
-		// ------------------------------------------------------------------------------------------
-		// Constructor function
-		
-		public function Condition(t:String='', ...a) {
-			type=t; params=a;
+		public function Condition(type:String='', ...params) {
+			this.type=type; this.params=params;
 		}
 		
-		// ------------------------------------------------------------------------------------------
-		// Test a hash against this condition
+		/** Test a tag hash against the Condition. */
 
 		public function test(tags:Object):Boolean {
 			switch (type) {

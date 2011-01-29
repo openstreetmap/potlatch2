@@ -1,21 +1,21 @@
 package net.systemeD.halcyon.styleparser {
 
-	/** A class permitting you to load CSS files containing '@import' rules, which will be 
-	*	automatically replaced with the contents of the file.
-	*
-	*   Typical usage:
-	*
-	*		cssLoader=new NestedCSSLoader();
-	*		cssLoader.addEventListener(Event.COMPLETE, doParseCSS);
-	*		cssLoader.load("potlatch.css");
-	*
-	*	doParseCSS can then access the CSS via event.target.css.
-	*/
-
 	import flash.events.*;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+
+	/** A class permitting you to load CSS files containing 'import' rules, which will be 
+		automatically replaced with the contents of the file.									<p>
+	
+	   	Typical usage:																			</p><pre>
+	
+			cssLoader=new NestedCSSLoader();
+			cssLoader.addEventListener(Event.COMPLETE, doParseCSS);
+			cssLoader.load("potlatch.css");														</pre><p>
+	
+		doParseCSS can then access the CSS via event.target.css.								</p>
+	*/
 
 	public class NestedCSSLoader extends EventDispatcher {
 		private var sourceCSS:String;
