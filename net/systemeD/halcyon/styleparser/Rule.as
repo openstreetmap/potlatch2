@@ -8,14 +8,14 @@ package net.systemeD.halcyon.styleparser {
 		public var isAnd:Boolean = true;
 		public var minZoom:uint = 0;
 		public var maxZoom:uint = 255;
-		public var subject:String='';			// "", "way", "node" or "relation"
+		public var subject:String='';			// "", "way", "area", "line", "node" or "relation"
 		
 		public function Rule(s:String=''):void {
 			subject=s;
 		}
 		
 		public function test(obj:Entity,tags:Object,zoom:uint):Boolean {
-			if (subject!='' && obj.getType()!=subject) { return false; }
+			if (subject!='' && !obj.isType(subject)) { return false; }
 			if (zoom<minZoom || zoom>maxZoom) { return false; }
 			
 			var v:Boolean=true; var i:uint=0;

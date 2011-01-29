@@ -390,6 +390,11 @@ package net.systemeD.halcyon.connection {
             return '';
         }
 
+		/** Compare type against supplied string */
+		public function isType(str:String):String {
+			return getType()==str;
+		}
+
     }
 
 }
