@@ -43,7 +43,8 @@ package net.systemeD.potlatch2.collections {
 					obj[set.child(a).name()]=set.child(a);
 				}
                 collection.push(obj);
-				if (obj.url==saved_url || (obj.name==saved_name && obj.name!='Custom')) { isInMenu=true; }
+				if (obj.url==saved_url) { isInMenu=true; }
+				else if (obj.name==saved_name && obj.name!='Custom') { isInMenu=true; saved_url=obj.url; }
 			}
 			if (saved_url && !isInMenu) { collection.push({ name:saved_name, url:saved_url }); }
 
