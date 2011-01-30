@@ -63,10 +63,10 @@
       <arg line="-source-path ."/>
       <arg line="-doc-sources net/systemeD/"/>
       <arg line="-external-library-path=lib/"/>
-      <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes}"/>
+      <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes} ${com_classes}"/>
       <arg line="-output resources/docs/"/>
       <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
-      <arg line="-main-title 'Halcyon and Poltatch2 Developer documentation'" />
+      <arg line="-main-title 'Halcyon and Potlatch2 Developer documentation'" />
       <arg line="-footer 'Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
       <arg line="-package net.systemeD.controls 'Custom-built controls used in Poltatch2'" />
       <arg line="-package net.systemeD.halcyon 'The AS3 rendering library'" />
@@ -97,6 +97,15 @@
              automatically ignored). Unfortunately asdoc only has options for excluding particular
              classes, and there's lots of them - so this stuff autogenerates the class lists that
              we want to ignore. -->
+
+        <fileset id="com_sources" dir="${basedir}/com/" />
+        <!-- convert the names of excluded classes to packages with class names -->
+        <pathconvert property="com_classes" pathsep=" " refid="com_sources">
+                <chainedmapper>
+                        <globmapper from="${basedir}/*" to="*"/>
+                        <mapper type="package" from="*.as" to="*"/>
+                </chainedmapper>
+        </pathconvert>
 
         <!-- Get the list of all files in the org directory -->
         <fileset id="org_sources" dir="${basedir}/org/" />
