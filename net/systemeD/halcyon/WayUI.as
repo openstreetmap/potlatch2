@@ -393,7 +393,7 @@ package net.systemeD.halcyon {
 		private function solidLineOtherWay(g:Graphics,way:Way):void {
 			if (way.length==0) { return; }
 			
-			var node:Node = way.getNode(indexStart);
+			var node:Node = way.getNode(0);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			for (var i:uint = 1; i < way.length; i++) {
 				node = way.getNode(i);
