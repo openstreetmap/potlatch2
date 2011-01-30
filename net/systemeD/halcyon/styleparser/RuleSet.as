@@ -11,10 +11,11 @@ package net.systemeD.halcyon.styleparser {
 	import net.systemeD.halcyon.Globals;
 	
 	/** A complete stylesheet, as loaded from a MapCSS file. It contains all selectors, declarations, 
-		and embedded images are contained.																		</p><p>
+		and embedded images.																				</p><p>
 		
-		The RuleSet class contains the main getStyles method for finding the styles to apply to an entity,
-		plus the MapCSS parser. */
+		The RuleSet class has two principal methods: getStyles, which calculates the styles that apply
+		to an entity (returned as a StyleList); and parse, which parses a MapCSS stylesheet into
+		a complete RuleSet. */
 
 	public class RuleSet {
 
@@ -228,6 +229,7 @@ package net.systemeD.halcyon.styleparser {
 			yellowgreen:0x9acd32 };
 
 		/** Constructor */
+
 		public function RuleSet(mins:uint,maxs:uint,redrawCall:Function=null,iconLoadedCallback:Function=null):void {
 			minscale = mins;
 			maxscale = maxs;
@@ -235,7 +237,8 @@ package net.systemeD.halcyon.styleparser {
 			iconCallback = iconLoadedCallback;
 		}
 
-		/** Get styles for an object*/
+		/** Create a StyleList for an Entity, by creating a blank StyleList, then running each StyleChooser over it.
+			@see net.systemeD.halcyon.styleparser.StyleList */
 
 		public function getStyles(obj:Entity, tags:Object, zoom:uint):StyleList {
 			var sl:StyleList=new StyleList();
@@ -276,7 +279,7 @@ package net.systemeD.halcyon.styleparser {
 		/** Load all images referenced in the RuleSet (for example, icons or bitmap fills).
 			FIXME: if an image is referenced twice, it'll be requested twice. */
 		
-		public function loadImages():void {
+		private function loadImages():void {
 			var filename:String;
 			for each (var chooser:StyleChooser in choosers) {
 				for each (var style:Style in chooser.styles) {

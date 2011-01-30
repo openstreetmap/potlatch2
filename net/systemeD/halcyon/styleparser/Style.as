@@ -3,21 +3,40 @@ package net.systemeD.halcyon.styleparser {
 	import flash.utils.ByteArray;
 	import flash.net.*;
 
+	/** A Style is a set of graphic properties (e.g. stroke colour and width, casing colour and width, 
+		font and text size), typically derived from a MapCSS descriptor. This is the base class
+		for particular style groupings such as ShapeStyle and PointStyle.
+		
+		@see net.systemeD.halcyon.styleparser.StyleList
+		@see net.systemeD.halcyon.styleparser.StyleChooser
+	*/
+
 	public class Style {
 
-		/** Has this style had another style merged into it? */
+		/** Has this style had another style merged into it?
+			(When styles cascade, then we need to merge the first style with any subsequent styles that apply.) */
 		public var merged:Boolean=false;
-		/** true once a property has been set from a string */
-		public var edited:Boolean=false;
-		/** Z-index */
-		public var sublayer:Number=5;
-		/** Should entities with this style respond to interaction like mouse movement? */
-		public var interactive:Boolean=true;	
-		/** Compiled SWFs for each eval. We keep it here, not in the property itself, so that we can retain typing for each property */
-		public var evals:Object={};
-		/** Return an exact copy of this object */
-		// ** this needs some benchmarking - may be quicker to iterate over .properties, copying each one
 
+		/** Is the style active (properties have been set)? */
+		public var edited:Boolean=false;
+
+		/** The sublayer is the z-index property _within_ an OSM layer.
+			It enables (for example) trunk roads to be rendered above primary roads within that OSM layer, 
+			and so on. "OSM layer 1 / sublayer 5" will render above "OSM layer 1 / sublayer 4", but below 
+			"OSM layer 2 / sublayer 4". */
+		public var sublayer:Number=5;
+
+		/** Does this style permit mouse interaction?
+			(Some styling, such as P2's back-level yellow highlight for selected ways, should not respond 
+			to mouse events.) */
+		public var interactive:Boolean=true;	
+
+		/** Compiled SWFs for each eval. We keep it here, not in the property itself, so that we can retain typing for each property. */
+		public var evals:Object={};
+		
+		/** Make an exact copy of an object.
+			Used when merging cascading styles. (FIXME: this needs some benchmarking - it may be quicker to simply iterate over .properties, 
+			copying each one. */
 		public function deepCopy():* {
 			registerClassAlias("net.systemeD.halcyon.styleparser.ShapeStyle",ShapeStyle);
 			registerClassAlias("net.systemeD.halcyon.styleparser.TextStyle",TextStyle);
@@ -30,8 +49,7 @@ package net.systemeD.halcyon.styleparser {
 			return (a.readObject());
 		}
 
-		/** Add properties from another object */
-
+		/** Merge two Style objects. */
 		public function mergeWith(additional:Style):void {
 			for each (var prop:String in properties) {
 				if (additional[prop]) {
@@ -41,8 +59,7 @@ package net.systemeD.halcyon.styleparser {
 			this.merged=true;
 		}
 
-		/** Getters (to be overridden) */
-
+		/** Properties getter, to be overridden. */
 		public function get properties():Array {
 			return [];
 		}
@@ -58,19 +75,16 @@ package net.systemeD.halcyon.styleparser {
 			return false;
 		}
 		
-		/** If the stylesheet has width=eval('_width+2'), then this will set Style.width to 7 (say). */
+		/** Run all evals for this Style over the supplied tags.
+			If, for example, the stylesheet contains width=eval('_width+2'), then this will set Style.width to 7. */
 		public function runEvals(tags:Object):void {
 			for (var k:String in evals) {
 				// ** Do we need to do typing here?
 				this[k]=evals[k].exec(tags);
-				
-				
-				//    
 			}
 		}
 
-		/** Set property and cast as correct type (used in stylesheet imports)*/
-		
+		/** Set a property, casting as correct type. */
 		public function setPropertyFromString(k:String,v:*):Boolean {
 			if (!this.hasOwnProperty(k)) { return false; }
 			if (v is Eval) { evals[k]=v; v=1; }
@@ -96,7 +110,7 @@ package net.systemeD.halcyon.styleparser {
 			return false;
 		}
 
-		/** Serialise properties to a string. */
+		/** Summarise Style as String - for debugging. */
 		public function toString():String {
 			var str:String='';
             for each (var k:String in this.properties) {

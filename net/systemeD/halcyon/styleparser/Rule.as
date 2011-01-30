@@ -2,7 +2,7 @@ package net.systemeD.halcyon.styleparser {
 
     import net.systemeD.halcyon.connection.*;
 
-	/**	A MapCSS selector. Contains a list of Conditions, the entity type to which the selector applies, 
+	/**	A MapCSS selector. Contains a list of Conditions; the entity type to which the selector applies; 
 		and the zoom levels at which it is true. way[waterway=river][boat=yes] would be parsed into one Rule. <p>
 		
 		The selectors and declaration together form a StyleChooser.											  </p>
