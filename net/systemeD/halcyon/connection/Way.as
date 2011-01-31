@@ -56,6 +56,10 @@ package net.systemeD.halcyon.connection {
             return nodes[index];
         }
 
+        public function getFirstNode():Node {
+            return nodes[0];
+        }
+
 		public function getLastNode():Node {
 			return nodes[nodes.length-1];
 		}
@@ -265,6 +269,24 @@ package net.systemeD.halcyon.connection {
 			if (str=='area' &&  isArea()) return true;
 			return false;
 		}
+		
+		/** Whether the way has a loop that joins back midway along its length */
+		public function isPShape():Boolean {
+			return getFirstNode() != getLastNode() && (!hasOnceOnly(getFirstNode()) || !hasOnceOnly(getLastNode()) );
+		}
+		
+		/** Given a P-shaped way, return the index of midway node that one end connects back to. */
+		public function getPJunctionNodeIndex():uint {
+			if (isPShape()) {
+			    if (hasOnceOnly(getFirstNode())) {
+			        // nodes[0] is the free end
+			        return nodes.indexOf(getLastNode());
+			    } else {
+			        // nodes[0] is in the loop
+			        return nodes.lastIndexOf(getFirstNode());
+			    }
+			}
+			return null;
+		}
     }
-
 }

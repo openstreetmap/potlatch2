@@ -125,14 +125,23 @@ package net.systemeD.potlatch2.controller {
 			    return new DrawWay(selectedWay, isLast, true);
         }
 
+		/** Splits a way into two separate ways, at the currently selected node. Handles simple loops and P-shapes. Untested for anything funkier. */
 		public function splitWay():ControllerState {
+			var n:Node=firstSelected as Node;
+			var ni:uint = parentWay.indexOfNode(n);
 			// abort if start or end
-			if (parentWay.getNode(0)    == firstSelected) { return this; }
-			if (parentWay.getLastNode() == firstSelected) { return this; }
+			if (parentWay.isPShape() && !parentWay.hasOnceOnly(n)) {
+				// If P-shaped, we want to split at the midway point on the stem, not at the end of the loop
+				ni = parentWay.getPJunctionNodeIndex();
+				
+			} else {
+			    if (parentWay.getNode(0)    == n) { return this; }
+			    if (parentWay.getLastNode() == n) { return this; }
+			}
 
 			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
 			controller.map.setPurgable([parentWay],true);
-            MainUndoStack.getGlobalStack().addAction(new SplitWayAction(parentWay, firstSelected as Node));
+            MainUndoStack.getGlobalStack().addAction(new SplitWayAction(parentWay, ni));
 
 			return new SelectedWay(parentWay);
 		}

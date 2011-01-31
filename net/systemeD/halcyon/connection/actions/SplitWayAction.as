@@ -1,25 +1,24 @@
 package net.systemeD.halcyon.connection.actions {
 
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
     
     public class SplitWayAction extends CompositeUndoableAction {
     
         private var selectedWay:Way;
-        private var selectedNode:Node;
+        private var nodeIndex:uint; // Index rather than node required as nodes can occur multiple times
         private var newWay:Way;
     
-        public function SplitWayAction(selectedWay:Way, selectedNode:Node) {
+        public function SplitWayAction(selectedWay:Way, nodeIndex:uint) {
             super("Split way "+selectedWay.id);
             this.selectedWay = selectedWay;
-            this.selectedNode = selectedNode;
+            this.nodeIndex = nodeIndex;
         }
     
         public override function doAction():uint {
             if (newWay==null) {
 				newWay = Connection.getConnection().createWay(
 					selectedWay.getTagsCopy(), 
-					selectedWay.sliceNodes(selectedWay.indexOfNode(selectedNode),selectedWay.length),
+					selectedWay.sliceNodes(nodeIndex,selectedWay.length),
 					push);
 
 				// we reverse the list, which is already sorted by position. This way positions aren't affected
@@ -74,7 +73,7 @@ package net.systemeD.halcyon.connection.actions {
                 }
                 
                 // now that we're done with the selectedWay, remove the nodes
-                selectedWay.deleteNodesFrom(selectedWay.indexOfNode(selectedNode)+1, push);
+                selectedWay.deleteNodesFrom(nodeIndex+1, push);
 
 				// and remove from any turn restrictions that aren't relevant
 				for each (var r:Relation in selectedWay.findParentRelationsOfType('restriction')) {
