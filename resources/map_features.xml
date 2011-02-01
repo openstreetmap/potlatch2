@@ -1550,7 +1550,17 @@ Quick documentation:
     <inputSet ref="buildingAddress"/>
     <input type="choice" category="Religion" name="Religion" key="religion" description="The religion to which this place of worship belongs.">
       <choice value="christian" text="Christianity (church)"/>
+      <choice value="muslim" text="Islam (mosque)"/>
+      <choice value="buddhist" text="Buddhist (temple)"/>
       <choice value="jewish" text="Judaism (synagogue)"/>
+      <choice value="hindu" text="Hindu (temple)"/>
+      <choice value="sikh" text="Sikh (gurdwara)"/>
+      <choice value="spiritualist" text="Spiritualism"/>
+      <choice value="unitarian" text="Unitarianism"/>
+      <choice value="taoist" text="Taoism"/>
+      <choice value="multifaith" text="Multi-faith"/>
+      <choice value="scientologist" text="Scientology"/>
+      <choice value="bahai" text="Bahai"/>
     </input>
     <inputSet ref="isBuilding"/>
     <inputSet ref="common"/>
