@@ -302,7 +302,7 @@ package net.systemeD.potlatch2.controller {
 				nextNode = followedWay.getPrevNode(curnode);
 			}
 			if (!nextNode) return;
-			if (nextNode.hasParent(firstSelected)) return;
+			if (nextNode.hasParent(firstSelected) && !(firstSelected as Way).hasOnceOnly(curnode)) return;
 
 			appendNode(nextNode as Node, MainUndoStack.getGlobalStack().addAction);
 			resetElastic(nextNode as Node);
