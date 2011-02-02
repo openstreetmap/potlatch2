@@ -106,13 +106,14 @@
                           ["/", "Cycle through overlapping ways"],
                           ];
         var text2:Array =  [["D", "Dim features"],
+                            ["F", "Follow existing way"],
                             ["R", "Repeat tags"],
                             ["T", "Toggle between simple and advanced tags"],
                             ["P", "Create parallel way"],
-                            ["V", "Reverse direction of way"],
-                            ["Q", "Make area right-angled"]
+                            ["V", "Reverse direction of way"]
                             ];
-        var text3:Array =  [["S", "Save"],
+        var text3:Array =  [["Q", "Make area right-angled"],
+                            ["S", "Save"],
                             ["X", "Cut way at node"],
                             ["Z", "Undo"],
                             ["Esc", "Cancel edit"],
@@ -313,6 +314,7 @@
             <p><b>To disconnect a junction</b>, select the point on the way you wish to alter. The press - on your keyboard to remove the point.</p>
             <p><b>To reverse the direction of a way</b>, click the Reverse Direction button in the bottom right corner. The direction of a way is only a concern for those features with a "oneway" tag - oneway streets, coastlines, islands, and so on.</p>
             <p><b>To create a way running parallel</b>, select the way and click the Create Parallel Way button in the bottom right corner or press P on your keyboard.</p>
+            <p><b>To create a way that shares nodes with an existing way</b>, start drawing, click the first two shared nodes, then press F to automatically follow the existing way.</p>
             <p><i>Visit the <a href="http://wiki.openstreetmap.org/wiki/Potlatch2/Primer" target="_blank">Potlatch2 Primer</a> on the OpenStreetMap wiki for even more advanced editing methods and conventions.</i></p>
           ]]>
         </mx:htmlText>
