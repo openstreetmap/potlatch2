@@ -1,7 +1,8 @@
 package net.systemeD.halcyon.connection {
 
     import flash.events.*;
-
+	import mx.rpc.http.HTTPService;
+	import mx.rpc.events.*;
 	import flash.system.Security;
 	import flash.net.*;
     import org.iotashan.oauth.*;
@@ -206,27 +207,26 @@ package net.systemeD.halcyon.connection {
 
             // now actually upload them
             // make an OAuth query
-
             var url:String = Connection.apiBaseURL+"changeset/" + changeset.id + "/upload";
 
             // build the actual request
-            var urlReq:URLRequest = new URLRequest(signedOAuthURL(url, "POST"));
-            urlReq.method = "POST";
-            urlReq.data = upload.toXMLString();
-            urlReq.contentType = "text/xml";
-            urlReq.requestHeaders = [new URLRequestHeader("X-Error-Format","xml")];
-            var loader:URLLoader = new URLLoader();
-            loader.dataFormat = URLLoaderDataFormat.BINARY;
-            loader.addEventListener(Event.COMPLETE, diffUploadComplete);
-            loader.addEventListener(IOErrorEvent.IO_ERROR, function(event:IOErrorEvent):void { trace(urlReq.data); diffUploadIOError(event); } );
-            loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, recordStatus);
-	        loader.load(urlReq);
+			var serv:HTTPService=new HTTPService();
+			serv.method="POST";
+			serv.url=url;
+			serv.contentType = "text/xml";
+			serv.headers={'X-Error-Format':'xml'};
+			serv.request=" ";
+			serv.resultFormat="e4x";
+			serv.requestTimeout=0;
+			serv.addEventListener(ResultEvent.RESULT, diffUploadComplete);
+			serv.addEventListener(FaultEvent.FAULT, diffUploadIOError);
+			serv.send(upload);
 	        
 	        dispatchEvent(new Event(SAVE_STARTED));
         }
 
-        private function diffUploadComplete(event:Event):void {
-			var results:XML = new XML(URLLoader(event.target).data);
+        private function diffUploadComplete(event:ResultEvent):void {
+			var results:XML = XML(event.result);
 
 			// was it an error document?
 			if (results.name().localName=='osmError') {
@@ -263,10 +263,11 @@ package net.systemeD.halcyon.connection {
             MainUndoStack.getGlobalStack().breakUndo(); // so, for now, break the undo stack
         }
 
-        private function diffUploadIOError(event:IOErrorEvent):void {
-			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't upload data: "+httpStatus+" "+event.text } ));
-	        dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
-        }
+		private function diffUploadIOError(event:FaultEvent):void {
+			trace(event.fault);
+			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't upload data: "+event.fault.faultString } ));
+			dispatchEvent(new SaveCompleteEvent(SAVE_COMPLETED, false));
+		}
 
 		private function diffUploadAPIError(status:String, message:String):void {
 			var matches:Array;
