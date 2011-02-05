@@ -12,6 +12,7 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
 
+	/** The elastic is a visual indication of a way that the user is currently in the process of drawing. */
 	public class Elastic {
 
 		public var map:Map;							// reference to parent map
@@ -19,6 +20,7 @@ package net.systemeD.halcyon {
         private var _start:Point;
         private var _end:Point;
 
+		/** Create and draw the elastic. */
 		public function Elastic(map:Map, start:Point, end:Point) {
 			this.map = map;
 			this._start = start;
@@ -44,19 +46,17 @@ package net.systemeD.halcyon {
 		    return _end;
 		}
 		
+		/** Remove all currently existing sprites */
 		public function removeSprites():void {
-			// Remove all currently existing sprites
+			
 			while (sprites.length>0) {
 				var d:DisplayObject=sprites.pop(); d.parent.removeChild(d);
 			}
         }
         
+		/** Draws the elastic - a dashed line on the highest paint layer. */
 		public function redraw():void {
 		    removeSprites();
-
-			// Iterate through each sublayer, drawing any styles on that layer
-			var p0:Point = start;
-			var p1:Point = end;
 
 			// Create stroke object
 			var stroke:Shape = new Shape();
