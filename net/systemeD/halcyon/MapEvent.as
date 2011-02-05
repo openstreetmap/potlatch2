@@ -19,6 +19,8 @@ package net.systemeD.halcyon {
         public static const INITIALISED:String = "initialized";
 		/** Backrgound imagery has changed to one with attribution that must not be obscured. */
 		public static const BUMP:String = "bump";
+		public static const MOUSEOVER:String="mouseover";
+		public static const TOGGLE_LATLON:String="toggle_latlon";
 		public static const ERROR:String = "error";				// ** FIXME - this should be a dedicated ErrorEvent class
 
 		/** Event-specific parameters. */

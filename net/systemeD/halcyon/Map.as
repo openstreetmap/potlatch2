@@ -100,6 +100,9 @@ package net.systemeD.halcyon {
 		/** VectorLayer objects */
 		public var vectorlayers:Object={};  
 		
+		/** Should the position of mouse cursor be shown to the user? */
+		private var showingLatLon:Boolean=false;  
+		
 		// ------------------------------------------------------------------------------------------
 		/** Map constructor function */
         public function Map(initparams:Object) {
@@ -435,6 +438,11 @@ package net.systemeD.halcyon {
 		private function reportPosition():void {
 			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
+
+        private function toggleReportPosition():void {
+            showingLatLon = !showingLatLon;
+            this.dispatchEvent(new MapEvent(MapEvent.TOGGLE_LATLON, {latlon: showingLatLon}));
+        }
 		
 		/** Switch to new MapCSS. */
 		public function setStyle(url:String):void {
@@ -521,7 +529,10 @@ package net.systemeD.halcyon {
 		/** Respond to mouse movement, dragging the map if tolerance threshold met. */
 		public function mouseMoveHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
-			if (dragstate==NOT_DRAGGING) { return; }
+			if (dragstate==NOT_DRAGGING) { 
+			   this.dispatchEvent(new MapEvent(MapEvent.MOUSEOVER, { x: coord2lon(mouseX), y: coord2lat(mouseY) }));
+               return; 
+            }
 			
 			if (dragstate==NOT_MOVED) {
 				if (new Date().getTime()-downTime<300) {
@@ -557,7 +568,7 @@ package net.systemeD.halcyon {
 				case Keyboard.UP:	moveMap(0,mapheight/2); break;		 // up cursor
 				case Keyboard.RIGHT:	moveMap(-mapwidth/2,0); break;   // right cursor
 				case Keyboard.DOWN:	moveMap(0,-mapheight/2); break;      // down cursor
-//				case 76:	reportPosition(); break;			// L - report lat/long
+				case 76:	toggleReportPosition(); break;			// L - report lat/long
 			}
 		}
 

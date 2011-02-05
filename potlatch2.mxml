@@ -68,6 +68,8 @@
         <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
+        <mx:TextArea id="coordsbox" left="0" top="0" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="33"
+            width="57" enabled="false" borderThickness="0" visible="false"/>
 
     </mx:Canvas>
 
@@ -216,6 +218,9 @@
             theController = new EditController(theMap, tagViewer, toolbox);
             theController.setActive();
             
+            theMap.addEventListener(MapEvent.MOUSEOVER, mouseoverHandler);
+            theMap.addEventListener(MapEvent.TOGGLE_LATLON, togglelatlonHandler);
+            
             var conn:Connection = Connection.getConnectionInstance();
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
             conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
@@ -286,7 +291,7 @@
 			trace("showing alert with "+buttons);
 			Alert.show(mapEvent.params.message, 'Error', buttons, null, function(closeEvent:CloseEvent):void { 
 				switch (closeEvent.detail) {
-					case mx.controls.Alert.CANCEL:	mapEvent.params.cancel(); break;
+					case mx.controls.Alert.CANCEL:	mapEvent.params.cancel(); break; //fixme? this gets called if user presses escape, even if there's no cancel button.
 					case mx.controls.Alert.YES:		mapEvent.params.yes(); break;
 					case mx.controls.Alert.NO:		mapEvent.params.no(); break;
 					default:						if (mapEvent.params.ok) mapEvent.params.ok();
@@ -347,6 +352,17 @@
 				toolbox.y=Math.min(toolbox.y,stage.stageHeight-toolbox.height-10-e.params.y);
 			}
 		}
+
+        private function mouseoverHandler(e:MapEvent):void {
+            if (coordsbox.visible) {
+                coordsbox.text= Number(e.params.x).toFixed(5) + "\n " + Number(e.params.y).toFixed(5); // Not sure if 5 dp's really required.
+            }
+        }
+
+        private function togglelatlonHandler(e:MapEvent):void {
+            coordsbox.visible = e.params.latlon;
+        }
+
 
         private function onDataStart(event:Event):void {
 			switch (event.type) {
