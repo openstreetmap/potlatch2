@@ -121,3 +121,4 @@ way[tunnel=yes][!waterway]
 /* Attribute decoration */
 
 way[oneway=yes], way[junction=roundabout] { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows; }
+way[oneway=-1] { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows-reversed; }

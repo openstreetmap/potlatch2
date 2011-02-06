@@ -1,15 +1,14 @@
 package net.systemeD.halcyon {
 
 	import flash.display.*;
+	import flash.events.*;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.events.*;
+	
+	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.styleparser.*;
-    import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
 
 	/** The graphical representation of a Way. */ 
 	public class WayUI extends EntityUI {
@@ -405,43 +404,59 @@ package net.systemeD.halcyon {
 		
 		private function dashedLine(g:Graphics,dashes:Array):Array {
 			var way:Way=entity as Way;
-			var segments:Array=[];
-			var draw:Boolean=false, dashleft:Number=0, dc:Array=new Array();
-			var a:Number, xc:Number, yc:Number;
-			var curx:Number, cury:Number;
-			var dx:Number, dy:Number, segleft:Number=0;
- 			var i:int=indexStart;
+			var segments:Array=[]; // array of dash locations being constructed for later arrow drawing
+			var draw:Boolean=false; // are we drawing or marking empty space till next dash
+			var dashleft:Number=0; // how much of current dash is left
+			var dc:Array=new Array(); // copy of dashes, gets consumed then replaced
+			var xc:Number, yc:Number; // normalised vector coordinates of direction to next node 
+			var curx:Number, cury:Number; // current drawing location
+			var dx:Number, dy:Number, segleft:Number=0; // distance remaining until next node
+ 			var i:int=indexStart; // node index
+ 			var dashstartx:int, dashstarty:int; // needed to draw reverse arrows
+ 			var dashstartxc: Number, dashstartyc: Number;
 
             var node:Node = way.getNode(i);
             var nextNode:Node = way.getNode(i);
  			g.moveTo(paint.map.lon2coord(node.lon), paint.map.latp2coord(node.latp));
 			while (i < indexEnd-1 || segleft>0) {
 				if (dashleft<=0) {	// should be ==0
+				    // finished drawing current dash, pop another one off the pattern, looping if necessary
 					if (dc.length==0) { dc=dashes.slice(0); }
 					dashleft=dc.shift();
-					if (draw) { segments.push([curx,cury,dx,dy]); }
+					if (draw) { segments.push([curx,cury,xc,yc, dashstartx, dashstarty, dashstartxc, dashstartyc]); }
 					draw=!draw;
+					// record start of each dash, if we need to draw a reverse arrow head later
+					dashstartx = curx; dashstarty = cury;
+					dashstartxc = xc; dashstartyc = yc;
 				}
 				if (i==drawExcept || i==drawExcept+1) { draw=false; }
 				if (segleft<=0) {	// should be ==0
+                    // arrived at target node. calculate direction to next node.
                     node = way.getNode(i);
                     nextNode = way.getNode(i+1);
 					curx=paint.map.lon2coord(node.lon);
                     dx=paint.map.lon2coord(nextNode.lon)-curx;
 					cury=paint.map.latp2coord(node.latp);
                     dy=paint.map.latp2coord(nextNode.latp)-cury;
-					a=Math.atan2(dy,dx); xc=Math.cos(a); yc=Math.sin(a);
+					//a=Math.atan2(dy,dx); xc=Math.cos(a); yc=Math.sin(a);
 					segleft=Math.sqrt(dx*dx+dy*dy);
+					xc = dx/segleft;
+					yc = dy/segleft;
+					if (i==0) {
+                        // record start location of very first dash
+                        dashstartx = curx; dashstarty = cury;
+                        dashstartxc = xc; dashstartyc = yc;
+					}
 					i++;
 				}
 
 				if (segleft<=dashleft) {
-					// the path segment is shorter than the dash
+					// the path segment is shorter than the dash: draw to end of segment
 		 			curx+=dx; cury+=dy;
 					moveLine(g,curx,cury,draw);
 					dashleft-=segleft; segleft=0;
 				} else {
-					// the path segment is longer than the dash
+					// draw whole dash, then loop
 					curx+=dashleft*xc; dx-=dashleft*xc;
 					cury+=dashleft*yc; dy-=dashleft*yc;
 					moveLine(g,curx,cury,draw);
@@ -462,22 +477,25 @@ package net.systemeD.halcyon {
 			var c:int=s.color ? s.color : 0;
 			switch (s.line_style.toLowerCase()) {
 
-				case 'arrows':
-					var w:Number=s.width*1.5;	// width of arrow
-					var l:Number=s.width*2;		// length of arrow
-					var angle0:Number, angle1:Number, angle2:Number;
+				case 'arrows':; case 'arrows-reversed':
+					var w:Number=s.width*1.5;  // width of arrow
+					var l:Number=s.width*2;	   // length of arrow
 					g.lineStyle(1,c);
 					for each (var seg:Array in segments) {
 						g.beginFill(c);
-						angle0= Math.atan2(seg[3],seg[2]);
-						angle1=-Math.atan2(seg[3],seg[2]);
-						angle2=-Math.atan2(seg[3],seg[2])-Math.PI;
-						g.moveTo(seg[0]+l*Math.cos(angle0),
-						         seg[1]+l*Math.sin(angle0));
-						g.lineTo(seg[0]+w*Math.sin(angle1),
-						         seg[1]+w*Math.cos(angle1));
-						g.lineTo(seg[0]+w*Math.sin(angle2),
-						         seg[1]+w*Math.cos(angle2));
+						// seg: {dashendx, dashendy, dx, dy, dashstartx, dashstarty, dashstartdx, dashstartdy} 
+						// where dx is normalised x component of direction vector
+						// note that a dash can go around a corner, so the info is not redundant
+						
+						if (s.line_style.toLowerCase() == "arrows-reversed") {
+	                        g.moveTo(seg[4]-l*seg[6], seg[5]-l*seg[7]); // note reversed arrow head
+	                        g.lineTo(seg[4]-w*seg[7], seg[5]+w*seg[6]);
+	                        g.lineTo(seg[4]+w*seg[7], seg[5]-w*seg[6]);
+						} else {
+							g.moveTo(seg[0]+l*seg[2], seg[1]+l*seg[3]);
+	                        g.lineTo(seg[0]-w*seg[3], seg[1]+w*seg[2]);
+	                        g.lineTo(seg[0]+w*seg[3], seg[1]-w*seg[2]);
+	                    }
 						g.endFill();
 					}
 					break;
@@ -486,8 +504,8 @@ package net.systemeD.halcyon {
                     g.lineStyle(1,c);
                     for each (seg in segments) {
                         g.beginFill(c);
-                        angle0 = -Math.atan2(seg[3], seg[2]) + Math.PI / 2; //0
-                        angle1 = -Math.atan2(seg[3], seg[2]) - Math.PI/6;       //60
+                        var angle0:Number = -Math.atan2(seg[3], seg[2]) + Math.PI / 2; //0
+                        var angle1:Number = -Math.atan2(seg[3], seg[2]) - Math.PI/6;       //60
                         g.moveTo(seg[0], seg[1]);//start 0,0
                         g.lineTo(seg[0] - w * Math.sin(angle0), seg[1] - w * Math.cos(angle0));
                         g.lineTo(seg[0] + w * Math.sin(angle1), seg[1] + w * Math.cos(angle1));
@@ -496,7 +514,6 @@ package net.systemeD.halcyon {
                     break;
 				}
 		}
-
 		
 		/** Find point partway (0-1) along a path
 		  * @return (x,y,angle)
