@@ -6,7 +6,7 @@
     direction="{fieldDirection}" styleName="titledEditor">
 
   <mx:Label text="{fieldName}:"/>
-  <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
+  <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}" rowCount="15"
       change="value = inputBox.selectedItem.value"
       open="inputBox.dropdown.variableRowHeight = true">
       <edit:itemRenderer>
