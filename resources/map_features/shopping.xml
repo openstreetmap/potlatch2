@@ -6,6 +6,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dsupermarket</help>
     <point/>
+    <area/>
     <tag k="shop" v="supermarket"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -20,6 +21,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dconvenience</help>
     <point/>
+    <area/>
     <tag k="shop" v="convenience"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -30,6 +32,7 @@
   <feature name="Bakery">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -44,6 +47,7 @@
   <feature name="Alcohol shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -57,6 +61,7 @@
   <feature name="Bike shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -69,6 +74,7 @@
   <feature name="Bookshop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -81,6 +87,7 @@
   <feature name="Butcher">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -92,6 +99,7 @@
   <feature name="Car sales">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -104,6 +112,7 @@
   <feature name="Car repair">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -116,6 +125,7 @@
   <feature name="Clothes shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -128,6 +138,7 @@
   <feature name="Confectionery">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -140,6 +151,7 @@
   <feature name="DIY">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -152,6 +164,7 @@
   <feature name="Fishmonger">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -163,6 +176,7 @@
   <feature name="Florist">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -175,6 +189,7 @@
   <feature name="Garden centre">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -187,6 +202,7 @@
   <feature name="Gift shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -199,6 +215,7 @@
   <feature name="Greengrocer">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -211,6 +228,7 @@
   <feature name="Hairdresser">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -223,6 +241,7 @@
   <feature name="Hifi shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -235,6 +254,7 @@
   <feature name="Jewellery">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -246,6 +266,7 @@
   <feature name="Kiosk">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -258,6 +279,7 @@
   <feature name="Laundrette">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -270,6 +292,7 @@
   <feature name="Motorbike shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -282,6 +305,7 @@
   <feature name="Music shop">
     <category>shopping</category>
     <point/>
+    <area/>
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
@@ -298,11 +322,23 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Pharmacy</help>
     <point/>
+    <area/>
     <tag k="amenity" v="pharmacy"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
     <input type="checkbox" category="Amenity" presence="always" description="Does this pharmacy sell prescription drugs?" name="Dispensing" key="dispensing" layout="horizontal"/>
+    <inputSet ref="common"/>
+  </feature>
+
+  <feature name="Toy shop">
+    <category>shopping</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="web"/>
+    <inputSet ref="buildingAddress"/>
+    <tag k="shop" v="toys"/>
     <inputSet ref="common"/>
   </feature>
 </featureGroup>

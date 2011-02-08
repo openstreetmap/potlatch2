@@ -26,6 +26,7 @@ package net.systemeD.potlatch2.mapfeatures {
         public var missingIconCls:Class;
 
 
+        /** Create this Feature from an XML subtree. */
         public function Feature(mapFeatures:MapFeatures, _xml:XML) {
             this.mapFeatures = mapFeatures;
             this._xml = _xml;
@@ -99,14 +100,14 @@ package net.systemeD.potlatch2.mapfeatures {
         }
 
         [Bindable(event="nameChanged")]
-        /** The human-readable name of the feature, or null if none. */
+        /** The human-readable name of the feature (@name), or null if none. */
         public function get name():String {
 			if (_xml.attribute('name').length()>0) { return _xml.@name; }
 			return null;
         }
 
         [Bindable(event="imageChanged")]
-        /** An icon for the feature. If none is defined, return default "missing icon". */
+        /** An icon for the feature (from icons[0]/@image). If none is defined, return default "missing icon". */
         public function get image():ByteArray {
             var icon:XMLList = _xml.icon;
             var imageURL:String = null;
@@ -134,6 +135,7 @@ package net.systemeD.potlatch2.mapfeatures {
             return makeHTMLIcon(icon, entity);
         }
 
+        /** Convert the contents of the "icon" tag as an HTML string, with variable substitution. */
         public static function makeHTMLIcon(icon:XMLList, entity:Entity):String {
             if ( icon == null )
                 return "";
@@ -147,6 +149,7 @@ package net.systemeD.potlatch2.mapfeatures {
             return txt;
         }
 
+        /** Basic HTML escaping. */
         public static function htmlEscape(str:String):String {
             var newStr:String = str.replace(/&/g, "&amp;");
             newStr = newStr.replace(/</g, "&lt;");

@@ -438,7 +438,6 @@ package net.systemeD.halcyon {
                     dx=paint.map.lon2coord(nextNode.lon)-curx;
 					cury=paint.map.latp2coord(node.latp);
                     dy=paint.map.latp2coord(nextNode.latp)-cury;
-					//a=Math.atan2(dy,dx); xc=Math.cos(a); yc=Math.sin(a);
 					segleft=Math.sqrt(dx*dx+dy*dy);
 					xc = dx/segleft;
 					yc = dy/segleft;
