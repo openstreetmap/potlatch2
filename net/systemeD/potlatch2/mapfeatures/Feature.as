@@ -40,7 +40,7 @@ package net.systemeD.potlatch2.mapfeatures {
 
 			// parse tags
             for each(var tag:XML in definition.tag) {
-                _tags.push( { k:String(tag.@k), v:String(tag.@v)} );
+                _tags.push( { k:String(tag.@k), v:String(tag.@v), vmatch:String(tag.@vmatch)} );
             }
 
 			// parse 'within'
