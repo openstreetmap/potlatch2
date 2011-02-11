@@ -200,14 +200,23 @@ package net.systemeD.potlatch2.mapfeatures {
 			}
         }
 
-        /** Whether there is a help string defined. */
+        /** Whether there is a help string defined or one can be derived from tags. */
         public function hasHelpURL():Boolean {
-            return _xml.help.length() > 0;
+            return _xml.help.length() > 0 || _tags.length > 0;
         }
 
-        /** The defined help string, if any. */
+        /** The defined help string, if any. If none, generate one from tags on the feature, pointing to the OSM wiki. */
         public function get helpURL():String {
-            return _xml.help;
+        	if (_xml.help.length() > 0)
+                return _xml.help;
+            else if (_tags.length > 0) {
+                if (_tags[0].v == "*")
+                    return "http://www.openstreetmap.org/wiki/Key:" + _tags[0].k;
+                else
+                    return "http://www.openstreetmap.org/wiki/Tag:" + _tags[0].k + "=" + _tags[0].v;                
+            } else
+                return "";
+
         }
     }
 }
