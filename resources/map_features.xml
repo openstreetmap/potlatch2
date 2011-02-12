@@ -52,70 +52,38 @@ Quick documentation:
 <mapFeatures>
 
   <!-- Categories -->
-
-  <category name="Roads" id="roads">
-  </category>
-
-  <category name="Paths" id="paths">
-  </category>
-
-  <category name="Shopping" id="shopping">
-  </category>
-
-  <category name="Food and Drink" id="foodanddrink">
-  </category>
-
-  <category name="Amenity" id="amenity">
-  </category>
-
-  <category name="Tourism" id="tourism">
-  </category>
-
-  <category name="Accommodation" id="accommodation">
-  </category>
-
-  <category name="Transport" id="transport">
-  </category>
-
-  <category name="Water" id="water">
-  </category>
-
-  <category name="Natural" id="natural">
-  </category>
-
-  <category name="Barrier" id="barrier">
-  </category>
-
-  <category name="Power" id="power">
-  </category>
-
-  <category name="Admin" id="admin">
-  </category>
-
-  <category name="Buildings" id="buildings">
-  </category>
-
-  <category name="Landuse" id="landuse">
-  </category>
-
-  <category name="Agriculture" id="agriculture">
-  </category>
-
-  <category name="Advanced" id="advanced">
-  </category>
-
-  <category name="Places" id="places">
-  </category>
-
-  <category name="Sport&amp;Leisure" id="sport">
-  </category>
-
+  <category name="Roads" id="roads"/>
+  <category name="Paths" id="paths"/>
+  <category name="Shopping" id="shopping"/>
+  <category name="Food and Drink" id="foodanddrink"/>
+  <category name="Amenity" id="amenity"/>
+  <category name="Tourism" id="tourism"/>
+  <category name="Accommodation" id="accommodation"/>
+  <category name="Transport" id="transport"/>
+  <category name="Water" id="water"/>
+  <category name="Natural" id="natural"/>
+  <category name="Barrier" id="barrier"/>
+  <category name="Power" id="power"/>
+  <category name="Admin" id="admin"/>
+  <category name="Buildings" id="buildings"/>
+  <category name="Landuse" id="landuse"/>
+  <category name="Agriculture" id="agriculture"/>
+  <category name="Advanced" id="advanced"/>
+  <category name="Places" id="places"/>
+  <category name="Sport&amp;Leisure" id="sport"/>
+  <category name="Man-made" id="manmade"/>
 
   <!-- Common input sets -->
 
   <inputSet id="simpleName">
     <input type="freetext" presence="always" name="Name" key="name" description="The name" priority="highest"/>
   </inputSet>
+
+  <inputSet id="nameAndRef">
+    <inputSet ref="simpleName" />
+    <input type="freetext" presence="always" name="Reference number" key="ref" description="A reference number or code used to identify this thing." />
+  </inputSet>
+
 
   <inputSet id="source">
     <input type="freetext" category="Misc" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Yahoo, ...)" priority="lowest"/>
@@ -212,6 +180,7 @@ Quick documentation:
     <inputSet ref="roadRoundabout"/>
     <inputSet ref="permissions"/>
   </inputSet>
+  
 
   <inputSet id="minorRoad">
     <inputSet ref="names"/>
@@ -641,6 +610,7 @@ Quick documentation:
   <include file="map_features/amenities.xml" /> <!-- includes cafe, bar... --> 
   <include file="map_features/landuse.xml" />   <!-- includes outdoor leisure/sporting stuff, agriculture, natural. --> 
   <include file="map_features/buildings.xml" /> <!-- a bit of a dumping ground, includes sports centre, shopping centre, hospital... --> 
+  <include file="map_features/man_made.xml" />  
 
 
   
