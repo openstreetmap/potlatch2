@@ -268,13 +268,14 @@
     <category>transport</category>
     <icon image="features/pois/transport_turning_circle.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dturning_circle</help>
-    <point/>
+    <point draganddrop="no"/>
     <tag k="highway" v="turning_circle"/>
     <inputSet ref="common"/>
   </feature>
 
   <feature name="Mini Roundabout">
     <category>transport</category>
+    <icon image="features/pois/miniroundabout.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dmini_roundabout</help>
     <point/>
     <tag k="highway" v="mini_roundabout"/>
@@ -286,7 +287,7 @@
 
     <category>transport</category>
     <icon image="icons/speed_hump_16.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Key:traffic%3Dcalming</help>
+<!--    <help>http://wiki.openstreetmap.org/wiki/Key:traffic_calming</help>-->
     <point/>
     <tag k="traffic_calming" v="yes" vmatch="*"/>
     <input type="choice" key="traffic_calming" name="Obstacle type" category="Traffic calming" presence="onTagMatch">

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg5535"
+   version="1.1"
+   inkscape:version="0.48+devel r9797"
+   sodipodi:docname="amenity_vendingmachine.svg">
+  <defs
+     id="defs5537" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="105.49299"
+     inkscape:cy="348.10106"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="990"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid5569" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5540">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#784421;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect3069"
+       width="360"
+       height="365.85367"
+       x="195"
+       y="349.43536"
+       ry="40"
+       inkscape:export-filename="I:\OSM\pot2b\potlatch2\resources\features\pois\amenity_vendingmachine.png"
+       inkscape:export-xdpi="5.9039998"
+       inkscape:export-ydpi="5.9039998" />
+    <path
+       style="fill:#ffffff;stroke:#ffffff;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.50802141000000001;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 280,412.36218 0,260 140,0 0,-260 z"
+       id="path5571"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="I:\OSM\pot2b\potlatch2\resources\features\pois\amenity_vendingmachine.png"
+       inkscape:export-xdpi="5.9039998"
+       inkscape:export-ydpi="5.9039998" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:0.79144383;fill-rule:evenodd;stroke:#ffffff;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path6091"
+       sodipodi:cx="640"
+       sodipodi:cy="412.36218"
+       sodipodi:rx="60"
+       sodipodi:ry="60"
+       d="m 611.04566,464.91355 a 60,60 0 1 1 0.2425,0.13288"
+       sodipodi:start="2.0743857"
+       sodipodi:end="8.3529623"
+       sodipodi:open="true"
+       transform="matrix(0.49536774,0,0,0.64460671,160.82179,217.67579)"
+       inkscape:export-filename="I:\OSM\pot2b\potlatch2\resources\features\pois\amenity_vendingmachine.png"
+       inkscape:export-xdpi="5.9039998"
+       inkscape:export-ydpi="5.9039998" />
+    <rect
+       style="fill:#ffffff;fill-opacity:0.79144383;fill-rule:evenodd;stroke:#ffffff;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect6095"
+       width="140"
+       height="100"
+       x="280"
+       y="412.36218"
+       ry="40"
+       rx="0"
+       inkscape:export-filename="I:\OSM\pot2b\potlatch2\resources\features\pois\amenity_vendingmachine.png"
+       inkscape:export-xdpi="5.9039998"
+       inkscape:export-ydpi="5.9039998" />
+    <path
+       style="fill:#ffffff;fill-opacity:0.79144383;fill-rule:evenodd;stroke:#ffffff;stroke-width:3.89500713;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path6099"
+       d="m 483.13867,471.14976 c -2.49614,-0.0739 -4.99355,-0.079 -7.49033,-0.0683 -2.11347,0.0102 -4.22191,-0.0874 -6.31756,0.26433 -2.79416,1.16402 -8.50384,5.42194 2.88049,-2.36288 -1.11015,0.8867 -2.15929,1.95167 -2.89006,3.29849 -0.58462,1.27229 -0.69811,2.67202 -0.59413,4.09218 0.2467,1.58019 0.735,3.08193 1.27691,4.5458 0.64332,2.01761 1.57436,3.81699 2.82848,5.36047 2.04816,2.17781 4.45786,3.79033 6.86661,5.31788 2.34296,1.65139 4.81925,2.92372 7.45488,3.71121 1.18122,0.25052 0.60248,0.14856 1.73549,0.31163 0,0 -6.10265,5.15146 -6.10265,5.15146 l 0,0 c -1.14854,-0.23595 -0.56138,-0.0962 -1.7604,-0.42562 -2.61934,-0.94721 -5.09182,-2.31385 -7.46886,-3.93572 -2.46924,-1.59145 -4.95767,-3.24048 -7.05285,-5.49914 -1.32224,-1.62522 -2.32,-3.47376 -3.02286,-5.59045 -0.57392,-1.54584 -1.10331,-3.1255 -1.41088,-4.78181 -0.15088,-1.56516 -0.12524,-3.11577 0.40021,-4.5923 0.58391,-1.43748 0.80265,-1.51501 1.71253,-2.57359 0.99847,-1.16162 -0.0577,-0.1792 1.03868,-1.12392 2.07212,-1.44872 6.75277,-5.53127 10.11503,-6.26154 2.07983,-0.2373 4.17205,-0.024 6.25773,-0.0824 2.5491,0.011 5.09875,0.003 7.64726,-0.0683 0,0 -6.10372,5.3126 -6.10372,5.3126 z"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="I:\OSM\pot2b\potlatch2\resources\features\pois\amenity_vendingmachine.png"
+       inkscape:export-xdpi="5.9039998"
+       inkscape:export-ydpi="5.9039998" />
+  </g>
+</svg>
