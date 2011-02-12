@@ -1,7 +1,6 @@
 package net.systemeD.potlatch2.mapfeatures {
 
     import flash.events.EventDispatcher;
-    import flash.events.Event;
 
         /** A Category is a (non-exclusive) grouping of related Features used to help the user find the map feature they are interested in using. */
 	public class Category extends EventDispatcher {
@@ -46,14 +45,16 @@ package net.systemeD.potlatch2.mapfeatures {
 
         [Bindable(event="featuresChanged")]
         /** Get an array of all features in this category that have the requested type, or possibly empty list. */
-        public function getFeaturesForType(type:String):Array {
+        public function getFeaturesForType(type:String, onlydnd:Boolean=false):Array {
             if ( type == null || type == "" )
                 return []; //_features;
 
             var filteredFeatures:Array = new Array();
             for each( var feature:Feature in _features ) {
                 if ( feature.isType(type) )
-                    filteredFeatures.push(feature);
+                    if (!onlydnd || feature.canDND()) {
+                        filteredFeatures.push(feature);
+                    }
             }
             return filteredFeatures;
         }

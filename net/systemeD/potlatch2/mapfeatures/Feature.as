@@ -1,12 +1,13 @@
 package net.systemeD.potlatch2.mapfeatures {
 
-    import flash.events.EventDispatcher;
     import flash.events.Event;
+    import flash.events.EventDispatcher;
     import flash.net.*;
     import flash.utils.ByteArray;
+    
     import mx.core.BitmapAsset;
     import mx.graphics.codec.PNGEncoder;
-
+    
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.potlatch2.utils.CachedDataLoader;
 
@@ -113,6 +114,7 @@ package net.systemeD.potlatch2.mapfeatures {
             var imageURL:String = null;
             var img:ByteArray;
 
+            
             if ( icon.length() > 0 && icon[0].hasOwnProperty("@image") )
                 imageURL = icon[0].@image;
 
@@ -124,6 +126,14 @@ package net.systemeD.potlatch2.mapfeatures {
             }
             var bitmap:BitmapAsset = new missingIconCls() as BitmapAsset;
             return new PNGEncoder().encode(bitmap.bitmapData);
+        }
+        
+        /** Can this feature be drag-and-dropped from the side panel? By default, any "point" feature can,
+        *   unless it has <point draganddrop="no"/> 
+        * */
+        public function canDND():Boolean {
+        	var point:XMLList = _xml.elements("point");
+        	return point.length() > 0 && !(XML(point[0]).attribute("draganddrop")[0] == "no");
         }
 
         private function imageLoaded(url:String, data:ByteArray):void {
