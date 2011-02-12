@@ -1,9 +1,8 @@
 package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.connection.CompositeUndoableAction;
-	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.connection.Node;
-	import net.systemeD.halcyon.connection.MainUndoStack;
+	import net.systemeD.halcyon.connection.Way;
 
 	/** Tool to transform a closed way of at least 3 distinct points into a circular shape, inserting more nodes as necessary. Call only the static function circularise(). */
 	public class Circularise {
@@ -107,13 +106,19 @@ package net.systemeD.potlatch2.tools {
         private function calculateCentre():void {
 			// Find centre-point
 			// ** should be refactored to be within Way.as, so we can share with WayUI.as
+            var i:uint, n:Node;
+			
+			/* This code is buggy - in some instances (particularly rectangles?) the centre is displaced, meaning an excessively large circle
+			   in the wrong place. */
+			/*  
 			var b:Node=way.getNode(way.length-1);
 			var patharea:Number=0;
 			var lx:Number=b.lon;
 			var ly:Number=b.latp;
-			var i:uint, n:Node;
+			var totx:Number=0, toty:Number=0;
 			for (i=0; i<way.length; i++) {
 				n=way.getNode(i);
+                trace('DEBUG lon, latp: ' + n.lon + ',' + n.latp);
 				var sc:Number = (lx*n.latp-n.lon*ly);
 				cx += (lx+n.lon )*sc;
 				cy += (ly+n.latp)*sc;
@@ -123,16 +128,39 @@ package net.systemeD.potlatch2.tools {
 			patharea/=2;
 			cx/=patharea*6;
 			cy/=patharea*6;
+            trace('DEBUG cx, cy: ' + cx + ',' + cy);
+			trace('DEBUG totx, toty: ' + totx + ',' + toty);
+			*/
+            /* Naive algorithm seems to produce a good result. */
+            var totx:Number=0, toty:Number=0;
+            for (i=0; i<way.length; i++) {
+                n=way.getNode(i);
+                totx+=n.lon;
+                toty+=n.latp;
+            }
+            cx = totx / way.length;
+            cy = toty / way.length;
+			/*
+			Alternative: use WayUI centroid algorithm, although that has the same bug?
+			cx = map.coord2lon(WayUI(map.paint.wayuis[way.id]).centroid_x);
+			cy = map.coord2latp(WayUI(map.paint.wayuis[way.id]).centroid_y);
+			*/
+			
         }
 
         private function calculateCentreDistance():void {
 			// Average distance to centre
 			// (first + last are the same node, don't use twice)
 			for (var i:uint = 0; i < way.length - 1; i++) {
+				trace ('DEBUG lon, latp: ' + (way.getNode(i).lon -cx)+ ', ' + (way.getNode(i).latp-cy));
+				
+				trace('DEBUG d+=' + Math.sqrt(Math.pow(way.getNode(i).lon -cx,2)+
+                             Math.pow(way.getNode(i).latp-cy,2)));
 				d+=Math.sqrt(Math.pow(way.getNode(i).lon -cx,2)+
 							 Math.pow(way.getNode(i).latp-cy,2));
 			}
 			d /= way.length - 1;
+			trace('DEBUG d: ' + d);
 	    }
 
 		private function insertNode(ang:Number, index:int):void {
