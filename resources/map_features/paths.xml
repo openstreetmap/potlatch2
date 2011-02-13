@@ -101,6 +101,7 @@
 
     <relation/>
     <tag k="type" v="route"/>
+    <tag k="route" v="bicycle"/>
     <tag k="network" v="ncn"/>
 
     <inputSet ref="route"/>
@@ -117,6 +118,7 @@
 
     <relation/>
     <tag k="type" v="route"/>
+    <tag k="route" v="bicycle"/>
     <tag k="network" v="rcn"/>
 
     <inputSet ref="route"/>
@@ -136,6 +138,7 @@
 
     <relation/>
     <tag k="type" v="route"/>
+    <tag k="route" v="bicycle"/>
     <tag k="network" v="lcn"/>
 
     <inputSet ref="route"/>
