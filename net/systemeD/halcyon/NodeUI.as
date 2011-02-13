@@ -208,5 +208,10 @@ package net.systemeD.halcyon {
 				d.transform.matrix=m;
 			}
 		}
+        public function hitTest(x:Number, y:Number):Node {
+            if (hitzone && hitzone.hitTestPoint(x,y,true)) { return entity as Node; }
+            return null;
+        }
+		
 	}
 }

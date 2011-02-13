@@ -136,6 +136,7 @@ package net.systemeD.halcyon.connection {
             markDirty();
         }
 
+		/** Merges another way into this one, removing the other one. */
 		public function mergeWith(way:Way,topos:int,frompos:int, performAction:Function):void {
 			performAction(new MergeWaysAction(this, way, topos, frompos));
 		}

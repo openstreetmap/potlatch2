@@ -7,6 +7,7 @@ package net.systemeD.halcyon.connection.actions {
         private var way2:Way;
         private var toPos:uint;
         private var fromPos:uint;
+        static public var lastProblemTags:Array;
     
         public function MergeWaysAction(way1:Way, way2:Way, toPos:uint, fromPos:uint) {
             super("Merge ways "+way1.id+" "+way2.id);
@@ -14,6 +15,7 @@ package net.systemeD.halcyon.connection.actions {
             this.way2 = way2;
             this.toPos = toPos;
             this.fromPos = fromPos;
+            lastProblemTags=null;
         }
         
         public override function doAction():uint {
@@ -24,7 +26,7 @@ package net.systemeD.halcyon.connection.actions {
             way1.suspend();
 
             mergeRelations();
-        	mergeTags();
+            lastProblemTags = way1.mergeTags(way2,push);
         	mergeNodes();
 			way2.remove(push);
 
@@ -51,20 +53,6 @@ package net.systemeD.halcyon.connection.actions {
 			}
         }
         
-        public function mergeTags():void {
-        	var way1Tags:Object = way1.getTagsHash();
-			var way2Tags:Object = way2.getTagsHash();
-			for (var k:String in way2Tags) {
-			    var v1:String = way1Tags[k];
-			    var v2:String = way2Tags[k];
-				if ( v1 && v1 != v2) {
-					way1.setTag(k, v1+"; "+v2, push);
-					// ** send a warning about tags not matching
-				} else {
-					way1.setTag(k, v2, push);
-				}
-			}
-        }
         
         public function mergeNodes():void {
             var i:int;

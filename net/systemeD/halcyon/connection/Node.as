@@ -134,6 +134,12 @@ package net.systemeD.halcyon.connection {
 		public override function getType():String {
 			return 'node';
 		}
+		
+        /** Merge another node into this one, removing the other one. */
+        public function mergeWith(node:Node, performAction:Function):void {
+            performAction(new MergeNodesAction(this, node));
+        }
+		
     }
 
 }

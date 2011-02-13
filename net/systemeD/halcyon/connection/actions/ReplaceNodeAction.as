@@ -2,6 +2,7 @@ package net.systemeD.halcyon.connection.actions {
 
     import net.systemeD.halcyon.connection.*;
 
+    /** Action that substitutes one node instead of another, in all the ways and relations that that node is part of. */
     public class ReplaceNodeAction extends CompositeUndoableAction {
 
         private var node:Node;

@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	
+	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
@@ -85,6 +86,11 @@ package net.systemeD.potlatch2.controller {
 			return parentWay;
 		}
 
+        public function get selectedNode():Node {
+            return parentWay.getNode(selectedIndex);
+        }
+
+
 		private function cycleWays():ControllerState {
 			var wayList:Array=firstSelected.parentWays;
 			if (wayList.length==1) { return this; }
@@ -165,19 +171,58 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+        /** Attempt to either merge the currently selected node with another very nearby node, or failing that,
+        *   attach it mid-way along a very nearby way. */
         public function join():ControllerState {
-            // detect the ways that overlap this node
             var p:Point = new Point(controller.map.lon2coord(Node(firstSelected).lon),
                                              controller.map.latp2coord(Node(firstSelected).latp));
             var q:Point = map.localToGlobal(p);
+
+            // First, look for POI nodes in 20x20 pixel box around the current node
+            var hitnodes:Array = map.connection.getObjectsByBbox(
+                map.coord2lon(p.x-10),
+                map.coord2lon(p.x+10),
+                map.coord2lat(p.y-10),
+                map.coord2lat(p.y+10)).poisInside;
+            
+            for each (var n: Node in hitnodes) {
+                if (!n.hasParent(selectedWay)) { 
+                   return doMergeNodes(n);
+                }
+            }
+            
             var ways:Array=[]; var w:Way;
             for each (var wayui:WayUI in controller.map.paint.wayuis) {
                 w=wayui.hitTest(q.x, q.y);
-                if (w && w!=selectedWay) { ways.push(w); }
+                if (w && w!=selectedWay) { 
+                // hit a way, now let's see if we hit a specific node
+                    for (var i:uint = 0; i < w.length; i++) {
+                    	n = w.getNode(i);
+                    	var x:Number = map.lon2coord(n.lon);
+                    	var y:Number = map.latp2coord(n.latp);
+                    	if (n != selectedNode && Math.abs(x-p.x) + Math.abs(y-p.y) < 10) {
+                            return doMergeNodes(n);
+                        }    
+                    }
+                    ways.push(w); 
+                }
             }
 
+            // No nodes hit, so join our node onto any overlapping ways.
             Node(firstSelected).join(ways,MainUndoStack.getGlobalStack().addAction);
             return this;
         }
+        
+        private function doMergeNodes(n:Node): ControllerState {
+        	n.mergeWith(Node(firstSelected), MainUndoStack.getGlobalStack().addAction);
+            // only merge one node at a time - too confusing otherwise?
+            var msg:String = "Nodes merged."
+            if (MergeNodesAction.lastProblemTags) {
+                msg += " *Warning* The following tags conflicted and need attention: " + MergeNodesAction.lastProblemTags;
+            }
+            map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+            return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
+        }
     }
 }
+
