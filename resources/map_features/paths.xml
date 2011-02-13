@@ -25,21 +25,6 @@
     <inputset ref="naming"/>
   </feature>
 
-  <feature name="Generic path">
-    <category>paths</category>
-    <icon >
-      ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
-    </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dpath</help>
-
-    <line/>
-    <tag k="highway" v="path"/>
-    <inputSet ref="path"/>
-    <inputSet ref="common"/>
-    <inputset ref="naming"/>
-  </feature>
-
-
   <feature name="Pedestrian street">
     <category>paths</category>
     <icon image="features/paths__pedestrian.png">
@@ -88,6 +73,20 @@
     <inputSet ref="common"/>
   </feature>
   
+  <feature name="Generic path">
+    <category>paths</category>
+    <icon image="features/paths__unofficial.png">
+      ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
+    </icon>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dpath</help>
+
+    <line/>
+    <tag k="highway" v="path"/>
+    <inputSet ref="path"/>
+    <inputSet ref="common"/>
+    <inputset ref="naming"/>
+  </feature>
+
   
   <!-- Bicycle routes -->
   <feature name="National Cycle Network">

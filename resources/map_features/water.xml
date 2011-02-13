@@ -75,7 +75,7 @@
 
   <feature name="Riverbank">
     <category>water</category>
-    <icon image="features/pois/water_generic.24.png">
+    <icon image="features/waterway__riverbank.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
 
@@ -87,7 +87,7 @@
 
   <feature name="Reservoir">
     <category>water</category>
-    <icon image="features/pois/water_generic.24.png">
+    <icon image="features/waterway__reservoir.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -102,7 +102,7 @@
 
   <feature name="Lake">
     <category>water</category>
-    <icon image="features/pois/water_generic.24.png">
+    <icon image="features/waterway__lake.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -117,7 +117,7 @@
 
   <feature name="Basin">
     <category>water</category>
-    <icon image="features/pois/water_generic.24.png">
+    <icon image="features/waterway__basin.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -149,7 +149,7 @@
 
   <feature name="Dock">
     <category>water</category>
-    <icon image="features/pois/water_generic.24.png">
+    <icon image="features/waterway__dock.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -164,7 +164,7 @@
 
   <feature name="Marina">
     <category>water</category>
-    <icon image="features/pois/transport_marina.n.24.png">
+    <icon image="features/waterway__marina.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -199,6 +199,7 @@
 
   <feature name="Coastline">
     <category>water</category>
+    <icon image="features/waterway__coastline.png" />
     <line/>
     <tag k="natural" v="coastline"/>
     <inputSet ref="common"/>

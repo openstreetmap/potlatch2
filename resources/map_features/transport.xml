@@ -1,7 +1,7 @@
 <featureGroup>
     <feature name="Railway line">
         <category>transport</category>
-        <icon image="features/transport__railway.png">
+        <icon image="features/railway__rail.png">
           <font size="14pt">
             <b>${name}</b>
           </font>
@@ -20,7 +20,7 @@
     
       <feature name="Railway spur">
         <category>transport</category>
-        <icon image="features/transport__railway.png">
+        <icon image="features/railway__spur.png">
           <font size="14pt">
             <b>${name}</b>
           </font>
@@ -35,7 +35,7 @@
     
       <feature name="Railway siding">
         <category>transport</category>
-        <icon image="features/transport__railway.png">
+        <icon image="features/railway__siding.png">
           <font size="14pt">
             <b>${name}</b>
           </font>
@@ -50,7 +50,7 @@
     
       <feature name="Preserved line">
         <category>transport</category>
-        <icon image="features/transport__railway.png">
+        <icon image="features/railway__preserved.png">
           <font size="14pt"><b>${name}</b></font>
         </icon>
     
@@ -62,7 +62,7 @@
     
       <feature name="Disused tracks">
         <category>transport</category>
-        <icon image="features/transport__railway_disused.png">
+        <icon image="features/railway__disused.png">
           <font size="14pt">
             <b>${name}</b>
           </font>
@@ -76,7 +76,7 @@
     
       <feature name="Old trackbed">
         <category>transport</category>
-        <icon image="features/transport__railway_abandoned.png">
+        <icon image="features/railway__abandoned.png">
           <font size="14pt"><b>${name}</b></font>
         </icon>
     
@@ -88,7 +88,7 @@
     
       <feature name="Light rail line">
         <category>transport</category>
-        <icon image="features/transport__tram.png">
+        <icon image="features/railway__light.png">
           <font size="14pt">
             <b>${name}</b>
           </font>
@@ -106,7 +106,7 @@
     
       <feature name="Tram line">
         <category>transport</category>
-        <icon image="features/transport__tram.png">
+        <icon image="features/railway__tram.png">
           <font size="14pt"><b>${name}</b></font>
         </icon>
     
@@ -123,7 +123,7 @@
     
       <feature name="Subway line">
         <category>transport</category>
-        <icon image="features/transport__subway.png">
+        <icon image="features/railway__subway.png">
           <font size="14pt">
             <b>${name}</b>
           </font>
@@ -141,7 +141,7 @@
     
       <feature name="Railway platform">
         <category>transport</category>
-        <icon image="features/transport__railway_platform.png"/>
+        <icon image="features/railway__platform.png"/>
         <line/>
         <area/>
         <tag k="railway" v="platform"/>
@@ -205,7 +205,7 @@
     
       <feature name="Airport runway">
         <category>transport</category>
-        <icon image="icons/transport_blank.png"/>
+        <icon image="features/aeroway__runway.png"/>
         <tag k="aeroway" v="runway"/>
         <line/>
         <inputSet ref="names"/>
@@ -217,7 +217,7 @@
     
       <feature name="Airport taxiway">
         <category>transport</category>
-        <icon image="icons/transport_blank.png"/>
+        <icon image="features/aeroway__taxiway.png"/>
         <tag k="aeroway" v="taxiway"/>
         <line/>
         <inputSet ref="names"/>
