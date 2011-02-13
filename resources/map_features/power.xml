@@ -39,7 +39,7 @@
 
   <feature name="Plant (station)">
     <category>power</category>
-    <icon image="icons/power_blank.png"/>
+    <icon image="features/pois/power_station.png"/>
     <area/>
     <point/>
     <tag k="power" v="generator"/>

@@ -24,12 +24,12 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="105.49299"
-     inkscape:cy="348.10106"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="260.79121"
+     inkscape:cy="382.9676"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:window-width="1680"
      inkscape:window-height="990"
      inkscape:window-x="-4"
@@ -47,6 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,10 +59,10 @@
        style="fill:#784421;fill-opacity:1;fill-rule:evenodd;stroke:none"
        id="rect3069"
        width="360"
-       height="365.85367"
+       height="360"
        x="195"
-       y="349.43536"
-       ry="40"
+       y="352.36218"
+       ry="39.359997"
        inkscape:export-filename="I:\OSM\pot2b\potlatch2\resources\features\pois\amenity_vendingmachine.png"
        inkscape:export-xdpi="5.9039998"
        inkscape:export-ydpi="5.9039998" />
