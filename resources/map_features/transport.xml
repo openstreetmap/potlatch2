@@ -152,7 +152,7 @@
     
       <feature name="Bus station">
         <category>transport</category>
-        <icon image="/features/pois/transport_bus_station.n.24.png">
+        <icon image="features/amenity__bus_station.png">
           <b>${name} ${addr:housename}</b><br/>
           ${addr:housenumber} ${addr:street} ${addr:postcode}
         </icon>
@@ -168,7 +168,7 @@
     
       <feature name="Airport">
         <category>transport</category>
-        <icon image="icons/transport_airport_48.png"/>
+        <icon image="features/aeroway__aerodrome.png"/>
         <tag k="aeroway" v="aerodrome"/>
         <area/>
         <point/>
@@ -181,7 +181,7 @@
     
       <feature name="Airport terminal">
         <category>transport</category>
-        <icon image="features/pois/transport_airport_terminal.n.24.png"/>
+        <icon image="features/aeroway__terminal.png"/>
         <tag k="aeroway" v="terminal"/>
         <area/>
         <point/>
@@ -193,7 +193,7 @@
     
       <feature name="Helipad">
         <category>transport</category>
-        <icon image="icons/transport_helipad_48.png"/>
+        <icon image="features/aeroway__helipad.png"/>
         <tag k="aeroway" v="helipad"/>
         <area/>
         <point/>
@@ -229,7 +229,7 @@
     
       <feature name="Airport apron">
         <category>transport</category>
-        <icon image="icons/transport_blank.png"/>
+        <icon image="features/aeroway__apron.png"/>
         <tag k="aeroway" v="apron"/>
         <area/>
         <inputSet ref="names"/>
@@ -251,7 +251,7 @@
       
 <feature name="Aerodrome">
     <category>aeroway</category>
-    <icon image="features/pois/transport_aerodrome.n.24.png"/>
+    <icon image="features/aeroway__aerodrome.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
     <point/>
     <tag k="aeroway" v="aerodrome"/>
@@ -274,7 +274,7 @@
 
   <feature name="Car Parking">
     <category>transport</category>
-    <icon image="features/pois/transport_parking_car.n.24.png">
+    <icon image="features/amenity__parking.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
