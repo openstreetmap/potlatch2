@@ -62,7 +62,7 @@ package net.systemeD.potlatch2.controller {
 			    var msg:String = 1 + mergers + " ways merged."
                 var conflictTags2:Array = new Array();
                 // there must be a better way of avoiding duplicates...
-                for each (var conflict in conflictTags) conflictTags2.push(conflict);
+                for each (var conflict:String in conflictTags) conflictTags2.push(conflict);
                 if (conflictTags2.length>0)
                     msg += " *Warning* The following tags conflicted and need attention: " + conflictTags2;
                 map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));

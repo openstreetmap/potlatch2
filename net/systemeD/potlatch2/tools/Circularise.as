@@ -152,7 +152,6 @@ package net.systemeD.potlatch2.tools {
 			// Average distance to centre
 			// (first + last are the same node, don't use twice)
 			for (var i:uint = 0; i < way.length - 1; i++) {
-                             Math.pow(way.getNode(i).latp-cy,2)));
 				d+=Math.sqrt(Math.pow(way.getNode(i).lon -cx,2)+
 							 Math.pow(way.getNode(i).latp-cy,2));
 			}
