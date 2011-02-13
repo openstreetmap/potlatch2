@@ -248,7 +248,6 @@
   </feature>
 
   <feature name="Raceway/racing track">
-    <category>roads</category>
     <category>sport</category>
     <icon>
       <font size="10pt">A purpose built track for racing motor vehicles.</font>
