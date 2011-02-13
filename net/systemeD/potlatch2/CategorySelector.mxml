@@ -12,7 +12,7 @@
       <mx:Repeater id="catRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType(limit)}">
           <mx:VBox label="{catRep.currentItem.name}">
           <mx:TileList dataProvider="{catRep.currentItem.getFeaturesForType(limit)}"
-                       width="100%" height="100%" change="itemSelected(event);" styleName="catToggleTiles"
+                       width="420" height="100%" change="itemSelected(event);" styleName="catToggleTiles"
                        creationComplete="ensureSelection();">
               <mx:itemRenderer>
                   <mx:Component>
