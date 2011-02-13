@@ -1,16 +1,13 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
-	import flash.display.DisplayObject;
-	import flash.ui.Keyboard;
 	import flash.geom.Point;
-    import net.systemeD.potlatch2.EditController;
-    import net.systemeD.potlatch2.tools.Parallelise;
-    import net.systemeD.potlatch2.tools.Quadrilateralise;
-    import net.systemeD.potlatch2.tools.Simplify;
-    import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.MapPaint;
-	import net.systemeD.halcyon.WayUI;
+	import flash.ui.Keyboard;
+	
 	import net.systemeD.halcyon.Globals;
+	import net.systemeD.halcyon.WayUI;
+	import net.systemeD.halcyon.connection.*;
+	import net.systemeD.potlatch2.tools.Quadrilateralise;
+	import net.systemeD.potlatch2.tools.Simplify;
 
     /** Behaviour that takes place while a way is selected includes: adding a node to the way, straightening/reshaping the way, dragging it. */
     public class SelectedWay extends ControllerState {
@@ -18,15 +15,17 @@ package net.systemeD.potlatch2.controller {
         protected var initWay:Way;
         private var clicked:Point;		// did the user enter this state by clicking at a particular point?
 		private var wayList:Array;		// list of ways to cycle through with '/' keypress
+		private var initIndex: int;     // index of last selected node if entered from SelectedWayNode
         
         /** 
         * @param way The way that is now selected.
         * @param point The location that was clicked.
         * @param ways An ordered list of ways sharing a node, to make "way cycling" work. */
-        public function SelectedWay(way:Way, point:Point=null, ways:Array=null) {
+        public function SelectedWay(way:Way, point:Point=null, ways:Array=null, index:int=0) {
             initWay = way;
 			clicked = point;
 			wayList = ways;
+			initIndex=index;
         }
 
         private function updateSelectionUI(e:Event):void {
@@ -76,6 +75,9 @@ package net.systemeD.potlatch2.controller {
 				case 191: /* / */           return cycleWays();
 				case Keyboard.BACKSPACE:	
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
+                case 188: /* , */           return new SelectedWayNode(initWay, initIndex); // allows navigating from one way to another by keyboard
+                case 190: /* . */           return new SelectedWayNode(initWay, initIndex); //  using <, > and /           
+
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
@@ -92,7 +94,9 @@ package net.systemeD.potlatch2.controller {
 				}
 			}
 			wayList=wayList.slice(1).concat(wayList[0]);
-			return new SelectedWay(wayList[0], clicked, wayList);
+			// Find the new way's index of the currently "selected" node, to facilitate keyboard navigation
+			var newindex:int = Way(wayList[0]).indexOfNode(initWay.getNode(initIndex));
+			return new SelectedWay(wayList[0], clicked, wayList, newindex);
 		}
 
 		/** Perform deletion of currently selected way. */

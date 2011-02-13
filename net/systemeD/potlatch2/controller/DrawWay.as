@@ -310,12 +310,7 @@ package net.systemeD.potlatch2.controller {
 			controller.map.setHighlight(nextNode, { selectedway: true });
 
 			// recentre the map if the new lat/lon is offscreen
-			if (nextNode.lat > controller.map.edge_t ||
-				nextNode.lat < controller.map.edge_b ||  
-				nextNode.lon < controller.map.edge_l ||
-				nextNode.lon > controller.map.edge_r) {
-				controller.map.moveMapFromLatLon(nextNode.lat, nextNode.lon);
-			}
+			controller.map.scrollIfNeeded(nextNode.lat,nextNode.lon);
 		}
 		
 		override public function enterState():void {

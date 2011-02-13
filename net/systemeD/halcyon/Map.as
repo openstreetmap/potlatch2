@@ -1,25 +1,17 @@
 package net.systemeD.halcyon {
 
-	import flash.text.TextField;
-	import flash.geom.Rectangle;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.Loader;
 	import flash.display.Sprite;
-	import flash.display.Shape;
-	import flash.display.Stage;
-	import flash.display.BitmapData;
-	import flash.display.LoaderInfo;
-	import flash.text.Font;
-	import flash.utils.ByteArray;
 	import flash.events.*;
+	import flash.external.ExternalInterface;
+	import flash.geom.Rectangle;
 	import flash.net.*;
-    import flash.external.ExternalInterface;
-
-    import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.connection.EntityEvent;
-	import net.systemeD.halcyon.styleparser.*;
-	import net.systemeD.halcyon.Globals;
+	import flash.text.Font;
+	import flash.text.TextField;
 	import flash.ui.Keyboard;
+	
+	import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.styleparser.*;
 
 //	for experimental export function:
 //	import flash.net.FileReference;
@@ -245,6 +237,14 @@ package net.systemeD.halcyon {
 			updateCoordsFromLatLon(lat,lon);
 			updateEntityUIs(false,false);
 			download();
+		}
+		
+		/** Recentre map at given lat/lon, if that point is currently outside the visible area. */
+		public function scrollIfNeeded(lat:Number,lon:Number): void{
+            if (lat> edge_t || lat < edge_b || lon < edge_l || lon > edge_r) {
+                moveMapFromLatLon(lat, lon);
+            }
+
 		}
 
 		// Co-ordinate conversion functions

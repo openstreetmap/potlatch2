@@ -77,6 +77,8 @@ package net.systemeD.potlatch2.controller {
                 case 74:                    if (event.shiftKey) { return unjoin() }; return join();// 'J'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
+				case 188: /* , */           return stepNode(-1);
+				case 190: /* . */           return stepNode(+1);           
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
@@ -89,16 +91,18 @@ package net.systemeD.potlatch2.controller {
         public function get selectedNode():Node {
             return parentWay.getNode(selectedIndex);
         }
-
-
+        
 		private function cycleWays():ControllerState {
 			var wayList:Array=firstSelected.parentWays;
 			if (wayList.length==1) { return this; }
 			wayList.splice(wayList.indexOf(parentWay),1);
+            // find index of this node in the newly selected way, to maintain state for keyboard navigation
+            var newindex:int = Way(wayList[0]).indexOfNode(parentWay.getNode(initIndex));
 			return new SelectedWay(wayList[0],
 			                       new Point(controller.map.lon2coord(Node(firstSelected).lon),
 			                                 controller.map.latp2coord(Node(firstSelected).latp)),
-			                       wayList.concat(parentWay));
+			                       wayList.concat(parentWay),
+			                       newindex);
 		}
 
 		override public function enterState():void {
@@ -223,6 +227,16 @@ package net.systemeD.potlatch2.controller {
             map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
         }
+        
+        /** Move the selection one node further up or down this way, looping if necessary. */
+        public function stepNode(delta:int):ControllerState {
+            var ni:int = (selectedIndex + delta + parentWay.length) %  parentWay.length
+            controller.map.scrollIfNeeded(parentWay.getNode(ni).lat,parentWay.getNode(ni).lon);
+            return new SelectedWayNode(parentWay, ni);
+        }
+
     }
+    
+    
 }
 
