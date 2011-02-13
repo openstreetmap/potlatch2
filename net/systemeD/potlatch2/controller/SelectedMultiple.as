@@ -1,13 +1,11 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
-	import flash.display.DisplayObject;
-	import flash.ui.Keyboard;
-	import net.systemeD.potlatch2.EditController;
+	
+	import net.systemeD.halcyon.AttentionEvent;
+	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.connection.actions.MergeWaysAction;
-	import net.systemeD.halcyon.MapPaint;
-	import net.systemeD.halcyon.WayUI;
-	import net.systemeD.halcyon.Globals;
+    
 
 	public class SelectedMultiple extends ControllerState {
 		protected var initSelection:Array;
@@ -41,13 +39,35 @@ package net.systemeD.potlatch2.controller {
 		public function mergeWays():ControllerState {
 			var changed:Boolean;
 			var waylist:Array=selectedWays;
+			var conflictTags:Object={}; 
+			var mergers:uint=0;
 			do {
 				// ** FIXME - we should have one CompositeUndoableAction for the whole caboodle,
 				// but that screws up the execution order and can make the merge not work
 				var undo:CompositeUndoableAction = new CompositeUndoableAction("Merge ways");
 				changed=tryMerge(waylist, undo);
-				MainUndoStack.getGlobalStack().addAction(undo);
+				if (changed)
+				    mergers ++;
+                MainUndoStack.getGlobalStack().addAction(undo);
+                
+                if (MergeWaysAction.lastProblemTags) {
+                	for each (var t:String in MergeWaysAction.lastProblemTags) {
+                		conflictTags[t]=t;
+                	}
+                }
+            				
 			} while (changed==true);
+
+            if (mergers>0) {			                
+			    var msg:String = 1 + mergers + " ways merged."
+                var conflictTags2:Array = new Array();
+                // there must be a better way of avoiding duplicates...
+                for each (var conflict in conflictTags) conflictTags2.push(conflict);
+                if (conflictTags2.length>0)
+                    msg += " *Warning* The following tags conflicted and need attention: " + conflictTags2;
+                map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+            }
+
 			return controller.findStateForSelection(waylist);
 		}
 		
