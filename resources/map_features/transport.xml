@@ -441,7 +441,7 @@
   <!-- public transit routes -->
   <feature name="Bus Route">
     <category>transport</category>
-    <icon image="features/transport__bus.png">
+    <icon image="features/route__bus.png">
       <font size="12pt">
         ${operator} <b>${ref}</b>
       </font>

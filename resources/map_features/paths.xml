@@ -91,7 +91,7 @@
   <!-- Bicycle routes -->
   <feature name="National Cycle Network">
     <category>paths</category>
-    <icon image="features/cycle__ncn.png" background="red" foreground="white">
+    <icon image="features/route__ncn.png" background="red" foreground="white">
       <font size="14pt">
         <b>${ref}</b>
       </font>
@@ -110,7 +110,7 @@
 
   <feature name="Regional Cycle Network">
     <category>paths</category>
-    <icon image="features/cycle__rcn.png" background="cyan" foreground="white">
+    <icon image="features/route__rcn.png" background="cyan" foreground="white">
       <font size="14pt"><b>${ref}</b></font><br/>
       <font size="12pt">${name}</font>
     </icon>
@@ -126,7 +126,7 @@
 
   <feature name="Local Cycle Network">
     <category>paths</category>
-    <icon image="features/cycle__lcn.png" background="blue" foreground="white">
+    <icon image="features/route__lcn.png" background="blue" foreground="white">
       <font size="14pt">
         <b>${ref}</b>
       </font>
@@ -146,7 +146,7 @@
   
   <feature name="Long Distance Path">
     <category>paths</category>
-    <icon image="features/paths__footway.png" background="green" foreground="white">
+    <icon image="features/route__nwn.png" background="green" foreground="white">
       <font size="14pt">
         <b>${ref}</b>
       </font>
