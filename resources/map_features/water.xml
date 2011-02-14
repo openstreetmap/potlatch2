@@ -132,7 +132,7 @@
 
   <feature name="Weir">
     <category>water</category>
-    <icon image="features/waterway__weir.png">
+    <icon image="features/waterway__weir.png" dnd="features/pois/transport_weir.n.24.png">
       <font size="14pt">
         <b>${name}</b>
       </font>
@@ -143,9 +143,6 @@
     <tag k="waterway" v="weir"/>
     <inputSet ref="common"/>
   </feature>
-
-
-
 
   <feature name="Dock">
     <category>water</category>
@@ -164,7 +161,7 @@
 
   <feature name="Marina">
     <category>water</category>
-    <icon image="features/waterway__marina.png">
+    <icon image="features/waterway__marina.png" dnd="features/pois/transport_marina.n.24.png">
       <font size="14pt">
         <b>${name}</b>
       </font>

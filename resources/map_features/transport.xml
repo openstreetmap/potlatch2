@@ -193,7 +193,7 @@
     
       <feature name="Helipad">
         <category>transport</category>
-        <icon image="features/aeroway__helipad.png"/>
+        <icon image="features/aeroway__helipad.png" dnd="features/pois/transport_helicopter_pad.n.24.png"/>
         <tag k="aeroway" v="helipad"/>
         <area/>
         <point/>
@@ -274,7 +274,7 @@
 
   <feature name="Car Parking">
     <category>transport</category>
-    <icon image="features/amenity__parking.png">
+    <icon image="features/amenity__parking.png" dnd="features/pois/transport_parking_car.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
