@@ -44,7 +44,7 @@
 								DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
 							}
 						]]></mx:Script>
-						<mx:Image id="foo" source="{data.image}" height="24" width="24" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
+						<mx:Image id="foo" source="{data.dndimage}" height="24" width="24" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
 					</mx:VBox>
 				</mx:Component>
 			</mx:itemRenderer>

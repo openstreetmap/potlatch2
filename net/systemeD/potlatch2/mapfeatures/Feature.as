@@ -107,16 +107,34 @@ package net.systemeD.potlatch2.mapfeatures {
 			return null;
         }
 
+        /** Returns the icon defined for the feature.
+        * This uses the "image" property of the feature's icon element. If no image property is defined, returns a default "missing icon".
+        */
         [Bindable(event="imageChanged")]
-        /** An icon for the feature (from icons[0]/@image). If none is defined, return default "missing icon". */
         public function get image():ByteArray {
+            return getImage();
+        }
+
+        /** Returns the drag+drop override-icon defined for the feature.
+        * This uses the "dnd" property of the feature's icon element, or if there is no override-icon it falls back to the standard image.
+        */
+        [Bindable(event="imageChanged")]
+        public function get dndimage():ByteArray {
+            return getImage(true);
+        }
+
+        /** Fetches the feature's image, as defined by the icon element in the feature definition.
+        * @param dnd if true, overrides the normal image and returns the one defined by the dnd property instead. */
+        private function getImage(dnd:Boolean = false):ByteArray {
             var icon:XMLList = _xml.icon;
             var imageURL:String = null;
             var img:ByteArray;
 
-            
-            if ( icon.length() > 0 && icon[0].hasOwnProperty("@image") )
+            if ( dnd && icon.length() > 0 && icon[0].hasOwnProperty("@dnd") ) {
+                imageURL = icon[0].@dnd;
+            } else if ( icon.length() > 0 && icon[0].hasOwnProperty("@image") ) {
                 imageURL = icon[0].@image;
+            }
 
             if ( imageURL != null ) {
                 img = CachedDataLoader.loadData(imageURL, imageLoaded);

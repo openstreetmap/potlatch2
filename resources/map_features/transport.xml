@@ -168,7 +168,7 @@
     
       <feature name="Airport">
         <category>transport</category>
-        <icon image="features/aeroway__aerodrome.png"/>
+        <icon image="features/aeroway__aerodrome.png" dnd="features/pois/transport_airport.n.24.png"/>
         <tag k="aeroway" v="aerodrome"/>
         <area/>
         <point/>
@@ -181,7 +181,7 @@
     
       <feature name="Airport terminal">
         <category>transport</category>
-        <icon image="features/aeroway__terminal.png"/>
+        <icon image="features/aeroway__terminal.png" dnd="features/pois/transport_airport_terminal.n.24.png"/>
         <tag k="aeroway" v="terminal"/>
         <area/>
         <point/>

@@ -10,6 +10,7 @@ Quick documentation:
   category: [ctext] corresponding to category id
   icon
     @image: path to .png file
+    @dnd: path to optional dnd-specific-override .png file
     @background: colour spec
     @foreground: colour spec
     (general html goes here?) Variables substituted with ${ref}
