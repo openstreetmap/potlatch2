@@ -58,7 +58,7 @@
 
 
   <feature name="Marketplace">
-    <category>landuse</category>
+    <category>shopping</category>
     <point />
     <area/>
     <icon image="features/pois/shopping_greengrocer.n.24.png">
@@ -153,7 +153,6 @@
 
 
   <feature name="Recreation ground">
-    <category>landuse</category>
     <category>sport</category>    
     <area/>
     <icon image="features/pois/sport_leisure_centre.n.24.png">
@@ -166,7 +165,7 @@
 
 
   <feature name="Sports pitch">
-    <category>landuse</category>
+    <category>sport</category>
     <area/>
     <icon image="features/pois/sport_leisure_centre.n.24.png">
       <b>${name}</b>
@@ -217,7 +216,6 @@
   </inputSet>
 
   <feature name="Sports track">
-    <category>landuse</category>
     <category>sport</category>
     <area/>
     <line/>
