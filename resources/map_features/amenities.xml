@@ -242,9 +242,8 @@
   </feature>
 
   <feature name="Hunting stand">
-    <category>amenity</category>
     <category>sport</category>
-    <!-- icon needed -->
+    <icon image="features/pois/sport_shooting.n.24.png"/>
     <point/>
     <tag k="amenity" v="hunting_stand"/>
     <inputSet ref="common"/>
