@@ -55,7 +55,7 @@
 
   <feature name="Place of Worship">
     <category>amenity</category>
-    <icon image="icons/place_of_worship.png"/>
+    <icon image="features/pois/place_of_worship_unknown.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
     <point/>
     <tag k="amenity" v="place_of_worship"/>
