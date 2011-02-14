@@ -1,7 +1,7 @@
 <featureGroup>
   <feature name="Tower/mast">
     <category>manmade</category>
-    <icon image="features/manmade_tower.png" dnd="no"/>
+    <icon image="features/manmade_tower.png"/>
     <point/>
     <tag k="man_made" v="tower" vmatch="tower|water_tower|lighthouse|chimney|mast|communications_tower|flagpole|antenna|pole|cross"/>
     <input type="choice" key="man_made" name="Object" presence="always" priority="highest">
