@@ -159,7 +159,7 @@
 
     <relation/>
     <tag k="type" v="route"/>
-    <tag k="route" v="foot"/>
+    <tag k="route" v="hiking"/>
 
     <inputSet ref="route"/>
     <inputSet ref="common"/>
