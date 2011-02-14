@@ -333,6 +333,7 @@
 
   <feature name="Toy shop">
     <category>shopping</category>
+    <icon image="features/pois/shopping_toy.n.24.png" />
     <point/>
     <area/>
     <inputSet ref="simpleName"/>

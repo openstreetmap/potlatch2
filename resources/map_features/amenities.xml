@@ -144,7 +144,7 @@
 
   <feature name="Town hall">
     <category>amenity</category>
-    <icon >
+    <icon image="features/pois/amenity_town_hall.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dtownhall</help>
