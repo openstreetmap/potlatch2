@@ -180,7 +180,7 @@
     <inputSet ref="simpleName"/>
     <inputSet ref="web"/>
     <inputSet ref="buildingAddress"/>
-    <icon image="features/pois/flowers.png"/>
+    <icon image="features/pois/shopping_florist.n.24.png"/>
     <tag k="shop" v="florist"/>
     <inputSet ref="common"/>
   </feature>
