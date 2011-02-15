@@ -21,6 +21,9 @@ package net.systemeD.potlatch2 {
         /** A comma-separated list of types of bugs. We don't want ones classed as routing problems, they are likely to be skobbler-app specific. */
         /* Possible values: wrong_turn,bad_routing,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other */
         private var filter_type:String = "wrong_turn,oneway_road,blocked_street,missing_street,wrong_roundabout,missing_speedlimit,other";
+        /** Type of comments. "idd = 0" means no comments with default description, "idd = 1" means only comments with default description.
+        * Use empty string (i.e. don't pass any parameter) to indicate all comments. */
+        private var commentType:String = "&idd=0";
 
         // as strings, since that's how they are in tags and http calls
         public static var BUG_STATUS_OPEN:String = "1";
@@ -64,7 +67,7 @@ package net.systemeD.potlatch2 {
         public override function loadBbox(left:Number, right:Number,
                                 top:Number, bottom:Number):void {
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type));
+            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
             loader.addEventListener(Event.COMPLETE, parseJSON);
             loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
             loader.addEventListener(IOErrorEvent.IO_ERROR, handleError);
