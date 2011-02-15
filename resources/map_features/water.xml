@@ -177,18 +177,9 @@
 
   <feature name="Slipway">
     <category>water</category>
-    <icon image="features/waterway__slipway.png" />
+    <icon image="features/waterway__slipway.png" dnd="features/pois/transport_slipway.n.24.png"/>
+    <point/>
     <line/>
-    <tag k="leisure" v="slipway"/>
-    <inputSet ref="names"/>
-    <inputSet ref="common"/>
-  </feature>
-
-  <feature name="Slipway">
-    <category>water</category>
-    <!-- icon from http://www.clker.com/clipart-map-symbols-boat-launch-white.html, feel free to (re)move this notice -->
-    <icon image="features/pois/boat-launch-24.png"/>
-    <point />
     <tag k="leisure" v="slipway"/>
     <inputSet ref="names"/>
     <inputSet ref="common"/>
