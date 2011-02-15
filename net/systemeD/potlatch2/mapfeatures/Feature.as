@@ -107,6 +107,14 @@ package net.systemeD.potlatch2.mapfeatures {
 			return null;
         }
 
+        [Bindable(event="descriptionChanged")]
+        /** The human-readable description of the feature, or null if none. */
+        public function get description():String {
+            var desc:XMLList = _xml.description
+            if (desc.length()>0) { return desc[0]; }
+            return null;
+        }
+
         /** Returns the icon defined for the feature.
         * This uses the "image" property of the feature's icon element. If no image property is defined, returns a default "missing icon".
         */

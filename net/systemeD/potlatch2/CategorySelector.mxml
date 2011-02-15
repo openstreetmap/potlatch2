@@ -18,7 +18,7 @@
                   <mx:Component>
                       <mx:VBox width="100" height="75"
                           horizontalScrollPolicy="off" verticalScrollPolicy="off"
-                          horizontalAlign="center" verticalGap="0">
+                          horizontalAlign="center" verticalGap="0" toolTip="{data.description}">
                           <mx:Image source="{data.image}" height="100%" verticalAlign="middle"/>
                           <mx:Text text="{data.name}"/>
                       </mx:VBox>
