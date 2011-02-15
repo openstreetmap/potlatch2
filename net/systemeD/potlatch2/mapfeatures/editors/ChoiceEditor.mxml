@@ -12,7 +12,21 @@
       <edit:itemRenderer>
         <mx:Component>
         <mx:HBox toolTip="{data.description}" horizontalScrollPolicy="off">
-          <mx:Image source="{data.icon}"/>
+          <!-- Use an object proxy to wrap calls to data.icon, otherwise you get a slew of binding warnings. Something to do
+                with it being passed through the dataProvider to an itemRenderer.
+                It's not clear whether this fixes the problem or just supresses the warnings!
+                see http://designovermatter.com/post.cfm/warning-unable-to-bind-to-property-somevar-on-object-object-class-is-not-an-ieventdispatcher -->
+          <mx:Script><![CDATA[
+            import mx.utils.ObjectProxy;
+
+            [Bindable]
+            public var dataProxy:ObjectProxy;
+
+            private function init():void {
+                dataProxy = new ObjectProxy(data);
+            }
+          ]]></mx:Script>
+          <mx:Image source="{dataProxy.icon}"/>
           <mx:Label htmlText="{data.label}"/>
         </mx:HBox>
         </mx:Component>
