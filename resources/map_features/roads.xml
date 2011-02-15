@@ -274,7 +274,7 @@
 
   <feature name="Mini Roundabout">
     <category>transport</category>
-    <icon image="features/pois/miniroundabout.png"/>
+    <icon image="features/pois/transport_mini_roundabout.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dmini_roundabout</help>
     <point/>
     <tag k="highway" v="mini_roundabout"/>
