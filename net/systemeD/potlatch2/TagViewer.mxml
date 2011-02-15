@@ -303,8 +303,12 @@
 
       /** Set the icon, categorySelector and help text for the current entity. */
       private function setCategorySelector(entity:Entity, feature:Feature):void {
-			// Remove the "user has selected something" event listener from previous categorySelector
-			if (currentCategorySelector) currentCategorySelector.removeEventListener("selectedType", changeFeatureType);
+			// Remove the "user has selected something" event listener from previous categorySelector,
+			// and make it invisible because Flex is crap at updating click areas otherwise
+			if (currentCategorySelector) { 
+				currentCategorySelector.removeEventListener("selectedType", changeFeatureType);
+				currentCategorySelector.visible=false;
+			}
 			
 			// Have we cached the categorySelector for this limitType? If not, create one
 			var lt:String=limitType(entity);
@@ -334,7 +338,10 @@
 					iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
 				}
 			}
+
+			// Set it as the popup, and make sure it's visible
 			popupChange.popUp=currentCategorySelector;
+			currentCategorySelector.visible=true;
       }
 
 	  private function isMultipleEditable(entities:Array):Boolean {
