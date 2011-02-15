@@ -209,7 +209,6 @@
 
   <feature name="Water fountain">
     <category>amenity</category>
-    <category>water</category>
     <category>foodanddrink</category>
     <icon image="features/pois/food_drinkingtap.n.24.png">
       ${ref}
