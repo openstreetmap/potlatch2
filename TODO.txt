@@ -35,7 +35,6 @@ Potlatch 2: main outstanding issues
 ** Keypress detection is very erratic, depending on focus - need to work out where events are going (Application.application?) and sense them there
 * Failing to parse map_features should be an error state
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
-* Potlatch 1-style "floaty warnings"
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
 * GPS loading should have a loading... label
