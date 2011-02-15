@@ -283,9 +283,8 @@
 
 
   <feature name="Traffic calming">
-
     <category>transport</category>
-    <icon image="icons/speed_hump_16.png"/>
+    <icon image="features/pois/transport_traffic_calming.n.24.png"/>
 <!--    <help>http://wiki.openstreetmap.org/wiki/Key:traffic_calming</help>-->
     <point/>
     <tag k="traffic_calming" v="yes" vmatch="*"/>
