@@ -201,7 +201,7 @@
     <point/>
     <area/>
     <tag k="amenity" v="cinema"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the cinema" priority="low"/>
+    <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
   </feature>
 

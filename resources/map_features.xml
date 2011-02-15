@@ -506,7 +506,7 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="waterways">
-    <input type="freetext" presence="always" name="Name" category="Naming" key="name" description="The name"/>
+    <inputSet ref="simpleName"/>
     <input type="freetext" presence="always" name="Width" category="Properties" key="width" description="The width in metres"/>
     <inputSet ref="boatPermissions"/>
   </inputSet>

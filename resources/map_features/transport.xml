@@ -255,7 +255,7 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
     <point/>
     <tag k="aeroway" v="aerodrome"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the aerodrome/airport" priority="low"/>
+    <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
   </feature>
 
@@ -431,7 +431,7 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
     <point/>
     <tag k="amenity" v="ferry_terminal"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of the ferry terminal."/>
+    <inputSet ref="simpleName" />
     <input type="freetext" presence="always" category="" name="Operator" key="operator" description="The operator of the ferry terminal." priority="low"/>
     <input type="freetext" presence="onTagMatch" category="Cargo" name="Cargo" key="cargo" description="The cargo shipped from here." priority="low"/>
     <inputSet ref="common"/>

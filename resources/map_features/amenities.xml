@@ -7,7 +7,7 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfire_station</help>
     <point/>
     <tag k="amenity" v="fire_station"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
+    <inputSet ref="simpleName" />
     <inputSet ref="common"/>
   </feature>
 
@@ -44,7 +44,7 @@
     <point/>
     <area/>
     <tag k="amenity" v="hospital"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The Name of it." priority="low"/>
+    <inputSet ref="simpleName"/>
     <input type="choice" presence="always" category="Hospital" name="Emergency treatment available" key="emergency" description="Are there accident and emergency facilities at this hospital?">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
@@ -59,7 +59,7 @@
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
     <point/>
     <tag k="amenity" v="place_of_worship"/>
-    <input type="freetext" presence="always" category="" name="name" key="name" description="The name of it." priority="low"/>
+    <inputSet ref="simpleName" />
     <input type="choice" presence="always" category="" name="Religion" key="religion" description="The religion worshipped here.">
       <choice value="christian" text="Christianity (church)"/>
       <choice value="jewish" text="Judaism (synagogue)"/>
