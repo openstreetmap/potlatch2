@@ -58,8 +58,8 @@
 
 
   <feature name="Dam">
-    <!-- Moved to "barrier" because this describes the dam wall, not the water. -->
-    <category>barrier</category>
+    <category>water</category>
+    <description>A structure for holding water in a reservoir</description>
     <icon image="features/waterway__dam.png">
       <font size="14pt">
         <b>${name}</b>
@@ -187,6 +187,7 @@
 
   <feature name="Coastline">
     <category>water</category>
+    <description>The average high tide line, with water on the right-hand side</description>
     <icon image="features/waterway__coastline.png" />
     <line/>
     <tag k="natural" v="coastline"/>
