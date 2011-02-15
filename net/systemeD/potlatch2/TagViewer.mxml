@@ -63,7 +63,7 @@
             <mx:Text condenseWhite="true" width="100%" id="iconText" styleName="dndIconText"/>
           </mx:HBox>
           <mx:HBox width="100%">
-            <mx:PopUpButton id="popupChange" creationComplete="initFeatureBox()" openAlways="true" width="100%" styleName="dndTagPopUpMenu"/>
+            <mx:PopUpButton id="popupChange" openAlways="true" width="100%" styleName="dndTagPopUpMenu" closeDuration="0" />
             <mx:LinkButton icon="@Embed('../../../embedded/information.svg')" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
           </mx:HBox>
         </mx:VBox>
@@ -232,7 +232,8 @@
 
       public var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
-      private var tw:CategorySelector = null;
+      private var currentCategorySelector:CategorySelector;
+      private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
       private var feature:Feature = null;
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
@@ -293,29 +294,47 @@
               if ( feature != null )
                   feature.addEventListener("imageChanged", featureImageChanged);
           }
-
-          if ( feature != null && feature.name != null ) {
-              setFeatureIcon(selectedEntity, feature);
-          } else {
-              blankFeatureIcon(selectedEntity);
-          }
+          setCategorySelector(selectedEntity, feature);
       }
 
       private function featureImageChanged(event:Event):void {
-          setFeatureIcon(selectedEntity, feature);
+          setCategorySelector(selectedEntity, feature);
       }
 
-      private function setFeatureIcon(entity:Entity, feature:Feature):void {
-          //blankFeatureIcon(entity);
+      /** Set the icon, categorySelector and help text for the current entity. */
+      private function setCategorySelector(entity:Entity, feature:Feature):void {
+			// Remove the "user has selected something" event listener from previous categorySelector
+			if (currentCategorySelector) currentCategorySelector.removeEventListener("selectedType", changeFeatureType);
+			
+			// Have we cached the categorySelector for this limitType? If not, create one
+			var lt:String=limitType(entity);
+			if (!categorySelectors[lt]) {
+				categorySelectors[lt]=new CategorySelector();
+				categorySelectors[lt].setLimitTypes(lt);
+			}
+			currentCategorySelector=categorySelectors[lt];
+			currentCategorySelector.addEventListener("selectedType", changeFeatureType, false, 0, true);
 
-          iconImage.source = feature.image;
-
-          var txt:String = feature.htmlDetails(entity);
-          iconText.htmlText = txt;
-          popupChange.label = feature.name;
-          setLimitTypes(entity);
-          tw.setSelectedFeature(feature);
-          helpLabel.visible = feature.hasHelpURL();
+			// Update surrounding icon/text display
+			if (feature) {
+				iconImage.source = feature.image;
+				iconText.htmlText = feature.htmlDetails(entity);
+				popupChange.label = feature.name;
+				helpLabel.visible = feature.hasHelpURL();
+				currentCategorySelector.setSelectedFeature(feature);
+			} else {
+				iconImage.source = null;
+				popupChange.label = "unknown";
+				helpLabel.visible = false;
+				if (entity==null) {
+					iconText.htmlText = "<i>Nothing selected</i>";
+				} else if (entity.hasTags()) {
+					iconText.htmlText = "<b>Not recognised</b><br/><font size='10pt'>Try looking at the tags under the advanced properties</font>";
+				} else {
+					iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
+				}
+			}
+			popupChange.popUp=currentCategorySelector;
       }
 
 	  private function isMultipleEditable(entities:Array):Boolean {
@@ -326,32 +345,11 @@
 		return true;
 	  }
 
-      private function setLimitTypes(entity:Entity):void {
-          var type:String = null;
-          if ( entity is Node )
-              type = "point";
-          else if ( entity is Way )
-              type = Way(entity).isArea() ? "area" : "line";
-          else if ( entity is Relation )
-              type = "relation";
-          tw.setLimitTypes(type);
-      }
-
-      private function blankFeatureIcon(entity:Entity):void {
-          iconImage.source = null;
-          popupChange.label = "unknown";
-          setLimitTypes(entity);
-		  if (entity == null) {
-			iconText.htmlText = "<i>Nothing selected</i>";
-            tw.setNoSelectedFeature();
-		  } else if (entity.hasTags()) {
-			iconText.htmlText = "<b>Not recognised</b><br/><font size='10pt'>Try looking at the tags under the advanced properties</font>";
-            tw.setSelectedFeature(null);
-		  } else {
-			iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
-            tw.setSelectedFeature(null);
-          }
-          helpLabel.visible = false;
+      private function limitType(entity:Entity):String {
+          if      (entity is Node    ) return "point";
+          else if (entity is Way     ) return Way(entity).isArea() ? "area" : "line";
+          else if (entity is Relation) return "relation";
+          return null;
       }
 
       private var tabComponents:Object = {};
@@ -774,18 +772,12 @@
 		}
       }
 
-      public function initFeatureBox():void {
-          tw = new CategorySelector();
-          tw.addEventListener("selectedType", changeFeatureType);
-          popupChange.popUp = tw;
-      }
-
       public function changeFeatureType(event:Event):void {
           if ( selectedEntity == null )
               return;
 
           UIComponent.suspendBackgroundProcessing();
-          var newFeature:Feature = tw.selectedType;
+          var newFeature:Feature = currentCategorySelector.selectedType;
           var undoStack:Function = MainUndoStack.getGlobalStack().addAction;
           var action:CompositeUndoableAction = new CompositeUndoableAction(
                   "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+newFeature.name);
