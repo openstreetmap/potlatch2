@@ -44,5 +44,5 @@ package net.systemed.potlatch2.indentation {
 * POI icons for map_features are 24x24 and come from the CC0-licensed SJJB set (http://www.sjjb.co.uk/icons)
 * POI icons for Halcyon stylesheets are 16x16 and also come from the SJJB set
 * Way icons for map_features are 75x45 and have up to now generally been drawn by Richard (see way_icons.ai)
-* All features must have an icon, and all icons must be in the correct style. Do not add a feature without a matching icon.
+* All features must have a unique icon, and all icons must be in the correct style. Do not add a feature without a matching icon.
 * Only deployable files go in resources/ . Vector source files go in resources_src/
