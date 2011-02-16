@@ -20,7 +20,6 @@ Potlatch 2: main outstanding issues
 ** SuperTabNavigator frequently doesn't respond to tab clicks
 * initialiseEditors is quite slow (typically 150ms)
 * Tag panel jumps up and down when number spinner is used on bike parking
-* New relation panel jumps up and down, but I haven't seen it on editing existing relations
 * Changing relation ref doesn't update the main tagviewer until the entity is reselected
 * Changing type of relation doesn't update the main tagviewer until the entity is reselected
 * Adding a relation via the advanced panel doesn't update the simple panel
