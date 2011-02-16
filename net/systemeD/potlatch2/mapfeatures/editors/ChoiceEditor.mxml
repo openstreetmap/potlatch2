@@ -12,7 +12,7 @@
       <edit:itemRenderer>
         <mx:Component>
         <mx:HBox toolTip="{data.description}" horizontalScrollPolicy="off">
-          <mx:Image source="{data.icon}"/>
+          <mx:Image source="{Choice(data).icon}"/>
           <mx:Label htmlText="{data.label}"/>
         </mx:HBox>
         </mx:Component>
