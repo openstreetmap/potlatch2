@@ -4,7 +4,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.Map;
 	import net.systemeD.potlatch2.tools.Parallelise;
-	import net.systemeD.halcyon.Globals;
 
     /** The state midway during the use of the "parallelise tool", where a parallel way has been created but is stuck to the 
     * mouse cursor, allowing the user to choose how far from the original way it should go. This transforms it in the process. */
@@ -80,12 +79,10 @@ package net.systemeD.potlatch2.controller {
 			controller.map.paint.createWayUI(firstSelected as Way);
 			startlon =controller.map.coord2lon(controller.map.mouseX);
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
-			Globals.vars.root.addDebug("**** -> "+this);
         }
 		/** Unselects. */
 		override public function exitState(newState:ControllerState):void {
             clearSelection(newState);
-			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

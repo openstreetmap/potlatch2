@@ -4,7 +4,6 @@ package net.systemeD.halcyon {
 	import flash.events.MouseEvent;
 	import flash.text.AntiAliasType;
 	import flash.text.GridFitType;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.StyleList;
     import net.systemeD.halcyon.connection.*;
 

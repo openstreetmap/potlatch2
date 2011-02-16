@@ -6,7 +6,6 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.styleparser.RuleSet;
-	import net.systemeD.halcyon.Globals;
 
 	/** Manages the drawing of map entities, allocating their sprites etc. */
 	public class MapPaint extends Sprite {

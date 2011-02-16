@@ -10,7 +10,6 @@ package net.systemeD.halcyon {
 	import flash.geom.Point;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
 	
 	/** The graphical representation of a Node (including POIs and nodes that are part of Ways). */
 	public class NodeUI extends EntityUI {

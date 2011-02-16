@@ -109,7 +109,6 @@ package net.systemeD.potlatch2.collections {
 				}
 				if (bg.attribution_url) {
 					// load the attribution
-					trace("requesting "+bg.attribution_url);
 			        var urlloader:URLLoader = new URLLoader();
 					var thisbg2:Object = bg;			// scope it for the closure
 					urlloader.addEventListener(Event.COMPLETE, function(e:Event):void { onAttributionLoad(e,thisbg2); });
@@ -137,7 +136,6 @@ package net.systemeD.potlatch2.collections {
 		}
 		
 		public function onAttributionLoad(e:Event,bg: Object):void {
-			trace ("onAttributionLoad");
 			// if we ever need to cope with non-Microsoft attribution, then this should look at bg.scheme
             default xml namespace = Namespace("http://schemas.microsoft.com/search/local/ws/rest/v1");
             var xml:XML = new XML(e.target.data);

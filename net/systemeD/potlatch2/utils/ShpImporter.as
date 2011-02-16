@@ -3,7 +3,6 @@ package net.systemeD.potlatch2.utils {
 	import org.vanrijkom.shp.*;
 	import org.vanrijkom.dbf.*;
 	import net.systemeD.halcyon.MapPaint;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.potlatch2.tools.Simplify;

@@ -4,7 +4,6 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
 	
 	import net.systemeD.halcyon.AttentionEvent;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.connection.actions.*;
@@ -108,7 +107,6 @@ package net.systemeD.potlatch2.controller {
 		override public function enterState():void {
             selectNode(parentWay,initIndex);
 			controller.map.setPurgable(selection,false);
-			Globals.vars.root.addDebug("**** -> "+this);
         }
 		override public function exitState(newState:ControllerState):void {
             if (firstSelected.hasTags()) {
@@ -116,7 +114,6 @@ package net.systemeD.potlatch2.controller {
             }
 			controller.map.setPurgable(selection,true);
             clearSelection(newState);
-			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

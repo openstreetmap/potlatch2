@@ -2,7 +2,6 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	
 	import net.systemeD.halcyon.AttentionEvent;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.connection.actions.MergeWaysAction;
     
@@ -115,7 +114,6 @@ package net.systemeD.potlatch2.controller {
 			}
 			controller.updateSelectionUI();
 			controller.map.setPurgable(selection,false);
-			Globals.vars.root.addDebug("**** -> "+this+" "+selection);
 		}
 
 		override public function exitState(newState:ControllerState):void {
@@ -125,7 +123,6 @@ package net.systemeD.potlatch2.controller {
 			}
 			selection = [];
 			if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
-			Globals.vars.root.addDebug("**** <- "+this);
 		}
 
 		override public function toString():String {

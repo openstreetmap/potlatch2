@@ -4,7 +4,6 @@ package net.systemeD.halcyon.connection {
 
     import flash.events.EventDispatcher;
     import flash.events.Event;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.MapEvent;

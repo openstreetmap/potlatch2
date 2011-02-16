@@ -4,7 +4,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.VectorLayer;
-	import net.systemeD.halcyon.Globals;
 
     public class SelectedMarker extends ControllerState {
         protected var initMarker:Marker;
@@ -55,13 +54,11 @@ package net.systemeD.potlatch2.controller {
         override public function enterState():void {
             selectMarker(initMarker);
 			controller.map.setPurgable(selection,false);
-			Globals.vars.root.addDebug("**** -> "+this);
         }
 
         override public function exitState(newState:ControllerState):void {
 			controller.map.setPurgable(selection,true);
             clearSelection(newState);
-			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

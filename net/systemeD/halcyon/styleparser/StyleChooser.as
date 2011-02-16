@@ -1,7 +1,6 @@
 package net.systemeD.halcyon.styleparser {
 
 	import net.systemeD.halcyon.connection.Entity;
-	import net.systemeD.halcyon.Globals;
 
 	public class StyleChooser {
 

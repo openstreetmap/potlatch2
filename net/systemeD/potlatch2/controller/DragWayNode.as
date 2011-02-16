@@ -2,7 +2,6 @@ package net.systemeD.potlatch2.controller {
 	import flash.events.*;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.WayUI;
 
     public class DragWayNode extends ControllerState {
@@ -121,14 +120,12 @@ package net.systemeD.potlatch2.controller {
 			controller.map.setHighlight(draggingNode, { selected: true } );
 			controller.map.protectWay(parentWay);
 			controller.map.limitWayDrawing(parentWay, NaN, draggingIndex);
-			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
 			controller.map.unprotectWay(parentWay);
 			controller.map.limitWayDrawing(parentWay);
 			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
 			controller.map.setHighlight(draggingNode, { selected: false } );
-			Globals.vars.root.addDebug("**** <- "+this);
         }
         override public function toString():String {
             return "DragWayNode";

@@ -9,8 +9,6 @@ package net.systemeD.potlatch2.utils {
 	import flash.events.*;
 	import flash.net.*;
 
-	import net.systemeD.halcyon.Globals;
-
 	public class Importer {
 
 		protected var container:Object;				// destination object for way/node/relations data
@@ -23,9 +21,6 @@ package net.systemeD.potlatch2.utils {
 		protected var simplify:Boolean;
 
 		public function Importer(container:*, paint:MapPaint, filenames:Array, callback:Function, simplify:Boolean) {
-			Globals.vars.root.addDebug("starting importer"); 
-			Globals.vars.root.addDebug("container is "+container);
-			Globals.vars.root.addDebug("paint is "+paint);
 			this.container = container;
 			this.paint = paint;
 			this.filenames=filenames;
@@ -35,7 +30,7 @@ package net.systemeD.potlatch2.utils {
 			var sp:uint=0;
 			for each (var fn:String in filenames) {
 				var thissp:uint=sp;		// scope within this block for the URLLoader 'complete' closure
-				Globals.vars.root.addDebug("requesting file "+fn);
+				trace("requesting file "+fn);
 				var request:DebugURLRequest = new DebugURLRequest(fn);
 				var loader:URLLoader = new URLLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
@@ -50,7 +45,7 @@ package net.systemeD.potlatch2.utils {
 		}
 		
 		protected function fileLoaded(e:Event,filenum:uint):void {
-			Globals.vars.root.addDebug("loaded file "+filenum); 
+			trace("loaded file "+filenum); 
 			files[filenum]=e.target.data;
 			filesloaded++;
 			if (filesloaded==filenames.length) { 

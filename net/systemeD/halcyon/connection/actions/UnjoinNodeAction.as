@@ -1,7 +1,6 @@
 package net.systemeD.halcyon.connection.actions {
 
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
     
     public class UnjoinNodeAction extends CompositeUndoableAction {
 

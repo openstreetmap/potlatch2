@@ -3,7 +3,6 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
 
     public class SelectedPOINode extends ControllerState {
         protected var initNode:Node;
@@ -59,7 +58,6 @@ package net.systemeD.potlatch2.controller {
         override public function enterState():void {
             selectNode(initNode);
 			controller.map.setPurgable(selection,false);
-			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
             if(firstSelected.hasTags()) {
@@ -67,7 +65,6 @@ package net.systemeD.potlatch2.controller {
             }
 			controller.map.setPurgable(selection,true);
             clearSelection(newState);
-			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         override public function toString():String {

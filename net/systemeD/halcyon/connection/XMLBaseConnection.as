@@ -6,8 +6,6 @@ package net.systemeD.halcyon.connection {
 	import flash.net.*;
     import org.iotashan.oauth.*;
 
-	import net.systemeD.halcyon.Globals;
-
     /**
     * XMLBaseConnection is the common code between connecting to an OSM server
     * (i.e. XMLConnection) and connecting to a standalone .osm file (i.e. OSMConnection)

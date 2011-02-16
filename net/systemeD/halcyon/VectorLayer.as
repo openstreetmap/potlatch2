@@ -4,7 +4,6 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.styleparser.RuleSet;
 
     /** The VectorLayer class is used for the concept of Vector Background Layers.

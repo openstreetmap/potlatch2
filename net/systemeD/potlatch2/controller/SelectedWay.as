@@ -3,7 +3,6 @@ package net.systemeD.potlatch2.controller {
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.potlatch2.tools.Quadrilateralise;
@@ -117,7 +116,6 @@ package net.systemeD.potlatch2.controller {
 	            initWay.addEventListener(Connection.WAY_REORDERED, updateSelectionUI, false, 0, true);
 			}
 			controller.map.setPurgable(selection,false);
-			Globals.vars.root.addDebug("**** -> "+this+" "+firstSelected.id);
         }
         /** Officially leave the state, remembering the current way's tags for future repeats. */
         // TODO: tweak this so that repeat tags aren't remembered if you only select a way in order to branch off it. (a la PL1) 
@@ -128,7 +126,6 @@ package net.systemeD.potlatch2.controller {
 			controller.map.setPurgable(selection,true);
             firstSelected.removeEventListener(Connection.WAY_REORDERED, updateSelectionUI);
             clearSelection(newState);
-			Globals.vars.root.addDebug("**** <- "+this);
         }
 
         /** @return "SelectedWay" */

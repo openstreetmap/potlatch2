@@ -10,7 +10,6 @@ package net.systemeD.halcyon {
     import flash.geom.Point;
     import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.Globals;
 
     public class MarkerUI extends EntityUI {
 

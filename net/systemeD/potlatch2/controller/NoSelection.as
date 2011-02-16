@@ -6,7 +6,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapPaint;
-	import net.systemeD.halcyon.Globals;
 
 	public class NoSelection extends ControllerState {
 
@@ -45,10 +44,8 @@ package net.systemeD.potlatch2.controller {
 		
         override public function enterState():void {
 			controller.map.mouseUpHandler();
-			Globals.vars.root.addDebug("**** -> "+this);
         }
         override public function exitState(newState:ControllerState):void {
-			Globals.vars.root.addDebug("**** <- "+this);
         }
 		override public function toString():String {
 			return "NoSelection";

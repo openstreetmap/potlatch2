@@ -1,7 +1,6 @@
 package net.systemeD.potlatch2.utils {
 
 	import net.systemeD.halcyon.MapPaint;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.potlatch2.tools.Simplify;
 

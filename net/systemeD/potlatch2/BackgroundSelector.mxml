@@ -29,7 +29,6 @@
 		import mx.core.*;
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
-		import net.systemeD.halcyon.Globals;
 
 		public function setDimming(v:Boolean):void {
 			Application.application.theMap.setDimming(dim.selected);

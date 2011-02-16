@@ -6,7 +6,6 @@ package net.systemeD.halcyon.connection {
 	import flash.system.Security;
 
 	import net.systemeD.halcyon.ExtendedURLLoader;
-	import net.systemeD.halcyon.Globals;
 
     /**
     * Read-only connection from local OSM-XML format (.osm) files.
@@ -96,7 +95,6 @@ package net.systemeD.halcyon.connection {
 		}
 		
 		private function loadFile(box:Array):void {
-			Globals.vars.root.addDebug("called loadFile for "+box);
 			bboxes[box]=LOADING;
 
             var mapRequest:URLRequest = new URLRequest(Connection.apiBaseURL+"/"+box[0]+"_"+box[1]+"_"+box[2]+"_"+box[3]+".osm");

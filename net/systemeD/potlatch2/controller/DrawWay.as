@@ -7,7 +7,6 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
 	import net.systemeD.halcyon.Elastic;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.halcyon.MapPaint;
 
 	public class DrawWay extends SelectedWay {
@@ -323,7 +322,6 @@ package net.systemeD.potlatch2.controller {
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
 			controller.setCursor(controller.pen);
-			Globals.vars.root.addDebug("**** -> "+this);
 		}
 		override public function exitState(newState:ControllerState):void {
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
@@ -333,7 +331,6 @@ package net.systemeD.potlatch2.controller {
 			controller.setCursor(null);
 			elastic.removeSprites();
 			elastic = null;
-			Globals.vars.root.addDebug("**** <- "+this);
 		}
 		override public function toString():String {
 			return "DrawWay";

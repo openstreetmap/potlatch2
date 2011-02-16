@@ -8,7 +8,6 @@ package net.systemeD.halcyon.styleparser {
     import net.systemeD.halcyon.connection.Entity;
 
     import net.systemeD.halcyon.connection.*;
-	import net.systemeD.halcyon.Globals;
 	
 	/** A complete stylesheet, as loaded from a MapCSS file. It contains all selectors, declarations, 
 		and embedded images.																				</p><p>
@@ -337,8 +336,8 @@ package net.systemeD.halcyon.styleparser {
         }
 
 		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
-		private function securityErrorHandler( event:SecurityErrorEvent ):void { Globals.vars.root.addDebug("securityerrorevent"); }
-		private function ioErrorHandler( event:IOErrorEvent ):void { Globals.vars.root.addDebug("ioerrorevent"); }
+		private function securityErrorHandler( event:SecurityErrorEvent ):void { trace("securityerrorevent"); }
+		private function ioErrorHandler( event:IOErrorEvent ):void { trace("ioerrorevent"); }
 
 		// ------------------------------------------------------------------------------------------------
 		// Parse CSS
@@ -418,11 +417,11 @@ package net.systemeD.halcyon.styleparser {
 				// Unknown pattern
 				} else if ((o=UNKNOWN.exec(css))) {
 					css=css.replace(UNKNOWN,'');
-					Globals.vars.root.addDebug("unknown: "+o[1]);
+					trace("unknown: "+o[1]);
 					// ** do some debugging with o[1]
 
 				} else {
-					Globals.vars.root.addDebug("choked on "+css);
+					trace("choked on "+css);
 					return;
 				}
 			}

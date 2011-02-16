@@ -5,7 +5,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
-	import net.systemeD.halcyon.Globals;
 
     /** The state of moving a selection around with the mouse. */
     public class DragSelection extends ControllerState {
@@ -98,7 +97,6 @@ package net.systemeD.potlatch2.controller {
 			for each (var entity:Entity in selection) {
 				controller.map.setHighlight(entity, { selected: true });
 			}
-			Globals.vars.root.addDebug("**** -> "+this);
         }
         
         /** Un-highlight the dragged selection. */
@@ -106,7 +104,6 @@ package net.systemeD.potlatch2.controller {
 			for each (var entity:Entity in selection) {
 				controller.map.setHighlight(entity, { selected: false });
 			}
-			Globals.vars.root.addDebug("**** <- "+this);
         }
         /** "DragSelection" */
         override public function toString():String {

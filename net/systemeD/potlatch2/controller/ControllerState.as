@@ -6,7 +6,6 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.collections.Imagery;
     import net.systemeD.potlatch2.EditController;
-	import net.systemeD.halcyon.Globals;
 	import net.systemeD.potlatch2.save.SaveManager;
 	import flash.ui.Keyboard;
 	import mx.controls.Alert;

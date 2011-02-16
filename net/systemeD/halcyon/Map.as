@@ -166,7 +166,6 @@ package net.systemeD.halcyon {
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			baselon    =startlon          -(mapwidth /2)/scalefactor;
 			basey      =lat2latp(startlat)+(mapheight/2)/scalefactor;
-			addDebug("Baselon "+baselon+", basey "+basey);
 			updateCoords(0,0);
             this.dispatchEvent(new Event(MapEvent.INITIALISED));
 			download();
@@ -294,7 +293,6 @@ package net.systemeD.halcyon {
 			if (connection.waycount>1000) {
 				connection.purgeOutside(edge_l,edge_r,edge_t,edge_b);
 			}
-			addDebug("Calling download with "+edge_l+"-"+edge_r+", "+edge_t+"-"+edge_b);
 			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 
             // Do the same for vector layers
@@ -425,7 +423,6 @@ package net.systemeD.halcyon {
 		}
 
 		private function changeScale(newscale:uint):void {
-			addDebug("new scale "+newscale);
 			scale=newscale;
 			this.dispatchEvent(new MapEvent(MapEvent.SCALE, {scale:scale}));
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
@@ -433,10 +430,6 @@ package net.systemeD.halcyon {
 			tileset.changeScale(scale);
 			updateEntityUIs(true,true);
 			download();
-		}
-
-		private function reportPosition():void {
-			addDebug("lon "+coord2lon(mouseX)+", lat "+coord2lat(mouseY));
 		}
 
         private function toggleReportPosition():void {
@@ -488,7 +481,7 @@ package net.systemeD.halcyon {
 		// and mask)
 /*		
 		public function export():void {
-			addDebug("size is "+this.width+","+this.height);
+			trace("size is "+this.width+","+this.height);
 			var jpgSource:BitmapData = new BitmapData(800,800); // (this.width, this.height);
 			jpgSource.draw(this);
 			var jpgEncoder:JPGEncoder = new JPGEncoder(85);
@@ -570,11 +563,6 @@ package net.systemeD.halcyon {
 				case Keyboard.DOWN:	moveMap(0,-mapheight/2); break;      // down cursor
 				case 76:	toggleReportPosition(); break;			// L - report lat/long
 			}
-		}
-
-		/** What to do if an error with the network connection happens. */
-		public function connectionError(err:Object=null): void {
-			addDebug("got error"); 
 		}
 
 		// ------------------------------------------------------------------------------------------
