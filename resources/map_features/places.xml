@@ -1,7 +1,7 @@
 <featureGroup>
   <feature name="Hamlet">
     <category>places</category>
-    <icon image="icons/place.png"/>
+    <icon image="features/pois/poi_place_hamlet.p.24.png"/>
     <point/>
     <area/>
     <tag k="place" v="hamlet" />
@@ -12,7 +12,7 @@
 
   <feature name="Village">
     <category>places</category>
-    <icon image="icons/place.png"/>
+    <icon image="features/pois/poi_place_village.p.24.png"/>
     <point/>
     <area/>
     <tag k="place" v="village" />
@@ -23,7 +23,7 @@
 
   <feature name="Suburb">
     <category>places</category>
-    <icon image="icons/place.png"/>
+    <icon image="features/pois/poi_place_town.p.24.png"/>
     <point/>
     <area/>
     <tag k="place" v="suburb" />
@@ -34,7 +34,7 @@
 
   <feature name="Town">
     <category>places</category>
-    <icon image="icons/place.png"/>
+    <icon image="features/pois/poi_place_town.p.24.png"/>
     <point/>
     <area/>
     <tag k="place" v="town" />
@@ -45,7 +45,7 @@
 
   <feature name="City">
     <category>places</category>
-    <icon image="icons/place.png"/>
+    <icon image="features/pois/poi_place_city.p.24.png"/>
     <point/>
     <area/>
     <tag k="place" v="city" />
