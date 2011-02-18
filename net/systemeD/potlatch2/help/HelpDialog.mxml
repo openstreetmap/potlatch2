@@ -4,7 +4,7 @@
         xmlns:help="net.systemeD.potlatch2.help.*"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="{getTitleText()}"
-        width="600" height="500"
+        width="660" height="500"
         verticalGap="0">
   <mx:Script><![CDATA[
     import mx.managers.PopUpManager;
@@ -174,6 +174,13 @@
         </mx:GridRow>
       </mx:Grid>
     </mx:VBox>
+
+    <mx:VBox label="Introduction" width="100%" height="100%" hide="introvideo.stopPlaying()" removedFromStage="introvideo.stopPlaying()">
+		<help:VideoPlayer width="640" height="369" id="introvideo"
+			file="help/introduction.mp4" 
+			previewImage="help/introduction.jpg" />
+	</mx:VBox>
+
     <mx:VBox label="Controls" width="100%" height="100%">
       <mx:Label text="Interface Controls" textAlign="center" width="100%" styleName="helpPageHeader"/>
       <mx:Grid width="100%">

@@ -7,7 +7,7 @@
 		</mx:Box>
 		<mx:Box id="videoContainer">
 			<mx:VideoDisplay id="video" 
-				metadataReceived="prepareVideo()"
+ 				metadataReceived="prepareVideo()"
 				click="playVideo()"
 				autoPlay="false"
 				width="100%" height="100%" />
@@ -68,6 +68,11 @@
 			public function progressThumbRelease(event:Event):void { 
 				video.playheadTime = event.currentTarget.value; 
 			} 
+			public function stopPlaying():void {
+				if (!video.playing) return;
+				video.pause();
+				playButton.source=playImage;
+			}
 
 		]]> 
 	</mx:Script>
