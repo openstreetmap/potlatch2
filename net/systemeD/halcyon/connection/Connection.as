@@ -1,12 +1,12 @@
 package net.systemeD.halcyon.connection {
 
-    import flash.net.*;
-
-    import flash.events.EventDispatcher;
     import flash.events.Event;
-	import net.systemeD.halcyon.connection.actions.*;
-	import net.systemeD.halcyon.AttentionEvent;
-	import net.systemeD.halcyon.MapEvent;
+    import flash.events.EventDispatcher;
+    import flash.net.*;
+    
+    import net.systemeD.halcyon.AttentionEvent;
+    import net.systemeD.halcyon.MapEvent;
+    import net.systemeD.halcyon.connection.actions.*;
 
 	public class Connection extends EventDispatcher {
 
@@ -308,14 +308,18 @@ package net.systemeD.halcyon.connection {
             return list;
         }
 
+        /** Returns all available relations that match all of {k1: [v1,v2,...], k2: [v1...] ...} 
+        * where p1 is an array [v1, v2, v3...] */
         public function getMatchingRelationIDs(match:Object):Array {
             var list:Array = [];
-			var ok:Boolean;
             for each (var relation:Relation in relations) {
-				ok=true;
-				if (relation.deleted) { ok=false; }
+                var ok: Boolean = true;
+				if (relation.deleted) { continue; }
 				for (var k:String in match) {
-					if (!relation.getTagsHash()[k] || relation.getTagsHash()[k]!=match[k]) { ok=false; }
+					var v:String = relation.getTagsHash()[k];
+					if (!v || match[k].indexOf(v) < 0) { 
+					   ok = false; break;  
+					}
 				}
 				if (ok) { list.push(relation.id); }
 			}

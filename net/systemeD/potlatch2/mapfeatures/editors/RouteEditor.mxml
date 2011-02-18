@@ -39,7 +39,7 @@
     }
 
 	public function addToRelation():void {
-		new RelationSelectPanel().init(_entity, _factory.relationTags);        
+		new RelationSelectPanel().init(_entity, _factory.relationTagPatterns);        
 	}
     
   ]]></mx:Script>

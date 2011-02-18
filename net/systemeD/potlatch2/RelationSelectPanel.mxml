@@ -15,17 +15,25 @@
         private var conn:Connection;
         private var relationList:Array;
         private var entity:Entity;
-		private var tags:Object;
+		private var defaulttags:Object;
 
+        /** Initialise panel used to add and remove relations from an entity.
+        *   @param e Entity that is being edited.
+        *   @param t Object containing tag match patterns as properties, for the kind of relation sought.
+        */
         public function init(e:Entity, t:Object):void {
           entity = e;
-          tags = {}; for (var k:String in t) { tags[k]=t[k]; }	// deep copy tags
+          defaulttags = {};
+          for (var k:String in t) {  
+            //tagmatches[k]=t[k];// deep copy match pattern tags
+            defaulttags[k]=t[k][0];  // route=[hiking,foot] -> route=hiking
+          }	
           PopUpManager.addPopUp(this, Application(Application.application), true);
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
           conn = Connection.getConnectionInstance();
-          relationList = conn.getMatchingRelationIDs(tags);
+          relationList = conn.getMatchingRelationIDs(t);
           if (relationList.length == 0) {
             warning.text = "No relations available";
           } else {
@@ -64,7 +72,7 @@
 					members.push(new RelationMember(e, ''));
 				}
 			} else members.push(new RelationMember(entity, ''));
-			var relation:Relation = conn.createRelation(tags, members, MainUndoStack.getGlobalStack().addAction);
+			var relation:Relation = conn.createRelation(defaulttags, members, MainUndoStack.getGlobalStack().addAction);
 
 			PopUpManager.removePopUp(this);
 			var panel:RelationEditorPanel = RelationEditorPanel(

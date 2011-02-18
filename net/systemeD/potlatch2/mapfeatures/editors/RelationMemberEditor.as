@@ -25,16 +25,19 @@ package net.systemeD.potlatch2.mapfeatures.editors {
           if (_entity == null)
               return [];
           
-          var relationTags:Object = _factory.relationTags;
+          var relationTagPatterns:Object = _factory.relationTagPatterns;
           var matched:Array = [];
+          
           for each(var relation:Relation in _entity.parentRelations) {
               var addable:Boolean = true;
-              for ( var k:String in relationTags ) {
+              for ( var k:String in relationTagPatterns ) {
                   var relVal:String = relation.getTag(k);
-                  if ( relVal != relationTags[k] )
+                  if ( relationTagPatterns[k].indexOf(relVal) < 0 ) {
                       addable = false;
+                      break;
+                  }
               }
-              if (_factory.role && !relation.hasMemberInRole(_entity,_factory.role) ) { addable=false; }
+              if (_factory.role && !relation.hasMemberInRole(_entity,_factory.role) ) { continue; }
 
               if (addable) {
                   for each( var memberIndex:int in relation.findEntityMemberIndexes(_entity)) {

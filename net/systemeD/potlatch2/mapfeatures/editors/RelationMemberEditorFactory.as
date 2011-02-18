@@ -1,26 +1,30 @@
 package net.systemeD.potlatch2.mapfeatures.editors {
 
+    import flash.display.*;
+    
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.mapfeatures.*;
-    import flash.display.*;
 
 	public class RelationMemberEditorFactory extends EditorFactory {
-	    private var _relationTags:Object;
+	    /** Contains "route"=["hiking","foot"] key/values. The <match> map_features tag is parsed here from
+	    * "hiking|foot" pipe-separated values. */
+	    private var _relationTagPatterns:Object;
 		private var _role:String;
         
+        /** Constructs the editing panel for a relation(###), given its <relation> in map_features.xml */
         public function RelationMemberEditorFactory(inputXML:XML) {
             super(inputXML);
-            _relationTags = {};
+            _relationTagPatterns = {};
             for each(var match:XML in inputXML.match) {
-                _relationTags[match.@k] = match.@v;
+                _relationTagPatterns[match.@k] = match.@v.split('|');
             }
 			for each(var role:XML in inputXML.role) {
 				_role=role.@role;
 			}
         }
         
-        public function get relationTags():Object {
-            return _relationTags;
+        public function get relationTagPatterns():Object {
+            return _relationTagPatterns;
         }
         
         public function get role():String {
@@ -35,9 +39,9 @@ package net.systemeD.potlatch2.mapfeatures.editors {
             // get relations for the entity
             for each(var relation:Relation in parentRelations) {
 				var match:Boolean=true;
-                for ( var k:String in _relationTags ) {
+                for ( var k:String in _relationTagPatterns ) {
                     var relVal:String = relation.getTag(k);
-                    if ( relVal != _relationTags[k] ) { match=false; break; }
+                    if (k.indexOf(relVal) < 0) { match=false; break; }
 					if ( _role && !relation.hasMemberInRole(entity,_role) ) { match=false; break; }
                 }
 				if (match) { return true; }
