@@ -40,10 +40,10 @@
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
         <mx:Spacer width="100%"/>
-        <mx:Button label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
+        <mx:Button id="undo" label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"
             toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
-        <mx:Button label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
+        <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
         <mx:Button label="Help" click="new HelpDialog().init();" styleName="appBarButton" />

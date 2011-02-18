@@ -32,4 +32,9 @@
     <ResourceProxy property="welcome.label" key="help.welcome" />
   </SmartResourceInjector>
 
+  <SmartResourceInjector bundleName="p2_main" target="{potlatch2}">
+    <ResourceProxy property="undo.label" key="main.undo" />
+    <ResourceProxy property="redo.label" key="main.redo" />
+  </SmartResourceInjector>
+
 </LocaleMap>
