@@ -255,6 +255,7 @@
 
   <target name="buildLocales">
     <echo>Building Localization .swf's</echo>
+    <compileLocale locale="en_US" />
     <compileLocale locale="en_GB" />
     <compileLocale locale="fr_FR" />
   </target>
@@ -262,6 +263,7 @@
 
   <target name="deployLocales" depends="buildLocales">
     <echo>Deploying the compiled swf and assets package for the given locales</echo>
+    <deployLocale locale="en_US" />
     <deployLocale locale="en_GB" />
     <deployLocale locale="fr_FR" />
   </target>
