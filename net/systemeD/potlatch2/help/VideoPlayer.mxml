@@ -8,6 +8,7 @@
 		<mx:Box id="videoContainer">
 			<mx:VideoDisplay id="video" 
  				metadataReceived="prepareVideo()"
+				playheadUpdate="advanceProgress(event)"
 				click="playVideo()"
 				autoPlay="false"
 				width="100%" height="100%" />
@@ -37,8 +38,11 @@
 				the user actually wants it.)
 			*/
 
+			import mx.events.VideoEvent;
+
 			[Bindable] public var file:String;
 			[Bindable] public var previewImage:String; 
+			private var wasPlaying:Boolean;
 
 			[Bindable] [Embed(source="../../../../embedded/video_play.png" )] public var playImage:Class;
 			[Bindable] [Embed(source="../../../../embedded/video_pause.png")] public var pauseImage:Class;
@@ -62,12 +66,17 @@
 				progressBar.maximum=video.totalTime;
 			}
 			public function progressThumbPress(event:Event):void { 
+				wasPlaying=video.playing;
 				video.pause();
 				playButton.source=playImage;
 			}
 			public function progressThumbRelease(event:Event):void { 
 				video.playheadTime = event.currentTarget.value; 
+				if (wasPlaying) playVideo();
 			} 
+			public function advanceProgress(event:VideoEvent):void {
+				progressBar.value = event.playheadTime;
+			}
 			public function stopPlaying():void {
 				if (!video.playing) return;
 				video.pause();
