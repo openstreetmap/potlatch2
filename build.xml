@@ -28,7 +28,7 @@
   </target>
 
   <!-- delete and create the DEPLOY dir again -->
-  <target name="init" depends="git-buildnumber,svn-buildnumber">
+  <target name="init" depends="git-buildnumber,svn-buildnumber,deployLocales">
     <echo>Build Number ${build_number}</echo>
     <copy file="version.as.template" tofile="version.as" overwrite="true" />
     <replace file="version.as" token="@@@buildnumber@@@" value="${build_number}" />
@@ -200,5 +200,70 @@
   </target>
 
   <target name="test" depends="init, compileTestRunner, runTestsAndReport" description="Compiles unit tests and generates test report artifacts." />
+
+  <!-- ======================================= -->
+  <!-- Locale Targets -->
+  <!-- ======================================= -->
+
+  <!-- Deploy compiled Localization Resource Bundles and resources. -->
+  <macrodef name="deployLocale" description="Deploying the compiled swfs">
+    <attribute name="locale" default="en_GB"/>
+    <sequential>
+      <echo>Copying @{locale}.swf to deploy directory...</echo>
+
+      <mkdir dir="${basedir}/resources/locales"/>
+      <copy file="${basedir}/l10n/locale/bundles/@{locale}.swf" tofile="${basedir}/resources/locales/@{locale}.swf" />
+
+    </sequential>
+  </macrodef>
+
+  <!-- Compiles Localization Resource Bundle. -->
+  <macrodef name="compileLocale" description="Compiles the Resource package for the given locale">
+    <attribute name="locale" default="en_GB"/>
+    <sequential>
+
+      <!--
+      Invoke MXMLC
+      - also include the MX Framework locale assets
+      Note: this requires user to invoke copyLocale.exe prior to running this script
+      -->
+      <mxmlc output="${basedir}/l10n/locale/bundles/@{locale}.swf">
+<!--         <locale>@{locale}</locale> -->
+
+
+        <source-path path-element="${basedir}/l10n/locale/@{locale}"/>
+        <include-resource-bundles>help_dialog</include-resource-bundles>
+
+<!--        <source-path path-element="${src.dir}/locale/framework/bundles/{locale}/src"/>
+        <include-resource-bundles>collections</include-resource-bundles>
+        <include-resource-bundles>containers</include-resource-bundles>
+        <include-resource-bundles>controls</include-resource-bundles>
+        <include-resource-bundles>core</include-resource-bundles>
+        <include-resource-bundles>effects</include-resource-bundles>
+        <include-resource-bundles>formatters</include-resource-bundles>
+        <include-resource-bundles>logging</include-resource-bundles>
+        <include-resource-bundles>SharedResources</include-resource-bundles>
+        <include-resource-bundles>skins</include-resource-bundles>
+        <include-resource-bundles>states</include-resource-bundles>
+        <include-resource-bundles>styles</include-resource-bundles>
+        <include-resource-bundles>utils</include-resource-bundles>
+        <include-resource-bundles>validators</include-resource-bundles>-->
+      </mxmlc>
+
+    </sequential>
+  </macrodef>
+
+  <target name="buildLocales">
+    <echo>Building Localization .swf's</echo>
+    <compileLocale locale="en_GB" />
+    <compileLocale locale="fr_FR" />
+  </target>
+
+
+  <target name="deployLocales" depends="buildLocales">
+    <echo>Deploying the compiled swf and assets package for the given locales</echo>
+    <deployLocale locale="en_GB" />
+    <deployLocale locale="fr_FR" />
+  </target>
 
 </project>

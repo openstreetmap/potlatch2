@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LocaleMap enableLog="true"
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:factory="mx.core.*"
+    xmlns="library://ns.babelfx.org/l10n/flex/" >
+
+  <!-- Support for Locale ResourceBundle changes -->
+  <mx:Script>
+    <![CDATA[
+      import com.mindspace.l10n.commands.ExternalLocaleCommand;
+
+      import net.systemeD.potlatch2.help.HelpDialog;
+    ]]>
+  </mx:Script>
+
+  <commandFactory>
+    <factory:ClassFactory generator="{ExternalLocaleCommand}">
+      <factory:properties>
+        <mx:Object externalPath="locales/\{0\}.swf"/>
+      </factory:properties>
+    </factory:ClassFactory>
+  </commandFactory>
+
+  <!--
+  SmartResourceInjectors for targeted class instantiations. Instead of dependency injection of UI instances,
+  we use SRI(s) here to remove any need to know view hierarchy relationships... we simply want a reference
+  to the UI instance when ready.
+  -->
+
+  <SmartResourceInjector bundleName="help_dialog" target="{HelpDialog}">
+    <ResourceProxy property="gettingStarted.text" key="help.gettingStarted" />
+    <ResourceProxy property="welcome.label" key="help.welcome" />
+  </SmartResourceInjector>
+
+</LocaleMap>

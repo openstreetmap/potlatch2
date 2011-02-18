@@ -51,6 +51,8 @@
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
 			click="SaveManager.saveChanges();" id="saveButton" enabled="false"/>
     </mx:ApplicationControlBar>
+
+    <map:LocalizationMap xmlns:map="l10n.map.*" />
     
     <mx:HDividedBox width="100%" height="100%">
 
@@ -100,6 +102,7 @@
         import mx.managers.DragManager;
         import mx.core.DragSource;
         import mx.controls.Alert;
+        import com.mindspace.l10n.events.LocaleEvent;
 
         public var theMap:Map;
         public var theController:EditController;
@@ -115,6 +118,10 @@
         include "version.as";
 
 		private function initApp():void {
+
+            /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. Use en_GB instead. */
+            /* Change this to another locale (e.g. fr_FR) to see the differences. This will obviously become done differently at some point. */
+            dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,'en_GB'));
 
 			Globals.vars.map_area = map_area;
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
