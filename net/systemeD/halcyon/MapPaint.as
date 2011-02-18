@@ -221,6 +221,7 @@ package net.systemeD.halcyon {
 				wayuis[way.id].redrawMultis();
 				wayuis[way.id].removeSprites();
 				wayuis[way.id].removeEventListeners();
+				wayuis[way.id].removeListenSprite();
 				delete wayuis[way.id];
 			}
 			for (var i:uint=0; i<way.length; i++) {
@@ -254,6 +255,7 @@ package net.systemeD.halcyon {
 			if (!nodeuis[node.id]) { return; }
 			nodeuis[node.id].removeSprites();
 			nodeuis[node.id].removeEventListeners();
+			nodeuis[node.id].removeListenSprite();
 			delete nodeuis[node.id];
 		}
 
@@ -282,6 +284,7 @@ package net.systemeD.halcyon {
             if (!markeruis[marker.id]) { return; }
             markeruis[marker.id].removeSprites();
             markeruis[marker.id].removeEventListeners();
+            markeruis[marker.id].removeListenSprite();
             delete markeruis[marker.id];
         }
 		

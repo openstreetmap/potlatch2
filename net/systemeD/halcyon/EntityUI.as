@@ -179,6 +179,13 @@ package net.systemeD.halcyon {
 			}
 		}
 		
+		public function removeListenSprite():void {
+			if (listenSprite && listenSprite.parent) listenSprite.parent.removeChild(listenSprite);
+			if (hitzone && hitzone.parent) hitzone.parent.removeChild(hitzone);
+			listenSprite=null;
+			hitzone=null;
+		}
+		
 		public function protectSprites():void { clearLimit=sprites.length; }
 		public function unprotectSprites():void { clearLimit=0; }
 
