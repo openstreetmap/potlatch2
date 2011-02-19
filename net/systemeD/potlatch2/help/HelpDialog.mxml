@@ -105,7 +105,8 @@
                           ["Ctrl+Click", "Select multiple nodes or ways (Command+Click on Mac)"],
                           ["/", "Cycle through overlapping ways"],
                           ];
-        var text2:Array =  [["D", "Dim features"],
+        var text2:Array =  [["+", "Add new tag"],
+                            ["D", "Dim features"],
                             ["F", "Follow existing way"],
                             ["R", "Repeat tags"],
                             ["T", "Toggle between simple and advanced tags"],
