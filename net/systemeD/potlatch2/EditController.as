@@ -11,6 +11,7 @@ package net.systemeD.potlatch2 {
     import flash.events.*;
 	import flash.geom.*;
 	import flash.ui.Keyboard;
+	import flash.text.TextField;
 
     /** Controller for the main map editing window itself. The logic that responds to mouse and keyboard events is all 
     * buried in various ControllerState classes. */
@@ -53,8 +54,8 @@ package net.systemeD.potlatch2 {
             map.parent.addEventListener(MouseEvent.MOUSE_DOWN, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_WHEEL, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.CLICK, mapMouseEvent);
-            map.parent.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-            map.parent.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+            map.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+            map.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 
             if (this.moveFunction) {
                 map.addEventListener(MapEvent.MOVE, moveHandler);
@@ -96,7 +97,7 @@ package net.systemeD.potlatch2 {
 		}
 
         private function keyUpHandler(event:KeyboardEvent):void {
-            trace("key code "+event.keyCode);
+			if (event.target is TextField) return;				// not meant for us
 			if (keys[event.keyCode]) { delete keys[event.keyCode]; }
 			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
             
