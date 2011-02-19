@@ -206,6 +206,9 @@
 
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
+            
+			// mouse-position listener for co-ordinate display
+            theMap.addEventListener(MapEvent.MOUSE_MOVE, mouseoverHandler);
 
 			// position toolbox
 			toolbox=Toolbox(PopUpManager.createPopUp(this,Toolbox,false));
@@ -224,9 +227,6 @@
 
             theController = new EditController(theMap, tagViewer, toolbox);
             theController.setActive();
-            
-            theMap.addEventListener(MapEvent.MOUSEOVER, mouseoverHandler);
-            theMap.addEventListener(MapEvent.TOGGLE_LATLON, togglelatlonHandler);
             
             var conn:Connection = Connection.getConnectionInstance();
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
@@ -365,11 +365,6 @@
                 coordsbox.text= Number(e.params.x).toFixed(5) + "\n " + Number(e.params.y).toFixed(5); // Not sure if 5 dp's really required.
             }
         }
-
-        private function togglelatlonHandler(e:MapEvent):void {
-            coordsbox.visible = e.params.latlon;
-        }
-
 
         private function onDataStart(event:Event):void {
 			switch (event.type) {

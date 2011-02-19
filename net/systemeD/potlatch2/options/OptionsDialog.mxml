@@ -20,6 +20,7 @@
         tbcheck.selected = Application.application.toolbox.visible;
         cursorcheck.selected = Application.application.theController.cursorsEnabled;
         tigercheck.selected = obj.data['tiger_highlighted'];
+        latlongcheck.selected = Application.application.coordsbox.visible;
     }
     
     private function optionsDialog_close(evt:CloseEvent):void {
@@ -45,6 +46,9 @@
 
     <mx:CheckBox width="100%" label="Highlight unedited TIGER (US roads)" selected="false" id="tigercheck"
         change="tigerToggle()" />
+
+	<mx:CheckBox width="100%" label="Show mouse latitude/longitude" selected="false" id="latlongcheck" 
+		change="Application.application.coordsbox.visible=latlongcheck.selected" />
 
   <mx:ControlBar>
     <mx:Spacer width="100%"/>
