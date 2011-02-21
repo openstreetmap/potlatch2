@@ -33,8 +33,15 @@
   </SmartResourceInjector>
 
   <SmartResourceInjector bundleName="p2_main" target="{potlatch2}">
+    <ResourceProxy property="bgButton.label" key="main.background" />
+    <ResourceProxy property="styleButton.label" key="main.map_style" />
+    <ResourceProxy property="gpsData.label" key="main.gps_data" />
+    <ResourceProxy property="myTracks.label" key="main.my_tracks" />
     <ResourceProxy property="undo.label" key="main.undo" />
     <ResourceProxy property="redo.label" key="main.redo" />
+    <ResourceProxy property="helpButton.label" key="main.help" />
+    <ResourceProxy property="optionsButton.label" key="main.options" />
+    <ResourceProxy property="saveButton.label" key="main.save" />
   </SmartResourceInjector>
 
 </LocaleMap>

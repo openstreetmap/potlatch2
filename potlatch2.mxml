@@ -34,8 +34,8 @@
 		    itemClick="if (event.index==0) { trackLoader.load(); } else { new MyGpxDialog().init(); }">
 			<mx:dataProvider>
 				<mx:Array>
-					<mx:Object label="GPS data" />
-					<mx:Object label="My tracks" />
+					<mx:Object label="GPS data" id="gpsData" />
+					<mx:Object label="My tracks" id="myTracks" />
 				</mx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
@@ -46,8 +46,8 @@
         <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
-        <mx:Button label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
-        <mx:Button label="Options" click="new OptionsDialog().init();" styleName="appBarButton" /> 
+        <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
+        <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
 			click="SaveManager.saveChanges();" id="saveButton" enabled="false"/>
     </mx:ApplicationControlBar>

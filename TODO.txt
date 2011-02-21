@@ -69,6 +69,11 @@ Potlatch 2: main outstanding issues
 == Reverse Button ==
 * Doesn't look like a button
 
+== l10n ==
+* Fix the en_US / default locale problem
+* Fix the gps_data / my_tracks issue
+* Choose locale via loaderInfo
+
 Requested enhancements
 ----------------------
 
