@@ -9,7 +9,9 @@
 	horizontalAlign="center" 
 	addedToStage="initApp()"
 	preloader="net.systemeD.potlatch2.Preloader">
-	
+
+    <map:LocalizationMap xmlns:map="l10n.map.*" />
+
 	<mx:Style source="styles/Application.css"/>
 
     <mx:Glow id="glowImage" duration="100" 
@@ -51,8 +53,6 @@
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
 			click="SaveManager.saveChanges();" id="saveButton" enabled="false"/>
     </mx:ApplicationControlBar>
-
-    <map:LocalizationMap xmlns:map="l10n.map.*" />
     
     <mx:HDividedBox width="100%" height="100%">
 
