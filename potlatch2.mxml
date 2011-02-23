@@ -119,9 +119,11 @@
 
 		private function initApp():void {
 
-            /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. Use en_GB instead. */
-            /* Change this to another locale (e.g. fr_FR) to see the differences. This will obviously become done differently at some point. */
-            dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,'en_GB'));
+            /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. */
+            /* Change this to another locale (e.g. fr_FR) to see the differences. */
+            if (loaderInfo.parameters['locale']) {
+              dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
+            }
 
 			Globals.vars.map_area = map_area;
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
