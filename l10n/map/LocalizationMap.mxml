@@ -13,7 +13,7 @@
 
       import net.systemeD.potlatch2.help.HelpDialog;
       import net.systemeD.potlatch2.TagViewer;
-
+      import net.systemeD.potlatch2.Toolbox;
 
       private function onLocaleChanged(event:Event):void {
           var rMngr : IResourceManager = ResourceManager.getInstance();
@@ -65,4 +65,10 @@
     <ResourceProxy property="dndPrompt" key="tag_viewer.dndprompt" />
   </SmartResourceInjector>
 
+  <SmartResourceInjector bundleName="p2_main" target="{Toolbox}">
+    <ResourceProxy property="deleteNode" key="toolbox.delete_node" />
+    <ResourceProxy property="deleteWay" key="toolbox.delete_way" />
+    <ResourceProxy property="deleteArea" key="toolbox.delete_area" />
+    <ResourceProxy property="deleteItem" key="toolbox.delete_item" />
+  </SmartResourceInjector>
 </LocaleMap>

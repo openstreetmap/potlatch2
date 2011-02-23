@@ -104,6 +104,11 @@
         [Bindable]
         public var angle:int=0;
 
+        public var deleteNode:String = "Delete Node (Delete)";
+        public var deleteArea:String = "Delete Area (Shift+Delete)";
+        public var deleteWay:String = "Delete Way (Shift+Delete)";
+        public var deleteItem:String = "Delete Item"; // When nothing is selected
+
 		public function init(controller:EditController):void {
 			this.controller=controller;
 			/* check if the toolbox was explictly turned off in a previous session */
@@ -170,10 +175,10 @@
 		[Bindable(event="updateSkin")]
 		private function deleteToolTipText():String {
 			var entity:Entity=controller.state.firstSelected;
-			if (entity is Node) { return "Delete Node (Delete)"; }
-			if (entity is Way && Way(entity).isArea()) { return "Delete Area (Shift+Delete)"; }
-			if (entity is Way) { return "Delete Way (Shift+Delete)"; }
-			return "Delete Item"; // When nothing is selected
+			if (entity is Node) { return deleteNode; }
+			if (entity is Way && Way(entity).isArea()) { return deleteArea; }
+			if (entity is Way) { return deleteWay; }
+			return deleteItem; // When nothing is selected
 		}
 
         private function updateDirectionArrow():void {
