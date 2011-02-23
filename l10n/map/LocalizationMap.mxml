@@ -12,6 +12,7 @@
       import mx.resources.IResourceManager;
 
       import net.systemeD.potlatch2.help.HelpDialog;
+      import net.systemeD.potlatch2.TagViewer;
 
 
       private function onLocaleChanged(event:Event):void {
@@ -58,6 +59,10 @@
     <ResourceProxy property="helpButton.label" key="main.help" />
     <ResourceProxy property="optionsButton.label" key="main.options" />
     <ResourceProxy property="saveButton.label" key="main.save" />
+  </SmartResourceInjector>
+
+  <SmartResourceInjector bundleName="p2_main" target="{TagViewer}">
+    <ResourceProxy property="dndPrompt" key="tag_viewer.dndprompt" />
   </SmartResourceInjector>
 
 </LocaleMap>
