@@ -8,8 +8,26 @@
   <mx:Script>
     <![CDATA[
       import com.mindspace.l10n.commands.ExternalLocaleCommand;
+      import mx.resources.ResourceManager;
+      import mx.resources.IResourceManager;
 
       import net.systemeD.potlatch2.help.HelpDialog;
+
+
+      private function onLocaleChanged(event:Event):void {
+          var rMngr : IResourceManager = ResourceManager.getInstance();
+          var sri : SmartResourceInjector = event.target as SmartResourceInjector;
+          var options : Array = [
+                                  { label : rMngr.getString('p2_main','main.gps_data') },
+                                  { label : rMngr.getString('p2_main','main.my_tracks') }
+                                ];
+
+          // Iterate all view instances and inject new dataProvider
+          for each (var inst:potlatch2 in sri.targetInstances) {
+              if (inst == null) continue;
+              inst.gpsButton.dataProvider = options;
+          }
+      }
     ]]>
   </mx:Script>
 
@@ -32,11 +50,9 @@
     <ResourceProxy property="welcome.label" key="help.welcome" />
   </SmartResourceInjector>
 
-  <SmartResourceInjector bundleName="p2_main" target="{potlatch2}">
+  <SmartResourceInjector bundleName="p2_main" target="{potlatch2}" localeChange="onLocaleChanged(event)">
     <ResourceProxy property="bgButton.label" key="main.background" />
     <ResourceProxy property="styleButton.label" key="main.map_style" />
-    <ResourceProxy property="gpsData.label" key="main.gps_data" />
-    <ResourceProxy property="myTracks.label" key="main.my_tracks" />
     <ResourceProxy property="undo.label" key="main.undo" />
     <ResourceProxy property="redo.label" key="main.redo" />
     <ResourceProxy property="helpButton.label" key="main.help" />
