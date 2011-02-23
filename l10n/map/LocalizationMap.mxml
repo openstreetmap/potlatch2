@@ -70,5 +70,13 @@
     <ResourceProxy property="deleteWay" key="toolbox.delete_way" />
     <ResourceProxy property="deleteArea" key="toolbox.delete_area" />
     <ResourceProxy property="deleteItem" key="toolbox.delete_item" />
+    <ResourceProxy property="reverseButton.toolTip" key="toolbox.reverse_direction" />
+    <ResourceProxy property="splitButton.toolTip" key="toolbox.split_way" />
+    <ResourceProxy property="mergeButton.toolTip" key="toolbox.merge_ways" />
+    <ResourceProxy property="straightenButton.toolTip" key="toolbox.straighten_way" />
+    <ResourceProxy property="circulariseButton.toolTip" key="toolbox.make_circular" />
+    <ResourceProxy property="quadrilateraliseButton.toolTip" key="toolbox.make_right_angled" />
+    <ResourceProxy property="parralleliseButton.toolTip" key="toolbox.create_parrallel_way" />
   </SmartResourceInjector>
+
 </LocaleMap>
