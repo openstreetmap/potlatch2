@@ -490,26 +490,11 @@
              setupAdvanced(selectedEntity);
       }
 
-      /**
-      * When you enter a new tag and press enter, the focus moves to the add button
-      * Adding an event listener to the button and listening for + means that you
-      * can add two consecutive tags with the same keypress. This relies on focus
-      * moving to the "add" button, though, so it's not robust to rearranging the UI.
-      */
-      private function advancedAddButtonKeyboardEvent(event:KeyboardEvent):void {
-          switch (event.keyCode) {
-            case 187:   addNewTag(); break;                          // + - add tag
-            case 107:   addNewTag(); break;                          // numpad plus
-          }
-      }
-
       private var listeningToRelations:Array = [];
 
       private function setupAdvanced(entity:Entity):void {
 		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
 		advancedTagGrid.init(entity);
-        advancedAddButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent, false, 0, true);
-        advancedDeleteButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent, false, 0, true);
 
 		if ( entity == null ) {
 			advancedID.htmlText = "";
