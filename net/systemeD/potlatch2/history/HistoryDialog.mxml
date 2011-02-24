@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+        xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:help="net.systemeD.potlatch2.help.*"
+        layout="vertical" showCloseButton="true"
+        horizontalAlign="center" title="History"
+        width="600" height="400"
+        verticalGap="0">
+
+  <mx:VBox>
+    <mx:Text text="History for {entity.getType()} {entity.id}" />
+    <mx:Text text="For now, click the more details button" />
+  </mx:VBox>
+
+
+  <mx:ControlBar>
+    <mx:Button label="Revert" enabled="false" styleName="titleWindowButton" />
+    <mx:Button label="Mail" enabled="false" styleName="titleWindowButton" />
+    <mx:Spacer width="100%"/>
+    <mx:Button label="More Details..." enabled="{entity.id >= 0}" click="openEntityPage()" styleName="titleWindowButton" />
+    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+  </mx:ControlBar>
+
+  <mx:Script><![CDATA[
+
+    import mx.managers.PopUpManager;
+    import mx.core.Application;
+    import mx.events.CloseEvent;
+
+    import net.systemeD.halcyon.connection.*
+
+    [Bindable]
+    private var entity:Entity;
+
+    public function init(e:Entity):void {
+        if (e == null) {return;}
+
+        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.centerPopUp(this);
+        this.addEventListener(CloseEvent.CLOSE, historyDialog_close);
+
+        entity = e;
+    }
+
+    private function historyDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+    }
+
+    /** Open up a new browser page showing OSM's view of the current entity. */
+    public function openEntityPage():void {
+        if (entity != null && entity.id >= 0) {
+            // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
+            var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
+            navigateToURL(new URLRequest(urlBase+entity.getType()+'/'+entity.id), "potlatch_browse");
+        }
+    }
+
+
+    ]]>
+  </mx:Script>
+
+
+</mx:TitleWindow>
+
+

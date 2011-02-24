@@ -69,7 +69,7 @@
         </mx:VBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
-        <mx:Label id="advancedID" click="openEntityPage()">
+        <mx:Label id="advancedID" click="new HistoryDialog().init(selectedEntity);">
           <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
         </mx:Label>
 
@@ -210,6 +210,7 @@
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.VectorLayer;
       import net.systemeD.potlatch2.mapfeatures.*;
+      import net.systemeD.potlatch2.history.HistoryDialog;
 
       import mx.collections.*;
       import mx.containers.*;
@@ -753,15 +754,6 @@
       public function openDescription():void {
           if ( feature != null && feature.hasHelpURL() )
               navigateToURL(new URLRequest(feature.helpURL), "potlatch_help");
-      }
-
-      /** Open up a new browser page showing OSM's view of the current entity. */
-      public function openEntityPage():void {
-          if (selectedEntity != null && selectedEntity.id >= 0) {
-              // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-              var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
-              navigateToURL(new URLRequest(urlBase+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
-          }
       }
 
       public function addToRelation():void {
