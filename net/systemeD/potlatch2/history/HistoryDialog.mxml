@@ -46,6 +46,7 @@
     import mx.managers.PopUpManager;
     import mx.core.Application;
     import mx.events.CloseEvent;
+    import flash.events.Event;
 
     import net.systemeD.halcyon.connection.*
 
@@ -54,6 +55,11 @@
 
     [Bindable]
     private var entityStates:Array;
+
+    // store intermediate states for ways
+    private var wayStates:Array; // an array of ways
+    private var wayNodeStates:Array; // an array of arrays of nodes
+    private var pendingNodeFetches:uint;
 
     public function init(e:Entity):void {
         if (e == null) {return;}
@@ -99,7 +105,50 @@
         // This is much more complicated that nodes.
         // In potlatch(2) we show the user the number of different states, bearing in mind
         // node movements (and tag changes?).
-        entityStates = results.reverse(); // mwahahaha, for now
+
+        wayStates = results;
+
+        wayNodeStates = [];
+        addEventListener("pendingNodesAllFetched", processWayStates);
+
+        var nodes:Object = {};
+        var count:uint = 0;
+
+        for each(var oldWay:Way in results) {
+            trace(oldWay);
+            for (var i:uint = 0; i< oldWay.length; i++) {
+                var node:Node = oldWay.getNode(i);
+                if(!nodes[node.id]) {
+                    nodes[node.id] = node;
+                    count++;
+                }
+            }
+        }
+
+        pendingNodeFetches = count;
+
+        for each (var n:Node in nodes) {
+            trace("fetching node " + n.id);
+            Connection.getConnection().fetchHistory(n, pendingNode);
+        }
+    }
+
+    private function pendingNode(results:Array):void {
+        wayNodeStates.push(results)
+        pendingNodeFetches--;
+        trace("fetched node "+results[0].id+" , "+pendingNodeFetches+" more to go");
+        if (pendingNodeFetches == 0) {
+            dispatchEvent(new Event("pendingNodesAllFetched"));
+            trace("done");
+        }
+    }
+
+    private function processWayStates(e:Event):void {
+        // we now have all the nodes
+        // for each way
+
+        entityStates = wayStates;
+        trace("TODO - make this work");
     }
 
     public function message(entity:Entity):void {
