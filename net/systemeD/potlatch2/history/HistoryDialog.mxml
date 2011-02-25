@@ -47,6 +47,7 @@
     import mx.core.Application;
     import mx.events.CloseEvent;
     import flash.events.Event;
+    import com.adobe.utils.ArrayUtil;
 
     import net.systemeD.halcyon.connection.*
 
@@ -147,8 +148,70 @@
         // we now have all the nodes
         // for each way
 
-        entityStates = wayStates;
-        trace("TODO - make this work");
+        var revdates:Array = [];
+        var revusers:Object = {};
+
+        for each (var way:Way in wayStates) {
+            revdates.push(way.timestamp);
+            revusers[way.timestamp] = way.user;
+        }
+
+        for each (var nodeStates:Array in wayNodeStates) {
+            for each (var node:Node in nodeStates) {
+                revdates.push(node.timestamp);
+                revusers[node.timestamp] = node.user;
+            }
+        }
+
+        // sort the dates and remove duplicates and those before the first version of the way
+        revdates = revdates.sort();
+        revdates = ArrayUtil.createUniqueCopy(revdates);
+        revdates.filter(function(e:*, i:int, arr:Array):Boolean { return e > wayStates[0].timestamp});
+
+        var version:int = 1;
+        var subversion:int = 0;
+        var es:Array = []; // entityStates
+
+        for each (var revdate:String in revdates) {
+          var entitystate:Object = {};
+
+
+          var w:Way = getEntityAtDate(wayStates, revdate) as Way;
+          if (w.version == version) {
+              subversion++;
+          } else {
+              version = w.version;
+              subversion = 1;
+          }
+
+          //for (i = 0, i < w.length; i++) {
+          //    var generalNode:Node = w.getNode(i);
+          //    var specificNode:Node = getEntityAtDate(wayNodeStates[generalNode.id], revdate);
+          //    where was I going with this? Oh, yes, it'll be needed for building the object to revert to.
+          //}
+
+          entitystate.version = String(version) + "." + String(subversion);
+          entitystate.timestamp = revdate;
+          entitystate.user = revusers[revdate];
+          es.push(entitystate)
+        }
+
+        entityStates = es.reverse();
+    }
+
+    // given a list of entities sorted with oldest first, find the last version before that date.
+    private function getEntityAtDate(list:Array, date:String):Entity {
+        trace("find for date : "+date);
+        for(var i:int = list.length-1; i >= 0; i--) {
+            var entity:Entity = list[i];
+            trace (entity.timestamp + " : " + date);
+            if (entity.timestamp <= date) {
+                trace("returning version " + entity.version);
+                return entity;
+            }
+        }
+        trace("ERROR");
+        return null;
     }
 
     public function message(entity:Entity):void {
