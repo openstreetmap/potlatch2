@@ -490,7 +490,7 @@ package net.systemeD.halcyon.connection {
             for each(var wayData:XML in _xml.way) {
                 var nodes:Array = [];
                 for each(var nd:XML in wayData.nd) {
-                  nodes.push(new Node(Number(nd.ref), NaN, null, false, NaN, NaN));
+                  nodes.push(new Node(Number(nd.@ref), NaN, null, false, NaN, NaN));
                 }
                 var newWay:Way = new Way(
                     Number(wayData.@id),
