@@ -9,6 +9,7 @@ package net.systemeD.halcyon.connection {
 
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.MapEvent;
+	import net.systemeD.halcyon.ExtendedURLLoader;
 
     /**
     * XMLConnection provides all the methods required to connect to a live
@@ -446,6 +447,43 @@ package net.systemeD.halcyon.connection {
 					callback(e);
 				}, errorOnMapLoad, mapLoadStatus); // needs error handlers
             dispatchEvent(new Event(LOAD_STARTED)); //specifc to map or reusable?
+        }
+
+        /** Fetch the history for the given entity. The callback function will be given an array of entities of that type, representing the different versions */
+        override public function fetchHistory(entity:Entity, callback:Function):void {
+            if (entity.id >= 0) {
+              var request:URLRequest = new URLRequest(Connection.apiBaseURL + entity.getType() + "/" + entity.id + "/history");
+              var loader:ExtendedURLLoader = new ExtendedURLLoader();
+              loader.addEventListener(Event.COMPLETE, loadedHistory);
+              loader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad); //needs error handlers
+              loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
+              loader.info['callback'] = callback; //store the callback so we can use it later
+              loader.load(request);
+              dispatchEvent(new Event(LOAD_STARTED));
+            } else {
+              // objects created locally only have one state, their current one
+              callback([entity]);
+            }
+        }
+
+        private function loadedHistory(event:Event):void {
+            var _xml:XML = new XML(ExtendedURLLoader(event.target).data);
+            var results:Array = [];
+            for each(var nodeData:XML in _xml.node) {
+                var newNode:Node = new Node(Number(nodeData.@id),
+                    uint(nodeData.@version),
+                    parseTags(nodeData.tag),
+                    true,
+                    Number(nodeData.@lat),
+                    Number(nodeData.@lon),
+                    Number(nodeData.@uid),
+                    nodeData.@timestamp);
+                results.push(newNode);
+            }
+            // TODO implement ways and relations
+
+            // use the callback we stored earlier, and pass it the results
+            ExtendedURLLoader(event.target).info['callback'](results);
         }
 	}
 }

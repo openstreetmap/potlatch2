@@ -527,6 +527,7 @@ package net.systemeD.halcyon.connection {
         public function fetchUserTraces(refresh:Boolean=false):void {}
         public function fetchTrace(id:Number, callback:Function):void {}
         public function hasAccessToken():Boolean { return false; }
+        public function fetchHistory(entity:Entity, callback:Function):void {}
     }
 
 }
