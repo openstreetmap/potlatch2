@@ -469,8 +469,12 @@ package net.systemeD.halcyon.connection {
         private function loadedHistory(event:Event):void {
             var _xml:XML = new XML(ExtendedURLLoader(event.target).data);
             var results:Array = [];
+
+            // only one type of entity should be returned, but this handles any
+
             for each(var nodeData:XML in _xml.node) {
-                var newNode:Node = new Node(Number(nodeData.@id),
+                var newNode:Node = new Node(
+                    Number(nodeData.@id),
                     uint(nodeData.@version),
                     parseTags(nodeData.tag),
                     true,
@@ -478,10 +482,32 @@ package net.systemeD.halcyon.connection {
                     Number(nodeData.@lon),
                     Number(nodeData.@uid),
                     nodeData.@timestamp,
-                    nodeData.@user);
+                    nodeData.@user
+                    );
                 results.push(newNode);
             }
-            // TODO implement ways and relations
+
+            for each(var wayData:XML in _xml.way) {
+                var nodes:Array = [];
+                for each(var nd:XML in wayData.nd) {
+                  nodes.push(new Node(Number(nd.ref), NaN, null, false, NaN, NaN));
+                }
+                var newWay:Way = new Way(
+                    Number(wayData.@id),
+                    uint(wayData.@version),
+                    parseTags(wayData.tag),
+                    true,
+                    nodes,
+                    Number(wayData.@uid),
+                    wayData.@timestamp,
+                    wayData.@user
+                    );
+                results.push(newWay);
+            }
+
+            for each(var relData:XML in _xml.relation) {
+                trace("relation history not implemented");
+            }
 
             // use the callback we stored earlier, and pass it the results
             ExtendedURLLoader(event.target).info['callback'](results);

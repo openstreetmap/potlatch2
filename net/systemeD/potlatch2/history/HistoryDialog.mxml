@@ -82,6 +82,8 @@
     private function fetchHistory():void {
         if (entity is Node) {
             Connection.getConnection().fetchHistory(entity, processNode);
+        } else if (entity is Way) {
+            Connection.getConnection().fetchHistory(entity, processWay);
         } else {
             // not implemented
         }
@@ -91,6 +93,13 @@
         // Simply copy the nodes into the states array
         // todo sorting or somesuch
         entityStates = results.reverse();
+    }
+
+    private function processWay(results:Array):void {
+        // This is much more complicated that nodes.
+        // In potlatch(2) we show the user the number of different states, bearing in mind
+        // node movements (and tag changes?).
+        entityStates = results.reverse(); // mwahahaha, for now
     }
 
     public function message(entity:Entity):void {
