@@ -18,6 +18,17 @@
           <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="45"/>
           <mx:DataGridColumn editable="false" dataField="timestamp" headerText="timestamp"/>
           <mx:DataGridColumn editable="false" dataField="uid" headerText="uid"/>
+          <mx:DataGridColumn editable="false" dataField="user" headerText="username" />
+          <mx:DataGridColumn editable="false">
+            <mx:itemRenderer>
+              <mx:Component>
+                <mx:VBox>
+                  <mx:Button label="Contact User"
+                    click="parentDocument.message(data)"/>
+                </mx:VBox>
+              </mx:Component>
+            </mx:itemRenderer>
+          </mx:DataGridColumn>
         </mx:columns>
       </mx:DataGrid>
     </mx:HBox>
@@ -26,7 +37,6 @@
 
   <mx:ControlBar>
     <mx:Button label="Revert" enabled="false" styleName="titleWindowButton" />
-    <mx:Button label="Mail" enabled="false" styleName="titleWindowButton" />
     <mx:Spacer width="100%"/>
     <mx:Button label="More Details..." enabled="{entity.id >= 0}" click="openEntityPage()" styleName="titleWindowButton" />
     <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
@@ -65,7 +75,7 @@
     private function openEntityPage():void {
         if (entity != null && entity.id >= 0) {
             // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-            var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
+            var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/';
             navigateToURL(new URLRequest(urlBase+entity.getType()+'/'+entity.id), "potlatch_browse");
         }
     }
@@ -82,6 +92,13 @@
         // Simply copy the nodes into the states array
         // todo sorting or somesuch
         entityStates = results;
+    }
+
+    public function message(entity:Entity):void {
+        if (entity.user != null) {
+            var urlBase:String = Connection.getConnectionInstance().apiBase + '../../message/new/';
+            navigateToURL(new URLRequest(urlBase+entity.user), "potlatch_message");
+        }
     }
     ]]>
   </mx:Script>
