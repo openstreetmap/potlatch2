@@ -15,17 +15,16 @@
     <mx:HBox width="100%" height="100%">
       <mx:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
         <mx:columns>
-          <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="45"/>
+          <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="50" textAlign="center"/>
           <mx:DataGridColumn editable="false" dataField="timestamp" headerText="timestamp"/>
-          <mx:DataGridColumn editable="false" dataField="uid" headerText="uid"/>
           <mx:DataGridColumn editable="false" dataField="user" headerText="username" />
           <mx:DataGridColumn editable="false">
             <mx:itemRenderer>
               <mx:Component>
-                <mx:VBox>
+                <mx:HBox horizontalAlign="center" verticalAlign="middle">
                   <mx:Button label="Contact User"
                     click="parentDocument.message(data)"/>
-                </mx:VBox>
+                </mx:HBox>
               </mx:Component>
             </mx:itemRenderer>
           </mx:DataGridColumn>
@@ -91,7 +90,7 @@
     private function processNode(results:Array):void {
         // Simply copy the nodes into the states array
         // todo sorting or somesuch
-        entityStates = results;
+        entityStates = results.reverse();
     }
 
     public function message(entity:Entity):void {
