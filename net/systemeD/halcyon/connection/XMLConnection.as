@@ -16,8 +16,6 @@ package net.systemeD.halcyon.connection {
     */
 	public class XMLConnection extends XMLBaseConnection {
 
-        //public var readConnection:NetConnection;
-
 		public function XMLConnection() {
 
 			if (Connection.policyURL!='')
