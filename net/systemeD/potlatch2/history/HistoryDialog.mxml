@@ -9,7 +9,13 @@
 
   <mx:VBox>
     <mx:Text text="History for {entity.getType()} {entity.id}" />
-    <mx:Text text="For now, click the more details button" />
+    <mx:DataGrid dataProvider="{entityStates}" width="100%" height="100%" >
+      <mx:columns>
+        <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="45"/>
+        <mx:DataGridColumn editable="false" dataField="timestamp" headerText="timestamp"/>
+        <mx:DataGridColumn editable="false" dataField="uid" headerText="uid"/>
+      </mx:columns>
+    </mx:DataGrid>
   </mx:VBox>
 
 
@@ -32,6 +38,9 @@
     [Bindable]
     private var entity:Entity;
 
+    [Bindable]
+    private var entityStates:Array;
+
     public function init(e:Entity):void {
         if (e == null) {return;}
 
@@ -40,6 +49,7 @@
         this.addEventListener(CloseEvent.CLOSE, historyDialog_close);
 
         entity = e;
+        fetchHistory();
     }
 
     private function historyDialog_close(evt:CloseEvent):void {
@@ -47,7 +57,7 @@
     }
 
     /** Open up a new browser page showing OSM's view of the current entity. */
-    public function openEntityPage():void {
+    private function openEntityPage():void {
         if (entity != null && entity.id >= 0) {
             // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
             var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
@@ -55,7 +65,19 @@
         }
     }
 
+    private function fetchHistory():void {
+        if (entity is Node) {
+            Connection.getConnection().fetchHistory(entity, processNode);
+        } else {
+            // not implemented
+        }
+    }
 
+    private function processNode(results:Array):void {
+        // Simply copy the nodes into the states array
+        // todo sorting or somesuch
+        entityStates = results;
+    }
     ]]>
   </mx:Script>
 
