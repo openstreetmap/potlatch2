@@ -7,15 +7,20 @@
         width="600" height="400"
         verticalGap="0">
 
-  <mx:VBox>
-    <mx:Text text="History for {entity.getType()} {entity.id}" />
-    <mx:DataGrid dataProvider="{entityStates}" width="100%" height="100%" >
-      <mx:columns>
-        <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="45"/>
-        <mx:DataGridColumn editable="false" dataField="timestamp" headerText="timestamp"/>
-        <mx:DataGridColumn editable="false" dataField="uid" headerText="uid"/>
-      </mx:columns>
-    </mx:DataGrid>
+  <mx:VBox width="100%" height="100%">
+    <mx:HBox width="100%">
+      <mx:Text text="History for {entity.getType()} {entity.id}" selectable="false" width="50%" />
+      <mx:Text text="Loading data..." visible="{ entityStates == null }" selectable="false" />
+    </mx:HBox>
+    <mx:HBox width="100%" height="100%">
+      <mx:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
+        <mx:columns>
+          <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="45"/>
+          <mx:DataGridColumn editable="false" dataField="timestamp" headerText="timestamp"/>
+          <mx:DataGridColumn editable="false" dataField="uid" headerText="uid"/>
+        </mx:columns>
+      </mx:DataGrid>
+    </mx:HBox>
   </mx:VBox>
 
 
