@@ -68,6 +68,7 @@ package net.systemeD.potlatch2.controller {
 				case 83:	SaveManager.saveChanges(); break;										// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z - undo
+                case 89:    MainUndoStack.getGlobalStack().redo(); return null;                     // Y - redo
 				case Keyboard.ESCAPE:	revertSelection(); break;									// ESC - revert to server version
 				case Keyboard.NUMPAD_ADD:															// + - add tag
 				case 187:	controller.tagViewer.selectAdvancedPanel();								//   |
