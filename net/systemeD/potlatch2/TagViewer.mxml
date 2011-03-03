@@ -337,6 +337,7 @@
 				} else {
 					iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
 				}
+				currentCategorySelector.setSelectedFeature(null);
 			}
 
 			// Set it as the popup, and make sure it's visible
