@@ -115,7 +115,6 @@
 		override protected function createChildren():void {
 			super.createChildren();
 			super.titleBar.addEventListener(MouseEvent.MOUSE_DOWN,handleDown);
-			super.titleBar.addEventListener(MouseEvent.MOUSE_UP,handleUp);
 		}
 
 		public function updateSelectionUI():void {
@@ -126,10 +125,12 @@
 
 		private function handleDown(e:Event):void {
 			this.startDrag();
+			stage.addEventListener(MouseEvent.MOUSE_UP,handleUp);
 		}
 
 		private function handleUp(e:Event):void {
 			this.stopDrag();
+			stage.removeEventListener(MouseEvent.MOUSE_UP,handleUp);
 		}
 		
 		public function toggle():void {
