@@ -195,11 +195,13 @@ package net.systemeD.halcyon {
 		
 		protected function purgeTiles():void {
 			for (var tile:String in tiles) {
-				var coords:Array=tile.split(','); var tz:uint=coords[0]; var tx:uint=coords[1]; var ty:uint=coords[1];
-				if (tz!=map.scale || tx<tile_l || tx>tile_r || ty<tile_t || ty<tile_b) {
-					if (tiles[tile].parent) tiles[tile].parent.removeChild(tiles[tile]);
-					delete tiles[tile];
-					loadcount--;
+				if (tiles[tile] is Sprite) {
+					var coords:Array=tile.split(','); var tz:uint=coords[0]; var tx:uint=coords[1]; var ty:uint=coords[1];
+					if (tz!=map.scale || tx<tile_l || tx>tile_r || ty<tile_t || ty<tile_b) {
+						if (tiles[tile].parent) tiles[tile].parent.removeChild(tiles[tile]);
+						delete tiles[tile];
+						loadcount--;
+					}
 				}
 			}
 		}
