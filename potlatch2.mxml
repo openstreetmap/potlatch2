@@ -31,11 +31,16 @@
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
 		<mx:PopUpMenuButton id="gpsButton" styleName="appBarButton"
-		    itemClick="if (event.index==0) { trackLoader.load(); } else { new MyGpxDialog().init(); }">
+		    itemClick="if (event.index==0) { trackLoader.load(); } 
+		          else if (event.index==1) { new MyGpxDialog().init(); } 
+		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
+		    	                             mx.controls.Menu(gpsButton.popUp).selectedIndex=0; /* Yes, we do need to call it twice */
+		    	                             theMap.removeVectorLayer(theMap.findVectorLayer('GPS tracks')); }">
 			<mx:dataProvider>
 				<mx:Array>
 					<mx:Object label="GPS data" />
 					<mx:Object label="My tracks" />
+					<mx:Object label="Clear" />
 				</mx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>

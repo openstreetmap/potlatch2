@@ -17,7 +17,6 @@ package net.systemeD.potlatch2.utils {
 		private var top:Number=0;
 		private var bottom:Number=0;
 		private var page:uint=0;
-		private var _layer:VectorLayer;
 
 		private var map:Map;
 		private var apiBaseURL:String;
@@ -75,14 +74,13 @@ package net.systemeD.potlatch2.utils {
 			layer.paint.updateEntityUIs(layer.getObjectsByBbox(left,right,top,bottom), false, false);
 		}
 
-		
 		private function get layer():VectorLayer {
-			if (!_layer) {
-				var n:String='GPS tracks';
-				_layer=new VectorLayer(n,map,STYLESHEET);
-				map.addVectorLayer(_layer);
+			var vl:VectorLayer=map.findVectorLayer('GPS tracks');
+			if (!vl) {
+				vl=new VectorLayer('GPS tracks',map,STYLESHEET);
+				map.addVectorLayer(vl);
 			}
-			return _layer;
+			return vl;
 		}
 		
 		private function greatCircle(lat1:Number,lon1:Number,lat2:Number,lon2:Number):Number {

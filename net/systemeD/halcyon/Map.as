@@ -386,6 +386,20 @@ package net.systemeD.halcyon {
 			vectorlayers[layer.name]=layer;
 			vectorbg.addChild(layer.paint);
 		}
+		
+		public function removeVectorLayer(layer:VectorLayer):void {
+			if (!layer) return;
+			layer.blank();
+			vectorbg.removeChild(layer.paint);
+			delete vectorlayers[layer.name];
+		}
+		
+		public function findVectorLayer(name:String):VectorLayer {
+			for each (var layer:VectorLayer in vectorlayers) {
+				if (layer.name==name) { return layer; }
+			}
+			return null;
+		}
 
 		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out

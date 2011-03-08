@@ -130,9 +130,7 @@
 	}
 
 	private function removeVectorLayer():void {
-		var a:String=dataGrid.selectedItem.name;
-		map.vectorlayers[a].blank();
-		delete map.vectorlayers[a];
+		map.removeVectorLayer(map.vectorlayers[dataGrid.selectedItem.name]);
 		dispatchEvent(new Event("layers_changed"));
 	}
     
