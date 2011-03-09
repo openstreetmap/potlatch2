@@ -1,0 +1,5 @@
+build.properties
+l10n/locale/bundles
+resources/locales
+resources/potlatch2.swf
+version.as
