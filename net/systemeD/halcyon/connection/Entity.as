@@ -12,6 +12,7 @@ package net.systemeD.halcyon.connection {
         private var _version:uint;
         private var _uid:Number;
         private var _timestamp:String;
+        private var _user:String;
         private var tags:Object = {};
         private var modified:Boolean = false;
         private var _loaded:Boolean = true;
@@ -22,11 +23,12 @@ package net.systemeD.halcyon.connection {
         /** Have all its parents (ie, relations that contain this object as a member, ways that contain this node) been loaded into memory */
         public var parentsLoaded:Boolean = true;
 
-        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
+        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String, user:String) {
             this._id = id;
             this._version = version;
             this._uid = uid;
             this._timestamp = timestamp;
+            this._user = user
             this.tags = tags;
 			this._loaded = loaded;
             modified = id < 0;
@@ -62,9 +64,14 @@ package net.systemeD.halcyon.connection {
             return _timestamp;
         }
 
+        /** The username who last edited this entity (from OSM API). */
+        public function get user():String {
+            return _user;
+        }
+
         /** Set a bunch of properties in one hit. Implicitly makes entity not deleted. */
-        public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, uid:Number, timestamp:String):void {
-            _version=version; this.tags=tags; _loaded=loaded; this.parentsLoaded=parentsLoaded; _uid = uid; _timestamp = timestamp;
+        public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, uid:Number, timestamp:String, user:String):void {
+            _version=version; this.tags=tags; _loaded=loaded; this.parentsLoaded=parentsLoaded; _uid = uid; _timestamp = timestamp; _user = user;
             deleted=false;
         }
 

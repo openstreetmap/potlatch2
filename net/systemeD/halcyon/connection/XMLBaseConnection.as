@@ -22,6 +22,7 @@ package net.systemeD.halcyon.connection {
             var version:uint;
             var uid:Number;
             var timestamp:String;
+            var user:String;
             var tags:Object;
             var node:Node, newNode:Node;
             var unusedNodes:Object={};
@@ -41,6 +42,7 @@ package net.systemeD.halcyon.connection {
                 version = uint(relData.@version);
                 uid = Number(relData.@uid);
                 timestamp = relData.@timestamp;
+                user = relData.@user;
                 
                 var rel:Relation = getRelation(id);
                 if ( rel == null || !rel.loaded ) {
@@ -78,9 +80,9 @@ package net.systemeD.halcyon.connection {
                     }
                     
                     if ( rel == null )
-                        setRelation(new Relation(id, version, tags, true, members, uid, timestamp), false);
+                        setRelation(new Relation(id, version, tags, true, members, uid, timestamp, user), false);
                     else {
-                        rel.update(version, tags, true, false, members, uid, timestamp);
+                        rel.update(version, tags, true, false, members, uid, timestamp, user);
                         sendEvent(new EntityEvent(NEW_RELATION, rel), false);
                     }
                 }
@@ -96,7 +98,8 @@ package net.systemeD.halcyon.connection {
 				                   Number(nodeData.@lat),
 				                   Number(nodeData.@lon),
 				                   Number(nodeData.@uid),
-				                   nodeData.@timestamp);
+				                   nodeData.@timestamp),
+				                   nodeData.@user;
 				
 				if ( singleEntityRequest ) {
 					// it's a revert request, so create/update the node
@@ -117,6 +120,7 @@ package net.systemeD.halcyon.connection {
                 version = uint(data.@version);
                 uid = Number(data.@uid);
                 timestamp = data.@timestamp;
+                user = data.@user;
 
                 var way:Way = getWay(id);
                 if ( way == null || !way.loaded || singleEntityRequest) {
@@ -130,10 +134,10 @@ package net.systemeD.halcyon.connection {
 					}
                     tags = parseTags(data.tag);
                     if ( way == null ) {
-                        setWay(new Way(id, version, tags, true, nodes, uid, timestamp),false);
+                        setWay(new Way(id, version, tags, true, nodes, uid, timestamp, user),false);
                     } else {
 						waycount++;
-                        way.update(version, tags, true, true, nodes, uid, timestamp);
+                        way.update(version, tags, true, true, nodes, uid, timestamp, user);
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }

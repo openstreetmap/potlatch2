@@ -11,17 +11,17 @@ package net.systemeD.halcyon.connection {
 		private var edge_b:Number;
 		public static var entity_type:String = 'way';
 
-        public function Way(id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Way(id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null, user:String = null) {
+            super(id, version, tags, loaded, uid, timestamp, user);
             this.nodes = nodes;
 			for each (var node:Node in nodes) { node.addParent(this); }
 			calculateBbox();
         }
 
-		public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null):void {
+		public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null, user:String = null):void {
 			var node:Node;
 			for each (node in this.nodes) { node.removeParent(this); }
-			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp); this.nodes=nodes;
+			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp,user); this.nodes=nodes;
 			for each (node in nodes) { node.addParent(this); }
 			calculateBbox();
 		}

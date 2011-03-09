@@ -18,7 +18,7 @@ package net.systemeD.halcyon.connection {
 		private var delayedEvents:Array = [];
 
         public function EntityCollection(entities:Array) {
-			super(-1, 0, {}, true, -1, "");
+			super(-1, 0, {}, true, NaN, null, null);
             _entities = entities;
 			
 			//To avoid firing on every contained entity, we wait some short time before firing the events

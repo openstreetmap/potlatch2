@@ -477,7 +477,8 @@ package net.systemeD.halcyon.connection {
                     Number(nodeData.@lat),
                     Number(nodeData.@lon),
                     Number(nodeData.@uid),
-                    nodeData.@timestamp);
+                    nodeData.@timestamp,
+                    nodeData.@user);
                 results.push(newNode);
             }
             // TODO implement ways and relations
