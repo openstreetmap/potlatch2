@@ -1,5 +1,14 @@
 build.properties
 l10n/locale/bundles
-resources/locales
-resources/potlatch2.swf
 version.as
+halcyon.tmproj
+
+resources/locales
+resources/*.swf
+resources/*.cache
+resources/docs
+
+/tests/bin/
+/tests/report/
+
+/generated
