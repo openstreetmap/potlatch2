@@ -210,7 +210,7 @@ package net.systemeD.halcyon.connection {
             // build the actual request
 			var serv:HTTPService=new HTTPService();
 			serv.method="POST";
-			serv.url=url;
+			serv.url=signedOAuthURL(url, "POST");
 			serv.contentType = "text/xml";
 			serv.headers={'X-Error-Format':'xml'};
 			serv.request=" ";
