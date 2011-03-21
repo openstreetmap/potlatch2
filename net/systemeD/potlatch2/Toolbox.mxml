@@ -2,17 +2,12 @@
 <mx:Panel
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
-	height="76" width="129" layout="absolute"
-	styleName="theToolBox">
+	borderThicknessRight="1" borderThicknessLeft="1" borderThicknessBottom="3"
+	title="Edit Pathways and Areas" layout="horizontal" styleName="theToolBox">
 
         <!-- the animation effect that controls the rotation of the reverse arrow.
               We could get more fancy by using previous angle in angleFrom, and a longer duration, to give a nice animated effect -->
         <mx:Rotate id="rotate" angleFrom="{angle-1}" angleTo="{angle}" target="{arrowBox}" originX="{arrowBox.width/2}" originY="{arrowBox.height/2}" duration="4"/>
-
-
-		<mx:Image data="@Embed('../../../embedded/close_small.png')"
-			includeInLayout="false" id="toolboxClose" click="toggle();" 
-			y="-6" x="115" />
 
 		<!-- Top row -->
 
@@ -21,9 +16,9 @@
 			enabled="{canDo('delete')}" 
 			alpha="{getAlpha('delete')}" 
 			toolTip="{deleteToolTipText()}" 
-			width="28" height="28" textAlign="left" y="4" x="6" paddingLeft="6" paddingRight="0" />
+			width="24" height="24" />
 
-        <mx:HBox width="28" height="28" y="4" x="36" borderStyle="solid" cornerRadius="4" click="reverseClicked();" horizontalAlign="center" verticalAlign="middle">
+        <mx:HBox width="24" height="24" y="4" x="36" borderStyle="solid" cornerRadius="12" click="reverseClicked();" horizontalAlign="center" verticalAlign="middle">
             <mx:ViewStack id="rotateButtonStack">
                 <mx:HBox id="arrowBoxWrapper"><!-- changing the viewstack back onto a rotated hbox causes positioning glitches, hence this wrapper -->
                     <!-- I can totally recommend adding borderStyle="solid" to arrowBox when debugging -->
@@ -55,13 +50,13 @@
 			enabled="{canDo('split')}" 
 			alpha="{getAlpha('split')}" 
 			toolTip="Split way (X)" 
-			width="28" height="28" textAlign="left" y="4" x="66" paddingLeft="8" paddingRight="0" />
+			width="24" height="24" />
 		<mx:Button icon="@Embed('../../../embedded/merge.svg')" 
 			click='doMerge();'
 			enabled="{canDo('merge')}" 
 			alpha="{getAlpha('merge')}" 
 			toolTip="Merge ways" 
-			width="28" height="28" textAlign="left" y="4" x="96" paddingLeft="3" paddingRight="0" />
+			width="24" height="24" />
 
 		<!-- Second row -->
 
@@ -70,25 +65,25 @@
 			enabled="{canDo('straighten')}" 
 			alpha="{getAlpha('straighten')}" 
 			toolTip="Straighten way" 
-			width="28" height="28" textAlign="left" y="34" x="6" paddingLeft="5" paddingRight="0" />
+			width="24" height="24" />
 		<mx:Button icon="@Embed('../../../embedded/circle.svg')" 
 			click='doCircularise();' 
 			enabled="{canDo('circularise')}" 
 			alpha="{getAlpha('circularise')}" 
 			toolTip="Make circular" 
-			width="28" height="28" textAlign="left" y="34" x="36" paddingLeft="4" paddingRight="0" />
+			width="24" height="24" />
 		<mx:Button icon="@Embed('../../../embedded/quadrilateralise.svg')" 
 			click='doQuadrilateralise();' 
 			enabled="{canDo('quadrilateralise')}" 
 			alpha="{getAlpha('quadrilateralise')}" 
-			toolTip="Make right-angled (Q)"
-			width="28" height="28" textAlign="left" y="34" x="66" paddingLeft="6" paddingRight="0" />
+			toolTip="Make right-angled (Q)" 
+			width="24" height="24" />
 		<mx:Button icon="@Embed('../../../embedded/parallel.svg')" 
 			click='doParallelise();' 
 			enabled="{canDo('parallelise')}" 
 			alpha="{getAlpha('parallelise')}" 
 			toolTip="Create parallel way (P)" 
-			width="28" height="28" textAlign="left" y="34" x="96" paddingLeft="8" paddingRight="0" />
+			width="24" height="24" />
 
 	<mx:Script><![CDATA[
 

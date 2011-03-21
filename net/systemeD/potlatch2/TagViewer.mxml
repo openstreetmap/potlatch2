@@ -21,7 +21,7 @@
 		</mx:HBox>
 
 		<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point', true)}" width="100%" height="1"
-			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)" styleName="dndPanelTileList">
+			             updateComplete="resizePOIGrid(event)" styleName="dndPanelTileList">
 			<mx:itemRenderer>
 				<mx:Component>
 					<mx:VBox toolTip="{data.name}">
@@ -44,7 +44,7 @@
 								DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
 							}
 						]]></mx:Script>
-						<mx:Image id="foo" source="{data.dndimage}" height="24" width="24" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
+						<mx:Image id="foo" source="{data.dndimage}" height="20" width="20" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
 					</mx:VBox>
 				</mx:Component>
 			</mx:itemRenderer>

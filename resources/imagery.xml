@@ -12,6 +12,10 @@
 		<terms_url>http://opengeodata.org/microsoft-imagery-details</terms_url>
 		<default>yes</default>
 	</set>
+    <set>
+        <name>MapQuest Open Aerial</name>
+        <url>http://oatile1.mqcdn.com/naip/$z/$x/$y.png</url>
+    </set>
 	<set>
 		<name>OSM - Mapnik</name>
 		<url>http://tile.openstreetmap.org/$z/$x/$y.png</url>
@@ -27,6 +31,11 @@
     <set>
         <name>OSM - MapQuest</name>
         <url>http://otile1.mqcdn.com/tiles/1.0.0/osm/$z/$x/$y.png</url>
+    </set>
+    <set minlat="17" minlon="175" maxlat="72" maxlon="-46">
+      <name>OSM - Tiger Edited Map</name>
+      <type>900913</type>
+      <url>http://tiger-osm.mapquest.com/tiles/1.0.0/tiger/$z/$x/$y.png</url>
     </set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
 		<name>OS OpenData Streetview</name>
