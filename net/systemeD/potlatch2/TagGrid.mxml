@@ -74,12 +74,14 @@
 				dataProvider = tagDataProvider;
 			}
 
+			if (selectedEntity==entity) return;
 			selectedEntity=entity;
-			updateTagDataProvider();
+			updateTagDataProvider(true);
 		}
 
-		private function updateTagDataProvider():void {
-			if (editedItemPosition) return;
+		private function updateTagDataProvider(force:Boolean=false):void {
+			if (editedItemPosition && !force) return;
+
 			tagDataProvider.removeAll();
 			if (selectedEntity==null) { return; }
 			var tags:Array = selectedEntity.getTagArray();
