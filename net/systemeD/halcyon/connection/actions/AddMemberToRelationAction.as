@@ -17,6 +17,8 @@ package net.systemeD.halcyon.connection.actions {
         }
         
         public override function doAction():uint {
+            if ( index == -1 )
+                index = memberList.length;
             memberList.splice(index, 0, member);
             member.entity.addParent(rel);
             markDirty();
