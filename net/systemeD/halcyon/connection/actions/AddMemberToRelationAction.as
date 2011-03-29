@@ -29,7 +29,9 @@ package net.systemeD.halcyon.connection.actions {
         
         public override function undoAction():uint {
             memberList.splice(index, 1);
-            member.entity.removeParent(rel);
+            if (rel.findEntityMemberIndex(member.entity)==-1) {
+                member.entity.removeParent(rel);
+            }
             markClean();
             rel.dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, member.entity, rel, index));
             
