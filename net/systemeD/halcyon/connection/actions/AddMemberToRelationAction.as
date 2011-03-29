@@ -4,7 +4,7 @@ package net.systemeD.halcyon.connection.actions {
     
     public class AddMemberToRelationAction extends UndoableEntityAction {
         private var rel:Relation;
-        private var index:uint;
+        private var index:int;
         private var member:RelationMember;
         private var memberList:Array;
         
