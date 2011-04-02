@@ -46,9 +46,9 @@ package net.systemeD.halcyon.connection {
             sendLoadRequest(mapRequest);
 		}
 
-		override public function loadEntity(entity:Entity):void {
-			var url:String=Connection.apiBaseURL + entity.getType() + "/" + entity.id;
-			if (entity is Way) url+="/full";
+		override public function loadEntityByID(type:String, id:Number):void {
+			var url:String=Connection.apiBaseURL + type + "/" + id;
+			if (type=='way') url+="/full";
 			sendLoadRequest(new URLRequest(url));
 		}
 

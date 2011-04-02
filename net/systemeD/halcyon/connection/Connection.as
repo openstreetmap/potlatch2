@@ -544,7 +544,7 @@ package net.systemeD.halcyon.connection {
 		public function loadBbox(left:Number, right:Number,
 								top:Number, bottom:Number):void {
 	    }
-	    public function loadEntity(entity:Entity):void {}
+	    public function loadEntityByID(type:String, id:Number):void {}
 	    public function setAuthToken(id:Object):void {}
         public function setAccessToken(key:String, secret:String):void {}
 	    public function createChangeset(tags:Object):void {}
@@ -553,6 +553,11 @@ package net.systemeD.halcyon.connection {
         public function fetchUserTraces(refresh:Boolean=false):void {}
         public function fetchTrace(id:Number, callback:Function):void {}
         public function hasAccessToken():Boolean { return false; }
+
+		public function loadEntity(entity:Entity):void {
+			loadEntityByID(entity.getType(),entity.id);
+		}
+
     }
 
 }

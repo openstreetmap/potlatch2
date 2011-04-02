@@ -85,6 +85,7 @@
 			PopUpManager.removePopUp(this);
 			var panel:RelationLoaderPanel = RelationLoaderPanel(
 			    PopUpManager.createPopUp(Application(Application.application), RelationLoaderPanel, true));
+			panel.setEntity(entity);
 			PopUpManager.centerPopUp(panel);
 		}
         

@@ -2,10 +2,11 @@
 <mx:TitleWindow
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
-	title="Load Relation" width="350" height="200"
+	title="Load Relation" width="350" height="160"
+	creationComplete="requestedID.setFocus()"
 	showCloseButton="true" close="PopUpManager.removePopUp(this);">
 	
-	<mx:HBox>
+	<mx:HBox paddingLeft="3" paddingTop="4">
 		<mx:Label text="Relation ID: " />
 		<mx:TextInput id="requestedID" restrict="0-9" />
 	</mx:HBox>
@@ -19,22 +20,46 @@
 		import net.systemeD.potlatch2.*;
 		import mx.managers.PopUpManager;
 
-		// ** FIXME: should automatically focus on id field (like the Changeset dialogue)
-
-		public function loadRelation():void {
-            var conn:Connection = Connection.getConnectionInstance();
-			var id:uint = uint(requestedID.text);
-			if (requestedID.text) {
-				var rel:Relation=conn.getRelation(id);
-				if (!rel) {
-					rel = conn.createRelation({}, [], MainUndoStack.getGlobalStack().addAction);
-					rel.renumber(id,1);
-				}
-				conn.loadEntity(rel);
-				// add an eventListener of some sort to pop up the panel again once it's loaded
-			}
-			PopUpManager.removePopUp(this);
+		private var entity:Entity;
+		private var relid:Number;
+		
+		public function setEntity(e:Entity):void {
+			entity=e;
 		}
+
+		private function loadRelation():void {
+			relid = Number(requestedID.text);
+			PopUpManager.removePopUp(this);
+
+			var conn:Connection = Connection.getConnectionInstance();
+			if (!relid) return;
+			if (conn.getRelation(relid)) {
+				relationLoaded(null);
+			} else {
+				conn.loadEntityByID("relation",relid);
+				conn.addEventListener(Connection.LOAD_COMPLETED, relationLoaded);
+			}
+		}
+		
+		private function relationLoaded(event:Event):void {
+			var conn:Connection = Connection.getConnectionInstance();
+			var relation:Relation = conn.getRelation(relid);
+			conn.removeEventListener(Connection.LOAD_COMPLETED, relationLoaded);
+			if (!relation) return;
+
+			var undo:CompositeUndoableAction = new CompositeUndoableAction("Add to relation");
+			if (entity is EntityCollection) {
+				for each (var e:Entity in EntityCollection(entity).entities) {
+					if (relation.findEntityMemberIndex(e)==-1) {
+						relation.appendMember(new RelationMember(e, ''), undo.push);
+					}
+				}
+			} else {
+				relation.appendMember(new RelationMember(entity, ''), undo.push);
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+		}
+		
     ]]></mx:Script>	
 </mx:TitleWindow>
 
