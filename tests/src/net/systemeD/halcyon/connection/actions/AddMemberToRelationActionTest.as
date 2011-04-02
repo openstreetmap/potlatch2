@@ -10,6 +10,13 @@ package net.systemeD.halcyon.connection.actions {
 
     public class AddMemberToRelationActionTest {
 
+        [Before]
+        public function setUp():void {
+            //Instantiate the connection first to prevent errors
+            Connection.getConnection();
+        }
+
+
         [Test]
         public function addMember():void {
 
@@ -18,8 +25,6 @@ package net.systemeD.halcyon.connection.actions {
             var rel:Relation = new Relation(1,1,{},true,[]);
             var member:RelationMember = new RelationMember(n, "foo");
 
-            //Instantiate the connection first to prevent errors
-            Connection.getConnection();
             rel.appendMember(member, function(action:UndoableAction):void { action.doAction(); });
             Assert.assertEquals(1, rel.length);
 
