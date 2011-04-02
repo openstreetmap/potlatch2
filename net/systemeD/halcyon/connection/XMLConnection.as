@@ -63,6 +63,7 @@ package net.systemeD.halcyon.connection {
 
         private function errorOnMapLoad(event:Event):void {
 			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map" } ));
+			dispatchEvent(new Event(LOAD_COMPLETED));
         }
         private function mapLoadStatus(event:HTTPStatusEvent):void {
             trace("loading map status = "+event.status);
