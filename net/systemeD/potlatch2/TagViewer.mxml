@@ -713,21 +713,7 @@
 	}
 
       private function tagChanged(event:TagEvent):void {
-	      if(selectedEntity != null && selectedEntity is EntityCollection) {
-			setupMultiAdvanced(selectedEntity);
-		    return;
-		  }
-
           refreshFeatureIcon();
-          // ** FIXME - changing tags on Advanced tab should update simple view
-          // (but putting initialiseEditors here breaks other stuff, because it causes
-          // the Basic pane to be selected)
-
-          // if the advancedTagGrid has already been set up, it needs to be refreshed.
-          // FIXME make this better, maybe advancedTagGrid should be event listening.
-          if(advancedContainer.initialized) {
-            checkAdvanced();
-          }
       }
 
       public function loadFeatures():void {
