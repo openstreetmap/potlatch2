@@ -18,12 +18,11 @@ package net.systemeD.halcyon.connection.actions {
             var rel:Relation = new Relation(1,1,{},true,[]);
             var member:RelationMember = new RelationMember(n, "foo");
 
-            //This throws an error, but JoinNodeActionTest doesn't. Why?
+            //Instantiate the connection first to prevent errors
+            Connection.getConnection();
+            rel.appendMember(member, function(action:UndoableAction):void { action.doAction(); })
+            Assert.assertEquals(1, rel.length);
 
-            //rel.appendMember(member, function(action:UndoableAction):void { action.doAction(); })
-            //Assert.assertEquals(rel.length,1);
-
-            //Assert.assertNotNull(Connection.getConnectionInstance()) <- this fails, and is the cause of the above failing. Why?
         }
 
         [Test]
