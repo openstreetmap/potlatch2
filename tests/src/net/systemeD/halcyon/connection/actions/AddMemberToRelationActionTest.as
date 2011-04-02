@@ -20,7 +20,7 @@ package net.systemeD.halcyon.connection.actions {
 
             //Instantiate the connection first to prevent errors
             Connection.getConnection();
-            rel.appendMember(member, function(action:UndoableAction):void { action.doAction(); })
+            rel.appendMember(member, function(action:UndoableAction):void { action.doAction(); });
             Assert.assertEquals(1, rel.length);
 
         }
@@ -37,6 +37,42 @@ package net.systemeD.halcyon.connection.actions {
             Assert.assertEquals(5, arr.length);
             Assert.assertEquals("e", arr[3]);
             Assert.assertEquals("d", arr[4]);
+        }
+
+        [Test]
+        public function appendMember():void {
+            var n:Node = new Node(1,1,{},true,5,10);
+            var n2:Node = new Node(2,1,{},true,5,10);
+            var n3:Node = new Node(3,1,{},true,5,10);
+
+            var member1:RelationMember = new RelationMember(n, "first");
+            var member2:RelationMember = new RelationMember(n2, "second");
+            var member3:RelationMember = new RelationMember(n3, "third");
+
+            var rel:Relation = new Relation(1,1,{},true, [member1, member2]);
+            Assert.assertEquals(2, rel.length);
+
+            rel.appendMember(member3, function(action:UndoableAction):void { action.doAction(); });
+            Assert.assertEquals(member3, rel.getMember(2));
+        }
+
+        [Test]
+        public function setMember():void {
+            var n:Node = new Node(1,1,{},true,5,10);
+            var n2:Node = new Node(2,1,{},true,5,10);
+            var n3:Node = new Node(3,1,{},true,5,10);
+
+            var member1:RelationMember = new RelationMember(n, "first");
+            var member2:RelationMember = new RelationMember(n2, "second");
+            var member3:RelationMember = new RelationMember(n3, "third");
+
+            var rel:Relation = new Relation(1,1,{},true, [member1, member2]);
+            Assert.assertEquals(2, rel.length);
+
+            rel.setMember(1, member3, function(action:UndoableAction):void { action.doAction(); });
+            Assert.assertEquals(member3, rel.getMember(1));
+
+            Assert.assertEquals(2, rel.length);
         }
     }
 }
