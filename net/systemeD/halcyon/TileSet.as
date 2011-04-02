@@ -224,6 +224,11 @@ package net.systemeD.halcyon {
 					}
 					t=baseurl.replace('$quadkey',u); break;
 
+				case 'tms':
+					ty=Math.pow(2,tz)-1-ty;
+					t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+					break;
+
 				default:
 					if (baseurl.indexOf('$x')>-1) {
 						t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
