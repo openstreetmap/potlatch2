@@ -35,6 +35,9 @@ package net.systemeD.potlatch2.controller {
 			if (event.type==MouseEvent.MOUSE_DOWN && event.ctrlKey && entity && entity!=firstSelected) {
 				return new SelectedMultiple([firstSelected,entity]);
 			}
+			if (event.type==MouseEvent.MOUSE_DOWN && event.shiftKey && !entity) {
+				return new DrawQuadrilateral(firstSelected as Node);
+			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
         }
