@@ -434,7 +434,10 @@
 
 			// Get the tags
             var tags:Array = event.dragSource.dataForFormat('tags') as Array;
-            var mapLoc:Point = Globals.vars.root.globalToLocal(new Point(event.stageX, event.stageY));
+
+            // If you dnd quick enough, this exposes a flex bug and event.stageX/Y become negative.
+            // Take the mouse positions from a displayObject's stage for consistent results.
+            var mapLoc:Point = Globals.vars.root.globalToLocal(new Point(event.target.stage.mouseX, event.target.stage.mouseY));
             var lat:Number = Globals.vars.root.coord2lat(mapLoc.y);
             var lon:Number = Globals.vars.root.coord2lon(mapLoc.x);
             
