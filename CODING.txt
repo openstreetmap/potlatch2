@@ -46,3 +46,7 @@ package net.systemed.potlatch2.indentation {
 * Way icons for map_features are 75x45 and have up to now generally been drawn by Richard (see way_icons.ai)
 * All features must have a unique icon, and all icons must be in the correct style. Do not add a feature without a matching icon.
 * Only deployable files go in resources/ . Vector source files go in resources_src/
+
+== babelFx ==
+
+* Currently using forked version from https://github.com/gravitystorm/l10n_Injection

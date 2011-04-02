@@ -224,7 +224,8 @@
       import mx.core.DragSource;
       import flexlib.containers.SuperTabNavigator;
 
-      private static const dndPrompt:String="Add new points by dragging them onto the map";
+      [Bindable]
+      public var dndPrompt:String="Add new points by dragging them onto the map";
 
       private var editorStackTabNavigator:SuperTabNavigator;
       private var editorStackAccordion:Accordion;
