@@ -48,7 +48,7 @@ package net.systemeD.halcyon.connection {
 
 		override public function loadEntity(entity:Entity):void {
 			var url:String=Connection.apiBaseURL + entity.getType() + "/" + entity.id;
-			if (entity is Relation || entity is Way) url+="/full";
+			if (entity is Way) url+="/full";
 			sendLoadRequest(new URLRequest(url));
 		}
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
+	title="Load Relation" width="350" height="200"
+	showCloseButton="true" close="PopUpManager.removePopUp(this);">
+	
+	<mx:HBox>
+		<mx:Label text="Relation ID: " />
+		<mx:TextInput id="requestedID" restrict="0-9" />
+	</mx:HBox>
+    <mx:ControlBar>
+      <mx:Spacer width="100%"/>
+      <mx:Button label="Load" click="loadRelation();" styleName="titleWindowButton" />
+    </mx:ControlBar>
+	<mx:Script><![CDATA[
+		import net.systemeD.halcyon.*;
+		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.potlatch2.*;
+		import mx.managers.PopUpManager;
+
+		// ** FIXME: should automatically focus on id field (like the Changeset dialogue)
+
+		public function loadRelation():void {
+            var conn:Connection = Connection.getConnectionInstance();
+			var id:uint = uint(requestedID.text);
+			if (requestedID.text) {
+				var rel:Relation=conn.getRelation(id);
+				if (!rel) {
+					rel = conn.createRelation({}, [], MainUndoStack.getGlobalStack().addAction);
+					rel.renumber(id,1);
+				}
+				conn.loadEntity(rel);
+				// add an eventListener of some sort to pop up the panel again once it's loaded
+			}
+			PopUpManager.removePopUp(this);
+		}
+    ]]></mx:Script>	
+</mx:TitleWindow>
+

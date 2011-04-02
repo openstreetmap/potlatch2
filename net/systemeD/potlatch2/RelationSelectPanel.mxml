@@ -80,6 +80,13 @@
 			panel.setRelation(relation);
 			PopUpManager.centerPopUp(panel);
         }
+
+		public function closeAndLoadRelation():void {
+			PopUpManager.removePopUp(this);
+			var panel:RelationLoaderPanel = RelationLoaderPanel(
+			    PopUpManager.createPopUp(Application(Application.application), RelationLoaderPanel, true));
+			PopUpManager.centerPopUp(panel);
+		}
         
     ]]></mx:Script> 
     <mx:Text id="warning" text="" />
@@ -87,6 +94,7 @@
     </mx:List>
     <mx:ControlBar>
       <mx:Button label="New Relation..." click="closeAndNewRelation();" styleName="titleWindowButton" />
+      <mx:Button label="Load Relation..." click="closeAndLoadRelation();" styleName="titleWindowButton" />
       <mx:Spacer width="100%"/>
       <mx:Button label="Select" click="updateEntityAndClose();" enabled="{relationSelector.selectedItems.length>0}" styleName="titleWindowButton" />
     </mx:ControlBar>
