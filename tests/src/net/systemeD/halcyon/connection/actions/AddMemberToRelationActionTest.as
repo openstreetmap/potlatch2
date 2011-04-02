@@ -28,14 +28,15 @@ package net.systemeD.halcyon.connection.actions {
         [Test]
         public function spliceStuff():void {
 
+            // create an array
             var arr:Array = ["a", "b", "c", "d"];
-            Assert.assertEquals(arr.length, 4);
+            Assert.assertEquals(4, arr.length);
 
+            // doesn't actually splice onto the end, inserts at position 4
             arr.splice(-1, 0, "e");
-            Assert.assertEquals(arr.length, 5);
-
-            arr.splice(-1, 1);
-            Assert.assertEquals(arr.length, 4);
+            Assert.assertEquals(5, arr.length);
+            Assert.assertEquals("e", arr[3]);
+            Assert.assertEquals("d", arr[4]);
         }
     }
 }
