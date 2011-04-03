@@ -23,7 +23,7 @@ package net.systemeD.potlatch2.controller {
 			super(way);
 			this.editEnd = editEnd;
 			this.leaveNodeSelected = leaveNodeSelected;
-			if (way.length==1 && way.getNode(0).parentWays.length==1) {
+			if (way.length==1) {
 				// drawing new way, so keep track of click in case creating a POI
 				lastClick=way.getNode(0);
 				lastClickTime=new Date();
@@ -61,6 +61,9 @@ package net.systemeD.potlatch2.controller {
 								controller.map.coord2lon(event.localX));
                             MainUndoStack.getGlobalStack().addAction(newPoiAction);
                             return new SelectedPOINode(newPoiAction.getNode());
+                        } else if (Way(firstSelected).length==1) {
+                            // It's not a poi, but they've double-clicked or clicked-twice the first node - do nothing
+                            return this;
 						} else {
 							// double-click at end of way
 							return stopDrawing();

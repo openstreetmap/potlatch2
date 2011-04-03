@@ -101,6 +101,10 @@ package net.systemeD.halcyon.connection {
         private var traces:Array = [];
         private var nodePositions:Object = {};
         protected var traces_loaded:Boolean = false;
+		private var loadedBboxes:Array = [];
+
+		/** maximum number of ways to keep in memory before purging */
+		protected const MAXWAYS:uint=3000;
 
         protected function get nextNegative():Number {
             return negativeID--;
@@ -269,21 +273,18 @@ package net.systemeD.halcyon.connection {
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
             var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
             performCreate(new CreateEntityAction(node, setNode));
-			//markDirty();
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array, performCreate:Function):Way {
             var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
             performCreate(new CreateEntityAction(way, setWay));
-			//markDirty();
             return way;
         }
 
         public function createRelation(tags:Object, members:Array, performCreate:Function):Relation {
             var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
             performCreate(new CreateEntityAction(relation, setRelation));
-			//markDirty();
             return relation;
         }
 
@@ -363,6 +364,31 @@ package net.systemeD.halcyon.connection {
 		}
 		public function get isDirty():Boolean {
 			return modified;
+		}
+
+		// Keep track of the bboxes we've loaded
+
+		/** Has the data within this bbox already been loaded? */
+		protected function isBboxLoaded(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+			var l:Number,r:Number,t:Number,b:Number;
+			for each (var box:Array in loadedBboxes) {
+				l=box[0]; r=box[1]; t=box[2]; b=box[3];
+				if (left>=l && left<=r && right>=l && right<=r && top>=b && top<=t && bottom>=b && bottom<=t) {
+					return true;
+				}
+			}
+			return false;
+		}
+		/** Mark that bbox is loaded */
+		protected function markBboxLoaded(left:Number,right:Number,top:Number,bottom:Number):void {
+			if (isBboxLoaded(left,right,top,bottom)) return;
+			loadedBboxes.push([left,right,top,bottom]);
+		}
+		/** Purge all data if number of ways exceeds limit */
+		public function purgeIfFull(left:Number,right:Number,top:Number,bottom:Number):void {
+			if (waycount<=MAXWAYS) return;
+			purgeOutside(left,right,top,bottom);
+			loadedBboxes=([left,right,top,bottom]);
 		}
 
 		// Changeset tracking

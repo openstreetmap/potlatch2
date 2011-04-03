@@ -37,10 +37,6 @@ package net.systemeD.halcyon {
 		public var scale:uint=14;						 
 		/** current scaling factor for lon/latp */
 		public var scalefactor:Number=MASTERSCALE;
-		public var bigedge_l:Number= 999999;			// area of largest whichways
-		public var bigedge_r:Number=-999999;			//  |
-		public var bigedge_b:Number= 999999;			//  |
-		public var bigedge_t:Number=-999999;			//  |
 
 		public var edge_l:Number;						// current bounding box
 		public var edge_r:Number;						//  |
@@ -282,14 +278,6 @@ package net.systemeD.halcyon {
         */
 		public function download():void {
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
-			
-			if (edge_l>=bigedge_l && edge_r<=bigedge_r &&
-				edge_b>=bigedge_b && edge_t<=bigedge_t) { return; } 	// we have already loaded this area, so ignore
-			bigedge_l=edge_l; bigedge_r=edge_r;
-			bigedge_b=edge_b; bigedge_t=edge_t;
-			if (connection.waycount>1000) {
-				connection.purgeOutside(edge_l,edge_r,edge_t,edge_b);
-			}
 			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 
             // Do the same for vector layers
@@ -385,6 +373,20 @@ package net.systemeD.halcyon {
 		public function addVectorLayer(layer:VectorLayer):void {
 			vectorlayers[layer.name]=layer;
 			vectorbg.addChild(layer.paint);
+		}
+		
+		public function removeVectorLayer(layer:VectorLayer):void {
+			if (!layer) return;
+			layer.blank();
+			vectorbg.removeChild(layer.paint);
+			delete vectorlayers[layer.name];
+		}
+		
+		public function findVectorLayer(name:String):VectorLayer {
+			for each (var layer:VectorLayer in vectorlayers) {
+				if (layer.name==name) { return layer; }
+			}
+			return null;
 		}
 
 		// ------------------------------------------------------------------------------------------

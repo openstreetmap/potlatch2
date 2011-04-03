@@ -17,8 +17,6 @@ package net.systemeD.halcyon.connection {
     */
 	public class XMLConnection extends XMLBaseConnection {
 
-        //public var readConnection:NetConnection;
-
 		public function XMLConnection() {
 
 			if (Connection.policyURL!='')
@@ -31,6 +29,15 @@ package net.systemeD.halcyon.connection {
 		
 		override public function loadBbox(left:Number,right:Number,
 								top:Number,bottom:Number):void {
+            purgeIfFull(left,right,top,bottom);
+            if (isBboxLoaded(left,right,top,bottom)) return;
+
+            // enlarge bbox by 20% on each edge
+            var xmargin:Number=(right-left)/5;
+            var ymargin:Number=(top-bottom)/5;
+            left-=xmargin; right+=xmargin;
+            bottom-=ymargin; top+=ymargin;
+
             var mapVars:URLVariables = new URLVariables();
             mapVars.bbox= left+","+bottom+","+right+","+top;
 
@@ -57,6 +64,7 @@ package net.systemeD.halcyon.connection {
 
         private function errorOnMapLoad(event:Event):void {
 			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map" } ));
+			dispatchEvent(new Event(LOAD_COMPLETED));
         }
         private function mapLoadStatus(event:HTTPStatusEvent):void {
             trace("loading map status = "+event.status);
@@ -213,7 +221,7 @@ package net.systemeD.halcyon.connection {
             // build the actual request
 			var serv:HTTPService=new HTTPService();
 			serv.method="POST";
-			serv.url=url;
+			serv.url=signedOAuthURL(url, "POST");
 			serv.contentType = "text/xml";
 			serv.headers={'X-Error-Format':'xml'};
 			serv.request=" ";

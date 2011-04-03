@@ -4,7 +4,7 @@ package net.systemeD.halcyon.connection.actions {
     
     public class AddMemberToRelationAction extends UndoableEntityAction {
         private var rel:Relation;
-        private var index:uint;
+        private var index:int;
         private var member:RelationMember;
         private var memberList:Array;
         
@@ -17,6 +17,8 @@ package net.systemeD.halcyon.connection.actions {
         }
         
         public override function doAction():uint {
+            if ( index == -1 )
+                index = memberList.length;
             memberList.splice(index, 0, member);
             member.entity.addParent(rel);
             markDirty();
@@ -27,7 +29,9 @@ package net.systemeD.halcyon.connection.actions {
         
         public override function undoAction():uint {
             memberList.splice(index, 1);
-            member.entity.removeParent(rel);
+            if (rel.findEntityMemberIndex(member.entity)==-1) {
+                member.entity.removeParent(rel);
+            }
             markClean();
             rel.dispatchEvent(new RelationMemberEvent(Connection.RELATION_MEMBER_REMOVED, member.entity, rel, index));
             

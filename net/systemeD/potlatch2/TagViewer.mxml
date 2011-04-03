@@ -225,7 +225,8 @@
       import mx.core.DragSource;
       import flexlib.containers.SuperTabNavigator;
 
-      private static const dndPrompt:String="Add new points by dragging them onto the map";
+      [Bindable]
+      public var dndPrompt:String="Add new points by dragging them onto the map";
 
       private var editorStackTabNavigator:SuperTabNavigator;
       private var editorStackAccordion:Accordion;
@@ -338,6 +339,7 @@
 				} else {
 					iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
 				}
+				currentCategorySelector.setSelectedFeature(null);
 			}
 
 			// Set it as the popup, and make sure it's visible
@@ -491,26 +493,11 @@
              setupAdvanced(selectedEntity);
       }
 
-      /**
-      * When you enter a new tag and press enter, the focus moves to the add button
-      * Adding an event listener to the button and listening for + means that you
-      * can add two consecutive tags with the same keypress. This relies on focus
-      * moving to the "add" button, though, so it's not robust to rearranging the UI.
-      */
-      private function advancedAddButtonKeyboardEvent(event:KeyboardEvent):void {
-          switch (event.keyCode) {
-            case 187:   addNewTag(); break;                          // + - add tag
-            case 107:   addNewTag(); break;                          // numpad plus
-          }
-      }
-
       private var listeningToRelations:Array = [];
 
       private function setupAdvanced(entity:Entity):void {
 		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
 		advancedTagGrid.init(entity);
-        advancedAddButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent, false, 0, true);
-        advancedDeleteButton.addEventListener(KeyboardEvent.KEY_DOWN, advancedAddButtonKeyboardEvent, false, 0, true);
 
 		if ( entity == null ) {
 			advancedID.htmlText = "";
@@ -593,11 +580,11 @@
 			for each (var entity:Entity in EntityCollection(selectedEntity).entities) {
 				var indexes:Array=relation.findEntityMemberIndexes(entity);
 				for each (var index:int in indexes) {
-					relation.setMember(index, new RelationMember(entity,newRole));
+					relation.setMember(index, new RelationMember(entity,newRole), MainUndoStack.getGlobalStack().addAction);
 				}
 			}
 		} else {
-			relation.setMember(props['index'], new RelationMember(selectedEntity,newRole));
+			relation.setMember(props['index'], new RelationMember(selectedEntity,newRole), MainUndoStack.getGlobalStack().addAction);
 		}
       }
 
@@ -728,21 +715,7 @@
 	}
 
       private function tagChanged(event:TagEvent):void {
-	      if(selectedEntity != null && selectedEntity is EntityCollection) {
-			setupMultiAdvanced(selectedEntity);
-		    return;
-		  }
-
           refreshFeatureIcon();
-          // ** FIXME - changing tags on Advanced tab should update simple view
-          // (but putting initialiseEditors here breaks other stuff, because it causes
-          // the Basic pane to be selected)
-
-          // if the advancedTagGrid has already been set up, it needs to be refreshed.
-          // FIXME make this better, maybe advancedTagGrid should be event listening.
-          if(advancedContainer.initialized) {
-            checkAdvanced();
-          }
       }
 
       public function loadFeatures():void {

@@ -70,6 +70,7 @@ package net.systemeD.halcyon {
 
 			var tags:Object = entity.getTagsCopy();
 			setStateClass('poi', !entity.hasParentWays);
+			setStateClass('junction', entity.numParentWays>1);
             setStateClass('hasTags', entity.hasInterestingTags());
             setStateClass('dupe', Node(entity).isDupe());
 			tags=applyStateClasses(tags);

@@ -20,12 +20,14 @@ package net.systemeD.halcyon {
 		private var requests:Array=[];
 		private var tiles:Object={};		// key is "z,x,y"; value "true" if queued, or reference to loader object if requested
 		private var waiting:int=0;			// number of tiles currently being downloaded
+		private var loadcount:int=0;		// number of tiles fully downloaded
 		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
 		private var scheme:String;			// 900913 or microsoft
 		public var blocks:Array;			// array of regexes which are verboten
 
 		private var map:Map;
-		private const MAXTILEREQUESTS:int= 4;
+		private const MAXTILEREQUESTS:uint= 4;
+		private const MAXTILESLOADED:uint=30;
 
 		private var sharpenFilter:BitmapFilter = new ConvolutionFilter(3, 3, 
 			[0, -1, 0,
@@ -182,11 +184,26 @@ package net.systemeD.halcyon {
 			t.addEventListener(TimerEvent.TIMER,function():void { upFade(DisplayObject(event.target.loader)); });
 			t.start();
 			waiting--;
+			loadcount++;
+			if (loadcount>MAXTILESLOADED) purgeTiles();
 			return;
 		}
 		
 		protected function upFade(s:DisplayObject):void {
 			s.alpha+=0.1;
+		}
+		
+		protected function purgeTiles():void {
+			for (var tile:String in tiles) {
+				if (tiles[tile] is Sprite) {
+					var coords:Array=tile.split(','); var tz:uint=coords[0]; var tx:uint=coords[1]; var ty:uint=coords[1];
+					if (tz!=map.scale || tx<tile_l || tx>tile_r || ty<tile_t || ty<tile_b) {
+						if (tiles[tile].parent) tiles[tile].parent.removeChild(tiles[tile]);
+						delete tiles[tile];
+						loadcount--;
+					}
+				}
+			}
 		}
 
 		
@@ -206,6 +223,11 @@ package net.systemeD.halcyon {
 						u+=String(byte);
 					}
 					t=baseurl.replace('$quadkey',u); break;
+
+				case 'tms':
+					ty=Math.pow(2,tz)-1-ty;
+					t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+					break;
 
 				default:
 					if (baseurl.indexOf('$x')>-1) {

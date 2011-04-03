@@ -1,0 +1,14 @@
+build.properties
+l10n/locale/bundles
+version.as
+halcyon.tmproj
+
+resources/locales
+resources/*.swf
+resources/*.cache
+resources/docs
+
+/tests/bin/
+/tests/report/
+
+/generated

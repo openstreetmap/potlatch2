@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LocaleMap enableLog="true"
+<LocaleMap enableLog="false"
     xmlns:mx="http://www.adobe.com/2006/mxml"
     xmlns:factory="mx.core.*"
     xmlns="library://ns.babelfx.org/l10n/flex/" >
@@ -8,8 +8,27 @@
   <mx:Script>
     <![CDATA[
       import com.mindspace.l10n.commands.ExternalLocaleCommand;
+      import mx.resources.ResourceManager;
+      import mx.resources.IResourceManager;
 
       import net.systemeD.potlatch2.help.HelpDialog;
+      import net.systemeD.potlatch2.TagViewer;
+      import net.systemeD.potlatch2.Toolbox;
+
+      private function onLocaleChanged(event:Event):void {
+          var rMngr : IResourceManager = ResourceManager.getInstance();
+          var sri : SmartResourceInjector = event.target as SmartResourceInjector;
+          var options : Array = [
+                                  { label : rMngr.getString('p2_main','main.gps_data') },
+                                  { label : rMngr.getString('p2_main','main.my_tracks') }
+                                ];
+
+          // Iterate all view instances and inject new dataProvider
+          for each (var inst:potlatch2 in sri.targetInstances) {
+              if (inst == null) continue;
+              inst.gpsButton.dataProvider = options;
+          }
+      }
     ]]>
   </mx:Script>
 
@@ -32,9 +51,32 @@
     <ResourceProxy property="welcome.label" key="help.welcome" />
   </SmartResourceInjector>
 
-  <SmartResourceInjector bundleName="p2_main" target="{potlatch2}">
+  <SmartResourceInjector bundleName="p2_main" target="{potlatch2}" localeChange="onLocaleChanged(event)">
+    <ResourceProxy property="bgButton.label" key="main.background" />
+    <ResourceProxy property="styleButton.label" key="main.map_style" />
     <ResourceProxy property="undo.label" key="main.undo" />
     <ResourceProxy property="redo.label" key="main.redo" />
+    <ResourceProxy property="helpButton.label" key="main.help" />
+    <ResourceProxy property="optionsButton.label" key="main.options" />
+    <ResourceProxy property="saveButton.label" key="main.save" />
+  </SmartResourceInjector>
+
+  <SmartResourceInjector bundleName="p2_main" target="{TagViewer}">
+    <ResourceProxy property="dndPrompt" key="tag_viewer.dndprompt" />
+  </SmartResourceInjector>
+
+  <SmartResourceInjector bundleName="p2_main" target="{Toolbox}">
+    <ResourceProxy property="deleteNode" key="toolbox.delete_node" />
+    <ResourceProxy property="deleteWay" key="toolbox.delete_way" />
+    <ResourceProxy property="deleteArea" key="toolbox.delete_area" />
+    <ResourceProxy property="deleteItem" key="toolbox.delete_item" />
+    <ResourceProxy property="reverseButton.toolTip" key="toolbox.reverse_direction" />
+    <ResourceProxy property="splitButton.toolTip" key="toolbox.split_way" />
+    <ResourceProxy property="mergeButton.toolTip" key="toolbox.merge_ways" />
+    <ResourceProxy property="straightenButton.toolTip" key="toolbox.straighten_way" />
+    <ResourceProxy property="circulariseButton.toolTip" key="toolbox.make_circular" />
+    <ResourceProxy property="quadrilateraliseButton.toolTip" key="toolbox.make_right_angled" />
+    <ResourceProxy property="parralleliseButton.toolTip" key="toolbox.create_parrallel_way" />
   </SmartResourceInjector>
 
 </LocaleMap>

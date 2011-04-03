@@ -12,6 +12,7 @@ package net.systemeD.potlatch2 {
 	import flash.geom.*;
 	import flash.ui.Keyboard;
 	import flash.text.TextField;
+    import mx.controls.TextArea;
 
     /** Controller for the main map editing window itself. The logic that responds to mouse and keyboard events is all 
     * buried in various ControllerState classes. */
@@ -93,12 +94,15 @@ package net.systemeD.potlatch2 {
 		}
         
         private function keyDownHandler(event:KeyboardEvent):void {
+			if ((event.target is TextField) || (event.target is TextArea)) return;
 			keys[event.keyCode]=true;
 		}
 
         private function keyUpHandler(event:KeyboardEvent):void {
-			if (event.target is TextField) return;				// not meant for us
-			if (keys[event.keyCode]) { delete keys[event.keyCode]; }
+            if (!keys[event.keyCode]) return;
+            delete keys[event.keyCode];
+            if ((event.target is TextField) || (event.target is TextArea)) return;				// not meant for us
+
 			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
             
             if (event.keyCode == 77) { toggleSize(); } // 'M'

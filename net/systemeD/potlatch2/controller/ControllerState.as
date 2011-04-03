@@ -70,7 +70,8 @@ package net.systemeD.potlatch2.controller {
                 case 72:    showHistory(); break;                                                   // H - History
 				case 83:	SaveManager.saveChanges(); break;										// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
-				case 90:	MainUndoStack.getGlobalStack().undo(); return null;						// Z - undo
+				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo
+				            else { MainUndoStack.getGlobalStack().redo(); return null;  }           // Shift-Z - redo 						
 				case Keyboard.ESCAPE:	revertSelection(); break;									// ESC - revert to server version
 				case Keyboard.NUMPAD_ADD:															// + - add tag
 				case 187:	controller.tagViewer.selectAdvancedPanel();								//   |
