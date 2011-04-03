@@ -19,6 +19,7 @@
 						labelField="name"
 						rowCount="10"
 						restrict="&#x0020;-&#x10FFFF;"
+						maxChars="255" 
 						typedText="{outerDocument.selectedItem.key}">
 					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
 					</controls:AutoComplete>
@@ -36,6 +37,7 @@
 						labelField="name"
 						rowCount="10"
 						restrict="&#x0020;-&#x10FFFF;"
+						maxChars="255" 
 						typedText="{outerDocument.selectedItem.value}">
 					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
 					</controls:AutoComplete>
@@ -69,24 +71,48 @@
 
 		/** Assign a new selected Entity, and update editing controls appropriately. */
 		public function init(entity:Entity):void {
+			if (selectedEntity==entity) return;
+			if (selectedEntity) selectedEntity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
+
+			selectedEntity=entity;
+			if (!selectedEntity) return;
+			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+
 			if ( tagDataProvider == null ) {
 				tagDataProvider = new ArrayCollection();
 				dataProvider = tagDataProvider;
+			} else {
+				tagDataProvider.removeAll();
 			}
 
-			if (selectedEntity==entity) return;
-			selectedEntity=entity;
-			updateTagDataProvider(true);
-		}
-
-		private function updateTagDataProvider(force:Boolean=false):void {
-			if (editedItemPosition && !force) return;
-
-			tagDataProvider.removeAll();
-			if (selectedEntity==null) { return; }
 			var tags:Array = selectedEntity.getTagArray();
 			tags.sortOn("key");
 			for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
+		}
+
+		/** Update dataProvider in response to a tag being edited or removed */
+		private function tagChanged(event:TagEvent):void {
+			var set:Boolean=false;
+			for (var i:uint=0; i<tagDataProvider.length; i++) {
+				if (tagDataProvider[i].key==event.oldKey) {
+					if (event.newValue && event.key) {
+						if (!set) {
+							// this entry in the dataProvider has changed
+							tagDataProvider[i].key=event.key;
+							tagDataProvider[i].value=event.newValue;
+							set=true;
+						} else {
+							// trap duplicate tags
+							tagDataProvider.removeItemAt(i);
+						}
+					} else {
+						// this entry in the dataProvider has been deleted
+						tagDataProvider.removeItemAt(i);
+					}
+				}
+			}
+			// tell Flex to redraw the grid because we've changed a tag
+			invalidateList();
 		}
 
 		/** Create editing controls for a new key/value pair, with default values. */
@@ -101,7 +127,6 @@
 		public function removeTag():void {
 			var k:String = selectedItem.key;
 			selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
-			updateTagDataProvider();
 		}
 
 		/** Return the type ("node", "way", "relation") of the selected entity. */

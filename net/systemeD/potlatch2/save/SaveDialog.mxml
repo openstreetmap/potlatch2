@@ -9,7 +9,6 @@
     <mx:Object k="created_by" v="Potlatch 2"/>
     <mx:Object k="version" v="{Application.application.version}"/>
     <mx:Object k="build" v="{Application.application.build_number}"/>
-    <mx:Object k="comment" v=""/>
   </mx:ArrayCollection>
   
   <mx:ViewStack id="processSequence" width="100%" height="100%" 
@@ -104,7 +103,7 @@
 		for (var i:int=changesetTags.length-1; i>0; i--) {
 			if (changesetTags[i]['k']=='comment') { changesetTags.removeItemAt(i); }
 		}
-		changesetTags.addItem( { k:'comment', v: event.target.text } );
+		if (event.target.text!='') changesetTags.addItem( { k:'comment', v: event.target.text } );
     }
 
 	private function monitorEnter(event:TextEvent):void {

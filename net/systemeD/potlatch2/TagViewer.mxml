@@ -224,7 +224,8 @@
       import mx.core.DragSource;
       import flexlib.containers.SuperTabNavigator;
 
-      private static const dndPrompt:String="Add new points by dragging them onto the map";
+      [Bindable]
+      public var dndPrompt:String="Add new points by dragging them onto the map";
 
       private var editorStackTabNavigator:SuperTabNavigator;
       private var editorStackAccordion:Accordion;
@@ -578,11 +579,11 @@
 			for each (var entity:Entity in EntityCollection(selectedEntity).entities) {
 				var indexes:Array=relation.findEntityMemberIndexes(entity);
 				for each (var index:int in indexes) {
-					relation.setMember(index, new RelationMember(entity,newRole));
+					relation.setMember(index, new RelationMember(entity,newRole), MainUndoStack.getGlobalStack().addAction);
 				}
 			}
 		} else {
-			relation.setMember(props['index'], new RelationMember(selectedEntity,newRole));
+			relation.setMember(props['index'], new RelationMember(selectedEntity,newRole), MainUndoStack.getGlobalStack().addAction);
 		}
       }
 
@@ -713,21 +714,7 @@
 	}
 
       private function tagChanged(event:TagEvent):void {
-	      if(selectedEntity != null && selectedEntity is EntityCollection) {
-			setupMultiAdvanced(selectedEntity);
-		    return;
-		  }
-
           refreshFeatureIcon();
-          // ** FIXME - changing tags on Advanced tab should update simple view
-          // (but putting initialiseEditors here breaks other stuff, because it causes
-          // the Basic pane to be selected)
-
-          // if the advancedTagGrid has already been set up, it needs to be refreshed.
-          // FIXME make this better, maybe advancedTagGrid should be event listening.
-          if(advancedContainer.initialized) {
-            checkAdvanced();
-          }
       }
 
       public function loadFeatures():void {
