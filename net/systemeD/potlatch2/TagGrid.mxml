@@ -19,6 +19,7 @@
 						labelField="name"
 						rowCount="10"
 						restrict="&#x0020;-&#x10FFFF;"
+						maxChars="255" 
 						typedText="{outerDocument.selectedItem.key}">
 					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
 					</controls:AutoComplete>
@@ -36,6 +37,7 @@
 						labelField="name"
 						rowCount="10"
 						restrict="&#x0020;-&#x10FFFF;"
+						maxChars="255" 
 						typedText="{outerDocument.selectedItem.value}">
 					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
 					</controls:AutoComplete>
