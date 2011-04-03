@@ -151,7 +151,7 @@
     
   <feature name="Car Wash">
     <category>transport</category>
-    <icon image="icons/transport_blank.png">
+    <icon image="features/pois/transport_car_wash.n.24.png">
       ${name}
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcar_wash</help>

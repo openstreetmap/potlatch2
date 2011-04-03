@@ -70,6 +70,7 @@ node[aeroway=aerodrome] { icon-image: icons/transport_aerodrome.n.16.png; z-inde
 node[amenity=bus_station] { icon-image: icons/transport_bus_station.n.16.png; z-index: 20; }
 node[highway=bus_stop] { icon-image: icons/transport_bus_stop2.n.16.png; z-index: 20; }
 node[amenity=fuel] { icon-image: icons/transport_fuel.n.16.png; z-index: 20; }
+node[amenity=car_wash] { icon-image: icons/transport_car_wash.n.16.png; z-index: 20; }
 node[amenity=bicycle_parking] { icon-image: icons/transport_parking_bicycle.n.16.png; text-offset: 15; text: capacity; z-index: 20; }
 node[amenity=parking] { icon-image: icons/transport_parking_car.n.16.png; z-index: 20; }
 node[amenity=ferry_terminal] { icon-image: icons/transport_port.n.16.png; z-index: 20; }
