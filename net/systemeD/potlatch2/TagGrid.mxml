@@ -111,6 +111,8 @@
 					}
 				}
 			}
+			if (!set && event.newValue) tagDataProvider.addItem( { key:event.key, value:event.newValue } );
+
 			// tell Flex to redraw the grid because we've changed a tag
 			invalidateList();
 		}
