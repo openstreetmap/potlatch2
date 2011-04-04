@@ -11,7 +11,7 @@ package net.systemeD.halcyon.connection.actions {
         public function SetTagAction(entity:Entity, key:String, value:String) {
             super(entity, "Set "+key+"="+value);
             this.key = key;
-            this.value = value.substr(0,255);
+            this.value = value ? value.substr(0,255): null;
         }
 
         public override function doAction():uint {
