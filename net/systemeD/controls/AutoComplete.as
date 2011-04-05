@@ -81,6 +81,8 @@ package net.systemeD.controls {
 			setStyle("paddingLeft",0);
 			setStyle("paddingRight",0);
 			rowCount = 7;
+			
+			if (maxChars) textInput.maxChars=maxChars;
 		}
 		
 		//--------------------------------------------------------------------------
@@ -93,6 +95,7 @@ package net.systemeD.controls {
 		private var showingDropdown:Boolean=false;
 		private var tempCollection:Object;
 		private var dropdownClosed:Boolean=true;
+		public var maxChars:uint=0;
 
 		//--------------------------------------------------------------------------
 		//	Overridden Properties
