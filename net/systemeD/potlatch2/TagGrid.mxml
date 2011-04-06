@@ -94,7 +94,7 @@
 		private function tagChanged(event:TagEvent):void {
 			var set:Boolean=false;
 			for (var i:uint=0; i<tagDataProvider.length; i++) {
-				if (tagDataProvider[i].key==event.oldKey) {
+				if (tagDataProvider[i].key==event.oldKey || tagDataProvider[i].key==event.key) {
 					if (event.newValue && event.key) {
 						if (!set) {
 							// this entry in the dataProvider has changed
