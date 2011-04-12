@@ -88,16 +88,18 @@ package net.systemeD.halcyon.connection {
         }
 
         public function insertNode(index:uint, node:Node, performAction:Function):void {
+			if (index>0 && getNode(index-1)==node) return;
+			if (index<nodes.length-1 && getNode(index)==node) return;
 			performAction(new AddNodeToWayAction(this, node, nodes, index));
         }
 
         public function appendNode(node:Node, performAction:Function):uint {
-			performAction(new AddNodeToWayAction(this, node, nodes, -1));
+			if (node!=getLastNode()) performAction(new AddNodeToWayAction(this, node, nodes, -1));
             return nodes.length + 1;
         }
         
         public function prependNode(node:Node, performAction:Function):uint {
-			performAction(new AddNodeToWayAction(this, node, nodes, 0));
+			if (node!=getFirstNode()) performAction(new AddNodeToWayAction(this, node, nodes, 0));
             return nodes.length + 1;
         }
         

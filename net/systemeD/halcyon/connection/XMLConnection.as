@@ -28,6 +28,15 @@ package net.systemeD.halcyon.connection {
 		
 		override public function loadBbox(left:Number,right:Number,
 								top:Number,bottom:Number):void {
+            purgeIfFull(left,right,top,bottom);
+            if (isBboxLoaded(left,right,top,bottom)) return;
+
+            // enlarge bbox by 20% on each edge
+            var xmargin:Number=(right-left)/5;
+            var ymargin:Number=(top-bottom)/5;
+            left-=xmargin; right+=xmargin;
+            bottom-=ymargin; top+=ymargin;
+
             var mapVars:URLVariables = new URLVariables();
             mapVars.bbox= left+","+bottom+","+right+","+top;
 
@@ -54,6 +63,7 @@ package net.systemeD.halcyon.connection {
 
         private function errorOnMapLoad(event:Event):void {
 			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map" } ));
+			dispatchEvent(new Event(LOAD_COMPLETED));
         }
         private function mapLoadStatus(event:HTTPStatusEvent):void {
             trace("loading map status = "+event.status);

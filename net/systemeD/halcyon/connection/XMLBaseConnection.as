@@ -139,6 +139,7 @@ package net.systemeD.halcyon.connection {
                 }
             }
             
+            markBboxLoaded(minlon,maxlon,maxlat,minlat);
             registerPOINodes();
             dispatchEvent(new Event(LOAD_COMPLETED));
         }

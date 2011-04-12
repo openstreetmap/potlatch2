@@ -60,13 +60,11 @@ package net.systemeD.halcyon.connection {
             return members[index];
         }
 
-        public function setMember(index:uint, member:RelationMember):void {
-            var oldMember:RelationMember = getMember(index);
-            
-			members.splice(index, 1, member);
-            oldMember.entity.removeParent(this);
- 			member.entity.addParent(this);
-			markDirty();
+        public function setMember(index:uint, member:RelationMember, performAction:Function):void {
+            var composite:CompositeUndoableAction = new CompositeUndoableAction("Set Member at index "+index);
+            composite.push(new RemoveMemberByIndexAction(this, members, index));
+            composite.push(new AddMemberToRelationAction(this, index, member, members));
+            performAction(composite);
         }
 
 		public function findMembersByRole(role:String, entityType:Class=null):Array {
