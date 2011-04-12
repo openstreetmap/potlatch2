@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.tools {
   import net.systemeD.halcyon.connection.Way;
   import net.systemeD.halcyon.connection.Node;
+  import net.systemeD.halcyon.AttentionEvent;
   import flash.geom.Point;
   import net.systemeD.halcyon.connection.*;
 
@@ -28,7 +29,7 @@ package net.systemeD.potlatch2.tools {
         functor.step();
         var newScore:Number = functor.goodness;
         if (newScore > score) {
-          trace("Quadrilateralise blew up! " + newScore + " > " + score);
+          Connection.getConnection().dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Corners too sharp to straighten"));
           return false;
 	    }
         score = newScore;
