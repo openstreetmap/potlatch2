@@ -14,7 +14,7 @@
 	</set>
 	<set>
 		<name>OSM - Mapnik</name>
-		<url>http://tile.openstreetmap.org/$z/$x/$y.png</url>
+		<url>http://c.tile.openstreetmap.org/$z/$x/$y.png</url>
 	</set>
 	<set>
 		<name>OSM - Osmarender</name>
