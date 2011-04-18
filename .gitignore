@@ -2,13 +2,18 @@ build.properties
 l10n/locale/bundles
 version.as
 halcyon.tmproj
+Potlatch2.as3proj
 
 resources/locales
 resources/*.swf
 resources/*.cache
 resources/docs
+resources/mapquest
 
 /tests/bin/
 /tests/report/
 
 /generated
+
+bin/
+obj/
