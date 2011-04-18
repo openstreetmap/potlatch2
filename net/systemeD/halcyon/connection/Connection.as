@@ -388,7 +388,7 @@ package net.systemeD.halcyon.connection {
 		public function purgeIfFull(left:Number,right:Number,top:Number,bottom:Number):void {
 			if (waycount<=MAXWAYS) return;
 			purgeOutside(left,right,top,bottom);
-			loadedBboxes=([left,right,top,bottom]);
+			loadedBboxes=[[left,right,top,bottom]];
 		}
 
 		// Changeset tracking
