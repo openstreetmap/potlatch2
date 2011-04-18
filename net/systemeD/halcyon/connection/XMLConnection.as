@@ -179,7 +179,8 @@ package net.systemeD.halcyon.connection {
             urlReq.method = "POST";
 			if (xml) { urlReq.data = xml.toXMLString(); } else { urlReq.data = true; }
             urlReq.contentType = "application/xml";
-            urlReq.requestHeaders = new Array(new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"));
+            urlReq.requestHeaders = [ new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"), 
+			                          new URLRequestHeader("X-Error-Format", "XML") ];
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, onComplete);
             loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
