@@ -114,7 +114,10 @@
             var params:Object = new Object();
             var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, params, consumer, null);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
-            
+
+			//register the "pressTry" function so the oAuth callback page can try to advance the editor directly to the next step
+			ExternalInterface.addCallback("pressTry", pressTry);            
+			
             // build the actual request
             var urlReq:URLRequest = new URLRequest(String(urlStr));
             var loader:URLLoader = new URLLoader();
@@ -215,6 +218,10 @@
             var secret:String = Connection.getParam("oauth_consumer_secret", "");
             return new OAuthConsumer(key, secret);
         }
+		
+		public function pressTry():void {
+			getAccessToken();
+		}
         
 	]]></mx:Script>
 </mx:TitleWindow>

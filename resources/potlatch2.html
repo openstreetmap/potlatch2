@@ -5,12 +5,6 @@
 <head>
 <title>Potlatch TWO</title>
 <script type="text/javascript" src="swfobject.js"></script>
-</head>
-
-<body>
-
-<div id="map" style="width:100%; height: 100%; border: 1px solid black">
-</div>
 
 <script>
 	function getArgs() {
@@ -37,6 +31,12 @@
 
     function markChanged(a) { changesaved=a; } /* called from flash */
 
+	var attributes = {
+		id: "map",
+		name: "map"
+	};
+
+	
 	var args = getArgs();
 	var lat;
 	var lon;
@@ -47,35 +47,46 @@
 	} else {
 		lat=51.875;
 		lon=-1.492;
+		args["lat"] = lat;
+		args["lon"] = lon;
 	}
 
 	if (args.zoom) {
 		zoom = parseInt(args.zoom);
 	} else {
 		zoom = 16;
+		args["zoom"] = 16;
 	}
 
-	var fo = new SWFObject("potlatch2.swf?d="+Math.round(Math.random()*1000), "map", "100%", "100%", "9", "#FFFFFF");
-	fo.addVariable("lat",lat);
-	fo.addVariable("lon",lon);
-	fo.addVariable("zoom",zoom);
-	fo.addVariable("api","http://api06.dev.openstreetmap.org/api/0.6/");
-	fo.addVariable("policy","http://api06.dev.openstreetmap.org/api/crossdomain.xml");
-	fo.addVariable("connection","XML");
-	fo.addVariable("oauth_policy", "http://api06.dev.openstreetmap.org/oauth/crossdomain.xml");
-	fo.addVariable("oauth_request_url", "http://api06.dev.openstreetmap.org/oauth/request_token");
-	fo.addVariable("oauth_access_url", "http://api06.dev.openstreetmap.org/oauth/access_token");
-	fo.addVariable("oauth_auth_url", "http://api06.dev.openstreetmap.org/oauth/authorize");
-	fo.addVariable("oauth_consumer_key", "fiM1IoqnKJk4JCfcl63DA");
-	fo.addVariable("oauth_consumer_secret", "7fYgJK9M4vB1CvBZ6jEsPGxYK9UD1hEnI6NqTxNGs");
-	fo.addVariable("serverName", "api06 Test On Dev");
-    fo.addVariable("show_help", "once");
-    fo.addVariable("site_name", "MapQuest");
-    fo.addVariable("force_auth", "force");
-	fo.write("map");
-
-
+			args["api"] = "http://api06.dev.openstreetmap.org/api/0.6/";
+			args["policy"] = "http://api06.dev.openstreetmap.org/api/crossdomain.xml";
+			args["connection"] = "XML";
+			args["oauth_policy"] = "http://api06.dev.openstreetmap.org/oauth/crossdomain.xml";
+			args["oauth_request_url"] = "http://api06.dev.openstreetmap.org/oauth/request_token";
+			args["oauth_access_url"] = "http://api06.dev.openstreetmap.org/oauth/access_token";
+			args["oauth_auth_url"] = "http://api06.dev.openstreetmap.org/oauth/authorize";
+			args["oauth_consumer_key"] = "fiM1IoqnKJk4JCfcl63DA";
+			args["oauth_consumer_secret"] = "7fYgJK9M4vB1CvBZ6jEsPGxYK9UD1hEnI6NqTxNGs";
+			args["serverName"] = "api06 Test On Dev";
+    		args["show_help"] = "once";
+    		args["site_name"] = "MapQuest";
+    		args["force_auth"] = "force";
+	
+	var params = false;
+	
+	swfobject.embedSWF("potlatch2.swf?d="+Math.round(Math.random()*1000), "mapHolder", "100%", "100%", "9.0.0", "expressInstall.swf", args, params, attributes);
 </script>
+
+
+</head>
+
+<body>
+
+<div id="mapHolder" style="width:100%; height: 100%; border: 1px solid black">
+	If you see this message you need to install Flash Play 9.0 or above, from Adobe, <a href="http://get.adobe.com/flashplayer/" target="_blank">available here</a> in order to use Potlatch 2
+</div>
+
+
 
 </body>
 </html>

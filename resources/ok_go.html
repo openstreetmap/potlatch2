@@ -3,6 +3,7 @@
 	<script language="javascript">
 	 function sendBack() {
 		if (window.self.opener) {
+			 window.self.opener.swfobject.getObjectById("map").pressTry();
 			 window.self.opener.focus();
 		}
 		window.self.close();
