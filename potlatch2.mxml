@@ -53,6 +53,7 @@
         <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
+        <mx:Button id="findButton" label="Find" click="new FindDialog().init();" styleName="appBarButton" />		
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
@@ -108,6 +109,8 @@
         import mx.core.DragSource;
         import mx.controls.Alert;
         import com.mindspace.l10n.events.LocaleEvent;
+		
+		import net.systemeD.potlatch2.find.*;
 
         public var theMap:Map;
         public var theController:EditController;

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="vertical" showCloseButton="true"
+	horizontalAlign="center" title="Find a place in OpenStreetMap (powered by Nominatim Search)"
+	width="458" height="350" verticalGap="0">
+	<mx:Script><![CDATA[
+		import mx.core.Application;
+		import mx.events.CloseEvent;
+		import mx.events.FlexEvent;
+		import mx.managers.PopUpManager;
+		import mx.rpc.events.ResultEvent;
+		import mx.rpc.http.HTTPService;
+		import mx.controls.Alert;
+		
+		import net.systemeD.halcyon.Globals;
+		
+		private var nominatim:HTTPService = new HTTPService;
+		private var nominatimURL:String = "http://open.mapquestapi.com/nominatim/v1/search?";
+		private var nomOptions:Object = { addressdetails:"1", limit:"10", format:"xml" };
+
+		[Bindable]
+        private var searchResults:XMLList;
+				
+		
+		public function init():void {
+			PopUpManager.addPopUp(this, Application(Application.application), true);
+			PopUpManager.centerPopUp(this);
+			this.addEventListener(CloseEvent.CLOSE, findDialog_close);
+			
+			var obj:SharedObject = SharedObject.getLocal("user_state");
+	
+		}
+		
+		private function findDialog_close(evt:CloseEvent):void {
+			PopUpManager.removePopUp(this);
+		}
+
+		private function goFetch(q:String):void {
+
+			var searchCall:String = nominatimURL;
+			for (var item:String in nomOptions) {
+				searchCall += item + "="; 
+				searchCall += nomOptions[item] + "&";
+			}
+			searchCall += "q=" + q;
+			this.nominatim.url = searchCall
+			this.nominatim.addEventListener(ResultEvent.RESULT, goneFetched);
+			this.nominatim.resultFormat = 'e4x';
+
+			this.nominatim.send();
+			
+		}
+		
+		private function goneFetched(e:ResultEvent):void {
+			var resultXML:XML = e.result as XML;
+            var resultList:XMLList = resultXML..place as XMLList;
+			//Alert.show(resultXML);
+            searchResults = e.result..place as XMLList;
+            var sr2:XMLList = e.result.searchresults as XMLList;
+            var sr3:XMLList = e.result.searchresults.place as XMLList;
+            
+            //Alert.show(searchResults);
+
+            Alert.show("SR1 = " + searchResults.length);
+            Alert.show("SR2 = " + sr2.length());
+            Alert.show("SR3 = " + sr3.length());
+            Alert.show("SR4 = " + resultList.length());            
+		}
+
+		protected function btnFind_clickHandler(event:MouseEvent):void
+		{
+			goFetch(txtFind.text);
+		}
+
+
+		protected function txtFind_enterHandler(event:FlexEvent):void
+		{
+			goFetch(txtFind.text);
+		}
+
+	]]>
+	</mx:Script>
+	
+	<mx:ControlBar>
+		<mx:Spacer width="100%"/>
+		<mx:Button label="close" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+	</mx:ControlBar>
+
+	<mx:HBox>
+		<mx:TextInput id="txtFind" width="250" enter="txtFind_enterHandler(event)"/>
+		<mx:Button label="Find" id="btnFind" click="btnFind_clickHandler(event)"/>		
+	</mx:HBox>
+	
+	<mx:Spacer height="20"/>
+	
+	<mx:DataGrid id="dgResults" dataProvider="{searchResults}">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Name" dataField="@display_name"/>
+		</mx:columns>
+	</mx:DataGrid>
+
+
+</mx:TitleWindow>
