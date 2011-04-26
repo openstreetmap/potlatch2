@@ -5,6 +5,7 @@
 	horizontalAlign="center" title="Find a place in OpenStreetMap (powered by Nominatim Search)"
 	width="458" height="350" verticalGap="0">
 	<mx:Script><![CDATA[
+        import flash.events.Event;
 		import mx.core.Application;
 		import mx.events.CloseEvent;
 		import mx.events.FlexEvent;
@@ -12,12 +13,14 @@
 		import mx.rpc.events.ResultEvent;
 		import mx.rpc.http.HTTPService;
 		import mx.controls.Alert;
-		
+        import mx.events.ListEvent;
+        		
 		import net.systemeD.halcyon.Globals;
 		
 		private var nominatim:HTTPService = new HTTPService;
 		private var nominatimURL:String = "http://open.mapquestapi.com/nominatim/v1/search?";
 		private var nomOptions:Object = { addressdetails:"1", limit:"10", format:"xml" };
+        private var selectedResult:Object = {lat: "0", lon: "0"};
 
 		[Bindable]
         private var searchResults:XMLList;
@@ -59,13 +62,6 @@
             searchResults = e.result..place as XMLList;
             var sr2:XMLList = e.result.searchresults as XMLList;
             var sr3:XMLList = e.result.searchresults.place as XMLList;
-            
-            //Alert.show(searchResults);
-
-            Alert.show("SR1 = " + searchResults.length);
-            Alert.show("SR2 = " + sr2.length());
-            Alert.show("SR3 = " + sr3.length());
-            Alert.show("SR4 = " + resultList.length());            
 		}
 
 		protected function btnFind_clickHandler(event:MouseEvent):void
@@ -79,13 +75,21 @@
 			goFetch(txtFind.text);
 		}
 
+        private function setSelected(evt:ListEvent):void {
+            //Alert.show(evt.itemRenderer.data.@lat);
+            selectedResult = { lat: evt.itemRenderer.data.@lat, lon: evt.itemRenderer.data.@lon };
+        }
+        
+        private function goToSelected():void {
+            Application.application.theMap.updateCoordsFromLatLon(selectedResult.lat, selectedResult.lon);
+            Application.application.theMap.download();
+            //Application.application.theMap.redraw();            
+            PopUpManager.removePopUp(this);
+        }
+        
+        
 	]]>
 	</mx:Script>
-	
-	<mx:ControlBar>
-		<mx:Spacer width="100%"/>
-		<mx:Button label="close" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
-	</mx:ControlBar>
 
 	<mx:HBox>
 		<mx:TextInput id="txtFind" width="250" enter="txtFind_enterHandler(event)"/>
@@ -94,11 +98,19 @@
 	
 	<mx:Spacer height="20"/>
 	
-	<mx:DataGrid id="dgResults" dataProvider="{searchResults}">
+	<mx:DataGrid id="dgResults" dataProvider="{searchResults}" change="setSelected(event)">
 		<mx:columns>
-			<mx:DataGridColumn headerText="Name" dataField="@display_name"/>
-		</mx:columns>
+			<mx:DataGridColumn headerText="Name" dataField="@display_name" minWidth="200" />
+			<mx:DataGridColumn headerText="Type" dataField="@type"/>
+			<mx:DataGridColumn headerText="Class" dataField="@class"/>            
+			<mx:DataGridColumn headerText="OSM ID" dataField="@osm_id"/>
+        </mx:columns>
 	</mx:DataGrid>
 
-
+    <mx:ControlBar>
+        <mx:Spacer width="100%"/>
+        <mx:Button label="Go To" click="goToSelected();" styleName="titleWindowButton" />        
+        <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+    </mx:ControlBar>
+    
 </mx:TitleWindow>
