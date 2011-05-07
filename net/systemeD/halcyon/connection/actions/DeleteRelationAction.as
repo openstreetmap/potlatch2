@@ -25,7 +25,7 @@ package net.systemeD.halcyon.connection.actions {
 			for each (var member:RelationMember in memberList) {
 			    member.entity.removeParent(relation);
 			}
-			memberList.splice(0, memberList.length);
+			memberList=[];
 			effects.doAction();
 			setDeleted(true);
             
@@ -52,6 +52,7 @@ package net.systemeD.halcyon.connection.actions {
             effects.undoAction();
             for each(var member:RelationMember in oldMemberList) {
                 memberList.push(member);
+                member.entity.addParent(relation);
                 relation.dispatchEvent(new RelationMemberEvent(
                         Connection.RELATION_MEMBER_ADDED, member.entity, relation, 0));
             }

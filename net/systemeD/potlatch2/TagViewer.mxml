@@ -217,6 +217,7 @@
       import mx.core.*;
       import mx.managers.PopUpManager;
       import mx.controls.Menu;
+      import mx.controls.Alert;
       import flash.geom.Point;
       import flash.net.*;
       import mx.events.DragEvent;
@@ -659,7 +660,8 @@
 		var menu:Menu = new Menu(); 
 		var dp:Object = [ {label: "Select all members"}, 
 						  {label: "Deselect all members"}, 
-						  {label: "Add selection to this relation", enabled: false} ]; 
+						  {label: "Add selection to this relation", enabled: false},
+						  {label: "Delete relation"} ]; 
 		menu.dataProvider = dp; 
 		menu.addEventListener("itemClick", selectRelationMenu); 
 		button.popUp = menu;
@@ -709,6 +711,14 @@
 					}
 				}
 				MainUndoStack.getGlobalStack().addAction(undo);
+				break;
+			
+			case 3:	// Delete relation
+				Alert.show("Do you really want to delete the relation?","Are you sure?",Alert.YES | Alert.CANCEL,null,
+					function(event:CloseEvent):void { 
+						if (event.detail==Alert.CANCEL) return;
+						rel.remove(MainUndoStack.getGlobalStack().addAction);
+					} );
 				break;
 		}
 	}
