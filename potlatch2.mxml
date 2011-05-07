@@ -15,15 +15,15 @@
 	<mx:Style source="styles/Application.css"/>
 
     <mx:Glow id="glowImage" duration="100" 
-        alphaFrom="0" alphaTo="0.8"
+        alphaFrom="0.3" alphaTo="1.0" 
         blurXFrom="0.0" blurXTo="5.0" 
         blurYFrom="0.0" blurYTo="5.0" 
-        color="0x009ADE"/>
+        color="0xFF8000"/>
     <mx:Glow id="unglowImage" duration="100" 
-        alphaFrom="0.8" alphaTo="0"
+        alphaFrom="1.0" alphaTo="0.3" 
         blurXFrom="5.0" blurXTo="0.0" 
         blurYFrom="5.0" blurYTo="0.0" 
-        color="0x009ADE"/>
+        color="0xFF8000"/>
     <mx:WipeLeft id="wipeOut" duration="250"/>
     <mx:WipeRight id="wipeIn" duration="250"/>
 
@@ -53,7 +53,6 @@
         <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
         <mx:Spacer width="100%"/>
-        <mx:Button id="findButton" label="Find" click="new FindDialog().init();" styleName="appBarButton" />		
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
@@ -69,11 +68,13 @@
         <mx:Canvas id="map_area" resize="onResizeMap()"
             top="0" left="0" width="100%" height="100%" dragEnter="dragEnterHandler(event);" dragDrop="dragDropHandler(event);">
         </mx:Canvas>
-        <mx:Image source="@Embed('embedded/zoom_in.png')" right="7" top="3" click="theMap.zoomIn();"
+        <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom in - currently z'+getScale()}" />
-        <mx:Image source="@Embed('embedded/zoom_out.png')" right="7" top="30" click="theMap.zoomOut();"
+        <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom out - currently z'+getScale()}" />
-        <mx:TextArea id="dataWorking" text="" right="35" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
+        <mx:Image source="@Embed('embedded/search.svg')" right="3" top="40" click="new FindDialog().init();"
+            rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="Find place" />
+        <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
         <mx:TextArea id="coordsbox" left="0" top="0" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="33"
@@ -88,6 +89,7 @@
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.save.SaveManager;
+		import net.systemeD.potlatch2.find.*;
 		import net.systemeD.potlatch2.collections.*;
 		import net.systemeD.potlatch2.controller.*;
 		import net.systemeD.potlatch2.help.*;
@@ -109,8 +111,6 @@
         import mx.core.DragSource;
         import mx.controls.Alert;
         import com.mindspace.l10n.events.LocaleEvent;
-		
-		import net.systemeD.potlatch2.find.*;
 
         public var theMap:Map;
         public var theController:EditController;

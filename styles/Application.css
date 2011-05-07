@@ -4,75 +4,106 @@ TitleWindow {
 	borderAlpha: 1;
 	borderThicknessLeft: 5;
 	borderThicknessRight: 5;
-	cornerRadius: 12px;
-	backgroundColor: #eeeeee;
-	borderColor: #dddddd;
-	color: #3b7700;
-	fontWeight: bold;
-	fontSize: 11pt;
+	cornerRadius: 0px;
+	borderColor: #6495ED;
+	titleStyleName: "titleHeader";
 }
 
-PopUpButton, Button {
+.titleHeader { font-size: 14; font-weight: bold; color: white; }
+
+.titleWindowButton { 
 	fontFamily: Arial;
 	fontSize: 11;
 	fontWeight: bold;
 	cornerRadius: 12;
-	paddingLeft: 10;
-	paddingRight: 10;
+	paddingLeft: 5;
+	paddingRight: 5;
 	highlightAlphas: 0, 0;
-	fillAlphas: 1, 1, 1, 1;
-	fillColors: #ffffff, #ffffff, #ffffff, #ffffff;
-	color: #51214d;
-	textRollOverColor: #51214d;
-	borderColor: #dddddd;
+	fillAlphas: 1,1;
+	fillColors: white, white;
+	color: black;
+	borderColor: haloBlue;
+}
+
+Button {
+	color: black;
+	textRollOverColor: black;
 }
 
 VScrollBar {
 	cornerRadius: 0;
 	highlightAlphas: 0, 0;
 	fillAlphas: 0, 0, 0, 0;
-	fillColors: #ffffff, #ffffff, #ffffff, #ffffff;
+	fillColors: white, white, white, white;
 	trackColors: #eeeeee, #eeeeee;
 	borderColor: #999999;
 	thumbOffset: 1;
+}
+
+CheckBox, List, StyleSelector, BackgroundSelector { color: black; }
+
+TabNavigator {
+	horizontalGap: 3;
 }
 
 TextInput {
 	color: #333333;
 }
 
+Label {
+	fontWeight: normal;
+}
+
 /* Main window */
 
 Application {
-	padding-left: 0;
-	padding-right: 0;
-	padding-top: 0;
-	padding-bottom: 0;
-	backgroundColor: #eeeeee;
-	backgroundGradientColors: #eeeeee, #eeeeee;
-	backgroundGradientAlphas: 1, 1;
-	themeColor: #bbbbbb;
-	color: #333333;
-	backgroundGradientAlphas: 0, 0;
+	padding-left: 4;
+	padding-right: 4;
+	padding-top: 2;
+	padding-bottom: 4;
+	backgroundColor: #6495ED;
+	themeColor: #0000ff;
 	borderStyle: none;
 	fontFamily: Arial;
 }
 
 HDividedBox {
 	dividerAlpha: 1;
-	dividerColor: #51214d;
-	backgroundColor: #009ade;
+	dividerColor: #0000ff;
+	backgroundColor: #6495ED;
+	dividerAffordance: 6;
+	horizontalGap: 6;
+/*   backgroundColor: #ffff99; */
 }
 
 ApplicationControlBar {
-	padding-top: 4;
-	padding-bottom: 1;
+	padding-top: 2;
+	padding-bottom: 0;
+	padding-left: 4;
+	padding-right: 4;
 	highlightAlphas: 0, 0;
 	fillAlphas: 1,1;
-	fillColors: #eeeeee, #eeeeee;
-	backgroundColor: #eeeeee;
+	fillColors: haloBlue, #6495ED;
+	/*fillColors: #ffffcc, #ffff99;*/
+	backgroundColor: #ffffcc;
 	dropShadowEnabled: false;
 	/*borderSkin: ClassReference("mx.skins.halo.ApplicationBackground");*/
+}
+
+.appBarButton {
+	fontFamily: Arial;
+	fontSize: 11;
+	fontWeight: bold;
+	cornerRadius: 12;
+	paddingLeft: 5;
+	paddingRight: 5;
+	highlightAlphas: 0, 0;
+	fillAlphas: 1,1;
+	fillColors: haloBlue, #6495ED;
+	color: white;
+	textRollOverColor: white;
+	disabledColor: #5555bb;
+	borderColor: haloBlue;
 }
 
 /* General text classes */
@@ -90,7 +121,8 @@ ApplicationControlBar {
 /* Drag-and-drop panel */
 
 .dndPanelTileList {
-	borderColor: #ffffff;
+	borderColor: #dddddd;
+	backgroundColor: #dddddd;
 }
 
 .dndEditorContainer {
@@ -98,8 +130,8 @@ ApplicationControlBar {
 	paddingTop: 3;
 	paddingLeft: 3;
 	paddingRight: 3;
-	backgroundColor: #eeeeee;
-	color: #3b7700;
+	backgroundColor: white;
+	color: #333333;
 	fontSize: 11;
 	fontWeight: bold;
 }
@@ -107,17 +139,19 @@ ApplicationControlBar {
 .dndPanelVbox {
 	paddingRight: 3;
 	paddingLeft: 3;
-	paddingTop: 15;
+	paddingTop: 5;
 	verticalGap: 0;
+	backgroundColor: #dddddd;
 	borderColor: #aaaaaa;
+	fontWeight: normal;
 }
 
 .catToggleButtonBar {
-	themeColor: #51214d;
+	themeColor: #0000ff;
 	buttonStyleName: "mytoggleButtonBarButtonStyle";
 }
 
-.mytoggleButtonBarButtonStyle { fillColors: #dddddd, #dddddd, #dddddd, #dddddd; }
+.mytoggleButtonBarButtonStyle { fillColors: #dddddd, #eeeeee, #eeeeee, #eeeeee; borderColor: white; }
 
 .catToggleTiles {
 	themeColor: #cccccc;
@@ -126,19 +160,20 @@ ApplicationControlBar {
 /* Drag-and-drop POI icons */
 
 .helpInfo {
-	fontSize: 13;
-	color: #777777;
-	textAlign: right;
-	paddingLeft: 30;
-	paddingRight: 15;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingBottom: 6;
 }
-
+.dndRepeater {
+}
+.dndPanelCategory {
+	backgroundColor: white;
+}
 .dndPanelCategoryLabel {
-	paddingTop: 9;
-	color: #3b7700;
+	paddingTop: 0;
+	color: #444444;
 	fontSize: 11;
 	fontWeight: bold;
-	paddingBottom: 0;
 }
 
 /* Simple tag view - header */
@@ -148,19 +183,21 @@ ApplicationControlBar {
 }
 
 .featureSelector {
-	paddingTop: 3;
+	paddingTop: 0;
 	paddingLeft: 3;
 	paddingRight: 3;
-	verticalAlign: middle;
+	paddingBottom: 7;
 }
 
 .dndTagPopUpMenu {
-	fillColors: #dddddd, #dddddd, #dddddd, #dddddd;
+	fillColors: white, white, white, white;
 	borderColor: #aaaaaa;
+	fontSize: 11;
+	fontWeight: bold;
 }
 
 .dndIconText {
-	color: #009ade;
+	color: black;
 	fontSize: 14;
 	fontWeight: bold;
 }
@@ -168,9 +205,10 @@ ApplicationControlBar {
 /* Simple tag view - editor container */
 
 .dndStackTab {
-	backgroundColor: #eeeeee;
+	backgroundColor: white;
 	themeColor: #bbbbbb;
 	cornerRadius: 0;
+	color: #333333;
 	borderColor: #999999;
 	tabStyleName: "myTabs";
 	firstTabStyleName: "myTabs";
@@ -178,37 +216,29 @@ ApplicationControlBar {
 	selectedTabTextStyleName: "mySelectedTabs";
 }
 
-.myTabs {
-	cornerRadius: 12;
-	fillColors: #ffffff, #ffffff;
-	borderColor: #999999;
-	themeColor: #999999;
-}
-
-.mySelectedTabs {}
+.myTabs { font-size: 11; font-weight: normal; cornerRadius: 0; fillColors: white, white; borderColor: #999999; themeColor: #999999; }
+.mySelectedTabs { fillColors: white, white; }
 
 .dndStackAccordion {
 	themeColor: #bbbbbb;
 	cornerRadius: 0;
 	borderColor: #999999;
+	headerStyleName: "accordionHeader";
 }
+
+.accordionHeader { fillColors: #888888, #999999; fillAlphas: 1,1; color: white; fontWeight: bold; fontSize: 11; }
 
 /* Toolbox */
 
 .theToolBox {
-	backgroundColor: #eeeeee;
-	cornerRadius: 12;
-	headerHeight: 21;
-	titleStyleName: "mypanelTitle";
-	borderAlpha: 1.0;
+	headerColors: haloBlue, #6495ED;
+	headerAlphas: 1,1;
+	headerHeight: 6;
+	borderThicknessRight: 0; borderThicknessLeft: 0; borderThicknessBottom: 0;
+	paddingLeft: 4; paddingTop: 4;
 }
 
-.mypanelTitle {
-	textAlign: center;
-	color: #3b7700;
-	fontSize: 11;
-	fontWeight: bold;
-}
+.mypanelTitle { textAlign: center; color: #333333; fontSize: 10; fontWeight: bold; }
 
 /* Help */
 
@@ -224,11 +254,8 @@ ApplicationControlBar {
 }
 
 .helpTN {
-	borderColor: #dddddd;
-	cornerRadius: 5px;
+	cornerRadius: 0px;
 	tabOffset: 10px;
-	color: #333333;
-	fontWeight: regular;
 }
 
 
