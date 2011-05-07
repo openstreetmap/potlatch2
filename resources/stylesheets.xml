@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <stylesheets>
-    <stylesheet>
-        <name>MapQuest UK</name>
-        <url>mapquest/mapquest-uk.css</url>
-    </stylesheet>
-    <stylesheet>
-        <name>MapQuest EU</name>
-        <url>mapquest/mapquest-eu.css</url>
-    </stylesheet>
-    <stylesheet>
-        <name>MapQuest US</name>
-        <url>mapquest/mapquest-us.css</url>
-    </stylesheet>
 	<stylesheet>
 		<name>Potlatch</name>
 		<url>stylesheets/potlatch.css</url>
