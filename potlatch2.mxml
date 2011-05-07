@@ -181,7 +181,7 @@
             theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
 
 			theMap.backdrop=b;
-			yahoo=new Yahoo(w,h,theMap);
+			yahoo=new Yahoo(theMap);
 			yahoo.hide();
 			_root.addChild(yahoo);
 			_root.addChild(theMap);
