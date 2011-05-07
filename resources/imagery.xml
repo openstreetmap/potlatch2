@@ -17,6 +17,11 @@
         <url>http://oatile1.mqcdn.com/naip/$z/$x/$y.png</url>
     </set>
 	<set>
+		<name>Yahoo</name>
+		<url>yahoo</url>
+		<sourcetag>yahoo</sourcetag>
+	</set>
+	<set>
 		<name>OSM - Mapnik</name>
 		<url>http://c.tile.openstreetmap.org/$z/$x/$y.png</url>
 	</set>
