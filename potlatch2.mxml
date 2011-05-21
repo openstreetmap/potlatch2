@@ -7,7 +7,7 @@
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off"
 	horizontalAlign="center" 
-	addedToStage="initApp()"
+	addedToStage="startInit()"
 	preloader="net.systemeD.potlatch2.Preloader">
 
     <map:LocalizationMap xmlns:map="l10n.map.*" />
@@ -125,13 +125,23 @@
 
         include "version.as";
 
-		private function initApp():void {
-
+		private function startInit():void {
             /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. */
             /* Change this to another locale (e.g. fr_FR) to see the differences. */
             if (loaderInfo.parameters['locale']) {
               dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
             }
+
+			// Load font and don't do anything until that's done
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, continueInit);
+			loader.load(new URLRequest("FontLibrary.swf"));
+		}
+		
+		private function continueInit(r:Event):void {
+			// Set font
+			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
+			Font.registerFont(FontLibrary.DejaVu);
 
 			Globals.vars.map_area = map_area;
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
@@ -165,16 +175,36 @@
 
 			// pass additional parameters to map
 			var params:Object={}; var k:String;
-			for (k in this.loaderInfo.parameters) {
-				params[k]=this.loaderInfo.parameters[k];
-			}
-			for (k in SharedObject.getLocal('user_state').data) {
-				params[k]=SharedObject.getLocal('user_state').data[k];
-			}
-			params['tileblocks']=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			for (k in this.loaderInfo.parameters) params[k]=this.loaderInfo.parameters[k];
+			for (k in SharedObject.getLocal('user_state').data) params[k]=SharedObject.getLocal('user_state').data[k];
 
-			// create map and Yahoo
+			// Create map
 			theMap=new Map(params);
+
+			// Initialise 900913 background
+			// >>>> REFACTOR: something odd about accessing map.tileparams here...
+			map.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			map.tileset.init(map.tileparams, false, 
+			                 initparams['background_dim']    ==null ? true  : initparams['background_dim'],
+			                 initparams['background_sharpen']==null ? false : initparams['background_sharpen']);
+
+			// Add core data layer
+			// >>>> REFACTOR: shouldn't be hardcoded to XMLConnection
+			var conn:Connection = new XMLConnection("Main", initparams['api'], initparams['policy'], initparams);
+            conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
+            conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
+            conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
+            conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
+            conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
+            conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
+			conn.addEventListener(MapEvent.ERROR, onMapError);
+			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
+			conn.addEventListener(AttentionEvent.ALERT, onAlert);
+			map.addLayer(conn,initparams['styleurl'],false);
+
+			// Set start position of map
+			// >>>> REFACTOR: what happens if lat/lon/zoom not supplied? (Hurleston GPX case)
+			map.init(initparams['lat'], initparams['lon'], initparams['zoom']);
 
             // Auto-load vector backgrounds from config
             // This could go spectacularly wrong if map.init completes before the event listener below is added
@@ -238,17 +268,6 @@
             theController = new EditController(theMap, tagViewer, toolbox);
             theController.setActive();
             
-            var conn:Connection = Connection.getConnectionInstance();
-            conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
-            conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
-            conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
-            conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
-            conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
-            conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
-			conn.addEventListener(MapEvent.ERROR, onMapError);
-			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
-			conn.addEventListener(AttentionEvent.ALERT, onAlert);
-
             // set the access token from saved cookie
             var tokenObject:SharedObject = SharedObject.getLocal("access_token");
             conn.setAccessToken(tokenObject.data["oauth_token"], tokenObject.data["oauth_token_secret"]);
@@ -448,11 +467,11 @@
             
             var createAction:CompositeUndoableAction = new CompositeUndoableAction("Create POI");
             
-            var node:Node = Connection.getConnectionInstance().createNode({}, lat, lon, createAction.push);
+            var node:Node = Connection.getConnection().createNode({}, lat, lon, createAction.push);
             for each ( var tag:Object in tags ) {
                 node.setTag(tag.k, tag.v, createAction.push);
             }
-			Connection.getConnectionInstance().registerPOI(node);
+			Connection.getConnection().registerPOI(node);
 			MainUndoStack.getGlobalStack().addAction(createAction);
             theController.setState(new SelectedPOINode(node));
         }
@@ -463,7 +482,7 @@
         }
 
         private function loadTrace(id:Number):void {
-            var conn:Connection = Connection.getConnectionInstance();
+            var conn:Connection = Connection.getConnection();
             conn.addEventListener(Connection.TRACES_LOADED, function (e:Event):void {
                 for each (var trace:Trace in conn.getTraces()) {
                     if (trace.id == id) { trace.addToMap(); }
