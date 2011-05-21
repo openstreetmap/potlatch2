@@ -223,7 +223,7 @@
 		public function doDelete():void {
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Delete objects");
 			for each (var entity:Entity in controller.state.selection) {
-				if (entity is Node) { controller.connection.unregisterPOI(Node(entity)); }
+				if (entity is Node) { entity.connection.unregisterPOI(Node(entity)); }
 				entity.remove(undo.push);
 			}
 			MainUndoStack.getGlobalStack().addAction(undo);

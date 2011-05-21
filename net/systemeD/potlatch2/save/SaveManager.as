@@ -33,6 +33,7 @@ package net.systemeD.potlatch2.save {
             var oauthPanel:OAuthPanel = OAuthPanel(
                 PopUpManager.createPopUp(Application(Application.application), OAuthPanel, true));
             PopUpManager.centerPopUp(oauthPanel);
+			oauthPanel.setConnection(_connection);
             
             var listener:Function = function(event:Event):void {
                 var accessToken:OAuthToken = oauthPanel.accessToken;

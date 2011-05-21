@@ -24,7 +24,6 @@ Global changes:
 - move lots of connection.map to connection.map.editableLayer
 - remove all references to getConnection etc. - there can now be more than one Connection
 - remove all back-references to Map except where necessary for lat/long/scale
-- Controllers are full of references to controller.map and to controller.connection
 - getParam is broken - there needs to be a global equivalent (not in Connection) for stuff sent via flashvars - i.e. loaderInfo.parameters (but that's Flex-only)
 - Look for Connection. - lots of static stuff which shouldn't be that any more
 

@@ -48,7 +48,7 @@ package net.systemeD.potlatch2.controller {
 
             if ( event.type == MouseEvent.MOUSE_UP && entity is Node && event.shiftKey ) {
 				// start new way
-				var way:Way = controller.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
+				var way:Way = entity.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
 				return new DrawWay(way, true, false);
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==firstSelected && event.shiftKey) {
 				// insert node within way (shift-click)

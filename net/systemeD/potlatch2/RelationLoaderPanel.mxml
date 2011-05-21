@@ -21,30 +21,30 @@
 		import mx.managers.PopUpManager;
 
 		private var entity:Entity;
+		private var connection:Connection;
 		private var relid:Number;
 		
 		public function setEntity(e:Entity):void {
 			entity=e;
+			connection=e.connection;
 		}
 
 		private function loadRelation():void {
 			relid = Number(requestedID.text);
 			PopUpManager.removePopUp(this);
 
-			var conn:Connection = Connection.getConnection();
 			if (!relid) return;
-			if (conn.getRelation(relid)) {
+			if (connection.getRelation(relid)) {
 				relationLoaded(null);
 			} else {
-				conn.loadEntityByID("relation",relid);
-				conn.addEventListener(Connection.LOAD_COMPLETED, relationLoaded);
+				connection.loadEntityByID("relation",relid);
+				connection.addEventListener(Connection.LOAD_COMPLETED, relationLoaded);
 			}
 		}
 		
 		private function relationLoaded(event:Event):void {
-			var conn:Connection = Connection.getConnection();
-			var relation:Relation = conn.getRelation(relid);
-			conn.removeEventListener(Connection.LOAD_COMPLETED, relationLoaded);
+			var relation:Relation = connection.getRelation(relid);
+			connection.removeEventListener(Connection.LOAD_COMPLETED, relationLoaded);
 			if (!relation) return;
 
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Add to relation");

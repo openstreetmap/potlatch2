@@ -65,9 +65,9 @@ package net.systemeD.potlatch2.controller {
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
-				case 67:	controller.connection.closeChangeset(); break;							// C - close changeset
+				case 67:	editableLayer.connection.closeChangeset(); break;						// C - close changeset
 				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
-				case 83:	SaveManager.saveChanges(controller.connection); break;					// S - save
+				case 83:	SaveManager.saveChanges(editableLayer.connection); break;				// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo
 				            else { MainUndoStack.getGlobalStack().redo(); return null;  }           // Shift-Z - redo 						
@@ -87,7 +87,7 @@ package net.systemeD.potlatch2.controller {
 			if ( paint && paint.isBackground ) {
 				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
-					var newEntity:Entity=paint.findSource().pullThrough(entity,controller.connection);
+					var newEntity:Entity=paint.findSource().pullThrough(entity,editableLayer.connection);
 					if (entity is Way) { return new SelectedWay(newEntity as Way); }
 					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
                 } else if (event.type == MouseEvent.MOUSE_DOWN && entity is Marker) {
@@ -206,7 +206,7 @@ package net.systemeD.potlatch2.controller {
 		protected function revertHandler(event:CloseEvent):void {
 			if (event.detail==Alert.CANCEL) return;
 			for each (var item:Entity in _selection) {
-				controller.connection.loadEntity(item);
+				item.connection.loadEntity(item);
 			}
 		}
 

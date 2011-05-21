@@ -23,7 +23,6 @@ package net.systemeD.potlatch2 {
 		private var toolbox:Toolbox;
         
         public var state:ControllerState;
-        private var _connection:Connection;
         
 		private var keys:Object={};
 		public var clipboards:Object={};
@@ -65,7 +64,6 @@ package net.systemeD.potlatch2 {
 
         public function setActive():void {
             map.setController(this);
-            _connection = map.connection;
         }
 
         /** Accesses map object. */
@@ -73,11 +71,6 @@ package net.systemeD.potlatch2 {
             return _map;
         }
         
-        /** Accesss connection object. */
-        public function get connection():Connection {
-            return _connection;
-        }
-
         /**
         * Updates the various user interfaces that change when the selection changes.
         * Currently this is the TagViewer and the Toolbox

@@ -30,8 +30,7 @@
 	}
 
 	public function addNewTurnRestriction():void {
-		var conn:Connection = Connection.getConnection();
-		var relation:Relation = conn.createRelation(
+		var relation:Relation = _entity.connection.createRelation(
 			{ type: 'restriction' }, 
 			[ new RelationMember(_entity, 'via') ],
             MainUndoStack.getGlobalStack().addAction);

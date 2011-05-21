@@ -49,7 +49,7 @@ package net.systemeD.potlatch2.controller {
 
             if ( event.type == MouseEvent.MOUSE_UP && entity is Node && event.shiftKey ) {
 				// start new way
-                var way:Way = controller.connection.createWay({}, [entity],
+                var way:Way = entity.connection.createWay({}, [entity],
                     MainUndoStack.getGlobalStack().addAction);
                 return new DrawWay(way, true, false);
 			} else if ( event.type == MouseEvent.MOUSE_UP && entity is Node && focus == parentWay ) {
@@ -180,7 +180,7 @@ package net.systemeD.potlatch2.controller {
             var q:Point = map.localToGlobal(p);
 
             // First, look for POI nodes in 20x20 pixel box around the current node
-            var hitnodes:Array = controller.connection.getObjectsByBbox(
+            var hitnodes:Array = editableLayer.connection.getObjectsByBbox(
                 map.coord2lon(p.x-10),
                 map.coord2lon(p.x+10),
                 map.coord2lat(p.y-10),

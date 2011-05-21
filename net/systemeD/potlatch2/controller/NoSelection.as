@@ -26,11 +26,12 @@ package net.systemeD.potlatch2.controller {
 			if (event.type==MouseEvent.MOUSE_UP && (focus==null || (paint && paint.isBackground)) && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
 				var undo:CompositeUndoableAction = new BeginWayAction();
-				var startNode:Node = controller.connection.createNode(
+				var conn:Connection = editableLayer.connection;
+				var startNode:Node = conn.createNode(
 					{}, 
 					controller.map.coord2lat(event.localY),
 					controller.map.coord2lon(event.localX), undo.push);
-				var way:Way = controller.connection.createWay({}, [startNode], undo.push);
+				var way:Way = conn.createWay({}, [startNode], undo.push);
 				MainUndoStack.getGlobalStack().addAction(undo);
 				return new DrawWay(way, true, false);
 			}

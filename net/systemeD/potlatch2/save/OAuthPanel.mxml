@@ -86,9 +86,13 @@
         
         private function getAuthText():String {
             return "To save data you must authorise this application to edit "+
-                    Connection.serverName + " on your behalf.";
+                    connection.serverName + " on your behalf.";
         }
         
+		public function setConnection(connection:Connection):void {
+			this.connection=connection;
+		}
+
         private function openURL(url:String):void {
 			if (ExternalInterface.available) {
 				var winH:int = 560;
@@ -105,8 +109,6 @@
 		}
         
         private function getRequestToken():void {
-            connection = Connection.getConnection();
-            
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
             var url:String = Connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
@@ -192,7 +194,7 @@
             PopUpManager.removePopUp(this);
             
             _accessToken = getResponseToken(URLLoader(event.target));
-            Connection.getConnection().setAuthToken(_accessToken);
+            connection.setAuthToken(_accessToken);
             dispatchEvent(new Event(ACCESS_TOKEN_EVENT));
         }
         

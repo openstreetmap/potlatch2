@@ -43,7 +43,7 @@ package net.systemeD.potlatch2.controller {
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
-            var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
+            var node:Node = selectedWay.connection.createNode({}, lat, lon, undo.push);
             var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
 			for each (w in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
             MainUndoStack.getGlobalStack().addAction(undo);
@@ -59,7 +59,7 @@ package net.systemeD.potlatch2.controller {
                 	return new SelectedWayNode(parentWay,draggingIndex);
 				} else if (event.shiftKey && !isNew) {
 					// start new way
-					var way:Way = controller.connection.createWay({}, [entity],
+					var way:Way = entity.connection.createWay({}, [entity],
 					    MainUndoStack.getGlobalStack().addAction);
 					return new DrawWay(way, true, false);
 				} else if (event.shiftKey && isNew) {
