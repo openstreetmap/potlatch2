@@ -5,6 +5,7 @@ Potlatch 2: main outstanding issues
 
 * P1-style J (join)
 * Doing a '-' to remove a point from a junction doesn't redraw the point on other ways
+* Circularise doesn't redraw the nodes on the selected way
 
 == Vector background layers ==
 

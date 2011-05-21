@@ -38,7 +38,6 @@ package net.systemeD.halcyon.connection {
 
             var mapVars:URLVariables = new URLVariables();
             mapVars.bbox= left+","+bottom+","+right+","+top;
-trace("requesting "+mapVars.bbox);
 
             var mapRequest:URLRequest = new URLRequest(apiBaseURL+"map");
             mapRequest.data = mapVars;
