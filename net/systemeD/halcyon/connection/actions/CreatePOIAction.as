@@ -10,9 +10,11 @@ package net.systemeD.halcyon.connection.actions {
 		private var tags:Object;
 		private var lat:Number;
 		private var lon:Number;
+		private var connection:Connection;
         
-        public function CreatePOIAction(tags:Object, lat:Number, lon:Number) {
+        public function CreatePOIAction(connection:Connection, tags:Object, lat:Number, lon:Number) {
           super("Create POI");
+          this.connection = connection;
           this.tags = tags;
           this.lat = lat;
           this.lon = lon;
@@ -20,17 +22,17 @@ package net.systemeD.halcyon.connection.actions {
         
         public override function doAction():uint {
           if (newNode == null) {
-            newNode = Connection.getConnection().createNode(tags,lat,lon,push);
+            newNode = connection.createNode(tags,lat,lon,push);
           }
           super.doAction();
-          Connection.getConnection().registerPOI(newNode);
+          connection.registerPOI(newNode);
           
           return SUCCESS;
         }
         
         public override function undoAction():uint {
           super.undoAction();
-          Connection.getConnection().unregisterPOI(newNode);
+          connection.unregisterPOI(newNode);
           
           return SUCCESS;
         }

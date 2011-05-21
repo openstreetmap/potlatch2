@@ -67,7 +67,7 @@ package net.systemeD.potlatch2.controller {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
 				case 67:	controller.connection.closeChangeset(); break;							// C - close changeset
 				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
-				case 83:	SaveManager.saveChanges(); break;										// S - save
+				case 83:	SaveManager.saveChanges(controller.connection); break;					// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo
 				            else { MainUndoStack.getGlobalStack().redo(); return null;  }           // Shift-Z - redo 						

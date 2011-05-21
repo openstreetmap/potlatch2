@@ -74,7 +74,8 @@ package net.systemeD.potlatch2.collections {
 		}
 
 		public function setStylesheet(name:String,url:String):void {
-			_map.setStyle(url);
+			_map.editableLayer.setStyle(url);
+			// >>>> REFACTOR: not great to have a reference to editableLayer in here
 			var obj:SharedObject = SharedObject.getLocal("user_state");
 			obj.setProperty("stylesheet_url",url);
 			obj.setProperty("stylesheet_name",name);

@@ -202,9 +202,9 @@ package net.systemeD.halcyon.connection {
             if (this is Node) {
                 var n:Node = Node(this);
                 if (isDeleted) {
-                    Connection.getConnection().removeDupe(n);
+                    connection.removeDupe(n);
                 } else {
-                    Connection.getConnection().addDupe(n);
+                    connection.addDupe(n);
                 }
             }
         }

@@ -47,13 +47,12 @@ package net.systemeD.halcyon.connection {
 		public function OSMConnection(name:String,api:String,policy:String,initparams:Object) {
 
 			super(name,api,policy,initparams);
-			if (Connection.policyURL!='')
-                Security.loadPolicyFile(Connection.policyURL);
+			if (policyURL!='') Security.loadPolicyFile(policyURL);
 
-            tileResolution = Number(Connection.getParam("tile_resolution", "0.2"));
+            tileResolution = Number(getParam("tile_resolution", "0.2"));
 
 			var o:Object = new Object();
-			var files:String = Connection.getParam("files","");
+			var files:String = getParam("files","");
 			if (files=="") {
 				filemode=TILED;
 			} else {

@@ -4,14 +4,10 @@ Aims:
 - to enable multiple Maps to be shown on-screen (e.g. for junction editor)
 - to bring Connection and VectorLayer code together
 
-==== think what to do about controllers ====
-
-
 Map.as changes:
 becomes a collection of MapPaint objects, all with the same lat/long/scale
 (plus a backdrop sprite and a background imagery sprite)
 √ move listeners to Connection to MapPaint (e.g. new way created in the Connection - MapPaint should know about it, not Map)
-- refactor tileset/setbackground stuff?
 
 MapPaint.as changes:
 - gains a reference to a Connection - i.e. the source data for this layer
@@ -29,4 +25,10 @@ Global changes:
 - remove all references to getConnection etc. - there can now be more than one Connection
 - remove all back-references to Map except where necessary for lat/long/scale
 - Controllers are full of references to controller.map and to controller.connection
-- move AttentionEvent stuff
+- getParam is broken - there needs to be a global equivalent (not in Connection) for stuff sent via flashvars - i.e. loaderInfo.parameters (but that's Flex-only)
+- Look for Connection. - lots of static stuff which shouldn't be that any more
+
+Further refactoring probably needed:
+- move AttentionEvent stuff (some may be commented out)
+- Traces (e.g. in potlatch2.mxml) - seems a bit mixed up
+- refactor tileset/setbackground stuff?

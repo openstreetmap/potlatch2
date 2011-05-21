@@ -31,7 +31,6 @@ package net.systemeD.halcyon.connection {
         }
 
         private function setLatLonImmediate(lat:Number, lon:Number):void {
-            var connection:Connection = Connection.getConnection();
             connection.removeDupe(this);
             this._lat = lat;
             this._latproj = lat2latp(lat);
@@ -89,7 +88,6 @@ package net.systemeD.halcyon.connection {
         */
         public function join(ways:Array, performAction:Function):void {
             if (this.isDupe() || ways.length > 0) {
-              var connection:Connection = Connection.getConnection();
               var nodes:Array = connection.getNodesAtPosition(lat,lon);
               // filter the nodes array to remove any occurances of this.
               // Pass "this" as thisObject to get "this" into the callback function
@@ -111,7 +109,6 @@ package net.systemeD.halcyon.connection {
         }
 
         public function isDupe():Boolean {
-            var connection:Connection = Connection.getConnection();
             if (connection.getNode(this.id) == this // node could be part of a vector layer
                 && connection.nodesAtPosition(lat, lon) > 1) {
               return true;

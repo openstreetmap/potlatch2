@@ -76,8 +76,6 @@ package net.systemeD.halcyon {
 		public var tileset:TileSet; 
 		/** background tile URL, name and scheme */
 		private var tileparams:Object={ url:'' }; 
-		/** internal style URL */
-		private var styleurl:String=''; 
 		/** show all objects, even if unstyled? */
 		public var showall:Boolean=true; 
 		
@@ -228,7 +226,7 @@ package net.systemeD.halcyon {
 		public function download():void {
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				paintContainer.getChildAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+				getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
 		}
 
         // Handle mouse events on ways/nodes
@@ -248,19 +246,14 @@ package net.systemeD.halcyon {
 		// Add layers
 		
 		public function addLayer(connection:Connection, styleurl:String, backgroundlayer:Boolean=true):void {
-			var paint:MapPaint=new MapPaint(this,connection,-5,5);
+			var paint:MapPaint=new MapPaint(this, connection, styleurl, -5, 5);
 			paintContainer.addChild(paint);
 			paint.isBackground=backgroundlayer;
-			if (styleurl) {
-				// if we've only just set up paint, then setStyle won't have created the RuleSet
-				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-				paint.ruleset.loadFromCSS(styleurl);
-			}
 		}
 
 		public function removeLayerByName(name:String):void {
 			for (var i:uint=0; i<paintContainer.numChildren; i++) {
-				if (paintContainer.getChildAt(i).connection.name==name)
+				if (getLayerAt(i).connection.name==name)
 					paintContainer.removeChildAt(i);
 					// >>>> REFACTOR: needs to do the equivalent of VectorLayer.blank()
 			}
@@ -268,18 +261,21 @@ package net.systemeD.halcyon {
 		
 		public function findLayer(name:String):MapPaint {
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				if (paintContainer.getChildAt(i).connection.name==name) return paintContainer.getChildAt(i);
+				if (getLayerAt(i).connection.name==name) return getLayerAt(i);
 			return null;
+		}
+
+		private function getLayerAt(i:uint):MapPaint {
+			return MapPaint(paintContainer.getChildAt(i));
 		}
 		
 		/* Find which layer is editable */
 		public function get editableLayer():MapPaint {
 			var editableLayer:MapPaint;
 			for (var i:uint=0; i<paintContainer.numChildren; i++) {
-				layer=paintContainer.getChildAt(i);
-				if (!layer.isBackground) {
+				if (!getLayerAt(i).isBackground) {
 					if (editableLayer) trace("Multiple editable layers found");
-					editableLayer=layer;
+					editableLayer=getLayerAt(i);
 				}
 			}
 			return editableLayer;
@@ -290,15 +286,15 @@ package net.systemeD.halcyon {
 		
 		private function updateAllEntityUIs(redraw:Boolean,remove:Boolean):void {
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				paintContainer.getChildAt(i).updateEntityUIs(redraw, remove);
+				getLayerAt(i).updateEntityUIs(redraw, remove);
 		}
 		public function redraw():void {
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				paintContainer.getChildAt(i).redraw();
+				getLayerAt(i).redraw();
 		}
 		public function redrawPOIs():void { 
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				paintContainer.getChildAt(i).redrawPOIs();
+				getLayerAt(i).redrawPOIs();
 		}
 		
 		public function zoomIn():void {
@@ -318,15 +314,6 @@ package net.systemeD.halcyon {
 			updateAllEntityUIs(true,true);
 			download();
 		}
-
-		/** Switch to new MapCSS. */
-		public function setStyle(url:String):void {
-			styleurl=url;
-			if (paint) { 
-				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-				paint.ruleset.loadFromCSS(url);
-			}
-        }
 
 		/** Select a new background imagery. */
 		public function setBackground(bg:Object):void {

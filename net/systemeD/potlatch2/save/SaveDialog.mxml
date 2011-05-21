@@ -83,11 +83,15 @@
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.AttentionEvent;
     
-    private var conn:Connection = Connection.getConnection();
+    private var _connection:Connection;
 	private var doSkip:Boolean = false;
     
     [Bindable]
     private var failureText:String = "";
+
+	public function setConnection(connection:Connection):void {
+		_connection=connection;
+	}
 
 	public function dontPrompt():void {
 		if (processSequence.initialized) { skipInput(); } else { doSkip=true; }
@@ -131,9 +135,9 @@
         }
         
         // add the listeners
-        conn.addEventListener(Connection.NEW_CHANGESET, changesetCreated);
-        conn.addEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
-        conn.createChangeset(tags);
+        _connection.addEventListener(Connection.NEW_CHANGESET, changesetCreated);
+        _connection.addEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
+        _connection.createChangeset(tags);
     }
 
     private function allowForEdit(event:DataGridEvent):void {
@@ -159,12 +163,12 @@
     }
 
     private function changesetCreated(event:EntityEvent=null):void {
-        var changeset:Changeset = conn.getActiveChangeset();
+        var changeset:Changeset = _connection.getActiveChangeset();
         addStatus("Saving to changeset "+changeset.id);
         
         saveProgress.label = "Uploading changes";
-        conn.addEventListener(Connection.SAVE_COMPLETED, saveCompleted);
-        conn.uploadChanges();
+        _connection.addEventListener(Connection.SAVE_COMPLETED, saveCompleted);
+        _connection.uploadChanges();
     }
     
     private function changesetError(event:Event):void {
@@ -173,7 +177,7 @@
     
     private function saveCompleted(event:SaveCompleteEvent):void {
         if ( event.saveOK ) {
-			conn.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Changes successfully saved"));
+			_connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Changes successfully saved"));
             close();
         } else {
             fail("Failure when uploading data");
@@ -195,9 +199,9 @@
     }
     
     private function close():void {
-        conn.removeEventListener(Connection.NEW_CHANGESET, changesetCreated);
-        conn.removeEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
-        conn.removeEventListener(Connection.SAVE_COMPLETED, saveCompleted);
+        _connection.removeEventListener(Connection.NEW_CHANGESET, changesetCreated);
+        _connection.removeEventListener(Connection.NEW_CHANGESET_ERROR, changesetError);
+        _connection.removeEventListener(Connection.SAVE_COMPLETED, saveCompleted);
         PopUpManager.removePopUp(this);
     }
   ]]></mx:Script>

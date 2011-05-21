@@ -56,6 +56,7 @@ package net.systemeD.potlatch2.controller {
                             MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
                             
                             var newPoiAction:CreatePOIAction = new CreatePOIAction(
+								editableLayer.connection,
 								{},
 								controller.map.coord2lat(event.localY),
 								controller.map.coord2lon(event.localX));

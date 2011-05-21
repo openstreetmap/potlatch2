@@ -23,12 +23,14 @@ package net.systemeD.halcyon.connection {
         private var _filename:String;
         private var _traceData:String;
         private var map:Map;
+        private var _connection:Connection;
         private var _layer:VectorLayer;
         private var simplify:Boolean = false;
 
         private static const STYLESHEET:String="stylesheets/gpx.css";
 
-        public function Trace() {
+        public function Trace(connection:Connection) {
+			_connection = connection;
             map = Globals.vars.root;
         }
 
@@ -61,7 +63,7 @@ package net.systemeD.halcyon.connection {
 
         private function fetchFromServer():void {
             // todo - needs proper error handling
-            Connection.getConnection().fetchTrace(id, saveTraceData);
+            _connection.fetchTrace(id, saveTraceData);
             dispatchEvent(new Event("loading_data"));
         }
 

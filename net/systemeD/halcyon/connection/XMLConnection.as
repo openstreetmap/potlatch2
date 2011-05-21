@@ -19,12 +19,10 @@ package net.systemeD.halcyon.connection {
 		public function XMLConnection(name:String,api:String,policy:String,initparams:Object) {
 
 			super(name,api,policy,initparams);
-			if (Connection.policyURL!='')
-                Security.loadPolicyFile(Connection.policyURL);
-            var oauthPolicy:String = Connection.getParam("oauth_policy", "");
-            if ( oauthPolicy != "" ) {
-                Security.loadPolicyFile(oauthPolicy);
-            }
+			if (policyURL != "") Security.loadPolicyFile(policyURL);
+
+            var oauthPolicy:String = getParam("oauth_policy", "");
+            if (oauthPolicy != "") Security.loadPolicyFile(oauthPolicy);
 		}
 		
 		override public function loadBbox(left:Number,right:Number,
@@ -441,7 +439,7 @@ package net.systemeD.halcyon.connection {
             clearTraces();
             var files:XML = new XML(URLLoader(event.target).data);
             for each(var traceData:XML in files.gpx_file) {
-              var t:Trace = new Trace().fromXML(traceData);
+              var t:Trace = new Trace(this).fromXML(traceData);
               addTrace(t);
             }
             traces_loaded = true;

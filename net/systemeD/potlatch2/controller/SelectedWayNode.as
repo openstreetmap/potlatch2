@@ -180,7 +180,7 @@ package net.systemeD.potlatch2.controller {
             var q:Point = map.localToGlobal(p);
 
             // First, look for POI nodes in 20x20 pixel box around the current node
-            var hitnodes:Array = map.connection.getObjectsByBbox(
+            var hitnodes:Array = controller.connection.getObjectsByBbox(
                 map.coord2lon(p.x-10),
                 map.coord2lon(p.x+10),
                 map.coord2lat(p.y-10),
@@ -221,7 +221,7 @@ package net.systemeD.potlatch2.controller {
             if (MergeNodesAction.lastProblemTags) {
                 msg += " *Warning* The following tags conflicted and need attention: " + MergeNodesAction.lastProblemTags;
             }
-            map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+            // somethingorother.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
         }
         

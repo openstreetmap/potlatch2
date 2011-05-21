@@ -49,7 +49,7 @@ package net.systemeD.halcyon {
 		 * @param minlayer The lowest OSM layer to display.
 		 * @param maxlayer The highest OSM layer to display.
 		 * */ 
-		public function MapPaint(map:Map,connection:Connection,minlayer:int,maxlayer:int) {
+		public function MapPaint(map:Map, connection:Connection, styleurl:String, minlayer:int, maxlayer:int) {
 			mouseEnabled=false;
 
 			this.map=map;
@@ -58,6 +58,10 @@ package net.systemeD.halcyon {
 			this.maxlayer=maxlayer;
 			sublayerIndex[1]=0;
 			var s:Sprite, l:int;
+
+			// Set up stylesheet
+			ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
+			ruleset.loadFromCSS(styleurl);
 
 			// Listen for changes on this Connection
             connection.addEventListener(Connection.NEW_WAY, newWayCreatedListener);
@@ -335,6 +339,12 @@ package net.systemeD.halcyon {
             for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 		
+		/** Switch to new MapCSS. */
+		public function setStyle(url:String):void {
+			ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
+			ruleset.loadFromCSS(url);
+        }
+
 		// >>>> REFACTOR: remove this
 		public function findSource():VectorLayer {
 			var v:VectorLayer;

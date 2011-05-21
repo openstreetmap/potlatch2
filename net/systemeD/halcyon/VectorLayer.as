@@ -170,7 +170,7 @@ package net.systemeD.halcyon {
 				oldNode=Node(entity);
 				unregisterPOI(oldNode);
 				var newPoiAction:CreatePOIAction = new CreatePOIAction(
-					oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
+					this, oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
 				MainUndoStack.getGlobalStack().addAction(newPoiAction);
 				paint.deleteNodeUI(oldNode);
 				delete nodes[oldNode.id];

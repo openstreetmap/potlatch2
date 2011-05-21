@@ -28,8 +28,7 @@ package net.systemeD.halcyon.connection {
 		public function AMFConnection(name:String,api:String,policy:String,initparams:Object) {
 
 			super(name,api,policy,initparams);
-			if (Connection.policyURL!='')
-                Security.loadPolicyFile(Connection.policyURL);
+			if (policyURL!='') Security.loadPolicyFile(policyURL);
 
 			readConnection=new NetConnection();
 			readConnection.objectEncoding = flash.net.ObjectEncoding.AMF0;
