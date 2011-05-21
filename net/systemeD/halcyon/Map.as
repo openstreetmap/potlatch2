@@ -75,7 +75,7 @@ package net.systemeD.halcyon {
 		/** background tile object */
 		public var tileset:TileSet; 
 		/** background tile URL, name and scheme */
-		private var tileparams:Object={ url:'' }; 
+		public var tileparams:Object={ url:'' }; 
 		/** show all objects, even if unstyled? */
 		public var showall:Boolean=true; 
 		
@@ -224,6 +224,7 @@ package net.systemeD.halcyon {
         * The bounding box for the download is taken from the current map edges.
         */
 		public function download():void {
+trace("download "+edge_l+","+edge_r+","+edge_t+","+edge_b)
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
 				getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);

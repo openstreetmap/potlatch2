@@ -7,6 +7,7 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.AttentionEvent;
     import net.systemeD.halcyon.MapEvent;
     import net.systemeD.halcyon.connection.actions.*;
+    import net.systemeD.halcyon.Globals;
 
 	public class Connection extends EventDispatcher {
 
@@ -24,7 +25,9 @@ package net.systemeD.halcyon.connection {
 		}
 
         public function getParam(name:String, defaultValue:String):String {
-            return params[name] == null ? defaultValue : params[name];
+			if (params[name]) return params[name];
+			if (Globals.vars.flashvars[name]) return Globals.vars.flashvars[name];
+			return defaultValue;
         }
 
         public function get apiBase():String {

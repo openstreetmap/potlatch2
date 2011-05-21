@@ -37,7 +37,7 @@
 		          else if (event.index==1) { new MyGpxDialog().init(); } 
 		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
 		    	                             mx.controls.Menu(gpsButton.popUp).selectedIndex=0; /* Yes, we do need to call it twice */
-		    	                             theMap.removeVectorLayer(theMap.findVectorLayer('GPS tracks')); }">
+		    	                             theMap.removeLayerByName('GPS tracks'); }">
 			<mx:dataProvider>
 				<mx:Array>
 					<mx:Object label="GPS data" id="gpsData" />
@@ -147,6 +147,7 @@
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
 			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
 			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
+			Globals.vars.flashvars = loaderInfo.parameters;
 
 			// populate sharedObject with loaderInfo parameters if supplied
 			var obj:SharedObject = SharedObject.getLocal("user_state");
@@ -179,18 +180,26 @@
 			for (k in SharedObject.getLocal('user_state').data) params[k]=SharedObject.getLocal('user_state').data[k];
 
 			// Create map
-			theMap=new Map(params);
+			theMap=new Map();
+			theMap.backdrop=b;
+            theMap.updateSize(w,h);
+			theMap.addEventListener(MapEvent.SCALE, scaleHandler);
+
+			yahoo=new Yahoo(theMap);
+			yahoo.hide();
+			_root.addChild(yahoo);
+			_root.addChild(theMap);
 
 			// Initialise 900913 background
 			// >>>> REFACTOR: something odd about accessing map.tileparams here...
-			map.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
-			map.tileset.init(map.tileparams, false, 
-			                 initparams['background_dim']    ==null ? true  : initparams['background_dim'],
-			                 initparams['background_sharpen']==null ? false : initparams['background_sharpen']);
+			theMap.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			theMap.tileset.init(theMap.tileparams, false, 
+			                    params['background_dim']    ==null ? true  : params['background_dim'],
+			                    params['background_sharpen']==null ? false : params['background_sharpen']);
 
 			// Add core data layer
 			// >>>> REFACTOR: shouldn't be hardcoded to XMLConnection
-			var conn:Connection = new XMLConnection("Main", initparams['api'], initparams['policy'], initparams);
+			var conn:Connection = new XMLConnection("Main", params['api'], params['policy'], params);
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
             conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
             conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
@@ -200,23 +209,16 @@
 			conn.addEventListener(MapEvent.ERROR, onMapError);
 			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
 			conn.addEventListener(AttentionEvent.ALERT, onAlert);
-			map.addLayer(conn,initparams['styleurl'],false);
+			// >>>> REFACTOR: shouldn't be trying to find out stylesheet from here
+			theMap.addLayer(conn,params['styleurl'] ? params['styleurl'] : 'stylesheets/potlatch.css',false);
 
 			// Set start position of map
 			// >>>> REFACTOR: what happens if lat/lon/zoom not supplied? (Hurleston GPX case)
-			map.init(initparams['lat'], initparams['lon'], initparams['zoom']);
+			theMap.init(params['lat'], params['lon'], params['zoom']);
 
             // Auto-load vector backgrounds from config
             // This could go spectacularly wrong if map.init completes before the event listener below is added
             theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
-
-			theMap.backdrop=b;
-			yahoo=new Yahoo(theMap);
-			yahoo.hide();
-			_root.addChild(yahoo);
-			_root.addChild(theMap);
-            theMap.updateSize(w,h);
-			theMap.addEventListener(MapEvent.SCALE, scaleHandler);
 
 			// add attribution/logo sprite
 			var overlay:Sprite=new Sprite();
@@ -278,7 +280,7 @@
                 if (conn.hasAccessToken()) { 
                     loadTrace(id);
                 } else {
-                    SaveManager.ensureAccess(function ():void { loadTrace(id); });
+                    SaveManager.ensureAccess(function ():void { loadTrace(id); }, conn);
                 }
             }
 
@@ -289,7 +291,8 @@
 				var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [vectorlayer.url], 
 				                                    function(success:Boolean,message:String=null):void {
 					if (!success) return;
-					theMap.addVectorLayer(vectorlayer);
+					// >>>> REFACTOR: vectorlayer commented out
+//					theMap.addVectorLayer(vectorlayer);
 					dispatchEvent(new Event("layers_changed"));
 				                                    }, false);
 			}
@@ -301,7 +304,7 @@
             // force_auth == force => checks for access token, and displays OAuth panel if needed
             var force_auth:String = loaderInfo.parameters["force_auth"];
             if (!conn.hasAccessToken() && force_auth == 'force') {
-              SaveManager.ensureAccess(onAccessChecked);
+              SaveManager.ensureAccess(onAccessChecked, conn);
             }
 
             // show help dialog on startup, if required

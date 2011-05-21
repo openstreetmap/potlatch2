@@ -37,7 +37,8 @@ package net.systemeD.halcyon {
 			name=n;
 			map=m;
 			style=s;
-			paint=new MapPaint(m,0,0);
+				// >>>> REFACTOR: VectorLayer commented out
+//			paint=new MapPaint(m,0,0);
 			redrawFromCSS(style);
 		}
 
@@ -52,9 +53,11 @@ package net.systemeD.halcyon {
         * e.g. <code>layer.paint.updateEntityUIs(...);</code>
         */
 		public function createNode(tags:Object,lat:Number,lon:Number):Node {
-			var node:Node = new Node(this, negativeID, 0, tags, true, lat, lon);
-			nodes[negativeID]=node; negativeID--;
-			return node;
+				// >>>> REFACTOR: VectorLayer commented out
+//			var node:Node = new Node(this, negativeID, 0, tags, true, lat, lon);
+//			nodes[negativeID]=node; negativeID--;
+//			return node;
+			return null;
 		}
 
         /**
@@ -62,9 +65,11 @@ package net.systemeD.halcyon {
         * @param nodes An array of Node objects
         */
 		public function createWay(tags:Object,nodes:Array):Way {
-			var way:Way = new Way(this, negativeID, 0, tags, true, nodes.concat());
-			ways[negativeID]=way; negativeID--;
-			return way;
+				// >>>> REFACTOR: VectorLayer commented out
+//			var way:Way = new Way(this, negativeID, 0, tags, true, nodes.concat());
+//			ways[negativeID]=way; negativeID--;
+//			return way;
+			return null;
 		}
 
         /**
@@ -72,9 +77,11 @@ package net.systemeD.halcyon {
         * @param members An array of RelationMember objects
         */
 		public function createRelation(tags:Object,members:Array):Relation {
-            var relation:Relation = new Relation(this, negativeID, 0, tags, true, members.concat());
-			relations[negativeID]=relation; negativeID--;
-            return relation;
+				// >>>> REFACTOR: VectorLayer commented out
+//			var relation:Relation = new Relation(this, negativeID, 0, tags, true, members.concat());
+//			relations[negativeID]=relation; negativeID--;
+//			return relation;
+			return null;
 		}
 
         /**
@@ -91,12 +98,14 @@ package net.systemeD.halcyon {
               id = negativeID;
               negativeID--;
             }
-            var marker:Marker = markers[id];
-            if (marker == null) {
-              marker = new Marker(this, id, 0, tags, true, lat, lon);
-              markers[id]=marker;
-            }
-            return marker;
+				// >>>> REFACTOR: VectorLayer commented out
+//            var marker:Marker = markers[id];
+//            if (marker == null) {
+//              marker = new Marker(this, id, 0, tags, true, lat, lon);
+//              markers[id]=marker;
+//            }
+//            return marker;
+			return null;
         }
 
         public function registerPOI(node:Node):void {
@@ -161,7 +170,7 @@ package net.systemeD.halcyon {
 				}
 				paint.wayuis[oldWay.id].redraw();
 				delete ways[oldWay.id];
-				map.paint.createWayUI(newWay);
+				paint.createWayUI(newWay);
 				return newWay;
 
 			} else if (entity is Node && !entity.hasParentWays) {
@@ -169,12 +178,14 @@ package net.systemeD.halcyon {
 				// ** should be properly undoable
 				oldNode=Node(entity);
 				unregisterPOI(oldNode);
-				var newPoiAction:CreatePOIAction = new CreatePOIAction(
-					this, oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
-				MainUndoStack.getGlobalStack().addAction(newPoiAction);
-				paint.deleteNodeUI(oldNode);
-				delete nodes[oldNode.id];
-				return newPoiAction.getNode();
+				// >>>> REFACTOR: VectorLayer commented out
+//				var newPoiAction:CreatePOIAction = new CreatePOIAction(
+//					this, oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
+//				MainUndoStack.getGlobalStack().addAction(newPoiAction);
+//				paint.deleteNodeUI(oldNode);
+//				delete nodes[oldNode.id];
+//				return newPoiAction.getNode();
+				return null;
 			}
 			return null;
 		}

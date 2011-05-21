@@ -33,15 +33,15 @@ package net.systemeD.potlatch2.utils {
 
 
         private function get layer():VectorLayer {
-            if (!_layer) {
-
-                var policyFile:String = bugBaseURL+"crossdomain.xml";
-                Security.loadPolicyFile(policyFile);
-
-                _layer=new BugLayer(name,map,STYLESHEET,bugBaseURL,bugApiKey,bugDetailsURL);
-                map.addVectorLayer(_layer);
-            }
-            return _layer;
+			// >>>> REFACTOR: VectorLayer commented out
+            // if (!_layer) {
+            //     var policyFile:String = bugBaseURL+"crossdomain.xml";
+            //     Security.loadPolicyFile(policyFile);
+            //     _layer=new BugLayer(name,map,STYLESHEET,bugBaseURL,bugApiKey,bugDetailsURL);
+            //     map.addVectorLayer(_layer);
+            // }
+            // return _layer;
+			return null;
         }
     }
 }

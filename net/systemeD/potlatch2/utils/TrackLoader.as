@@ -75,12 +75,14 @@ package net.systemeD.potlatch2.utils {
 		}
 
 		private function get layer():VectorLayer {
-			var vl:VectorLayer=map.findVectorLayer('GPS tracks');
-			if (!vl) {
-				vl=new VectorLayer('GPS tracks',map,STYLESHEET);
-				map.addVectorLayer(vl);
-			}
-			return vl;
+			// >>>> REFACTOR: VectorLayer commented out
+			// var vl:VectorLayer=map.findVectorLayer('GPS tracks');
+			// if (!vl) {
+			//	vl=new VectorLayer('GPS tracks',map,STYLESHEET);
+			//	map.addVectorLayer(vl);
+			// }
+			// return vl;
+			return null;
 		}
 		
 		private function greatCircle(lat1:Number,lon1:Number,lat2:Number,lon2:Number):Number {

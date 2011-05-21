@@ -234,6 +234,7 @@
 
       public var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
+      private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
       private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
       private var feature:Feature = null;
@@ -242,6 +243,7 @@
 
 	  public function setEntity(entities:Array, layer:VectorLayer=null):void {
 		UIComponent.suspendBackgroundProcessing();
+		connection=null;
 
 		var firstSelected:Entity=null;
 		if (entities.length==1) { firstSelected=entities[0]; }
@@ -259,6 +261,7 @@
 		} else if (entities.length==1) {
 			// Single entity selected, so show tag panel
 			selectedEntity=firstSelected;
+			connection=firstSelected.connection;
 			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
@@ -279,7 +282,8 @@
 			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged);
             sidebar.selectedChild = multiplePanel;
 			setupMultiAdvanced(selectedEntity);
-
+			connection=entities[0].connection;
+			
 		} else {
 			//The selection contains elements which can't be edited all together.
 			sidebar.selectedChild = multipleInvalidPanel;
@@ -622,8 +626,7 @@
           // but is at least robust for any kind of change.
           // Figuring out a better way is someone else's FIXME
 
-          var conn:Connection = Connection.getConnection();
-          var rel:Relation = selectedEntity as Relation
+          var rel:Relation = selectedEntity as Relation;
           var action:CompositeUndoableAction = new CompositeUndoableAction("Rearrange relation members for "+rel);
 
           // drop members
@@ -635,12 +638,10 @@
           for each(var memberObject:Object in membersGrid.dataProvider) {
             var e:Entity;
             var id:Number = memberObject.id;
-            if(memberObject.type == 'node') {
-              e = conn.getNode(id);
-            } else if (memberObject.type == 'way') {
-              e = conn.getWay(id);
-            } else if (memberObject.type == 'relation') {
-              e = conn.getRelation(id);
+			switch (memberObject.type) {
+				case 'node':		e = connection.getNode(id); break;
+            	case 'way':			e = connection.getWay(id); break;
+				case 'relation':	e = connection.getRelation(id); break;
             }
             rel.appendMember(new RelationMember(e, memberObject.role), action.push);
           }
@@ -650,7 +651,7 @@
       private function editRelation(id:Number):void {
           var panel:RelationEditorPanel = RelationEditorPanel(
               PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-          panel.setRelation(Connection.getConnection().getRelation(id));
+          panel.setRelation(connection.getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
 
@@ -742,7 +743,7 @@
       public function openEntityPage():void {
           if (selectedEntity != null && selectedEntity.id >= 0) {
               // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-              var urlBase:String = Connection.getConnection().apiBase + '../../browse/'
+              var urlBase:String = connection.apiBase + '../../browse/'
               navigateToURL(new URLRequest(urlBase+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
           }
       }
@@ -752,7 +753,7 @@
       }
 
       private function removeFromRelation(id:Number, index:int=-1):void {
-		var rel:Relation=Connection.getConnection().getRelation(id);
+		var rel:Relation=connection.getRelation(id);
 		if (index>-1) {
 			rel.removeMemberByIndex(index, MainUndoStack.getGlobalStack().addAction);
 		} else if (selectedEntity is EntityCollection) {

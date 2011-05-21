@@ -60,8 +60,7 @@ package net.systemeD.halcyon {
 			var s:Sprite, l:int;
 
 			// Set up stylesheet
-			ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-			ruleset.loadFromCSS(styleurl);
+			setStyle(styleurl);
 
 			// Listen for changes on this Connection
             connection.addEventListener(Connection.NEW_WAY, newWayCreatedListener);
@@ -341,16 +340,16 @@ package net.systemeD.halcyon {
 		
 		/** Switch to new MapCSS. */
 		public function setStyle(url:String):void {
-			ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
+			ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,redraw,redrawPOIs);
 			ruleset.loadFromCSS(url);
         }
 
 		// >>>> REFACTOR: remove this
 		public function findSource():VectorLayer {
-			var v:VectorLayer;
-			for each (v in map.vectorlayers) {
-				if (v.paint==this) { return v; }
-			}
+//			var v:VectorLayer;
+//			for each (v in map.vectorlayers) {
+//				if (v.paint==this) { return v; }
+//			}
 			return null;
 		}
 

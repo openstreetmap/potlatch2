@@ -18,10 +18,12 @@
 
 	<mx:HBox>
 	<mx:Button label="Edit..." click="Application.application.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
-	<mx:Button label="Vector file..." click="Application.application.bgButton.close(); new VectorSourceDialog().init();" />
+	<mx:Button label="Vector file..." click="Application.application.bgButton.close(); " />
 	</mx:HBox>
 
 	<mx:Script><![CDATA[
+		// >>>> REFACTOR: vector file button was click="Application.application.bgButton.close(); new VectorSourceDialog().init();" but that's amazingly broken -->
+
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;

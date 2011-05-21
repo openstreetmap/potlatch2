@@ -67,14 +67,15 @@ package net.systemeD.potlatch2.utils {
         }
 
         private function get layer():VectorLayer {
-            if (!_layer) {
-                var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
-                Security.loadPolicyFile(policyFile);
-
-                _layer=new VectorLayer(name,map,STYLESHEET);
-                map.addVectorLayer(_layer);
-            }
-            return _layer;
+			// >>>> REFACTOR: VectorLayer commented out
+            // if (!_layer) {
+            //     var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
+            //     Security.loadPolicyFile(policyFile);
+            //     _layer=new VectorLayer(name,map,STYLESHEET);
+            //     map.addVectorLayer(_layer);
+            // }
+            // return _layer;
+			return null;
         }
     }
 }

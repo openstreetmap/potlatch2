@@ -74,8 +74,9 @@ package net.systemeD.halcyon.connection {
 
         private function get layer():VectorLayer {
             if (!_layer) {
-                _layer=new VectorLayer(filename,map,STYLESHEET);
-                map.addVectorLayer(_layer);
+				// >>>> REFACTOR: VectorLayer commented out
+                // _layer=new VectorLayer(filename,map,STYLESHEET);
+                // map.addVectorLayer(_layer);
             }
             return _layer;
         }

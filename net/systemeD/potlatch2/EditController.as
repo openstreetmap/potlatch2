@@ -4,6 +4,7 @@ package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.MapEvent;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.halcyon.Globals;
     import net.systemeD.potlatch2.controller.*;
     import net.systemeD.potlatch2.FunctionKeyManager;
 	import mx.managers.CursorManager;
@@ -45,9 +46,9 @@ package net.systemeD.potlatch2 {
             this.tagViewer = tagViewer;
 			this.toolbox = toolbox;
 			this.toolbox.init(this);
-            this.maximiseFunction = Connection.getParam("maximise_function", null);
-            this.minimiseFunction = Connection.getParam("minimise_function", null);
-            this.moveFunction = Connection.getParam("move_function", null);
+            this.maximiseFunction = Globals.vars.flashvars["maximise_function"];
+            this.minimiseFunction = Globals.vars.flashvars["minimise_function"];
+            this.moveFunction     = Globals.vars.flashvars["move_function"];
 
             map.parent.addEventListener(MouseEvent.MOUSE_MOVE, mapMouseEvent);
             map.parent.addEventListener(MouseEvent.MOUSE_UP, mapMouseEvent);
