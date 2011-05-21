@@ -164,9 +164,10 @@
         }
 
         // sort the dates and remove duplicates and those before the first version of the way
+
         revdates = revdates.sort();
-        revdates = ArrayUtil.createUniqueCopy(revdates);
-        revdates.filter(function(e:*, i:int, arr:Array):Boolean { return e > wayStates[0].timestamp});
+        revdates = ArrayUtil.createUniqueCopy(revdates); // (corelib) de-duplicates
+        revdates = revdates.filter(function(e:*, i:int, arr:Array):Boolean { return e >= wayStates[0].timestamp});
 
         var version:int = 1;
         var subversion:int = 0;
