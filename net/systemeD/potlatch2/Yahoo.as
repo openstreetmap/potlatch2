@@ -13,54 +13,68 @@ package net.systemeD.potlatch2 {
 		private static const token:String="f0a.sejV34HnhgIbNSmVHmndXFpijgGeun0fSIMG9428hW_ifF3pYKwbV6r9iaXojl1lU_dakekR";
 		private static const MAXZOOM:int=17;
 
+		private static const UNINITIALISED:uint=0;
+		private static const INITIALISING:uint=1;
+		private static const HIDDEN:uint=2;
+		private static const SHOWING:uint=3;
+		private var currentState:uint=UNINITIALISED;
+
 		private var _lat:Number;
 		private var _lon:Number;
 		private var _scale:Number;
 		private var offset_lat:Number=0;
 		private var offset_lon:Number=0;
-		private var inited:Boolean;
-		private var enabled:Boolean;
 
-		public function Yahoo(w:Number, h:Number, map:Map) {
+		public function Yahoo(map:Map) {
 			super();
-			this.init(token, w, h);  
-			this.mapType="satellite";
-			this.alpha=0.5;
+			currentState=UNINITIALISED;
 			this.map=map;
-			inited=false;
-			visible=enabled=false;
-			this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
+			visible=false;
 		}
 		
 		public function show():void {
-			visible=enabled=true;
-			if (inited) { 
+			visible=true;
+			if (currentState==UNINITIALISED) {
+				currentState=INITIALISING;
+				this.addEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
+				this.init(token, map.mapwidth, map.mapheight);
+				this.mapType="satellite";
+				this.alpha=0.5;				// ** FIXME - should take the value the user has chosen
+				activateListeners();
+			} else if (currentState==HIDDEN) { 
+				currentState=SHOWING;
 				moveto(map.centre_lat, map.centre_lon, map.scale);
 				this.setSize(map.mapwidth,map.mapheight);
+				activateListeners();
 			}
+		}
 
+		public function hide():void {
+			deactivateListeners();
+			visible=false;
+			if (currentState==SHOWING) currentState=HIDDEN;
+		}
+
+		private function activateListeners():void {
 			map.addEventListener(MapEvent.MOVE, moveHandler);
 			map.addEventListener(MapEvent.RESIZE, resizeHandler);
 			map.addEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
-
-		public function hide():void {
-			visible=enabled=false;
-
+		
+		private function deactivateListeners():void {
 			map.removeEventListener(MapEvent.MOVE, moveHandler);
 			map.removeEventListener(MapEvent.RESIZE, resizeHandler);
 			map.removeEventListener(MapEvent.NUDGE_BACKGROUND, nudgeHandler);
 		}
 		
 		private function initHandler(event:YahooMapEvent):void {
-			inited=true;
+			currentState=visible ? SHOWING : HIDDEN;
 			if (map.centre_lat) { moveto(map.centre_lat, map.centre_lon, map.scale); }
 			this.removeEventListener(YahooMapEvent.MAP_INITIALIZE, initHandler);
-			visible=enabled;
 		}
 
 		private function moveHandler(event:MapEvent):void {
-			if (!inited) { return; }
+			if (currentState!=SHOWING) { return; }
 			moveto(event.params.lat, event.params.lon, event.params.scale);
 		}
 

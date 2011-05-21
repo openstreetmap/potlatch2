@@ -304,7 +304,7 @@ package net.systemeD.halcyon.styleparser {
 
 		private function loadedImage(event:Event):void {
 			var fn:String=event.target.info['filename'];
-			images[fn]=event.target.data;
+			images[fn]=event.target.data; if (images[fn].length==0) return;
 
 			var loader:ExtendedLoader = new ExtendedLoader();
 			loader.info['filename']=fn;

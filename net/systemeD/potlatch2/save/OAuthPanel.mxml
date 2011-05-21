@@ -67,11 +67,14 @@
 	</mx:ControlBar>
 	
 	<mx:Script><![CDATA[
+		import flash.display.InteractiveObject;
         import flash.events.Event;
         import flash.net.*;
+		import flash.system.Capabilities;
         import mx.managers.PopUpManager;
         import net.systemeD.halcyon.connection.*;
         import org.iotashan.oauth.*;
+		import flash.external.ExternalInterface;
 
         private var connection:Connection;
         private var requestToken:OAuthToken;
@@ -87,9 +90,19 @@
         }
         
         private function openURL(url:String):void {
-            var urlRequest:URLRequest = new URLRequest(url);
-            navigateToURL(urlRequest, "_blank");
-        }
+			if (ExternalInterface.available) {
+				var winH:int = 560;
+				var winW:int = 600;
+				var leftPos:int  = (Capabilities.screenResolutionX - winW) / 2;
+				var topPos:int = (Capabilities.screenResolutionY - winH) / 2;
+				ExternalInterface.call( "window.open", url,"oAuthWin","height=" + winH + ",width=" + winW +",top=" + topPos + ", left=" + leftPos +", toolbar=no,scrollbars=no,status=no,location=no,menubar=no,directories=no");
+				}		
+			else
+			{
+				var urlRequest:URLRequest = new URLRequest(url);
+				navigateToURL(urlRequest,"_blank");
+			}
+		}
         
         private function getRequestToken():void {
             connection = Connection.getConnectionInstance();
@@ -101,7 +114,10 @@
             var params:Object = new Object();
             var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, params, consumer, null);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
-            
+
+			//register the "pressTry" function so the oAuth callback page can try to advance the editor directly to the next step
+			ExternalInterface.addCallback("pressTry", pressTry);            
+			
             // build the actual request
             var urlReq:URLRequest = new URLRequest(String(urlStr));
             var loader:URLLoader = new URLLoader();
@@ -134,8 +150,8 @@
             
             var url:String = Connection.getParam("oauth_auth_url", "http://127.0.0.1:3000/oauth/authorize");            
             link.label = url;
-            authoriseURL = url + "?oauth_token="+requestToken.key;
-            progress.visible = false;
+			authoriseURL = url + "?oauth_token="+requestToken.key;
+			progress.visible = false;
             gotLinkBox.visible = true;
         }
 
@@ -202,6 +218,10 @@
             var secret:String = Connection.getParam("oauth_consumer_secret", "");
             return new OAuthConsumer(key, secret);
         }
+		
+		public function pressTry():void {
+			getAccessToken();
+		}
         
 	]]></mx:Script>
 </mx:TitleWindow>

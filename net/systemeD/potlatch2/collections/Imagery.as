@@ -61,9 +61,7 @@ package net.systemeD.potlatch2.collections {
             var backgroundSet:Boolean = false;
 
 			// Read all values from XML file
-            collection=new Array(
-				{ name: "None", url: "" },
-				{ name: "Yahoo", url: "yahoo", sourcetag: "Yahoo" } );
+			collection=new Array({ name: "None", url: "" });
 			for each(var set:XML in xml.set) {
 				var obj:Object={};
 				var a:XML;
@@ -75,7 +73,7 @@ package net.systemeD.potlatch2.collections {
 			}
 
 			// Add user's previous preference (from SharedObject) if we didn't find it in the XML file
-            if (!isSet && saved.name && saved.url && saved.url!='' && saved.url!='yahoo') {
+            if (!isSet && saved.name && saved.url && saved.url!='') {
                 collection.push(saved);
                 isSet=true;
             }
