@@ -186,7 +186,6 @@ package net.systemeD.halcyon {
             if (lat> edge_t || lat < edge_b || lon < edge_l || lon > edge_r) {
                 moveMapFromLatLon(lat, lon);
             }
-
 		}
 
 		// Co-ordinate conversion functions
@@ -228,19 +227,9 @@ package net.systemeD.halcyon {
         */
 		public function download():void {
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
-			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+			for (var i:uint=0; i<paintContainer.numChildren; i++)
 				paintContainer.getChildAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
-			}
 		}
-
-		// >>>> REFACTOR: moved to MapPaint:
-        // public function setHighlight(entity:Entity, settings:Object):void {
-        // public function setHighlightOnNodes(way:Way, settings:Object):void {
-		// public function protectWay(way:Way):void {
-		// public function unprotectWay(way:Way):void {
-		// public function limitWayDrawing(way:Way,except:Number=NaN,only:Number=NaN):void {
-		// public function setPurgable(entities:Array, purgable:Boolean):void {
-
 
         // Handle mouse events on ways/nodes
         private var mapController:MapController = null;
@@ -270,11 +259,10 @@ package net.systemeD.halcyon {
 		}
 
 		public function removeLayerByName(name:String):void {
-			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				if (paintContainer.getChildAt(i).connection.name==name) {
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				if (paintContainer.getChildAt(i).connection.name==name)
 					paintContainer.removeChildAt(i);
 					// >>>> REFACTOR: needs to do the equivalent of VectorLayer.blank()
-				}
 			}
 		}
 		
@@ -282,6 +270,19 @@ package net.systemeD.halcyon {
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
 				if (paintContainer.getChildAt(i).connection.name==name) return paintContainer.getChildAt(i);
 			return null;
+		}
+		
+		/* Find which layer is editable */
+		public function get editableLayer():MapPaint {
+			var editableLayer:MapPaint;
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				layer=paintContainer.getChildAt(i);
+				if (!layer.isBackground) {
+					if (editableLayer) trace("Multiple editable layers found");
+					editableLayer=layer;
+				}
+			}
+			return editableLayer;
 		}
 
 		// ------------------------------------------------------------------------------------------

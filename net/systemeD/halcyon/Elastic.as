@@ -17,14 +17,16 @@ package net.systemeD.halcyon {
 
 		public var map:Map;							// reference to parent map
 		public var sprites:Array=new Array();		// instances in display list
+		private var editableLayer:MapPaint;
         private var _start:Point;
         private var _end:Point;
 
 		/** Create and draw the elastic. */
 		public function Elastic(map:Map, start:Point, end:Point) {
 			this.map = map;
-			this._start = start;
-			this._end = end;
+			editableLayer = map.editableLayer;
+			_start = start;
+			_end = end;
 			redraw();
 		}
 		
@@ -62,7 +64,7 @@ package net.systemeD.halcyon {
 			var stroke:Shape = new Shape();
             stroke.graphics.lineStyle(1, 0xff0000, 1, false, "normal", CapsStyle.ROUND, JointStyle.ROUND);
 
-			var l:DisplayObject=map.paint.getPaintSpriteAt(map.paint.maxlayer);
+			var l:DisplayObject=editableLayer.getPaintSpriteAt(editableLayer.maxlayer);
 			var o:DisplayObject=Sprite(l).getChildAt(3);	// names layer
 			(o as Sprite).addChild(stroke);
 			sprites.push(stroke);

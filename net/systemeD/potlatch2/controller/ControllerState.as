@@ -19,6 +19,7 @@ package net.systemeD.potlatch2.controller {
     public class ControllerState {
 
         protected var controller:EditController;
+		protected var editableLayer:MapPaint;
         protected var previousState:ControllerState;
 
 		protected var _selection:Array=[];
@@ -27,6 +28,7 @@ package net.systemeD.potlatch2.controller {
 
         public function setController(controller:EditController):void {
             this.controller = controller;
+			editableLayer = controller.map.editableLayer;
         }
 
         public function setPreviousState(previousState:ControllerState):void {
@@ -64,7 +66,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
 				case 67:	controller.connection.closeChangeset(); break;							// C - close changeset
-				case 68:	controller.map.paint.alpha=1.3-controller.map.paint.alpha; return null;	// D - dim
+				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
 				case 83:	SaveManager.saveChanges(); break;										// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo
@@ -125,9 +127,9 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus && map.dragstate!=map.NOT_DRAGGING) {
 				map.mouseUpHandler();	// in case the end-drag is over an EntityUI
 			} else if ( event.type == MouseEvent.ROLL_OVER ) {
-				controller.map.setHighlight(focus, { hover: true });
+				editableLayer.setHighlight(focus, { hover: true });
 			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
-				controller.map.setHighlight(focus, { hover: false });
+				editableLayer.setHighlight(focus, { hover: false });
             } else if ( event.type == MouseEvent.MOUSE_WHEEL ) {
                 if (event.delta > 0) {
                   map.zoomIn();

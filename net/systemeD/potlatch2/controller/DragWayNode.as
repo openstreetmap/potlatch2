@@ -35,7 +35,7 @@ package net.systemeD.potlatch2.controller {
         private function addNode(selectedWay:Way,event:MouseEvent):int {
 			// find which other ways are under the mouse
 			var ways:Array=[]; var w:Way;
-			for each (var wayui:WayUI in controller.map.paint.wayuis) {
+			for each (var wayui:WayUI in editableLayer.wayuis) {
 				w=wayui.hitTest(event.stageX, event.stageY);
 				if (w && w!=selectedWay) { ways.push(w); }
 			}
@@ -115,17 +115,17 @@ package net.systemeD.potlatch2.controller {
 			originalLat = draggingNode.lat;
 			originalLon = draggingNode.lon;
 
-			controller.map.setHighlightOnNodes(parentWay, { selectedway: true } );
-			controller.map.limitWayDrawing(parentWay, draggingIndex);
-			controller.map.setHighlight(draggingNode, { selected: true } );
-			controller.map.protectWay(parentWay);
-			controller.map.limitWayDrawing(parentWay, NaN, draggingIndex);
+			editableLayer.setHighlightOnNodes(parentWay, { selectedway: true } );
+			editableLayer.limitWayDrawing(parentWay, draggingIndex);
+			editableLayer.setHighlight(draggingNode, { selected: true } );
+			editableLayer.protectWay(parentWay);
+			editableLayer.limitWayDrawing(parentWay, NaN, draggingIndex);
         }
         override public function exitState(newState:ControllerState):void {
-			controller.map.unprotectWay(parentWay);
-			controller.map.limitWayDrawing(parentWay);
-			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
-			controller.map.setHighlight(draggingNode, { selected: false } );
+			editableLayer.unprotectWay(parentWay);
+			editableLayer.limitWayDrawing(parentWay);
+			editableLayer.setHighlightOnNodes(parentWay, { selectedway: false } );
+			editableLayer.setHighlight(draggingNode, { selected: false } );
         }
         override public function toString():String {
             return "DragWayNode";

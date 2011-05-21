@@ -25,9 +25,9 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            controller.map.setHighlight(way, { hover: false });
-            controller.map.setHighlight(node, { selected: true });
-            controller.map.setHighlightOnNodes(way, { selectedway: true });
+            editableLayer.setHighlight(way, { hover: false });
+            editableLayer.setHighlight(node, { selected: true });
+            editableLayer.setHighlightOnNodes(way, { selectedway: true });
             selection = [node]; parentWay = way;
             controller.updateSelectionUI();
 			selectedIndex = index; initIndex = index;
@@ -35,9 +35,9 @@ package net.systemeD.potlatch2.controller {
                 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-            	controller.map.setHighlight(parentWay, { selected: false });
-				controller.map.setHighlight(firstSelected, { selected: false });
-				controller.map.setHighlightOnNodes(parentWay, { selectedway: false });
+            	editableLayer.setHighlight(parentWay, { selected: false });
+				editableLayer.setHighlight(firstSelected, { selected: false });
+				editableLayer.setHighlightOnNodes(parentWay, { selectedway: false });
 				selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -106,13 +106,13 @@ package net.systemeD.potlatch2.controller {
 
 		override public function enterState():void {
             selectNode(parentWay,initIndex);
-			controller.map.setPurgable(selection,false);
+			editableLayer.setPurgable(selection,false);
         }
 		override public function exitState(newState:ControllerState):void {
             if (firstSelected.hasTags()) {
               controller.clipboards['node']=firstSelected.getTagsCopy();
             }
-			controller.map.setPurgable(selection,true);
+			editableLayer.setPurgable(selection,true);
             clearSelection(newState);
         }
 
@@ -146,8 +146,8 @@ package net.systemeD.potlatch2.controller {
 			    if (parentWay.getLastNode() == n) { return this; }
 			}
 
-			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
-			controller.map.setPurgable([parentWay],true);
+			editableLayer.setHighlightOnNodes(parentWay, { selectedway: false } );
+			editableLayer.setPurgable([parentWay],true);
             MainUndoStack.getGlobalStack().addAction(new SplitWayAction(parentWay, ni));
 
 			return new SelectedWay(parentWay);
@@ -162,7 +162,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function deleteNode():ControllerState {
-			controller.map.setPurgable(selection,true);
+			editableLayer.setPurgable(selection,true);
 			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(parentWay);
 		}
@@ -175,8 +175,8 @@ package net.systemeD.potlatch2.controller {
         /** Attempt to either merge the currently selected node with another very nearby node, or failing that,
         *   attach it mid-way along a very nearby way. */
         public function join():ControllerState {
-            var p:Point = new Point(controller.map.lon2coord(Node(firstSelected).lon),
-                                             controller.map.latp2coord(Node(firstSelected).latp));
+			var p:Point = new Point(controller.map.lon2coord(Node(firstSelected).lon),
+			                        controller.map.latp2coord(Node(firstSelected).latp));
             var q:Point = map.localToGlobal(p);
 
             // First, look for POI nodes in 20x20 pixel box around the current node
@@ -193,7 +193,7 @@ package net.systemeD.potlatch2.controller {
             }
             
             var ways:Array=[]; var w:Way;
-            for each (var wayui:WayUI in controller.map.paint.wayuis) {
+            for each (var wayui:WayUI in editableLayer.wayuis) {
                 w=wayui.hitTest(q.x, q.y);
                 if (w && w!=selectedWay) { 
                 // hit a way, now let's see if we hit a specific node

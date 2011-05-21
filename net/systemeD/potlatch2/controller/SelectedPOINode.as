@@ -16,7 +16,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            controller.map.setHighlight(node, { selected: true });
+            editableLayer.setHighlight(node, { selected: true });
             selection = [node];
             controller.updateSelectionUI();
             initNode = node;
@@ -24,7 +24,7 @@ package net.systemeD.potlatch2.controller {
                 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-                controller.map.setHighlight(firstSelected, { selected: false });
+                editableLayer.setHighlight(firstSelected, { selected: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -60,13 +60,13 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectNode(initNode);
-			controller.map.setPurgable(selection,false);
+			editableLayer.setPurgable(selection,false);
         }
         override public function exitState(newState:ControllerState):void {
             if(firstSelected.hasTags()) {
               controller.clipboards['node']=firstSelected.getTagsCopy();
             }
-			controller.map.setPurgable(selection,true);
+			editableLayer.setPurgable(selection,true);
             clearSelection(newState);
         }
 

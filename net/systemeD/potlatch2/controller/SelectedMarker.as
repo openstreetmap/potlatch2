@@ -19,7 +19,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            controller.map.setHighlight(marker, { selected: true });
+            editableLayer.setHighlight(marker, { selected: true });
             selection = [marker];
             controller.updateSelectionUI(layer);
             initMarker = marker;
@@ -27,7 +27,7 @@ package net.systemeD.potlatch2.controller {
 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-                controller.map.setHighlight(firstSelected, { selected: false });
+                editableLayer.setHighlight(firstSelected, { selected: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -53,11 +53,11 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectMarker(initMarker);
-			controller.map.setPurgable(selection,false);
+			editableLayer.setPurgable(selection,false);
         }
 
         override public function exitState(newState:ControllerState):void {
-			controller.map.setPurgable(selection,true);
+			editableLayer.setPurgable(selection,true);
             clearSelection(newState);
         }
 
