@@ -7,8 +7,8 @@ package net.systemeD.halcyon.connection {
         private var _latproj:Number;
         private var _lon:Number;
 
-        public function Node(id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Node(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp);
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;

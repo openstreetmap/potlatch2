@@ -142,7 +142,7 @@ package net.systemeD.halcyon.connection {
             var id:Number = Number(URLLoader(event.target).data);
             
             // which means we now have a new changeset!
-            setActiveChangeset(new Changeset(id, lastUploadedChangesetTags));
+            setActiveChangeset(new Changeset(this, id, lastUploadedChangesetTags));
         }
 
         private function changesetCreateError(event:IOErrorEvent):void {

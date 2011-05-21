@@ -8,6 +8,7 @@ package net.systemeD.halcyon.connection {
     /** An Entity is an object stored in the map database, and therefore uploaded and downloaded. This includes Nodes, Ways, 
     *   Relations but also Changesets etc. */
     public class Entity extends EventDispatcher {
+		private var _connection:Connection;
         private var _id:Number;
         private var _version:uint;
         private var _uid:Number;
@@ -22,7 +23,8 @@ package net.systemeD.halcyon.connection {
         /** Have all its parents (ie, relations that contain this object as a member, ways that contain this node) been loaded into memory */
         public var parentsLoaded:Boolean = true;
 
-        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
+        public function Entity(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
+			this._connection = connection;
             this._id = id;
             this._version = version;
             this._uid = uid;
@@ -61,6 +63,11 @@ package net.systemeD.halcyon.connection {
         public function get timestamp():String {
             return _timestamp;
         }
+
+		/** Connection to which this entity belongs. */
+		public function get connection():Connection {
+			return _connection;
+		}
 
         /** Set a bunch of properties in one hit. Implicitly makes entity not deleted. */
         public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, uid:Number, timestamp:String):void {

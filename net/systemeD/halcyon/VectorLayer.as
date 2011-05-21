@@ -52,7 +52,7 @@ package net.systemeD.halcyon {
         * e.g. <code>layer.paint.updateEntityUIs(...);</code>
         */
 		public function createNode(tags:Object,lat:Number,lon:Number):Node {
-			var node:Node = new Node(negativeID, 0, tags, true, lat, lon);
+			var node:Node = new Node(this, negativeID, 0, tags, true, lat, lon);
 			nodes[negativeID]=node; negativeID--;
 			return node;
 		}
@@ -62,7 +62,7 @@ package net.systemeD.halcyon {
         * @param nodes An array of Node objects
         */
 		public function createWay(tags:Object,nodes:Array):Way {
-			var way:Way = new Way(negativeID, 0, tags, true, nodes.concat());
+			var way:Way = new Way(this, negativeID, 0, tags, true, nodes.concat());
 			ways[negativeID]=way; negativeID--;
 			return way;
 		}
@@ -72,7 +72,7 @@ package net.systemeD.halcyon {
         * @param members An array of RelationMember objects
         */
 		public function createRelation(tags:Object,members:Array):Relation {
-            var relation:Relation = new Relation(negativeID, 0, tags, true, members.concat());
+            var relation:Relation = new Relation(this, negativeID, 0, tags, true, members.concat());
 			relations[negativeID]=relation; negativeID--;
             return relation;
 		}
@@ -93,7 +93,7 @@ package net.systemeD.halcyon {
             }
             var marker:Marker = markers[id];
             if (marker == null) {
-              marker = new Marker(id, 0, tags, true, lat, lon);
+              marker = new Marker(this, id, 0, tags, true, lat, lon);
               markers[id]=marker;
             }
             return marker;

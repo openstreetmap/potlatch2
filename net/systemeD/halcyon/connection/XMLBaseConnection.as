@@ -54,7 +54,7 @@ package net.systemeD.halcyon.connection {
                         if ( type == "node" ) {
                             member = getNode(memberID);
                             if ( member == null ) {
-                                member = new Node(memberID,0,{},false,0,0);
+                                member = new Node(this,memberID,0,{},false,0,0);
                                 setNode(Node(member),true);
                             } else if (member.isDeleted()) {
                                 member.setDeletedState(false);
@@ -62,13 +62,13 @@ package net.systemeD.halcyon.connection {
                         } else if ( type == "way" ) {
                             member = getWay(memberID);
                             if (member == null) {
-                                member = new Way(memberID,0,{},false,[]);
+                                member = new Way(this,memberID,0,{},false,[]);
                                 setWay(Way(member),true);
                             }
                         } else if ( type == "relation" ) {
                             member = getRelation(memberID);
                             if (member == null) {
-                                member = new Relation(memberID,0,{},false,[]);
+                                member = new Relation(this,memberID,0,{},false,[]);
                                 setRelation(Relation(member),true);
                             }
                         }
@@ -78,7 +78,7 @@ package net.systemeD.halcyon.connection {
                     }
                     
                     if ( rel == null )
-                        setRelation(new Relation(id, version, tags, true, members, uid, timestamp), false);
+                        setRelation(new Relation(this, id, version, tags, true, members, uid, timestamp), false);
                     else {
                         rel.update(version, tags, true, false, members, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_RELATION, rel), false);
@@ -89,7 +89,8 @@ package net.systemeD.halcyon.connection {
             for each(var nodeData:XML in map.node) {
 				id = Number(nodeData.@id);
 				node = getNode(id);
-				newNode = new Node(id, 
+				newNode = new Node(this,
+				                   id, 
 				                   uint(nodeData.@version), 
 				                   parseTags(nodeData.tag),
 				                   true, 
@@ -130,7 +131,7 @@ package net.systemeD.halcyon.connection {
 					}
                     tags = parseTags(data.tag);
                     if ( way == null ) {
-                        setWay(new Way(id, version, tags, true, nodes, uid, timestamp),false);
+                        setWay(new Way(this, id, version, tags, true, nodes, uid, timestamp),false);
                     } else {
 						waycount++;
                         way.update(version, tags, true, true, nodes, uid, timestamp);

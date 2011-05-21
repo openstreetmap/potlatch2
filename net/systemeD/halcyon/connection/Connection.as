@@ -15,7 +15,8 @@ package net.systemeD.halcyon.connection {
         protected var policyURL:String;
         protected var params:Object;
 
-		public function Connection(cname:String,api:String,policy:String,initparams:Object={}) {
+		public function Connection(cname:String,api:String,policy:String,initparams:Object=null) {
+			initparams = (initparams!=null ? initparams:{});
 			name=cname;
 			apiBaseURL=api;
 			policyURL=policy;
@@ -255,19 +256,19 @@ package net.systemeD.halcyon.connection {
 		}
 
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
-            var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
+            var node:Node = new Node(this, nextNegative, 0, tags, true, lat, lon);
             performCreate(new CreateEntityAction(node, setNode));
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array, performCreate:Function):Way {
-            var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
+            var way:Way = new Way(this, nextNegative, 0, tags, true, nodes.concat());
             performCreate(new CreateEntityAction(way, setWay));
             return way;
         }
 
         public function createRelation(tags:Object, members:Array, performCreate:Function):Relation {
-            var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
+            var relation:Relation = new Relation(this, nextNegative, 0, tags, true, members.concat());
             performCreate(new CreateEntityAction(relation, setRelation));
             return relation;
         }

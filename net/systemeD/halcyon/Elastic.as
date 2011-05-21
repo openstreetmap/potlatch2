@@ -25,7 +25,7 @@ package net.systemeD.halcyon {
 		public function Elastic(map:Map, start:Point, end:Point) {
 			this.map = map;
 			editableLayer = map.editableLayer;
-			_start = start;
+			_start = start;
 			_end = end;
 			redraw();
 		}
