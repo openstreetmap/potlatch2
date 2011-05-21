@@ -51,15 +51,21 @@
 
     import net.systemeD.halcyon.connection.*
 
+    // This is the entity that we're requesting the history for.
     [Bindable]
     private var entity:Entity;
 
+    // These are the various states that the entity as been in - so is a list
+    // of Nodes (all with the same id) or Ways etc
     [Bindable]
     private var entityStates:Array;
 
     // store intermediate states for ways
     private var wayStates:Array; // an array of ways
     private var wayNodeStates:Array; // an array of arrays of nodes
+
+    // the number of outstanding asynchronous node history requests,
+    // so we know when all have been fetched
     private var pendingNodeFetches:uint;
 
     public function init(e:Entity):void {
@@ -109,6 +115,8 @@
 
         wayStates = results;
 
+        // figure out the list of nodes that have ever been involved in the way, and fetch them.
+        // pendingNode will store each one, and trigger an event when they are all downloaded.
         wayNodeStates = [];
         addEventListener("pendingNodesAllFetched", processWayStates);
 
@@ -116,7 +124,6 @@
         var count:uint = 0;
 
         for each(var oldWay:Way in results) {
-            trace(oldWay);
             for (var i:uint = 0; i< oldWay.length; i++) {
                 var node:Node = oldWay.getNode(i);
                 if(!nodes[node.id]) {
@@ -129,25 +136,28 @@
         pendingNodeFetches = count;
 
         for each (var n:Node in nodes) {
-            trace("fetching node " + n.id);
             Connection.getConnection().fetchHistory(n, pendingNode);
         }
     }
 
+    // Callback for fetching a node history as part of a way; when there's no outstanding
+    // nodes remaining this will trigger an event.
     private function pendingNode(results:Array):void {
         wayNodeStates.push(results)
         pendingNodeFetches--;
         trace("fetched node "+results[0].id+" , "+pendingNodeFetches+" more to go");
         if (pendingNodeFetches == 0) {
             dispatchEvent(new Event("pendingNodesAllFetched"));
-            trace("done");
         }
     }
 
     private function processWayStates(e:Event):void {
-        // we now have all the nodes
-        // for each way
+        // we now have all the node histories for
+        // for each node that has ever been part of the way.
 
+        // Build a list of every timestamp of interest, along with who
+        // the person was that triggered that timestamp (either from a way version
+        // change, or from changing a node.
         var revdates:Array = [];
         var revusers:Object = {};
 
@@ -176,8 +186,8 @@
         for each (var revdate:String in revdates) {
           var entitystate:Object = {};
 
-
           var w:Way = getEntityAtDate(wayStates, revdate) as Way;
+
           if (w.version == version) {
               subversion++;
           } else {

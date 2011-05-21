@@ -72,6 +72,9 @@ Potlatch 2: main outstanding issues
 == l10n ==
 * Fix the en_US / default locale problem
 
+== history ==
+* Think about what happens if a node, which used to be part of a way and isn't any more, changes. Does that put a fake "version" in?
+
 Requested enhancements
 ----------------------
 
