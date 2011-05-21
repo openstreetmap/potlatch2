@@ -63,7 +63,7 @@ package net.systemeD.potlatch2.utils {
               var marker:Marker = layer.createMarker(tags, lat, lon);
             }
 			default xml namespace = new Namespace("");
-            layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
+            layer.paint.updateEntityUIs(true, false);
         }
 
         private function get layer():VectorLayer {

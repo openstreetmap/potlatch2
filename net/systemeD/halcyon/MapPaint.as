@@ -10,11 +10,15 @@ package net.systemeD.halcyon {
 	/** Manages the drawing of map entities, allocating their sprites etc. */
 	public class MapPaint extends Sprite {
 		
-		/** Access Map object */
+		/** Parent Map - required for finding out bounds and scale */
 		public var map:Map;
-		/** Entities on layers below minlayer will not be shown by this paint object. (Confirm?) */
+
+		/** Source data for this MapPaint layer */
+		public var connection:Connection;
+
+		/** Lowest OSM layer that can be displayed */
 		public var minlayer:int;
-		/** Entities on layers above maxlayer will not be shown by this paint object. (Confirm?) */
+		/** Highest OSM layer that can be displayed */
 		public var maxlayer:int;
 		/** The MapCSS rules used for drawing entities. */
 		public var ruleset:RuleSet;						
@@ -40,18 +44,26 @@ package net.systemeD.halcyon {
 		 * <p>Each paint sprite has 4 child sprites (fill, casing, stroke, names). Each hit sprite has 2 child sprites (way hit tests, node hit tests).</p>  
 		 * <p>Thus if layers range from -5 to +5, there will be 11 top level paint sprites followed by 11 top level hit sprites.</p>
 		 * 
-		 * @param map The map to be rendered.
-		 * @param minlayer The lowest layer in that map that will be rendered.
-		 * @param maxlayer The top layer in that map that will be rendered.
+		 * @param map The Map this is attached to. (Required for finding out bounds and scale.)
+		 * @param connection The Connection containing the data for this layer.
+		 * @param minlayer The lowest OSM layer to display.
+		 * @param maxlayer The highest OSM layer to display.
 		 * */ 
-		public function MapPaint(map:Map,minlayer:int,maxlayer:int) {
+		public function MapPaint(map:Map,connection:Connection,minlayer:int,maxlayer:int) {
 			mouseEnabled=false;
 
 			this.map=map;
+			this.connection=connection;
 			this.minlayer=minlayer;
 			this.maxlayer=maxlayer;
 			sublayerIndex[1]=0;
 			var s:Sprite, l:int;
+
+			// Listen for changes on this Connection
+            connection.addEventListener(Connection.NEW_WAY, newWayCreatedListener);
+            connection.addEventListener(Connection.NEW_POI, newPOICreatedListener);
+            connection.addEventListener(Connection.WAY_RENUMBERED, wayRenumberedListener);
+            connection.addEventListener(Connection.NODE_RENUMBERED, nodeRenumberedListener);
 
 			// Add paint sprites
 			for (l=minlayer; l<=maxlayer; l++) {			// each layer (10 is +5, 0 is -5)
@@ -135,21 +147,18 @@ package net.systemeD.halcyon {
 		}
 
         /**
-        * Update, and if necessary, create / remove UIs for the given objects.
-        * The object is effectively lists of objects split into inside/outside pairs, e.g.
-        * { waysInside: [], waysOutside: [] } where each is a array of entities either inside
-        * or outside this current view window. UIs for the entities on "inside" lists will be created if necessary.
+        * Update, and if necessary, create / remove UIs for the current viewport.
         * Flags control redrawing existing entities and removing UIs from entities no longer in view.
         *
-        * @param o The object containing all the relevant entites.
         * @param redraw If true, all UIs for entities on "inside" lists will be redrawn
         * @param remove If true, all UIs for entites on "outside" lists will be removed. The purgable flag on UIs
                         can override this, for example for selected objects.
         * fixme? add smarter behaviour for way nodes - remove NodeUIs from way nodes off screen, create them for ones
         * that scroll onto screen (for highlights etc)
         */
-		public function updateEntityUIs(o:Object, redraw:Boolean, remove:Boolean):void {
+		public function updateEntityUIs(redraw:Boolean, remove:Boolean):void {
 			var way:Way, poi:Node, marker:Marker;
+			var o:Object = connection.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b);
 
 			for each (way in o.waysInside) {
 				if (!wayuis[way.id]) { createWayUI(way); }
@@ -326,6 +335,7 @@ package net.systemeD.halcyon {
             for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 		
+		// >>>> REFACTOR: remove this
 		public function findSource():VectorLayer {
 			var v:VectorLayer;
 			for each (v in map.vectorlayers) {
@@ -333,5 +343,79 @@ package net.systemeD.halcyon {
 			}
 			return null;
 		}
+
+		// ==================== Start of code moved from Map.as
+
+		// Listeners for Connection events
+
+        private function newWayCreatedListener(event:EntityEvent):void {
+            var way:Way = event.entity as Way;
+			if (!way.loaded || !way.within(map.edge_l, map.edge_r, map.edge_t, map.edge_b)) { return; }
+			createWayUI(way);
+        }
+
+        private function newPOICreatedListener(event:EntityEvent):void {
+            var node:Node = event.entity as Node;
+			if (!node.within(map.edge_l, map.edge_r, map.edge_t, map.edge_b)) { return; }
+			createNodeUI(node);
+        }
+
+		private function wayRenumberedListener(event:EntityRenumberedEvent):void {
+            var way:Way = event.entity as Way;
+			renumberWayUI(way,event.oldID);
+		}
+
+		private function nodeRenumberedListener(event:EntityRenumberedEvent):void {
+            var node:Node = event.entity as Node;
+			renumberNodeUI(node,event.oldID);
+		}
+
+        /** Visually mark an entity as highlighted. */
+        public function setHighlight(entity:Entity, settings:Object):void {
+			if      ( entity is Way  && wayuis[entity.id] ) { wayuis[entity.id].setHighlight(settings);  }
+			else if ( entity is Node && nodeuis[entity.id]) { nodeuis[entity.id].setHighlight(settings); }
+        }
+
+        public function setHighlightOnNodes(way:Way, settings:Object):void {
+			if (wayuis[way.id]) wayuis[way.id].setHighlightOnNodes(settings);
+        }
+
+		public function protectWay(way:Way):void {
+			if (wayuis[way.id]) wayuis[way.id].protectSprites();
+		}
+
+		public function unprotectWay(way:Way):void {
+			if (wayuis[way.id]) wayuis[way.id].unprotectSprites();
+		}
+		
+		public function limitWayDrawing(way:Way,except:Number=NaN,only:Number=NaN):void {
+			if (!wayuis[way.id]) return;
+			wayuis[way.id].drawExcept=except;
+			wayuis[way.id].drawOnly  =only;
+			wayuis[way.id].redraw();
+		}
+
+		/** Protect Entities and EntityUIs against purging. This prevents the currently selected items
+		   from being purged even though they're off-screen. */
+
+		public function setPurgable(entities:Array, purgable:Boolean):void {
+			for each (var entity:Entity in entities) {
+				entity.locked=!purgable;
+				if ( entity is Way  ) {
+					var way:Way=entity as Way;
+					if (wayuis[way.id]) { wayuis[way.id].purgable=purgable; }
+					for (var i:uint=0; i<way.length; i++) {
+						var node:Node=way.getNode(i)
+						node.locked=!purgable;
+						if (nodeuis[node.id]) { nodeuis[node.id].purgable=purgable; }
+					}
+				} else if ( entity is Node && nodeuis[entity.id]) { 
+					nodeuis[entity.id].purgable=purgable;
+				}
+			}
+		}
+
+		// ==================== End of code moved from Map.as
+
 	}
 }

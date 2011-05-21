@@ -20,7 +20,7 @@ package net.systemeD.potlatch2.save {
         }
 
         private function save(callback:Function):void {
-            var conn:Connection = Connection.getConnectionInstance();
+            var conn:Connection = Connection.getConnection();
             if (conn.hasAccessToken()) {
                 callback();
             } else {
@@ -51,7 +51,7 @@ package net.systemeD.potlatch2.save {
                 PopUpManager.createPopUp(Application(Application.application), SaveDialog, true));
             PopUpManager.centerPopUp(saveDialog);
 
-			if (Connection.getConnectionInstance().getActiveChangeset()) {
+			if (Connection.getConnection().getActiveChangeset()) {
 				saveDialog.dontPrompt();
 			}
         }

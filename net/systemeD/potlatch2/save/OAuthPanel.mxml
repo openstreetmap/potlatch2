@@ -105,7 +105,7 @@
 		}
         
         private function getRequestToken():void {
-            connection = Connection.getConnectionInstance();
+            connection = Connection.getConnection();
             
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
@@ -192,7 +192,7 @@
             PopUpManager.removePopUp(this);
             
             _accessToken = getResponseToken(URLLoader(event.target));
-            Connection.getConnectionInstance().setAuthToken(_accessToken);
+            Connection.getConnection().setAuthToken(_accessToken);
             dispatchEvent(new Event(ACCESS_TOKEN_EVENT));
         }
         

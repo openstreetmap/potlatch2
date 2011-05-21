@@ -36,7 +36,7 @@ package net.systemeD.halcyon.connection {
             }
 
             if ( !connectionWasDirty ) {
-              Connection.getConnectionInstance().markDirty();
+              Connection.getConnection().markDirty();
             }
         }
 
@@ -52,7 +52,7 @@ package net.systemeD.halcyon.connection {
             }
 
             if ( !connectionWasDirty ) {
-              Connection.getConnectionInstance().markClean();
+              Connection.getConnection().markClean();
             }
         }
 
@@ -62,7 +62,7 @@ package net.systemeD.halcyon.connection {
         */
         private function init():void {
             wasDirty = entity.isDirty;
-            connectionWasDirty = Connection.getConnectionInstance().isDirty;
+            connectionWasDirty = Connection.getConnection().isDirty;
             initialised = true;
         }
             

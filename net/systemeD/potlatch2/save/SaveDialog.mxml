@@ -83,7 +83,7 @@
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.AttentionEvent;
     
-    private var conn:Connection = Connection.getConnectionInstance();
+    private var conn:Connection = Connection.getConnection();
 	private var doSkip:Boolean = false;
     
     [Bindable]

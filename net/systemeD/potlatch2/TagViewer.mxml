@@ -622,7 +622,7 @@
           // but is at least robust for any kind of change.
           // Figuring out a better way is someone else's FIXME
 
-          var conn:Connection = Connection.getConnectionInstance();
+          var conn:Connection = Connection.getConnection();
           var rel:Relation = selectedEntity as Relation
           var action:CompositeUndoableAction = new CompositeUndoableAction("Rearrange relation members for "+rel);
 
@@ -650,7 +650,7 @@
       private function editRelation(id:Number):void {
           var panel:RelationEditorPanel = RelationEditorPanel(
               PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-          panel.setRelation(Connection.getConnectionInstance().getRelation(id));
+          panel.setRelation(Connection.getConnection().getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
 
@@ -742,7 +742,7 @@
       public function openEntityPage():void {
           if (selectedEntity != null && selectedEntity.id >= 0) {
               // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-              var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
+              var urlBase:String = Connection.getConnection().apiBase + '../../browse/'
               navigateToURL(new URLRequest(urlBase+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
           }
       }
@@ -752,7 +752,7 @@
       }
 
       private function removeFromRelation(id:Number, index:int=-1):void {
-		var rel:Relation=Connection.getConnectionInstance().getRelation(id);
+		var rel:Relation=Connection.getConnection().getRelation(id);
 		if (index>-1) {
 			rel.removeMemberByIndex(index, MainUndoStack.getGlobalStack().addAction);
 		} else if (selectedEntity is EntityCollection) {

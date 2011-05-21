@@ -16,8 +16,9 @@ package net.systemeD.halcyon.connection {
     */
 	public class XMLConnection extends XMLBaseConnection {
 
-		public function XMLConnection() {
+		public function XMLConnection(name:String,api:String,policy:String,initparams:Object) {
 
+			super(name,api,policy,initparams);
 			if (Connection.policyURL!='')
                 Security.loadPolicyFile(Connection.policyURL);
             var oauthPolicy:String = Connection.getParam("oauth_policy", "");

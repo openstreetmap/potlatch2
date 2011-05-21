@@ -27,7 +27,7 @@
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
 
-        conn = Connection.getConnectionInstance();
+        conn = Connection.getConnection();
         map = Globals.vars.root;
 
         conn.addEventListener(Connection.TRACES_LOADED, onTracesLoaded);

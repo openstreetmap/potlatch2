@@ -31,7 +31,7 @@
 			relid = Number(requestedID.text);
 			PopUpManager.removePopUp(this);
 
-			var conn:Connection = Connection.getConnectionInstance();
+			var conn:Connection = Connection.getConnection();
 			if (!relid) return;
 			if (conn.getRelation(relid)) {
 				relationLoaded(null);
@@ -42,7 +42,7 @@
 		}
 		
 		private function relationLoaded(event:Event):void {
-			var conn:Connection = Connection.getConnectionInstance();
+			var conn:Connection = Connection.getConnection();
 			var relation:Relation = conn.getRelation(relid);
 			conn.removeEventListener(Connection.LOAD_COMPLETED, relationLoaded);
 			if (!relation) return;

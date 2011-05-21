@@ -32,7 +32,7 @@
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
-          conn = Connection.getConnectionInstance();
+          conn = Connection.getConnection();
           relationList = conn.getMatchingRelationIDs(t);
           if (relationList.length == 0) {
             warning.text = "No relations available";

@@ -61,7 +61,7 @@ package net.systemeD.halcyon.connection {
 
         private function fetchFromServer():void {
             // todo - needs proper error handling
-            Connection.getConnectionInstance().fetchTrace(id, saveTraceData);
+            Connection.getConnection().fetchTrace(id, saveTraceData);
             dispatchEvent(new Event("loading_data"));
         }
 
@@ -129,7 +129,7 @@ package net.systemeD.halcyon.connection {
             }
 
 			default xml namespace = new Namespace("");
-            layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
+            layer.paint.updateEntityUIs(true, false);
         }
     }
 }

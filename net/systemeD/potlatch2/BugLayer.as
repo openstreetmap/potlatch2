@@ -97,7 +97,7 @@ package net.systemeD.potlatch2 {
                 tags["status"] = status[int(feature.properties.status)];
                 var marker:Marker = createMarker(tags, lat, lon, Number(feature.id));
               }
-              paint.updateEntityUIs(getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
+              paint.updateEntityUIs(true, false);
             }
         }
 

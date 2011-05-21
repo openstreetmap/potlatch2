@@ -25,8 +25,9 @@ package net.systemeD.halcyon.connection {
 		// ------------------------------------------------------------
 		// Constructor for new AMFConnection
 
-		public function AMFConnection() {
+		public function AMFConnection(name:String,api:String,policy:String,initparams:Object) {
 
+			super(name,api,policy,initparams);
 			if (Connection.policyURL!='')
                 Security.loadPolicyFile(Connection.policyURL);
 

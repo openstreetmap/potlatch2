@@ -10,31 +10,19 @@ package net.systemeD.halcyon.connection {
 
 	public class Connection extends EventDispatcher {
 
-        private static var connectionInstance:Connection = null;
+		public var name:String;
+        protected var apiBaseURL:String;
+        protected var policyURL:String;
+        protected var params:Object;
 
-        protected static var policyURL:String;
-        protected static var apiBaseURL:String;
-        protected static var params:Object;
+		public function Connection(cname:String,api:String,policy:String,initparams:Object={}) {
+			name=cname;
+			apiBaseURL=api;
+			policyURL=policy;
+			params=initparams;
+		}
 
-        public static function getConnection(initparams:Object=null):Connection {
-            if ( connectionInstance == null ) {
-            
-                params = initparams == null ? new Object() : initparams;
-                policyURL = getParam("policy", "http://127.0.0.1:3000/api/crossdomain.xml");
-                apiBaseURL = getParam("api", "http://127.0.0.1:3000/api/0.6/");
-                var connectType:String = getParam("connection", "XML");
-                
-                if ( connectType == "XML" )
-                    connectionInstance = new XMLConnection();
-                else if ( connectType == "OSM" )
-                    connectionInstance = new OSMConnection();
-                else
-                    connectionInstance = new AMFConnection();
-            }
-            return connectionInstance;
-        }
-
-        public static function getParam(name:String, defaultValue:String):String {
+        public function getParam(name:String, defaultValue:String):String {
             return params[name] == null ? defaultValue : params[name];
         }
 
@@ -42,13 +30,9 @@ package net.systemeD.halcyon.connection {
             return apiBaseURL;
         }
 
-        public static function get serverName():String {
+        public function get serverName():String {
             return getParam("serverName", "Localhost");
         }
-                
-		public static function getConnectionInstance():Connection {
-            return connectionInstance;
-		}
 
 		public function getEnvironment(responder:Responder):void {}
 

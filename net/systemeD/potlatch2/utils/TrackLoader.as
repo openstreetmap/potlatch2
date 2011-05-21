@@ -71,7 +71,7 @@ package net.systemeD.potlatch2.utils {
 			}
             
 			default xml namespace = new Namespace("");
-			layer.paint.updateEntityUIs(layer.getObjectsByBbox(left,right,top,bottom), false, false);
+			layer.paint.updateEntityUIs(false, false);
 		}
 
 		private function get layer():VectorLayer {

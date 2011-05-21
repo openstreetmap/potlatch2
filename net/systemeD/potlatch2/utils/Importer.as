@@ -50,7 +50,7 @@ package net.systemeD.potlatch2.utils {
 			filesloaded++;
 			if (filesloaded==filenames.length) { 
 				doImport();
-				paint.updateEntityUIs(container.getObjectsByBbox(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b), false, false);
+				paint.updateEntityUIs(false, false);
 				if (callback!=null) { callback(true); }
 			}
 		}

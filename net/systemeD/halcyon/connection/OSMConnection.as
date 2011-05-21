@@ -44,8 +44,9 @@ package net.systemeD.halcyon.connection {
 
 		private static const FILENAME:RegExp=/([\-\d\.]+)_([\-\d\.]+)_([\-\d\.]+)_([\-\d\.]+)\./i;
 
-		public function OSMConnection() {
+		public function OSMConnection(name:String,api:String,policy:String,initparams:Object) {
 
+			super(name,api,policy,initparams);
 			if (Connection.policyURL!='')
                 Security.loadPolicyFile(Connection.policyURL);
 
