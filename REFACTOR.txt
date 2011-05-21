@@ -1,0 +1,31 @@
+== Potlatch 2 refactoring ==
+
+Aims:
+- to enable multiple Maps to be shown on-screen (e.g. for junction editor)
+- to bring Connection and VectorLayer code together
+
+==== think what to do about controllers ====
+
+
+Map.as changes:
+becomes a collection of MapPaint objects, all with the same lat/long/scale
+(plus a backdrop sprite and a background imagery sprite)
+√ move listeners to Connection to MapPaint (e.g. new way created in the Connection - MapPaint should know about it, not Map)
+- refactor tileset/setbackground stuff?
+
+MapPaint.as changes:
+- gains a reference to a Connection - i.e. the source data for this layer
+- needs an 'interactive' flag
+√ UpdateEntityUIs no longer needs a set of entities passing to it - it can read directly from the Connection
+- consider whether it's better to have a backreference to Map or for Map to update edges/lat/long/scale etc.
+- wayuis, nodeuis etc. should ideally be private
+- removeLayer should blank
+
+VectorLayer.as changes:
+- move into Connection
+
+Global changes:
+- remove all references to getConnection etc. - there can now be more than one Connection
+- remove all back-references to Map except where necessary for lat/long/scale
+- Controllers are full of references to controller.map and to controller.connection
+- move AttentionEvent stuff
