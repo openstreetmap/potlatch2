@@ -172,6 +172,7 @@
        
       <!-- Sets java.awt.headless=true so font compilation works in headless environments -->
       <compiler.headless-server>true</compiler.headless-server>
+      <target-player>10.0.0</target-player>
      </mxmlc>
      
      <echo message="The ${test.application.name}.swf test runner has been created in ${test.bin.dir}" />
