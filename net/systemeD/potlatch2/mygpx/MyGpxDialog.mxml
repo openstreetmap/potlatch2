@@ -50,7 +50,7 @@
     }
 
     [Bindable(event="traces_loaded")]
-    private function get traces():Array {
+    private function get traces():Vector.<Trace> {
         return conn.getTraces();
     }
 
