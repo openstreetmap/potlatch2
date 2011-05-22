@@ -59,6 +59,10 @@ package net.systemeD.potlatch2.mapfeatures {
                     if (f.isType('relation'))                 { addToTagList('relation',tag); }
                     if (f.isType('point'))                    { addToTagList('node',tag); }
                 }
+
+                for each (var inputSet:XML in feature..inputSet) {
+                    tagsFromInputSet(definition.inputSet.(@id == String(inputSet.@ref)), f);
+                }
             }
 
             _categories = new Array();
@@ -67,6 +71,23 @@ package net.systemeD.potlatch2.mapfeatures {
                   _categories.push(new Category(this, catXML.@name, catXML.@id, _categories.length));
             }
             dispatchEvent(new Event("featuresLoaded"));
+        }
+
+        private function tagsFromInputSet(inputSet:XMLList, f:Feature):void {
+            for each (var input:XML in inputSet.input) {
+                // Take all the k/v pairs from inputs that have choice
+                // Todo - add the freetext keys (source, addr:housenumber etc)
+                for each (var choice:XML in input..choice ) {
+                    if (f.isType('line') || f.isType('area')) { addToTagList('way', {k:String(input.@key), v:String(choice.@value)}); }
+                    if (f.isType('relation'))                 { addToTagList('relation',{k:String(input.@key), v:String(choice.@value)}); }
+                    if (f.isType('point'))                    { addToTagList('node',{k:String(input.@key), v:String(choice.@value)}); }
+                }
+            }
+
+            // inputSets can have their own inputSets, so recurse
+            for each (var i:XML in inputSet.inputSet) {
+                tagsFromInputSet(definition.inputSet.(@id == String(i.@ref)), f);
+            }
         }
 
         /** Add one item to tagList index, which will end up being a list like: ["way"]["highway"]["residential"] */
