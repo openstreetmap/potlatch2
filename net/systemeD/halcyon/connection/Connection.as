@@ -79,6 +79,7 @@ package net.systemeD.halcyon.connection {
         private var nodes:Object = {};
         private var ways:Object = {};
         private var relations:Object = {};
+        private var markers:Object = {};
         private var pois:Array = [];
         private var changeset:Changeset = null;
 		private var changesetUpdated:Number;
@@ -188,6 +189,10 @@ package net.systemeD.halcyon.connection {
             return relations[id];
         }
 
+        public function getMarker(id:Number):Marker {
+            return markers[id];
+        }
+
 		protected function findEntity(type:String, id:*):Entity {
 			var i:Number=Number(id);
 			switch (type.toLowerCase()) {
@@ -276,6 +281,13 @@ package net.systemeD.halcyon.connection {
             return relation;
         }
 
+        /** Create a new marker. This can't be done as part of a Composite Action */
+        public function createMarker(tags:Object,lat:Number,lon:Number):Marker {
+            var marker:Marker = new Marker(this, nextNegative, 0, tags, true, lat, lon);
+            markers[marker.id] = marker;
+            return marker;
+        }
+
         public function getAllNodeIDs():Array {
             var list:Array = [];
             for each (var node:Node in nodes)
@@ -316,7 +328,8 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
-			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [] };
+			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [],
+                              markersInside: [], markersOutside: [] };
 			for each (var way:Way in ways) {
 				if (way.within(left,right,top,bottom)) { o.waysInside.push(way); }
 				                                  else { o.waysOutside.push(way); }
@@ -325,6 +338,10 @@ package net.systemeD.halcyon.connection {
 				if (poi.within(left,right,top,bottom)) { o.poisInside.push(poi); }
 				                                  else { o.poisOutside.push(poi); }
 			}
+            for each (var marker:Marker in markers) {
+                if (marker.within(left,right,top,bottom)) { o.markersInside.push(marker); }
+                                                     else { o.markersOutside.push(marker); }
+            }
 			return o;
 		}
 
