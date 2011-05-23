@@ -57,7 +57,7 @@ package net.systemeD.potlatch2.utils {
 			loader.addEventListener(Event.COMPLETE, parseGPX);
 		}
 
-		public function parseGPX(event:Event):void {
+		private function parseGPX(event:Event):void {
 			var file:XML = new XML(event.target.data);
 			var action:CompositeUndoableAction = new CompositeUndoableAction("add track objects");
 			for each (var ns:Namespace in file.namespaceDeclarations()) {
