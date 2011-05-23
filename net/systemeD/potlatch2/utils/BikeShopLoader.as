@@ -1,9 +1,9 @@
 package net.systemeD.potlatch2.utils {
 
     import net.systemeD.halcyon.Map;
-    import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.halcyon.MapPaint;
+    import net.systemeD.halcyon.connection.Connection;
     import net.systemeD.halcyon.connection.Marker;
-    import net.systemeD.potlatch2.BugLayer;
     import flash.net.*;
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
@@ -25,16 +25,19 @@ package net.systemeD.potlatch2.utils {
         private var map:Map;
         private var bikeShopBaseURL:String;
         private var name:String;
-        private var _layer:VectorLayer;
+        private var _layer:MapPaint;
+        private var connection:Connection;
         private static const STYLESHEET:String="stylesheets/bikeshops.css";
 
         public function BikeShopLoader(map:Map, url:String, name:String) {
             this.map = map;
             this.bikeShopBaseURL = url;
             this.name = name;
+            this.connection = new Connection(name,url,null,null);
         }
 
         public function load():void {
+            // this would be better if the connection did the loading
             var loader:URLLoader = new URLLoader();
             loader.load(new URLRequest(bikeShopBaseURL+"shop/missing.kml?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t));
             loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, balls);
@@ -60,22 +63,21 @@ package net.systemeD.potlatch2.utils {
               var tags:Object = {};
               tags["name"] = String(placemark.name);
               tags["description"] = String(placemark.description);
-              var marker:Marker = layer.createMarker(tags, lat, lon);
+              var marker:Marker = connection.createMarker(tags, lat, lon);
             }
 			default xml namespace = new Namespace("");
-            layer.paint.updateEntityUIs(true, false);
+            layer.updateEntityUIs(true, false);
         }
 
-        private function get layer():VectorLayer {
-			// >>>> REFACTOR: VectorLayer commented out
-            // if (!_layer) {
-            //     var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
-            //     Security.loadPolicyFile(policyFile);
-            //     _layer=new VectorLayer(name,map,STYLESHEET);
-            //     map.addVectorLayer(_layer);
-            // }
-            // return _layer;
-			return null;
+        private function get layer():MapPaint {
+            if (!_layer) {
+              // this should be done by the connection, not here.
+              var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
+              Security.loadPolicyFile(policyFile);
+
+              _layer = map.addLayer(connection, STYLESHEET);
+            }
+            return _layer;
         }
     }
 }
