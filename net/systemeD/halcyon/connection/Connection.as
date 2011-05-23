@@ -53,6 +53,7 @@ package net.systemeD.halcyon.connection {
         public static var NEW_WAY:String = "new_way";
         public static var NEW_RELATION:String = "new_relation";
         public static var NEW_POI:String = "new_poi";
+        public static var NEW_MARKER:String = "new_marker";
         public static var NODE_RENUMBERED:String = "node_renumbered";
         public static var WAY_RENUMBERED:String = "way_renumbered";
         public static var RELATION_RENUMBERED:String = "relation_renumbered";
@@ -293,6 +294,7 @@ package net.systemeD.halcyon.connection {
               trace("new marker");
               marker = new Marker(this, id, 0, tags, true, lat, lon);
               markers[id]=marker;
+              sendEvent(new EntityEvent(NEW_MARKER, marker),false);
             }
             return marker;
         }
