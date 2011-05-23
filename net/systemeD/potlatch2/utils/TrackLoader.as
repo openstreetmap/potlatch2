@@ -10,6 +10,7 @@ package net.systemeD.potlatch2.utils {
 	- empty layer on reload
 	- cope with tracks with timestamps */
 
+    /** A TrackLoader will load the public GPX traces for the current map bounding box into a separate layer */
 	public class TrackLoader {
 
 		private var left:Number=0;
@@ -24,13 +25,20 @@ package net.systemeD.potlatch2.utils {
 
 		private static const STYLESHEET:String="stylesheets/gpx.css";
 		private static const LAYER:String="GPS tracks";
-		
+
+		/** Create a new TrackLoader
+		*   @param map The map object you want to the GPS tracks layer to be added to
+		*   @param url The url of the server api base
+		*/
 		public function TrackLoader(map:Map, url:String) {
 			this.map=map;
 			apiBaseURL=url;
 			connection = new Connection(LAYER,apiBaseURL,null, null);
 		}
-		
+
+		/** Load the public traces for the current map extent
+		*   @param keep not implemented
+		*/
 		public function load(keep:Boolean=false):void {
 			if (map.edge_l==left && map.edge_r==right && map.edge_t==top && map.edge_b==bottom) {
 				page++;
