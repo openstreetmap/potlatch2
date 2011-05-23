@@ -69,7 +69,7 @@ package net.systemeD.potlatch2 {
                                 top:Number, bottom:Number):void {
 
             // Should be guarded against multiple calls really.
-            if (policyURL != "") { Security.loadPolicyFile(policyURL); trace("policy");};
+            if (policyURL != "") { Security.loadPolicyFile(policyURL); }
 
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, parseJSON);
