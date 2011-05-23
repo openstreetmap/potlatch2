@@ -16,7 +16,6 @@
 
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.VectorLayer;
-      import net.systemeD.potlatch2.BugLayer;
       import mx.collections.*;
 
       private var selectedEntity:Entity;
