@@ -6,6 +6,7 @@ package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.connection.actions.*;
     import flash.net.*;
     import flash.events.*;
+    import flash.system.Security;
     import com.adobe.serialization.json.JSON;
 
     /** A VectorLayer that can be used to load and display bugs from MapDust-compatible APIs.
@@ -35,7 +36,7 @@ package net.systemeD.potlatch2 {
             this.baseUrl = baseUrl;
             this.apiKey = apiKey;
             this.detailsUrl = detailsURL;
-            super(n, baseUrl, null, null);
+            super(n, baseUrl, baseUrl+"crossdomain.xml", null);
         }
 
         public function closeBug(m:Marker, nickname:String, comment:String, status:String = null):void {
@@ -66,11 +67,15 @@ package net.systemeD.potlatch2 {
 
         public override function loadBbox(left:Number, right:Number,
                                 top:Number, bottom:Number):void {
+
+            // Should be guarded against multiple calls really.
+            if (policyURL != "") { Security.loadPolicyFile(policyURL); trace("policy");};
+
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+left+","+bottom+","+right+","+top+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
             loader.addEventListener(Event.COMPLETE, parseJSON);
             loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
             loader.addEventListener(IOErrorEvent.IO_ERROR, handleError);
+            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+left+","+bottom+","+right+","+top+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
         }
 
 		private function handleError(event:Event):void {

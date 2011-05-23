@@ -30,18 +30,10 @@ package net.systemeD.potlatch2.utils {
         }
 
         public function load():void {
-            connection.loadBbox(map.edge_l, map.edge_r, map.edge_t, map.edge_b);
-        }
-
-        private function get layer():MapPaint {
             if (!_layer) {
-                // should be done by the connection
-                var policyFile:String = bugBaseURL+"crossdomain.xml";
-                Security.loadPolicyFile(policyFile);
-
                 _layer = map.addLayer(connection, STYLESHEET);
             }
-            return _layer;
+            connection.loadBbox(map.edge_l, map.edge_r, map.edge_t, map.edge_b);
         }
     }
 }
