@@ -212,13 +212,12 @@
 			// >>>> REFACTOR: shouldn't be trying to find out stylesheet from here
 			theMap.addLayer(conn,params['styleurl'] ? params['styleurl'] : 'stylesheets/potlatch.css',false);
 
+            // Auto-load vector backgrounds from config
+            theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
+
 			// Set start position of map
 			// >>>> REFACTOR: what happens if lat/lon/zoom not supplied? (Hurleston GPX case)
 			theMap.init(params['lat'], params['lon'], params['zoom']);
-
-            // Auto-load vector backgrounds from config
-            // This could go spectacularly wrong if map.init completes before the event listener below is added
-            theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
 
 			// add attribution/logo sprite
 			var overlay:Sprite=new Sprite();
