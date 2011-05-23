@@ -11,7 +11,7 @@ package net.systemeD.potlatch2 {
     /** A VectorLayer that can be used to load and display bugs from MapDust-compatible APIs.
         See utils/BugLoader.as for the corresponding loader. */
 
-    public class BugLayer extends VectorLayer {
+    public class BugConnection extends Connection {
 
         private var baseUrl:String;
         private var apiKey:String;
@@ -31,11 +31,11 @@ package net.systemeD.potlatch2 {
         public static var BUG_STATUS_INVALID:String = "3"; // or 'non-reproduceable'
         public static const status:Array = ["", "open", "fixed", "invalid"];
 
-        public function BugLayer(n:String, map:Map, s:String, baseUrl:String, apiKey:String, detailsURL:String) {
+        public function BugConnection(n:String, baseUrl:String, apiKey:String, detailsURL:String) {
             this.baseUrl = baseUrl;
             this.apiKey = apiKey;
             this.detailsUrl = detailsURL;
-            super(n,map,s);
+            super(n, baseUrl, null, null);
         }
 
         public function closeBug(m:Marker, nickname:String, comment:String, status:String = null):void {
@@ -67,7 +67,7 @@ package net.systemeD.potlatch2 {
         public override function loadBbox(left:Number, right:Number,
                                 top:Number, bottom:Number):void {
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
+            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+left+","+bottom+","+right+","+top+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
             loader.addEventListener(Event.COMPLETE, parseJSON);
             loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
             loader.addEventListener(IOErrorEvent.IO_ERROR, handleError);
@@ -97,7 +97,6 @@ package net.systemeD.potlatch2 {
                 tags["status"] = status[int(feature.properties.status)];
                 var marker:Marker = createMarker(tags, lat, lon, Number(feature.id));
               }
-              paint.updateEntityUIs(true, false);
             }
         }
 
