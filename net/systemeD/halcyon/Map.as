@@ -245,10 +245,11 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Add layers
 		
-		public function addLayer(connection:Connection, styleurl:String, backgroundlayer:Boolean=true):void {
+		public function addLayer(connection:Connection, styleurl:String, backgroundlayer:Boolean=true):MapPaint {
 			var paint:MapPaint=new MapPaint(this, connection, styleurl, -5, 5);
 			paintContainer.addChild(paint);
 			paint.isBackground=backgroundlayer;
+			return paint;
 		}
 
 		public function removeLayerByName(name:String):void {
