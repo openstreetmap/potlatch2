@@ -67,6 +67,7 @@ package net.systemeD.halcyon {
             connection.addEventListener(Connection.NEW_POI, newPOICreatedListener);
             connection.addEventListener(Connection.WAY_RENUMBERED, wayRenumberedListener);
             connection.addEventListener(Connection.NODE_RENUMBERED, nodeRenumberedListener);
+            connection.addEventListener(Connection.NEW_MARKER, newMarkerCreatedListener);
 
 			// Add paint sprites
 			for (l=minlayer; l<=maxlayer; l++) {			// each layer (10 is +5, 0 is -5)
@@ -367,6 +368,12 @@ package net.systemeD.halcyon {
             var node:Node = event.entity as Node;
 			if (!node.within(map.edge_l, map.edge_r, map.edge_t, map.edge_b)) { return; }
 			createNodeUI(node);
+        }
+
+        private function newMarkerCreatedListener(event:EntityEvent):void {
+            var marker:Marker = event.entity as Marker;
+            if (!marker.within(map.edge_l, map.edge_r, map.edge_t, map.edge_b)) { return; }
+            createMarkerUI(marker);
         }
 
 		private function wayRenumberedListener(event:EntityRenumberedEvent):void {

@@ -31,8 +31,6 @@ package net.systemeD.potlatch2.utils {
 
         public function load():void {
             connection.loadBbox(map.edge_l, map.edge_r, map.edge_t, map.edge_b);
-            // FIXME Note this fires too early, since loadBbox is asynchronous
-            layer.updateEntityUIs(true, false);
         }
 
         private function get layer():MapPaint {
