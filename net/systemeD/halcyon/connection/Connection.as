@@ -281,10 +281,19 @@ package net.systemeD.halcyon.connection {
             return relation;
         }
 
-        /** Create a new marker. This can't be done as part of a Composite Action */
-        public function createMarker(tags:Object,lat:Number,lon:Number):Marker {
-            var marker:Marker = new Marker(this, nextNegative, 0, tags, true, lat, lon);
-            markers[marker.id] = marker;
+        /** Create a new marker. This can't be done as part of a Composite Action. */
+        // REFACTOR  This needs renaming and/or refactoring to behave more similarly to n/w/r
+        public function createMarker(tags:Object,lat:Number,lon:Number,id:Number=NaN):Marker {
+            if (!id) {
+              id = negativeID;
+              negativeID--;
+            }
+            var marker:Marker = markers[id];
+            if (marker == null) {
+              trace("new marker");
+              marker = new Marker(this, id, 0, tags, true, lat, lon);
+              markers[id]=marker;
+            }
             return marker;
         }
 
