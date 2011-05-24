@@ -16,12 +16,12 @@ package net.systemeD.halcyon.connection {
     * loading GPX files (and other formats) from arbitrary urls.
     */
     public class Trace extends EventDispatcher {
-        private var _id:Number;
-        private var _description:String;
+        private var _id:Number; // id of the trace, as reported by the server
+        private var _description:String; // description, as reported by the server
         private var tags:Array = []; // N.B. trace tags are NOT k/v pairs
-        private var _isLoaded:Boolean;
-        private var _filename:String;
-        private var _traceData:String;
+        private var _isLoaded:Boolean; // Flag for when the data has been downloaded and parsed
+        private var _filename:String; // The original name of the file, as reported by the server
+        private var _traceData:String; // the trace data, saved as a string
         private var map:Map;
         private var _layer:MapPaint;
         private var masterConnection:XMLConnection; // The authenticated connection
