@@ -34,6 +34,9 @@ package net.systemeD.halcyon {
 		/** Hash of index->position */
 		public var sublayerIndex:Object={};
 
+        /** The url of the style in use */
+        public var style:String = '';
+
 		private const VERYBIG:Number=Math.pow(2,16);
 		private static const NO_LAYER:int=-99999;		// same as NodeUI
 
@@ -341,6 +344,7 @@ package net.systemeD.halcyon {
 		
 		/** Switch to new MapCSS. */
 		public function setStyle(url:String):void {
+            style = url;
 			ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,redraw,redrawPOIs);
 			ruleset.loadFromCSS(url);
         }
