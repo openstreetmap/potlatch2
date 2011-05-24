@@ -32,11 +32,11 @@ package net.systemeD.halcyon.connection {
 
 			readConnection=new NetConnection();
 			readConnection.objectEncoding = flash.net.ObjectEncoding.AMF0;
-			readConnection.connect(Connection.apiBaseURL+"amf/read");
+			readConnection.connect(apiBaseURL+"amf/read");
 			
 			writeConnection=new NetConnection();
 			writeConnection.objectEncoding = flash.net.ObjectEncoding.AMF0;
-			writeConnection.connect(Connection.apiBaseURL+"amf/write");
+			writeConnection.connect(apiBaseURL+"amf/write");
 			
 		}
 

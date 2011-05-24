@@ -97,7 +97,7 @@ package net.systemeD.halcyon.connection {
 		private function loadFile(box:Array):void {
 			bboxes[box]=LOADING;
 
-            var mapRequest:URLRequest = new URLRequest(Connection.apiBaseURL+"/"+box[0]+"_"+box[1]+"_"+box[2]+"_"+box[3]+".osm");
+            var mapRequest:URLRequest = new URLRequest(apiBaseURL+"/"+box[0]+"_"+box[1]+"_"+box[2]+"_"+box[3]+".osm");
 			var mapLoader:ExtendedURLLoader = new ExtendedURLLoader();
 			mapLoader.info['bbox']=box;
 			mapLoader.addEventListener(Event.COMPLETE, markMapLoaded);
