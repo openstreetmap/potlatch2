@@ -29,7 +29,7 @@ package net.systemeD.halcyon {
 		public const MAXSCALE:uint=23; 
 
 		// Container for MapPaint objects
-		public var paintContainer:Sprite;
+		private var paintContainer:Sprite;
 
 		/** map scale */
 		public var scale:uint=14;						 
@@ -269,6 +269,16 @@ package net.systemeD.halcyon {
 		private function getLayerAt(i:uint):MapPaint {
 			return MapPaint(paintContainer.getChildAt(i));
 		}
+
+        /** Get all the layers available for this Map object
+        *   @return An array of MapPaint objects */
+        public function getLayers():Array {
+            var a:Array = [];
+            for (var i:uint=0; i<paintContainer.numChildren; i++) {
+                a.push(getLayerAt(i));
+            }
+            return a;
+        }
 		
 		/* Find which layer is editable */
 		public function get editableLayer():MapPaint {

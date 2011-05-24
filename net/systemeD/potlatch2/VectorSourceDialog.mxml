@@ -103,12 +103,11 @@
 	[Bindable(event="layers_changed")]
 	private function get vectorLayers():Array {
         var v:Array=[];
-        for (var i:uint = 0; i < map.paintContainer.numChildren; i++) { //nasty
-            var a:MapPaint = MapPaint(map.paintContainer.getChildAt(i));
+        for each (var a:MapPaint in map.getLayers() ) {
             if (a.isBackground) {
                 v.push( { name:a.connection.name, visible:a.visible, url:a.connection.apiBase, style:a.style } );
             }
-		}
+        }
 		return v;
 	}
 	
