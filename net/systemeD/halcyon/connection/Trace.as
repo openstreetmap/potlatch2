@@ -8,7 +8,7 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.Globals;
-    import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.halcyon.MapPaint;
 
     /**
     * Implements trace objects loaded from the OSM API.
@@ -23,18 +23,24 @@ package net.systemeD.halcyon.connection {
         private var _filename:String;
         private var _traceData:String;
         private var map:Map;
-        private var _connection:Connection;
-        private var _layer:VectorLayer;
+        private var _layer:MapPaint;
+        private var masterConnection:XMLConnection; // The authenticated connection
+        private var _connection:Connection; // The one we store our fake nodes/ways in.
         private var simplify:Boolean = false;
 
         private static const STYLESHEET:String="stylesheets/gpx.css";
 
-        public function Trace(connection:Connection) {
-			_connection = connection;
-            map = Globals.vars.root;
+        /** Create a new trace.
+        * @param masterConnection The authenticated connection to communicate with the server
+        */
+        public function Trace(masterConnection:XMLConnection) {
+            this.masterConnection = masterConnection;
+            map = Globals.vars.root; // REFACTOR this prevents traces being added to arbitrary maps
         }
 
-        /* Create a new trace, from the XML description given by the user/traces call */
+        /** Create a new trace, from the XML description given by the user/traces call.
+        * This only creates the object itself, the actual trace contents (trkseg etc) are
+        * lazily downloaded later. */
         public function fromXML(xml:XML):Trace {
             _id = Number(xml.@id);
             _filename = xml.@name;
@@ -63,7 +69,7 @@ package net.systemeD.halcyon.connection {
 
         private function fetchFromServer():void {
             // todo - needs proper error handling
-            _connection.fetchTrace(id, saveTraceData);
+            masterConnection.fetchTrace(id, saveTraceData);
             dispatchEvent(new Event("loading_data"));
         }
 
@@ -72,11 +78,17 @@ package net.systemeD.halcyon.connection {
             dispatchEvent(new Event("loaded_data"));
         }
 
-        private function get layer():VectorLayer {
+        private function get connection():Connection {
+            if (!_connection) {
+                // create a new layer for every trace, to they can be turned on/off individually
+                _connection = new Connection(filename, null, null, null); //fixme shouldn't rely on policy being loaded already.
+            }
+            return _connection
+        }
+
+        private function get layer():MapPaint {
             if (!_layer) {
-				// >>>> REFACTOR: VectorLayer commented out
-                // _layer=new VectorLayer(filename,map,STYLESHEET);
-                // map.addVectorLayer(_layer);
+                _layer = map.addLayer(connection, STYLESHEET);
             }
             return _layer;
         }
@@ -104,6 +116,7 @@ package net.systemeD.halcyon.connection {
 
         private function process():void {
             var file:XML = new XML(_traceData);
+            var action:CompositeUndoableAction = new CompositeUndoableAction("add trace objects");
 			for each (var ns:Namespace in file.namespaceDeclarations()) {
 				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
 					default xml namespace = ns;
@@ -114,10 +127,10 @@ package net.systemeD.halcyon.connection {
                 var way:Way;
                 var nodestring:Array = [];
                 for each (var trkpt:XML in trkseg.trkpt) {
-                    nodestring.push(layer.createNode({}, trkpt.@lat, trkpt.@lon));
+                    nodestring.push(connection.createNode({}, trkpt.@lat, trkpt.@lon, action.push));
                 }
                 if (nodestring.length > 0) {
-                    way = layer.createWay({}, nodestring);
+                    way = connection.createWay({}, nodestring, action.push);
                     //if (simplify) { Simplify.simplify(way, paint.map, false); }
                 }
             }
@@ -127,12 +140,13 @@ package net.systemeD.halcyon.connection {
                 for each (var tag:XML in wpt.children()) {
                     tags[tag.name().localName]=tag.toString();
                 }
-                var node:Node = layer.createNode(tags, wpt.@lat, wpt.@lon);
-				layer.registerPOI(node);
+                var node:Node = connection.createNode(tags, wpt.@lat, wpt.@lon, action.push);
+				connection.registerPOI(node);
             }
 
+            action.doAction(); /* just do it, don't add to undo stack */
 			default xml namespace = new Namespace("");
-            layer.paint.updateEntityUIs(true, false);
+            layer.updateEntityUIs(true, false);
         }
     }
 }
