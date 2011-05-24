@@ -80,14 +80,15 @@ package net.systemeD.halcyon.connection {
 
         private function get connection():Connection {
             if (!_connection) {
-                // create a new layer for every trace, to they can be turned on/off individually
-                _connection = new Connection(filename, null, null, null); //fixme shouldn't rely on policy being loaded already.
+                // create a new connection so that the ids don't impact the main layer.
+                _connection = new Connection(filename, null, null, null);
             }
             return _connection
         }
 
         private function get layer():MapPaint {
             if (!_layer) {
+                // create a new layer for every trace, so they can be turned on/off individually
                 _layer = map.addLayer(connection, STYLESHEET);
             }
             return _layer;
