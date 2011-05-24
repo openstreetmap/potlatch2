@@ -26,7 +26,7 @@ package net.systemeD.halcyon.connection {
 
         public function getParam(name:String, defaultValue:String):String {
 			if (params[name]) return params[name];
-			if (Globals.vars.flashvars[name]) return Globals.vars.flashvars[name];
+			if (Globals.vars.flashvars[name]) return Globals.vars.flashvars[name];  // REFACTOR - given the profusion of connections, should this be removed?
 			return defaultValue;
         }
 
