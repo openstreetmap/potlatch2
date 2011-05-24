@@ -112,7 +112,7 @@
 	}
 	
 	private function toggleVisibility(event:Event):void {
-		map.findLayer[dataGrid.selectedItem.name].visible = !map.findLayer[dataGrid.selectedItem.name].visible;
+		map.findLayer(dataGrid.selectedItem.name).visible = !map.findLayer(dataGrid.selectedItem.name).visible;
 	}
 	
 	private function dataEdited(event:DataGridEvent):void {
