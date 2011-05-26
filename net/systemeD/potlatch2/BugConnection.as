@@ -1,6 +1,5 @@
 package net.systemeD.potlatch2 {
 
-    import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
@@ -9,7 +8,7 @@ package net.systemeD.potlatch2 {
     import flash.system.Security;
     import com.adobe.serialization.json.JSON;
 
-    /** A VectorLayer that can be used to load and display bugs from MapDust-compatible APIs.
+    /** A Connection that can be used to load and display bugs from MapDust-compatible APIs.
         See utils/BugLoader.as for the corresponding loader. */
 
     public class BugConnection extends Connection {

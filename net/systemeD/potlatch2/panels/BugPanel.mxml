@@ -59,7 +59,6 @@
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.VectorLayer;
       import net.systemeD.potlatch2.BugConnection;
       import mx.collections.*;
       import com.adobe.utils.DateUtil;
