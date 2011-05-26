@@ -285,15 +285,17 @@
 
 			// Load arbitrary GPX from provided URL
 			if (loaderInfo.parameters['gpx_url']) {
-				var vectorlayer:VectorLayer=new VectorLayer(name,theMap,"stylesheets/gpx.css");
-				vectorlayer.url=loaderInfo.parameters['gpx_url'];
-				var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [vectorlayer.url], 
-				                                    function(success:Boolean,message:String=null):void {
-					if (!success) return;
-					// >>>> REFACTOR: vectorlayer commented out
-//					theMap.addVectorLayer(vectorlayer);
-					dispatchEvent(new Event("layers_changed"));
-				                                    }, false);
+
+                var gpx_url:String = loaderInfo.parameters['gpx_url'];
+
+                var connection:Connection = new Connection(name, gpx_url, null, null);
+                var gpx:GpxImporter=new GpxImporter(connection, theMap, [gpx_url],
+                                                function(success:Boolean,message:String=null):void {
+                                                    if (!success) return;
+                                                    var paint:MapPaint = theMap.addLayer(connection, "stylesheets/gpx.css");
+                                                    paint.updateEntityUIs(false, false);
+                                                    dispatchEvent(new Event("layers_changed"));
+                                                }, false);
 			}
 
 			// create GPS trackloader

@@ -1,6 +1,6 @@
 package net.systemeD.potlatch2.utils {
 
-	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.ExtendedURLLoader;
 	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.*;
@@ -11,8 +11,8 @@ package net.systemeD.potlatch2.utils {
 
 	public class Importer {
 
-		protected var container:Object;				// destination object for way/node/relations data
-		protected var paint:MapPaint;				// destination sprite for WayUIs/NodeUIs
+        protected var connection:Connection;    // destination connection for way/node/relations data
+        protected var map:Map;                  // map being used - used only in Simplify calls
 
 		public var files:Array=[];
 		protected var filenames:Array;
@@ -20,9 +20,9 @@ package net.systemeD.potlatch2.utils {
 		protected var callback:Function;
 		protected var simplify:Boolean;
 
-		public function Importer(container:*, paint:MapPaint, filenames:Array, callback:Function, simplify:Boolean) {
-			this.container = container;
-			this.paint = paint;
+		public function Importer(connection:Connection, map:Map, filenames:Array, callback:Function, simplify:Boolean) {
+			this.connection = connection;
+			this.map = map;
 			this.filenames=filenames;
 			this.callback=callback;
 			this.simplify=simplify;
@@ -48,14 +48,15 @@ package net.systemeD.potlatch2.utils {
 			trace("loaded file "+filenum); 
 			files[filenum]=e.target.data;
 			filesloaded++;
-			if (filesloaded==filenames.length) { 
-				doImport();
-				paint.updateEntityUIs(false, false);
+			if (filesloaded==filenames.length) {
+                var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
+				doImport(action.push);
+				action.doAction(); // just do it, don't add to undo stack
 				if (callback!=null) { callback(true); }
 			}
 		}
 		
-		protected function doImport():void {
+		protected function doImport(push:Function):void {
 		}
 
 		protected function securityErrorHandler( event:SecurityErrorEvent ):void { callback(false,"You don't have permission to open that file."); }

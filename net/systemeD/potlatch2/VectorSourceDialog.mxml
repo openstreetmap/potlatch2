@@ -33,7 +33,7 @@
 	    </mx:columns>
 	</mx:DataGrid>
 	<mx:HBox horizontalAlign="right" width="100%">
-		<mx:LinkButton label="Delete" click="removeVectorLayer()" enabled="{dataGrid.selectedItem != null? true : false}"/>
+		<mx:LinkButton label="Delete" click="removeLayer()" enabled="{dataGrid.selectedItem != null? true : false}"/>
 	</mx:HBox>
 
 	<mx:VBox width="100%" paddingTop="10">
@@ -129,7 +129,7 @@
 		}
 	}
 
-	private function removeVectorLayer():void {
+	private function removeLayer():void {
 		map.removeLayerByName(dataGrid.selectedItem.name);
 		dispatchEvent(new Event("layers_changed"));
 	}
@@ -144,31 +144,29 @@
 		if (type=='gpx') { stylesheet="stylesheets/gpx.css"; }
 
 		var connection:Connection = new Connection(name, url, null, null);
-		var mp:MapPaint = map.addLayer(connection, stylesheet);
 
-// REFACTOR this. commented out to let docs compile.
-        trace("loadFiles not implemented");
-//                var filesLoaded:Function = function(success:Boolean,message:String=null):void {
-//                        if (success) {
-//                                map.addVectorLayer(vectorlayer);
-//                                dispatchEvent(new Event("layers_changed"));
-//                        } else {
-//                                Alert.show(message, 'Error', mx.controls.Alert.OK);
-//                        }
-//                }
+                var filesLoaded:Function = function(success:Boolean,message:String=null):void {
+                        if (success) {
+                            var paint:MapPaint = map.addLayer(connection, stylesheet);
+                            paint.updateEntityUIs(false, false);
+                            dispatchEvent(new Event("layers_changed"));
+                        } else {
+                            Alert.show(message, 'Error', mx.controls.Alert.OK);
+                        }
+                }
 
-//		if (type=='gpx') {
-//			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
-//		} else if (type=='kml') {
-//			var kml:KmlImporter=new KmlImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
-//		} else if (type=='osm') {
-//			var osm:OsmImporter=new OsmImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
-//		} else {
-//			var re:RegExp=/.shp$/i; url=url.replace(re,'');
-//			var shp:ShpImporter=new ShpImporter(vectorlayer,
-//			                                    vectorlayer.paint,
-//			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify);
-//		}
+		if (type=='gpx') {
+			var gpx:GpxImporter=new GpxImporter(connection, map, [url], filesLoaded, simplify);
+		} else if (type=='kml') {
+			var kml:KmlImporter=new KmlImporter(connection, map, [url], filesLoaded, simplify);
+		} else if (type=='osm') {
+			var osm:OsmImporter=new OsmImporter(connection, map, [url], filesLoaded, simplify);
+		} else {
+			var re:RegExp=/.shp$/i; url=url.replace(re,'');
+			var shp:ShpImporter=new ShpImporter(connection,
+			                                    map,
+			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify);
+		}
 	}
 
               ]]>

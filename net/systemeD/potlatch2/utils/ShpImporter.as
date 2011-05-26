@@ -2,18 +2,19 @@ package net.systemeD.potlatch2.utils {
 
 	import org.vanrijkom.shp.*;
 	import org.vanrijkom.dbf.*;
-	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.potlatch2.tools.Simplify;
 
 	public class ShpImporter extends Importer {
 
-		public function ShpImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
-			super(container,paint,filenames,callback,simplify);
+		public function ShpImporter(connection:Connection, map:Map, filenames:Array, callback:Function=null, simplify:Boolean=false) {
+			super(connection,map,filenames,callback,simplify);
 		}
 
-		override protected function doImport(): void {
+		override protected function doImport(push:Function): void {
 			// we load .shp as files[0], .shx as files[1], .dbf as files[2]
 			var shp:ShpHeader=new ShpHeader(files[0]);
 			var dbf:DbfHeader=new DbfHeader(files[2]);
@@ -36,12 +37,12 @@ package net.systemeD.potlatch2.utils {
 						if (points!=null) {
 							for (var k:int=0; k < points.length; k++) {
 								var p:ShpPoint = ShpPoint(points[k]);
-								nodestring.push(container.createNode({}, p.y, p.x));
+								nodestring.push(connection.createNode({}, p.y, p.x, push));
 							}
 						}
 						if (nodestring.length>0) {
-							way=container.createWay({}, nodestring);
-							if (simplify) { Simplify.simplify(way, paint.map, false); }
+							way=connection.createWay({}, nodestring, push);
+							if (simplify) { Simplify.simplify(way, map, false); }
 						}
 					}
 				}
