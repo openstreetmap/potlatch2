@@ -25,11 +25,6 @@ MapPaint.as
 - wayuis, nodeuis etc. should ideally be private
 - removeLayer should blank
 
-VectorLayer.as is completely derelict
-- move into Connection
-- references in Loader classes etc. currently commented out
-- everything derived from VectorLayers (e.g. Traces, Bugs, BikeShopLoader) needs completely refactoring
-
 Global changes:
 - remove all back-references to Map except where necessary for lat/long/scale
 - getParam is messy - stuff sent via flashvars needs somewhere to live: currently in Globals which is ugly
