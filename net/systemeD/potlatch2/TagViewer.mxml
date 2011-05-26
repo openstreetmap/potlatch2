@@ -208,7 +208,7 @@
 
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.VectorLayer;
+      import net.systemeD.halcyon.MapPaint;
       import net.systemeD.potlatch2.mapfeatures.*;
 
       import mx.collections.*;
@@ -241,7 +241,7 @@
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
 
-	  public function setEntity(entities:Array, layer:VectorLayer=null):void {
+	  public function setEntity(entities:Array, layer:MapPaint=null):void {
 		UIComponent.suspendBackgroundProcessing();
 		connection=null;
 

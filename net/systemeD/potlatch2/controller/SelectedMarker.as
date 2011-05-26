@@ -3,13 +3,13 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.halcyon.MapPaint;
 
     public class SelectedMarker extends ControllerState {
         protected var initMarker:Marker;
-        protected var layer:VectorLayer;
+        protected var layer:MapPaint;
 
-        public function SelectedMarker(marker:Marker, layer:VectorLayer) {
+        public function SelectedMarker(marker:Marker, layer:MapPaint) {
             initMarker = marker;
             this.layer = layer;
         }

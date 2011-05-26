@@ -15,14 +15,14 @@
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.VectorLayer;
+      import net.systemeD.halcyon.MapPaint;
       import mx.collections.*;
 
       private var selectedEntity:Entity;
       private var tagDataProvider:ArrayCollection;
-      private var layer:VectorLayer;
+      private var layer:MapPaint;
 
-      public function init(entity:Entity, layer:VectorLayer):void {
+      public function init(entity:Entity, layer:MapPaint):void {
             this.layer = layer;
             if ( tagDataProvider == null ) {
                 tagDataProvider = new ArrayCollection();

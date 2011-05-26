@@ -1,9 +1,9 @@
 package net.systemeD.potlatch2 {
     import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.MapPaint;
     import net.systemeD.halcyon.MapController;
     import net.systemeD.halcyon.MapEvent;
     import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.halcyon.Globals;
     import net.systemeD.potlatch2.controller.*;
     import net.systemeD.potlatch2.FunctionKeyManager;
@@ -78,7 +78,7 @@ package net.systemeD.potlatch2 {
         *
         * @param layer Optionally pass the layer of the currently selected entity, eg for BugLayers
         */
-		public function updateSelectionUI(layer:VectorLayer = null):void {
+		public function updateSelectionUI(layer:MapPaint = null):void {
 			tagViewer.setEntity(state.selection, layer);
 			toolbox.updateSelectionUI();
 		}
