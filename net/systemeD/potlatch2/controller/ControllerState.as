@@ -87,7 +87,7 @@ package net.systemeD.potlatch2.controller {
 			if ( paint && paint.isBackground ) {
 				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
-					var newEntity:Entity=paint.findSource().pullThrough(entity,editableLayer.connection);
+					var newEntity:Entity=paint.pullThrough(entity,editableLayer);
 					if (entity is Way) { return new SelectedWay(newEntity as Way); }
 					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
                 } else if (event.type == MouseEvent.MOUSE_DOWN && entity is Marker) {

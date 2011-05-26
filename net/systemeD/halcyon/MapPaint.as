@@ -5,6 +5,7 @@ package net.systemeD.halcyon {
 	import net.systemeD.halcyon.NodeUI;
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
+	import net.systemeD.halcyon.connection.actions.CreatePOIAction;
 	import net.systemeD.halcyon.styleparser.RuleSet;
 
 	/** Manages the drawing of map entities, allocating their sprites etc. */
@@ -349,15 +350,6 @@ package net.systemeD.halcyon {
 			ruleset.loadFromCSS(url);
         }
 
-		// >>>> REFACTOR: remove this
-		public function findSource():VectorLayer {
-//			var v:VectorLayer;
-//			for each (v in map.vectorlayers) {
-//				if (v.paint==this) { return v; }
-//			}
-			return null;
-		}
-
 		// ==================== Start of code moved from Map.as
 
 		// Listeners for Connection events
@@ -436,6 +428,53 @@ package net.systemeD.halcyon {
 		}
 
 		// ==================== End of code moved from Map.as
+
+        /**
+        * Transfers an entity from this layer into another layer
+        * @param entity The entity from this layer that you want to transfer.
+        * @param target The layer to transfer to
+        *
+        * @return either the newly created entity, or null
+        */
+        public function pullThrough(entity:Entity, target:MapPaint):Entity {
+            // TODO - check the entity actually resides in this layer.
+
+            var action:CompositeUndoableAction = new CompositeUndoableAction("pull through");
+            if (entity is Way) {
+                // copy way through to main layer
+                // ** shouldn't do this if the nodes are already in the main layer
+                //    (or maybe we should just match on lat/long to avoid ways in background having nodes in foreground)
+                var oldWay:Way=Way(entity);
+                var newWay:Way=target.connection.createWay(oldWay.getTagsCopy(), [], action.push);
+                var nodemap:Object={};
+                for (var i:uint=0; i<oldWay.length; i++) {
+                    oldNode = oldWay.getNode(i);
+                    var newNode:Node = nodemap[oldNode.id] ? nodemap[oldNode.id] : target.connection.createNode(
+                        oldNode.getTagsCopy(), oldNode.lat, oldNode.lon,
+                        action.push);
+                    newWay.appendNode(newNode, action.push);
+                    nodemap[oldNode.id]=newNode;
+                }
+                // delete this way
+                oldWay.remove(action.push)
+                MainUndoStack.getGlobalStack().addAction(action);
+                return newWay;
+
+            } else if (entity is Node && !entity.hasParentWays) {
+
+                var oldNode:Node=Node(entity);
+
+                var newPoiAction:CreatePOIAction = new CreatePOIAction(
+                    target.connection, oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
+                action.push(newPoiAction);
+
+                oldNode.remove(action.push);
+
+                MainUndoStack.getGlobalStack().addAction(action);
+                return newPoiAction.getNode();
+            }
+            return null;
+        }
 
 	}
 }
