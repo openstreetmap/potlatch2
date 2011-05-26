@@ -73,6 +73,9 @@ Potlatch 2: main outstanding issues
 == l10n ==
 * Fix the en_US / default locale problem
 
+== other ==
+* Simplify.as shouldn't add an action to the global undo stack, since it's called from e.g. importing into other layers
+
 Requested enhancements
 ----------------------
 

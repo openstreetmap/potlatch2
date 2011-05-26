@@ -14,7 +14,10 @@ package net.systemeD.potlatch2.tools {
 		 * @param way Way to be simplified.
 		 * @param map Map it belongs to, for computing offscreen-ness.
 		 * @param keepOffscreen If true, don't delete any nodes that are not currently visible. 
-		 * */ 
+		 * */
+
+        /* FIXME this should take an action, and push the work onto that. Simplify is called from various places
+        * so shouldn't be adding to the global undo stack */
 		  
 		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean):void {
 			if (way.length<3) { return; }
