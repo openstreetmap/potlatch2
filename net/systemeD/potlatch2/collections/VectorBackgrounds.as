@@ -4,8 +4,9 @@ package net.systemeD.potlatch2.collections {
     import flash.net.*
     import flash.system.Security;
     import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.MapPaint;
+    import net.systemeD.halcyon.connection.Connection;
     import net.systemeD.halcyon.DebugURLRequest;
-    import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.potlatch2.utils.*;
         
     public class VectorBackgrounds extends EventDispatcher {
@@ -44,19 +45,25 @@ package net.systemeD.potlatch2.collections {
                 case "KMLImporter":
                   break;
                 case "GPXImporter":
-//                   if (set.url) {
-//                     if (set.@loaded == "true") {
-//                       name ||= 'GPX file';
-// 					  // >>>> REFACTOR: VectorLayer commented out
-//                       // var layer:VectorLayer = new VectorLayer(name, _map, 'stylesheets/gpx.css');
-//                       // _map.addVectorLayer(layer);
-//                       // var gpxImporter:GpxImporter = new GpxImporter(layer, layer.paint, [String(set.url)]);
-//                     } else {
-//                       trace("configured but not loaded isn't supported yet");
-//                     }
-//                   } else {
-//                     trace("AutoVectorBackground: no url for GPXImporter");
-//                   }
+                   if (set.url) {
+                     if (set.@loaded == "true") {
+                        name ||= 'GPX file';
+                        var gpx_url:String = String(set.url);
+
+                        var connection:Connection = new Connection(name, gpx_url, null, null);
+                        var gpx:GpxImporter=new GpxImporter(connection, _map, [gpx_url],
+                                                function(success:Boolean,message:String=null):void {
+                                                    if (!success) return;
+                                                    var paint:MapPaint = _map.addLayer(connection, "stylesheets/gpx.css");
+                                                    paint.updateEntityUIs(false, false);
+                                                    dispatchEvent(new Event("layers_changed"));
+                                                }, false);
+                     } else {
+                       trace("configured but not loaded isn't supported yet");
+                     }
+                   } else {
+                     trace("AutoVectorBackground: no url for GPXImporter");
+                   }
                   break;
 
                 case "BugLoader":
