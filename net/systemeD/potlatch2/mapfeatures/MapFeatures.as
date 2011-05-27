@@ -76,11 +76,16 @@ package net.systemeD.potlatch2.mapfeatures {
         private function tagsFromInputSet(inputSet:XMLList, f:Feature):void {
             for each (var input:XML in inputSet.input) {
                 // Take all the k/v pairs from inputs that have choice
-                // Todo - add the freetext keys (source, addr:housenumber etc)
                 for each (var choice:XML in input..choice ) {
                     if (f.isType('line') || f.isType('area')) { addToTagList('way', {k:String(input.@key), v:String(choice.@value)}); }
                     if (f.isType('relation'))                 { addToTagList('relation',{k:String(input.@key), v:String(choice.@value)}); }
                     if (f.isType('point'))                    { addToTagList('node',{k:String(input.@key), v:String(choice.@value)}); }
+                }
+
+                if (input.@type == 'freetext') {
+                    if (f.isType('line') || f.isType('area')) { addToTagList('way', {k:String(input.@key), v:''}); }
+                    if (f.isType('relation'))                 { addToTagList('relation',{k:String(input.@key), v:''}); }
+                    if (f.isType('point'))                    { addToTagList('node',{k:String(input.@key), v:''}); }
                 }
             }
 
