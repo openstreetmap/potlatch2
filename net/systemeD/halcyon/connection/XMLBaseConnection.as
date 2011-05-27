@@ -49,7 +49,7 @@ package net.systemeD.halcyon.connection {
                     timestamp = relData.@timestamp;
                 
                     var rel:Relation = getRelation(id);
-                    if ( rel == null || !rel.loaded ) {
+                    if ( rel == null || !rel.loaded || singleEntityRequest ) {
                         tags = parseTags(relData.tag);
                         var members:Array = [];
                         for each(var memberXML:XML in relData.member) {
