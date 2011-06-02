@@ -90,6 +90,18 @@ package net.systemeD.potlatch2.collections {
                   }
                   break;
 
+                case "SnapshotLoader":
+                  if (set.url) {
+                    name ||= 'Snapshot Server'
+                    var snapshotLoader:SnapshotLoader = new SnapshotLoader(_map, String(set.url), name);
+                    if (set.@loaded == "true") {
+                      snapshotLoader.load();
+                    }
+                  } else {
+                    trace("VectorBackground: no url for SnapshotLoader");
+                  }
+                  break;
+
                 default:
                   trace("AutoVectorBackground: unknown loader");
               }
