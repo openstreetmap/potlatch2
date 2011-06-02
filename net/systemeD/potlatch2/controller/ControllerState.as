@@ -50,11 +50,19 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+        /** Retrieves the map associated with the current EditController */
 		public function get map():Map {
 			return controller.map;
 		}
 
+        /** This is called when the EditController sets this ControllerState as the active state.
+        * Override this with whatever is needed, such as adding highlights to entities
+        */
         public function enterState():void {}
+
+        /** This is called by the EditController as the current controllerstate is exiting.
+        * Override this with whatever cleanup is needed, such as removing highlights from entities
+        */
         public function exitState(newState:ControllerState):void {}
 
 		/** Represent the state in text for debugging. */
