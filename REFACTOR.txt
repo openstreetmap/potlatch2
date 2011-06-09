@@ -5,7 +5,6 @@ Aims:
 - to bring Connection and VectorLayer code together
 
 Current known problems:
-- pull-through creates the way, but doesn't draw it
 - AttentionEvents don't work
 
 To check:
