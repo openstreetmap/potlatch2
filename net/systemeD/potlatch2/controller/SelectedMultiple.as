@@ -64,7 +64,7 @@ package net.systemeD.potlatch2.controller {
                 for each (var conflict:String in conflictTags) conflictTags2.push(conflict);
                 if (conflictTags2.length>0)
                     msg += " *Warning* The following tags conflicted and need attention: " + conflictTags2;
-                // >>>> somethingorother.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             }
 
 			return controller.findStateForSelection(waylist);

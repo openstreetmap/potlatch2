@@ -29,7 +29,6 @@ package net.systemeD.potlatch2.tools {
         functor.step();
         var newScore:Number = functor.goodness;
         if (newScore > score) {
-          // somethingorother.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Corners too sharp to straighten"));
           return false;
 	    }
         score = newScore;

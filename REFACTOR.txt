@@ -4,9 +4,6 @@ Aims:
 - to enable multiple Maps to be shown on-screen (e.g. for junction editor)
 - to bring Connection and VectorLayer code together
 
-Current known problems:
-- AttentionEvents don't work
-
 To check:
 - MapDust
 - VectorLayers from GPX

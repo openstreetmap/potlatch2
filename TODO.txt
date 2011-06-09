@@ -1,5 +1,4 @@
-Potlatch 2: main outstanding issues
------------------------------------
+= Potlatch 2: main outstanding issues =
 
 == Core geometry ==
 
@@ -34,6 +33,7 @@ Potlatch 2: main outstanding issues
 
 ** Keypress detection is very erratic, depending on focus - need to work out where events are going (Application.application?) and sense them there
 * Failing to parse map_features should be an error state
+* Quadrilateralise should throw an AttentionEvent if it's too sharp to straighten
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon

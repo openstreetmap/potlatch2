@@ -17,7 +17,7 @@ package net.systemeD.potlatch2 {
 
     /** Controller for the main map editing window itself. The logic that responds to mouse and keyboard events is all 
     * buried in various ControllerState classes. */
-    public class EditController implements MapController {
+    public class EditController extends EventDispatcher implements MapController {
 
         private var _map:Map;
         public var tagViewer:TagViewer;

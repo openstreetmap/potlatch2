@@ -220,7 +220,7 @@ package net.systemeD.potlatch2.controller {
 				// FIXME: ugh, just ugh.
                 msg += " *Warning* The following tags conflicted and need attention: " + MergeNodesAction.lastProblemTags;
             }
-            // somethingorother.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+            controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
         }
         
