@@ -8,7 +8,6 @@ To check:
 - MapDust
 - VectorLayers from GPX
 - VectorLayers from shapefiles
-- Save/OAuth not tested
 - removeLayer in MapPaint.as should blank - does it?
 
 == Changes overall ==

@@ -81,6 +81,7 @@
         private var _accessToken:OAuthToken;
         private var authoriseURL:String;
         private var lastHTTPStatus:int = 0;
+        private var waiting:Boolean = false;
         
         public static var ACCESS_TOKEN_EVENT:String = "gotAccessToken";
         
@@ -91,6 +92,7 @@
         
 		public function setConnection(connection:Connection):void {
 			this.connection=connection;
+			if (waiting) { waiting=false; getRequestToken(); }
 		}
 
         private function openURL(url:String):void {
@@ -109,6 +111,8 @@
 		}
         
         private function getRequestToken():void {
+            if (!connection) { waiting=true; return; }	// in case the connection hasn't been set yet
+
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
             var url:String = connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
