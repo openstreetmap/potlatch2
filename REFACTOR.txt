@@ -4,12 +4,6 @@ Aims:
 - to enable multiple Maps to be shown on-screen (e.g. for junction editor)
 - to bring Connection and VectorLayer code together
 
-To check:
-- MapDust
-- VectorLayers from GPX
-- VectorLayers from shapefiles
-- removeLayer in MapPaint.as should blank - does it?
-
 == Changes overall ==
 
 Map.as becomes a collection of MapPaint objects, all with the same lat/long/scale

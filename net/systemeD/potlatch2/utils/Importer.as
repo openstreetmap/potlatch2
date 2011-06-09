@@ -27,21 +27,19 @@ package net.systemeD.potlatch2.utils {
 			this.callback=callback;
 			this.simplify=simplify;
 
-			var sp:uint=0;
-			for each (var fn:String in filenames) {
-				var thissp:uint=sp;		// scope within this block for the URLLoader 'complete' closure
-				trace("requesting file "+fn);
+			// Use forEach to avoid closure problem (http://stackoverflow.com/questions/422784/how-to-fix-closure-problem-in-actionscript-3-as3#3971784)
+			filenames.forEach(function(fn:String, index:int, array:Array):void {
+				trace("requesting file "+index);
 				var request:DebugURLRequest = new DebugURLRequest(fn);
 				var loader:URLLoader = new URLLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
-				loader.addEventListener(Event.COMPLETE,function(e:Event):void { fileLoaded(e,thissp); });
+				loader.addEventListener(Event.COMPLETE,function(e:Event):void { fileLoaded(e,index); });
 				if (callback!=null) {
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
 				}
 				loader.load(request.request);
-				sp++;
-			}
+			});
 		}
 		
 		protected function fileLoaded(e:Event,filenum:uint):void {
