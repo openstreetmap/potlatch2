@@ -33,19 +33,13 @@ package net.systemeD.potlatch2.controller {
         }
 
         private function addNode(selectedWay:Way,event:MouseEvent):int {
-			// find which other ways are under the mouse
-			var ways:Array=[]; var w:Way;
-			for each (var wayui:WayUI in editableLayer.wayuis) {
-				w=wayui.hitTest(event.stageX, event.stageY);
-				if (w && w!=selectedWay) { ways.push(w); }
-			}
-
+			var ways:Array = editableLayer.findWaysAtPoint(event.stageX, event.stageY, selectedWay);
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
             var node:Node = selectedWay.connection.createNode({}, lat, lon, undo.push);
             var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
-			for each (w in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
+			for each (var w:Way in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
             MainUndoStack.getGlobalStack().addAction(undo);
 			return index;
         }

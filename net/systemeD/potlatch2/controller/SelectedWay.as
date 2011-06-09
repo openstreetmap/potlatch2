@@ -3,7 +3,6 @@ package net.systemeD.potlatch2.controller {
 	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	
-	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.potlatch2.tools.Quadrilateralise;
 	import net.systemeD.potlatch2.tools.Simplify;
@@ -86,11 +85,7 @@ package net.systemeD.potlatch2.controller {
 			if (!clicked || (wayList && wayList.length<2)) { return this; }
 
 			if (!wayList) {
-				wayList=[initWay];
-				for each (var wayui:WayUI in editableLayer.wayuis) {
-					var w:Way=wayui.hitTest(clicked.x, clicked.y);
-					if (w && w!=initWay) { wayList.push(w); }
-				}
+				wayList=[initWay].concat(editableLayer.findWaysAtPoint(clicked.x,clicked.y,initWay));
 			}
 			wayList=wayList.slice(1).concat(wayList[0]);
 			// Find the new way's index of the currently "selected" node, to facilitate keyboard navigation

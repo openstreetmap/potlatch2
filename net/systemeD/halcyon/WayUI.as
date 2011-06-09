@@ -84,9 +84,7 @@ package net.systemeD.halcyon {
 		    if (!event.node.hasParent(event.way)) {
 				event.node.removeEventListener(Connection.NODE_MOVED, nodeMoved);
 			}
-			if (paint.nodeuis[event.node.id]) {
-				paint.nodeuis[event.node.id].redraw();
-			}
+			paint.redrawEntity(event.node);
             recalculate();
 		    redraw();
 			redrawMultis();
@@ -137,9 +135,7 @@ package net.systemeD.halcyon {
 			for each (var m:Relation in multis) {
 				var outers:Array=m.findMembersByRole('outer');
 				for each (var e:Entity in outers) { 
-					if (e is Way && paint.wayuis[e.id]) {
-						paint.wayuis[e.id].redraw();
-					}
+					paint.redrawEntity(e);
 				}
 			}
 		}
@@ -151,23 +147,20 @@ package net.systemeD.halcyon {
         public function setHighlightOnNodes(settings:Object):void {
 			for (var i:uint = 0; i < Way(entity).length; i++) {
                 var node:Node = Way(entity).getNode(i);
-				if (paint.nodeuis[node.id]) {
-					// Speed things up a bit by only setting the highlight if it's either:
-					// a) an "un-highlight" (so we don't leave mess behind when scrolling)
-					// b) currently onscreen
-					// Currently this means if you highlight an object then scroll, nodes will scroll
-					// into view that should be highlighted but aren't.
-					if (settings.hoverway==false || 
-					    settings.selectedway==false || 
-					    node.lat >=  paint.map.edge_b && node.lat <= paint.map.edge_t &&
-					    node.lon >= paint.map.edge_l && node.lon <= paint.map.edge_r) {
-					    paint.nodeuis[node.id].setHighlight(settings); // Triggers redraw if required
-					}
-					if (settings.selectedway  || settings.hoverway)
-						nodehighlightsettings=settings;
-					else
-					   nodehighlightsettings={}; 
+				// Speed things up a bit by only setting the highlight if it's either:
+				// a) an "un-highlight" (so we don't leave mess behind when scrolling)
+				// b) currently onscreen
+				// Currently this means if you highlight an object then scroll, nodes will scroll
+				// into view that should be highlighted but aren't.
+				if (settings.hoverway==false || 
+				    settings.selectedway==false || 
+				    node.within(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b)) {
+				    paint.setHighlight(node,settings); // Triggers redraw if required
 				}
+				if (settings.selectedway || settings.hoverway)
+					nodehighlightsettings=settings;
+				else
+					nodehighlightsettings={}; 
 			}
         }
         

@@ -24,12 +24,11 @@ package net.systemeD.halcyon {
 		/** The MapCSS rules used for drawing entities. */
 		public var ruleset:RuleSet;						
 		/** WayUI objects attached to Way entities that are currently visible. */
-		public var wayuis:Object=new Object();			// sprites for ways and (POI/tagged) nodes
+		private var wayuis:Object=new Object();
 		/** NodeUI objects attached to POI/tagged node entities that are currently visible. */
-		// confirm this - it seems to me all nodes in ways get nodeuis? --Steve B
-		public var nodeuis:Object=new Object();
+		private var nodeuis:Object=new Object();
 		/** MarkerUI objects attached to Marker entities that are currently visible. */
-        public var markeruis:Object=new Object();
+        private var markeruis:Object=new Object();
         /** Is this a background layer or the core paint object? */
 		public var isBackground:Boolean = true;
 		/** Hash of index->position */
@@ -330,6 +329,7 @@ package net.systemeD.halcyon {
 			return s;
 		}
 
+		/** Redraw all entities */
 		public function redraw():void {
 			for each (var w:WayUI in wayuis) { w.recalculate(); w.invalidateStyleList(); w.redraw(); }
 			/* sometimes (e.g. in Map.setStyle) Mappaint.redrawPOIs() is called immediately afterwards anyway. FIXME? */
@@ -337,10 +337,19 @@ package net.systemeD.halcyon {
             for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 
-		/** Redraw nodes and markers */
+		/** Redraw nodes and markers only */
 		public function redrawPOIs():void {
 			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
             for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
+		}
+		
+		/** Redraw a single entity if it exists */
+		public function redrawEntity(e:Entity):Boolean {
+			if      (e is Way    && wayuis[e.id]) wayuis[e.id].redraw();
+			else if (e is Node   && nodeuis[e.id]) nodeuis[e.id].redraw();
+			else if (e is Marker && markeruis[e.id]) markeruis[e.id].redraw();
+			else return false;
+			return true;
 		}
 		
 		/** Switch to new MapCSS. */
@@ -428,6 +437,17 @@ package net.systemeD.halcyon {
 		}
 
 		// ==================== End of code moved from Map.as
+
+		/** Find all ways whose WayUI passes a given screen co-ordinate. */
+		
+		public function findWaysAtPoint(x:Number, y:Number, ignore:Way=null):Array {
+			var ways:Array=[]; var w:Way;
+			for each (var wayui:WayUI in wayuis) {
+				w=wayui.hitTest(x,y);
+				if (w && w!=ignore) { ways.push(w); }
+			}
+			return ways;
+		}
 
         /**
         * Transfers an entity from this layer into another layer

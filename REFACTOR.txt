@@ -4,29 +4,30 @@ Aims:
 - to enable multiple Maps to be shown on-screen (e.g. for junction editor)
 - to bring Connection and VectorLayer code together
 
-Current status:
-- it loads a map and lets you edit it!
-- VectorLayers (of any shape) will not work - lots of them are commented out
+Current known problems:
+- pull-through creates the way, but doesn't draw it
+- AttentionEvents don't work
+
+To check:
+- MapDust
+- VectorLayers from GPX
+- VectorLayers from shapefiles
 - Save/OAuth not tested
+- removeLayer in MapPaint.as should blank - does it?
 
 == Changes overall ==
 
 Map.as becomes a collection of MapPaint objects, all with the same lat/long/scale
 (plus a backdrop sprite and a background imagery sprite)
+
 Map.editableLayer returns a reference to the single MapPaint object where isBackground is false
 
 MapPaint.as gains a reference to a Connection - i.e. the source data for this layer
 
-== Stuff to look at ==
+== Code tidying ==
 
 There are lots more of these throughout the code, marked with fixmes of the form '>>>> REFACTOR'
 
-MapPaint.as
-- wayuis, nodeuis etc. should ideally be private
-- removeLayer should blank
-
-Global changes:
 - remove all back-references to Map except where necessary for lat/long/scale
 - getParam is messy - stuff sent via flashvars needs somewhere to live: currently in Globals which is ugly
-- AttentionEvents are derelict and commented out
 - tileset/setbackground stuff is screwed up again and needs refactoring a little
