@@ -33,7 +33,7 @@
 	    </mx:columns>
 	</mx:DataGrid>
 	<mx:HBox horizontalAlign="right" width="100%">
-		<mx:LinkButton label="Delete" click="removeLayer()" enabled="{dataGrid.selectedItem != null? true : false}"/>
+		<mx:LinkButton label="Delete" click="removeLayer()" enabled="{dataGrid.selectedItem != null &amp;&amp; dataGrid.selectedItem.isBackground}"/>
 	</mx:HBox>
 
 	<mx:VBox width="100%" paddingTop="10">
@@ -44,12 +44,22 @@
 			<mx:RadioButton width="100%" groupName="filetype" value="kml" id="kml" label="KML" />
 			<mx:RadioButton width="100%" groupName="filetype" value="osm" id="osm" label="OSM" />
 			<mx:RadioButton width="100%" groupName="filetype" value="shp" id="shp" label="Shapefile" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Shapefile projection:" />
+			<mx:ComboBox id="projection"> 
+				<mx:ArrayCollection>
+					<mx:Object label="Lat/long" data="" />
+					<mx:Object label="Ordnance Survey GB" data="EPSG:27700" />
+					<mx:Object label="NAD83" data="EPSG:4269" />
+				</mx:ArrayCollection>
+			</mx:ComboBox>
 			<mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
 		</mx:HBox>
 		<mx:HBox>
 			<mx:Text text="URL:"/>
 			<mx:TextInput width="100%" id="src" text="" />
-			<mx:Button label="Load" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected);" enabled="{src.text == '' ? false : true}"/>
+			<mx:Button label="Load" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected, projection.selectedItem.data);" enabled="{src.text == '' ? false : true}"/>
 		</mx:HBox>
 	</mx:VBox>
 
@@ -104,9 +114,7 @@
 	private function get vectorLayers():Array {
         var v:Array=[];
         for each (var a:MapPaint in map.getLayers() ) {
-            if (a.isBackground) {
-                v.push( { name:a.connection.name, visible:a.visible, url:a.connection.apiBase, style:a.style } );
-            }
+            v.push( { name:a.connection.name, visible:a.visible, url:a.connection.apiBase, style:a.style, isBackground:a.isBackground } );
         }
 		return v;
 	}
@@ -138,7 +146,7 @@
         PopUpManager.removePopUp(this);
     }
 
-	private function loadFiles(url:String,type:String,simplify:Boolean):void {
+	private function loadFiles(url:String,type:String,simplify:Boolean,projection:String=""):void {
 		var names:Array=url.split('/'); var name:String=names[names.length-1];
 		var stylesheet:String="stylesheets/potlatch.css";
 		if (type=='gpx') { stylesheet="stylesheets/gpx.css"; }
@@ -162,10 +170,16 @@
 		} else if (type=='osm') {
 			var osm:OsmImporter=new OsmImporter(connection, map, [url], filesLoaded, simplify);
 		} else {
+			/* FIXME: 
+			   we're currently hardcoding the projection values. We could populate this directly from 
+			   proj4as, or better still, parse the WKT in the .PRJ file:
+					http://trac.osgeo.org/proj4js/ticket/47
+					http://trac.osgeo.org/proj4js/changeset/1873
+			*/
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
 			var shp:ShpImporter=new ShpImporter(connection,
 			                                    map,
-			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify);
+			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify, projection);
 		}
 	}
 
