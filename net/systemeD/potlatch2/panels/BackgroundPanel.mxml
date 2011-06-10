@@ -12,10 +12,13 @@
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
+  <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
+  <mx:Button label="Complete" click="markComplete()"/>
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.MapPaint;
+      import net.systemeD.potlatch2.utils.SnapshotConnection;
       import mx.collections.*;
 
       private var selectedEntity:Entity;
@@ -41,6 +44,11 @@
             for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
       }
 
+      private function markComplete():void {
+            if (selectedEntity.connection is SnapshotConnection) {
+                SnapshotConnection(selectedEntity.connection).markComplete(selectedEntity);
+            }
+      }
       ]]>
   </mx:Script>
 </mx:VBox>
