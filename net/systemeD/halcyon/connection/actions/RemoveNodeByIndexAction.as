@@ -37,7 +37,7 @@ package net.systemeD.halcyon.connection.actions {
 		}
 		
 		public override function undoAction():uint {
-			for (var i:uint=removed.length-1; i>=0; i--) {
+			for (var i:int=removed.length-1; i>=0; i--) {
 				nodeList.splice(index, 0, removed[i]);
 				removed[i].addParent(way);
 				if (fireEvent) {
