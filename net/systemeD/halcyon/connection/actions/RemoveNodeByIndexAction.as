@@ -18,26 +18,35 @@ package net.systemeD.halcyon.connection.actions {
             this.fireEvent = fireEvent;
         }
         
-        public override function doAction():uint {
-            removed = nodeList.splice(index, 1);
-            if (nodeList.indexOf(removed[0])==-1) { removed[0].removeParent(way); }
-            way.deleted = nodeList.length == 0;
-            markDirty();
-            if (fireEvent) {
-               entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], way, index));
-            }
-            return SUCCESS;
-        }
-        
-        public override function undoAction():uint {
-            nodeList.splice(index, 0, removed[0]);
-            removed[0].addParent(way);
-            way.deleted = nodeList.length == 0;
-            markClean();
-            if (fireEvent) {
-                entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, removed[0], way, index));
-            }
-            return SUCCESS;
+		public override function doAction():uint {
+			var preceding:Node=(index>1) ? nodeList[index-1] : null;
+			var node:Node=nodeList[index];
+			removed=[];
+
+			while (nodeList[index]==node || nodeList[index]==preceding) {
+				var removedNode:Node=nodeList.splice(index, 1)[0];
+				removed.push(removedNode);
+				if (nodeList.indexOf(removedNode)==-1) { removedNode.removeParent(way); }
+				if (fireEvent) {
+				   entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removedNode, way, index));
+				}
+			}
+			way.deleted = nodeList.length == 0;
+			markDirty();
+			return SUCCESS;
+		}
+		
+		public override function undoAction():uint {
+			for (var i:uint=removed.length-1; i>=0; i--) {
+				nodeList.splice(index, 0, removed[i]);
+				removed[i].addParent(way);
+				if (fireEvent) {
+					entity.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_ADDED, removed[i], way, index));
+				}
+			}
+			way.deleted = nodeList.length == 0;
+			markClean();
+			return SUCCESS;
         }
     }
 }
