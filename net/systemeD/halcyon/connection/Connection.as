@@ -12,6 +12,7 @@ package net.systemeD.halcyon.connection {
 	public class Connection extends EventDispatcher {
 
 		public var name:String;
+		public var statusFetcher:StatusFetcher;
         protected var apiBaseURL:String;
         protected var policyURL:String;
         protected var params:Object;
@@ -57,7 +58,8 @@ package net.systemeD.halcyon.connection {
         public static var NODE_RENUMBERED:String = "node_renumbered";
         public static var WAY_RENUMBERED:String = "way_renumbered";
         public static var RELATION_RENUMBERED:String = "relation_renumbered";
-        public static var TAG_CHANGED:String = "tag_change";
+        public static var TAG_CHANGED:String = "tag_changed";
+        public static var STATUS_CHANGED:String = "status_changed";
         public static var NODE_MOVED:String = "node_moved";
         public static var NODE_ALTERED:String = "node_altered";
         public static var WAY_NODE_ADDED:String = "way_node_added";
@@ -319,6 +321,14 @@ package net.systemeD.halcyon.connection {
                 list.push(relation.id);
             return list;
         }
+
+		public function getAllLoadedEntities():Array {
+			var list:Array = []; var entity:Entity;
+			for each (entity in relations) { if (entity.loaded && !entity.deleted) list.push(entity); }
+			for each (entity in ways     ) { if (entity.loaded && !entity.deleted) list.push(entity); }
+			for each (entity in nodes    ) { if (entity.loaded && !entity.deleted) list.push(entity); }
+			return list;
+		}
 
         /** Returns all available relations that match all of {k1: [v1,v2,...], k2: [v1...] ...} 
         * where p1 is an array [v1, v2, v3...] */

@@ -233,6 +233,7 @@ package net.systemeD.halcyon {
             setStateClass('area', Way(entity).isArea());
             setStateClass('tiger', (entity.isUneditedTiger() && Globals.vars.highlightTiger));
             tags=applyStateClasses(tags);
+			if (entity.status) { tags['_status']=entity.status; }
 
 			// Keep track of maximum stroke width for hitzone
 			var maxwidth:Number=4;

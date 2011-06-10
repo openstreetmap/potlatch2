@@ -74,6 +74,7 @@ package net.systemeD.halcyon {
             setStateClass('hasTags', entity.hasInterestingTags());
             setStateClass('dupe', Node(entity).isDupe());
 			tags=applyStateClasses(tags);
+			if (entity.status) { tags['_status']=entity.status; }
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
 				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
 			}

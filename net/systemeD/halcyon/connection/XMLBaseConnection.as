@@ -26,6 +26,7 @@ package net.systemeD.halcyon.connection {
             var tags:Object;
             var node:Node, newNode:Node;
             var unusedNodes:Object={};
+			var createdEntities:Array=[];
 
 			var minlon:Number, maxlon:Number, minlat:Number, maxlat:Number;
 			var singleEntityRequest:Boolean=true;
@@ -78,9 +79,11 @@ package net.systemeD.halcyon.connection {
                             members.push(new RelationMember(member, role));
                     }
                     
-                    if ( rel == null )
-                        setRelation(new Relation(this, id, version, tags, true, members, uid, timestamp), false);
-                    else {
+                    if ( rel == null ) {
+                        rel=new Relation(this, id, version, tags, true, members, uid, timestamp);
+                        setRelation(rel, false);
+                        createdEntities.push(rel);
+                    } else {
                         rel.update(version, tags, true, false, members, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_RELATION, rel), false);
                     }
@@ -107,6 +110,7 @@ package net.systemeD.halcyon.connection {
 					// the node didn't exist before, so create/update it
 					newNode.parentsLoaded=newNode.within(minlon,maxlon,minlat,maxlat);
 					setOrUpdateNode(newNode, true);
+					createdEntities.push(newNode);
 				} else {
 					// the node's already in memory, but store it in case one of the new ways needs it
 					if (newNode.within(minlon,maxlon,minlat,maxlat)) newNode.parentsLoaded=true;
@@ -122,20 +126,22 @@ package net.systemeD.halcyon.connection {
 
                 var way:Way = getWay(id);
                 if ( way == null || !way.loaded || singleEntityRequest) {
-                    var nodes:Array = [];
+                    var nodelist:Array = [];
                     for each(var nd:XML in data.nd) {
 						var nodeid:Number=Number(nd.@ref)
 						if (getNode(nodeid).isDeleted() && unusedNodes[nodeid]) { 
 							setOrUpdateNode(unusedNodes[nodeid], true); 
 						}
-                        nodes.push(getNode(nodeid));
+                        nodelist.push(getNode(nodeid));
 					}
                     tags = parseTags(data.tag);
                     if ( way == null ) {
-                        setWay(new Way(this, id, version, tags, true, nodes, uid, timestamp),false);
+                        way=new Way(this, id, version, tags, true, nodelist, uid, timestamp)
+                        setWay(way,false);
+                        createdEntities.push(way);
                     } else {
 						waycount++;
-                        way.update(version, tags, true, true, nodes, uid, timestamp);
+                        way.update(version, tags, true, true, nodelist, uid, timestamp);
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }
@@ -144,6 +150,8 @@ package net.systemeD.halcyon.connection {
             markBboxLoaded(minlon,maxlon,maxlat,minlat);
             registerPOINodes();
             dispatchEvent(new Event(LOAD_COMPLETED));
+
+            if (statusFetcher) statusFetcher.fetch(createdEntities); 
         }
         
         protected function registerPOINodes():void {

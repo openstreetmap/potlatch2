@@ -55,6 +55,7 @@ package net.systemeD.halcyon {
 			this.entity=entity;
 			this.paint=paint;
             entity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+            entity.addEventListener(Connection.STATUS_CHANGED, statusChanged, false, 0, true);
 			entity.addEventListener(Connection.ADDED_TO_RELATION, relationAdded, false, 0, true);
 			entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved, false, 0, true);
 			entity.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw, false, 0, true);
@@ -71,6 +72,7 @@ package net.systemeD.halcyon {
 		/** Remove the default event listeners. */
 		protected function removeGenericEventListeners():void {
             entity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
+            entity.removeEventListener(Connection.STATUS_CHANGED, statusChanged);
 			entity.removeEventListener(Connection.ADDED_TO_RELATION, relationAdded);
 			entity.removeEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved);
 			entity.removeEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
@@ -123,6 +125,11 @@ package net.systemeD.halcyon {
             redraw();
         }
 		
+        protected function statusChanged(event:EntityEvent):void {
+			invalidateStyleList();
+            redraw();
+        }
+
         protected function mouseEvent(event:MouseEvent):void {
 			paint.map.entityMouseEvent(event, entity);
         }

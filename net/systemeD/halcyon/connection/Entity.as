@@ -1,5 +1,6 @@
 package net.systemeD.halcyon.connection {
 
+    import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.utils.Dictionary;
     
@@ -17,6 +18,7 @@ package net.systemeD.halcyon.connection {
         private var modified:Boolean = false;
         private var _loaded:Boolean = true;
         private var parents:Dictionary = new Dictionary();
+		public var status:String;
         /** Lock against purging when off-screen */
         public var locked:Boolean = false;
         public var deleted:Boolean = false;
@@ -177,6 +179,14 @@ package net.systemeD.halcyon.connection {
                 copy.push(new Tag(this, key, tags[key]));
             return copy;
         }
+
+		/** Change entity status. */
+		public function setStatus(s:String):void {
+			if (s=='') s=null;
+			if (s==status) return;
+			status=s;
+			dispatchEvent(new EntityEvent(Connection.STATUS_CHANGED,this));
+		}
 
 		// Clean/dirty methods
 
@@ -394,7 +404,7 @@ package net.systemeD.halcyon.connection {
 		}
 
 
-                /** Basic description of Entity - should be overriden by subclass. */
+		/** Basic description of Entity - should be overriden by subclass. */
 		public function getDescription():String {
 			var basic:String=this.getType()+" "+_id;
 			if (tags['ref'] && tags['name']) { return tags['ref']+' '+tags['name']+' ('+basic+')'; }
