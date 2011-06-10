@@ -101,6 +101,16 @@ package net.systemeD.halcyon.connection {
             return false;
         }
 
+		/** Compare tags between two entities. */
+		public function sameTags(entity:Entity):Boolean {
+			var o:Object=entity.getTagsHash();
+			for (var k:String in tags)
+				if (!o[k] || o[k]!=tags[k]) return false;
+			for (k in o)
+				if (!tags[k] || tags[k]!=o[k]) return false;
+			return true;
+		}
+
         /** Rough function to detect entities untouched since TIGER import. */
         public function isUneditedTiger():Boolean {
             // todo: make this match the rules from the tiger edited map

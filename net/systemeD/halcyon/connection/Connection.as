@@ -485,6 +485,13 @@ package net.systemeD.halcyon.connection {
             return [];
         }
 
+		public function identicalNode(node:Node):Node {
+			for each (var dupe:Node in nodePositions[node.lat+","+node.lon]) {
+				if (node.lat==dupe.lat && node.lon==dupe.lon && node.sameTags(dupe)) return dupe;
+			}
+			return null;
+		}
+
 		// Error-handling
 		
 		protected function throwConflictError(entity:Entity,serverVersion:uint,message:String):void {

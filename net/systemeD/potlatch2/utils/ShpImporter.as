@@ -30,6 +30,7 @@ package net.systemeD.potlatch2.utils {
 			}
 
 			var nodemap:Object={};
+			var key:String, v:String;
 
 			if (shp.shapeType==ShpType.SHAPE_POLYGON || shp.shapeType==ShpType.SHAPE_POLYLINE) {
 
@@ -37,9 +38,15 @@ package net.systemeD.potlatch2.utils {
 				var polyArray:Array = ShpTools.readRecords(files[0]);
 				for (var i:uint=0; i<polyArray.length; i++) {
 
-					// Get attributes like this:
-					//		var dr:DbfRecord = DbfTools.getRecord(files[2], dbf, i);
-					//		var xsID:String = dr.values[idFieldName];
+					// Get attributes and create a tags hash
+					// (note that dr.values is a Dictionary)
+					var dr:DbfRecord = DbfTools.getRecord(files[2], dbf, i);
+					var tags:Object={};
+					for (key in dr.values) {
+						v=dr.values[key];
+						while (v.substr(v.length-1,1)==" ") v=v.substr(0,v.length-1);
+						if (v!='') tags[key.toLowerCase()]=v;
+					}
 
 					// Do each ring in turn, then each point in the ring
 					var way:Way;
@@ -60,14 +67,14 @@ package net.systemeD.potlatch2.utils {
 									x=p.x; x=p.y;
 								}
 
-								var key:String=x+","+y;
+								key=x+","+y;
 								if (nodemap[key]) { node=nodemap[key]; }
 								else { node=connection.createNode({}, y, x, push); nodemap[key]=node; }
 								nodestring.push(node);
 							}
 						}
 						if (nodestring.length>0) {
-							way=connection.createWay({}, nodestring, push);
+							way=connection.createWay(tags, nodestring, push);
 							if (simplify) { Simplify.simplify(way, map, false); }
 						}
 					}

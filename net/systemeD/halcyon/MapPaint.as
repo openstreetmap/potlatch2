@@ -462,16 +462,18 @@ package net.systemeD.halcyon {
             var action:CompositeUndoableAction = new CompositeUndoableAction("pull through");
             if (entity is Way) {
                 // copy way through to main layer
-                // ** shouldn't do this if the nodes are already in the main layer
-                //    (or maybe we should just match on lat/long to avoid ways in background having nodes in foreground)
                 var oldWay:Way=Way(entity);
                 var nodemap:Object={};
                 var nodes:Array=[];
+                var oldNode:Node, newNode:Node;
                 for (var i:uint=0; i<oldWay.length; i++) {
                     oldNode = oldWay.getNode(i);
-                    var newNode:Node = nodemap[oldNode.id] ? nodemap[oldNode.id] : target.connection.createNode(
-                        oldNode.getTagsCopy(), oldNode.lat, oldNode.lon,
-                        action.push);
+                    if (nodemap[oldNode.id])
+                        newNode=nodemap[oldNode.id];
+                    else if (target.connection.identicalNode(oldNode))
+                        newNode=target.connection.identicalNode(oldNode);
+                    else
+                        newNode = target.connection.createNode(oldNode.getTagsCopy(), oldNode.lat, oldNode.lon, action.push);
                     nodes.push(newNode);
                     nodemap[oldNode.id]=newNode;
                 }
@@ -482,7 +484,7 @@ package net.systemeD.halcyon {
 
             } else if (entity is Node && !entity.hasParentWays) {
 
-                var oldNode:Node=Node(entity);
+                oldNode=Node(entity);
 
                 var newPoiAction:CreatePOIAction = new CreatePOIAction(
                     target.connection, oldNode.getTagsCopy(), oldNode.lat, oldNode.lon);
