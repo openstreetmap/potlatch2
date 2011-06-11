@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.collections.Imagery;
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.potlatch2.save.SaveManager;
+	import net.systemeD.potlatch2.utils.SnapshotConnection;
 	import flash.ui.Keyboard;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
@@ -50,11 +51,19 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+        /** Retrieves the map associated with the current EditController */
 		public function get map():Map {
 			return controller.map;
 		}
 
+        /** This is called when the EditController sets this ControllerState as the active state.
+        * Override this with whatever is needed, such as adding highlights to entities
+        */
         public function enterState():void {}
+
+        /** This is called by the EditController as the current controllerstate is exiting.
+        * Override this with whatever cleanup is needed, such as removing highlights from entities
+        */
         public function exitState(newState:ControllerState):void {}
 
 		/** Represent the state in text for debugging. */
@@ -85,7 +94,10 @@ package net.systemeD.potlatch2.controller {
             var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( paint && paint.isBackground ) {
-				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
+                if ( event.type == MouseEvent.MOUSE_DOWN && entity.connection is SnapshotConnection) {
+                    if (entity is Way) { return new SelectedBackgroundWay(entity as Way); }
+                    else if (entity is Node) { return new SelectedBackgroundNode(entity as Node, paint); }
+                } else if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
 					var newEntity:Entity=paint.pullThrough(entity,editableLayer);
 					if (entity is Way) { return new SelectedWay(newEntity as Way); }

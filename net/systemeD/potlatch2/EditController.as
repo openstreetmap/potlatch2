@@ -22,7 +22,8 @@ package net.systemeD.potlatch2 {
         private var _map:Map;
         public var tagViewer:TagViewer;
 		private var toolbox:Toolbox;
-        
+
+        /** The current ControllerState */
         public var state:ControllerState;
         
 		private var keys:Object={};
@@ -144,7 +145,9 @@ package net.systemeD.potlatch2 {
 			return true;
 		}
 
-        /** Exit the current state and switch to a new one. */
+        /** Exit the current state and switch to a new one.
+        *
+        *   @param newState The ControllerState to switch to. */
         public function setState(newState:ControllerState):void {
             if ( newState == state )
                 return;
