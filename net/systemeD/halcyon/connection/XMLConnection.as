@@ -197,7 +197,10 @@ package net.systemeD.halcyon.connection {
             loader.load(urlReq);
         }
 
-        override public function uploadChanges():void {
+		/** Create XML changeset and send it to the server. Returns the XML string for use in the 'Show data' button.
+		    (We don't mind what's returned as long as it implements .toString() ) */
+
+        override public function uploadChanges():* {
             var changeset:Changeset = getActiveChangeset();
             var upload:XML = <osmChange version="0.6"/>
             upload.appendChild(addCreated(changeset, getAllNodeIDs, getNode, serialiseNode));
@@ -230,7 +233,8 @@ package net.systemeD.halcyon.connection {
 			serv.addEventListener(FaultEvent.FAULT, diffUploadIOError);
 			serv.send(upload);
 	        
-	        dispatchEvent(new Event(SAVE_STARTED));
+			dispatchEvent(new Event(SAVE_STARTED));
+			return upload;
         }
 
         private function diffUploadComplete(event:ResultEvent):void {
