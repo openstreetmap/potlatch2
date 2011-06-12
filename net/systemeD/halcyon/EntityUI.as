@@ -139,13 +139,13 @@ package net.systemeD.halcyon {
 
 		/** Add object (stroke/fill/roadname) to layer sprite*/
 		
-		protected function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
+		protected function addToLayer(s:DisplayObject,spritetype:uint,sublayer:int=-1):void {
 			var l:Sprite, o:Sprite;
 			if (sublayer!=-1) {
-				o=paint.sublayer(layer,sublayer);
+				o=paint.sublayer(layer,spritetype,sublayer);
 			} else {
 				l=paint.getPaintSpriteAt(layer);
-				o=l.getChildAt(t) as Sprite;
+				o=l.getChildAt(spritetype) as Sprite;
 			}
 			o.addChild(s);
 			if (sprites.indexOf(s)==-1) { sprites.push(s); }
@@ -155,7 +155,6 @@ package net.systemeD.halcyon {
             }
 		}
 
-		// What does this do, could someone please document?
 		protected function setListenSprite():void {
 			var l:Sprite=paint.getHitSpriteAt(layer);
 			var s:Sprite;

@@ -112,14 +112,12 @@ way[leisure=sports_centre] :area { color: #66ddcc; fill-color: #66ddcc; set .are
 
 /* Physical decoration */
 
-way[bridge=yes], way[bridge=viaduct], way[bridge=suspension]
-    { z-index: 4; color: white; width: eval('_width+3'); }
-    { z-index: 3; color: black; width: eval('_width+6'); }
-way[tunnel=yes][!waterway]
-    { z-index: 4; color: white; width: eval('_width+2'); }
-    { z-index: 3; color: black; width: eval('_width+6'); dashes: 4,4; }
+way[bridge=yes]::bridge1, way[bridge=viaduct]::bridge1, way[bridge=suspension]::bridge1 { z-index: 4; color: white; width: eval('_width+3'); }
+way[bridge=yes]::bridge2, way[bridge=viaduct]::bridge2, way[bridge=suspension]::bridge2 { z-index: 3; color: black; width: eval('_width+6'); }
+way[tunnel=yes][!waterway]::bridge1 { z-index: 4; color: white; width: eval('_width+2'); }
+way[tunnel=yes][!waterway]::bridge2 { z-index: 3; color: black; width: eval('_width+6'); dashes: 4,4; }
 
 /* Attribute decoration */
 
-way[oneway=yes], way[junction=roundabout] { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows; }
-way[oneway=-1] { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows-reversed; }
+way[oneway=yes]::arrows, way[junction=roundabout]::arrows { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows; }
+way[oneway=-1]::arrows { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows-reversed; }

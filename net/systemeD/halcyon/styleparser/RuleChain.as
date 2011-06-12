@@ -15,8 +15,8 @@ package net.systemeD.halcyon.styleparser {
 	*/
 
 	public class RuleChain {
-		public var rules:Array=[];		// should eventually become a Vector of Rules
-		public var subpart:String='';	// subpart name, as in way[highway=primary]::centreline
+		public var rules:Array=[];				// should eventually become a Vector of Rules
+		public var subpart:String='default';	// subpart name, as in way[highway=primary]::centreline
 
 		// Test a ruleChain
 		// - run a set of tests in the chain
@@ -27,8 +27,9 @@ package net.systemeD.halcyon.styleparser {
 		// - if they succeed, and there's more in the chain, rerun this for each parent until success
 		
 		public function test(pos:int, obj:Entity, tags:Object, zoom:uint):Boolean {
+			if (length==0) { return false; }
 			if (pos==-1) { pos=rules.length-1; }
-
+			
 			var r:Rule=rules[pos];
 			if (!r.test(obj, tags, zoom)) { return false; }
 			if (pos==0) { return true; }
@@ -44,6 +45,10 @@ package net.systemeD.halcyon.styleparser {
 			return rules.length;
 		}
 		
+		public function setSubpart(s:String):void {
+			subpart = s=='' ? 'default' : s;
+		}
+
 		// ---------------------------------------------------------------------------------------------
 		// Methods to add properties (used by parsers such as MapCSS)
 
@@ -59,7 +64,6 @@ package net.systemeD.halcyon.styleparser {
 			rules[rules.length-1].minZoom=z1;
 			rules[rules.length-1].maxZoom=z2;
 		}
-
 
 	}
 }

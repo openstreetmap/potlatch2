@@ -45,7 +45,7 @@ package net.systemeD.halcyon.styleparser {
 		}
 		
 		public function applyCasingStyle(g:Graphics):void {
-			g.lineStyle(casing_width,
+			g.lineStyle(width + casing_width,
 						casing_color   ? casing_color : 0,
 						casing_opacity ? casing_opacity : 1,
 						false, "normal",

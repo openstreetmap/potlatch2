@@ -43,7 +43,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const CONDITION:RegExp	=/^ \[(.+?)\] \s* /sx;
 		private static const OBJECT:RegExp		=/^ (\w+) \s* /sx;
 		private static const DECLARATION:RegExp	=/^ \{(.+?)\} \s* /sx;
-		private static const SUBPART:RegExp		=/^ ::(\S+) \s* /sx;
+		private static const SUBPART:RegExp		=/^ ::(\w+) \s* /sx;
 		private static const UNKNOWN:RegExp		=/^ (\S+) \s* /sx;
 
 		private static const ZOOM_MINMAX:RegExp	=/^ (\d+)\-(\d+) $/sx;
@@ -75,6 +75,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const oCONDITION:uint=4;
 		private static const oOBJECT:uint=5;
 		private static const oDECLARATION:uint=6;
+		private static const oSUBPART:uint=7;
 
 		private static const DASH:RegExp=/\-/g;
 		private static const COLOR:RegExp=/color$/;
@@ -288,7 +289,7 @@ package net.systemeD.halcyon.styleparser {
 					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
 					else { continue; }
 					if (filename=='square' || filename=='circle') { continue; }
-				
+			
 					iconsToLoad++;
 					var request:DebugURLRequest=new DebugURLRequest(filename);
 					var loader:ExtendedURLLoader=new ExtendedURLLoader();
@@ -409,6 +410,13 @@ package net.systemeD.halcyon.styleparser {
 					css=css.replace(OBJECT,'');
 					sc.currentChain.addRule(o[1]);
 					previous=oOBJECT;
+
+				// Subpart - ::centreline
+				} else if ((o=SUBPART.exec(css))) {
+					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
+					css=css.replace(SUBPART,'');
+					sc.currentChain.setSubpart(o[1]);
+					previous=oSUBPART;
 
 				// Declaration - {...}
 				} else if ((o=DECLARATION.exec(css))) {

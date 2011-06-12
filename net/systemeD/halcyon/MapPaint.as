@@ -75,7 +75,9 @@ package net.systemeD.halcyon {
 			// Add paint sprites
 			for (l=minlayer; l<=maxlayer; l++) {			// each layer (10 is +5, 0 is -5)
 				s = getPaintSprite();						//	|
-				s.addChild(getPaintSprite());				//	| 0 fill
+				var q:Sprite = getPaintSprite();			//	| 0 fill
+				q.addChild(getPaintSprite());				//	|  | sublayer
+				s.addChild(q);								//  |  |
 				s.addChild(getPaintSprite());				//	| 1 casing
 				var t:Sprite = getPaintSprite();			//	| 2 stroke
 				t.addChild(getPaintSprite());				//	|  | sublayer
@@ -110,7 +112,7 @@ package net.systemeD.halcyon {
 			return true;
 		}
 
-		public function sublayer(layer:int,sublayer:Number):Sprite {
+		public function sublayer(layer:int,spritetype:uint,sublayer:Number):Sprite {
 			var l:DisplayObject;
 			var o:DisplayObject;
 			var index:String, ix:Number;
@@ -132,8 +134,8 @@ package net.systemeD.halcyon {
 				// add sprites
 				for (var i:int=minlayer; i<=maxlayer; i++) {
 					l=getChildAt(i-minlayer);
-					o=(l as Sprite).getChildAt(2);
-					(o as Sprite).addChildAt(getPaintSprite(),lowestAbovePos);
+					o=(l as Sprite).getChildAt(0); (o as Sprite).addChildAt(getPaintSprite(),lowestAbovePos);	// fillsprite
+					o=(l as Sprite).getChildAt(2); (o as Sprite).addChildAt(getPaintSprite(),lowestAbovePos);	// strokesprite
 				}
 			
 				// update index
@@ -149,7 +151,7 @@ package net.systemeD.halcyon {
 			}
 
 			l=getChildAt(layer-minlayer);
-			o=(l as Sprite).getChildAt(2);
+			o=(l as Sprite).getChildAt(spritetype);
 			return ((o as Sprite).getChildAt(sublayerIndex[sublayer]) as Sprite);
 		}
 

@@ -259,7 +259,7 @@ package net.systemeD.halcyon {
 				indexEnd  =Math.min(drawOnly+2,Way(entity).length);
 			}
 
-			// Iterate through each sublayer, drawing any styles on that layer
+			// Iterate through each subpart, drawing any styles on that layer
 			var drawn:Boolean;
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
@@ -267,9 +267,9 @@ package net.systemeD.halcyon {
 				inners=inners.concat(m.findMembersByRole('inner',Way));
 			}
 
-			for each (var sublayer:Number in styleList.sublayers) {
-				if (styleList.shapeStyles[sublayer]) {
-					var s:ShapeStyle=styleList.shapeStyles[sublayer];
+			for each (var subpart:String in styleList.subparts) {
+				if (styleList.shapeStyles[subpart]) {
+					var s:ShapeStyle=styleList.shapeStyles[subpart];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
 					var x0:Number=paint.map.lon2coord(Way(entity).getNode(0).lon);
 					var y0:Number=paint.map.latp2coord(Way(entity).getNode(0).latp);
@@ -277,7 +277,7 @@ package net.systemeD.halcyon {
 
 					// Stroke
 					if (s.width)  {
-						stroke=new Shape(); addToLayer(stroke,STROKESPRITE,sublayer);
+						stroke=new Shape(); addToLayer(stroke,STROKESPRITE,s.sublayer);
 						stroke.graphics.moveTo(x0,y0);
 						s.applyStrokeStyle(stroke.graphics);
 						if (s.dashes && s.dashes.length>0) {
@@ -290,7 +290,7 @@ package net.systemeD.halcyon {
 
 					// Fill
 					if ((!isNaN(s.fill_color) || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0 && isNaN(drawExcept)) {
-						fill=new Shape(); addToLayer(fill,FILLSPRITE);
+						fill=new Shape(); addToLayer(fill,FILLSPRITE,s.sublayer);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
 									 else { s.applyFill(fill.graphics); }
@@ -311,8 +311,8 @@ package net.systemeD.halcyon {
 					}
 				}
 				
-				if (styleList.textStyles[sublayer] && isNaN(drawExcept)) {
-					var t:TextStyle=styleList.textStyles[sublayer];
+				if (styleList.textStyles[subpart] && isNaN(drawExcept)) {
+					var t:TextStyle=styleList.textStyles[subpart];
 					interactive||=t.interactive;
 					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);
 					nameformat = t.getTextFormat();
