@@ -63,7 +63,6 @@ package net.systemeD.potlatch2.controller {
 			editableLayer.setPurgable(selection,false);
         }
         override public function exitState(newState:ControllerState):void {
-trace("firstSelected is "+firstSelected);
             if(firstSelected.hasTags()) {
               controller.clipboards['node']=firstSelected.getTagsCopy();
             }
