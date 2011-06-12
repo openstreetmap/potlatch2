@@ -94,14 +94,14 @@ package net.systemeD.potlatch2.controller {
             var focus:Entity = getTopLevelFocusEntity(entity);
 
 			if ( paint && paint.isBackground ) {
-                if ( event.type == MouseEvent.MOUSE_DOWN && entity.connection is SnapshotConnection) {
-                    if (entity is Way) { return new SelectedBackgroundWay(entity as Way); }
-                    else if (entity is Node) { return new SelectedBackgroundNode(entity as Node, paint); }
-                } else if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
+				if (event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
 					var newEntity:Entity=paint.pullThrough(entity,editableLayer);
-					if (entity is Way) { return new SelectedWay(newEntity as Way); }
+					if      (entity is Way ) { return new SelectedWay(newEntity as Way); }
 					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
+                } else if (event.type == MouseEvent.MOUSE_DOWN) {
+                    if      (entity is Way ) { return new SelectedBackgroundWay(entity as Way); }
+                    else if (entity is Node) { return new SelectedBackgroundNode(entity as Node, paint); }
                 } else if (event.type == MouseEvent.MOUSE_DOWN && entity is Marker) {
                     return new SelectedMarker(entity as Marker, paint);
 				} else if ( event.type == MouseEvent.MOUSE_UP ) {
@@ -123,6 +123,8 @@ package net.systemeD.potlatch2.controller {
 					return new DragSelection(selection, event);
 				} else if (entity) {
 					return new DragSelection([entity], event);
+				} else if (event.ctrlKey) {
+					return new SelectArea(event.localX,event.localY);
 				}
             } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && this is SelectedMarker) {
                 // this is identical to the below, but needed for unselecting markers on vector background layers.
