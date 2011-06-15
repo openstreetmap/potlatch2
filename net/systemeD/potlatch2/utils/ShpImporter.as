@@ -64,7 +64,7 @@ package net.systemeD.potlatch2.utils {
 									r=proj.transform(fromProj,toProj,r);
 									x=r.x; y=r.y;
 								} else {
-									x=p.x; x=p.y;
+									x=p.x; y=p.y;
 								}
 
 								key=x+","+y;
