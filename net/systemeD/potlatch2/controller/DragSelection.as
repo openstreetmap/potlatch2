@@ -95,14 +95,14 @@ package net.systemeD.potlatch2.controller {
         /** Highlight the dragged selection. */
         override public function enterState():void {
 			for each (var entity:Entity in selection) {
-				editableLayer.setHighlight(entity, { selected: true });
+				layer.setHighlight(entity, { selected: true });
 			}
         }
         
         /** Un-highlight the dragged selection. */
         override public function exitState(newState:ControllerState):void {
 			for each (var entity:Entity in selection) {
-				editableLayer.setHighlight(entity, { selected: false });
+				layer.setHighlight(entity, { selected: false });
 			}
         }
         /** "DragSelection" */

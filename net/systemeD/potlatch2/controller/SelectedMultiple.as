@@ -19,7 +19,7 @@ package net.systemeD.potlatch2.controller {
 
 			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey ) {
 				// modify selection
-				editableLayer.setHighlight(entity, { selected: toggleSelection(entity) });
+				layer.setHighlight(entity, { selected: toggleSelection(entity) });
 				controller.updateSelectionUI();
 
 				if (selectCount>1) { return this; }
@@ -110,16 +110,16 @@ package net.systemeD.potlatch2.controller {
 		override public function enterState():void {
 			selection=initSelection.concat();
 			for each (var entity:Entity in selection) {
-				editableLayer.setHighlight(entity, { selected: true, hover: false });
+				layer.setHighlight(entity, { selected: true, hover: false });
 			}
 			controller.updateSelectionUI();
-			editableLayer.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
 		}
 
 		override public function exitState(newState:ControllerState):void {
-			editableLayer.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
 			for each (var entity:Entity in selection) {
-				editableLayer.setHighlight(entity, { selected: false, hover: false });
+				layer.setHighlight(entity, { selected: false, hover: false });
 			}
 			selection = [];
 			if (!newState.isSelectionState()) { controller.updateSelectionUI(); }

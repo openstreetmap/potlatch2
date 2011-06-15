@@ -26,7 +26,7 @@ package net.systemeD.potlatch2.controller {
 			if (event.type==MouseEvent.MOUSE_UP && (focus==null || (paint && paint.isBackground)) && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
 				var undo:CompositeUndoableAction = new BeginWayAction();
-				var conn:Connection = editableLayer.connection;
+				var conn:Connection = layer.connection;
 				var startNode:Node = conn.createNode(
 					{}, 
 					controller.map.coord2lat(event.localY),

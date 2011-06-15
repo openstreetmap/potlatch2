@@ -34,7 +34,7 @@ package net.systemeD.potlatch2.controller {
 				var right:Number=controller.map.coord2lon(endX);
 				var top:Number=controller.map.coord2lat(startY);
 				var bottom:Number=controller.map.coord2lat(endY);
-				var entities:Object=editableLayer.connection.getObjectsByBbox(left,right,top,bottom);
+				var entities:Object=layer.connection.getObjectsByBbox(left,right,top,bottom);
 				for each (var way:Way  in entities.waysInside) { if (way.intersects(left,right,top,bottom)) toggleSelection(way); }
 				for each (var poi:Node in entities.poisInside) { toggleSelection(poi); }
 				return controller.findStateForSelection(selection);
@@ -51,7 +51,7 @@ package net.systemeD.potlatch2.controller {
 		
 		override public function enterState():void {
 			box=new Shape();
-			var l:DisplayObject=editableLayer.getPaintSpriteAt(editableLayer.maxlayer);
+			var l:DisplayObject=layer.getPaintSpriteAt(layer.maxlayer);
 			var o:DisplayObject=Sprite(l).getChildAt(3);
 			(o as Sprite).addChild(box);
 			controller.map.draggable=false;

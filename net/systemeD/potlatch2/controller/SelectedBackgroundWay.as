@@ -5,8 +5,7 @@ package net.systemeD.potlatch2.controller {
 	
 	import net.systemeD.halcyon.WayUI;
 	import net.systemeD.halcyon.connection.*;
-	import net.systemeD.potlatch2.tools.Quadrilateralise;
-	import net.systemeD.potlatch2.tools.Simplify;
+    import net.systemeD.halcyon.MapPaint;
 
     /** Behaviour that takes place while a way is selected includes: adding a node to the way, straightening/reshaping the way, dragging it. */
     public class SelectedBackgroundWay extends ControllerState {
@@ -20,11 +19,12 @@ package net.systemeD.potlatch2.controller {
         * @param way The way that is now selected.
         * @param point The location that was clicked.
         * @param ways An ordered list of ways sharing a node, to make "way cycling" work. */
-        public function SelectedBackgroundWay(way:Way, point:Point=null, ways:Array=null, index:int=0) {
+        public function SelectedBackgroundWay(way:Way, layer:MapPaint, point:Point=null, ways:Array=null, index:int=0) {
             initWay = way;
 			clicked = point;
 			wayList = ways;
 			initIndex=index;
+			this.layer = layer;
         }
 
         private function updateSelectionUI(e:Event):void {
@@ -34,8 +34,8 @@ package net.systemeD.potlatch2.controller {
         /** Tidy up UI as we transition to a new state without the current selection. */
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-            	editableLayer.setHighlight(firstSelected, { selected: false, hover: false });
-            	editableLayer.setHighlightOnNodes(firstSelected as Way, { selectedway: false });
+            	layer.setHighlight(firstSelected, { selected: false, hover: false });
+            	layer.setHighlightOnNodes(firstSelected as Way, { selectedway: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -63,17 +63,17 @@ package net.systemeD.potlatch2.controller {
         override public function enterState():void {
             if (firstSelected!=initWay) {
                 clearSelection(this);
-                editableLayer.setHighlight(initWay, { selected: true, hover: false });
-	            editableLayer.setHighlightOnNodes(initWay, { selectedway: true });
+                layer.setHighlight(initWay, { selected: true, hover: false });
+	            layer.setHighlightOnNodes(initWay, { selectedway: true });
 	            selection = [initWay];
 	            controller.updateSelectionUI();
 			}
-			editableLayer.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
         }
         
         /** Officially leave the state */
         override public function exitState(newState:ControllerState):void {
-            editableLayer.setPurgable(selection,true);
+            layer.setPurgable(selection,true);
             clearSelection(newState);
         }
 

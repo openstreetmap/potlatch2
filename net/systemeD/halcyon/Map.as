@@ -245,7 +245,7 @@ package net.systemeD.halcyon {
 		
 		public function addLayer(connection:Connection, styleurl:String, backgroundlayer:Boolean=true, interactive:Boolean=false):MapPaint {
 			var paint:MapPaint=new MapPaint(this, connection, styleurl, -5, 5);
-			paintContainer.addChild(paint);
+			paintContainer.addChildAt(paint,0);
 			paint.isBackground=backgroundlayer;
 			paint.interactive=interactive;
 			return paint;

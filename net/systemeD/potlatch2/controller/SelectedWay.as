@@ -33,8 +33,8 @@ package net.systemeD.potlatch2.controller {
         /** Tidy up UI as we transition to a new state without the current selection. */
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-            	editableLayer.setHighlight(firstSelected, { selected: false, hover: false });
-            	editableLayer.setHighlightOnNodes(firstSelected as Way, { selectedway: false });
+            	layer.setHighlight(firstSelected, { selected: false, hover: false });
+            	layer.setHighlightOnNodes(firstSelected as Way, { selectedway: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -85,7 +85,7 @@ package net.systemeD.potlatch2.controller {
 			if (!clicked || (wayList && wayList.length<2)) { return this; }
 
 			if (!wayList) {
-				wayList=[initWay].concat(editableLayer.findWaysAtPoint(clicked.x,clicked.y,initWay));
+				wayList=[initWay].concat(layer.findWaysAtPoint(clicked.x,clicked.y,initWay));
 			}
 			wayList=wayList.slice(1).concat(wayList[0]);
 			// Find the new way's index of the currently "selected" node, to facilitate keyboard navigation
@@ -95,7 +95,7 @@ package net.systemeD.potlatch2.controller {
 
 		/** Perform deletion of currently selected way. */
 		public function deleteWay():ControllerState {
-			editableLayer.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
+			layer.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
@@ -104,13 +104,13 @@ package net.systemeD.potlatch2.controller {
         override public function enterState():void {
             if (firstSelected!=initWay) {
 	            clearSelection(this);
-	            editableLayer.setHighlight(initWay, { selected: true, hover: false });
-	            editableLayer.setHighlightOnNodes(initWay, { selectedway: true });
+	            layer.setHighlight(initWay, { selected: true, hover: false });
+	            layer.setHighlightOnNodes(initWay, { selectedway: true });
 	            selection = [initWay];
 	            controller.updateSelectionUI();
 	            initWay.addEventListener(Connection.WAY_REORDERED, updateSelectionUI, false, 0, true);
 			}
-			editableLayer.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
         }
         /** Officially leave the state, remembering the current way's tags for future repeats. */
         // TODO: tweak this so that repeat tags aren't remembered if you only select a way in order to branch off it. (a la PL1) 
@@ -118,7 +118,7 @@ package net.systemeD.potlatch2.controller {
 			if (firstSelected.hasTags()) {
               controller.clipboards['way']=firstSelected.getTagsCopy();
             }
-			editableLayer.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
             firstSelected.removeEventListener(Connection.WAY_REORDERED, updateSelectionUI);
             clearSelection(newState);
         }

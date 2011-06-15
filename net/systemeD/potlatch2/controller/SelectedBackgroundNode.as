@@ -7,7 +7,6 @@ package net.systemeD.potlatch2.controller {
 
     public class SelectedBackgroundNode extends ControllerState {
         protected var initNode:Node;
-        protected var layer:MapPaint;
 
         public function SelectedBackgroundNode(node:Node, layer:MapPaint) {
             initNode = node;
@@ -19,7 +18,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            editableLayer.setHighlight(node, { selected: true });
+            layer.setHighlight(node, { selected: true });
             selection = [node];
             controller.updateSelectionUI(layer);
             initNode = node;
@@ -27,7 +26,7 @@ package net.systemeD.potlatch2.controller {
 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-                editableLayer.setHighlight(firstSelected, { selected: false });
+                layer.setHighlight(firstSelected, { selected: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -53,11 +52,11 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectNode(initNode);
-			editableLayer.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
         }
 
         override public function exitState(newState:ControllerState):void {
-			editableLayer.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
             clearSelection(newState);
         }
 
