@@ -108,20 +108,23 @@ package net.systemeD.potlatch2.controller {
 			if ( paint && paint.isBackground ) {
 				if (event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
-					paint.setHighlight(entity, { hover:false, selected: false });
-					if (entity is Way) paint.setHighlightOnNodes(Way(entity), { selectedway: false });
-					var newEntity:Entity=paint.pullThrough(entity,controller.map.editableLayer);
-					if      (entity is Way ) { return new SelectedWay(newEntity as Way); }
-					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
+					var newSelection:Array=[];
+					if (selection.indexOf(entity)==-1) { selection=[entity]; }
+					for each (var entity:Entity in selection) {
+						paint.setHighlight(entity, { hover:false, selected: false });
+						if (entity is Way) paint.setHighlightOnNodes(Way(entity), { selectedway: false });
+						newSelection.push(paint.pullThrough(entity,controller.map.editableLayer));
+					}
+					return controller.findStateForSelection(newSelection);
 				} else if (!paint.interactive) {
 					return null;
 				} else if (event.type == MouseEvent.MOUSE_DOWN && paint.interactive) {
-					if      (entity is Way   ) { return new SelectedBackgroundWay(entity as Way, paint); }
-					else if (entity is Node  ) { return new SelectedBackgroundNode(entity as Node, paint); }
+					if      (entity is Way   ) { return new SelectedWay(entity as Way, paint); }
+					else if (entity is Node  ) { if (!entity.hasParentWays) return new SelectedPOINode(entity as Node, paint); }
 					else if (entity is Marker) { return new SelectedMarker(entity as Marker, paint); }
-				} else if ( event.type == MouseEvent.MOUSE_UP) {
+				} else if ( event.type == MouseEvent.MOUSE_UP && !event.ctrlKey) {
 					return (this is NoSelection) ? null : new NoSelection();
-				} else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING) {
+				} else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
 					return (this is NoSelection) ? null : new NoSelection();
 				}
 					
@@ -139,11 +142,11 @@ package net.systemeD.potlatch2.controller {
 					return new DragSelection(selection, event);
 				} else if (entity) {
 					return new DragSelection([entity], event);
-				} else if (event.ctrlKey) {
-					return new SelectArea(event.localX,event.localY);
+				} else if (event.ctrlKey && !layer.isBackground) {
+					return new SelectArea(event.localX,event.localY,selection);
 				}
 
-            } else if ( (event.type==MouseEvent.CLICK || event.type==MouseEvent.MOUSE_UP) && focus == null && map.dragstate!=map.DRAGGING) {
+            } else if ( (event.type==MouseEvent.CLICK || event.type==MouseEvent.MOUSE_UP) && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
                 return (this is NoSelection) ? null : new NoSelection();
             }
 			return null;

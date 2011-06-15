@@ -363,6 +363,11 @@ package net.systemeD.halcyon {
 			ruleset.loadFromCSS(url);
         }
 
+		/** Does an entity belong to this layer? */
+		public function sameConnection(entity:Entity):Boolean {
+			return entity.connection==this.connection;
+		}
+
 		// ==================== Start of code moved from Map.as
 
 		// Listeners for Connection events

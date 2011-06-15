@@ -4,12 +4,13 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.connection.actions.MergeWaysAction;
-    
+    import net.systemeD.halcyon.MapPaint;
 
 	public class SelectedMultiple extends ControllerState {
 		protected var initSelection:Array;
 		
-		public function SelectedMultiple(sel:Array) {
+		public function SelectedMultiple(sel:Array, layer:MapPaint=null) {
+			if (layer) this.layer=layer;
 			initSelection=sel.concat();
 		}
 
@@ -24,6 +25,9 @@ package net.systemeD.potlatch2.controller {
 
 				if (selectCount>1) { return this; }
 				return controller.findStateForSelection(selection);
+
+			} else if ( event.type == MouseEvent.MOUSE_UP && selection.indexOf(focus)>-1 ) {
+				return this;
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;

@@ -291,6 +291,14 @@ package net.systemeD.halcyon {
 			return editableLayer;
 		}
 
+		/** Find which paint object an entity will be displayed on. */
+		public function getLayerForEntity(entity:Entity):MapPaint {
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				if (getLayerAt(i).sameConnection(entity)) return getLayerAt(i);
+			}
+			return null;
+		}
+
 		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out
 		

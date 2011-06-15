@@ -163,13 +163,15 @@ package net.systemeD.potlatch2 {
 		/** Given what is currently selected (or not), find the matching ControllerState. */
 		public function findStateForSelection(sel:Array):ControllerState {
 			if (sel.length==0) { return new NoSelection(); }
-			else if (sel.length>1) { return new SelectedMultiple(sel); }
-			else if (sel[0] is Way) { return new SelectedWay(sel[0]); }
+			var layer:MapPaint=_map.getLayerForEntity(sel[0]);
+			
+			if (sel.length>1) { return new SelectedMultiple(sel, layer); }
+			else if (sel[0] is Way) { return new SelectedWay(sel[0], layer); }
 			else if (sel[0] is Node && Node(sel[0]).hasParentWays) {
 				var way:Way=sel[0].parentWays[0] as Way;
 				return new SelectedWayNode(way, way.indexOfNode(sel[0] as Node));
 			} else {
-				return new SelectedPOINode(sel[0] as Node);
+				return new SelectedPOINode(sel[0] as Node, layer);
 			}
 		}
 

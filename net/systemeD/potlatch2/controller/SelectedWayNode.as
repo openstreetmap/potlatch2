@@ -97,7 +97,7 @@ package net.systemeD.potlatch2.controller {
 			wayList.splice(wayList.indexOf(parentWay),1);
             // find index of this node in the newly selected way, to maintain state for keyboard navigation
             var newindex:int = Way(wayList[0]).indexOfNode(parentWay.getNode(initIndex));
-			return new SelectedWay(wayList[0],
+			return new SelectedWay(wayList[0], layer,
 			                       new Point(controller.map.lon2coord(Node(firstSelected).lon),
 			                                 controller.map.latp2coord(Node(firstSelected).latp)),
 			                       wayList.concat(parentWay),
