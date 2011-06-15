@@ -190,15 +190,13 @@
 			_root.addChild(yahoo);
 			_root.addChild(theMap);
 
-			// Initialise 900913 background
-			// >>>> REFACTOR: something odd about accessing map.tileparams here...
-			theMap.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
-			theMap.tileset.init(theMap.tileparams, false, 
-			                    params['background_dim']    ==null ? true  : params['background_dim'],
-			                    params['background_sharpen']==null ? false : params['background_sharpen']);
+			// Initialise stylesheets
+			Stylesheets.instance().init();
+			Stylesheets.instance().addEventListener(CollectionEvent.SELECT,
+				function(e:CollectionEvent):void { theMap.editableLayer.setStyle(String(e.data)); }
+			);
 
 			// Add core data layer
-			// >>>> REFACTOR: shouldn't be hardcoded to XMLConnection
 			var conn:Connection = new XMLConnection("Main", params['api'], params['policy'], params);
             conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
             conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
@@ -209,14 +207,14 @@
 			conn.addEventListener(MapEvent.ERROR, onMapError);
 			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
 			conn.addEventListener(AttentionEvent.ALERT, onAlert);
-			// >>>> REFACTOR: shouldn't be trying to find out stylesheet from here
-			theMap.addLayer(conn,params['styleurl'] ? params['styleurl'] : 'stylesheets/potlatch.css',false);
+			theMap.addLayer(conn, Stylesheets.instance().selected, false, true);
 
             // Auto-load vector backgrounds from config
             theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
 
 			// Set start position of map
-			// >>>> REFACTOR: what happens if lat/lon/zoom not supplied? (Hurleston GPX case)
+			// ** FIXME: if lat/lon/zoom aren't supplied, we need to keep the map in a non-loading state 
+			//           until the user has decided where to start editing (e.g. when the first GPX loads)
 			theMap.init(params['lat'], params['lon'], params['zoom']);
 
 			// add attribution/logo sprite
@@ -240,10 +238,15 @@
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
-			// initialise imagery and stylesheets
+			// initialise imagery
+			theMap.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			theMap.tileset.setDimming(params['background_dim']    ==null ? true  : params['background_dim']);
+			theMap.tileset.setSharpen(params['background_sharpen']==null ? false : params['background_sharpen']);
 			Imagery.instance().init(theMap, overlay, yahoo);
-			Stylesheets.instance().init(theMap);
 			Imagery.instance().addEventListener(MapEvent.BUMP, bumpHandler);
+			Imagery.instance().addEventListener(CollectionEvent.SELECT,
+				function(e:CollectionEvent):void { theMap.tileset.init(e.data, e.data!=''); }
+			);
 
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
@@ -266,6 +269,7 @@
             t.visible = loaderInfo.parameters["show_debug"] == 'true';
 			Globals.vars.root=theMap;	// just for the addDebug function
 
+			// create controller
             theController = new EditController(theMap, tagViewer, toolbox);
             theController.setActive();
 			theController.addEventListener(AttentionEvent.ATTENTION, onAttention);

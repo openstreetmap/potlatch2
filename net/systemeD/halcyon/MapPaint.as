@@ -31,6 +31,8 @@ package net.systemeD.halcyon {
         private var markeruis:Object=new Object();
         /** Is this a background layer or the core paint object? */
 		public var isBackground:Boolean = true;
+		/** Can the user select entities in this layer? */
+		public var interactive:Boolean = false;
 		/** Hash of index->position */
 		public var sublayerIndex:Object={};
 

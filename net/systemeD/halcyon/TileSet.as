@@ -47,9 +47,7 @@ package net.systemeD.halcyon {
 		 * @param dim Start with imagery faded?
 		 * @param sharpen Start with sharpen filter applied?
 		 */
-		public function init(params:Object, update:Boolean=false, dim:Boolean=true, sharpen:Boolean=false):void {
-			setDimming(dim);
-			sharpening=sharpen;
+		public function init(params:Object, update:Boolean=false):void {
 			baseurl=params.url;
 			scheme =params.scheme ? params.scheme : '900913';
 			tiles={};

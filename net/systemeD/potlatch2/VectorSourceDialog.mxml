@@ -3,17 +3,29 @@
         xmlns:mx="http://www.adobe.com/2006/mxml" 
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Load vector file"
-        width="400" height="350" verticalGap="0">
+        width="500" height="350" verticalGap="0">
 
 	<mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" 
 		dataProvider="{vectorLayers}" itemEditEnd="dataEdited(event)">
 	    <mx:columns>
-	        <mx:DataGridColumn editable="false" dataField="visible" headerText="Show" width="45">
+	        <mx:DataGridColumn editable="false" dataField="visible" headerText="Show?" width="45">
 				<mx:itemRenderer>
 					<mx:Component>
 						<mx:CheckBox selectedField="isSelected"
 									 click="data.isSelected=!data.isSelected; this.parent.parent.dispatchEvent(new Event('visibility_changed'));" 
 									 paddingLeft="5"/>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+	        <mx:DataGridColumn editable="false" dataField="interactive" headerText="Select?" width="45">
+				<mx:itemRenderer>
+					<!-- There should really be a way to hide this for the editable layer. See
+					     http://stackoverflow.com/questions/6329895/how-do-i-change-the-style-of-one-individual-cell-in-a-flex-datagrid 
+					     Leave it as a FIXME until we move to Flex 4 -->
+					<mx:Component>
+						<mx:CheckBox selectedField="isInteractive"
+									 click="data.isInteractive=!data.isInteractive; this.parent.parent.dispatchEvent(new Event('interactive_changed'));" 
+						             paddingLeft="5"/>
 					</mx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
@@ -94,6 +106,7 @@
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, vectorDialog_close);
 		dataGrid.addEventListener("visibility_changed", toggleVisibility);
+		dataGrid.addEventListener("interactive_changed", toggleInteractive);
 		map = Globals.vars.root;
 		dispatchEvent(new Event("layers_changed"));
     }
@@ -114,13 +127,17 @@
 	private function get vectorLayers():Array {
         var v:Array=[];
         for each (var a:MapPaint in map.getLayers() ) {
-            v.push( { name:a.connection.name, visible:a.visible, url:a.connection.apiBase, style:a.style, isBackground:a.isBackground } );
+            v.push( { name:a.connection.name, visible:a.visible, interactive:a.interactive, url:a.connection.apiBase, style:a.style, isBackground:a.isBackground } );
         }
 		return v;
 	}
 	
 	private function toggleVisibility(event:Event):void {
 		map.findLayer(dataGrid.selectedItem.name).visible = !map.findLayer(dataGrid.selectedItem.name).visible;
+	}
+
+	private function toggleInteractive(event:Event):void {
+		map.findLayer(dataGrid.selectedItem.name).interactive = !map.findLayer(dataGrid.selectedItem.name).interactive;
 	}
 	
 	private function dataEdited(event:DataGridEvent):void {
