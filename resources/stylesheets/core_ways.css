@@ -74,20 +74,21 @@ way|z-15[aeroway=aerodrome] :area
     { z-index: 3; fill-color: #bb99bb;  fill-opacity: 0.5;}
 way[aeroway=taxiway] !:area { z-index: 8; color: #999999; width: 3; casing-color: #aa66aa; casing-width: 2; }
 way[aeroway=taxiway]  :area { z-index: 8; color: #bb99bb; width: 3; fill-color: #ccaacc; } 
-way|z17-[aeroway=runway] !:area 
-    { z-index: 9; color: black; width: 11; casing-color: #aa66aa; casing-width: 1; }
-    { z-index: 10; color: white; width: 9;  dashes: 0, 20, 4, 76; } 
-    { z-index: 11; color: black; width: 7; } 
-    { z-index: 12; color: white; width: 5;  dashes: 0, 20, 4, 76; } 
-    { z-index: 13; color: black; width: 3; } 
-    { z-index: 14; color: white; width: 1;  dashes: 4, 16; } 
-way|z15-16[aeroway=runway] !:area 
-    { z-index: 9; color: black; width: 5;  } 
-    { z-index: 12; color: white; width: 5;  dashes: 0, 20, 4, 76; } 
-    { z-index: 13; color: black; width: 3; } 
-    { z-index: 14; color: white; width: 1;  dashes: 4, 16; } 
-way|z-14[aeroway=runway] !:area 
-    { z-index: 9; color: #444444; width: 3;  } 
+
+way|z17-[aeroway=runway] !:area { z-index: 9; color: black; width: 11; casing-color: #aa66aa; casing-width: 1; }
+way|z17-[aeroway=runway]::aa !:area { z-index: 10; color: white; width: 9;  dashes: 0, 20, 4, 76; }
+way|z17-[aeroway=runway]::bb !:area { z-index: 11; color: black; width: 7; }
+way|z17-[aeroway=runway]::cc !:area { z-index: 12; color: white; width: 5;  dashes: 0, 20, 4, 76; }
+way|z17-[aeroway=runway]::dd !:area { z-index: 13; color: black; width: 3; }
+way|z17-[aeroway=runway]::ee !:area { z-index: 14; color: white; width: 1;  dashes: 4, 16; }
+
+way|z15-16[aeroway=runway] !:area { z-index: 9; color: black; width: 5;  }
+way|z15-16[aeroway=runway]::aa !:area { z-index: 12; color: white; width: 5;  dashes: 0, 20, 4, 76; }
+way|z15-16[aeroway=runway]::bb !:area { z-index: 13; color: black; width: 3; }
+way|z15-16[aeroway=runway]::cc !:area { z-index: 14; color: white; width: 1;  dashes: 4, 16; }
+
+way|z-14[aeroway=runway] !:area { z-index: 9; color: #444444; width: 3;  }
+
 way[aeroway=runway] :area { z-index: 9; color: black; width: 3; fill-color: #775577; } 
 way[aeroway=apron] :area { z-index: 4; color: #cc66cc; width: 1; fill-color: #ddaadd; fill-opacity: 0.5;} 
 
