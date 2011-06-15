@@ -20,9 +20,9 @@ way .area_small_name {text-color: black; font-size: 9; text: name; text-halo: #f
 
 /* Test rendering for licence status */
 
-way[_status=no]       { z-index: 0; width: 20; color: red; }
-way[_status=partial]  { z-index: 0; width: 20; color: red; opacity: 0.4; }
-way[_status=unsure]   { z-index: 0; width: 20; color: orange; opacity: 0.4; }
-node[_status=no]      { z-index: 0; icon-image: square; icon-width: 15; color: red; }
-node[_status=partial] { z-index: 0; icon-image: square; icon-width: 15; color: red; opacity: 0.4; }
-node[_status=unsure]  { z-index: 0; icon-image: square; icon-width: 15; color: orange; opacity: 0.4; }
+way[_status=no]::status       { z-index: 0; width: 20; color: red; }
+way[_status=partial]::status  { z-index: 0; width: 20; color: red; opacity: 0.4; }
+way[_status=unsure]::status   { z-index: 0; width: 20; color: orange; opacity: 0.4; }
+node[_status=no]::status      { z-index: 0; icon-image: square; icon-width: 15; color: red; }
+node[_status=partial]::status { z-index: 0; icon-image: square; icon-width: 15; color: red; opacity: 0.4; }
+node[_status=unsure]::status  { z-index: 0; icon-image: square; icon-width: 15; color: orange; opacity: 0.4; }
