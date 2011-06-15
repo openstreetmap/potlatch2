@@ -2,7 +2,6 @@ package net.systemeD.potlatch2.utils {
 
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.ExtendedURLLoader;
-	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.*;
 	import flash.net.URLLoader;
 	import flash.display.LoaderInfo;
@@ -30,7 +29,7 @@ package net.systemeD.potlatch2.utils {
 			// Use forEach to avoid closure problem (http://stackoverflow.com/questions/422784/how-to-fix-closure-problem-in-actionscript-3-as3#3971784)
 			filenames.forEach(function(fn:String, index:int, array:Array):void {
 				trace("requesting file "+index);
-				var request:DebugURLRequest = new DebugURLRequest(fn);
+				var request:URLRequest = new URLRequest(fn);
 				var loader:URLLoader = new URLLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
 				loader.addEventListener(Event.COMPLETE,function(e:Event):void { fileLoaded(e,index); });
@@ -38,7 +37,7 @@ package net.systemeD.potlatch2.utils {
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
 				}
-				loader.load(request.request);
+				loader.load(request);
 			});
 		}
 		
