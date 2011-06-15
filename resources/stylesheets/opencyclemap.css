@@ -107,13 +107,11 @@ node[barrier=cattle_grid] { icon-image: icons/cattle_grid.png; }*/
 	
 /* We can stack styles at different z-index (depth) */
 
-way[railway=rail]
-	{ z-index: 6; color: #444444; width: 5; } 
-	{ z-index: 7; color: white; width: 3; dashes: 12,12; }
+way[railway=rail] { z-index: 6; color: #444444; width: 5; }
+way[railway=rail]::dashes { z-index: 7; color: white; width: 3; dashes: 12,12; }
 way[railway=platform] { color:black; width: 2; }
-way[railway=subway]
-        { z-index: 6; color: #444444; width: 5; }
-        { z-index: 7; color: white; width: 3; dashes: 8,8; }
+way[railway=subway] { z-index: 6; color: #444444; width: 5; }
+way[railway=subway]::dashes { z-index: 7; color: white; width: 3; dashes: 8,8; }
 
 /* Bridge */
 way[bridge=yes], way[bridge=viaduct], way[bridge=suspension]
