@@ -27,17 +27,17 @@ way[highway=primary],way[highway=primary_link],
 way[highway=secondary],way[highway=secondary_link],
 way[highway=tertiary],way[highway=tertiary_link],
 way[highway=residential]                             { text: name; text-color: black; font-size: 7; text-position: line;}*/
-way[highway=motorway],way[highway=motorway_link]    { z-index: 9; color: #bfbfcf; width: 7; casing-color: #506077; casing-width: 9; }
-way[highway=trunk],way[highway=trunk_link]          { z-index: 9; color: #c8d8c8; width: 7; casing-color: #477147; casing-width: 9; }
-way[highway=primary],way[highway=primary_link]      { z-index: 8; color: #d8c8c8; width: 7; casing-color: #8d4346; casing-width: 9; }
-way[highway=secondary],way[highway=secondary_link]  { z-index: 7; color: #eeeec9; width: 7; casing-color: #a37b48; casing-width: 9; }
-way[highway=tertiary],way[highway=unclassified]     { z-index: 6; color: #eeeec9; width: 5; casing-color: #999999; casing-width: 7; }
-way[highway=residential]                            { z-index: 5; color: white; width: 5; casing-color: #999; casing-width: 7; }
-way[highway=service]                                { color: white; width: 3; casing-color: #999; casing-width: 5; }
+way[highway=motorway],way[highway=motorway_link]    { z-index: 9; color: #bfbfcf; width: 7; casing-color: #506077; casing-width: 1; }
+way[highway=trunk],way[highway=trunk_link]          { z-index: 9; color: #c8d8c8; width: 7; casing-color: #477147; casing-width: 1; }
+way[highway=primary],way[highway=primary_link]      { z-index: 8; color: #d8c8c8; width: 7; casing-color: #8d4346; casing-width: 1; }
+way[highway=secondary],way[highway=secondary_link]  { z-index: 7; color: #eeeec9; width: 7; casing-color: #a37b48; casing-width: 1; }
+way[highway=tertiary],way[highway=unclassified]     { z-index: 6; color: #eeeec9; width: 5; casing-color: #999999; casing-width: 1; }
+way[highway=residential]                            { z-index: 5; color: white; width: 5; casing-color: #999; casing-width: 1; }
+way[highway=service]                                { color: white; width: 3; casing-color: #999; casing-width: 1; }
 
 /* Pedestrian precincts need to be treated carefully. Only closed-loops with an explicit
 area=yes tag should be filled. The below doesn't yet work as intended. */
-way[highway=pedestrian] !:area { color: #ddddee; width: 5; casing-color: #555555; casing-width: 6; }
+way[highway=pedestrian] !:area { color: #ddddee; width: 5; casing-color: #555555; casing-width: 1; }
 way[highway=pedestrian] :area  { color: #555555; width: 1; fill-color: #ddddee; fill-opacity: 0.8; }
 
 way[highway=steps]     { color: #be6c6c; width: 2; dashes: 4, 2; }
