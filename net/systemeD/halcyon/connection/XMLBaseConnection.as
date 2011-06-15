@@ -102,6 +102,7 @@ package net.systemeD.halcyon.connection {
 				                   Number(nodeData.@lon),
 				                   Number(nodeData.@uid),
 				                   nodeData.@timestamp);
+                if ( inlineStatus ) { newNode.status = nodeData.@status; trace(newNode.status)}
 				
 				if ( singleEntityRequest ) {
 					// it's a revert request, so create/update the node
@@ -137,6 +138,7 @@ package net.systemeD.halcyon.connection {
                     tags = parseTags(data.tag);
                     if ( way == null ) {
                         way=new Way(this, id, version, tags, true, nodelist, uid, timestamp)
+                        if ( inlineStatus ) { way.status = data.@status; trace(way.status); }
                         setWay(way,false);
                         createdEntities.push(way);
                     } else {
@@ -145,6 +147,8 @@ package net.systemeD.halcyon.connection {
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }
+
+
             }
             
             markBboxLoaded(minlon,maxlon,maxlat,minlat);

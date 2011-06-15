@@ -13,6 +13,7 @@ package net.systemeD.halcyon.connection {
 
 		public var name:String;
 		public var statusFetcher:StatusFetcher;
+		public var inlineStatus:Boolean = false;
         protected var apiBaseURL:String;
         protected var policyURL:String;
         protected var params:Object;
