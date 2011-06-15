@@ -4,10 +4,10 @@ relation[type=restriction] node { z-index:11; icon-image: icons/restriction.png;
 
 /* Interactive way behaviour */
 
-way :hover	{ z-index: 2; width: eval('_width+10'); color: #ffff99; }
-way :selected { z-index: 2; width: eval('_width+10'); color: yellow; opacity: 0.7;}
-way :restrictfrom { z-index: -1; width: eval('_width+10'); color: red; opacity: 0.7;}
-way :restrictto { z-index: -1; width: eval('_width+10'); color: blue; opacity: 0.7;}
+way::highlight :hover	{ z-index: 2; width: eval('_width+10'); color: #ffff99; }
+way::highlight :selected { z-index: 2; width: eval('_width+10'); color: yellow; opacity: 0.7;}
+way::highlight :restrictfrom { z-index: -1; width: eval('_width+10'); color: red; opacity: 0.7;}
+way::highlight :restrictto { z-index: -1; width: eval('_width+10'); color: blue; opacity: 0.7;}
 /*way !:drawn !:hasTags{ z-index:10; width: 0.5; color: red; }*/
 way !:drawn { z-index:10; width: 1; color: #333333; }
 way :tiger { casing-color: #ff00ff;}
