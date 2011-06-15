@@ -19,4 +19,3 @@ There are lots more of these throughout the code, marked with fixmes of the form
 
 - remove all back-references to Map except where necessary for lat/long/scale
 - getParam is messy - stuff sent via flashvars needs somewhere to live: currently in Globals which is ugly
-- tileset/setbackground stuff is screwed up again and needs refactoring a little
