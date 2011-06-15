@@ -145,11 +145,11 @@ node :junction :selectedway { z-index: 8; icon-image: square; icon-width: 12; ca
 /* Descendant selectors provide an easy way to style relations: this example means "any way
    which is part of a relation whose type=route". */
 
-relation[type=route] way { z-index: 1; width: 17; color: yellow; opacity: 0.3; }
-relation[type=route][route=bicycle][network=ncn] way { z-index: 1; width: 12; color: red; opacity: 0.3; }
-relation[type=route][route=bicycle][network=rcn] way { z-index: 1; width: 12; color: cyan; opacity: 0.3; }
-relation[type=route][route=bicycle][network=lcn] way { z-index: 1; width: 12; color: blue; opacity: 0.3; }
-relation[type=route][route=bicycle][network=mtb] way { z-index: 1; width: 12; color: #48a448; opacity: 0.3; }
+relation[type=route] way::routeline { z-index: 1; width: 17; color: yellow; opacity: 0.3; }
+relation[type=route][route=bicycle][network=ncn] way::routeline { z-index: 1; width: 12; color: red; opacity: 0.3; }
+relation[type=route][route=bicycle][network=rcn] way::routeline { z-index: 1; width: 12; color: cyan; opacity: 0.3; }
+relation[type=route][route=bicycle][network=lcn] way::routeline { z-index: 1; width: 12; color: blue; opacity: 0.3; }
+relation[type=route][route=bicycle][network=mtb] way::routeline { z-index: 1; width: 12; color: #48a448; opacity: 0.3; }
 
 
 
