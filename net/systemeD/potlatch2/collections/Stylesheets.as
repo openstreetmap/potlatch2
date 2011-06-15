@@ -14,24 +14,31 @@ package net.systemeD.potlatch2.collections {
         private static const GLOBAL_INSTANCE:Stylesheets = new Stylesheets();
         public static function instance():Stylesheets { return GLOBAL_INSTANCE; }
 
+		private static const DEFAULT:String = 'stylesheets/potlatch.css';
+
 		public var collection:Array=[];
-		public var selected:Object={};
-		private var _map:Map;
+		private var _selected:String;
 
 		/* Load catalogue file */
 
-		public function init(map:Map):void {
-			_map=map;
+		public function init(request_url:String=null):void {
+			// First, we set _selected in case it's needed before the stylesheet catalogue loads
+			_selected=request_url;
+			_selected=_selected ? _selected : SharedObject.getLocal("user_state").data['stylesheet_url'];
+			_selected=_selected ? _selected : DEFAULT;
+			
+			// Load the stylesheet catalogue
 			var request:DebugURLRequest = new DebugURLRequest("stylesheets.xml");
 			var loader:URLLoader = new URLLoader();
-	        loader.addEventListener(Event.COMPLETE, onStylesheetsLoad);
+	        loader.addEventListener(Event.COMPLETE, function(e:Event):void { onStylesheetsLoad(e,request_url); });
 	        loader.load(request.request);
 		}
 
-		private function onStylesheetsLoad(event:Event):void {
+		private function onStylesheetsLoad(event:Event, request_url:String=null):void {
 			var xml:XML = new XML(URLLoader(event.target).data);
 			var saved_url:String = SharedObject.getLocal("user_state").data['stylesheet_url'];
 			var saved_name:String= SharedObject.getLocal("user_state").data['stylesheet_name'];
+			if (request_url && request_url!=saved_url) { saved_url=request_url; saved_name='Custom'; }
 			var isInMenu:Boolean=false, isSet:Boolean=false;
 
             // first, build the menu from the stylesheet list.
@@ -64,8 +71,8 @@ package net.systemeD.potlatch2.collections {
                 setStylesheet(s.name, s.url);
               } else {
                 //hit and hope. FIXME should this be an error state?
-                collection.push({ name:'Potlatch', url:'stylesheets/potlatch.css'});
-                setStylesheet('Potlatch','stylesheets/potlatch.css');
+                collection.push({ name:'Potlatch', url:DEFAULT});
+                setStylesheet('Potlatch',DEFAULT);
               }
             }
 			FunctionKeyManager.instance().registerListener('Map style',
@@ -74,13 +81,15 @@ package net.systemeD.potlatch2.collections {
 		}
 
 		public function setStylesheet(name:String,url:String):void {
-			_map.editableLayer.setStyle(url);
-			// >>>> REFACTOR: not great to have a reference to editableLayer in here
+			_selected=url;
+			dispatchEvent(new CollectionEvent(CollectionEvent.SELECT, url));
 			var obj:SharedObject = SharedObject.getLocal("user_state");
 			obj.setProperty("stylesheet_url",url);
 			obj.setProperty("stylesheet_name",name);
 			obj.flush();
 		}
+		
+		public function get selected():String { return _selected; }
 
 		private function findStylesheetURLWithName(name:String):String {
 			for each (var ss:Object in collection) {

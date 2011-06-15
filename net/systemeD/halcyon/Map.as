@@ -74,8 +74,6 @@ package net.systemeD.halcyon {
 		public var backdrop:Object; 
 		/** background tile object */
 		public var tileset:TileSet; 
-		/** background tile URL, name and scheme */
-		public var tileparams:Object={ url:'' }; 
 		/** show all objects, even if unstyled? */
 		public var showall:Boolean=true; 
 		
@@ -325,12 +323,6 @@ package net.systemeD.halcyon {
 			tileset.changeScale(scale);
 			updateAllEntityUIs(true,true);
 			download();
-		}
-
-		/** Select a new background imagery. */
-		public function setBackground(bg:Object):void {
-			tileparams=bg;
-			if (tileset) { tileset.init(bg, bg.url!=''); }
 		}
 
 		/** Set background dimming on/off. */
