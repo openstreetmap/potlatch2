@@ -8,7 +8,7 @@ package net.systemeD.potlatch2.utils {
 
         private var map:Map;
         private var _layer:MapPaint;
-        private static const STYLESHEET:String="stylesheets/wireframe.css"; //TODO take from xml
+        private static const STYLESHEET:String="stylesheets/snapshot.css"; //TODO take from xml
         private var connection:SnapshotConnection;
 
 

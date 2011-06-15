@@ -8,6 +8,7 @@ package net.systemeD.potlatch2.utils {
 
         public function SnapshotConnection(cname:String,api:String,policy:String,initparams:Object=null) {
             super(cname,api,policy,initparams);
+            inlineStatus = true;
         }
 
         /** Send a "complete" call to the server, and remove it from the current layer */
