@@ -12,8 +12,17 @@
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
-  <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
-  <mx:Button label="Complete" click="markComplete()"/>
+  <mx:ViewStack id="statusStack" resizeToContent="true" width="100%">
+    <mx:VBox id="empty" />
+    <mx:VBox id="not_complete">
+      <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
+      <mx:Button label="Complete" click="markComplete()"/>
+    </mx:VBox>
+    <mx:VBox id="complete">
+      <mx:Text text="This feature has been marked as complete. If this is wrong, press the button below." />
+      <mx:Button label="Not complete" click="markNotComplete()"/>
+    </mx:VBox>
+  </mx:ViewStack>
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
@@ -26,28 +35,51 @@
       private var layer:MapPaint;
 
       public function init(entity:Entity, layer:MapPaint):void {
-            this.layer = layer;
-            if ( tagDataProvider == null ) {
-                tagDataProvider = new ArrayCollection();
-                backgroundPanelDG.dataProvider = tagDataProvider;
-            }
+          this.layer = layer;
+          if ( tagDataProvider == null ) {
+              tagDataProvider = new ArrayCollection();
+              backgroundPanelDG.dataProvider = tagDataProvider;
+          }
 
-            selectedEntity=entity;
-            updateTagDataProvider();
+          selectedEntity=entity;
+          selectedEntity.addEventListener(Connection.STATUS_CHANGED, statusEvent, false, 0, true);
+          setStatusStack();
+          updateTagDataProvider();
       }
 
       private function updateTagDataProvider():void {
-            tagDataProvider.removeAll();
-            if (selectedEntity==null) { return; }
-            var tags:Array = selectedEntity.getTagArray();
-            tags.sortOn("key");
-            for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
+          tagDataProvider.removeAll();
+          if (selectedEntity==null) { return; }
+          var tags:Array = selectedEntity.getTagArray();
+          tags.sortOn("key");
+          for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
+      }
+
+      private function statusEvent(e:Event):void {
+            setStatusStack();
+      }
+
+      private function setStatusStack():void {
+          switch (selectedEntity.status) {
+              case 'incomplete':
+                  statusStack.selectedChild = not_complete;
+                  break;
+              case 'complete':
+                  statusStack.selectedChild = complete;
+                  break;
+              default:
+                  statusStack.selectedChild = empty;
+          }
       }
 
       private function markComplete():void {
-            if (selectedEntity.connection is SnapshotConnection) {
-                SnapshotConnection(selectedEntity.connection).markComplete(selectedEntity);
-            }
+          if (selectedEntity.connection is SnapshotConnection) {
+              SnapshotConnection(selectedEntity.connection).markComplete(selectedEntity);
+          }
+      }
+
+      private function markNotComplete():void {
+          // todo
       }
       ]]>
   </mx:Script>
