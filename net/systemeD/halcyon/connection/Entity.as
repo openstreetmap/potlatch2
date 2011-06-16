@@ -425,30 +425,21 @@ package net.systemeD.halcyon.connection {
 		
         /** Copy tags from another entity into this one, creating "key=value1; value2" pairs if necessary.
         * * @return Array of keys that require manual merging, in order to warn the user. */ 
-        public function mergeTags(source: Entity, performAction:Function):Array {
+        public function mergeTags(source: Entity, performAction:Function):Boolean {
             var sourcetags:Object = source.getTagsHash();
-            var problem_keys:Array=new Array(); 
+            var conflict:Boolean = false;
             for (var k:String in sourcetags) {
                 var v1:String = tags[k];
                 var v2:String = sourcetags[k];
                 if ( v1 && v1 != v2) {
-                    // This can create broken tags (does anything support "highway=residential; tertiary"?). 
-                    // Probably better to do something like:
-                    // highway=residential
-                    // highway:tomerge=tertiary
-                    
                     setTag(k, v1+"; "+v2, performAction);
-                    problem_keys.push(k);
+                    conflict=true;
                 } else {
                     setTag(k, v2, performAction);
                 }
             }
-            if (problem_keys.length > 0)
-                return problem_keys;
-            else 
-                return null;
+            return conflict;
         }
-
 
     }
 

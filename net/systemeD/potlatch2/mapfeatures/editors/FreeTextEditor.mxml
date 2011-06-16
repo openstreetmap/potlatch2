@@ -3,12 +3,13 @@
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
+	xmlns:controls="net.systemeD.controls.*"
 	width="100%"
 	toolTip="{fieldDescription}"
     direction="{fieldDirection}" styleName="titledEditor">
 
   <mx:Label text="{fieldName}:"/>
-  <flexlib:PromptingTextInput id="inputBox" prompt="{prompt}" text="{value}" width="100%" 
+  <controls:PromptingTextInputWarning id="inputBox" prompt="{prompt}" text="{value}" width="100%" 
       focusOut="value = inputBox.text" enter="value = inputBox.text"
       restrict="&#x0020;-&#x10FFFF;" />
 

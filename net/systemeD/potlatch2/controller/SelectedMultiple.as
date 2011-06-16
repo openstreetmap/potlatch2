@@ -42,32 +42,26 @@ package net.systemeD.potlatch2.controller {
 		public function mergeWays():ControllerState {
 			var changed:Boolean;
 			var waylist:Array=selectedWays;
-			var conflictTags:Object={}; 
+			var tagConflict:Boolean=false; 
+			var relationConflict:Boolean=false;
 			var mergers:uint=0;
 			do {
 				// ** FIXME - we should have one CompositeUndoableAction for the whole caboodle,
 				// but that screws up the execution order and can make the merge not work
 				var undo:CompositeUndoableAction = new CompositeUndoableAction("Merge ways");
 				changed=tryMerge(waylist, undo);
-				if (changed)
-				    mergers ++;
-                MainUndoStack.getGlobalStack().addAction(undo);
-                
-                if (MergeWaysAction.lastProblemTags) {
-                	for each (var t:String in MergeWaysAction.lastProblemTags) {
-                		conflictTags[t]=t;
-                	}
-                }
-            				
+				if (changed) mergers++;
+				MainUndoStack.getGlobalStack().addAction(undo);
+				tagConflict     ||= MergeWaysAction.lastTagsMerged;
+				relationConflict||= MergeWaysAction.lastRelationsMerged;
+
 			} while (changed==true);
 
             if (mergers>0) {			                
-			    var msg:String = 1 + mergers + " ways merged."
-                var conflictTags2:Array = new Array();
-                // there must be a better way of avoiding duplicates...
-                for each (var conflict:String in conflictTags) conflictTags2.push(conflict);
-                if (conflictTags2.length>0)
-                    msg += " *Warning* The following tags conflicted and need attention: " + conflictTags2;
+			    var msg:String = 1 + mergers + " ways merged";
+                if (tagConflict && relationConflict) msg+=": check tags and relations";
+                else if (tagConflict) msg+=": check conflicting tags";
+                else if (relationConflict) msg+=": check relations";
                 controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             }
 
