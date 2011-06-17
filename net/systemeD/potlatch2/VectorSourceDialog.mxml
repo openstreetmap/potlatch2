@@ -70,7 +70,7 @@
 		</mx:HBox>
 		<mx:HBox>
 			<mx:Text text="URL:"/>
-			<mx:TextInput width="100%" id="src" text="" />
+			<mx:TextInput width="100%" id="src" text="" change="selectByExtension()" />
 			<mx:Button label="Load" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected, projection.selectedItem.data);" enabled="{src.text == '' ? false : true}"/>
 		</mx:HBox>
 	</mx:VBox>
@@ -159,6 +159,13 @@
 		dispatchEvent(new Event("layers_changed"));
 	}
     
+	private function selectByExtension():void {
+		if      (src.text.match(/\.shp$/i)) filetype.selectedValue='shp'
+		else if (src.text.match(/\.osm$/i)) filetype.selectedValue='osm'
+		else if (src.text.match(/\.gpx$/i)) filetype.selectedValue='gpx'
+		else if (src.text.match(/\.kml$/i)) filetype.selectedValue='kml'
+	}
+
     private function vectorDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
     }

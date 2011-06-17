@@ -45,6 +45,7 @@ package net.systemeD.potlatch2.utils {
 					for (key in dr.values) {
 						v=dr.values[key];
 						while (v.substr(v.length-1,1)==" ") v=v.substr(0,v.length-1);
+						while (v.substr(0,1)==" ") v=v.substr(1);
 						if (v!='') tags[key.toLowerCase()]=v;
 					}
 
@@ -64,7 +65,7 @@ package net.systemeD.potlatch2.utils {
 									r=proj.transform(fromProj,toProj,r);
 									x=r.x; y=r.y;
 								} else {
-									x=p.x; x=p.y;
+									x=p.x; y=p.y;
 								}
 
 								key=x+","+y;

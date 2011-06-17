@@ -231,6 +231,7 @@ package net.systemeD.halcyon {
             // Copy tags object, and add states
             var tags:Object = entity.getTagsCopy();
             setStateClass('area', Way(entity).isArea());
+            setStateClass('background', paint.isBackground);
             setStateClass('tiger', (entity.isUneditedTiger() && Globals.vars.highlightTiger));
             tags=applyStateClasses(tags);
 			if (entity.status) { tags['_status']=entity.status; }

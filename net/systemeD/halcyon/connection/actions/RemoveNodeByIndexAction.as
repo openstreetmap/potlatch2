@@ -23,7 +23,7 @@ package net.systemeD.halcyon.connection.actions {
 			var node:Node=nodeList[index];
 			removed=[];
 
-			while (nodeList[index]==node || nodeList[index]==preceding) {
+			while (nodeList[index]==node || (nodeList[index]==preceding && preceding!=null)) {
 				var removedNode:Node=nodeList.splice(index, 1)[0];
 				removed.push(removedNode);
 				if (nodeList.indexOf(removedNode)==-1) { removedNode.removeParent(way); }

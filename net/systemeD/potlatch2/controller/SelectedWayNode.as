@@ -25,9 +25,9 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            editableLayer.setHighlight(way, { hover: false });
-            editableLayer.setHighlight(node, { selected: true });
-            editableLayer.setHighlightOnNodes(way, { selectedway: true });
+            layer.setHighlight(way, { hover: false });
+            layer.setHighlight(node, { selected: true });
+            layer.setHighlightOnNodes(way, { selectedway: true });
             selection = [node]; parentWay = way;
             controller.updateSelectionUI();
 			selectedIndex = index; initIndex = index;
@@ -35,9 +35,9 @@ package net.systemeD.potlatch2.controller {
                 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-            	editableLayer.setHighlight(parentWay, { selected: false });
-				editableLayer.setHighlight(firstSelected, { selected: false });
-				editableLayer.setHighlightOnNodes(parentWay, { selectedway: false });
+            	layer.setHighlight(parentWay, { selected: false });
+				layer.setHighlight(firstSelected, { selected: false });
+				layer.setHighlightOnNodes(parentWay, { selectedway: false });
 				selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -97,7 +97,7 @@ package net.systemeD.potlatch2.controller {
 			wayList.splice(wayList.indexOf(parentWay),1);
             // find index of this node in the newly selected way, to maintain state for keyboard navigation
             var newindex:int = Way(wayList[0]).indexOfNode(parentWay.getNode(initIndex));
-			return new SelectedWay(wayList[0],
+			return new SelectedWay(wayList[0], layer,
 			                       new Point(controller.map.lon2coord(Node(firstSelected).lon),
 			                                 controller.map.latp2coord(Node(firstSelected).latp)),
 			                       wayList.concat(parentWay),
@@ -106,13 +106,13 @@ package net.systemeD.potlatch2.controller {
 
 		override public function enterState():void {
             selectNode(parentWay,initIndex);
-			editableLayer.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
         }
 		override public function exitState(newState:ControllerState):void {
             if (firstSelected.hasTags()) {
               controller.clipboards['node']=firstSelected.getTagsCopy();
             }
-			editableLayer.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
             clearSelection(newState);
         }
 
@@ -146,8 +146,8 @@ package net.systemeD.potlatch2.controller {
 			    if (parentWay.getLastNode() == n) { return this; }
 			}
 
-			editableLayer.setHighlightOnNodes(parentWay, { selectedway: false } );
-			editableLayer.setPurgable([parentWay],true);
+			layer.setHighlightOnNodes(parentWay, { selectedway: false } );
+			layer.setPurgable([parentWay],true);
             MainUndoStack.getGlobalStack().addAction(new SplitWayAction(parentWay, ni));
 
 			return new SelectedWay(parentWay);
@@ -162,7 +162,7 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		public function deleteNode():ControllerState {
-			editableLayer.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
 			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);
 			return new SelectedWay(parentWay);
 		}
@@ -182,7 +182,7 @@ package net.systemeD.potlatch2.controller {
 
             // First, look for POI nodes in 20x20 pixel box around the current node
 			// FIXME: why aren't we using a hitTest for this?
-            var hitnodes:Array = editableLayer.connection.getObjectsByBbox(
+            var hitnodes:Array = layer.connection.getObjectsByBbox(
                 map.coord2lon(p.x-10),
                 map.coord2lon(p.x+10),
                 map.coord2lat(p.y-10),
@@ -194,7 +194,7 @@ package net.systemeD.potlatch2.controller {
                 }
             }
             
-			var ways:Array=editableLayer.findWaysAtPoint(q.x, q.y, selectedWay);
+			var ways:Array=layer.findWaysAtPoint(q.x, q.y, selectedWay);
 			for each (var w:Way in ways) {
                 // hit a way, now let's see if we hit a specific node
                 for (var i:uint = 0; i < w.length; i++) {
@@ -215,11 +215,8 @@ package net.systemeD.potlatch2.controller {
         private function doMergeNodes(n:Node): ControllerState {
         	n.mergeWith(Node(firstSelected), MainUndoStack.getGlobalStack().addAction);
             // only merge one node at a time - too confusing otherwise?
-            var msg:String = "Nodes merged."
-            if (MergeNodesAction.lastProblemTags) {
-				// FIXME: ugh, just ugh.
-                msg += " *Warning* The following tags conflicted and need attention: " + MergeNodesAction.lastProblemTags;
-            }
+            var msg:String = "Nodes merged"
+            if (MergeNodesAction.lastTagsMerged) msg += ": check conflicting tags";
             controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
         }

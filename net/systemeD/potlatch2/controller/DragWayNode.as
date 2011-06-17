@@ -33,7 +33,7 @@ package net.systemeD.potlatch2.controller {
         }
 
         private function addNode(selectedWay:Way,event:MouseEvent):int {
-			var ways:Array = editableLayer.findWaysAtPoint(event.stageX, event.stageY, selectedWay);
+			var ways:Array = layer.findWaysAtPoint(event.stageX, event.stageY, selectedWay);
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
@@ -109,17 +109,17 @@ package net.systemeD.potlatch2.controller {
 			originalLat = draggingNode.lat;
 			originalLon = draggingNode.lon;
 
-			editableLayer.setHighlightOnNodes(parentWay, { selectedway: true } );
-			editableLayer.limitWayDrawing(parentWay, draggingIndex);
-			editableLayer.setHighlight(draggingNode, { selected: true } );
-			editableLayer.protectWay(parentWay);
-			editableLayer.limitWayDrawing(parentWay, NaN, draggingIndex);
+			layer.setHighlightOnNodes(parentWay, { selectedway: true } );
+			layer.limitWayDrawing(parentWay, draggingIndex);
+			layer.setHighlight(draggingNode, { selected: true } );
+			layer.protectWay(parentWay);
+			layer.limitWayDrawing(parentWay, NaN, draggingIndex);
         }
         override public function exitState(newState:ControllerState):void {
-			editableLayer.unprotectWay(parentWay);
-			editableLayer.limitWayDrawing(parentWay);
-			editableLayer.setHighlightOnNodes(parentWay, { selectedway: false } );
-			editableLayer.setHighlight(draggingNode, { selected: false } );
+			layer.unprotectWay(parentWay);
+			layer.limitWayDrawing(parentWay);
+			layer.setHighlightOnNodes(parentWay, { selectedway: false } );
+			layer.setHighlight(draggingNode, { selected: false } );
         }
         override public function toString():String {
             return "DragWayNode";

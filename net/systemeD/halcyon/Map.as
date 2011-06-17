@@ -245,7 +245,7 @@ package net.systemeD.halcyon {
 		
 		public function addLayer(connection:Connection, styleurl:String, backgroundlayer:Boolean=true, interactive:Boolean=false):MapPaint {
 			var paint:MapPaint=new MapPaint(this, connection, styleurl, -5, 5);
-			paintContainer.addChild(paint);
+			paintContainer.addChildAt(paint,0);
 			paint.isBackground=backgroundlayer;
 			paint.interactive=interactive;
 			return paint;
@@ -289,6 +289,14 @@ package net.systemeD.halcyon {
 				}
 			}
 			return editableLayer;
+		}
+
+		/** Find which paint object an entity will be displayed on. */
+		public function getLayerForEntity(entity:Entity):MapPaint {
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				if (getLayerAt(i).sameConnection(entity)) return getLayerAt(i);
+			}
+			return null;
 		}
 
 		// ------------------------------------------------------------------------------------------

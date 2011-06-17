@@ -29,7 +29,7 @@
 
 		<!-- Value -->
 
-		<mx:DataGridColumn editable="true" dataField="value" headerText="Value">
+		<mx:DataGridColumn editable="true" dataField="value" headerText="Value" itemRenderer="net.systemeD.controls.DataGridWarningField" >
 			<mx:itemEditor>
 				<mx:Component>
 					<controls:AutoComplete

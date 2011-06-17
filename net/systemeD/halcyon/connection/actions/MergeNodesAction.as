@@ -7,13 +7,16 @@ package net.systemeD.halcyon.connection.actions
         // Node2's tags are merged into node1, then node2 is deleted.       
         private var node1:Node;
         private var node2:Node;
-        static public var lastProblemTags:Array;
+		// ** FIXME: not at all elegant having these stuffed in static variables; we should probably use events instead
+        static public var lastTagsMerged:Boolean;
+		static public var lastRelationsMerged:Boolean;
     
         public function MergeNodesAction(destnode:Node, sourcenode:Node) {
             super("Merge nodes "+destnode.id+" "+sourcenode.id);
             this.node1 = destnode;
             this.node2 = sourcenode;
-            lastProblemTags=null;
+            lastTagsMerged=false;
+            lastRelationsMerged=false;
         }
         
         public override function doAction():uint {
@@ -21,8 +24,7 @@ package net.systemeD.halcyon.connection.actions
             super.clearActions();
             node1.suspend();
 
-//            mergeRelations(); TODO
-            lastProblemTags= node1.mergeTags(node2,push); // TODO use to warn user
+            lastTagsMerged=node1.mergeTags(node2,push);
             node2.replaceWith(node1, push);
             node2.remove(push);
 
@@ -45,6 +47,7 @@ package net.systemeD.halcyon.connection.actions
                 // ** needs to copy roles as well
                 if (r.findEntityMemberIndex(node1)==-1) {
                     r.appendMember(new RelationMember(node1, ''), push);
+                    lastRelationsMerged=true;
                 }
             }
         }
