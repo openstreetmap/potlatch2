@@ -93,7 +93,7 @@ package net.systemeD.potlatch2.collections {
                 case "SnapshotLoader":
                   if (set.url) {
                     name ||= 'Snapshot Server'
-                    var snapshotLoader:SnapshotLoader = new SnapshotLoader(_map, String(set.url), name);
+                    var snapshotLoader:SnapshotLoader = new SnapshotLoader(_map, String(set.url), name, String(set.style));
                     if (set.@loaded == "true") {
                       snapshotLoader.load();
                     }
