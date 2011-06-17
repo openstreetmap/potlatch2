@@ -230,6 +230,7 @@
       import mx.events.DragEvent;
       import mx.managers.DragManager;
       import mx.core.DragSource;
+      import mx.controls.TabBar;
       import flexlib.containers.SuperTabNavigator;
 
       [Bindable]
@@ -379,6 +380,14 @@
       private var tabComponents:Object = {};
 
       private function initialiseEditors():void {
+          // reset tab to 0 to work around TabNavigator bug (#3444)
+          if (editorStack is TabNavigator) {
+              try {
+                  var tabBar:TabBar=TabBar(TabNavigator(editorStack).getTabAt(0).parent);
+                  tabBar.selectedIndex=0;
+              } catch(errObject:Error) {}
+          }
+
           editorStack.removeAllChildren();
           if ( selectedEntity == null || feature == null )
               return;
