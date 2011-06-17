@@ -79,7 +79,9 @@
       }
 
       private function markNotComplete():void {
-          // todo
+          if (selectedEntity.connection is SnapshotConnection) {
+              SnapshotConnection(selectedEntity.connection).markNotComplete(selectedEntity);
+          }
       }
       ]]>
   </mx:Script>

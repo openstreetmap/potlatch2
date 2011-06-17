@@ -11,30 +11,51 @@ package net.systemeD.potlatch2.utils {
             inlineStatus = true;
         }
 
-        /** Send a "complete" call to the server, and remove it from the current layer */
+        // As it stands, the following two functions could be refactored further.
+
+        /** Post a status update call to the server and update entity.status if successful */
         public function markComplete(entity:Entity):void {
             var urlReq:URLRequest;
-            var loader:URLLoader = new URLLoader();
+
             if (entity is Node) {
                 var node:Node = Node(entity);
                 if (node == getNode(node.id)) { // confirm it's from this connection
-                    urlReq = new URLRequest(apiBaseURL+"node/"+node.id+"/status");
-                    urlReq.method = "POST";
-                    urlReq.data = 'complete';
-                    loader.addEventListener(Event.COMPLETE, function(e:Event):void { updateStatus(node, 'complete') });
-                    loader.load(urlReq);
+                    makeRequest(entity, 'complete');
                 }
 
             } else if (entity is Way) {
                 var way:Way = Way(entity);
                 if (way == getWay(way.id)) { // confirm it's from this connection
-                    urlReq = new URLRequest(apiBaseURL+"way/"+way.id+"/status");
-                    urlReq.method = "POST";
-                    urlReq.data = 'complete';
-                    loader.addEventListener(Event.COMPLETE, function(e:Event):void { updateStatus(way, 'complete') });
-                    loader.load(urlReq);
+                    makeRequest(entity, 'complete');
                 }
             }
+        }
+
+        /** Send a "complete" call to the server and update entity.status if successful */
+        public function markNotComplete(entity:Entity):void {
+            var urlReq:URLRequest;
+
+            if (entity is Node) {
+                var node:Node = Node(entity);
+                if (node == getNode(node.id)) { // confirm it's from this connection
+                    makeRequest(entity, 'incomplete');
+                }
+
+            } else if (entity is Way) {
+                var way:Way = Way(entity);
+                if (way == getWay(way.id)) { // confirm it's from this connection
+                    makeRequest(entity, 'incomplete');
+                }
+            }
+        }
+
+        private function makeRequest(entity:Entity, status:String):void {
+            var urlReq:URLRequest = new URLRequest(apiBaseURL+entity.getType()+"/"+entity.id+"/status");
+            urlReq.method = "POST";
+            urlReq.data = status;
+            var loader:URLLoader = new URLLoader();
+            loader.addEventListener(Event.COMPLETE, function(e:Event):void { updateStatus(entity, status) });
+            loader.load(urlReq);
         }
 
         private function updateStatus(e:Entity, s:String):void {
