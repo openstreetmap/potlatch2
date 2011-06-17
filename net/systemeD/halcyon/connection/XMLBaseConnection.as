@@ -144,6 +144,7 @@ package net.systemeD.halcyon.connection {
                     } else {
 						waycount++;
                         way.update(version, tags, true, true, nodelist, uid, timestamp);
+                        if ( inlineStatus ) { way.status = data.@status; }
                         sendEvent(new EntityEvent(NEW_WAY, way), false);
                     }
                 }
