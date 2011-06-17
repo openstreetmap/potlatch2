@@ -293,7 +293,6 @@ package net.systemeD.halcyon.connection {
             }
             var marker:Marker = markers[id];
             if (marker == null) {
-              trace("new marker");
               marker = new Marker(this, id, 0, tags, true, lat, lon);
               markers[id]=marker;
               sendEvent(new EntityEvent(NEW_MARKER, marker),false);
