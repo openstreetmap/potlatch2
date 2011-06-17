@@ -31,6 +31,8 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
+			if (firstSelected.deleted) return new NoSelection();	// in case user has clicked Undo
+
 			var mouse:Point;
 			var node:Node;
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
