@@ -51,7 +51,8 @@
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"
             toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
         <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
-            enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
+            enabled="{MainUndoStack.getGlobalStack().canRedo()}"
+            toolTip="{MainUndoStack.getGlobalStack().getRedoDescription() ? 'Redo '+MainUndoStack.getGlobalStack().getRedoDescription() : 'Redo last action'}" />
         <mx:Spacer width="100%"/>
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
