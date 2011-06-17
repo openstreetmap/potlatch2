@@ -17,8 +17,8 @@ package net.systemeD.halcyon.connection.actions {
         public override function doAction():uint {
             var tags:Object = entity.getTagsHash();
             oldValue = tags[key];
-            if ( oldValue != value || key == '' ) {
-                if ( value == null || value == "" || key == '' )
+            if ( value == null || key == '' || oldValue != value ) {
+                if ( value == null || key == '' || value == '' )
                     delete tags[key];
                 else
                     tags[key] = value;

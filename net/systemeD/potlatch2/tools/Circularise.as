@@ -163,7 +163,7 @@ package net.systemeD.potlatch2.tools {
 			var lon:Number = cx+Math.sin(ang*Math.PI/180)*d;
 			lats.splice(index, 0, lat);
 			lons.splice(index, 0, lon);
-			var newNode:Node = map.connection.createNode({}, map.latp2lat(lat), lon, action.push);
+			var newNode:Node = way.connection.createNode({}, map.latp2lat(lat), lon, action.push);
 			way.insertNode(index, newNode, action.push);
 		}
 	}

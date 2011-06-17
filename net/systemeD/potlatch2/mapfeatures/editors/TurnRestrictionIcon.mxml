@@ -63,6 +63,7 @@
     import net.systemeD.potlatch2.RelationEditorPanel;
     import net.systemeD.potlatch2.mapfeatures.*;
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.Globals;
     import flash.events.*;
     import mx.collections.ArrayCollection;
@@ -161,9 +162,9 @@
 	}
 	
 	private function setHighlights(bool:Boolean):void {
-		var map:Map = Globals.vars.root;
-		var from:Object=findSelected('from'); if (from) { map.setHighlight(from.data, { restrictfrom: bool } ); }
-		var to:Object  =findSelected('to'  ); if (to  ) { map.setHighlight(to.data  , { restrictto: bool   } ); }
+		var paint:MapPaint = Map(Globals.vars.root).editableLayer;	// ** FIXME: should really be the mapPaint layer where the objects are located
+		var from:Object=findSelected('from'); if (from) { paint.setHighlight(from.data, { restrictfrom: bool } ); }
+		var to:Object  =findSelected('to'  ); if (to  ) { paint.setHighlight(to.data  , { restrictto: bool   } ); }
 	}
     
     ]]></mx:Script>

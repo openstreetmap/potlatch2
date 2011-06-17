@@ -76,7 +76,7 @@ package net.systemeD.potlatch2.controller {
 		/** Creates the WayUI for the parallel way. */
 		override public function enterState():void {
 			selection=[parallelise.parallelWay];
-			controller.map.paint.createWayUI(firstSelected as Way);
+			layer.createWayUI(firstSelected as Way);
 			startlon =controller.map.coord2lon(controller.map.mouseX);
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
         }

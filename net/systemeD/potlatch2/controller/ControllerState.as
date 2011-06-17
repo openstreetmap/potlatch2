@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.collections.Imagery;
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.potlatch2.save.SaveManager;
+	import net.systemeD.potlatch2.utils.SnapshotConnection;
 	import flash.ui.Keyboard;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
@@ -19,6 +20,7 @@ package net.systemeD.potlatch2.controller {
     public class ControllerState {
 
         protected var controller:EditController;
+		public var layer:MapPaint;
         protected var previousState:ControllerState;
 
 		protected var _selection:Array=[];
@@ -26,7 +28,8 @@ package net.systemeD.potlatch2.controller {
         public function ControllerState() {}
 
         public function setController(controller:EditController):void {
-            this.controller = controller;
+            this.controller=controller;
+            if (!layer) layer=controller.map.editableLayer;
         }
 
         public function setPreviousState(previousState:ControllerState):void {
@@ -48,11 +51,19 @@ package net.systemeD.potlatch2.controller {
             return this;
         }
 
+        /** Retrieves the map associated with the current EditController */
 		public function get map():Map {
 			return controller.map;
 		}
 
+        /** This is called when the EditController sets this ControllerState as the active state.
+        * Override this with whatever is needed, such as adding highlights to entities
+        */
         public function enterState():void {}
+
+        /** This is called by the EditController as the current controllerstate is exiting.
+        * Override this with whatever cleanup is needed, such as removing highlights from entities
+        */
         public function exitState(newState:ControllerState):void {}
 
 		/** Represent the state in text for debugging. */
@@ -61,11 +72,12 @@ package net.systemeD.potlatch2.controller {
 		}
 		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
+			var editableLayer:MapPaint=controller.map.editableLayer;								// shorthand for this method
 			switch (event.keyCode) {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
-				case 67:	controller.connection.closeChangeset(); break;							// C - close changeset
-				case 68:	controller.map.paint.alpha=1.3-controller.map.paint.alpha; return null;	// D - dim
-				case 83:	SaveManager.saveChanges(); break;										// S - save
+				case 67:	editableLayer.connection.closeChangeset(); break;						// C - close changeset
+				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
+				case 83:	SaveManager.saveChanges(editableLayer.connection); break;				// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo
 				            else { MainUndoStack.getGlobalStack().redo(); return null;  }           // Shift-Z - redo 						
@@ -82,20 +94,41 @@ package net.systemeD.potlatch2.controller {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if ( paint && paint.isBackground ) {
-				if ( event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
-					// alt-click to pull data out of vector background layer
-					var newEntity:Entity=paint.findSource().pullThrough(entity,controller.connection);
-					if (entity is Way) { return new SelectedWay(newEntity as Way); }
-					else if (entity is Node) { return new SelectedPOINode(newEntity as Node); }
-                } else if (event.type == MouseEvent.MOUSE_DOWN && entity is Marker) {
-                    return new SelectedMarker(entity as Marker, paint.findSource());
-				} else if ( event.type == MouseEvent.MOUSE_UP ) {
-					return (this is NoSelection) ? null : new NoSelection();
-				} else { return null; }
+			if ( event.type == MouseEvent.MOUSE_UP && focus && map.dragstate!=map.NOT_DRAGGING) {
+				map.mouseUpHandler();	// in case the end-drag is over an EntityUI
+			} else if ( event.type == MouseEvent.ROLL_OVER && paint && paint.interactive ) {
+				paint.setHighlight(focus, { hover: true });
+			} else if ( event.type == MouseEvent.MOUSE_OUT && paint && paint.interactive ) {
+				paint.setHighlight(focus, { hover: false });
+			} else if ( event.type == MouseEvent.MOUSE_WHEEL ) {
+				if      (event.delta > 0) { map.zoomIn(); }
+				else if (event.delta < 0) { map.zoomOut(); }
 			}
 
-			if ( event.type == MouseEvent.MOUSE_DOWN ) {
+			if ( paint && paint.isBackground ) {
+				if (event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
+					// alt-click to pull data out of vector background layer
+					var newSelection:Array=[];
+					if (selection.indexOf(entity)==-1) { selection=[entity]; }
+					for each (var entity:Entity in selection) {
+						paint.setHighlight(entity, { hover:false, selected: false });
+						if (entity is Way) paint.setHighlightOnNodes(Way(entity), { selectedway: false });
+						newSelection.push(paint.pullThrough(entity,controller.map.editableLayer));
+					}
+					return controller.findStateForSelection(newSelection);
+				} else if (!paint.interactive) {
+					return null;
+				} else if (event.type == MouseEvent.MOUSE_DOWN && paint.interactive) {
+					if      (entity is Way   ) { return new SelectedWay(entity as Way, paint); }
+					else if (entity is Node  ) { if (!entity.hasParentWays) return new SelectedPOINode(entity as Node, paint); }
+					else if (entity is Marker) { return new SelectedMarker(entity as Marker, paint); }
+				} else if ( event.type == MouseEvent.MOUSE_UP && !event.ctrlKey) {
+					return (this is NoSelection) ? null : new NoSelection();
+				} else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
+					return (this is NoSelection) ? null : new NoSelection();
+				}
+					
+			} else if ( event.type == MouseEvent.MOUSE_DOWN ) {
 				if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
 					// select node within this way
                 	return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
@@ -109,31 +142,12 @@ package net.systemeD.potlatch2.controller {
 					return new DragSelection(selection, event);
 				} else if (entity) {
 					return new DragSelection([entity], event);
+				} else if (event.ctrlKey && !layer.isBackground) {
+					return new SelectArea(event.localX,event.localY,selection);
 				}
-            } else if ( event.type == MouseEvent.CLICK && focus == null && map.dragstate!=map.DRAGGING && this is SelectedMarker) {
-                // this is identical to the below, but needed for unselecting markers on vector background layers.
-                // Deselecting a POI or way on the main layer emits both CLICK and MOUSE_UP, but markers only CLICK
-                // I'll leave it to someone who understands to decide whether they are the same thing and should be
-                // combined with a (CLICK || MOUSE_UP)
-                
-                // "&& this is SelectedMarker" added by Steve Bennett. The CLICK event being processed for SelectedWay state
-                // causes way to get unselected...so restrict the double processing as much as possible.  
-                
+
+            } else if ( (event.type==MouseEvent.CLICK || event.type==MouseEvent.MOUSE_UP) && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
                 return (this is NoSelection) ? null : new NoSelection();
-			} else if ( event.type == MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING) {
-				return (this is NoSelection) ? null : new NoSelection();
-			} else if ( event.type == MouseEvent.MOUSE_UP && focus && map.dragstate!=map.NOT_DRAGGING) {
-				map.mouseUpHandler();	// in case the end-drag is over an EntityUI
-			} else if ( event.type == MouseEvent.ROLL_OVER ) {
-				controller.map.setHighlight(focus, { hover: true });
-			} else if ( event.type == MouseEvent.MOUSE_OUT ) {
-				controller.map.setHighlight(focus, { hover: false });
-            } else if ( event.type == MouseEvent.MOUSE_WHEEL ) {
-                if (event.delta > 0) {
-                  map.zoomIn();
-                } else if (event.delta < 0) {
-                  map.zoomOut();
-                }
             }
 			return null;
 		}
@@ -204,7 +218,7 @@ package net.systemeD.potlatch2.controller {
 		protected function revertHandler(event:CloseEvent):void {
 			if (event.detail==Alert.CANCEL) return;
 			for each (var item:Entity in _selection) {
-				controller.connection.loadEntity(item);
+				item.connection.loadEntity(item);
 			}
 		}
 

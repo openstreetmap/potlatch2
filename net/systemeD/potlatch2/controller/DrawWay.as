@@ -31,6 +31,8 @@ package net.systemeD.potlatch2.controller {
 		}
 		
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
+			if (firstSelected.deleted) return new NoSelection();	// in case user has clicked Undo
+
 			var mouse:Point;
 			var node:Node;
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
@@ -43,8 +45,8 @@ package net.systemeD.potlatch2.controller {
                 controller.map.mouseUpHandler(); // in case you're still in the drag-tolerance zone, and mouse up over something.
 				if ( entity == null || isBackground ) { // didn't hit anything: extend the way by one node.
 					node = createAndAddNode(event, MainUndoStack.getGlobalStack().addAction);
-                    controller.map.setHighlight(node, { selectedway: true });
-                    controller.map.setPurgable([node], false);
+                    layer.setHighlight(node, { selectedway: true });
+                    layer.setPurgable([node], false);
 					resetElastic(node);
 					lastClick=node;
 					controller.updateSelectionUIWithoutTagChange();
@@ -56,6 +58,7 @@ package net.systemeD.potlatch2.controller {
                             MainUndoStack.getGlobalStack().undo(); // undo the BeginWayAction that (presumably?) just happened
                             
                             var newPoiAction:CreatePOIAction = new CreatePOIAction(
+								layer.connection,
 								{},
 								controller.map.coord2lat(event.localY),
 								controller.map.coord2lon(event.localX));
@@ -75,9 +78,9 @@ package net.systemeD.potlatch2.controller {
 						// hit a node, add it to this way and carry on
 						appendNode(entity as Node, MainUndoStack.getGlobalStack().addAction);
 						if (focus is Way) {
-                          controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
+                          layer.setHighlightOnNodes(focus as Way, { hoverway: false });
                         }
-						controller.map.setHighlight(entity, { selectedway: true });
+						layer.setHighlight(entity, { selectedway: true });
 						resetElastic(entity as Node);
 						lastClick=entity;
 						if (Way(firstSelected).getNode(0)==Way(firstSelected).getLastNode()) {
@@ -91,7 +94,7 @@ package net.systemeD.potlatch2.controller {
 			            var lat:Number = controller.map.coord2lat(event.localY);
 			            var lon:Number = controller.map.coord2lon(event.localX);
 			            var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
-			            node = controller.connection.createNode({}, lat, lon, undo.push);
+			            node = firstSelected.connection.createNode({}, lat, lon, undo.push);
 			            Way(firstSelected).insertNodeAtClosestPosition(node, true, undo.push);
 						appendNode(node,undo.push);
 			            MainUndoStack.getGlobalStack().addAction(undo);
@@ -101,13 +104,13 @@ package net.systemeD.potlatch2.controller {
                         node = createAndAddNode(event, jnct.push);
                         Way(entity).insertNodeAtClosestPosition(node, true, jnct.push);
                         MainUndoStack.getGlobalStack().addAction(jnct);
-                        controller.map.setHighlight(node, { selectedway: true });
-                        controller.map.setPurgable([node], false);
+                        layer.setHighlight(node, { selectedway: true });
+                        layer.setPurgable([node], false);
 					}
 					resetElastic(node);
 					lastClick=node;
-					controller.map.setHighlightOnNodes(entity as Way, { hoverway: false });
-					controller.map.setHighlightOnNodes(firstSelected as Way, { selectedway: true });
+					layer.setHighlightOnNodes(entity as Way, { hoverway: false });
+					layer.setHighlightOnNodes(firstSelected as Way, { selectedway: true });
 				}
 				lastClickTime=new Date();
 			} else if ( event.type == MouseEvent.MOUSE_MOVE && elastic ) {
@@ -121,7 +124,7 @@ package net.systemeD.potlatch2.controller {
 				if (focus is Way && focus!=firstSelected) {
 					// floating over another way, highlight its nodes
 					hoverEntity=focus;
-					controller.map.setHighlightOnNodes(focus as Way, { hoverway: true });
+					layer.setHighlightOnNodes(focus as Way, { hoverway: true });
 				}
 				// set cursor depending on whether we're floating over the start of this way, 
 				// another random node, a possible junction...
@@ -136,7 +139,7 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.MOUSE_OUT && !isBackground ) {
 				if (focus is Way && entity!=firstSelected) {
 					hoverEntity=null;
-					controller.map.setHighlightOnNodes(focus as Way, { hoverway: false });
+					layer.setHighlightOnNodes(focus as Way, { hoverway: false });
 					// ** We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
 					// useful optimisation.
 				}
@@ -194,7 +197,7 @@ package net.systemeD.potlatch2.controller {
 		
 		protected function stopDrawing():ControllerState {
 			if ( hoverEntity ) {
-				controller.map.setHighlightOnNodes(hoverEntity as Way, { hoverway: false });
+				layer.setHighlightOnNodes(hoverEntity as Way, { hoverway: false });
 				hoverEntity = null;
 			}
 
@@ -210,7 +213,7 @@ package net.systemeD.potlatch2.controller {
 		    
 			var lat:Number = controller.map.coord2lat(event.localY);
 			var lon:Number = controller.map.coord2lon(event.localX);
-			var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
+			var node:Node = firstSelected.connection.createNode({}, lat, lon, undo.push);
 			appendNode(node, undo.push);
 			
 			performAction(undo);
@@ -243,8 +246,8 @@ package net.systemeD.potlatch2.controller {
 			}
 			// Only actually delete the node if it has no other tags, and is not part of other ways (or part of this way twice)
 			if (node.numParentWays==1 && Way(firstSelected).hasOnceOnly(node) && !node.hasInterestingTags()) {
-				controller.map.setPurgable([node], true);
-				controller.connection.unregisterPOI(node);
+				layer.setPurgable([node], true);
+				node.connection.unregisterPOI(node);
 				node.remove(undo.push);
 			}
 
@@ -260,7 +263,7 @@ package net.systemeD.potlatch2.controller {
             performAction(undo);
 
             if(!node.isDeleted()) { // i.e. was junction with another way (or is now POI)
-              controller.map.setHighlight(node, {selectedway: false});
+              layer.setHighlight(node, {selectedway: false});
             }
             return state;
 		}
@@ -309,7 +312,7 @@ package net.systemeD.potlatch2.controller {
 			appendNode(nextNode as Node, MainUndoStack.getGlobalStack().addAction);
 			resetElastic(nextNode as Node);
 			lastClick=nextNode;
-			controller.map.setHighlight(nextNode, { selectedway: true });
+			layer.setHighlight(nextNode, { selectedway: true });
 
 			// recentre the map if the new lat/lon is offscreen
 			controller.map.scrollIfNeeded(nextNode.lat,nextNode.lon);

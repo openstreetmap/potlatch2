@@ -49,7 +49,7 @@ package net.systemeD.halcyon.connection.actions {
             } else {
               markClean();
             }
-            Connection.getConnection().dispatchEvent(new EntityEvent(Connection.NEW_NODE, entity));
+            node.connection.dispatchEvent(new EntityEvent(Connection.NEW_NODE, entity));
             if ( effects != null )
                 effects.undoAction();
             return SUCCESS;

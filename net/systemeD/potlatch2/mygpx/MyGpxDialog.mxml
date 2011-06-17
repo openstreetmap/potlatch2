@@ -14,7 +14,6 @@
     import net.systemeD.potlatch2.save.*;
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.Globals;
-    import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.potlatch2.utils.Importer;
     import net.systemeD.potlatch2.utils.GpxImporter;
     import mx.controls.Alert;
@@ -27,11 +26,12 @@
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
 
-        conn = Connection.getConnectionInstance();
+		// >>>> REFACTOR: really horrible way of getting both map and connection
         map = Globals.vars.root;
+		conn = map.editableLayer.connection;
 
         conn.addEventListener(Connection.TRACES_LOADED, onTracesLoaded);
-        SaveManager.ensureAccess(fetchList);
+        SaveManager.ensureAccess(fetchList, conn);
     }
 
     private function myGpxDialog_close(evt:CloseEvent):void {

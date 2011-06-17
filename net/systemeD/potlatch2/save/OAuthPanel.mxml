@@ -81,14 +81,20 @@
         private var _accessToken:OAuthToken;
         private var authoriseURL:String;
         private var lastHTTPStatus:int = 0;
+        private var waiting:Boolean = false;
         
         public static var ACCESS_TOKEN_EVENT:String = "gotAccessToken";
         
         private function getAuthText():String {
             return "To save data you must authorise this application to edit "+
-                    Connection.serverName + " on your behalf.";
+                    connection.serverName + " on your behalf.";
         }
         
+		public function setConnection(connection:Connection):void {
+			this.connection=connection;
+			if (waiting) { waiting=false; getRequestToken(); }
+		}
+
         private function openURL(url:String):void {
 			if (ExternalInterface.available) {
 				var winH:int = 560;
@@ -105,11 +111,11 @@
 		}
         
         private function getRequestToken():void {
-            connection = Connection.getConnectionInstance();
-            
+            if (!connection) { waiting=true; return; }	// in case the connection hasn't been set yet
+
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
-            var url:String = Connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
+            var url:String = connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
             
             var params:Object = new Object();
             var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, params, consumer, null);
@@ -148,7 +154,7 @@
             trace("Yay! response: "+URLLoader(event.target).data);
             requestToken = getResponseToken(URLLoader(event.target));
             
-            var url:String = Connection.getParam("oauth_auth_url", "http://127.0.0.1:3000/oauth/authorize");            
+            var url:String = connection.getParam("oauth_auth_url", "http://127.0.0.1:3000/oauth/authorize");            
             link.label = url;
 			authoriseURL = url + "?oauth_token="+requestToken.key;
 			progress.visible = false;
@@ -168,7 +174,7 @@
         private function getAccessToken():void {
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
-            var url:String = Connection.getParam("oauth_access_url", "http://127.0.0.1:3000/oauth/access_token");
+            var url:String = connection.getParam("oauth_access_url", "http://127.0.0.1:3000/oauth/access_token");
 
             var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, consumer, requestToken);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
@@ -192,7 +198,7 @@
             PopUpManager.removePopUp(this);
             
             _accessToken = getResponseToken(URLLoader(event.target));
-            Connection.getConnectionInstance().setAuthToken(_accessToken);
+            connection.setAuthToken(_accessToken);
             dispatchEvent(new Event(ACCESS_TOKEN_EVENT));
         }
         
@@ -214,8 +220,8 @@
         }
         
         private function getConsumer():OAuthConsumer {
-            var key:String = Connection.getParam("oauth_consumer_key", "");
-            var secret:String = Connection.getParam("oauth_consumer_secret", "");
+            var key:String = connection.getParam("oauth_consumer_key", "");
+            var secret:String = connection.getParam("oauth_consumer_secret", "");
             return new OAuthConsumer(key, secret);
         }
 		

@@ -1,13 +1,16 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.display.*;
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.MapPaint;
 
     public class SelectedPOINode extends ControllerState {
         protected var initNode:Node;
 
-        public function SelectedPOINode(node:Node) {
+        public function SelectedPOINode(node:Node, layer:MapPaint=null) {
+			if (layer) this.layer=layer;
             initNode = node;
         }
  
@@ -16,7 +19,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            controller.map.setHighlight(node, { selected: true });
+            layer.setHighlight(node, { selected: true });
             selection = [node];
             controller.updateSelectionUI();
             initNode = node;
@@ -24,7 +27,7 @@ package net.systemeD.potlatch2.controller {
                 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-                controller.map.setHighlight(firstSelected, { selected: false });
+                layer.setHighlight(firstSelected, { selected: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -32,11 +35,14 @@ package net.systemeD.potlatch2.controller {
         
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE) { return this; }
-			if (event.type==MouseEvent.MOUSE_DOWN && event.ctrlKey && entity && entity!=firstSelected) {
-				return new SelectedMultiple([firstSelected,entity]);
-			}
-			if (event.type==MouseEvent.MOUSE_DOWN && event.shiftKey && !entity) {
+			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
+
+			if (event.type==MouseEvent.MOUSE_DOWN && event.ctrlKey && entity && entity!=firstSelected && paint==layer) {
+				return new SelectedMultiple([firstSelected,entity],layer);
+			} else if (event.type==MouseEvent.MOUSE_DOWN && event.shiftKey && !entity && !layer.isBackground) {
 				return new DrawQuadrilateral(firstSelected as Node);
+			} else if ( event.type == MouseEvent.MOUSE_UP && entity==firstSelected ) {
+				return this;
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
@@ -53,20 +59,20 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		public function deletePOI():ControllerState {
-			controller.connection.unregisterPOI(firstSelected as Node);
+			firstSelected.connection.unregisterPOI(firstSelected as Node);
 			firstSelected.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
 		}
 
         override public function enterState():void {
             selectNode(initNode);
-			controller.map.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
         }
         override public function exitState(newState:ControllerState):void {
             if(firstSelected.hasTags()) {
               controller.clipboards['node']=firstSelected.getTagsCopy();
             }
-			controller.map.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
             clearSelection(newState);
         }
 

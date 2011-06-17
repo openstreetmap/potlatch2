@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.utils {
 
-	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.potlatch2.tools.Simplify;
@@ -11,11 +12,11 @@ package net.systemeD.potlatch2.utils {
     */
 	public class GpxImporter extends Importer {
 
-		public function GpxImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
-			super(container,paint,filenames,callback,simplify);
+		public function GpxImporter(connection:Connection, map:Map, filenames:Array, callback:Function=null, simplify:Boolean=false) {
+			super(connection,map,filenames,callback,simplify);
 		}
 
-		override protected function doImport(): void {
+		override protected function doImport(push:Function): void {
 			var file:XML = new XML(files[0]);
 			for each (var ns:Namespace in file.namespaceDeclarations()) {
 				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
@@ -27,11 +28,11 @@ package net.systemeD.potlatch2.utils {
 				var way:Way;
                 var nodestring:Array = [];
                 for each (var trkpt:XML in trkseg.trkpt) {
-					nodestring.push(container.createNode({}, trkpt.@lat, trkpt.@lon));
+					nodestring.push(connection.createNode({}, trkpt.@lat, trkpt.@lon, push));
 				}
                 if (nodestring.length > 0) {
-					way = container.createWay({}, nodestring);
-					if (simplify) { Simplify.simplify(way, paint.map, false); }
+					way = connection.createWay({}, nodestring, push);
+					if (simplify) { Simplify.simplify(way, map, false); }
 				}
 			}
 
@@ -40,8 +41,8 @@ package net.systemeD.potlatch2.utils {
 				for each (var tag:XML in wpt.children()) {
 					tags[tag.name().localName]=tag.toString();
 				}
-				var node:Node = container.createNode(tags, wpt.@lat, wpt.@lon);
-				container.registerPOI(node);
+				var node:Node = connection.createNode(tags, wpt.@lat, wpt.@lon, push);
+				connection.registerPOI(node);
 			}
 
 			default xml namespace = new Namespace("");

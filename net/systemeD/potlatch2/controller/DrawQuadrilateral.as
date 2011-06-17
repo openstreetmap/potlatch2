@@ -54,7 +54,7 @@ package net.systemeD.potlatch2.controller {
 
 		override public function enterState():void {
 			controller.map.draggable=false;
-			var conn:Connection=controller.connection;
+			var conn:Connection=sourceNode.connection;
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Draw quadrilateral");
 			var cornerlon:Number =controller.map.coord2lon(controller.map.mouseX);
 			var cornerlat:Number =controller.map.coord2lat(controller.map.mouseY);

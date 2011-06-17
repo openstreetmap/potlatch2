@@ -43,6 +43,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const CONDITION:RegExp	=/^ \[(.+?)\] \s* /sx;
 		private static const OBJECT:RegExp		=/^ (\w+) \s* /sx;
 		private static const DECLARATION:RegExp	=/^ \{(.+?)\} \s* /sx;
+		private static const SUBPART:RegExp		=/^ ::(\w+) \s* /sx;
 		private static const UNKNOWN:RegExp		=/^ (\S+) \s* /sx;
 
 		private static const ZOOM_MINMAX:RegExp	=/^ (\d+)\-(\d+) $/sx;
@@ -74,6 +75,7 @@ package net.systemeD.halcyon.styleparser {
 		private static const oCONDITION:uint=4;
 		private static const oOBJECT:uint=5;
 		private static const oDECLARATION:uint=6;
+		private static const oSUBPART:uint=7;
 
 		private static const DASH:RegExp=/\-/g;
 		private static const COLOR:RegExp=/color$/;
@@ -287,7 +289,7 @@ package net.systemeD.halcyon.styleparser {
 					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
 					else { continue; }
 					if (filename=='square' || filename=='circle') { continue; }
-				
+			
 					iconsToLoad++;
 					var request:DebugURLRequest=new DebugURLRequest(filename);
 					var loader:ExtendedURLLoader=new ExtendedURLLoader();
@@ -366,7 +368,7 @@ package net.systemeD.halcyon.styleparser {
 					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
 
 					css=css.replace(CLASS,'');
-					sc.addCondition(new Condition('set',o[1]));
+					sc.currentChain.addConditionToLast(new Condition('set',o[1]));
 					previous=oCONDITION;
 
 				// Not class - !.motorway, !.builtup, !:hover
@@ -374,30 +376,31 @@ package net.systemeD.halcyon.styleparser {
 					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
 
 					css=css.replace(NOT_CLASS,'');
-					sc.addCondition(new Condition('unset',o[1]));
+					sc.currentChain.addConditionToLast(new Condition('unset',o[1]));
 					previous=oCONDITION;
 
 				// Zoom
 				} else if ((o=ZOOM.exec(css))) {
-					if (previous!=oOBJECT && previous!=oCONDITION) { sc.newObject(); }
+					if (previous!=oOBJECT && previous!=oCONDITION) { sc.currentChain.addRule(); }
 
 					css=css.replace(ZOOM,'');
 					var z:Array=parseZoom(o[1]);
-					sc.addZoom(z[0],z[1]);
+					sc.currentChain.addZoomToLast(z[0],z[1]);
+					sc.zoomSpecific=true;
 					previous=oZOOM;
 
 				// Grouping - just a comma
 				} else if ((o=GROUP.exec(css))) {
 					css=css.replace(GROUP,'');
-					sc.newGroup();
+					sc.newRuleChain();
 					previous=oGROUP;
 
 				// Condition - [highway=primary]
 				} else if ((o=CONDITION.exec(css))) {
 					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
-					if (previous!=oOBJECT && previous!=oZOOM && previous!=oCONDITION) { sc.newObject(); }
+					if (previous!=oOBJECT && previous!=oZOOM && previous!=oCONDITION) { sc.currentChain.addRule(); }
 					css=css.replace(CONDITION,'');
-					sc.addCondition(parseCondition(o[1]) as Condition);
+					sc.currentChain.addConditionToLast(parseCondition(o[1]) as Condition);
 					previous=oCONDITION;
 
 				// Object - way, node, relation
@@ -405,8 +408,15 @@ package net.systemeD.halcyon.styleparser {
 					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
 
 					css=css.replace(OBJECT,'');
-					sc.newObject(o[1]);
+					sc.currentChain.addRule(o[1]);
 					previous=oOBJECT;
+
+				// Subpart - ::centreline
+				} else if ((o=SUBPART.exec(css))) {
+					if (previous==oDECLARATION) { saveChooser(sc); sc=new StyleChooser(); }
+					css=css.replace(SUBPART,'');
+					sc.currentChain.setSubpart(o[1]);
+					previous=oSUBPART;
 
 				// Declaration - {...}
 				} else if ((o=DECLARATION.exec(css))) {

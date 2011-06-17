@@ -23,6 +23,7 @@
         */
         public function init(e:Entity, t:Object):void {
           entity = e;
+          conn = e.connection;
           defaulttags = {};
           for (var k:String in t) {  
             //tagmatches[k]=t[k];// deep copy match pattern tags
@@ -32,7 +33,6 @@
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
-          conn = Connection.getConnectionInstance();
           relationList = conn.getMatchingRelationIDs(t);
           if (relationList.length == 0) {
             warning.text = "No relations available";

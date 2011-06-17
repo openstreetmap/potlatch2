@@ -11,8 +11,8 @@ package net.systemeD.halcyon.connection {
 		private var edge_b:Number;
 		public static var entity_type:String = 'way';
 
-        public function Way(id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Way(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp);
             this.nodes = nodes;
 			for each (var node:Node in nodes) { node.addParent(this); }
 			calculateBbox();
@@ -51,7 +51,7 @@ package net.systemeD.halcyon.connection {
 			    (edge_b>top    && edge_b>top   ) || deleted) { return false; }
 			return true;
 		}
-        
+
         public function getNode(index:uint):Node {
             return nodes[index];
         }
@@ -94,12 +94,12 @@ package net.systemeD.halcyon.connection {
         }
 
         public function appendNode(node:Node, performAction:Function):uint {
-			if (node!=getLastNode()) performAction(new AddNodeToWayAction(this, node, nodes, -1));
+			insertNode(nodes.length, node, performAction);
             return nodes.length + 1;
         }
         
         public function prependNode(node:Node, performAction:Function):uint {
-			if (node!=getFirstNode()) performAction(new AddNodeToWayAction(this, node, nodes, 0));
+			insertNode(0, node, performAction);
             return nodes.length + 1;
         }
         
@@ -291,5 +291,51 @@ package net.systemeD.halcyon.connection {
 			}
 			return null;
 		}
+
+		public function intersects(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+			// simple test first: are any nodes contained?
+			for (var i:uint=0; i<nodes.length; i++) {
+				if (nodes[i].within(left,right,top,bottom)) return true;
+			}
+			// more complex test: do any segments cross?
+			for (i=0; i<nodes.length-1; i++) {
+				if (lineIntersectsRectangle(
+					nodes[i  ].lon, nodes[i  ].lat,
+					nodes[i+1].lon, nodes[i+1].lat,
+					left,right,top,bottom)) return true;
+			}
+			return false;
+		}
+		
+		private function lineIntersectsRectangle(x0:Number, y0:Number, x1:Number, y1:Number, l:Number, r:Number, b:Number, t:Number):Boolean {
+			// from http://sebleedelisle.com/2009/05/super-fast-trianglerectangle-intersection-test/
+			// note that t and b are transposed above because we're dealing with lat (top=90), not AS3 pixels (top=0)
+			var m:Number = (y1-y0) / (x1-x0);
+			var c:Number = y0 -(m*x0);
+			var top_intersection:Number, bottom_intersection:Number;
+			var toptrianglepoint:Number, bottomtrianglepoint:Number;
+
+			if (m>0) {
+				top_intersection = (m*l  + c);
+				bottom_intersection = (m*r  + c);
+			} else {
+				top_intersection = (m*r  + c);
+				bottom_intersection = (m*l  + c);
+			}
+
+			if (y0<y1) {
+				toptrianglepoint = y0;
+				bottomtrianglepoint = y1;
+			} else {
+				toptrianglepoint = y1;
+				bottomtrianglepoint = y0;
+			}
+
+			var topoverlap:Number = top_intersection>toptrianglepoint ? top_intersection : toptrianglepoint;
+			var botoverlap:Number = bottom_intersection<bottomtrianglepoint ? bottom_intersection : bottomtrianglepoint;
+			return (topoverlap<botoverlap) && (!((botoverlap<t) || (topoverlap>b)));
+		}
+
+
     }
 }

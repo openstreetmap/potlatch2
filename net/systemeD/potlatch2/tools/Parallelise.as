@@ -20,7 +20,7 @@ package net.systemeD.potlatch2.tools {
 		 * */
 		public function Parallelise(way:Way) {
 			var a:Number, b:Number, h:Number, i:uint, j:uint, k:int;
-			connection  = Connection.getConnection();
+			connection  = way.connection;
 			originalWay = way;
 			parallelWay = connection.createWay({}, [], MainUndoStack.getGlobalStack().addAction);
 
