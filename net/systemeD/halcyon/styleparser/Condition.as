@@ -36,7 +36,7 @@ package net.systemeD.halcyon.styleparser {
 				case 'regex':	var r:RegExp=new RegExp(params[1],"i");
 								return (r.test(tags[params[0]])); break;
 				case 'true':	return (tags[params[0]]=='true' || tags[params[0]]=='yes' || tags[params[0]]=='1'); break;
-				case 'untrue':	return (tags[params[0]]!='true' && tags[params[0]]!='yes' && tags[params[0]]!='1'); break;
+				case 'false':	return (tags[params[0]]!='true' && tags[params[0]]!='yes' && tags[params[0]]!='1' && tags[params[0]]!=undefined && tags[params[0]]!=''); break;
 				case 'set':		return (tags[params[0]]!=undefined && tags[params[0]]!=''); break;
 				case 'unset':	return (tags[params[0]]==undefined || tags[params[0]]==''); break;
 				case '<':		return (Number(tags[params[0]])< Number(params[1])); break;
