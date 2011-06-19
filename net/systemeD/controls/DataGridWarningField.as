@@ -26,7 +26,7 @@ package net.systemeD.controls {
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
  
-			if (data.value.indexOf(';')>-1) {
+			if (data.value && data.value.indexOf(';')>-1) {
 				setStyle('color',0xFF0000);
 				_image.visible=true;
 				_image.x = width -_image.width -5;
