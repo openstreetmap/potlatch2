@@ -85,7 +85,7 @@
 	</mx:Script>
 
 	<mx:HBox horizontalAlign="left" width="100%">
-		<mx:Label text="Search for: " />
+		<mx:Label text="Enter place name: " />
 		<mx:TextInput id="txtFind" width="100%" enter="txtFind_enterHandler(event)"/>
 		<mx:Button label="Search" id="btnFind" click="btnFind_clickHandler(event)"/>		
 	</mx:HBox>

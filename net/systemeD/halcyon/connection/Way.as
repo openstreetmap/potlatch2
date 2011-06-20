@@ -94,12 +94,12 @@ package net.systemeD.halcyon.connection {
         }
 
         public function appendNode(node:Node, performAction:Function):uint {
-			if (node!=getLastNode()) performAction(new AddNodeToWayAction(this, node, nodes, -1));
+			insertNode(nodes.length, node, performAction);
             return nodes.length + 1;
         }
         
         public function prependNode(node:Node, performAction:Function):uint {
-			if (node!=getFirstNode()) performAction(new AddNodeToWayAction(this, node, nodes, 0));
+			insertNode(0, node, performAction);
             return nodes.length + 1;
         }
         

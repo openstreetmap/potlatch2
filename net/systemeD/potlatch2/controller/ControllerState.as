@@ -146,7 +146,7 @@ package net.systemeD.potlatch2.controller {
 					return new SelectArea(event.localX,event.localY,selection);
 				}
 
-            } else if ( (event.type==MouseEvent.CLICK || event.type==MouseEvent.MOUSE_UP) && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
+            } else if ( event.type==MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
                 return (this is NoSelection) ? null : new NoSelection();
             }
 			return null;

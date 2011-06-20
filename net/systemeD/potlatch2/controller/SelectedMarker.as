@@ -34,7 +34,7 @@ package net.systemeD.potlatch2.controller {
 
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE) { return this; }
-            if (event.type==MouseEvent.MOUSE_UP) { return this; }
+            if ( (event.type==MouseEvent.MOUSE_UP || event.type==MouseEvent.CLICK) && entity==initMarker ) { return this; }
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
         }

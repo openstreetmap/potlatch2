@@ -45,12 +45,12 @@
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
 		<name>OS OpenData Streetview</name>
 		<url>http://os.openstreetmap.org/sv/$z/$x/$y.png</url>
-		<sourcetag>OS OpenData StreetView</sourcetag>
+		<sourcetag>OS_OpenData_StreetView</sourcetag>
 	</set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
 		<name>OS OpenData Locator</name>
 		<url>http://tiles.itoworld.com/os_locator/$z/$x/$y.png</url>
-		<sourcetag>OS OpenData Locator</sourcetag>
+		<sourcetag>OS_OpenData_Locator</sourcetag>
 		<sourcekey>source:name</sourcekey>
 	</set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
@@ -98,7 +98,16 @@
 		<url>http://hypercube.telascience.org/tiles/1.0.0/haiti-city/$z/$x/$y.jpg</url>
 		<sourcetag>Haiti streetnames</sourcetag>
 	</set>
-
+	<set minlat="24.2" minlon="-125.8" maxlat="49.5" maxlon="-62.3">
+		<name>National Agriculture Imagery Program</name>
+		<url>http://cube.telascience.org/tilecache/tilecache.py/1.0.0/NAIP_ALL/$z/$x/$y.png</url>
+		<sourcetag>NAIP</sourcetag>
+	</set>
+	<set minlat="55.3" minlon="-168.5" maxlat="71.5" maxlon="-140">
+		<name>National Agriculture Imagery Program</name>
+		<url>http://cube.telascience.org/tilecache/tilecache.py/1.0.0/NAIP_ALL/$z/$x/$y.png</url>
+		<sourcetag>NAIP</sourcetag>
+	</set>
     <set minlat="54.44" minlon="7.81" maxlat="57.86" maxlon="15.49">
         <name>Denmark - Fugro Aerial Imagery</name>
         <url>http://fugro.findvej.dk/fugro2005/$z/$x/$y.jpg</url>

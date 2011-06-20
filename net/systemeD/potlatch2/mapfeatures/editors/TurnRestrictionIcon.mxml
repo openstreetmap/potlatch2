@@ -111,7 +111,7 @@
 		// now add new entity
 		rel.appendMember(new RelationMember(entity,role), undo.push);
 
-        undo.doAction();
+        MainUndoStack.getGlobalStack().addAction(undo);
 
 		if (show.label=='Hide') { setHighlights(true); }
 	}

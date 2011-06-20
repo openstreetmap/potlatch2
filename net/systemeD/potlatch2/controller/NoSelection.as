@@ -25,6 +25,7 @@ package net.systemeD.potlatch2.controller {
 
 			if (event.type==MouseEvent.MOUSE_UP && (focus==null || (paint && paint.isBackground)) && map.dragstate!=map.DRAGGING) {
 				map.dragstate=map.NOT_DRAGGING;
+				// ** FIXME: BeginWayAction ought to be a discrete class
 				var undo:CompositeUndoableAction = new BeginWayAction();
 				var conn:Connection = layer.connection;
 				var startNode:Node = conn.createNode(

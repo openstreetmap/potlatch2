@@ -51,7 +51,8 @@
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"
             toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
         <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
-            enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
+            enabled="{MainUndoStack.getGlobalStack().canRedo()}"
+            toolTip="{MainUndoStack.getGlobalStack().getRedoDescription() ? 'Redo '+MainUndoStack.getGlobalStack().getRedoDescription() : 'Redo last action'}" />
         <mx:Spacer width="100%"/>
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
@@ -100,6 +101,8 @@
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
+		import flash.utils.Timer;
+		import flash.events.TimerEvent;
 		import flash.events.MouseEvent;
 		import flash.display.Sprite;
 		import mx.core.IChildList;
@@ -122,6 +125,8 @@
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
+		private var saveLabel:String='Save';
+		private var saveTimer:Timer;
 
         include "version.as";
 
@@ -148,6 +153,9 @@
 			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
 			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
 			Globals.vars.flashvars = loaderInfo.parameters;
+
+			// Remember localised Save text, because we change this dynamically
+			saveLabel=saveButton.label;
 
 			// populate sharedObject with loaderInfo parameters if supplied
 			var obj:SharedObject = SharedObject.getLocal("user_state");
@@ -431,15 +439,37 @@
             if (ExternalInterface.available) {
               ExternalInterface.call("markChanged", false);
             }
+			if (!saveTimer || !saveTimer.running) {
+				saveTimer=new Timer(60*1000,0);
+				saveTimer.addEventListener(TimerEvent.TIMER,saveTimeUpdate);
+				saveTimer.start();
+			}
 		}
 		private function onDataClean(event:Event):void {
 			saveButton.enabled=false;
             if (ExternalInterface.available) {
               ExternalInterface.call("markChanged", true);
             }
+            if (saveTimer && saveTimer.running) {
+				saveTimer.stop();
+				saveTimer.removeEventListener(TimerEvent.TIMER,saveTimeUpdate);
+				saveTimeWrite(0);
+			}
 		}
-		
-
+		private function saveTimeUpdate(event:TimerEvent):void {
+			var timer:Timer=Timer(event.target);
+			saveTimeWrite(uint(timer.delay*timer.currentCount/1000/60));
+		}
+		private function saveTimeWrite(minutes:uint):void {
+			if (minutes<5) {
+				saveButton.label=saveLabel;
+			} else {
+				saveButton.label=saveLabel+" ("+minutes+"m"+")"; 
+				if (minutes>=20 && minutes/5==int(minutes/5)) {
+					theController.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, minutes+"m since last save - please save regularly"));
+				}
+			}
+		}
 
 		private function scaleHandler(event:MapEvent):void {
 			dispatchEvent(new Event("rescale"));

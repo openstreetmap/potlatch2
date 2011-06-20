@@ -56,6 +56,7 @@ package net.systemeD.halcyon.connection {
 			mapLoader.addEventListener(Event.COMPLETE, loadedMap);
 			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
 			mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
+            request.requestHeaders.push(new URLRequestHeader("X-Error-Format", "XML"));
 			mapLoader.load(request);
 			dispatchEvent(new Event(LOAD_STARTED));
 		}
