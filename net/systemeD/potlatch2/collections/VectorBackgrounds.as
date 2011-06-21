@@ -27,11 +27,13 @@ package net.systemeD.potlatch2.collections {
 
         public function onConfigLoad(e:Event):void {
             var xml:XML = XML(e.target.data);
-            for each(var set:XML in xml.set) {
 
-              // allow layers to be defined but disabled. This lets me put examples in the
-              // config file.
-              if (set.@disabled == "true") continue;
+			// reconstitute results as Array, as we can't run .forEach over an XMLList
+			var sets:Array = [];
+			for each (var set:XML in xml.set) { sets.push(set); }
+			
+			// use .forEach to avoid closure problem (http://stackoverflow.com/questions/422784/how-to-fix-closure-problem-in-actionscript-3-as3#3971784)
+			sets.forEach(function(set:XML, index:int, array:Array):void {
 
               if (!(set.policyfile == undefined)) {
                 Security.loadPolicyFile(String(set.policyfile));
@@ -105,7 +107,7 @@ package net.systemeD.potlatch2.collections {
                 default:
                   trace("AutoVectorBackground: unknown loader");
               }
-            }
-        }
+        	});
+		}
     }
 }
