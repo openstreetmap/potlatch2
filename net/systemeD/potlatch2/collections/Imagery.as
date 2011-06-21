@@ -52,7 +52,7 @@ package net.systemeD.potlatch2.collections {
 			var xml:XML = new XML(URLLoader(event.target).data);
 			var saved:Object = {};
 			var bg:Object;
-			if (SharedObject.getLocal("user_state").data['background_url']) {
+			if (SharedObject.getLocal("user_state").data['background_url']!=undefined) {
 				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
 						url:  SharedObject.getLocal("user_state").data['background_url' ] };
 			}
