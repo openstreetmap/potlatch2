@@ -3,13 +3,12 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.halcyon.MapPaint;
 
     public class SelectedMarker extends ControllerState {
         protected var initMarker:Marker;
-        protected var layer:VectorLayer;
 
-        public function SelectedMarker(marker:Marker, layer:VectorLayer) {
+        public function SelectedMarker(marker:Marker, layer:MapPaint) {
             initMarker = marker;
             this.layer = layer;
         }
@@ -19,7 +18,7 @@ package net.systemeD.potlatch2.controller {
                 return;
 
             clearSelection(this);
-            controller.map.setHighlight(marker, { selected: true });
+            layer.setHighlight(marker, { selected: true });
             selection = [marker];
             controller.updateSelectionUI(layer);
             initMarker = marker;
@@ -27,7 +26,7 @@ package net.systemeD.potlatch2.controller {
 
         protected function clearSelection(newState:ControllerState):void {
             if ( selectCount ) {
-                controller.map.setHighlight(firstSelected, { selected: false });
+                layer.setHighlight(firstSelected, { selected: false });
                 selection = [];
                 if (!newState.isSelectionState()) { controller.updateSelectionUI(); }
             }
@@ -35,7 +34,7 @@ package net.systemeD.potlatch2.controller {
 
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE) { return this; }
-            if (event.type==MouseEvent.MOUSE_UP) { return this; }
+            if ( (event.type==MouseEvent.MOUSE_UP || event.type==MouseEvent.CLICK) && entity==initMarker ) { return this; }
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
         }
@@ -53,11 +52,11 @@ package net.systemeD.potlatch2.controller {
 
         override public function enterState():void {
             selectMarker(initMarker);
-			controller.map.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
         }
 
         override public function exitState(newState:ControllerState):void {
-			controller.map.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
             clearSelection(newState);
         }
 

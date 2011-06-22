@@ -1,17 +1,17 @@
 package net.systemeD.potlatch2 {
 
-    import net.systemeD.halcyon.VectorLayer;
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
     import flash.net.*;
     import flash.events.*;
+    import flash.system.Security;
     import com.adobe.serialization.json.JSON;
 
-    /** A VectorLayer that can be used to load and display bugs from MapDust-compatible APIs.
+    /** A Connection that can be used to load and display bugs from MapDust-compatible APIs.
         See utils/BugLoader.as for the corresponding loader. */
 
-    public class BugLayer extends VectorLayer {
+    public class BugConnection extends Connection {
 
         private var baseUrl:String;
         private var apiKey:String;
@@ -31,11 +31,11 @@ package net.systemeD.potlatch2 {
         public static var BUG_STATUS_INVALID:String = "3"; // or 'non-reproduceable'
         public static const status:Array = ["", "open", "fixed", "invalid"];
 
-        public function BugLayer(n:String, map:Map, s:String, baseUrl:String, apiKey:String, detailsURL:String) {
+        public function BugConnection(n:String, baseUrl:String, apiKey:String, detailsURL:String) {
             this.baseUrl = baseUrl;
             this.apiKey = apiKey;
             this.detailsUrl = detailsURL;
-            super(n,map,s);
+            super(n, baseUrl, baseUrl+"crossdomain.xml", null);
         }
 
         public function closeBug(m:Marker, nickname:String, comment:String, status:String = null):void {
@@ -66,11 +66,15 @@ package net.systemeD.potlatch2 {
 
         public override function loadBbox(left:Number, right:Number,
                                 top:Number, bottom:Number):void {
+
+            // Should be guarded against multiple calls really.
+            if (policyURL != "") { Security.loadPolicyFile(policyURL); }
+
             var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
             loader.addEventListener(Event.COMPLETE, parseJSON);
             loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleError);
             loader.addEventListener(IOErrorEvent.IO_ERROR, handleError);
+            loader.load(new URLRequest(baseUrl+"getBugs?bbox="+left+","+bottom+","+right+","+top+"&key="+apiKey+"&filter_status="+filter_status+"&filter_type="+filter_type+commentType));
         }
 
 		private function handleError(event:Event):void {
@@ -79,25 +83,27 @@ package net.systemeD.potlatch2 {
         private function parseJSON(event:Event):void {
             var result:String = String(event.target.data);
             if (result) { // api returns 204 no content for no bugs, and the JSON parser treats '' as an error
-              var featureCollection:Object = JSON.decode(result);
+              try {
+                // wrap in a try/catch block in case we're given bogus JSON from the server
+                var featureCollection:Object = JSON.decode(result);
 
-              for each (var feature:Object in featureCollection.features) {
-                // geoJSON spec is x,y,z i.e. lon, lat, ele
-                var lon:Number = feature.geometry.coordinates[0];
-                var lat:Number = feature.geometry.coordinates[1];
-                var tags:Object = {};
-                tags["name"] = String(feature.properties.description).substr(0,10)+'...';
-                tags["description"] = feature.properties.description;
-                tags["bug_id"] = feature.id;
-                tags["nickname"] = feature.properties.nickname;
-                tags["type"] = feature.properties.type;
-                tags["date_created"] = feature.properties.date_created;
-                tags["date_updated"] = feature.properties.date_updated;
-                tags["source"] = feature.properties.source;
-                tags["status"] = status[int(feature.properties.status)];
-                var marker:Marker = createMarker(tags, lat, lon, Number(feature.id));
-              }
-              paint.updateEntityUIs(getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
+                for each (var feature:Object in featureCollection.features) {
+                  // geoJSON spec is x,y,z i.e. lon, lat, ele
+                  var lon:Number = feature.geometry.coordinates[0];
+                  var lat:Number = feature.geometry.coordinates[1];
+                  var tags:Object = {};
+                  tags["name"] = String(feature.properties.description).substr(0,10)+'...';
+                  tags["description"] = feature.properties.description;
+                  tags["bug_id"] = feature.id;
+                  tags["nickname"] = feature.properties.nickname;
+                  tags["type"] = feature.properties.type;
+                  tags["date_created"] = feature.properties.date_created;
+                  tags["date_updated"] = feature.properties.date_updated;
+                  tags["source"] = feature.properties.source;
+                  tags["status"] = status[int(feature.properties.status)];
+                  var marker:Marker = createMarker(tags, lat, lon, Number(feature.id));
+                }
+              } catch (exception:Error) { }
             }
         }
 

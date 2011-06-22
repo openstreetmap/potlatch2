@@ -17,14 +17,13 @@ package net.systemeD.halcyon.connection {
     */
 	public class XMLConnection extends XMLBaseConnection {
 
-		public function XMLConnection() {
+		public function XMLConnection(name:String,api:String,policy:String,initparams:Object) {
 
-			if (Connection.policyURL!='')
-                Security.loadPolicyFile(Connection.policyURL);
-            var oauthPolicy:String = Connection.getParam("oauth_policy", "");
-            if ( oauthPolicy != "" ) {
-                Security.loadPolicyFile(oauthPolicy);
-            }
+			super(name,api,policy,initparams);
+			if (policyURL != "") Security.loadPolicyFile(policyURL);
+
+            var oauthPolicy:String = getParam("oauth_policy", "");
+            if (oauthPolicy != "") Security.loadPolicyFile(oauthPolicy);
 		}
 		
 		override public function loadBbox(left:Number,right:Number,
@@ -41,15 +40,15 @@ package net.systemeD.halcyon.connection {
             var mapVars:URLVariables = new URLVariables();
             mapVars.bbox= left+","+bottom+","+right+","+top;
 
-            var mapRequest:URLRequest = new URLRequest(Connection.apiBaseURL+"map");
+            var mapRequest:URLRequest = new URLRequest(apiBaseURL+"map");
             mapRequest.data = mapVars;
 
             sendLoadRequest(mapRequest);
 		}
 
-		override public function loadEntity(entity:Entity):void {
-			var url:String=Connection.apiBaseURL + entity.getType() + "/" + entity.id;
-			if (entity is Relation || entity is Way) url+="/full";
+		override public function loadEntityByID(type:String, id:Number):void {
+			var url:String=apiBaseURL + type + "/" + id;
+			if (type=='way') url+="/full";
 			sendLoadRequest(new URLRequest(url));
 		}
 
@@ -58,6 +57,7 @@ package net.systemeD.halcyon.connection {
 			mapLoader.addEventListener(Event.COMPLETE, loadedMap);
 			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
 			mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
+            request.requestHeaders.push(new URLRequestHeader("X-Error-Format", "XML"));
 			mapLoader.load(request);
 			dispatchEvent(new Event(LOAD_STARTED));
 		}
@@ -132,7 +132,7 @@ package net.systemeD.halcyon.connection {
               changesetXML.changeset.appendChild(tagXML);
             }        
 
-			sendOAuthPut(Connection.apiBaseURL+"changeset/create",
+			sendOAuthPut(apiBaseURL+"changeset/create",
 						 changesetXML,
 						 changesetCreateComplete, changesetCreateError, recordStatus);
 	    }
@@ -142,7 +142,7 @@ package net.systemeD.halcyon.connection {
             var id:Number = Number(URLLoader(event.target).data);
             
             // which means we now have a new changeset!
-            setActiveChangeset(new Changeset(id, lastUploadedChangesetTags));
+            setActiveChangeset(new Changeset(this, id, lastUploadedChangesetTags));
         }
 
         private function changesetCreateError(event:IOErrorEvent):void {
@@ -153,7 +153,7 @@ package net.systemeD.halcyon.connection {
             var cs:Changeset = getActiveChangeset();
 			if (!cs) return;
 			
-			sendOAuthPut(Connection.apiBaseURL+"changeset/"+cs.id+"/close",
+			sendOAuthPut(apiBaseURL+"changeset/"+cs.id+"/close",
 						 null,
 						 changesetCloseComplete, changesetCloseError, recordStatus);
 			closeActiveChangeset();
@@ -180,7 +180,8 @@ package net.systemeD.halcyon.connection {
             urlReq.method = "POST";
 			if (xml) { urlReq.data = xml.toXMLString(); } else { urlReq.data = true; }
             urlReq.contentType = "application/xml";
-            urlReq.requestHeaders = new Array(new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"));
+            urlReq.requestHeaders = [ new URLRequestHeader("X_HTTP_METHOD_OVERRIDE", "PUT"), 
+			                          new URLRequestHeader("X-Error-Format", "XML") ];
             var loader:URLLoader = new URLLoader();
             loader.addEventListener(Event.COMPLETE, onComplete);
             loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
@@ -198,7 +199,10 @@ package net.systemeD.halcyon.connection {
             loader.load(urlReq);
         }
 
-        override public function uploadChanges():void {
+		/** Create XML changeset and send it to the server. Returns the XML string for use in the 'Show data' button.
+		    (We don't mind what's returned as long as it implements .toString() ) */
+
+        override public function uploadChanges():* {
             var changeset:Changeset = getActiveChangeset();
             var upload:XML = <osmChange version="0.6"/>
             upload.appendChild(addCreated(changeset, getAllNodeIDs, getNode, serialiseNode));
@@ -216,7 +220,7 @@ package net.systemeD.halcyon.connection {
 
             // now actually upload them
             // make an OAuth query
-            var url:String = Connection.apiBaseURL+"changeset/" + changeset.id + "/upload";
+            var url:String = apiBaseURL+"changeset/" + changeset.id + "/upload";
 
             // build the actual request
 			var serv:HTTPService=new HTTPService();
@@ -231,7 +235,8 @@ package net.systemeD.halcyon.connection {
 			serv.addEventListener(FaultEvent.FAULT, diffUploadIOError);
 			serv.send(upload);
 	        
-	        dispatchEvent(new Event(SAVE_STARTED));
+			dispatchEvent(new Event(SAVE_STARTED));
+			return upload;
         }
 
         private function diffUploadComplete(event:ResultEvent):void {
@@ -430,8 +435,7 @@ package net.systemeD.halcyon.connection {
             if (traces_loaded && !refresh) {
               dispatchEvent(new Event(TRACES_LOADED));
             } else {
-              sendOAuthGet(Connection.apiBaseURL+"user/gpx_files",
-                          tracesLoadComplete, errorOnMapLoad, mapLoadStatus); //needs error handlers
+              sendOAuthGet(apiBaseURL+"user/gpx_files", tracesLoadComplete, errorOnMapLoad, mapLoadStatus); //needs error handlers
               dispatchEvent(new Event(LOAD_STARTED)); //specific to map or reusable?
             }
         }
@@ -440,7 +444,7 @@ package net.systemeD.halcyon.connection {
             clearTraces();
             var files:XML = new XML(URLLoader(event.target).data);
             for each(var traceData:XML in files.gpx_file) {
-              var t:Trace = new Trace().fromXML(traceData);
+              var t:Trace = new Trace(this).fromXML(traceData);
               addTrace(t);
             }
             traces_loaded = true;
@@ -449,7 +453,7 @@ package net.systemeD.halcyon.connection {
         }
 
         override public function fetchTrace(id:Number, callback:Function):void {
-            sendOAuthGet(Connection.apiBaseURL+"gpx/"+id+"/data.xml", 
+            sendOAuthGet(apiBaseURL+"gpx/"+id+"/data.xml", 
 				function(e:Event):void { 
             		dispatchEvent(new Event(LOAD_COMPLETED));
 					callback(e);

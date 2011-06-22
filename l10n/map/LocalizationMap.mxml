@@ -20,7 +20,8 @@
           var sri : SmartResourceInjector = event.target as SmartResourceInjector;
           var options : Array = [
                                   { label : rMngr.getString('p2_main','main.gps_data') },
-                                  { label : rMngr.getString('p2_main','main.my_tracks') }
+                                  { label : rMngr.getString('p2_main','main.my_tracks') },
+                                  { label : rMngr.getString('p2_main','main.clear_gps') }
                                 ];
 
           // Iterate all view instances and inject new dataProvider

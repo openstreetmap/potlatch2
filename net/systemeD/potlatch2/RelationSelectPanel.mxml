@@ -23,6 +23,7 @@
         */
         public function init(e:Entity, t:Object):void {
           entity = e;
+          conn = e.connection;
           defaulttags = {};
           for (var k:String in t) {  
             //tagmatches[k]=t[k];// deep copy match pattern tags
@@ -32,7 +33,6 @@
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
-          conn = Connection.getConnectionInstance();
           relationList = conn.getMatchingRelationIDs(t);
           if (relationList.length == 0) {
             warning.text = "No relations available";
@@ -80,6 +80,14 @@
 			panel.setRelation(relation);
 			PopUpManager.centerPopUp(panel);
         }
+
+		public function closeAndLoadRelation():void {
+			PopUpManager.removePopUp(this);
+			var panel:RelationLoaderPanel = RelationLoaderPanel(
+			    PopUpManager.createPopUp(Application(Application.application), RelationLoaderPanel, true));
+			panel.setEntity(entity);
+			PopUpManager.centerPopUp(panel);
+		}
         
     ]]></mx:Script> 
     <mx:Text id="warning" text="" />
@@ -87,6 +95,7 @@
     </mx:List>
     <mx:ControlBar>
       <mx:Button label="New Relation..." click="closeAndNewRelation();" styleName="titleWindowButton" />
+      <mx:Button label="Load Relation..." click="closeAndLoadRelation();" styleName="titleWindowButton" />
       <mx:Spacer width="100%"/>
       <mx:Button label="Select" click="updateEntityAndClose();" enabled="{relationSelector.selectedItems.length>0}" styleName="titleWindowButton" />
     </mx:ControlBar>

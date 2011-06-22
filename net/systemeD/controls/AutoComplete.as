@@ -355,6 +355,7 @@ package net.systemeD.controls {
 		}
 				
 		private function defaultFilterFunction(element:*, text:String):Boolean {
+			if (!text || text=='') return false;
 			var label:String = itemToLabel(element);
 			return (label.toLowerCase().substring(0,text.length) == text.toLowerCase());
 		}

@@ -1,8 +1,7 @@
 package net.systemeD.potlatch2.utils {
 
-	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.ExtendedURLLoader;
-	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.*;
 	import flash.net.URLLoader;
 	import flash.display.LoaderInfo;
@@ -11,8 +10,8 @@ package net.systemeD.potlatch2.utils {
 
 	public class Importer {
 
-		protected var container:Object;				// destination object for way/node/relations data
-		protected var paint:MapPaint;				// destination sprite for WayUIs/NodeUIs
+        protected var connection:Connection;    // destination connection for way/node/relations data
+        protected var map:Map;                  // map being used - used only in Simplify calls
 
 		public var files:Array=[];
 		protected var filenames:Array;
@@ -20,42 +19,41 @@ package net.systemeD.potlatch2.utils {
 		protected var callback:Function;
 		protected var simplify:Boolean;
 
-		public function Importer(container:*, paint:MapPaint, filenames:Array, callback:Function, simplify:Boolean) {
-			this.container = container;
-			this.paint = paint;
+		public function Importer(connection:Connection, map:Map, filenames:Array, callback:Function, simplify:Boolean) {
+			this.connection = connection;
+			this.map = map;
 			this.filenames=filenames;
 			this.callback=callback;
 			this.simplify=simplify;
 
-			var sp:uint=0;
-			for each (var fn:String in filenames) {
-				var thissp:uint=sp;		// scope within this block for the URLLoader 'complete' closure
-				trace("requesting file "+fn);
-				var request:DebugURLRequest = new DebugURLRequest(fn);
+			// Use forEach to avoid closure problem (http://stackoverflow.com/questions/422784/how-to-fix-closure-problem-in-actionscript-3-as3#3971784)
+			filenames.forEach(function(fn:String, index:int, array:Array):void {
+				trace("requesting file "+index);
+				var request:URLRequest = new URLRequest(fn);
 				var loader:URLLoader = new URLLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
-				loader.addEventListener(Event.COMPLETE,function(e:Event):void { fileLoaded(e,thissp); });
+				loader.addEventListener(Event.COMPLETE,function(e:Event):void { fileLoaded(e,index); });
 				if (callback!=null) {
 					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
 					loader.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
 				}
-				loader.load(request.request);
-				sp++;
-			}
+				loader.load(request);
+			});
 		}
 		
 		protected function fileLoaded(e:Event,filenum:uint):void {
 			trace("loaded file "+filenum); 
 			files[filenum]=e.target.data;
 			filesloaded++;
-			if (filesloaded==filenames.length) { 
-				doImport();
-				paint.updateEntityUIs(container.getObjectsByBbox(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b), false, false);
+			if (filesloaded==filenames.length) {
+                var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
+				doImport(action.push);
+				action.doAction(); // just do it, don't add to undo stack
 				if (callback!=null) { callback(true); }
 			}
 		}
 		
-		protected function doImport():void {
+		protected function doImport(push:Function):void {
 		}
 
 		protected function securityErrorHandler( event:SecurityErrorEvent ):void { callback(false,"You don't have permission to open that file."); }

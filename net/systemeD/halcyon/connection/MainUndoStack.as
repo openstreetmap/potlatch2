@@ -103,11 +103,24 @@ package net.systemeD.halcyon.connection {
 				return false;
 			}
 		}
+		
+		public function removeLastIfAction(action:Class):void {
+			if (undoActions.length && undoActions[undoActions.length-1] is action) {
+				undoActions.pop();
+			}
+		}
 
         [Bindable(event="new_undo_item")]
 		public function getUndoDescription():String {
 			if (undoActions.length==0) return null;
 			if (undoActions[undoActions.length-1].name) return undoActions[undoActions.length-1].name;
+			return null;
+		}
+
+        [Bindable(event="new_redo_item")]
+		public function getRedoDescription():String {
+			if (redoActions.length==0) return null;
+			if (redoActions[redoActions.length-1].name) return redoActions[redoActions.length-1].name;
 			return null;
 		}
 
