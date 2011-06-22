@@ -63,6 +63,7 @@
       <arg line="-source-path ."/>
       <arg line="-doc-sources net/systemeD/"/>
       <arg line="-external-library-path=lib/"/>
+      <arg line="-target-player 10.0.0"/>
       <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes} ${com_classes}"/>
       <arg line="-output resources/docs/"/>
       <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
