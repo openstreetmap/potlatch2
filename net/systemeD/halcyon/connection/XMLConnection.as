@@ -464,7 +464,7 @@ package net.systemeD.halcyon.connection {
         /** Fetch the history for the given entity. The callback function will be given an array of entities of that type, representing the different versions */
         override public function fetchHistory(entity:Entity, callback:Function):void {
             if (entity.id >= 0) {
-              var request:URLRequest = new URLRequest(Connection.apiBaseURL + entity.getType() + "/" + entity.id + "/history");
+              var request:URLRequest = new URLRequest(apiBaseURL + entity.getType() + "/" + entity.id + "/history");
               var loader:ExtendedURLLoader = new ExtendedURLLoader();
               loader.addEventListener(Event.COMPLETE, loadedHistory);
               loader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad); //needs error handlers
@@ -481,11 +481,13 @@ package net.systemeD.halcyon.connection {
         private function loadedHistory(event:Event):void {
             var _xml:XML = new XML(ExtendedURLLoader(event.target).data);
             var results:Array = [];
+            var dummyConn:Connection = new Connection("dummy", null, null);
 
             // only one type of entity should be returned, but this handles any
 
             for each(var nodeData:XML in _xml.node) {
                 var newNode:Node = new Node(
+                    dummyConn,
                     Number(nodeData.@id),
                     uint(nodeData.@version),
                     parseTags(nodeData.tag),
@@ -502,9 +504,10 @@ package net.systemeD.halcyon.connection {
             for each(var wayData:XML in _xml.way) {
                 var nodes:Array = [];
                 for each(var nd:XML in wayData.nd) {
-                  nodes.push(new Node(Number(nd.@ref), NaN, null, false, NaN, NaN));
+                  nodes.push(new Node(dummyConn,Number(nd.@ref), NaN, null, false, NaN, NaN));
                 }
                 var newWay:Way = new Way(
+                    dummyConn,
                     Number(wayData.@id),
                     uint(wayData.@version),
                     parseTags(wayData.tag),

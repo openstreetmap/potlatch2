@@ -87,16 +87,16 @@
     private function openEntityPage():void {
         if (entity != null && entity.id >= 0) {
             // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-            var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/';
+            var urlBase:String = entity.connection.apiBase + '../../browse/';
             navigateToURL(new URLRequest(urlBase+entity.getType()+'/'+entity.id), "potlatch_browse");
         }
     }
 
     private function fetchHistory():void {
         if (entity is Node) {
-            Connection.getConnection().fetchHistory(entity, processNode);
+            entity.connection.fetchHistory(entity, processNode);
         } else if (entity is Way) {
-            Connection.getConnection().fetchHistory(entity, processWay);
+            entity.connection.fetchHistory(entity, processWay);
         } else {
             // not implemented
         }
@@ -136,7 +136,7 @@
         pendingNodeFetches = count;
 
         for each (var n:Node in nodes) {
-            Connection.getConnection().fetchHistory(n, pendingNode);
+            entity.connection.fetchHistory(n, pendingNode);
         }
     }
 
@@ -227,7 +227,7 @@
 
     public function message(entity:Entity):void {
         if (entity.user != null) {
-            var urlBase:String = Connection.getConnectionInstance().apiBase + '../../message/new/';
+            var urlBase:String = entity.connection.apiBase + '../../message/new/';
             navigateToURL(new URLRequest(urlBase+entity.user), "potlatch_message");
         }
     }

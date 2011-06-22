@@ -174,7 +174,7 @@ package net.systemeD.halcyon.connection {
 			}
 		}
 
-		private function parseTags(tagElements:XMLList):Object {
+		protected function parseTags(tagElements:XMLList):Object {
 			var tags:Object = {};
 			for each (var tagEl:XML in tagElements)
 				tags[tagEl.@k] = tagEl.@v;

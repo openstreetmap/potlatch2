@@ -204,9 +204,9 @@ package net.systemeD.potlatch2.controller {
             if (selectCount == 1) {
                 new HistoryDialog().init(firstSelected);
             } else if (selectCount == 0) {
-                map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, nothing selected"));
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, nothing selected"));
             } else {
-                map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, multiple objects selected"));
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, multiple objects selected"));
             }
         }
 
