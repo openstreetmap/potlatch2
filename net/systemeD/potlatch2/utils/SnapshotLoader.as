@@ -4,6 +4,12 @@ package net.systemeD.potlatch2.utils {
     import net.systemeD.halcyon.MapPaint;
     import net.systemeD.potlatch2.utils.SnapshotConnection;
 
+    /**
+    * Loads a Snapshot layer. Uses lazy-loading such that only when the load() function is
+    * called will the layer be created and added to the map
+    *
+    * @see SnapShotConnection
+    */
     public class SnapshotLoader {
 
         private var map:Map;
@@ -12,7 +18,14 @@ package net.systemeD.potlatch2.utils {
         private var connection:SnapshotConnection;
         private var _stylesheet:String;
 
-
+        /**
+        * Create a new SnapshotLoader
+        * @param map The map object to attach the layer to
+        * @param url The url of the snapshot server. This should be to the api base and
+                     end in a forward slash, e.g. http://example.com/snapshot/api/
+        * @param name The name to give to the layer/connection
+        * @param stylesheet The url of the stylesheet to use for styling the layer
+        */
         public function SnapshotLoader(map:Map, url:String, name:String, stylesheet:String = null):void {
             trace("*"+stylesheet+"*")
             this.map = map;
@@ -20,6 +33,11 @@ package net.systemeD.potlatch2.utils {
             _stylesheet = (stylesheet && stylesheet != '') ? stylesheet : STYLESHEET;
         }
 
+        /**
+        * Load the layer.
+        * Call this the first time you wish to load the layer. After this it will respond
+        * automatically to pan / zooming of the associated Map
+        */
         public function load():void {
             if (!_layer) {
                 _layer = map.addLayer(connection, _stylesheet, true, true);

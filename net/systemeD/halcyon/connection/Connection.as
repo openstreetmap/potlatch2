@@ -574,6 +574,9 @@ package net.systemeD.halcyon.connection {
 
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
+        /**
+        * Load data for the bounding box given. Usually called in response to pan / zoom requests
+        */
 		public function loadBbox(left:Number, right:Number,
 								top:Number, bottom:Number):void {
 	    }

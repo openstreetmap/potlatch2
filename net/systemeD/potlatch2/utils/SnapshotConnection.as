@@ -4,6 +4,13 @@ package net.systemeD.potlatch2.utils {
     import flash.events.Event;
     import flash.net.*;
 
+    /**
+    * A connection to a Snapshot server. A Snapshot server serves OSM map requests and can also
+    * track the "status" of an entity. Most other types of XMLConnection requests will fail. See
+    * http://www.github.com/gravitystorm/snapshot-server for example code based on the database
+    * structure created by osmosis pgsnapshot schema.
+    */
+
     public class SnapshotConnection extends XMLConnection {
 
         public function SnapshotConnection(cname:String,api:String,policy:String,initparams:Object=null) {
@@ -13,7 +20,9 @@ package net.systemeD.potlatch2.utils {
 
         // As it stands, the following two functions could be refactored further.
 
-        /** Post a status update call to the server and update entity.status if successful */
+        /**
+        * Post a status update call to the server and update entity.status if successful.
+        */
         public function markComplete(entity:Entity):void {
             var urlReq:URLRequest;
 
@@ -31,7 +40,9 @@ package net.systemeD.potlatch2.utils {
             }
         }
 
-        /** Send a "complete" call to the server and update entity.status if successful */
+        /**
+        * Send a "complete" call to the server and update entity.status if successful.
+        */
         public function markNotComplete(entity:Entity):void {
             var urlReq:URLRequest;
 

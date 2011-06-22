@@ -13,9 +13,19 @@ package net.systemeD.halcyon.connection {
     /**
     * XMLConnection provides all the methods required to connect to a live
     * OSM server. See OSMConnection for connecting to a read-only .osm file
+    *
+    * @see OSMConnection
     */
 	public class XMLConnection extends XMLBaseConnection {
 
+        /**
+        * Create a new XML connection
+        * @param name The name of the connection
+        * @param api The url of the OSM API server, e.g. http://api06.dev.openstreetmap.org/api/0.6/
+        * @param policy The url of the flash crossdomain policy to load,
+                        e.g. http://api06.dev.openstreetmap.org/api/crossdomain.xml
+        * @param initparams Any further parameters for the connection, such as the serverName
+        */
 		public function XMLConnection(name:String,api:String,policy:String,initparams:Object) {
 
 			super(name,api,policy,initparams);
