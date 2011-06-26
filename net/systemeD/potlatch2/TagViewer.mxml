@@ -385,6 +385,7 @@
               try {
                   var tabBar:TabBar=TabBar(TabNavigator(editorStack).getTabAt(0).parent);
                   tabBar.selectedIndex=0;
+                  tabBar.validateNow();
               } catch(errObject:Error) {}
           }
 
