@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="MyGpx Files"
         width="600" height="400"
         verticalGap="0">
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
@@ -67,7 +68,7 @@
         }
     }
               ]]>
-  </mx:Script>
+  </fx:Script>
 
   <mx:Text text="Traces" id="results" />
   <mx:DataGrid dataProvider="{traces}" width="100%" height="100%" id="traceGrid">
@@ -78,12 +79,12 @@
             <mx:DataGridColumn editable="false" dataField="tagsText" headerText="tags"/>
             <mx:DataGridColumn editable="false">
               <mx:itemRenderer>
-                <mx:Component>
+                <fx:Component>
                   <mx:VBox>
                     <mx:Button label="Load"
                       click="parentDocument.loadFile(data)"/>
                   </mx:VBox>
-                </mx:Component>
+                </fx:Component>
               </mx:itemRenderer>
             </mx:DataGridColumn>
     </mx:columns>

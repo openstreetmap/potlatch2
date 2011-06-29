@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Options"
         width="350" height="250" verticalGap="0">
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
@@ -54,7 +55,7 @@
 	}
 
               ]]>
-  </mx:Script>
+  </fx:Script>
 	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
 	    change="FlexGlobals.topLevelApplication.toolbox.toggle()" />
 

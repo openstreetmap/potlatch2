@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	horizontalScrollPolicy="off"
@@ -18,13 +19,13 @@
 					    dropdownWidth="162" rowCount="2"
 					    fontWeight="normal">
 					<mx:ArrayCollection id="restrictionTypes">
-						<mx:Object label="No left turn" data='no_left_turn' />
-						<mx:Object label="No right turn" data='no_right_turn' />
-						<mx:Object label="No U turns" data='no_u_turn' />
-						<mx:Object label="No straight on" data='no_straight_on' />
-						<mx:Object label="Left turn only" data='only_left_turn' />
-						<mx:Object label="Right turn only" data='only_right_turn' />
-						<mx:Object label="Straight on only" data='only_straight_on' />
+						<fx:Object label="No left turn" data='no_left_turn' />
+						<fx:Object label="No right turn" data='no_right_turn' />
+						<fx:Object label="No U turns" data='no_u_turn' />
+						<fx:Object label="No straight on" data='no_straight_on' />
+						<fx:Object label="Left turn only" data='only_left_turn' />
+						<fx:Object label="Right turn only" data='only_right_turn' />
+						<fx:Object label="Straight on only" data='only_straight_on' />
 					</mx:ArrayCollection>
 				</edit:ChoiceComboBox>
 				</mx:GridItem>
@@ -57,7 +58,7 @@
 	</mx:HBox>
 	</mx:VBox>
 
-    <mx:Script><![CDATA[
+    <fx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.styleparser.RuleSet;
     import net.systemeD.potlatch2.RelationEditorPanel;
@@ -168,6 +169,6 @@
 		var to:Object  =findSelected('to'  ); if (to  ) { paint.setHighlight(to.data  , { restrictto: bool   } ); }
 	}
     
-    ]]></mx:Script>
+    ]]></fx:Script>
 </mx:HBox>
 

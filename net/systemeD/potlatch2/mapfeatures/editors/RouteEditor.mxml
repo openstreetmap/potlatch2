@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <edit:RelationMemberEditor
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
@@ -12,7 +13,7 @@
   <mx:VBox verticalGap="0" width="100%" id="routeIcons"/>
   <mx:LinkButton label="Add to a route" click="addToRelation()" />
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.*;
     import mx.managers.PopUpManager;
@@ -42,6 +43,6 @@
 		new RelationSelectPanel().init(_entity, _factory.relationTagPatterns);        
 	}
     
-  ]]></mx:Script>
+  ]]></fx:Script>
 </edit:RelationMemberEditor>
 

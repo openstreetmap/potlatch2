@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
 	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
@@ -21,7 +22,7 @@
 	<mx:Button label="Vector file..." click="FlexGlobals.topLevelApplication.bgButton.close(); new VectorSourceDialog().init();" />
 	</mx:HBox>
 
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
@@ -44,6 +45,6 @@
 			obj.setProperty('background_sharpen',v);
 			obj.flush();
 		}
-    ]]></mx:Script>	
+    ]]></fx:Script>
 </mx:VBox>
 

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalGap="0">
+<mx:VBox
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    verticalGap="0">
 	<mx:ViewStack id="videoStack" width="100%" height="100%">
 		<mx:Box id="previewContainer">
 			<mx:Image id="preview" width="100%" height="100%" source="{previewImage}" 
@@ -22,7 +25,7 @@
 			thumbRelease="progressThumbRelease(event);" />
 	</mx:HBox> 
 
-	<mx:Script> 
+	<fx:Script>
 		<![CDATA[ 
 
 			/** VideoPlayer component for P2 help dialog.
@@ -82,5 +85,5 @@
 			}
 
 		]]> 
-	</mx:Script>
+	</fx:Script>
 </mx:VBox>

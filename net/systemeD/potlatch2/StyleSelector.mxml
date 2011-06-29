@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
 	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
 	
@@ -12,12 +13,12 @@
 
 	<mx:Button label="Edit..." click="FlexGlobals.topLevelApplication.styleButton.close(); new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
 
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.collections.Stylesheets;
 		import mx.core.*;
-    ]]></mx:Script>	
+    ]]></fx:Script>
 </mx:VBox>
 

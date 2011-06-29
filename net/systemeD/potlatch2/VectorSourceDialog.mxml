@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Load vector file"
         width="500" height="350" verticalGap="0">
@@ -10,11 +11,11 @@
 	    <mx:columns>
 	        <mx:DataGridColumn editable="false" dataField="visible" headerText="Show?" width="45">
 				<mx:itemRenderer>
-					<mx:Component>
+					<fx:Component>
 						<mx:CheckBox selectedField="isSelected"
 									 click="data.isSelected=!data.isSelected; this.parent.parent.dispatchEvent(new Event('visibility_changed'));" 
 									 paddingLeft="5"/>
-					</mx:Component>
+					</fx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
 	        <mx:DataGridColumn editable="false" dataField="interactive" headerText="Select?" width="45">
@@ -22,24 +23,24 @@
 					<!-- There should really be a way to hide this for the editable layer. See
 					     http://stackoverflow.com/questions/6329895/how-do-i-change-the-style-of-one-individual-cell-in-a-flex-datagrid 
 					     Leave it as a FIXME until we move to Flex 4 -->
-					<mx:Component>
+					<fx:Component>
 						<mx:CheckBox selectedField="isInteractive"
 									 click="data.isInteractive=!data.isInteractive; this.parent.parent.dispatchEvent(new Event('interactive_changed'));" 
 						             paddingLeft="5"/>
-					</mx:Component>
+					</fx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
 	        <mx:DataGridColumn editable="true"  dataField="name"  headerText="Name"/>
 	        <mx:DataGridColumn editable="false" dataField="url"   headerText="URL"/>
 	        <mx:DataGridColumn editable="false" dataField="style" headerText="Style">
 				<mx:itemRenderer>
-					<mx:Component>
+					<fx:Component>
 					<mx:ComboBox
 							selectedItem="{outerDocument.whichStyle(data)}"
 					        change="outerDocument.styleEdited(data.name,selectedItem.url)"
 					        dataProvider="{outerDocument.styles}" 
 							labelField="name" />
-					</mx:Component>
+					</fx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
 	    </mx:columns>
@@ -61,9 +62,9 @@
 			<mx:Label text="Shapefile projection:" />
 			<mx:ComboBox id="projection"> 
 				<mx:ArrayCollection>
-					<mx:Object label="Lat/long" data="" />
-					<mx:Object label="Ordnance Survey GB" data="EPSG:27700" />
-					<mx:Object label="NAD83" data="EPSG:4269" />
+					<fx:Object label="Lat/long" data="" />
+					<fx:Object label="Ordnance Survey GB" data="EPSG:27700" />
+					<fx:Object label="NAD83" data="EPSG:4269" />
 				</mx:ArrayCollection>
 			</mx:ComboBox>
 			<mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
@@ -75,7 +76,7 @@
 		</mx:HBox>
 	</mx:VBox>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapPaint;
@@ -209,5 +210,5 @@
 	}
 
               ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:TitleWindow>
