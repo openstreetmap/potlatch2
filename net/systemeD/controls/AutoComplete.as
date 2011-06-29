@@ -208,25 +208,25 @@ package net.systemeD.controls {
 				// not in menu
 				// trace("not in menu"); trace("- restoring to "+typedText);
 				textInput.text = typedText;
-				textInput.setSelection(cursorPosition, cursorPosition);
+				textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (dropdown && typedTextChanged && textInput.text!=typedText) {
 				// in menu, but user has typed
 				// trace("in menu, but user has typed"); trace("- restoring to "+typedText);
 				textInput.text = typedText;
-				textInput.setSelection(cursorPosition, cursorPosition);
+				textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text==selectedLabel) {
 				// force update if Flex has fucked up again
 				// trace("should force update");
 				textInput.htmlText=selectedLabel;
 				textInput.validateNow();
-				if (typedTextChanged) textInput.setSelection(cursorPosition, cursorPosition);
+				if (typedTextChanged) textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text!=selectedLabel && !typedTextChanged) {
 				// in menu, user has navigated with cursor keys/mouse
 				// trace("in menu, user has navigated with cursor keys/mouse");
 				textInput.text = selectedLabel;
-				textInput.setSelection(0, textInput.text.length);
+				textInput.selectRange(0, textInput.text.length);
 			} else if (textInput.text!="") {
-				textInput.setSelection(cursorPosition, cursorPosition);
+				textInput.selectRange(cursorPosition, cursorPosition);
 			}
 
 			if (showDropdown && !dropdown.visible) {
@@ -248,7 +248,7 @@ package net.systemeD.controls {
 			if (event.keyCode==Keyboard.ESCAPE && showingDropdown) {
 				// ESCAPE cancels dropdown
 				textInput.text = typedText;
-				textInput.setSelection(textInput.text.length, textInput.text.length);
+				textInput.selectRange(textInput.text.length, textInput.text.length);
 				showingDropdown = false;
 				dropdownClosed=true;
 
