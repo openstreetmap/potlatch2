@@ -20,6 +20,7 @@ package net.systemeD.controls {
 	import mx.core.UIComponent;
 	import mx.controls.ComboBox;
 	import mx.controls.DataGrid;
+	import mx.controls.TextInput;
 	import mx.controls.listClasses.ListBase;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ListCollectionView;
@@ -179,7 +180,7 @@ package net.systemeD.controls {
 
 			if (dropdown) {
 				if (typedTextChanged) {
-					cursorPosition = textInput.selectionBeginIndex;
+					cursorPosition = TextInput(textInput).selectionBeginIndex;
 					updateDataProvider();
 
 					if( collection.length==0 || typedText=="" || typedText==null ) {
@@ -217,7 +218,7 @@ package net.systemeD.controls {
 			} else if (showingDropdown && textInput.text==selectedLabel) {
 				// force update if Flex has fucked up again
 				// trace("should force update");
-				textInput.htmlText=selectedLabel;
+				TextInput(textInput).htmlText=selectedLabel;
 				textInput.validateNow();
 				if (typedTextChanged) textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text!=selectedLabel && !typedTextChanged) {
