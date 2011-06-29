@@ -91,6 +91,7 @@
     import mx.events.DataGridEvent;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 
@@ -102,7 +103,7 @@
 
 
     public function init():void {
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, vectorDialog_close);
 		dataGrid.addEventListener("visibility_changed", toggleVisibility);

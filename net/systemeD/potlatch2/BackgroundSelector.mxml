@@ -6,19 +6,19 @@
 	
 	<mx:List width="100%" height="100%" id="background"
 			labelField="name"
-			change="Application.application.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);"
+			change="FlexGlobals.topLevelApplication.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);"
 	        dataProvider="{Imagery.instance().getAvailableImagery()}"
 	        rowCount="{Imagery.instance().getAvailableImagery().length}"/>
 	<mx:HBox>
-	<mx:CheckBox width="100%" label="Dim" selected="{Application.application.theMap.getDimming()}" id="dim"
+	<mx:CheckBox width="100%" label="Dim" selected="{FlexGlobals.topLevelApplication.theMap.getDimming()}" id="dim"
 	    change="setDimming(dim.selected)" />
-	<mx:CheckBox width="100%" label="Sharpen" selected="{Application.application.theMap.getSharpen()}" id="sharpen"
+	<mx:CheckBox width="100%" label="Sharpen" selected="{FlexGlobals.topLevelApplication.theMap.getSharpen()}" id="sharpen"
 	    change="setSharpen(sharpen.selected)" />
 	</mx:HBox>
 
 	<mx:HBox>
-	<mx:Button label="Edit..." click="Application.application.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
-	<mx:Button label="Vector file..." click="Application.application.bgButton.close(); new VectorSourceDialog().init();" />
+	<mx:Button label="Edit..." click="FlexGlobals.topLevelApplication.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
+	<mx:Button label="Vector file..." click="FlexGlobals.topLevelApplication.bgButton.close(); new VectorSourceDialog().init();" />
 	</mx:HBox>
 
 	<mx:Script><![CDATA[
@@ -32,14 +32,14 @@
 		import mx.managers.PopUpManager;
 
 		public function setDimming(v:Boolean):void {
-			Application.application.theMap.setDimming(dim.selected);
-			Application.application.yahoo.alpha = dim.selected ? 0.5 : 1;
+			FlexGlobals.topLevelApplication.theMap.setDimming(dim.selected);
+			FlexGlobals.topLevelApplication.yahoo.alpha = dim.selected ? 0.5 : 1;
 			var obj:SharedObject=SharedObject.getLocal("user_state");
 			obj.setProperty('background_dim',v);
 			obj.flush();
 		}
 		public function setSharpen(v:Boolean):void {
-			Application.application.theMap.setSharpen(sharpen.selected);
+			FlexGlobals.topLevelApplication.theMap.setSharpen(sharpen.selected);
 			var obj:SharedObject=SharedObject.getLocal("user_state");
 			obj.setProperty('background_sharpen',v);
 			obj.flush();

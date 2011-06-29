@@ -8,22 +8,23 @@
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
     import net.systemeD.halcyon.Globals;
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.connection.Connection;
     import net.systemeD.halcyon.connection.StatusFetcher;
     
     public function init():void {
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, optionsDialog_close);
 
         var obj:SharedObject = SharedObject.getLocal("user_state");
 
-        tbcheck.selected = Application.application.toolbox.visible;
-        cursorcheck.selected = Application.application.theController.cursorsEnabled;
+        tbcheck.selected = FlexGlobals.topLevelApplication.toolbox.visible;
+        cursorcheck.selected = FlexGlobals.topLevelApplication.theController.cursorsEnabled;
         tigercheck.selected = obj.data['tiger_highlighted'];
-        latlongcheck.selected = Application.application.coordsbox.visible;
+        latlongcheck.selected = FlexGlobals.topLevelApplication.coordsbox.visible;
 		licencecheck.selected = Map(Globals.vars.root).editableLayer.connection.statusFetcher!=null;
     }
     
@@ -33,7 +34,7 @@
 
     private function tigerToggle():void {
         Globals.vars.highlightTiger = tigercheck.selected;
-        Application.application.theMap.redraw();
+        FlexGlobals.topLevelApplication.theMap.redraw();
 
         var obj:SharedObject = SharedObject.getLocal("user_state");
         obj.setProperty("tiger_highlighted",tigercheck.selected);
@@ -55,16 +56,16 @@
               ]]>
   </mx:Script>
 	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
-	    change="Application.application.toolbox.toggle()" />
+	    change="FlexGlobals.topLevelApplication.toolbox.toggle()" />
 
 	<mx:CheckBox width="100%" label="Use custom cursors" selected="true" id="cursorcheck"
-	    change="Application.application.theController.cursorsEnabled=cursorcheck.selected" />
+	    change="FlexGlobals.topLevelApplication.theController.cursorsEnabled=cursorcheck.selected" />
 
     <mx:CheckBox width="100%" label="Highlight unedited TIGER (US roads)" selected="false" id="tigercheck"
         change="tigerToggle()" />
 
 	<mx:CheckBox width="100%" label="Show mouse latitude/longitude" selected="false" id="latlongcheck" 
-		change="Application.application.coordsbox.visible=latlongcheck.selected" />
+		change="FlexGlobals.topLevelApplication.coordsbox.visible=latlongcheck.selected" />
 
     <mx:CheckBox width="100%" label="Show licence status" selected="false" id="licencecheck"
         change="licenceToggle()" />

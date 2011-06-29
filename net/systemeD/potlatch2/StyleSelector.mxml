@@ -6,11 +6,11 @@
 	
 	<mx:List width="100%" height="100%" id="mapStyle" 
 	        labelField="name"
-	        change="Application.application.styleButton.close(); Stylesheets.instance().setStylesheet(mapStyle.selectedItem.name, mapStyle.selectedItem.url);"
+	        change="FlexGlobals.topLevelApplication.styleButton.close(); Stylesheets.instance().setStylesheet(mapStyle.selectedItem.name, mapStyle.selectedItem.url);"
 	        dataProvider="{Stylesheets.instance().getCollection()}"
 	        rowCount="{Stylesheets.instance().getCollection().length}" />
 
-	<mx:Button label="Edit..." click="Application.application.styleButton.close(); new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
+	<mx:Button label="Edit..." click="FlexGlobals.topLevelApplication.styleButton.close(); new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
 
 	<mx:Script><![CDATA[
 		import net.systemeD.halcyon.*;

@@ -7,6 +7,7 @@
 	<mx:Script><![CDATA[
         import flash.events.Event;
 		import mx.core.Application;
+		import mx.core.FlexGlobals;
 		import mx.events.CloseEvent;
 		import mx.events.FlexEvent;
 		import mx.managers.PopUpManager;
@@ -27,7 +28,7 @@
 				
 		
 		public function init():void {
-			PopUpManager.addPopUp(this, Application(Application.application), true);
+			PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
 			PopUpManager.centerPopUp(this);
 			this.addEventListener(CloseEvent.CLOSE, findDialog_close);
 			
@@ -74,9 +75,9 @@
         }
         
         private function goToSelected():void {
-            Application.application.theMap.updateCoordsFromLatLon(selectedResult.lat, selectedResult.lon);
-            Application.application.theMap.download();
-            //Application.application.theMap.redraw();            
+            FlexGlobals.topLevelApplication.theMap.updateCoordsFromLatLon(selectedResult.lat, selectedResult.lon);
+            FlexGlobals.topLevelApplication.theMap.download();
+            //FlexGlobals.topLevelApplication.theMap.redraw();
             PopUpManager.removePopUp(this);
         }
         

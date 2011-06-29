@@ -82,6 +82,7 @@
     import mx.controls.*;
     import mx.managers.PopUpManager;
 	import mx.core.Application;
+	import mx.core.FlexGlobals;
     import mx.events.DataGridEvent;
     import mx.events.DataGridEventReason;
     

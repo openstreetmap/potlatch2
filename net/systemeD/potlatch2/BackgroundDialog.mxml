@@ -41,6 +41,7 @@
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
 	import mx.collections.ArrayCollection;
 	import mx.controls.List;
 	import net.systemeD.potlatch2.FunctionKeyManager;
@@ -54,7 +55,7 @@
 		this.menu=menu;
 		collection=source;
 		dataCollection=new ArrayCollection(source.collection);
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
 		dataGrid.dataProvider=dataCollection;

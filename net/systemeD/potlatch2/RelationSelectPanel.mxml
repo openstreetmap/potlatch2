@@ -11,6 +11,7 @@
         import net.systemeD.potlatch2.*;
         import mx.managers.PopUpManager;
         import mx.core.Application;
+        import mx.core.FlexGlobals;
 
         private var conn:Connection;
         private var relationList:Array;
@@ -29,7 +30,7 @@
             //tagmatches[k]=t[k];// deep copy match pattern tags
             defaulttags[k]=t[k][0];  // route=[hiking,foot] -> route=hiking
           }	
-          PopUpManager.addPopUp(this, Application(Application.application), true);
+          PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
@@ -76,7 +77,7 @@
 
 			PopUpManager.removePopUp(this);
 			var panel:RelationEditorPanel = RelationEditorPanel(
-			    PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+			    PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
 			panel.setRelation(relation);
 			PopUpManager.centerPopUp(panel);
         }
@@ -84,7 +85,7 @@
 		public function closeAndLoadRelation():void {
 			PopUpManager.removePopUp(this);
 			var panel:RelationLoaderPanel = RelationLoaderPanel(
-			    PopUpManager.createPopUp(Application(Application.application), RelationLoaderPanel, true));
+			    PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationLoaderPanel, true));
 			panel.setEntity(entity);
 			PopUpManager.centerPopUp(panel);
 		}

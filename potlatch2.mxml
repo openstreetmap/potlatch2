@@ -108,6 +108,7 @@
 		import mx.core.IChildList;
         import mx.containers.Canvas;
 		import mx.core.Application;
+		import mx.core.FlexGlobals;
         import mx.events.DragEvent;
         import mx.events.CloseEvent;
         import mx.managers.DragManager;
@@ -360,7 +361,7 @@
 			if (entity is Relation) {
 				// If it's a relation, just bring up the editor panel
 				var panel:RelationEditorPanel = RelationEditorPanel(
-					PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+					PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
 				panel.setRelation(entity as Relation);
 				PopUpManager.centerPopUp(panel);
 				return;

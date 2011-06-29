@@ -69,6 +69,7 @@
     import mx.collections.ArrayCollection;
 	import mx.utils.ObjectProxy;
 	import mx.core.Application;
+	import mx.core.FlexGlobals;
 	import mx.managers.PopUpManager;
 
     private var _turn:Object;
@@ -136,7 +137,7 @@
 	public function openAdvanced():void {
 		var rel:Relation=Relation(_turn.relation);
 		var panel:RelationEditorPanel = RelationEditorPanel(
-			PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+			PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
 		panel.setRelation(rel);
 		PopUpManager.centerPopUp(panel);
 	}

@@ -9,6 +9,7 @@
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
 
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.save.*;
@@ -22,7 +23,7 @@
     private var conn:Connection;
 
     public function init():void {
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
 
