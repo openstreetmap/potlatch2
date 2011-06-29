@@ -33,7 +33,7 @@
     public function routeClicked(event:Event):void {
         var relation:Object = RouteIcon(event.currentTarget).route;
         var panel:RelationEditorPanel = RelationEditorPanel(
-            PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+            PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
         panel.setRelation(relation["relation"]);
         PopUpManager.centerPopUp(panel);
     }

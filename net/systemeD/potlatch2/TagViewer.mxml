@@ -669,7 +669,7 @@
 
       private function editRelation(id:Number):void {
           var panel:RelationEditorPanel = RelationEditorPanel(
-              PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+              PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
           panel.setRelation(connection.getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
@@ -708,7 +708,7 @@
 	public function selectRelationMenu(event:MenuEvent):void {
 		var rel:Relation=rowData.relation;
 		var entities:Array;
-		var controller:EditController=Application.application.theController;
+		var controller:EditController=FlexGlobals.topLevelApplication.theController;
 		switch (event.index) {
 			case 0: // Select all members
 				entities=selectedEntity.entities.concat(rel.memberEntities);
