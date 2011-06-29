@@ -38,8 +38,6 @@
 				the user actually wants it.)
 			*/
 
-			import mx.events.VideoEvent;
-
 			[Bindable] public var file:String;
 			[Bindable] public var previewImage:String; 
 			private var wasPlaying:Boolean;
