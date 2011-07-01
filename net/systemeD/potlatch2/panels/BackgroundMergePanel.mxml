@@ -6,4 +6,59 @@
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
   <mx:Text id="backgroundMergePanelText" text="W00t!!!" width="100%" styleName="helpInfo" />
+  <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
+    <mx:columns>
+      <mx:DataGridColumn editable="false" dataField="k" headerText="key" />
+      <mx:DataGridColumn editable="false" dataField="e" headerText="OSM value" />
+      <mx:DataGridColumn editable="false" dataField="b" headerText="Background value" />
+    </mx:columns>
+  </mx:DataGrid>
+  <mx:Script><![CDATA[
+
+      import net.systemeD.halcyon.connection.*;
+      import mx.collections.*;
+
+      private var editableEntity:Entity;
+      private var backgroundEntity:Entity;
+      private var tagDataProvider:ArrayCollection;
+
+      public function init(entities:Array):void {
+          if ( tagDataProvider == null ) {
+              tagDataProvider = new ArrayCollection();
+              backgroundPanelDG.dataProvider = tagDataProvider;
+          }
+
+          if (parentDocument.controller.map.getLayerForEntity(entities[0]).isBackground) {
+              backgroundEntity = entities[0];
+              editableEntity = entities[1];
+          } else {
+              backgroundEntity = entities[1];
+              editableEntity = entities[0];
+          }
+          updateTagDataProvider();
+      }
+
+      private function updateTagDataProvider():void {
+          var tag:Tag;
+          var keys:Array = [];
+
+          tagDataProvider.removeAll();
+
+          for each (tag in backgroundEntity.getTagArray() ) {
+              keys.push(tag.key);
+          }
+
+          for each (tag in editableEntity.getTagArray() ) {
+              keys.push(tag.key);
+          }
+
+          keys=keys.filter(function(k:*, i:int, arr:Array):Boolean { return arr.indexOf(k) == i } ); // remove duplicates
+          keys.sort();
+
+          for each (var key:String in keys) {
+              tagDataProvider.addItem({k:key, e:editableEntity.getTag(key), b:backgroundEntity.getTag(key)});
+          }
+      }
+  ]]>
+  </mx:Script>
 </mx:VBox>

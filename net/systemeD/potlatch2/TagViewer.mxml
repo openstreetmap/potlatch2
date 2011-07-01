@@ -299,7 +299,7 @@
         } else if (entities.length==2
                       && xor(entities[0].connection is SnapshotConnection, entities[1].connection is SnapshotConnection)
                       && xor(!controller.map.getLayerForEntity(entities[0]).isBackground, !controller.map.getLayerForEntity(entities[1]).isBackground) ) {
-            //backgroundMergePanel.init(entities, layer)
+            backgroundMergePanelContents.init(entities);
             sidebar.selectedChild = backgroundMergePanel;
 
 		} else if(isMultipleEditable(entities)) {
