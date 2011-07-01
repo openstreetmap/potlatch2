@@ -210,6 +210,12 @@
     <sidepanel:BackgroundPanel id="backgroundPanelContents" width="100%"/>
   </mx:VBox>
 
+  <!-- merge tags from background layer -->
+
+  <mx:VBox id="backgroundMergePanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <sidepanel:BackgroundMergePanel id="backgroundMergePanelContents" width="100%" />
+  </mx:VBox>
+
 </mx:ViewStack>
 
   <mx:Script><![CDATA[
@@ -290,6 +296,12 @@
               sidebar.selectedChild = tagsPanel;
             }
 
+        } else if (entities.length==2
+                      && xor(entities[0].connection is SnapshotConnection, entities[1].connection is SnapshotConnection)
+                      && xor(!controller.map.getLayerForEntity(entities[0]).isBackground, !controller.map.getLayerForEntity(entities[1]).isBackground) ) {
+            //backgroundMergePanel.init(entities, layer)
+            sidebar.selectedChild = backgroundMergePanel;
+
 		} else if(isMultipleEditable(entities)) {
 			selectedEntity = new EntityCollection(entities);
 			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged);
@@ -302,6 +314,10 @@
 			sidebar.selectedChild = multipleInvalidPanel;
 		}
 		UIComponent.resumeBackgroundProcessing();
+      }
+
+      private function xor(a:Boolean, b:Boolean):Boolean {
+          return ( a || b) && !(a && b);
       }
 
       private function refreshFeatureIcon():void {
