@@ -45,6 +45,7 @@ package net.systemeD.potlatch2 {
             this._map = map;
             setState(new NoSelection());
             this.tagViewer = tagViewer;
+            this.tagViewer.controller = this;
 			this.toolbox = toolbox;
 			this.toolbox.init(this);
             this.maximiseFunction = Globals.vars.flashvars["maximise_function"];

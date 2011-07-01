@@ -215,6 +215,7 @@
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.MapPaint;
+      import net.systemeD.potlatch2.EditController;
       import net.systemeD.potlatch2.mapfeatures.*;
       import net.systemeD.potlatch2.utils.*;
 
@@ -241,6 +242,7 @@
       [Bindable] private var editorStack:Container;
 
       public var mapFeatures:MapFeatures;
+      public var controller:EditController;
       private var selectedEntity:Entity;
       private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
