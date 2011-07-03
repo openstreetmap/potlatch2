@@ -86,11 +86,11 @@ Quick documentation:
   </inputSet>
 
    <inputSet id="simpleBrand"> 
-     <input type="freetext" presence="always" name="Brand" key="brand" description="Brand, i.e. Acme"/> 
+     <input type="freetext" category="Naming" presence="always" name="Brand" key="brand" description="Brand, i.e. Acme"/> 
    </inputSet> 
   
    <inputSet id="simpleOperator"> 
-     <input type="freetext" presence="always" name="Operator" key="operator" description="Operator, i.e. Acme Springfield Ltd"/> 
+     <input type="freetext" category="Naming" presence="always" name="Operator" key="operator" description="Operator, i.e. Acme Springfield Ltd"/> 
    </inputSet> 
 
   <inputSet id="source">
