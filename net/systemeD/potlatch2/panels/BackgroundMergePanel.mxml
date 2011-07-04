@@ -10,6 +10,13 @@
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="k" headerText="key" />
       <mx:DataGridColumn editable="false" dataField="e" headerText="OSM value" />
+      <mx:DataGridColumn editable="false" headerText="Merge">
+        <mx:itemRenderer>
+          <mx:Component>
+            <mx:Button label="++" visible="{data.b == null}" click="trace('b is '+data.b);parentDocument.mergeForKey(data.k);" />
+          </mx:Component>
+        </mx:itemRenderer>
+      </mx:DataGridColumn>
       <mx:DataGridColumn editable="false" dataField="b" headerText="Background value" />
     </mx:columns>
   </mx:DataGrid>
@@ -58,6 +65,10 @@
           for each (var key:String in keys) {
               tagDataProvider.addItem({k:key, e:editableEntity.getTag(key), b:backgroundEntity.getTag(key)});
           }
+      }
+
+      public function mergeForKey(key:String):void {
+          trace("merge for " + key);
       }
   ]]>
   </mx:Script>
