@@ -44,6 +44,7 @@
               backgroundEntity = entities[1];
               editableEntity = entities[0];
           }
+          editableEntity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
           updateTagDataProvider();
       }
 
@@ -67,6 +68,11 @@
           for each (var key:String in keys) {
               tagDataProvider.addItem({k:key, e:editableEntity.getTag(key), b:backgroundEntity.getTag(key)});
           }
+          backgroundPanelDG.invalidateList();
+      }
+
+      private function tagChanged(e:Event):void {
+          updateTagDataProvider();
       }
 
       public function buttonVisible(b:String, e:String):Boolean {
@@ -77,7 +83,7 @@
       }
 
       public function mergeForKey(key:String):void {
-          trace("merge for " + key);
+          editableEntity.setTag(key, backgroundEntity.getTag(key), MainUndoStack.getGlobalStack().addAction);
       }
 
       public function getColorFor(i:int):int {
