@@ -10,10 +10,12 @@
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="k" headerText="Key" />
       <mx:DataGridColumn editable="false" dataField="e" headerText="OSM value" />
-      <mx:DataGridColumn editable="false" headerText="Merge" width="30">
+      <mx:DataGridColumn editable="false" headerText="Merge" width="50" textAlign="center">
         <mx:itemRenderer>
           <mx:Component>
-            <mx:Button label="&lt;&lt;" visible="{data.b == null}" click="trace('b is '+data.b);parentDocument.mergeForKey(data.k);" />
+            <mx:HBox horizontalAlign="center" verticalAlign="middle">
+              <mx:Button label="&lt;&lt;" visible="{parentDocument.buttonVisible(data.b, data.e)}" click="parentDocument.mergeForKey(data.k);" />
+            </mx:HBox>
           </mx:Component>
         </mx:itemRenderer>
       </mx:DataGridColumn>
@@ -65,6 +67,13 @@
           for each (var key:String in keys) {
               tagDataProvider.addItem({k:key, e:editableEntity.getTag(key), b:backgroundEntity.getTag(key)});
           }
+      }
+
+      public function buttonVisible(b:String, e:String):Boolean {
+          if (b != null && b != e) {
+              return true;
+          }
+          return false;
       }
 
       public function mergeForKey(key:String):void {
