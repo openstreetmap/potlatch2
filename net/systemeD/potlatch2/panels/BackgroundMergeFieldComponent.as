@@ -11,8 +11,12 @@ package net.systemeD.potlatch2.panels {
         if(value != null)
         {
             super.data = value;
-            textField.background = true;
-            textField.backgroundColor = BackgroundMergePanel(listData.owner.parent).getColorFor(listData.rowIndex);
+            if (listData.label != ' ') { // yes, a space. No, neither null nor empty string. I hate you, adobe
+                textField.background = true;
+                textField.backgroundColor = BackgroundMergePanel(listData.owner.parent).getColorFor(listData.rowIndex);
+            } else {
+                textField.background = false;
+            }
         }
      }
   }

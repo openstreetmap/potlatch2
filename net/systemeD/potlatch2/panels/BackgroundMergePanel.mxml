@@ -86,14 +86,16 @@
           editableEntity.setTag(key, backgroundEntity.getTag(key), MainUndoStack.getGlobalStack().addAction);
       }
 
+      // Don't call this for things you don't want coloured in. Like for empty tags.
       public function getColorFor(i:int):int {
           if (tagDataProvider[i].e == tagDataProvider[i].b) {
               return 0xDDFFDD; // matching, green
            } else if (tagDataProvider[i].e == null) {
               return 0xDDDDFF; // new value, blue
-           } else {
+           } else if (tagDataProvider[i].b) {
               return 0xFFDDDD; // conflicting, red
            }
+           return NaN; // which is interpretted as black
       }
   ]]>
   </mx:Script>
