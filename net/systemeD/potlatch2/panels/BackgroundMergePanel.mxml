@@ -22,9 +22,23 @@
       <mx:DataGridColumn editable="false" itemRenderer="net.systemeD.potlatch2.panels.BackgroundMergeFieldComponent" dataField="b" headerText="Background value" />
     </mx:columns>
   </mx:DataGrid>
+  <mx:ViewStack id="statusStack" resizeToContent="true" width="100%">
+    <mx:VBox id="empty" />
+    <mx:VBox id="not_complete">
+      <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
+      <mx:Button label="Complete" click="markComplete()"/>
+    </mx:VBox>
+    <mx:VBox id="complete">
+      <mx:Text text="This feature has been marked as complete. If this is wrong, press the button below." />
+      <mx:Button label="Not complete" click="markNotComplete()"/>
+    </mx:VBox>
+  </mx:ViewStack>
   <mx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
+      import net.systemeD.halcyon.MapPaint;
+      import net.systemeD.potlatch2.utils.SnapshotConnection;
+
       import mx.collections.*;
 
       private var editableEntity:Entity;
@@ -44,6 +58,8 @@
               backgroundEntity = entities[1];
               editableEntity = entities[0];
           }
+          backgroundEntity.addEventListener(Connection.STATUS_CHANGED, statusEvent, false, 0, true);
+          setStatusStack();
           editableEntity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
           updateTagDataProvider();
       }
@@ -96,6 +112,35 @@
               return 0xFFDDDD; // conflicting, red
            }
            return NaN; // which is interpretted as black
+      }
+
+      private function statusEvent(e:Event):void {
+            setStatusStack();
+      }
+
+      private function setStatusStack():void {
+          switch (backgroundEntity.status) {
+              case 'incomplete':
+                  statusStack.selectedChild = not_complete;
+                  break;
+              case 'complete':
+                  statusStack.selectedChild = complete;
+                  break;
+              default:
+                  statusStack.selectedChild = empty;
+          }
+      }
+
+      private function markComplete():void {
+          if (backgroundEntity.connection is SnapshotConnection) {
+              SnapshotConnection(backgroundEntity.connection).markComplete(backgroundEntity);
+          }
+      }
+
+      private function markNotComplete():void {
+          if (backgroundEntity.connection is SnapshotConnection) {
+              SnapshotConnection(backgroundEntity.connection).markNotComplete(backgroundEntity);
+          }
       }
   ]]>
   </mx:Script>
