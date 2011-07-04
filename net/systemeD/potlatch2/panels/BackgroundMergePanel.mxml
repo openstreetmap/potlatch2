@@ -17,7 +17,7 @@
           </mx:Component>
         </mx:itemRenderer>
       </mx:DataGridColumn>
-      <mx:DataGridColumn editable="false" dataField="b" headerText="Background value" />
+      <mx:DataGridColumn editable="false" itemRenderer="net.systemeD.potlatch2.panels.BackgroundMergeFieldComponent" dataField="b" headerText="Background value" />
     </mx:columns>
   </mx:DataGrid>
   <mx:Script><![CDATA[
@@ -69,6 +69,16 @@
 
       public function mergeForKey(key:String):void {
           trace("merge for " + key);
+      }
+
+      public function getColorFor(i:int):int {
+          if (tagDataProvider[i].e == tagDataProvider[i].b) {
+              return 0xDDFFDD; // matching, green
+           } else if (tagDataProvider[i].e == null) {
+              return 0xDDDDFF; // new value, blue
+           } else {
+              return 0xFFDDDD; // conflicting, red
+           }
       }
   ]]>
   </mx:Script>
