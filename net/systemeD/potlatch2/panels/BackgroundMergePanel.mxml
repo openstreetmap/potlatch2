@@ -8,12 +8,12 @@
   <mx:Text id="backgroundMergePanelText" text="W00t!!!" width="100%" styleName="helpInfo" />
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
-      <mx:DataGridColumn editable="false" dataField="k" headerText="key" />
+      <mx:DataGridColumn editable="false" dataField="k" headerText="Key" />
       <mx:DataGridColumn editable="false" dataField="e" headerText="OSM value" />
-      <mx:DataGridColumn editable="false" headerText="Merge">
+      <mx:DataGridColumn editable="false" headerText="Merge" width="30">
         <mx:itemRenderer>
           <mx:Component>
-            <mx:Button label="++" visible="{data.b == null}" click="trace('b is '+data.b);parentDocument.mergeForKey(data.k);" />
+            <mx:Button label="&lt;&lt;" visible="{data.b == null}" click="trace('b is '+data.b);parentDocument.mergeForKey(data.k);" />
           </mx:Component>
         </mx:itemRenderer>
       </mx:DataGridColumn>
