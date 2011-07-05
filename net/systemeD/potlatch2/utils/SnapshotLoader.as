@@ -27,7 +27,6 @@ package net.systemeD.potlatch2.utils {
         * @param stylesheet The url of the stylesheet to use for styling the layer
         */
         public function SnapshotLoader(map:Map, url:String, name:String, stylesheet:String = null):void {
-            trace("*"+stylesheet+"*")
             this.map = map;
             connection = new SnapshotConnection(name, url, '');
             _stylesheet = (stylesheet && stylesheet != '') ? stylesheet : STYLESHEET;
