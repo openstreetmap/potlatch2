@@ -9,6 +9,7 @@ resources/*.swf
 resources/*.cache
 resources/docs
 resources/mapquest
+resources/generated
 
 /tests/bin/
 /tests/report/
