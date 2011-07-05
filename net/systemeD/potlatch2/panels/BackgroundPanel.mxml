@@ -4,7 +4,10 @@
     Background Panel
 -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
+<mx:VBox
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    height="100%">
   <mx:Text id="backgroundPanelText" text="You have selected a Background Feature." width="100%" styleName="helpInfo" />
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
@@ -14,7 +17,7 @@
   </mx:DataGrid>
   <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
   <mx:Button label="Complete" click="markComplete()"/>
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.MapPaint;
@@ -50,5 +53,5 @@
             }
       }
       ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:VBox>

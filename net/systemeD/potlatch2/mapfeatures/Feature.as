@@ -67,8 +67,12 @@ package net.systemeD.potlatch2.mapfeatures {
 
             for each(var inputSetRef:XML in xml.inputSet) {
                 var setName:String = String(inputSetRef.@ref);
-                for each (inputXML in mapFeatures.definition.inputSet.(@id==setName)) {
-                    addEditors(inputXML);
+                // Go on then, someone tell me why this stopped working. Namespaces?:
+                //for each (inputXML in mapFeatures.definition.inputSet.(@id == setName)) {
+                for each (inputXML in mapFeatures.definition.inputSet) {
+                    if (inputXML.@id == setName) {
+                        addEditors(inputXML);
+                    }
                 }
             }
 

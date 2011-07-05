@@ -4,7 +4,11 @@
     Bug Panel
 -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%" paddingTop="10">
+<mx:VBox
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    height="100%"
+    paddingTop="10">
   <mx:HBox>
     <mx:Image source="{bugImage}" width="32" height="32" />
     <mx:Text text="{bugTitle}" fontWeight="bold" fontSize="18" />
@@ -56,7 +60,7 @@
     </mx:VBox>
   </mx:ViewStack>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.potlatch2.BugConnection;
@@ -114,5 +118,5 @@
       }
 
       ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:VBox>

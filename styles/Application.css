@@ -1,6 +1,11 @@
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace p2 "net.systemeD.potlatch2.*";
+
+
 /* General Flex UI elements */
 
-TitleWindow {
+mx|TitleWindow {
 	borderAlpha: 1;
 	borderThicknessLeft: 5;
 	borderThicknessRight: 5;
@@ -25,12 +30,12 @@ TitleWindow {
 	borderColor: haloBlue;
 }
 
-Button {
+mx|Button {
 	color: black;
 	textRollOverColor: black;
 }
 
-VScrollBar {
+mx|VScrollBar {
 	cornerRadius: 0;
 	highlightAlphas: 0, 0;
 	fillAlphas: 0, 0, 0, 0;
@@ -40,23 +45,23 @@ VScrollBar {
 	thumbOffset: 1;
 }
 
-CheckBox, List, StyleSelector, BackgroundSelector { color: black; }
+mx|CheckBox, mx|List, p2|StyleSelector, p2|BackgroundSelector { color: black; }
 
-TabNavigator {
+mx|TabNavigator {
 	horizontalGap: 3;
 }
 
-TextInput {
+mx|TextInput {
 	color: #333333;
 }
 
-Label {
+mx|Label {
 	fontWeight: normal;
 }
 
 /* Main window */
 
-Application {
+mx|Application {
 	padding-left: 4;
 	padding-right: 4;
 	padding-top: 2;
@@ -67,7 +72,7 @@ Application {
 	fontFamily: Arial;
 }
 
-HDividedBox {
+mx|HDividedBox {
 	dividerAlpha: 1;
 	dividerColor: #0000ff;
 	backgroundColor: #6495ED;
@@ -76,7 +81,7 @@ HDividedBox {
 /*   backgroundColor: #ffff99; */
 }
 
-ApplicationControlBar {
+mx|ApplicationControlBar {
 	padding-top: 2;
 	padding-bottom: 0;
 	padding-left: 4;

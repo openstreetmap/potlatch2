@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <edit:SingleTagEditor
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	toolTip="{fieldDescription}"
     direction="{fieldDirection}" styleName="titledEditor">
@@ -10,16 +11,16 @@
       change="value = inputBox.selectedItem.value"
       open="inputBox.dropdown.variableRowHeight = true">
       <edit:itemRenderer>
-        <mx:Component>
+        <fx:Component>
         <mx:HBox toolTip="{data.description}" horizontalScrollPolicy="off">
           <mx:Image source="{Choice(data).icon}"/>
           <mx:Label htmlText="{data.label}"/>
         </mx:HBox>
-        </mx:Component>
+        </fx:Component>
       </edit:itemRenderer>
   </edit:ChoiceComboBox>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
       import mx.collections.*;
       import mx.utils.*;
       import net.systemeD.potlatch2.mapfeatures.Feature;
@@ -67,6 +68,6 @@
           choice.value = null;
           return choice;
       }
-  ]]></mx:Script>
+  ]]></fx:Script>
 </edit:SingleTagEditor>
 

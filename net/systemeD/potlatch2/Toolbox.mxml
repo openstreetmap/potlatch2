@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	height="76" width="129" layout="absolute"
 	styleName="theToolBox">
 
+        <fx:Declarations>
         <!-- the animation effect that controls the rotation of the reverse arrow.
               We could get more fancy by using previous angle in angleFrom, and a longer duration, to give a nice animated effect -->
         <mx:Rotate id="rotate" angleFrom="{angle-1}" angleTo="{angle}" target="{arrowBox}" originX="{arrowBox.width/2}" originY="{arrowBox.height/2}" duration="4"/>
-
+        </fx:Declarations>
 
 		<mx:Image data="@Embed('../../../embedded/close_small.png')"
 			includeInLayout="false" id="toolboxClose" click="toggle();" 
@@ -94,7 +96,7 @@
 			toolTip="Create parallel way (P)" 
 			width="28" height="28" textAlign="left" y="34" x="96" paddingLeft="8" paddingRight="0" />
 
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 
 		import flash.events.Event;
 		import flash.events.MouseEvent;
@@ -290,5 +292,5 @@
 
 
 	]]>
-</mx:Script>	
+</fx:Script>
 </mx:Panel>
