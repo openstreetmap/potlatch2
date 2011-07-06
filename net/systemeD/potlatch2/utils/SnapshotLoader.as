@@ -30,6 +30,8 @@ package net.systemeD.potlatch2.utils {
             this.map = map;
             connection = new SnapshotConnection(name, url, '');
             _stylesheet = (stylesheet && stylesheet != '') ? stylesheet : STYLESHEET;
+            _layer = map.addLayer(connection, _stylesheet, true, true);
+            _layer.visible = false;
         }
 
         /**
@@ -38,9 +40,7 @@ package net.systemeD.potlatch2.utils {
         * automatically to pan / zooming of the associated Map
         */
         public function load():void {
-            if (!_layer) {
-                _layer = map.addLayer(connection, _stylesheet, true, true);
-            }
+            _layer.visible = true;
             connection.loadBbox(map.edge_l, map.edge_r, map.edge_t, map.edge_b);
         }
     }

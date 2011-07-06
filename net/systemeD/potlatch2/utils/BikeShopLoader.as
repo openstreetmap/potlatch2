@@ -34,12 +34,12 @@ package net.systemeD.potlatch2.utils {
             this.bikeShopBaseURL = url;
             this.name = name;
             this.connection = new BikeShopConnection(name,url,bikeShopBaseURL+"crossdomain.xml",null);
+            _layer = map.addLayer(connection, STYLESHEET);
+            _layer.visible = false;
         }
 
         public function load():void {
-            if (!_layer) {
-                _layer = map.addLayer(connection, STYLESHEET);
-            }
+            _layer.visible = true;
             connection.loadBbox(map.edge_l, map.edge_r, map.edge_t, map.edge_b);
         }
     }
