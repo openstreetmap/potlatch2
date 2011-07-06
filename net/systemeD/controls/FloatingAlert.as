@@ -6,13 +6,24 @@ package net.systemeD.controls {
 	import flash.text.*;
 	import flash.utils.Timer;
 
+	/**
+	* A FloatingAlert displays a message and stays on screen until the user next presses the mouse or a key.
+	* It's an alternative to showing a modal dialog that would simply be dismissed. The alert appears at the bottom
+	* centre of the screen and fades in as it moves up into view.
+	*/
+
 	public class FloatingAlert extends Sprite {
 
 		private var textfield:TextField;
 		private var h:int;
 		private var w:int;
 		private var timer:Timer;
-		
+
+		/**
+		* Create a new FloatingAlert
+		*
+		* @param message The message to display to the user
+		*/
 		public function FloatingAlert(message:String) {
 			super();
 
