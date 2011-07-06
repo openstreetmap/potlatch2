@@ -14,7 +14,7 @@
       <url>http://80.242.147.84/osmbugs/api/</url>
       <apikey>e4d47b6b8c26e822a62d747b802f98ac</apikey>
     </set>
-    <set>
+    <set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
       <name>Bike Shop Locator - Missing Shops</name>
       <loader>BikeShopLoader</loader>
       <url>http://shaunmcdonald.dev.openstreetmap.org/bike-shop-locator/</url>

@@ -39,9 +39,26 @@ package net.systemeD.potlatch2.collections {
 					Security.loadPolicyFile(String(set.policyfile));
 				}
 
+                // Check for any bounds for the vector layer. Obviously won't kick in during subsequent panning
+                var validBbox:Boolean = false;
+                if (set.@minlon && String(set.@minlon) != '') {
+                    if (((_map.edge_l>set.@minlon && _map.edge_l<set.@maxlon) ||
+                         (_map.edge_r>set.@minlon && _map.edge_r<set.@maxlon) ||
+                         (_map.edge_l<set.@minlon && _map.edge_r>set.@maxlon)) &&
+                        ((_map.edge_b>set.@minlat && _map.edge_b<set.@maxlat) ||
+                         (_map.edge_t>set.@minlat && _map.edge_t<set.@maxlat) ||
+                         (_map.edge_b<set.@minlat && _map.edge_t>set.@maxlat))) {
+                        validBbox = true;
+                    } else {
+                        validBbox = false; // out of bounds
+                    }
+                } else {
+                    validBbox = true; // global set
+                }
+
 				if (set.@disabled == "true") {
                     // Don't do anything with it. The "disabled" attribute allows examples to appear in the config file
-				} else {
+				} else if (validBbox) {
 
 					var name:String = (set.name == undefined) ? null : String(set.name);
 					var loader:String = set.loader;
