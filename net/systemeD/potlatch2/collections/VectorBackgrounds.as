@@ -40,6 +40,7 @@ package net.systemeD.potlatch2.collections {
 				}
 
 				if (set.@disabled == "true") {
+                    // Don't do anything with it. The "disabled" attribute allows examples to appear in the config file
 				} else {
 
 					var name:String = (set.name == undefined) ? null : String(set.name);
