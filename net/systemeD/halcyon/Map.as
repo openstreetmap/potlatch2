@@ -218,13 +218,15 @@ package net.systemeD.halcyon {
             }
 		}
 
-        /** Download map data. Data is downloaded for the connection and the vector layers, where supported.
+        /** Download map data. Data is downloaded for the currently visible layers
         * The bounding box for the download is taken from the current map edges.
         */
 		public function download():void {
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+				if(getLayerAt(i).visible == true) {
+                    getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+                }
 		}
 
         // Handle mouse events on ways/nodes
