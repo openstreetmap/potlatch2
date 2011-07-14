@@ -303,6 +303,8 @@ Quick documentation:
     <input type="choice" name="Electrified" category="Electrification" description="Is the track electrified (whether by 3rd rail, overhead wires, etc)?"
            key="electrified">
       <choice value="yes" text="Yes"/>
+      <choice value="contact_line" text="Overhead line"/>
+      <choice value="rail" text="Third rail"/>
       <choice value="no" text="No"/>
     </input>
     <input type="choice" name="Voltage" category="Electrification" description="Nominal voltage of electric wires"
