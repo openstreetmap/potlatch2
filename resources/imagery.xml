@@ -113,4 +113,9 @@
         <url>http://fugro.findvej.dk/fugro2005/$z/$x/$y.jpg</url>
         <sourcetag>Fugro (2005)</sourcetag>
     </set>
+	<set minlat="55.23403" minlon="12.09144" maxlat="55.43647" maxlon="12.47712">
+		<name>Denmark - Stevns Kommune</name>
+		<url>http://tile.openstreetmap.dk/stevns/2009/$z/$x/$y.jpg</url>
+		<sourcetag>Stevns Kommune (2009)</sourcetag>
+	</set>
 </imagery>
