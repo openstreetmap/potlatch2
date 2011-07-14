@@ -439,17 +439,17 @@ package net.systemeD.halcyon.connection {
             }
         }
 
-        private function tracesLoadComplete(event:Event):void {
-            clearTraces();
-            var files:XML = new XML(URLLoader(event.target).data);
-            for each(var traceData:XML in files.gpx_file) {
-              var t:Trace = new Trace(this).fromXML(traceData);
-              addTrace(t);
-            }
-            traces_loaded = true;
-            dispatchEvent(new Event(LOAD_COMPLETED));
-            dispatchEvent(new Event(TRACES_LOADED));
-        }
+		private function tracesLoadComplete(event:Event):void {
+			var files:XML = new XML(URLLoader(event.target).data);
+			for each(var traceData:XML in files.gpx_file) {
+				var t:Trace = findTrace(traceData.@id);
+				if (!t) { t=new Trace(this); addTrace(t); }
+				t.fromXML(traceData);
+			}
+			traces_loaded = true;
+			dispatchEvent(new Event(LOAD_COMPLETED));
+			dispatchEvent(new Event(TRACES_LOADED));
+		}
 
         override public function fetchTrace(id:Number, callback:Function):void {
             sendOAuthGet(apiBaseURL+"gpx/"+id+"/data.xml", 

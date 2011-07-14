@@ -523,13 +523,14 @@
         }
 
         private function loadTrace(id:Number):void {
-            var conn:Connection = theMap.editableLayer.connection;
-            conn.addEventListener(Connection.TRACES_LOADED, function (e:Event):void {
-                for each (var trace:Trace in conn.getTraces()) {
-                    if (trace.id == id) { trace.addToMap(); }
-                }
-            });
-            conn.fetchUserTraces();
+			var conn:Connection = theMap.editableLayer.connection;
+			conn.addEventListener(Connection.TRACES_LOADED, function (e:Event):void {
+				var t:Trace = conn.findTrace(id);
+				if (!t) { t=new Trace(conn,id); conn.addTrace(t); }
+				t.addToMap();
+				conn.removeEventListener(Connection.TRACES_LOADED, arguments.callee);
+			});
+			conn.fetchUserTraces();
         }
 
 	]]></mx:Script>

@@ -24,7 +24,7 @@ package net.systemeD.halcyon.connection {
         private var _traceData:String; // the trace data, saved as a string
         private var map:Map;
         private var _layer:MapPaint;
-        private var masterConnection:XMLConnection; // The authenticated connection
+        private var masterConnection:Connection; // The authenticated connection
         private var _connection:Connection; // The one we store our fake nodes/ways in.
         private var simplify:Boolean = false;
 
@@ -33,9 +33,10 @@ package net.systemeD.halcyon.connection {
         /** Create a new trace.
         * @param masterConnection The authenticated connection to communicate with the server
         */
-        public function Trace(masterConnection:XMLConnection) {
+        public function Trace(masterConnection:Connection, id:int=0) {
             this.masterConnection = masterConnection;
             map = Globals.vars.root; // REFACTOR this prevents traces being added to arbitrary maps
+			if (id!=0) _id=id;
         }
 
         /** Create a new trace, from the XML description given by the user/traces call.
@@ -112,6 +113,7 @@ package net.systemeD.halcyon.connection {
 
         private function processEvent(e:Event):void {
             removeEventListener("loaded_data", processEvent);
+            _isLoaded=true;
             process();
         }
 
