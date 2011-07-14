@@ -8,12 +8,11 @@ package net.systemeD.controls {
 
 		private var _image:Image;
 		[Embed(source="../../../embedded/warning.png")] private var warningIcon:Class;
-    private var _whiteList:Array = [];
+		private var _whiteList:Array = ["source","collection_times","service_times","smoking_hours","opening_hours"];
 
 		function DataGridWarningField():void {
 			super();
 			setStyle('paddingLeft',2);
-      _whiteList.push("ref","source","collection_times","service_times","smoking_hours","opening_hours");
 		}
 
 		override protected function createChildren():void {
@@ -28,7 +27,7 @@ package net.systemeD.controls {
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-      if ( (_whiteList.indexOf(data.key.toLowerCase()) == -1) && (data.value && data.value.indexOf(';')>-1)) { 
+			if (data.value && (_whiteList.indexOf(data.key)==-1) && (data.value.indexOf(';')>-1)) { 
 				setStyle('color',0xFF0000);
 				_image.visible=true;
 				_image.x = width -_image.width -5;
