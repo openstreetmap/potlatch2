@@ -226,7 +226,13 @@
     <point/>
     <area/>
     <tag k="amenity" v="shelter"/>
-    <inputset ref="names"/>
+    <input type="choice" presence="always" name="Type of shelter" key="shelter_type" description="The intended use of the shelter.">
+      <choice value="picnic_shelter" text="Picnic shelter"/>
+      <choice value="public_transport" text="Public transport"/>
+      <choice value="weather_shelter" text="Weather shelter"/>
+      <choice value="wildlife_hide" text="Wildlife hide"/>
+    </input>
+    <inputSet ref="names"/>
     <inputSet ref="common"/>
   </feature>
 
