@@ -272,7 +272,7 @@
     <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post office"/>
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
     <inputSet ref="common"/>
-    <inputset ref="simpleName"/>
+    <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Trash/rubbish bin">
