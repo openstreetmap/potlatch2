@@ -110,6 +110,7 @@
     <icon image="features/pois/amenity_recycling.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Drecycling</help>
     <point/>
+    <area/>
     <tag k="amenity" v="recycling"/>
     <inputSet ref="simpleName"/>
     <input type="choice" presence="always" category="Recycling" name="Type of facility" key="recycling_type" description="Is this containers in a rural area or at an manned facility?" priority="high">
@@ -271,7 +272,7 @@
     <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post office"/>
     <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
     <inputSet ref="common"/>
-    <inputset ref="simpleName"/>
+    <inputSet ref="simpleName"/>
   </feature>
 
   <feature name="Trash/rubbish bin">
