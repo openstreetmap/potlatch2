@@ -131,17 +131,14 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.MOUSE_DOWN ) {
 				if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
 					// select node within this way
-                	return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
-				} else if ( entity is Node && focus is Way ) {
-					// select way node
-					return new DragWayNode(focus as Way, getNodeIndex(focus as Way,entity as Node), event, false);
+					return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
 				} else if ( controller.keyDown(Keyboard.SPACE) ) {
 					// drag the background imagery to compensate for poor alignment
 					return new DragBackground(event);
 				} else if (entity && selection.indexOf(entity)>-1) {
 					return new DragSelection(selection, event);
 				} else if (entity) {
-					return new DragSelection([entity], event);
+					return controller.findStateForSelection([entity]);
 				} else if (event.ctrlKey && !layer.isBackground) {
 					return new SelectArea(event.localX,event.localY,selection);
 				}
