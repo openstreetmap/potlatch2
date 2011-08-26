@@ -90,8 +90,8 @@ mx|ApplicationControlBar {
 	fillAlphas: 1,1;
 	fillColors: haloBlue, #6495ED;
 	/*fillColors: #ffffcc, #ffff99;*/
-	backgroundColor: #ffffcc;
-	dropShadowEnabled: false;
+	/*backgroundColor: #ffffcc;*/
+	/*dropShadowEnabled: false;*/
 	/*borderSkin: ClassReference("mx.skins.halo.ApplicationBackground");*/
 }
 

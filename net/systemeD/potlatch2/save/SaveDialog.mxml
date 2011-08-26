@@ -9,8 +9,8 @@
   <fx:Declarations>
   <mx:ArrayCollection id="changesetTags">
     <fx:Object k="created_by" v="Potlatch 2"/>
-    <fx:Object k="version" v="{FlexGlobals.topLevelApplication.version}"/>
-    <fx:Object k="build" v="{FlexGlobals.topLevelApplication.build_number}"/>
+    <fx:Object k="version" v="{application.version}"/>
+    <fx:Object k="build" v="{application.build_number}"/>
   </mx:ArrayCollection>
   </fx:Declarations>
   
@@ -95,8 +95,8 @@
     private var _connection:Connection;
 	private var doSkip:Boolean = false;
     
-    [Bindable]
-    private var failureText:String = "";
+    [Bindable] private var failureText:String = "";
+	[Bindable] private var application:Object = FlexGlobals.topLevelApplication;
 
 	public function setConnection(connection:Connection):void {
 		_connection=connection;

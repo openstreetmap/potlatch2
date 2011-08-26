@@ -32,7 +32,7 @@
         <mx:WipeRight id="wipeIn" duration="250"/>
     </fx:Declarations>
 
-    <mx:ApplicationControlBar dock="true">
+    <mx:ApplicationControlBar id="controlbar" dock="true">
         <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton"
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
@@ -150,6 +150,8 @@
 		}
 		
 		private function continueInit(r:Event):void {
+			controlbar.setStyle('dropShadowEnabled',"false");	// Flex 4 doesn't permit this in Application.css
+
 			// Set font
 			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
 			Font.registerFont(FontLibrary.DejaVu);

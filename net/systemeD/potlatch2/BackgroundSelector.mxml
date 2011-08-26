@@ -11,9 +11,9 @@
 	        dataProvider="{Imagery.instance().getAvailableImagery()}"
 	        rowCount="{Imagery.instance().getAvailableImagery().length}"/>
 	<mx:HBox>
-	<mx:CheckBox width="100%" label="Dim" selected="{FlexGlobals.topLevelApplication.theMap.getDimming()}" id="dim"
+	<mx:CheckBox width="100%" label="Dim" selected="{application.theMap.getDimming()}" id="dim"
 	    change="setDimming(dim.selected)" />
-	<mx:CheckBox width="100%" label="Sharpen" selected="{FlexGlobals.topLevelApplication.theMap.getSharpen()}" id="sharpen"
+	<mx:CheckBox width="100%" label="Sharpen" selected="{application.theMap.getSharpen()}" id="sharpen"
 	    change="setSharpen(sharpen.selected)" />
 	</mx:HBox>
 
@@ -31,6 +31,8 @@
 		import mx.core.*;
 		import mx.collections.ArrayCollection;
 		import mx.managers.PopUpManager;
+
+		[Bindable] private var application:Object = FlexGlobals.topLevelApplication;
 
 		public function setDimming(v:Boolean):void {
 			FlexGlobals.topLevelApplication.theMap.setDimming(dim.selected);
