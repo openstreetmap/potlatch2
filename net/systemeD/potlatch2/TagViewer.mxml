@@ -143,7 +143,7 @@
 			disabledIcon="@Embed('../../../embedded/view_accordion_disabled.png')"
 			click="setEditorStackUI(false)" id="accordionLabel" paddingTop="6"
 			toolTip="Show in sliding windows"
-			enabled="{editorStack is SuperTabNavigator &amp;&amp; stack.selectedIndex==0}" />
+			enabled="{editorStack is TabNavigator &amp;&amp; stack.selectedIndex==0}" />
 	  </mx:HBox>
   </mx:VBox>
 
@@ -232,12 +232,22 @@
       import mx.managers.DragManager;
       import mx.core.DragSource;
       import mx.controls.TabBar;
-      import flexlib.containers.SuperTabNavigator;
+//    import flexlib.containers.SuperTabNavigator;
+
+      [Bindable] [Embed(source="../../../embedded/tab_basic.png"       )] private var tabIconBasic:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_address.png"     )] private var tabIconAddress:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_cycle.png"       )] private var tabIconCycle:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_details.png"     )] private var tabIconDetails:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_restrictions.png")] private var tabIconRestrictions:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_transport.png"   )] private var tabIconTransport:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_walk.png"        )] private var tabIconWalk:Class;
+      private var tabIcons:Object= { Basic:tabIconBasic, Details:tabIconDetails, Address:tabIconAddress, Walk:tabIconWalk, Cycle:tabIconCycle, 
+	                                 Transport:tabIconTransport, Restrictions:tabIconRestrictions};
 
       [Bindable]
       public var dndPrompt:String="Add new points by dragging them onto the map";
 
-      private var editorStackTabNavigator:SuperTabNavigator;
+      private var editorStackTabNavigator:TabNavigator;
       private var editorStackAccordion:Accordion;
       [Bindable] private var editorStack:Container;
 
@@ -387,11 +397,13 @@
 
           var editorBox:VBox = createEditorBox();
           editorBox.label = "Basic";
+          editorBox.icon=tabIconBasic;
           editorStack.addChild(editorBox);
 
           var tabs:Object = {};
           tabComponents = {};
 
+          // ** FIXME: we should do this so that the tabs are always in the same order
           for each (var factory:EditorFactory in feature.editors) {
               if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
                   var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
@@ -404,6 +416,7 @@
 	              if ( tab == null) {
 	                  tab = createEditorBox();
 	                  tab.label = category;
+	                  if (tabIcons[category]) tab.icon=tabIcons[category];
 	                  editorStack.addChild(tab);
 	                  tabs[category] = tab;
 	                  tabComponents[tab] = [];
@@ -434,16 +447,16 @@
       }
 
 	private function initEditorStackUIs():void {
-		editorStackTabNavigator = new SuperTabNavigator();
-		editorStackTabNavigator.allowTabSqueezing=false;
-		editorStackTabNavigator.minTabWidth=10;
-		editorStackTabNavigator.closePolicy="close_never";
-		editorStackTabNavigator.scrollSpeed=20;
+		editorStackTabNavigator = new TabNavigator();
+//		editorStackTabNavigator.allowTabSqueezing=false;
+//		editorStackTabNavigator.minTabWidth=10;
+//		editorStackTabNavigator.closePolicy="close_never";
+//		editorStackTabNavigator.scrollSpeed=20;
 		editorStackTabNavigator.creationPolicy="auto";
 		editorStackTabNavigator.percentWidth=100;
 		editorStackTabNavigator.percentHeight=100;
 		editorStackTabNavigator.styleName="dndStackTab";
-		editorStackTabNavigator.popUpButtonPolicy="off"
+//		editorStackTabNavigator.popUpButtonPolicy="off"
 
 
 		editorStackAccordion = new Accordion();
@@ -451,6 +464,10 @@
 		editorStackAccordion.percentHeight=100;
 		editorStackAccordion.creationPolicy="auto";
 		editorStackAccordion.styleName="dndStackAccordion";
+		/* FIXME: the accordion icons should be right-aligned. See:
+		http://www.kristoferjoseph.com/blog/2008/11/06/positioning-the-flex-accordion-header-icon
+		http://blog.flexexamples.com/2007/09/13/changing-text-alignment-in-an-flex-accordion-header/
+		*/
 
 		setEditorStackUI(true);
 	}
@@ -481,8 +498,8 @@
 	}
 
 	private function editorStackUIUpdate(event:Event):void {
-		if (editorStack is SuperTabNavigator) {
-			var e:SuperTabNavigator = editorStack as SuperTabNavigator;
+		if (editorStack is TabNavigator) {
+			var e:TabNavigator = editorStack as TabNavigator;
 			if (e.selectedIndex<0) { return; }
 			for (var i:uint=0; i<e.numChildren; i++) {
 				e.getTabAt(i).selected=(i==e.selectedIndex);

@@ -45,7 +45,7 @@
     <area/>
     <tag k="amenity" v="hospital"/>
     <inputSet ref="simpleName"/>
-    <input type="choice" presence="always" category="Hospital" name="Emergency treatment available" key="emergency" description="Are there accident and emergency facilities at this hospital?">
+    <input type="choice" presence="always" category="Details" name="Emergency treatment available" key="emergency" description="Are there accident and emergency facilities at this hospital?">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
     </input>
@@ -60,7 +60,7 @@
     <point/>
     <tag k="amenity" v="place_of_worship"/>
     <inputSet ref="simpleName" />
-    <input type="choice" presence="always" category="" name="Religion" key="religion" description="The religion worshipped here.">
+    <input type="choice" presence="always" category="Details" name="Religion" key="religion" description="The religion worshipped here.">
       <choice value="christian" text="Christianity (church)"/>
       <choice value="jewish" text="Judaism (synagogue)"/>
       <choice value="muslim" text="Islam (mosque)"/>
@@ -70,7 +70,7 @@
       <choice value="shinto" text="Shinto (shrine)"/>
     </input>
 
-    <input type="freetext" presence="always" category="" name="denomination" key="denomination" description="The denomination of the religion worshiped here." priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="denomination" key="denomination" description="The denomination of the religion worshiped here." priority="low"/>
     <inputSet ref="common"/>
   </feature>
 
@@ -81,8 +81,8 @@
     <help>http://wiki.openstreetmap.org/wiki/Atm</help>
     <point/>
     <tag k="amenity" v="atm"/>
-    <input type="freetext" presence="always" category="Banking" name="Operator" key="operator" description="The organisation that provides this ATM" priority="low"/>
-    <input type="freetext" presence="always" category="Banking" name="Fee" key="fee" description="Is there a charge for using this ATM? If so how much?"/>
+    <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="The organisation that provides this ATM" priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Fee" key="fee" description="Is there a charge for using this ATM? If so how much?"/>
     <inputSet ref="common"/>
   </feature>
 
@@ -97,7 +97,7 @@
     <tag k="amenity" v="bank"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
-    <input type="choice" presence="always" category="Bank" name="Public ATM available" key="atm" description="Is there a public ATM available?">
+    <input type="choice" presence="always" category="Details" name="Public ATM available" key="atm" description="Is there a public ATM available?">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
     </input>
@@ -164,8 +164,8 @@
     <help>http://wiki.openstreetmap.org/wiki/Post_box</help>
     <point/>
     <tag k="amenity" v="post_box"/>
-    <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post box"/>
-    <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of the post box"/>
+    <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
     <inputSet ref="common"/>
   </feature>
 
@@ -179,8 +179,8 @@
     <point/>
     <area/>
     <tag k="amenity" v="post_office"/>
-    <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of the post office"/>
-    <input type="freetext" presence="always" category="Naming" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of the post office"/>
+    <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="The provider of the postal service" priority="low"/>
     <inputSet ref="common"/>
     <inputset ref="simpleName"/>
   </feature>
@@ -273,7 +273,7 @@
     <point/>
     <tag k="amenity" v="emergency_phone"/>
     <inputSet ref="common"/>
-    <input type="freetext" presence="always" category="Naming" name="Ref" key="ref" description="Reference number of emergency phone."/>    
+    <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of emergency phone."/>    
   </feature>
 
 

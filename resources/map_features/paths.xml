@@ -75,7 +75,7 @@
     <line/>
     <tag k="highway" v="steps"/>
     <inputSet ref="path"/>
-    <input type="freetext" presence="always" category="Naming" name="Number of steps" key="step_count" description="The number of steps in the way" priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Number of steps" key="step_count" description="The number of steps in the way" priority="low"/>
     <inputSet ref="common"/>
   </feature>
   

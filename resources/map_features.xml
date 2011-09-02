@@ -87,11 +87,11 @@ Quick documentation:
 
 
   <inputSet id="source">
-    <input type="freetext" category="Misc" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Yahoo, ...)" priority="lowest"/>
+    <input type="freetext" category="Details" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Yahoo, ...)" priority="lowest"/>
   </inputSet>
 
   <inputSet id="designation">
-    <input type="freetext" category="Misc" presence="onTagMatch" description="Official designation or classification" name="Designation" key="designation"/>
+    <input type="freetext" category="Details" presence="onTagMatch" description="Official designation or classification" name="Designation" key="designation"/>
   </inputSet>
 
   <inputSet id="common">
@@ -101,21 +101,21 @@ Quick documentation:
 
   <inputSet id="names">
     <input type="freetext" presence="always"
-        name="Name" category="Naming" priority="highest"
+        name="Name" category="Details" priority="highest"
         key="name" description="The most common name"/>
     <input type="freetext" presence="onTagMatch"
-        name="International Name" category="Naming"
+        name="International Name" category="Details"
         key="int_name" description="The internationally recognised name"/>
     <input type="freetext" presence="onTagMatch"
-        name="Historical Name" category="Naming" priority="low"
+        name="Historical Name" category="Details" priority="low"
         key="old_name" description="The historic or previous name"/>
     <input type="freetext" presence="onTagMatch"
-        name="Alternative Name" category="Naming" priority="low"
+        name="Alternative Name" category="Details" priority="low"
         key="alt_name" description="An alternative, currently used, name"/>
   </inputSet>
 
   <inputSet id="wifi">
-    <input type="choice" presence="onTagMatch" category="Eating" name="Wifi" key="wifi">
+    <input type="choice" presence="onTagMatch" category="Details" name="Wifi" key="wifi">
       <choice value="free" text="Free"/>
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
@@ -130,11 +130,11 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="web">
-    <input type="freetext" presence="onTagMatch" category="Web" description="The URL of the website" name="Website" key="website"/>
+    <input type="freetext" presence="onTagMatch" category="Address" description="The URL of the website" name="Website" key="website"/>
   </inputSet>
 
   <inputSet id="cuisine">
-    <input type="choice" presence="always" name="Cuisine" category="Eating" description="The type of food that they serve" key="cuisine">
+    <input type="choice" presence="always" name="Cuisine" category="Details" description="The type of food that they serve" key="cuisine">
       <!-- The 30 most popular values according to taginfo 23/12/2010 -->
       <choice value="burger" text="Burger"/>
       <choice value="chicken" text="Chicken"/>
@@ -216,22 +216,22 @@ Quick documentation:
 
   <inputSet id="roadRefs">
     <input type="freetext" presence="always"
-        name="Reference" category="Naming" priority="high"
+        name="Reference" category="Details" priority="high"
         key="ref" description="The official reference number"/>
     <input type="freetext" presence="onTagMatch"
-        name="International Reference" category="Naming"
+        name="International Reference" category="Details"
         key="int_ref" description="The official international reference number"/>
     <input type="freetext" presence="onTagMatch"
-        name="Old Reference" category="Naming" priority="low"
+        name="Old Reference" category="Details" priority="low"
         key="old_ref" description="The historic or previous reference number"/>
   </inputSet>
 
   <inputSet id="roadPhysical">
     <input type="freetext" presence="onTagMatch"
-        name="Width" category="Physical"
+        name="Width" category="Details"
         key="width" description="Width of the road" layout="horizontal"/>
     <input type="choice" presence="onTagMatch"
-        name="Surface" category="Physical" description="Type of road surface"
+        name="Surface" category="Details" description="Type of road surface"
         key="surface" layout="horizontal">
       <choice value="unpaved" text="Unpaved" description="Road surface is unsealed"/>
       <choice value="paved" text="Paved" description="Road surface is sealed"/>
@@ -252,27 +252,27 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="roadLanes">
-    <input presence="onTagMatch" type="number" name="Lanes" category="Physical" description="Total number of lanes, counting both directions"
+    <input presence="onTagMatch" type="number" name="Lanes" category="Details" description="Total number of lanes, counting both directions"
            key="lanes" minimum="1" maximum="10" layout="horizontal"/>
   </inputSet>
 
   <inputSet id="bridge">
     <input type="choice" presence="onTagMatch"
-        name="Bridge" category="Physical" description="Road goes over a bridge"
+        name="Bridge" category="Details" description="Road goes over a bridge"
         key="bridge" layout="horizontal">
       <choice value="yes" text="Generic Bridge" description="Generic bridge -- type unknown"/>
       <choice value="viaduct" text="Viaduct" description="Viaduct"/>
       <choice value="suspension" text="Suspension bridge"/>
     </input>
     <input type="slider" presence="onTagMatch"
-        name="Layer" category="Physical" description="Relative vertical positions (-5 lowest, +5 highest)"
+        name="Layer" category="Details" description="Relative vertical positions (-5 lowest, +5 highest)"
         key="layer" minimum="-5" maximum="5" default="0" snapInterval="1" labels="Lowest,Ground,Highest"
         defaultName="Ground"/>
   </inputSet>
   <inputSet id="tunnel">
     <!-- Not ideal, used for non-roads too. -->  
     <input type="choice" presence="onTagMatch"
-        name="Tunnel" category="Physical" description="Road goes into a tunnel"
+        name="Tunnel" category="Details" description="Road goes into a tunnel"
         key="tunnel" layout="horizontal">
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
@@ -280,12 +280,12 @@ Quick documentation:
 
   <inputSet id="embankment-cutting">
     <input type="choice"
-           name="Embankment" category="Physical" description="Road supported on a raised bed of earth and rock."
+           name="Embankment" category="Details" description="Road supported on a raised bed of earth and rock."
            key="embankment" layout="horizontal">
       <choice value="yes" text="Embankment"/>
     </input>
     <input type="choice"
-           name="Cutting" category="Physical" description="Road carved out of hill on one or both sides."
+           name="Cutting" category="Details" description="Road carved out of hill on one or both sides."
            key="cutting" layout="horizontal">
       <choice value="yes" text="Cutting"/>
     </input>
@@ -293,12 +293,12 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="rail-electrification">
-    <input type="choice" name="Electrified" category="Electrification" description="Is the track electrified (whether by 3rd rail, overhead wires, etc)?"
+    <input type="choice" name="Electrified" category="Details" description="Is the track electrified (whether by 3rd rail, overhead wires, etc)?"
            key="electrified">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
     </input>
-    <input type="choice" name="Voltage" category="Electrification" description="Nominal voltage of electric wires"
+    <input type="choice" name="Voltage" category="Details" description="Nominal voltage of electric wires"
            key="voltage" presence="withCategory">
       <choice value="600" text="600V"/>
       <choice value="750" text="750V"/>
@@ -307,7 +307,7 @@ Quick documentation:
       <choice value="15000" text="15kV"/>
       <choice value="25000" text="25kV"/>
     </input>
-    <input type="choice" name="Frequency" category="Electrification" description="Frequency in Hertz of alternating current power supply"
+    <input type="choice" name="Frequency" category="Details" description="Frequency in Hertz of alternating current power supply"
            key="frequency" presence="withCategory">
       <choice value="0" text="DC"/>
       <choice value="16.67" text="16.67 Hz"/>
@@ -364,7 +364,7 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="pedestrians">
-    <input type="choice" name="Pedestrians" description="Can pedestrians use this road, including footpaths if any?" category="Walking" key="foot">
+    <input type="choice" name="Pedestrians" description="Can pedestrians use this road, including footpaths if any?" category="Walk" key="foot">
       <choice value="yes" text="Allowed"/>
       <choice value="no" text="Prohibited"/>
       <choice value="designated" text="Designated"/>
@@ -372,8 +372,8 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="naptan">
-    <input type="freetext" presence="onTagMatch" category="Naptan" description="12 character internal Naptan ID" name="Atco Code" key="naptan:AtcoCode"/>
-    <input type="choice" presence="onTagMatch" category="Naptan" description="The eight-point compass bearning" name="Naptan Bearing" key="naptan:Bearing" >
+    <input type="freetext" presence="onTagMatch" category="Transport" description="12 character internal Naptan ID" name="Atco Code" key="naptan:AtcoCode"/>
+    <input type="choice" presence="onTagMatch" category="Transport" description="The eight-point compass bearning" name="Naptan Bearing" key="naptan:Bearing" >
       <choice value="N"  match="N"  text="N"  description=""/>
       <choice value="NE" match="NE" text="NE" description=""/>
       <choice value="E"  match="E"  text="E"  description=""/>
@@ -383,15 +383,15 @@ Quick documentation:
       <choice value="W"  match="W"  text="W"  description=""/>
       <choice value="NW" match="NW" text="NW" description=""/>
     </input>
-    <input type="freetext" presence="onTagMatch" category="Naptan" description="The naptan common name" name="Naptan Common Name (read-only)" key="naptan:CommonName"/>
-    <input type="freetext" presence="onTagMatch" category="Naptan" description="" name="Naptan Indicator (read-only)" key="naptan:Indicator"/>
-    <input type="freetext" presence="onTagMatch" category="Naptan" description="" name="Naptan Street (read-only)" key="naptan:Street"/>
-    <input type="freetext" presence="onTagMatch" category="Naptan" description="Delete this when the details have been verified on-the-ground" name="Naptan Verified?" key="naptan:verified"/>
+    <input type="freetext" presence="onTagMatch" category="Transport" description="The naptan common name" name="Naptan Common Name (read-only)" key="naptan:CommonName"/>
+    <input type="freetext" presence="onTagMatch" category="Transport" description="" name="Naptan Indicator (read-only)" key="naptan:Indicator"/>
+    <input type="freetext" presence="onTagMatch" category="Transport" description="" name="Naptan Street (read-only)" key="naptan:Street"/>
+    <input type="freetext" presence="onTagMatch" category="Transport" description="Delete this when the details have been verified on-the-ground" name="Naptan Verified?" key="naptan:verified"/>
   </inputSet>
 
   <inputSet id="buses">
-    <input type="freetext" presence="always" category="Bus Stop" name="Stop Name" key="name" description="The name of the bus stop"/>
-    <input type="freetext" presence="always" category="Bus Stop" name="Local Ref" key="local_ref" description="The local reference of the stop, usually one or two letters above the main flag, used at bus interchanges, e.g. L, BX"/>
+    <input type="freetext" presence="always" category="Transport" name="Stop Name" key="name" description="The name of the bus stop"/>
+    <input type="freetext" presence="always" category="Transport" name="Local Ref" key="local_ref" description="The local reference of the stop, usually one or two letters above the main flag, used at bus interchanges, e.g. L, BX"/>
     <inputSet ref="naptan"/>
   </inputSet>
 
@@ -474,7 +474,7 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="ldp">
-    <input type="route" name="National Walking Route" description="National walking route" category="Walking" priority="normal">
+    <input type="route" name="National Walking Route" description="National walking route" category="Walk" priority="normal">
       <match k="type" v="route"/>
       <match k="route" v="hiking|foot"/>
       <match k="network" v="nwn"/>
@@ -483,7 +483,7 @@ Quick documentation:
         <font size="12pt">${name}</font>
       </icon>
     </input>
-    <input type="route" name="Regional Walking Route" description="Regional walking route" category="Walking" priority="low">
+    <input type="route" name="Regional Walking Route" description="Regional walking route" category="Walk" priority="low">
       <match k="type" v="route"/>
       <match k="route" v="hiking|foot"/>
       <match k="network" v="rwn"/>
@@ -492,7 +492,7 @@ Quick documentation:
         <font size="12pt">${name}</font>
       </icon>
     </input>
-    <input type="route" name="Local Walking Route" description="Local walking route" category="Walking" priority="lowest">
+    <input type="route" name="Local Walking Route" description="Local walking route" category="Walk" priority="lowest">
       <match k="type" v="route"/>
       <match k="route" v="hiking|foot"/>
       <match k="network" v="lwn"/>
@@ -516,7 +516,7 @@ Quick documentation:
 <!-- Would be good to have a dedicated 'access' type of input -->
   <!-- all the description fields are identical at the moment for ease of maintenance, should be tailored in future. -->
   <inputSet id="boatPermissions">
-    <input type="choice" name="Boat permission" category="Permission" key="boat" description="Are boats allowed to use this waterway?">
+    <input type="choice" name="Boat permission" category="Restrictions" key="boat" description="Are boats allowed to use this waterway?">
       <choice value="yes" text="Allowed" description="General right of way."/>
       <choice value="no" text="Prohibited" description="No access to the public."/>
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
@@ -526,7 +526,7 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="permissions">
-    <input type="choice" name="General access" category="Permission" key="access" description="Is there a general right of access, regardless of mode of transport?">
+    <input type="choice" name="General access" category="Restrictions" key="access" description="Is there a general right of access, regardless of mode of transport?">
       <choice value="yes" text="Allowed" description="General right of way."/>
       <choice value="no" text="Prohibited" description="No access to the public."/>
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
@@ -534,7 +534,7 @@ Quick documentation:
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
     </input>
 
-    <input type="choice" name="Motor vehicles" category="Permission" key="motor_vehicle" description="Are cars and other private vehicles allowed?">
+    <input type="choice" name="Motor vehicles" category="Restrictions" key="motor_vehicle" description="Are cars and other private vehicles allowed?">
       <choice value="yes" text="Allowed" description="General right of way."/>
       <choice value="no" text="Prohibited" description="No access to the public."/>
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
@@ -542,7 +542,7 @@ Quick documentation:
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
     </input>
 
-    <input type="choice" name="Horses" category="Permission" key="horse" description="Are cars and other private vehicles allowed?">
+    <input type="choice" name="Horses" category="Restrictions" key="horse" description="Are cars and other private vehicles allowed?">
       <choice value="yes" text="Allowed" description="General right of way."/>
       <choice value="no" text="Prohibited" description="No access to the public."/>
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
@@ -571,11 +571,11 @@ Quick documentation:
   </inputSet>
 
   <inputSet id="isBuilding">
-    <input type="checkbox" presence="onTagMatch" category="Misc" description="Does this thing also represent one, solid building?" name="Building" key="building"/>
+    <input type="checkbox" presence="onTagMatch" category="Details" description="Does this thing also represent one, solid building?" name="Building" key="building"/>
   </inputSet>
 
   <inputSet id="powerCables">
-    <input type="choice" name="Cables" key="cables" presence="always" category="Power">
+    <input type="choice" name="Cables" key="cables" presence="always" category="Details">
       <choice value="2" text="2"/>
       <choice value="3" text="3"/>
       <choice value="4" text="4"/>
@@ -584,7 +584,7 @@ Quick documentation:
       <choice value="10" text="10"/>
       <choice value="12" text="12"/>
     </input>
-    <input type="choice" name="Voltage" key="voltage" presence="always" category="Power">
+    <input type="choice" name="Voltage" key="voltage" presence="always" category="Details">
       <!-- choices based on http://osmdoc.com/en/tag/voltage/#values-->
       <choice value="400" text="400 V"/>
       <choice value="600" text="600 V"/>

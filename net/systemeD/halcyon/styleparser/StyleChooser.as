@@ -1,6 +1,7 @@
 package net.systemeD.halcyon.styleparser {
 
 	import net.systemeD.halcyon.connection.Entity;
+    import net.systemeD.halcyon.ImageBank;
 
 	public class StyleChooser {
 
@@ -41,7 +42,7 @@ package net.systemeD.halcyon.styleparser {
 		
 		// Update the current StyleList from this StyleChooser
 
-		public function updateStyles(obj:Entity, tags:Object, sl:StyleList, imageWidths:Object, zoom:uint):void {
+		public function updateStyles(obj:Entity, tags:Object, sl:StyleList, zoom:uint):void {
 			if (zoomSpecific) { sl.validAt=zoom; }
 
 			// Are any of the ruleChains fulfilled?
@@ -64,9 +65,10 @@ package net.systemeD.halcyon.styleparser {
 							a=sl.pointStyles;
 							w=0;
 							if (PointStyle(r).icon_width && !PointStyle(r).evals['icon_width']) {
+								// ** FIXME: we should check this is the bit being used for 'square', 'circle' etc.
 								w=PointStyle(r).icon_width;
-							} else if (PointStyle(r).icon_image && imageWidths[PointStyle(r).icon_image]) {
-								w=imageWidths[PointStyle(r).icon_image];
+							} else if (PointStyle(r).icon_image && ImageBank.getInstance().hasImage(PointStyle(r).icon_image)) {
+								w=ImageBank.getInstance().getWidth(PointStyle(r).icon_image);
 							}
 							if (w>sl.maxwidth) { sl.maxwidth=w; }
 						} else if (r is InstructionStyle) {

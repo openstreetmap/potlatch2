@@ -178,7 +178,7 @@
 
 
   <inputSet id="pitchSport">
-    <input name="Sport" presence="always" category="Sport" key="sport" type="choice" description="The sport that is predominantly played here.">
+    <input name="Sport" presence="always" category="Details" key="sport" type="choice" description="The sport that is predominantly played here.">
       <choice value="9pin" text="9 pin bowling"/>
       <choice value="10pin" text="10 pin bowling"/>
       <choice value="american_football" text="American football"/>
