@@ -106,20 +106,19 @@ package net.systemeD.halcyon {
 					if (s.rotation) { rotation=s.rotation; }
 					if (s.icon_image!=iconnames[subpart]) {
 						icon=new Sprite();
+						iconnames[subpart]=s.icon_image;
 						addToLayer(icon,STROKESPRITE,s.sublayer);
 						if (s.icon_image=='square') {
 							// draw square
 							w=styleIcon(icon,subpart);
 							icon.graphics.drawRect(0,0,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconnames[subpart]="_square";
 
 						} else if (s.icon_image=='circle') {
 							// draw circle
 							w=styleIcon(icon,subpart);
 							icon.graphics.drawCircle(w,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconnames[subpart]="_circle";
 
 						} else if (ImageBank.getInstance().hasImage(s.icon_image)) {
 							// load icon from library
@@ -127,7 +126,6 @@ package net.systemeD.halcyon {
 //							addHitSprite(icon.width);			// ** check this - we're doing it below too
 							loaded=true; updatePosition();		// ** check this
 							if (s.interactive) { maxwidth=Math.max(icon.width,maxwidth); }
-							iconnames[subpart]=s.icon_image;
 						}
 					}
 				}
