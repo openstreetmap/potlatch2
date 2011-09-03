@@ -55,6 +55,8 @@ package net.systemeD.potlatch2 {
         }
 
 		override protected function initProgressHandler(e:Event):void {
+			// We don't let anything happen until the .zips are loaded
+			// see http://stackoverflow.com/questions/2773617/how-to-preload-a-file-in-flex-before-the-application-initializes
 			if (assetscount>0) {
 				queuedEvents.push(e);
 				e.stopImmediatePropagation();
