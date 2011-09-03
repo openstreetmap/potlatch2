@@ -142,18 +142,16 @@
             if (loaderInfo.parameters['locale']) {
               dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
             }
-
-			// Load font and don't do anything until that's done
 			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, continueInit);
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
 			loader.load(new URLRequest("FontLibrary.swf"));
 		}
 		
-		private function continueInit(r:Event):void {
+		private function startApp(event:Event):void {
 			controlbar.setStyle('dropShadowEnabled',"false");	// Flex 4 doesn't permit this in Application.css
 
 			// Set font
-			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
+			var FontLibrary:Class = event.target.applicationDomain.getDefinition("FontLibrary") as Class;
 			Font.registerFont(FontLibrary.DejaVu);
 
 			Globals.vars.map_area = map_area;

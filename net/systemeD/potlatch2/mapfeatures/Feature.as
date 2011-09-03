@@ -8,6 +8,7 @@ package net.systemeD.potlatch2.mapfeatures {
     import mx.core.BitmapAsset;
     import mx.graphics.codec.PNGEncoder;
     
+    import net.systemeD.halcyon.ImageBank;
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.potlatch2.utils.CachedDataLoader;
 
@@ -138,8 +139,7 @@ package net.systemeD.potlatch2.mapfeatures {
         * @param dnd if true, overrides the normal image and returns the one defined by the dnd property instead. */
         private function getImage(dnd:Boolean = false):ByteArray {
             var icon:XMLList = _xml.icon;
-            var imageURL:String = null;
-            var img:ByteArray;
+            var imageURL:String;
 
             if ( dnd && icon.length() > 0 && icon[0].hasOwnProperty("@dnd") ) {
                 imageURL = icon[0].@dnd;
@@ -147,11 +147,12 @@ package net.systemeD.potlatch2.mapfeatures {
                 imageURL = icon[0].@image;
             }
 
-            if ( imageURL != null ) {
-                img = CachedDataLoader.loadData(imageURL, imageLoaded);
-            }
-            if (img) {
-              return img;
+            if ( imageURL ) {
+				if (ImageBank.getInstance().hasImage(imageURL)) {
+					return ImageBank.getInstance().getAsByteArray(imageURL)
+				} else {
+	                return CachedDataLoader.loadData(imageURL, imageLoaded);
+				}
             }
             var bitmap:BitmapAsset = new missingIconCls() as BitmapAsset;
             return new PNGEncoder().encode(bitmap.bitmapData);

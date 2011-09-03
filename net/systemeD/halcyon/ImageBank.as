@@ -18,6 +18,7 @@ package net.systemeD.halcyon {
 		private var imagesReceived:uint=0;
 		
 		public static const IMAGES_LOADED:String="imagesLoaded";
+		public static const ZIP_LOADED:String="zipLoaded";
 		
 		private static const GLOBAL_INSTANCE:ImageBank = new ImageBank();
 		public static function getInstance():ImageBank { return GLOBAL_INSTANCE; }
@@ -67,12 +68,13 @@ package net.systemeD.halcyon {
 		   ========================================================================================== */
 		
 		public function loadFromZip(filename:String, prefix:String=""):void {
-			var urlstream:URLStream = new URLStream();
-			urlstream.addEventListener(Event.COMPLETE, function(e:Event):void { zipReady(e,prefix); } );
-			urlstream.load(new URLRequest(filename));
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat="binary";
+			loader.addEventListener(Event.COMPLETE, function(e:Event):void { zipReady(e,prefix); } );
+			loader.load(new URLRequest(filename));
 		}
 		private function zipReady(event:Event, prefix:String):void {
-			var zip:ZipFile = new ZipFile(URLStream(event.target));
+			var zip:ZipFile = new ZipFile(event.target.data);
 			for (var i:uint=0; i<zip.entries.length; i++) {
 				var fileref:ZipEntry = zip.entries[i];
 				var data:ByteArray = zip.getInput(fileref);
@@ -80,6 +82,7 @@ package net.systemeD.halcyon {
 				images[prefix+fileref.name]=loader;
 				loader.loadBytes(data);
 			}
+			dispatchEvent(new Event(ZIP_LOADED));
 		}
 
 
