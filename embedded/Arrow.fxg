@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fxg/comps/ArrowAbsolute.fxg -->
+<Graphic xmlns="http://ns.adobe.com/fxg/2008" version="2">    
+    <!-- Use Use compact syntax with absolute coordinates. -->
+    <Path data="
+        M 10 1
+ 		L 18 7
+		L 12 7
+		L 12 20
+		L 8 20
+		L 8 7
+		L 2 7
+		z">
+         <stroke>
+              <SolidColorStroke color="#000000"/>
+         </stroke>
+         <fill>
+              <SolidColor color="#000000"/>
+         </fill>
+    </Path>
+</Graphic>
