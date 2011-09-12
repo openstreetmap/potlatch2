@@ -30,6 +30,15 @@
     <mx:ApplicationControlBar dock="true">
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
 			click="SaveManager.saveChanges(theMap.editableLayer.connection);" id="saveButton" enabled="false"/>
+        <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
+        <mx:Spacer width="40"/>
+        <mx:Button id="undo" label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
+            enabled="{MainUndoStack.getGlobalStack().canUndo()}"
+            toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
+        <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
+            enabled="{MainUndoStack.getGlobalStack().canRedo()}"
+            toolTip="{MainUndoStack.getGlobalStack().getRedoDescription() ? 'Redo '+MainUndoStack.getGlobalStack().getRedoDescription() : 'Redo last action'}" />
+        <mx:Spacer width="100%"/>
         <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton"
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
@@ -48,15 +57,6 @@
 				</mx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
-        <mx:Spacer width="100%"/>
-        <mx:Button id="undo" label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
-            enabled="{MainUndoStack.getGlobalStack().canUndo()}"
-            toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
-        <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
-            enabled="{MainUndoStack.getGlobalStack().canRedo()}"
-            toolTip="{MainUndoStack.getGlobalStack().getRedoDescription() ? 'Redo '+MainUndoStack.getGlobalStack().getRedoDescription() : 'Redo last action'}" />
-        <mx:Spacer width="100%"/>
-        <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
     </mx:ApplicationControlBar>
     
