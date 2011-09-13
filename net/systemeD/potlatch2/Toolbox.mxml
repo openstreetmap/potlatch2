@@ -190,6 +190,7 @@
                     } else {
                         rotateButtonStack.selectedChild = arrowBoxWrapper;
                         arrow.iconDisplay.rotation=w.angle;
+						arrow.iconDisplay.smooth=true;
                     }
                 }
             }
