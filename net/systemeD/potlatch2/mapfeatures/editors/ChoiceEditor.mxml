@@ -28,15 +28,17 @@
       private var _choices:ArrayCollection = null;
       private var _unknownChoice:Choice = null;
 
+      // ** FIXME:
+      // currently the raw htmlText for the selected item is shown.
+      // see http://stackoverflow.com/questions/269773/flex-custom-item-renderer-for-the-displayed-item-in-the-combobox/280859#280859
+      // (via http://stackoverflow.com/questions/4051822/flex-itemrenderer-issue-with-dropdown-control)
+
       [Bindable(event="factory_set")]
       protected function get choices():ArrayCollection {
+          var dummy:String=_factory.key;		// otherwise _factory is null, for some not yet discovered reason.
           if ( _choices == null ) {
-              trace("factory is "+ _factory);
-              trace("processing choices for "+ _factory.key); // or .direcction
-              trace("factory is now "+ _factory);
               _choices = new ArrayCollection();
               for each ( var choice:Choice in ChoiceEditorFactory(_factory).choices ) {
-                  trace("added item: "+choice.value);
                   _choices.addItem(choice);
               }
               _choices.addItem(createUnsetChoice());
