@@ -14,7 +14,13 @@
         <fx:Component>
         <mx:HBox toolTip="{data.description}" horizontalScrollPolicy="off">
           <mx:Image source="{Choice(data).icon}"/>
-          <mx:Label htmlText="{data.label}"/>
+          <mx:Label htmlText="{getStyledLabel(Choice(data))}"/>
+			<fx:Script><![CDATA[
+			      public function getStyledLabel(choice:Choice):String {
+			          if (choice.value==null) return "<font color='#a0a0a0'><i>"+choice.label+"</i></font>";
+			          return choice.label;
+				  }
+			]]></fx:Script>
         </mx:HBox>
         </fx:Component>
       </s:itemRenderer>
@@ -27,11 +33,6 @@
       
       private var _choices:ArrayCollection = null;
       private var _unknownChoice:Choice = null;
-
-      // ** FIXME:
-      // currently the raw htmlText for the selected item is shown.
-      // see http://stackoverflow.com/questions/269773/flex-custom-item-renderer-for-the-displayed-item-in-the-combobox/280859#280859
-      // (via http://stackoverflow.com/questions/4051822/flex-itemrenderer-issue-with-dropdown-control)
 
       [Bindable(event="factory_set")]
       protected function get choices():ArrayCollection {
@@ -66,12 +67,12 @@
           
           return _unknownChoice;
       }
-      
+
       private function createUnsetChoice():Choice {
           var choice:Choice = new Choice();
           choice.icon = null;
           choice.description = "Field not set";
-          choice.label = "<font color='#a0a0a0'><i>Unset</i></font>";
+          choice.label = "Unset";
           choice.value = null;
           return choice;
       }
