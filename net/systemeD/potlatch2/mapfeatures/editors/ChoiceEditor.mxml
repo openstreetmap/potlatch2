@@ -35,9 +35,10 @@
               trace("processing choices for "+ _factory.key); // or .direcction
               trace("factory is now "+ _factory);
               _choices = new ArrayCollection();
-              for each ( var choice:Choice in ChoiceEditorFactory(_factory).choices )
+              for each ( var choice:Choice in ChoiceEditorFactory(_factory).choices ) {
                   trace("added item: "+choice.value);
                   _choices.addItem(choice);
+              }
               _choices.addItem(createUnsetChoice());
           }
           return _choices;
