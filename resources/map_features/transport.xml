@@ -13,7 +13,6 @@
         <inputSet ref="tunnel"/>
         <inputSet ref="embankment-cutting"/>
         <inputSet ref="rail-electrification"/>
-        <inputSet ref="rail-usage"/>
         <inputSet ref="common"/>
       </feature>
     

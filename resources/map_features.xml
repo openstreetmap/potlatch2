@@ -45,7 +45,7 @@
   </inputSet>
 
   <inputSet id="designation">
-    <input type="freetext" category="Details" presence="onTagMatch" description="Official designation or classification" name="Designation" key="designation"/>
+    <input type="freetext" category="Details" presence="onTagMatch" description="Official designation or classification" name="Designation" key="designation" priority="lowest" />
   </inputSet>
 
   <inputSet id="common">
@@ -58,13 +58,13 @@
         name="Name" category="Details" priority="highest"
         key="name" description="The most common name"/>
     <input type="freetext" presence="onTagMatch"
-        name="International Name" category="Details"
+        name="International Name" category="Details" subcategory="Additional names"
         key="int_name" description="The internationally recognised name"/>
     <input type="freetext" presence="onTagMatch"
-        name="Historical Name" category="Details" priority="low"
+        name="Historical Name" category="Details" subcategory="Additional names" priority="low"
         key="old_name" description="The historic or previous name"/>
     <input type="freetext" presence="onTagMatch"
-        name="Alternative Name" category="Details" priority="low"
+        name="Alternative Name" category="Details" subcategory="Additional names" priority="low"
         key="alt_name" description="An alternative, currently used, name"/>
   </inputSet>
 
@@ -173,16 +173,16 @@
         name="Reference" category="Details" priority="high"
         key="ref" description="The official reference number"/>
     <input type="freetext" presence="onTagMatch"
-        name="International Reference" category="Details"
+        name="International Reference" category="Details" subcategory="Additional names" 
         key="int_ref" description="The official international reference number"/>
     <input type="freetext" presence="onTagMatch"
-        name="Old Reference" category="Details" priority="low"
+        name="Old Reference" category="Details" subcategory="Additional names" priority="low"
         key="old_ref" description="The historic or previous reference number"/>
   </inputSet>
 
   <inputSet id="roadPhysical">
     <input type="freetext" presence="onTagMatch"
-        name="Width" category="Details"
+        name="Width" category="Details" subcategory="Physical" 
         key="width" description="Width of the road" layout="horizontal"/>
     <input type="choice" presence="onTagMatch"
         name="Surface" category="Details" description="Type of road surface"
@@ -202,7 +202,7 @@
     <inputSet ref="tunnel"/>
     <inputSet ref="embankment-cutting"/>
     <!-- not sure which category best suits put area=yes -->
-    <input type="checkbox" presence="onTagMatch" category="Restrictions" key="area" name="Open area" description="The way is a large open space, like at a dock, where vehicles can move anywhere within the space, rather than just along the edge." />
+    <input type="checkbox" presence="onTagMatch" category="Details" subcategory="Physical" key="area" name="Open area" description="The way is a large open space, like at a dock, where vehicles can move anywhere within the space, rather than just along the edge." />
   </inputSet>
 
   <inputSet id="roadLanes">
@@ -226,7 +226,7 @@
   <inputSet id="tunnel">
     <!-- Not ideal, used for non-roads too. -->  
     <input type="choice" presence="onTagMatch"
-        name="Tunnel" category="Details" description="Road goes into a tunnel"
+        name="Tunnel" category="Details" subcategory="Physical" description="Road goes into a tunnel"
         key="tunnel" layout="horizontal">
       <choice value="yes" text="Tunnel" description="Generic tunnel"/>
     </input>
@@ -234,12 +234,12 @@
 
   <inputSet id="embankment-cutting">
     <input type="choice"
-           name="Embankment" category="Details" description="Road supported on a raised bed of earth and rock."
+           name="Embankment" category="Details" subcategory="Physical" description="Road supported on a raised bed of earth and rock."
            key="embankment" layout="horizontal">
       <choice value="yes" text="Embankment"/>
     </input>
     <input type="choice"
-           name="Cutting" category="Details" description="Road carved out of hill on one or both sides."
+           name="Cutting" category="Details" subcategory="Physical" description="Road carved out of hill on one or both sides."
            key="cutting" layout="horizontal">
       <choice value="yes" text="Cutting"/>
     </input>
@@ -247,12 +247,12 @@
   </inputSet>
 
   <inputSet id="rail-electrification">
-    <input type="choice" name="Electrified" category="Details" description="Is the track electrified (whether by 3rd rail, overhead wires, etc)?"
+    <input type="choice" name="Electrified" category="Details" subcategory="Electrification" description="Is the track electrified (whether by 3rd rail, overhead wires, etc)?"
            key="electrified">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
     </input>
-    <input type="choice" name="Voltage" category="Details" description="Nominal voltage of electric wires"
+    <input type="choice" name="Voltage" category="Details" subcategory="Electrification" description="Nominal voltage of electric wires"
            key="voltage" presence="withCategory">
       <choice value="600" text="600V"/>
       <choice value="750" text="750V"/>
@@ -261,7 +261,7 @@
       <choice value="15000" text="15kV"/>
       <choice value="25000" text="25kV"/>
     </input>
-    <input type="choice" name="Frequency" category="Details" description="Frequency in Hertz of alternating current power supply"
+    <input type="choice" name="Frequency" category="Details" subcategory="Electrification" description="Frequency in Hertz of alternating current power supply"
            key="frequency" presence="withCategory">
       <choice value="0" text="DC"/>
       <choice value="16.67" text="16.67 Hz"/>
@@ -269,16 +269,6 @@
       <choice value="25" text="25 Hz"/>
       <choice value="50" text="50 Hz"/>
       <choice value="60" text="60 Hz"/>
-    </input>
-  </inputSet>
-
-  <inputSet id="rail-usage">
-    <input type="choice" name="Usage" category="Usage" description="Main use of the line" key="usage">
-      <choice value="main" text="Main line" description="The principal artery of a rail system."/>
-      <choice value="branch" text="Branch line" description="A secondary line, branching off a main line."/>
-      <choice value="industrial" text="Industrial"/>
-      <choice value="tourism" text="Tourism" />
-      <choice value="military" text="Military"/>
     </input>
   </inputSet>
 

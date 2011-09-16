@@ -8,7 +8,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 	    private var _notPresentText:String;
         
         public function FreeTextEditorFactory(inputXML:XML) {
-            super(inputXML);
+            super(inputXML,"horizontal");
             _notPresentText = inputXML.hasOwnProperty("@absenceText") ? String(inputXML.@absenceText) : "Unset";
         }
         

@@ -233,6 +233,33 @@ mx|ApplicationControlBar {
 
 .accordionHeader { fillColors: #888888, #999999; fillAlphas: 1,1; color: white; fontWeight: bold; fontSize: 11; }
 
+/* Simple tag view - panels for subcategories */
+
+.subcategoryPanel {
+	borderThicknessLeft: 1;
+	borderThicknessTop: 1;
+	borderThicknessBottom: 1;
+	borderThicknessRight: 1;
+	borderColor: gray;
+	borderAlpha: 1;
+	dropShadowEnabled: false;
+
+	backgroundColor: gray;
+	backgroundAlpha: 0.2;
+
+	headerHeight: 20;
+	headerColors: #d9d9d9, #ffffff;
+
+	paddingTop: 4;
+	paddingLeft: 4;
+	paddingRight: 4;
+	paddingBottom: 4;
+	verticalGap: 4;
+
+	openIcon: Embed(source="../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonDown");
+	closedIcon: Embed(source="../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonOver");
+}
+
 /* Toolbox */
 
 .theToolBox {

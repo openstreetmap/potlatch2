@@ -89,7 +89,7 @@ package net.systemeD.potlatch2.mapfeatures {
             var editor:EditorFactory = EditorFactory.createFactory(inputType, inputXML);
             if ( editor != null ) {
                 editor.presence = Presence.getPresence(presenceStr);
-                editor.sortOrder = EditorFactory.getPriority(sortOrderStr);
+                editor.sortOrder = editor.getPriority(sortOrderStr);
                 _editors.push(editor);
             }
         }

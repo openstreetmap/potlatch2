@@ -218,6 +218,7 @@
       import net.systemeD.halcyon.MapPaint;
       import net.systemeD.potlatch2.mapfeatures.*;
       import net.systemeD.potlatch2.utils.*;
+      import net.systemeD.controls.CollapsiblePanel;
 
       import mx.collections.*;
       import mx.containers.*;
@@ -389,44 +390,64 @@
       }
 
       private var tabComponents:Object = {};
+      private var subpanelComponents:Object = {};
 
       private function initialiseEditors():void {
-          editorStack.removeAllChildren();
-          if ( selectedEntity == null || feature == null )
-              return;
+		editorStack.removeAllChildren();
+		if ( selectedEntity == null || feature == null )
+			return;
 
-          var editorBox:VBox = createEditorBox();
-          editorBox.label = "Basic";
-          editorBox.icon=tabIconBasic;
-          editorStack.addChild(editorBox);
+		var editorBox:VBox = createEditorBox();
+		editorBox.label = "Basic";
+		editorBox.icon=tabIconBasic;
+		editorStack.addChild(editorBox);
 
-          var tabs:Object = {};
-          tabComponents = {};
+		var tabs:Object = {};
+		tabComponents = {};
+		var subpanels:Object = {};
+		subpanelComponents = {};
 
-          // ** FIXME: we should do this so that the tabs are always in the same order
-          for each (var factory:EditorFactory in feature.editors) {
-              if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
-                  var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-                  if ( editor != null )
-                      editorBox.addChild(editor);
-              }
-              var category:String = factory.category;
-              if (category!='') {
-	              var tab:VBox = tabs[category];
-	              if ( tab == null) {
-	                  tab = createEditorBox();
-	                  tab.label = category;
-	                  if (tabIcons[category]) tab.icon=tabIcons[category];
-	                  editorStack.addChild(tab);
-	                  tabs[category] = tab;
-	                  tabComponents[tab] = [];
-	              }
-	              var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
-	              if ( catEditor != null )
-	                  tabComponents[tab].push(catEditor);
-	              //    tab.addChild(catEditor);
-              }
-          }
+		// ** FIXME: we should do this so that the tabs are always in the same order
+		for each (var factory:EditorFactory in feature.editors) {
+			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
+				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
+				if (editor) editorBox.addChild(editor);
+			}
+
+			var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
+			if (!catEditor) continue;
+
+			// Create tab if it doesn't already exist
+			var category:String = factory.category;
+			if (category=='') continue;
+			var tab:VBox = tabs[category];
+			if (tab == null) {
+				tab = createEditorBox();
+				tab.label = category;
+				if (tabIcons[category]) tab.icon=tabIcons[category];
+				editorStack.addChild(tab);
+				tabs[category] = tab;
+				tabComponents[tab] = [];
+			}
+
+			// Create subcategory panel if needed
+			if (factory.subcategory) {
+				var subcategory:String = factory.subcategory;
+				if (!subpanels[category]) { subpanels[category]={}; }
+				var subpanel:CollapsiblePanel = subpanels[category][subcategory];
+				if (!subpanel) {
+					subpanel=new CollapsiblePanel(false);
+					subpanel.percentWidth=100;
+					subpanel.styleName="subcategoryPanel";
+					subpanel.title=subcategory;
+					subpanels[category][subcategory]=subpanel;
+					tabComponents[tab].push(subpanel);
+				}
+				subpanel.addChild(catEditor);
+			} else {
+				tabComponents[tab].push(catEditor);
+			}
+   		}
       }
 
       private function createEditorBox():VBox {
