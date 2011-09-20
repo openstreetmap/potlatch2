@@ -7,48 +7,37 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.AttentionEvent;
     import net.systemeD.halcyon.MapEvent;
     import net.systemeD.halcyon.connection.actions.*;
+    import net.systemeD.halcyon.Globals;
 
 	public class Connection extends EventDispatcher {
 
-        private static var connectionInstance:Connection = null;
+		public var name:String;
+		public var statusFetcher:StatusFetcher;
+        protected var apiBaseURL:String;
+        protected var policyURL:String;
+        protected var params:Object;
 
-        protected static var policyURL:String;
-        protected static var apiBaseURL:String;
-        protected static var params:Object;
+		public function Connection(cname:String,api:String,policy:String,initparams:Object=null) {
+			initparams = (initparams!=null ? initparams:{});
+			name=cname;
+			apiBaseURL=api;
+			policyURL=policy;
+			params=initparams;
+		}
 
-        public static function getConnection(initparams:Object=null):Connection {
-            if ( connectionInstance == null ) {
-            
-                params = initparams == null ? new Object() : initparams;
-                policyURL = getParam("policy", "http://127.0.0.1:3000/api/crossdomain.xml");
-                apiBaseURL = getParam("api", "http://127.0.0.1:3000/api/0.6/");
-                var connectType:String = getParam("connection", "XML");
-                
-                if ( connectType == "XML" )
-                    connectionInstance = new XMLConnection();
-                else if ( connectType == "OSM" )
-                    connectionInstance = new OSMConnection();
-                else
-                    connectionInstance = new AMFConnection();
-            }
-            return connectionInstance;
-        }
-
-        public static function getParam(name:String, defaultValue:String):String {
-            return params[name] == null ? defaultValue : params[name];
+        public function getParam(name:String, defaultValue:String):String {
+			if (params[name]) return params[name];
+			if (Globals.vars.flashvars[name]) return Globals.vars.flashvars[name];  // REFACTOR - given the profusion of connections, should this be removed?
+			return defaultValue;
         }
 
         public function get apiBase():String {
             return apiBaseURL;
         }
 
-        public static function get serverName():String {
+        public function get serverName():String {
             return getParam("serverName", "Localhost");
         }
-                
-		public static function getConnectionInstance():Connection {
-            return connectionInstance;
-		}
 
 		public function getEnvironment(responder:Responder):void {}
 
@@ -65,10 +54,12 @@ package net.systemeD.halcyon.connection {
         public static var NEW_WAY:String = "new_way";
         public static var NEW_RELATION:String = "new_relation";
         public static var NEW_POI:String = "new_poi";
+        public static var NEW_MARKER:String = "new_marker";
         public static var NODE_RENUMBERED:String = "node_renumbered";
         public static var WAY_RENUMBERED:String = "way_renumbered";
         public static var RELATION_RENUMBERED:String = "relation_renumbered";
-        public static var TAG_CHANGED:String = "tag_change";
+        public static var TAG_CHANGED:String = "tag_changed";
+        public static var STATUS_CHANGED:String = "status_changed";
         public static var NODE_MOVED:String = "node_moved";
         public static var NODE_ALTERED:String = "node_altered";
         public static var WAY_NODE_ADDED:String = "way_node_added";
@@ -91,6 +82,7 @@ package net.systemeD.halcyon.connection {
         private var nodes:Object = {};
         private var ways:Object = {};
         private var relations:Object = {};
+        private var markers:Object = {};
         private var pois:Array = [];
         private var changeset:Changeset = null;
 		private var changesetUpdated:Number;
@@ -200,6 +192,10 @@ package net.systemeD.halcyon.connection {
             return relations[id];
         }
 
+        public function getMarker(id:Number):Marker {
+            return markers[id];
+        }
+
 		protected function findEntity(type:String, id:*):Entity {
 			var i:Number=Number(id);
 			switch (type.toLowerCase()) {
@@ -271,21 +267,37 @@ package net.systemeD.halcyon.connection {
 		}
 
         public function createNode(tags:Object, lat:Number, lon:Number, performCreate:Function):Node {
-            var node:Node = new Node(nextNegative, 0, tags, true, lat, lon);
+            var node:Node = new Node(this, nextNegative, 0, tags, true, lat, lon);
             performCreate(new CreateEntityAction(node, setNode));
             return node;
         }
 
         public function createWay(tags:Object, nodes:Array, performCreate:Function):Way {
-            var way:Way = new Way(nextNegative, 0, tags, true, nodes.concat());
+            var way:Way = new Way(this, nextNegative, 0, tags, true, nodes.concat());
             performCreate(new CreateEntityAction(way, setWay));
             return way;
         }
 
         public function createRelation(tags:Object, members:Array, performCreate:Function):Relation {
-            var relation:Relation = new Relation(nextNegative, 0, tags, true, members.concat());
+            var relation:Relation = new Relation(this, nextNegative, 0, tags, true, members.concat());
             performCreate(new CreateEntityAction(relation, setRelation));
             return relation;
+        }
+
+        /** Create a new marker. This can't be done as part of a Composite Action. */
+        // REFACTOR  This needs renaming and/or refactoring to behave more similarly to n/w/r
+        public function createMarker(tags:Object,lat:Number,lon:Number,id:Number=NaN):Marker {
+            if (!id) {
+              id = negativeID;
+              negativeID--;
+            }
+            var marker:Marker = markers[id];
+            if (marker == null) {
+              marker = new Marker(this, id, 0, tags, true, lat, lon);
+              markers[id]=marker;
+              sendEvent(new EntityEvent(NEW_MARKER, marker),false);
+            }
+            return marker;
         }
 
         public function getAllNodeIDs():Array {
@@ -309,6 +321,14 @@ package net.systemeD.halcyon.connection {
             return list;
         }
 
+		public function getAllLoadedEntities():Array {
+			var list:Array = []; var entity:Entity;
+			for each (entity in relations) { if (entity.loaded && !entity.deleted) list.push(entity); }
+			for each (entity in ways     ) { if (entity.loaded && !entity.deleted) list.push(entity); }
+			for each (entity in nodes    ) { if (entity.loaded && !entity.deleted) list.push(entity); }
+			return list;
+		}
+
         /** Returns all available relations that match all of {k1: [v1,v2,...], k2: [v1...] ...} 
         * where p1 is an array [v1, v2, v3...] */
         public function getMatchingRelationIDs(match:Object):Array {
@@ -328,7 +348,8 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function getObjectsByBbox(left:Number, right:Number, top:Number, bottom:Number):Object {
-			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [] };
+			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [],
+                              markersInside: [], markersOutside: [] };
 			for each (var way:Way in ways) {
 				if (way.within(left,right,top,bottom)) { o.waysInside.push(way); }
 				                                  else { o.waysOutside.push(way); }
@@ -337,6 +358,10 @@ package net.systemeD.halcyon.connection {
 				if (poi.within(left,right,top,bottom)) { o.poisInside.push(poi); }
 				                                  else { o.poisOutside.push(poi); }
 			}
+            for each (var marker:Marker in markers) {
+                if (marker.within(left,right,top,bottom)) { o.markersInside.push(marker); }
+                                                     else { o.markersOutside.push(marker); }
+            }
 			return o;
 		}
 
@@ -388,7 +413,7 @@ package net.systemeD.halcyon.connection {
 		public function purgeIfFull(left:Number,right:Number,top:Number,bottom:Number):void {
 			if (waycount<=MAXWAYS) return;
 			purgeOutside(left,right,top,bottom);
-			loadedBboxes=([left,right,top,bottom]);
+			loadedBboxes=[[left,right,top,bottom]];
 		}
 
 		// Changeset tracking
@@ -414,13 +439,20 @@ package net.systemeD.halcyon.connection {
             return changeset;
         }
 
-        protected function addTrace(t:Object):void {
+        public function addTrace(t:Object):void {
             traces.push(t);
         }
 
         protected function clearTraces():void {
             traces = [];
         }
+
+		public function findTrace(id:int):Trace {
+			for each (var t:Trace in traces) {
+				if (t.id == id) return t;
+			}
+			return null;
+		}
 
         public function getTraces():Array {
             return traces;
@@ -468,6 +500,13 @@ package net.systemeD.halcyon.connection {
             }
             return [];
         }
+
+		public function identicalNode(node:Node):Node {
+			for each (var dupe:Node in nodePositions[node.lat+","+node.lon]) {
+				if (node.lat==dupe.lat && node.lon==dupe.lon && node.sameTags(dupe)) return dupe;
+			}
+			return null;
+		}
 
 		// Error-handling
 		
@@ -544,15 +583,20 @@ package net.systemeD.halcyon.connection {
 		public function loadBbox(left:Number, right:Number,
 								top:Number, bottom:Number):void {
 	    }
-	    public function loadEntity(entity:Entity):void {}
+	    public function loadEntityByID(type:String, id:Number):void {}
 	    public function setAuthToken(id:Object):void {}
         public function setAccessToken(key:String, secret:String):void {}
 	    public function createChangeset(tags:Object):void {}
 		public function closeChangeset():void {}
-	    public function uploadChanges():void {}
+        public function uploadChanges():* {}
         public function fetchUserTraces(refresh:Boolean=false):void {}
         public function fetchTrace(id:Number, callback:Function):void {}
         public function hasAccessToken():Boolean { return false; }
+
+		public function loadEntity(entity:Entity):void {
+			loadEntityByID(entity.getType(),entity.id);
+		}
+
     }
 
 }

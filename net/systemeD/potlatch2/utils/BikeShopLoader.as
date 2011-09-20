@@ -1,9 +1,9 @@
 package net.systemeD.potlatch2.utils {
 
     import net.systemeD.halcyon.Map;
-    import net.systemeD.halcyon.VectorLayer;
+    import net.systemeD.halcyon.MapPaint;
+    import net.systemeD.halcyon.connection.Connection;
     import net.systemeD.halcyon.connection.Marker;
-    import net.systemeD.potlatch2.BugLayer;
     import flash.net.*;
     import flash.events.*;
     import com.adobe.serialization.json.JSON;
@@ -25,56 +25,22 @@ package net.systemeD.potlatch2.utils {
         private var map:Map;
         private var bikeShopBaseURL:String;
         private var name:String;
-        private var _layer:VectorLayer;
+        private var _layer:MapPaint;
+        private var connection:Connection;
         private static const STYLESHEET:String="stylesheets/bikeshops.css";
 
         public function BikeShopLoader(map:Map, url:String, name:String) {
             this.map = map;
             this.bikeShopBaseURL = url;
             this.name = name;
+            this.connection = new BikeShopConnection(name,url,bikeShopBaseURL+"crossdomain.xml",null);
         }
 
         public function load():void {
-            var loader:URLLoader = new URLLoader();
-            loader.load(new URLRequest(bikeShopBaseURL+"shop/missing.kml?bbox="+map.edge_l+","+map.edge_b+","+map.edge_r+","+map.edge_t));
-            loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, balls);
-            loader.addEventListener(Event.COMPLETE, parseKML);
-        }
-
-        public function balls(event:SecurityErrorEvent):void {
-            trace(event);
-        }
-
-        private function parseKML(event:Event):void {
-            //trace(event.target.data);
-            default xml namespace = new Namespace("http://www.opengis.net/kml/2.2");
-            var kml:XML = new XML(event.target.data);
-            //trace(kml.attributes());
-            //var document:XMLList = kml.Document;
-            for each (var placemark:XML in kml..Placemark) {
-              trace("name:"+placemark.name);
-              var coords:Array = placemark..coordinates.split(",");
-              var lon:Number = coords[0];
-              var lat:Number = coords[1];
-              //var ele:Number = coords[2];
-              var tags:Object = {};
-              tags["name"] = String(placemark.name);
-              tags["description"] = String(placemark.description);
-              var marker:Marker = layer.createMarker(tags, lat, lon);
-            }
-			default xml namespace = new Namespace("");
-            layer.paint.updateEntityUIs(layer.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b), true, false);
-        }
-
-        private function get layer():VectorLayer {
             if (!_layer) {
-                var policyFile:String = bikeShopBaseURL+"crossdomain.xml";
-                Security.loadPolicyFile(policyFile);
-
-                _layer=new VectorLayer(name,map,STYLESHEET);
-                map.addVectorLayer(_layer);
+                _layer = map.addLayer(connection, STYLESHEET);
             }
-            return _layer;
+            connection.loadBbox(map.edge_l, map.edge_r, map.edge_t, map.edge_b);
         }
     }
 }

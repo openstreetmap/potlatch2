@@ -6,8 +6,8 @@ package net.systemeD.halcyon.connection {
         private var members:Array;
 		public static var entity_type:String = 'relation';
 
-        public function Relation(id:Number, version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Relation(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp);
             this.members = members;
 			for each (var member:RelationMember in members)
 			    member.entity.addParent(this);

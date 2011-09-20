@@ -9,6 +9,9 @@
     import mx.events.CloseEvent;
     import mx.core.Application;
     import net.systemeD.halcyon.Globals;
+    import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.connection.Connection;
+    import net.systemeD.halcyon.connection.StatusFetcher;
     
     public function init():void {
         PopUpManager.addPopUp(this, Application(Application.application), true);
@@ -21,6 +24,7 @@
         cursorcheck.selected = Application.application.theController.cursorsEnabled;
         tigercheck.selected = obj.data['tiger_highlighted'];
         latlongcheck.selected = Application.application.coordsbox.visible;
+		licencecheck.selected = Map(Globals.vars.root).editableLayer.connection.statusFetcher!=null;
     }
     
     private function optionsDialog_close(evt:CloseEvent):void {
@@ -36,6 +40,18 @@
         obj.flush();
     }
 
+	private function licenceToggle():void {
+		// ** FIXME: this is an inelegant patch for the short-term issue of highlighting licensing status
+		var conn:Connection=Map(Globals.vars.root).editableLayer.connection;
+		if (conn.statusFetcher) {
+			conn.statusFetcher=null;
+		} else {
+			conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/userlist",conn);
+			conn.statusFetcher.fetch(conn.getAllLoadedEntities());
+			// ** FIXME: needs to also switch map style
+		}
+	}
+
               ]]>
   </mx:Script>
 	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
@@ -49,6 +65,9 @@
 
 	<mx:CheckBox width="100%" label="Show mouse latitude/longitude" selected="false" id="latlongcheck" 
 		change="Application.application.coordsbox.visible=latlongcheck.selected" />
+
+    <mx:CheckBox width="100%" label="Show licence status" selected="false" id="licencecheck"
+        change="licenceToggle()" />
 
   <mx:ControlBar>
     <mx:Spacer width="100%"/>

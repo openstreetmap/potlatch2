@@ -204,12 +204,19 @@
     <sidepanel:BugPanel id="bugPanelContents" width="100%"/>
   </mx:VBox>
 
+  <!-- Background layer selection -->
+
+  <mx:VBox id="backgroundPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <sidepanel:BackgroundPanel id="backgroundPanelContents" width="100%"/>
+  </mx:VBox>
+
 </mx:ViewStack>
 
   <mx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.VectorLayer;
+      import net.systemeD.halcyon.MapPaint;
       import net.systemeD.potlatch2.mapfeatures.*;
+      import net.systemeD.potlatch2.utils.*;
 
       import mx.collections.*;
       import mx.containers.*;
@@ -217,11 +224,13 @@
       import mx.core.*;
       import mx.managers.PopUpManager;
       import mx.controls.Menu;
+      import mx.controls.Alert;
       import flash.geom.Point;
       import flash.net.*;
       import mx.events.DragEvent;
       import mx.managers.DragManager;
       import mx.core.DragSource;
+      import mx.controls.TabBar;
       import flexlib.containers.SuperTabNavigator;
 
       [Bindable]
@@ -233,14 +242,16 @@
 
       public var mapFeatures:MapFeatures;
       private var selectedEntity:Entity;
+      private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
       private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
       private var feature:Feature = null;
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
 
-	  public function setEntity(entities:Array, layer:VectorLayer=null):void {
+	  public function setEntity(entities:Array, layer:MapPaint=null):void {
 		UIComponent.suspendBackgroundProcessing();
+		connection=null;
 
 		var firstSelected:Entity=null;
 		if (entities.length==1) { firstSelected=entities[0]; }
@@ -258,15 +269,19 @@
 		} else if (entities.length==1) {
 			// Single entity selected, so show tag panel
 			selectedEntity=firstSelected;
+			connection=firstSelected.connection;
 			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
-            if (selectedEntity is Marker && layer is BugLayer) {
-              bugPanelContents.init(selectedEntity, layer);
+            if (selectedEntity is Marker && connection is BugConnection) {
+              bugPanelContents.init(selectedEntity, BugConnection(connection));
               sidebar.selectedChild = bugPanel;
             } else if (selectedEntity is Marker) {
               markerPanelContents.init(selectedEntity, layer);
               sidebar.selectedChild = markerPanel;
+            } else if (connection is SnapshotConnection) {
+              backgroundPanelContents.init(selectedEntity, layer);
+              sidebar.selectedChild = backgroundPanel;
             } else {
               refreshFeatureIcon();
               initialiseEditors();
@@ -278,7 +293,8 @@
 			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged);
             sidebar.selectedChild = multiplePanel;
 			setupMultiAdvanced(selectedEntity);
-
+			connection=entities[0].connection;
+			
 		} else {
 			//The selection contains elements which can't be edited all together.
 			sidebar.selectedChild = multipleInvalidPanel;
@@ -364,6 +380,15 @@
       private var tabComponents:Object = {};
 
       private function initialiseEditors():void {
+          // reset tab to 0 to work around TabNavigator bug (#3444)
+          if (editorStack is TabNavigator) {
+              try {
+                  var tabBar:TabBar=TabBar(TabNavigator(editorStack).getTabAt(0).parent);
+                  tabBar.selectedIndex=0;
+                  tabBar.validateNow();
+              } catch(errObject:Error) {}
+          }
+
           editorStack.removeAllChildren();
           if ( selectedEntity == null || feature == null )
               return;
@@ -621,8 +646,7 @@
           // but is at least robust for any kind of change.
           // Figuring out a better way is someone else's FIXME
 
-          var conn:Connection = Connection.getConnectionInstance();
-          var rel:Relation = selectedEntity as Relation
+          var rel:Relation = selectedEntity as Relation;
           var action:CompositeUndoableAction = new CompositeUndoableAction("Rearrange relation members for "+rel);
 
           // drop members
@@ -634,12 +658,10 @@
           for each(var memberObject:Object in membersGrid.dataProvider) {
             var e:Entity;
             var id:Number = memberObject.id;
-            if(memberObject.type == 'node') {
-              e = conn.getNode(id);
-            } else if (memberObject.type == 'way') {
-              e = conn.getWay(id);
-            } else if (memberObject.type == 'relation') {
-              e = conn.getRelation(id);
+			switch (memberObject.type) {
+				case 'node':		e = connection.getNode(id); break;
+            	case 'way':			e = connection.getWay(id); break;
+				case 'relation':	e = connection.getRelation(id); break;
             }
             rel.appendMember(new RelationMember(e, memberObject.role), action.push);
           }
@@ -649,7 +671,7 @@
       private function editRelation(id:Number):void {
           var panel:RelationEditorPanel = RelationEditorPanel(
               PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-          panel.setRelation(Connection.getConnectionInstance().getRelation(id));
+          panel.setRelation(connection.getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
 
@@ -659,7 +681,8 @@
 		var menu:Menu = new Menu(); 
 		var dp:Object = [ {label: "Select all members"}, 
 						  {label: "Deselect all members"}, 
-						  {label: "Add selection to this relation", enabled: false} ]; 
+						  {label: "Add selection to this relation", enabled: false},
+						  {label: "Delete relation"} ]; 
 		menu.dataProvider = dp; 
 		menu.addEventListener("itemClick", selectRelationMenu); 
 		button.popUp = menu;
@@ -710,6 +733,14 @@
 				}
 				MainUndoStack.getGlobalStack().addAction(undo);
 				break;
+			
+			case 3:	// Delete relation
+				Alert.show("Do you really want to delete the relation?","Are you sure?",Alert.YES | Alert.CANCEL,null,
+					function(event:CloseEvent):void { 
+						if (event.detail==Alert.CANCEL) return;
+						rel.remove(MainUndoStack.getGlobalStack().addAction);
+					} );
+				break;
 		}
 	}
 
@@ -732,7 +763,7 @@
       public function openEntityPage():void {
           if (selectedEntity != null && selectedEntity.id >= 0) {
               // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-              var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
+              var urlBase:String = connection.apiBase + '../../browse/'
               navigateToURL(new URLRequest(urlBase+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
           }
       }
@@ -742,7 +773,7 @@
       }
 
       private function removeFromRelation(id:Number, index:int=-1):void {
-		var rel:Relation=Connection.getConnectionInstance().getRelation(id);
+		var rel:Relation=connection.getRelation(id);
 		if (index>-1) {
 			rel.removeMemberByIndex(index, MainUndoStack.getGlobalStack().addAction);
 		} else if (selectedEntity is EntityCollection) {

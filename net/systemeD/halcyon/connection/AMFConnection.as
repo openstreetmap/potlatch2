@@ -25,18 +25,18 @@ package net.systemeD.halcyon.connection {
 		// ------------------------------------------------------------
 		// Constructor for new AMFConnection
 
-		public function AMFConnection() {
+		public function AMFConnection(name:String,api:String,policy:String,initparams:Object) {
 
-			if (Connection.policyURL!='')
-                Security.loadPolicyFile(Connection.policyURL);
+			super(name,api,policy,initparams);
+			if (policyURL!='') Security.loadPolicyFile(policyURL);
 
 			readConnection=new NetConnection();
 			readConnection.objectEncoding = flash.net.ObjectEncoding.AMF0;
-			readConnection.connect(Connection.apiBaseURL+"amf/read");
+			readConnection.connect(apiBaseURL+"amf/read");
 			
 			writeConnection=new NetConnection();
 			writeConnection.objectEncoding = flash.net.ObjectEncoding.AMF0;
-			writeConnection.connect(Connection.apiBaseURL+"amf/write");
+			writeConnection.connect(apiBaseURL+"amf/write");
 			
 		}
 
@@ -106,7 +106,7 @@ package net.systemeD.halcyon.connection {
                     var lat:Number = Number(p[2]);
                     var lon:Number = Number(p[1]);
                     var tags:Object = p[3];
-                    node = new Node(id, version, tags, true, lat, lon);
+                    node = new Node(this, id, version, tags, true, lat, lon);
                     setNode(node,true);
                 }
                 registerPOI(node);
@@ -151,7 +151,7 @@ package net.systemeD.halcyon.connection {
                 var node:Node = getNode(nodeID);
                 if ( node == null ) {
                     var nodeTags:Object = p[3];
-                    node = new Node(nodeID, nodeVersion, nodeTags, true, lat, lon);
+                    node = new Node(this, nodeID, nodeVersion, nodeTags, true, lat, lon);
                 } else if (!node.loaded) {
 					node.update(nodeVersion, nodeTags, true, false, lat, lon);
 				}
@@ -160,7 +160,7 @@ package net.systemeD.halcyon.connection {
 			}
 
 			if (way==null) {
-            	way = new Way(id, version, tags, true, nodes);
+            	way = new Way(this, id, version, tags, true, nodes);
 			} else {
 				way.update(version, tags, true, true, nodes);
 			}
@@ -198,21 +198,21 @@ package net.systemeD.halcyon.connection {
 				switch (type) {
 					case 'Node':
 						e=getNode(memid);
-						if (e==null) { e=new Node(memid,0,{},false,0,0); setNode(Node(e),true); }
+						if (e==null) { e=new Node(this, memid,0,{},false,0,0); setNode(Node(e),true); }
 						break;
 					case 'Way':
 						e=getWay(memid);
-						if (e==null) { e=new Way(memid,0,{},false,[]); setWay(Way(e),true); }
+						if (e==null) { e=new Way(this, memid,0,{},false,[]); setWay(Way(e),true); }
 						break;
 					case 'Relation':
 						e=getRelation(memid);
-						if (e==null) { e=new Relation(memid,0,{},false,[]); setRelation(Relation(e),true); }
+						if (e==null) { e=new Relation(this, memid,0,{},false,[]); setRelation(Relation(e),true); }
 						break;
 				}
 				members.push(new RelationMember(e,role));
 			}
 			if (relation==null) {
-	            relation = new Relation(id, version, tags, true, members);
+	            relation = new Relation(this, id, version, tags, true, members);
 			} else {
 				relation.update(version,tags,true,false,members);
 			}

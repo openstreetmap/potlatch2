@@ -29,7 +29,7 @@
 
 		<!-- Value -->
 
-		<mx:DataGridColumn editable="true" dataField="value" headerText="Value">
+		<mx:DataGridColumn editable="true" dataField="value" headerText="Value" itemRenderer="net.systemeD.controls.DataGridWarningField" >
 			<mx:itemEditor>
 				<mx:Component>
 					<controls:AutoComplete
@@ -94,7 +94,7 @@
 		private function tagChanged(event:TagEvent):void {
 			var set:Boolean=false;
 			for (var i:uint=0; i<tagDataProvider.length; i++) {
-				if (tagDataProvider[i].key==event.oldKey) {
+				if (tagDataProvider[i].key==event.oldKey || tagDataProvider[i].key==event.key) {
 					if (event.newValue && event.key) {
 						if (!set) {
 							// this entry in the dataProvider has changed
@@ -111,6 +111,8 @@
 					}
 				}
 			}
+			if (!set && event.newValue) tagDataProvider.addItem(new Tag(event.entity,event.key,event.newValue));
+
 			// tell Flex to redraw the grid because we've changed a tag
 			invalidateList();
 		}

@@ -1,10 +1,10 @@
-Potlatch 2: main outstanding issues
------------------------------------
+= Potlatch 2: main outstanding issues =
 
 == Core geometry ==
 
 * P1-style J (join)
 * Doing a '-' to remove a point from a junction doesn't redraw the point on other ways
+* Circularise doesn't redraw the nodes on the selected way
 
 == Vector background layers ==
 
@@ -33,6 +33,7 @@ Potlatch 2: main outstanding issues
 
 ** Keypress detection is very erratic, depending on focus - need to work out where events are going (Application.application?) and sense them there
 * Failing to parse map_features should be an error state
+* Quadrilateralise should throw an AttentionEvent if it's too sharp to straighten
 * Escape should rewind the entity to how it was before the current ControllerState. (Record a position in the undo stack when exiting a ControllerState, and escape would rewind to that)
 * Custom imagery dialog fixes
 * Ctrl-clicking two areas (one inside the other) should create a multipolygon
@@ -71,6 +72,9 @@ Potlatch 2: main outstanding issues
 
 == l10n ==
 * Fix the en_US / default locale problem
+
+== other ==
+* Simplify.as shouldn't add an action to the global undo stack, since it's called from e.g. importing into other layers
 
 Requested enhancements
 ----------------------

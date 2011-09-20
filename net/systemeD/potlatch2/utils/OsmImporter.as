@@ -1,16 +1,16 @@
 package net.systemeD.potlatch2.utils {
 
-	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.potlatch2.tools.Simplify;
 
 	public class OsmImporter extends Importer {
 
-		public function OsmImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
-			super(container,paint,filenames,callback,simplify);
+		public function OsmImporter(connection:Connection, map:Map, filenames:Array, callback:Function=null, simplify:Boolean=false) {
+			super(connection,map,filenames,callback,simplify);
 		}
 
-		override protected function doImport():void {
+		override protected function doImport(push:Function):void {
 			var map:XML = new XML(files[0]);
 			var data:XML;
 			
@@ -23,14 +23,14 @@ package net.systemeD.potlatch2.utils {
 
             for each(data in map.node) {
                 oldid = Number(data.@id);
-				nodemap[oldid] = container.createNode(parseTags(data.tag), Number(data.@lat), Number(data.@lon));
+				nodemap[oldid] = connection.createNode(parseTags(data.tag), Number(data.@lat), Number(data.@lon), push);
             }
 
             for each(data in map.way) {
                 oldid = Number(data.@id);
                 var nodes:Array = [];
                 for each(var nd:XML in data.nd) { nodes.push(nodemap[Number(nd.@ref)]); }
-				waymap[oldid] = container.createWay(parseTags(data.tag), nodes);
+				waymap[oldid] = connection.createWay(parseTags(data.tag), nodes, push);
             }
             
             for each(data in map.relation) {
@@ -48,7 +48,7 @@ package net.systemeD.potlatch2.utils {
 					}
 					if (member!=null) { members.push(new RelationMember(member,role)); }
                 }
-				relationmap[oldid] = container.createRelation(parseTags(data.tag), members);
+				relationmap[oldid] = connection.createRelation(parseTags(data.tag), members, push);
             }
         }
 

@@ -24,7 +24,7 @@ package net.systemeD.potlatch2.collections {
         public static function instance():Imagery { return GLOBAL_INSTANCE; }
 
 		public var collection:Array=[];
-		public var selected:Object={};
+		private var _selected:Object={};
 
 		private var _map:Map;
 		private var _overlay:Sprite;
@@ -52,7 +52,7 @@ package net.systemeD.potlatch2.collections {
 			var xml:XML = new XML(URLLoader(event.target).data);
 			var saved:Object = {};
 			var bg:Object;
-			if (SharedObject.getLocal("user_state").data['background_url']) {
+			if (SharedObject.getLocal("user_state").data['background_url']!=undefined) {
 				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
 						url:  SharedObject.getLocal("user_state").data['background_url' ] };
 			}
@@ -61,9 +61,7 @@ package net.systemeD.potlatch2.collections {
             var backgroundSet:Boolean = false;
 
 			// Read all values from XML file
-            collection=new Array(
-				{ name: "None", url: "" },
-				{ name: "Yahoo", url: "yahoo", sourcetag: "Yahoo" } );
+			collection=new Array({ name: "None", url: "" });
 			for each(var set:XML in xml.set) {
 				var obj:Object={};
 				var a:XML;
@@ -75,7 +73,7 @@ package net.systemeD.potlatch2.collections {
 			}
 
 			// Add user's previous preference (from SharedObject) if we didn't find it in the XML file
-            if (!isSet && saved.name && saved.url && saved.url!='' && saved.url!='yahoo') {
+            if (!isSet && saved.name && saved.url && saved.url!='') {
                 collection.push(saved);
                 isSet=true;
             }
@@ -159,9 +157,9 @@ package net.systemeD.potlatch2.collections {
 
 		public function setBackground(bg:Object):void {
 			// set background
-			selected=bg;
-			if (bg.url=='yahoo') { _map.setBackground({url:''}); _yahoo.show(); }
-			                else { _map.setBackground(bg      ); _yahoo.hide(); }
+			_selected=bg;
+			if (bg.url=='yahoo') { dispatchEvent(new CollectionEvent(CollectionEvent.SELECT, {url:''})); _yahoo.show(); }
+			                else { dispatchEvent(new CollectionEvent(CollectionEvent.SELECT, bg      )); _yahoo.hide(); }
 			// update attribution and logo
 			_overlay.visible=bg.attribution || bg.logo || bg.terms_url;
 			setLogo(); setAttribution(); setTerms();
@@ -171,6 +169,8 @@ package net.systemeD.potlatch2.collections {
 			obj.setProperty('background_name',String(bg.name));
 			obj.flush();
 		}
+		
+		public function get selected():Object { return _selected; }
 		
 		private function findBackgroundWithName(name:String):Object {
 			for each (var bg:Object in collection) {
@@ -186,10 +186,10 @@ package net.systemeD.potlatch2.collections {
 		private function setAttribution():void {
 			var tf:TextField=TextField(_overlay.getChildAt(0));
 			tf.text='';
-			if (!selected.attribution) return;
+			if (!_selected.attribution) return;
 			var attr:Array=[];
-			for (var provider:String in selected.attribution) {
-				for each (var bounds:Array in selected.attribution[provider]) {
+			for (var provider:String in _selected.attribution) {
+				for each (var bounds:Array in _selected.attribution[provider]) {
 					if (_map.scale>=bounds[0] && _map.scale<=bounds[1] &&
 					  ((_map.edge_l>bounds[3] && _map.edge_l<bounds[5]) ||
 					   (_map.edge_r>bounds[3] && _map.edge_r<bounds[5]) ||
@@ -214,24 +214,24 @@ package net.systemeD.potlatch2.collections {
 
 		private function setLogo():void {
 			while (_overlay.numChildren>2) { _overlay.removeChildAt(2); }
-			if (!selected.logoData) return;
+			if (!_selected.logoData) return;
 			var logo:Sprite=new Sprite();
-			logo.addChild(new Bitmap(selected.logoData));
-			if (selected.logo_url) { logo.buttonMode=true; logo.addEventListener(MouseEvent.CLICK, launchLogoLink, false, 0, true); }
+			logo.addChild(new Bitmap(_selected.logoData));
+			if (_selected.logo_url) { logo.buttonMode=true; logo.addEventListener(MouseEvent.CLICK, launchLogoLink, false, 0, true); }
 			_overlay.addChild(logo);
 			positionLogo();
 		}
 		private function positionLogo():void {
 			_overlay.getChildAt(2).x=5;
-			_overlay.getChildAt(2).y=_map.mapheight - 5 - selected.logoHeight - (selected.terms_url ? 10 : 0);
+			_overlay.getChildAt(2).y=_map.mapheight - 5 - _selected.logoHeight - (_selected.terms_url ? 10 : 0);
 		}
 		private function launchLogoLink(e:Event):void {
-			if (!selected.logo_url) return;
-			navigateToURL(new URLRequest(selected.logo_url), '_blank');
+			if (!_selected.logo_url) return;
+			navigateToURL(new URLRequest(_selected.logo_url), '_blank');
 		}
 		private function setTerms():void {
 			var terms:TextField=TextField(_overlay.getChildAt(1));
-			if (!selected.terms_url) { terms.text=''; return; }
+			if (!_selected.terms_url) { terms.text=''; return; }
 			terms.text="Background terms of use";
 			positionTerms();
 			terms.addEventListener(MouseEvent.CLICK, launchTermsLink, false, 0, true);
@@ -241,14 +241,14 @@ package net.systemeD.potlatch2.collections {
 			_overlay.getChildAt(1).y=_map.mapheight - 15;
 		}
 		private function launchTermsLink(e:Event):void {
-			if (!selected.terms_url) return;
-			navigateToURL(new URLRequest(selected.terms_url), '_blank');
+			if (!_selected.terms_url) return;
+			navigateToURL(new URLRequest(_selected.terms_url), '_blank');
 		}
 
 		private function resizeHandler(event:MapEvent):void {
-			if (selected.logoData) positionLogo();
-			if (selected.terms_url) positionTerms();
-			if (selected.attribution) positionAttribution();
+			if (_selected.logoData) positionLogo();
+			if (_selected.terms_url) positionTerms();
+			if (_selected.attribution) positionAttribution();
 		}
 
 		[Bindable(event="collection_changed")]

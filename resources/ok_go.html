@@ -1,0 +1,20 @@
+<html>
+<head>
+	<script language="javascript">
+	 function sendBack() {
+		if (window.self.opener) {
+			 window.self.opener.swfobject.getObjectById("map").pressTry();
+			 window.self.opener.focus();
+		}
+		window.self.close();
+	 }
+	</script>
+</head>
+<body onload="sendBack()">
+SUCCESS!
+<br />
+<br />
+go <a href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager07.html" target="_new">here</A> to clear cache and see this window again
+
+</body>
+</html>

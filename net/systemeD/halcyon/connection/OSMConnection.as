@@ -44,15 +44,15 @@ package net.systemeD.halcyon.connection {
 
 		private static const FILENAME:RegExp=/([\-\d\.]+)_([\-\d\.]+)_([\-\d\.]+)_([\-\d\.]+)\./i;
 
-		public function OSMConnection() {
+		public function OSMConnection(name:String,api:String,policy:String,initparams:Object) {
 
-			if (Connection.policyURL!='')
-                Security.loadPolicyFile(Connection.policyURL);
+			super(name,api,policy,initparams);
+			if (policyURL!='') Security.loadPolicyFile(policyURL);
 
-            tileResolution = Number(Connection.getParam("tile_resolution", "0.2"));
+            tileResolution = Number(getParam("tile_resolution", "0.2"));
 
 			var o:Object = new Object();
-			var files:String = Connection.getParam("files","");
+			var files:String = getParam("files","");
 			if (files=="") {
 				filemode=TILED;
 			} else {
@@ -97,7 +97,7 @@ package net.systemeD.halcyon.connection {
 		private function loadFile(box:Array):void {
 			bboxes[box]=LOADING;
 
-            var mapRequest:URLRequest = new URLRequest(Connection.apiBaseURL+"/"+box[0]+"_"+box[1]+"_"+box[2]+"_"+box[3]+".osm");
+            var mapRequest:URLRequest = new URLRequest(apiBaseURL+"/"+box[0]+"_"+box[1]+"_"+box[2]+"_"+box[3]+".osm");
 			var mapLoader:ExtendedURLLoader = new ExtendedURLLoader();
 			mapLoader.info['bbox']=box;
 			mapLoader.addEventListener(Event.COMPLETE, markMapLoaded);

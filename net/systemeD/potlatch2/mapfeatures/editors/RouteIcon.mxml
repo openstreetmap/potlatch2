@@ -90,11 +90,11 @@
     
     private function setRole(role:String):void {
         var member:RelationMember = new RelationMember(_route["entity"], role);
-        _route["relation"].setMember(_route["index"], member);
+        Relation(_route["relation"]).setMember(_route["index"], member, MainUndoStack.getGlobalStack().addAction);
     }
 
 	private function removeFromRelation():void {
-		_route["relation"].removeMember(_route["entity"], MainUndoStack.getGlobalStack().addAction);
+		Relation(_route["relation"]).removeMember(_route["entity"], MainUndoStack.getGlobalStack().addAction);
 	}
     
     ]]></mx:Script>

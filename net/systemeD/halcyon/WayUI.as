@@ -84,9 +84,7 @@ package net.systemeD.halcyon {
 		    if (!event.node.hasParent(event.way)) {
 				event.node.removeEventListener(Connection.NODE_MOVED, nodeMoved);
 			}
-			if (paint.nodeuis[event.node.id]) {
-				paint.nodeuis[event.node.id].redraw();
-			}
+			paint.redrawEntity(event.node);
             recalculate();
 		    redraw();
 			redrawMultis();
@@ -137,9 +135,7 @@ package net.systemeD.halcyon {
 			for each (var m:Relation in multis) {
 				var outers:Array=m.findMembersByRole('outer');
 				for each (var e:Entity in outers) { 
-					if (e is Way && paint.wayuis[e.id]) {
-						paint.wayuis[e.id].redraw();
-					}
+					paint.redrawEntity(e);
 				}
 			}
 		}
@@ -151,23 +147,20 @@ package net.systemeD.halcyon {
         public function setHighlightOnNodes(settings:Object):void {
 			for (var i:uint = 0; i < Way(entity).length; i++) {
                 var node:Node = Way(entity).getNode(i);
-				if (paint.nodeuis[node.id]) {
-					// Speed things up a bit by only setting the highlight if it's either:
-					// a) an "un-highlight" (so we don't leave mess behind when scrolling)
-					// b) currently onscreen
-					// Currently this means if you highlight an object then scroll, nodes will scroll
-					// into view that should be highlighted but aren't.
-					if (settings.hoverway==false || 
-					    settings.selectedway==false || 
-					    node.lat >=  paint.map.edge_b && node.lat <= paint.map.edge_t &&
-					    node.lon >= paint.map.edge_l && node.lon <= paint.map.edge_r) {
-					    paint.nodeuis[node.id].setHighlight(settings); // Triggers redraw if required
-					}
-					if (settings.selectedway  || settings.hoverway)
-						nodehighlightsettings=settings;
-					else
-					   nodehighlightsettings={}; 
+				// Speed things up a bit by only setting the highlight if it's either:
+				// a) an "un-highlight" (so we don't leave mess behind when scrolling)
+				// b) currently onscreen
+				// Currently this means if you highlight an object then scroll, nodes will scroll
+				// into view that should be highlighted but aren't.
+				if (settings.hoverway==false || 
+				    settings.selectedway==false || 
+				    node.within(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b)) {
+				    paint.setHighlight(node,settings); // Triggers redraw if required
 				}
+				if (settings.selectedway || settings.hoverway)
+					nodehighlightsettings=settings;
+				else
+					nodehighlightsettings={}; 
 			}
         }
         
@@ -238,8 +231,10 @@ package net.systemeD.halcyon {
             // Copy tags object, and add states
             var tags:Object = entity.getTagsCopy();
             setStateClass('area', Way(entity).isArea());
+            setStateClass('background', paint.isBackground);
             setStateClass('tiger', (entity.isUneditedTiger() && Globals.vars.highlightTiger));
             tags=applyStateClasses(tags);
+			if (entity.status) { tags['_status']=entity.status; }
 
 			// Keep track of maximum stroke width for hitzone
 			var maxwidth:Number=4;
@@ -265,7 +260,7 @@ package net.systemeD.halcyon {
 				indexEnd  =Math.min(drawOnly+2,Way(entity).length);
 			}
 
-			// Iterate through each sublayer, drawing any styles on that layer
+			// Iterate through each subpart, drawing any styles on that layer
 			var drawn:Boolean;
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
@@ -273,9 +268,9 @@ package net.systemeD.halcyon {
 				inners=inners.concat(m.findMembersByRole('inner',Way));
 			}
 
-			for each (var sublayer:Number in styleList.sublayers) {
-				if (styleList.shapeStyles[sublayer]) {
-					var s:ShapeStyle=styleList.shapeStyles[sublayer];
+			for each (var subpart:String in styleList.subparts) {
+				if (styleList.shapeStyles[subpart]) {
+					var s:ShapeStyle=styleList.shapeStyles[subpart];
 					var stroke:Shape, fill:Shape, casing:Shape, roadname:Sprite;
 					var x0:Number=paint.map.lon2coord(Way(entity).getNode(0).lon);
 					var y0:Number=paint.map.latp2coord(Way(entity).getNode(0).latp);
@@ -283,7 +278,7 @@ package net.systemeD.halcyon {
 
 					// Stroke
 					if (s.width)  {
-						stroke=new Shape(); addToLayer(stroke,STROKESPRITE,sublayer);
+						stroke=new Shape(); addToLayer(stroke,STROKESPRITE,s.sublayer);
 						stroke.graphics.moveTo(x0,y0);
 						s.applyStrokeStyle(stroke.graphics);
 						if (s.dashes && s.dashes.length>0) {
@@ -296,7 +291,7 @@ package net.systemeD.halcyon {
 
 					// Fill
 					if ((!isNaN(s.fill_color) || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0 && isNaN(drawExcept)) {
-						fill=new Shape(); addToLayer(fill,FILLSPRITE);
+						fill=new Shape(); addToLayer(fill,FILLSPRITE,s.sublayer);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
 									 else { s.applyFill(fill.graphics); }
@@ -317,8 +312,8 @@ package net.systemeD.halcyon {
 					}
 				}
 				
-				if (styleList.textStyles[sublayer] && isNaN(drawExcept)) {
-					var t:TextStyle=styleList.textStyles[sublayer];
+				if (styleList.textStyles[subpart] && isNaN(drawExcept)) {
+					var t:TextStyle=styleList.textStyles[subpart];
 					interactive||=t.interactive;
 					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);
 					nameformat = t.getTextFormat();

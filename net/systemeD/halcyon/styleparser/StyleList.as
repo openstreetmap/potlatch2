@@ -19,8 +19,8 @@ package net.systemeD.halcyon.styleparser {
 		public var shieldStyles:Object={};
 		public var maxwidth:Number=0;
 
-		/** List of sublayers used in this StyleList. */
-		public var sublayers:Array=[];
+		/** List of subparts used in this StyleList. */
+		public var subparts:Array=[];
 
         /** Zoom level this StyleList is valid at. If -1, valid at all styles (i.e. doesn't need to be recomputed
 			on zoom in/out); otherwise, specifies a single zoom level. */
@@ -47,9 +47,9 @@ package net.systemeD.halcyon.styleparser {
 			return NaN;
 		}
 		
-		/** Record that a sublayer is used in this StyleList. */
-		public function addSublayer(s:Number):void {
-			if (sublayers.indexOf(s)==-1) { sublayers.push(s); }
+		/** Record that a subpart is used in this StyleList. */
+		public function addSubpart(s:String):void {
+			if (subparts.indexOf(s)==-1) { subparts.push(s); }
 		}
 
 		/** Summarise StyleList as String - for debugging. */

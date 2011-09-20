@@ -10,18 +10,19 @@ package net.systemeD.potlatch2.save {
     public class SaveManager {
     
         private static var instance:SaveManager = new SaveManager();
+		private var _connection:Connection;
 
-        public static function saveChanges():void {
-            instance.save(instance.saveData);
+        public static function saveChanges(connection:Connection):void {
+            instance.save(instance.saveData,connection);
         }
 
-        public static function ensureAccess(callback:Function):void {
-            instance.save(callback);
+        public static function ensureAccess(callback:Function, connection:Connection):void {
+            instance.save(callback,connection);
         }
 
-        private function save(callback:Function):void {
-            var conn:Connection = Connection.getConnectionInstance();
-            if (conn.hasAccessToken()) {
+        private function save(callback:Function, connection:Connection):void {
+			_connection=connection;
+            if (connection.hasAccessToken()) {
                 callback();
             } else {
                 getNewToken(callback);
@@ -32,6 +33,7 @@ package net.systemeD.potlatch2.save {
             var oauthPanel:OAuthPanel = OAuthPanel(
                 PopUpManager.createPopUp(Application(Application.application), OAuthPanel, true));
             PopUpManager.centerPopUp(oauthPanel);
+			oauthPanel.setConnection(_connection);
             
             var listener:Function = function(event:Event):void {
                 var accessToken:OAuthToken = oauthPanel.accessToken;
@@ -49,11 +51,10 @@ package net.systemeD.potlatch2.save {
         private function saveData():void {
             var saveDialog:SaveDialog = SaveDialog(
                 PopUpManager.createPopUp(Application(Application.application), SaveDialog, true));
+			saveDialog.setConnection(_connection);
             PopUpManager.centerPopUp(saveDialog);
 
-			if (Connection.getConnectionInstance().getActiveChangeset()) {
-				saveDialog.dontPrompt();
-			}
+			if (_connection.getActiveChangeset()) saveDialog.dontPrompt();
         }
     }
     
