@@ -397,39 +397,55 @@
 		if ( selectedEntity == null || feature == null )
 			return;
 
-		var editorBox:VBox = createEditorBox();
-		editorBox.label = "Basic";
-		editorBox.icon=tabIconBasic;
-		editorStack.addChild(editorBox);
+		var basicEditorBox:VBox = createEditorBox();
+		basicEditorBox.label = "Basic";
+		basicEditorBox.icon=tabIconBasic;
+		editorStack.addChild(basicEditorBox);
 
 		var tabs:Object = {};
+		var tabList:Array = [];
 		tabComponents = {};
 		var subpanels:Object = {};
 		subpanelComponents = {};
 
-		// ** FIXME: we should do this so that the tabs are always in the same order
+		// First create the tabs
 		for each (var factory:EditorFactory in feature.editors) {
+			var category:String = factory.category;
+			if (category!='') {
+				var tab:VBox = tabs[category];
+				if ( tab == null) {
+					tab = createEditorBox();
+					tab.label = category;
+					if (tabIcons[category]) tab.icon=tabIcons[category];
+					tabs[category] = tab;
+					tabList.push(tab);	
+				}
+			}
+		}
+
+		// Put the tabs on-screen in order
+		tabList.sort(sortCategories,16);
+		for each (tab in tabList) {
+			editorStack.addChild(tab);
+			tabComponents[tab] = [];
+		}
+
+		// Then add the individual editors to them
+		for each (factory in feature.editors) {
+
+			// Add to basic editor box first
 			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
 				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-				if (editor) editorBox.addChild(editor);
+				if (editor) basicEditorBox.addChild(editor);
 			}
 
+			// Then prepare to add to category panel
+			category=factory.category;
+			if (factory.category=='') continue;
 			var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
 			if (!catEditor) continue;
-
-			// Create tab if it doesn't already exist
-			var category:String = factory.category;
-			if (category=='') continue;
-			var tab:VBox = tabs[category];
-			if (tab == null) {
-				tab = createEditorBox();
-				tab.label = category;
-				if (tabIcons[category]) tab.icon=tabIcons[category];
-				editorStack.addChild(tab);
-				tabs[category] = tab;
-				tabComponents[tab] = [];
-			}
-
+			tab=tabs[category];
+			
 			// Create subcategory panel if needed
 			if (factory.subcategory) {
 				var subcategory:String = factory.subcategory;
@@ -450,6 +466,16 @@
    		}
       }
 
+	// ** FIXME: Order probably shouldn't be hard-coded, but configurable
+	private static var categoryOrder:Array=["Restrictions","Transport","Cycle","Walk","Address","Details"];	// reverse order
+	private function sortCategories(a:VBox,b:VBox):int {
+		var a1:int=categoryOrder.indexOf(a.label);
+		var a2:int=categoryOrder.indexOf(b.label);
+		if (a1<a2) { return 1; }
+		else if (a1>a2) { return -1; }
+		return 0;
+	}
+	
       private function createEditorBox():VBox {
           var box:VBox = new VBox();
           box.percentWidth = 100;
