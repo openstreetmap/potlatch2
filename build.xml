@@ -1,4 +1,4 @@
-<project name="Potlatch2 über compile system" default="debug">
+<project name="Potlatch 2" default="debug">
 
   <!-- load properties from the environment -->
   <property environment="env" />
@@ -45,7 +45,7 @@
   </target>
 
   <!-- Build and output potlatch2.swf in release mode -->
-  <target name="release" depends="init">
+  <target name="release" depends="init"> <!-- FIXME convention is dist not release -->
     <mxmlc file="potlatch2.mxml">
       <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
       <source-path path-element="${FLEX_HOME}/frameworks"/>
@@ -274,5 +274,20 @@
     <deployLocale locale="de_DE" />
     <deployLocale locale="pl_PL" />
   </target>
+
+
+  <target name="clean"
+    description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <!--
+
+    FIXME what is supposed to be cleaned?
+
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+
+    -->
+  </target>
+
 
 </project>

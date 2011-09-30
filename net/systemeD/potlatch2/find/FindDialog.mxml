@@ -76,8 +76,7 @@
         }
         
         private function goToSelected():void {
-            FlexGlobals.topLevelApplication.theMap.updateCoordsFromLatLon(selectedResult.lat, selectedResult.lon);
-            FlexGlobals.topLevelApplication.theMap.download();
+            FlexGlobals.topLevelApplication.theMap.moveMapFromLatLon(selectedResult.lat, selectedResult.lon);
             //FlexGlobals.topLevelApplication.theMap.redraw();
             PopUpManager.removePopUp(this);
         }
