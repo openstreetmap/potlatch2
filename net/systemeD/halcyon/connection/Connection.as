@@ -91,7 +91,7 @@ package net.systemeD.halcyon.connection {
 		public var nodecount:int=0;
 		public var waycount:int=0;
 		public var relationcount:int=0;
-        private var traces:Array = [];
+        private var traces:Vector.<Trace> = new Vector.<Trace>();
         private var nodePositions:Object = {};
         protected var traces_loaded:Boolean = false;
 		private var loadedBboxes:Array = [];
@@ -440,12 +440,12 @@ package net.systemeD.halcyon.connection {
             return changeset;
         }
 
-        public function addTrace(t:Object):void {
+        public function addTrace(t:Trace):void {
             traces.push(t);
         }
 
         protected function clearTraces():void {
-            traces = [];
+            traces = new Vector.<Trace>();
         }
 
 		public function findTrace(id:int):Trace {
@@ -455,7 +455,7 @@ package net.systemeD.halcyon.connection {
 			return null;
 		}
 
-        public function getTraces():Array {
+        public function getTraces():Vector.<Trace> {
             return traces;
         }
 

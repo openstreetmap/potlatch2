@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:Application
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:halcyon="net.systemeD.halcyon.*"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	layout="vertical"
@@ -10,24 +12,27 @@
 	addedToStage="startInit()"
 	preloader="net.systemeD.potlatch2.Preloader">
 
-    <map:LocalizationMap xmlns:map="l10n.map.*" />
 
-	<mx:Style source="styles/Application.css"/>
 
-    <mx:Glow id="glowImage" duration="100" 
-        alphaFrom="0.3" alphaTo="1.0" 
-        blurXFrom="0.0" blurXTo="5.0" 
-        blurYFrom="0.0" blurYTo="5.0" 
-        color="0xFF8000"/>
-    <mx:Glow id="unglowImage" duration="100" 
-        alphaFrom="1.0" alphaTo="0.3" 
-        blurXFrom="5.0" blurXTo="0.0" 
-        blurYFrom="5.0" blurYTo="0.0" 
-        color="0xFF8000"/>
-    <mx:WipeLeft id="wipeOut" duration="250"/>
-    <mx:WipeRight id="wipeIn" duration="250"/>
+	<fx:Style source="styles/Application.css"/>
 
-    <mx:ApplicationControlBar dock="true">
+    <fx:Declarations>
+        <map:LocalizationMap xmlns:map="l10n.map.*" />
+        <mx:Glow id="glowImage" duration="100"
+            alphaFrom="0.3" alphaTo="1.0"
+            blurXFrom="0.0" blurXTo="5.0"
+            blurYFrom="0.0" blurYTo="5.0"
+            color="0xFF8000"/>
+        <mx:Glow id="unglowImage" duration="100"
+            alphaFrom="1.0" alphaTo="0.3"
+            blurXFrom="5.0" blurXTo="0.0"
+            blurYFrom="5.0" blurYTo="0.0"
+            color="0xFF8000"/>
+        <mx:WipeLeft id="wipeOut" duration="250"/>
+        <mx:WipeRight id="wipeIn" duration="250"/>
+    </fx:Declarations>
+
+    <mx:ApplicationControlBar id="controlbar" dock="true">
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
 			click="SaveManager.saveChanges(theMap.editableLayer.connection);" id="saveButton" enabled="false"/>
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
@@ -50,11 +55,11 @@
 		    	                             mx.controls.Menu(gpsButton.popUp).selectedIndex=0; /* Yes, we do need to call it twice */
 		    	                             theMap.removeLayerByName('GPS tracks'); }">
 			<mx:dataProvider>
-				<mx:Array>
-					<mx:Object label="GPS data" id="gpsData" />
-					<mx:Object label="My tracks" id="myTracks" />
-					<mx:Object label="Clear" id="clearGps" />
-				</mx:Array>
+				<fx:Array>
+					<fx:Object label="GPS data" id="gpsData" />
+					<fx:Object label="My tracks" id="myTracks" />
+					<fx:Object label="Clear" id="clearGps" />
+				</fx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
@@ -85,7 +90,7 @@
 
     </mx:HDividedBox>
 
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
@@ -108,6 +113,7 @@
 		import mx.core.IChildList;
         import mx.containers.Canvas;
 		import mx.core.Application;
+		import mx.core.FlexGlobals;
         import mx.events.DragEvent;
         import mx.events.CloseEvent;
         import mx.managers.DragManager;
@@ -136,16 +142,16 @@
             if (loaderInfo.parameters['locale']) {
               dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
             }
-
-			// Load font and don't do anything until that's done
 			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, continueInit);
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
 			loader.load(new URLRequest("FontLibrary.swf"));
 		}
 		
-		private function continueInit(r:Event):void {
+		private function startApp(event:Event):void {
+			controlbar.setStyle('dropShadowEnabled',"false");	// Flex 4 doesn't permit this in Application.css
+
 			// Set font
-			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
+			var FontLibrary:Class = event.target.applicationDomain.getDefinition("FontLibrary") as Class;
 			Font.registerFont(FontLibrary.DejaVu);
 
 			Globals.vars.map_area = map_area;
@@ -360,7 +366,7 @@
 			if (entity is Relation) {
 				// If it's a relation, just bring up the editor panel
 				var panel:RelationEditorPanel = RelationEditorPanel(
-					PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+					PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
 				panel.setRelation(entity as Relation);
 				PopUpManager.centerPopUp(panel);
 				return;
@@ -533,7 +539,7 @@
 			conn.fetchUserTraces();
         }
 
-	]]></mx:Script>
+	]]></fx:Script>
 
 </mx:Application>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <edit:SingleTagEditor
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
@@ -22,7 +23,7 @@
         <mx:Label text="{warning}" visible="{!isValueValid}" includeInLayout="{!isValueValid}" styleName="warningText" />
     </mx:HBox>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
     [Bindable(event="factory_set")]
     protected function get prompt():String {
         return _factory == null ? null : NumberEditorFactory(_factory).notPresentText;
@@ -81,6 +82,6 @@
         value = null;
     }
 	
-  ]]></mx:Script>
+  ]]></fx:Script>
 </edit:SingleTagEditor>
 

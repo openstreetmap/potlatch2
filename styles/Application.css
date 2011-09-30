@@ -1,6 +1,11 @@
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace p2 "net.systemeD.potlatch2.*";
+
+
 /* General Flex UI elements */
 
-TitleWindow {
+mx|TitleWindow {
 	borderAlpha: 1;
 	borderThicknessLeft: 5;
 	borderThicknessRight: 5;
@@ -25,12 +30,12 @@ TitleWindow {
 	borderColor: haloBlue;
 }
 
-Button {
+mx|Button {
 	color: black;
 	textRollOverColor: black;
 }
 
-VScrollBar {
+mx|VScrollBar {
 	cornerRadius: 0;
 	highlightAlphas: 0, 0;
 	fillAlphas: 0, 0, 0, 0;
@@ -40,23 +45,23 @@ VScrollBar {
 	thumbOffset: 1;
 }
 
-CheckBox, List, StyleSelector, BackgroundSelector { color: black; }
+mx|CheckBox, mx|List, p2|StyleSelector, p2|BackgroundSelector { color: black; }
 
-TabNavigator {
+mx|TabNavigator {
 	horizontalGap: 3;
 }
 
-TextInput {
+mx|TextInput {
 	color: #333333;
 }
 
-Label {
+mx|Label {
 	fontWeight: normal;
 }
 
 /* Main window */
 
-Application {
+mx|Application {
 	padding-left: 4;
 	padding-right: 4;
 	padding-top: 2;
@@ -67,7 +72,7 @@ Application {
 	fontFamily: Arial;
 }
 
-HDividedBox {
+mx|HDividedBox {
 	dividerAlpha: 1;
 	dividerColor: #0000ff;
 	backgroundColor: #6495ED;
@@ -76,7 +81,7 @@ HDividedBox {
 /*   backgroundColor: #ffff99; */
 }
 
-ApplicationControlBar {
+mx|ApplicationControlBar {
 	padding-top: 2;
 	padding-bottom: 0;
 	padding-left: 4;
@@ -85,8 +90,8 @@ ApplicationControlBar {
 	fillAlphas: 1,1;
 	fillColors: haloBlue, #6495ED;
 	/*fillColors: #ffffcc, #ffff99;*/
-	backgroundColor: #ffffcc;
-	dropShadowEnabled: false;
+	/*backgroundColor: #ffffcc;*/
+	/*dropShadowEnabled: false;*/
 	/*borderSkin: ClassReference("mx.skins.halo.ApplicationBackground");*/
 }
 
@@ -227,6 +232,33 @@ ApplicationControlBar {
 }
 
 .accordionHeader { fillColors: #888888, #999999; fillAlphas: 1,1; color: white; fontWeight: bold; fontSize: 11; }
+
+/* Simple tag view - panels for subcategories */
+
+.subcategoryPanel {
+	borderThicknessLeft: 1;
+	borderThicknessTop: 1;
+	borderThicknessBottom: 1;
+	borderThicknessRight: 1;
+	borderColor: gray;
+	borderAlpha: 1;
+	dropShadowEnabled: false;
+
+	backgroundColor: gray;
+	backgroundAlpha: 0.2;
+
+	headerHeight: 20;
+	headerColors: #d9d9d9, #ffffff;
+
+	paddingTop: 4;
+	paddingLeft: 4;
+	paddingRight: 4;
+	paddingBottom: 4;
+	verticalGap: 4;
+
+	openIcon: Embed(source="../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonDown");
+	closedIcon: Embed(source="../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonOver");
+}
 
 /* Toolbox */
 

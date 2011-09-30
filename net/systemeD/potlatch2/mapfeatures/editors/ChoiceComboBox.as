@@ -18,7 +18,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                 if ( !textInputReplacement ) {
                         if ( itemRenderer != null ) {
                                 //remove the default textInput
-                                removeChild(textInput);
+                                removeChild(TextInput(textInput));
 
                                 //create a new itemRenderer to use in place of the text input
                                 textInputReplacement = itemRenderer.newInstance();

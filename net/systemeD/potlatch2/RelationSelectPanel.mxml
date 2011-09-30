@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
     xmlns:potlatch2="net.systemeD.potlatch2.*"
     title="Select Relation" width="350" height="400"
     showCloseButton="true" close="PopUpManager.removePopUp(this);">
 
-    <mx:Script><![CDATA[
+    <fx:Script><![CDATA[
         import net.systemeD.halcyon.*;
         import net.systemeD.halcyon.connection.*;
         import net.systemeD.potlatch2.*;
         import mx.managers.PopUpManager;
         import mx.core.Application;
+        import mx.core.FlexGlobals;
 
         private var conn:Connection;
         private var relationList:Array;
@@ -29,7 +31,7 @@
             //tagmatches[k]=t[k];// deep copy match pattern tags
             defaulttags[k]=t[k][0];  // route=[hiking,foot] -> route=hiking
           }	
-          PopUpManager.addPopUp(this, Application(Application.application), true);
+          PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
           PopUpManager.centerPopUp(this);
     
           var titles:Array = [];
@@ -76,7 +78,7 @@
 
 			PopUpManager.removePopUp(this);
 			var panel:RelationEditorPanel = RelationEditorPanel(
-			    PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+			    PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
 			panel.setRelation(relation);
 			PopUpManager.centerPopUp(panel);
         }
@@ -84,19 +86,23 @@
 		public function closeAndLoadRelation():void {
 			PopUpManager.removePopUp(this);
 			var panel:RelationLoaderPanel = RelationLoaderPanel(
-			    PopUpManager.createPopUp(Application(Application.application), RelationLoaderPanel, true));
+			    PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationLoaderPanel, true));
 			panel.setEntity(entity);
 			PopUpManager.centerPopUp(panel);
 		}
+		
+		public function updateSelectButton():void {
+			selectButton.enabled=relationSelector.selectedItems.length>0;
+		}
         
-    ]]></mx:Script> 
+    ]]></fx:Script>
     <mx:Text id="warning" text="" />
-    <mx:List width="100%" height="100%" id="relationSelector" verticalScrollPolicy="on" allowMultipleSelection="true" > 
+    <mx:List width="100%" height="100%" id="relationSelector" change="updateSelectButton();" verticalScrollPolicy="on" allowMultipleSelection="true" > 
     </mx:List>
     <mx:ControlBar>
       <mx:Button label="New Relation..." click="closeAndNewRelation();" styleName="titleWindowButton" />
       <mx:Button label="Load Relation..." click="closeAndLoadRelation();" styleName="titleWindowButton" />
       <mx:Spacer width="100%"/>
-      <mx:Button label="Select" click="updateEntityAndClose();" enabled="{relationSelector.selectedItems.length>0}" styleName="titleWindowButton" />
+      <mx:Button label="Select" id="selectButton" click="updateEntityAndClose();" enabled="false" styleName="titleWindowButton" />
     </mx:ControlBar>
 </mx:TitleWindow>

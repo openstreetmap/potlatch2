@@ -5,15 +5,16 @@
 -->
 
 <mx:DataGrid editable="true" doubleClickEnabled="true" doubleClick="addNewTag()"
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:controls="net.systemeD.controls.*"
-	xmlns:mx="http://www.adobe.com/2006/mxml">
+	xmlns:mx="library://ns.adobe.com/flex/mx">
 	<mx:columns>
 
 		<!-- Key -->
 
 		<mx:DataGridColumn editable="true" dataField="key" headerText="Key">
 			<mx:itemEditor>
-				<mx:Component>
+				<fx:Component>
 					<controls:AutoComplete
 						dataProvider="{MapFeatures.getInstance().getAutoCompleteKeys(outerDocument.getEntityType())}"
 						labelField="name"
@@ -21,9 +22,9 @@
 						restrict="&#x0020;-&#x10FFFF;"
 						maxChars="255" 
 						typedText="{outerDocument.selectedItem.key}">
-					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
+					<fx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></fx:Script>
 					</controls:AutoComplete>
-				</mx:Component>
+				</fx:Component>
 			</mx:itemEditor>
 		</mx:DataGridColumn>
 
@@ -31,7 +32,7 @@
 
 		<mx:DataGridColumn editable="true" dataField="value" headerText="Value" itemRenderer="net.systemeD.controls.DataGridWarningField" >
 			<mx:itemEditor>
-				<mx:Component>
+				<fx:Component>
 					<controls:AutoComplete
 						dataProvider="{MapFeatures.getInstance().getAutoCompleteValues(outerDocument.getEntityType(),outerDocument.selectedItem.key)}"
 						labelField="name"
@@ -39,9 +40,9 @@
 						restrict="&#x0020;-&#x10FFFF;"
 						maxChars="255" 
 						typedText="{outerDocument.selectedItem.value}">
-					<mx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></mx:Script>
+					<fx:Script><![CDATA[ import net.systemeD.potlatch2.mapfeatures.*; ]]></fx:Script>
 					</controls:AutoComplete>
-				</mx:Component>
+				</fx:Component>
 			</mx:itemEditor>
 		</mx:DataGridColumn>
 
@@ -49,19 +50,19 @@
 
 		<mx:DataGridColumn width="20" editable="false">
 			<mx:itemRenderer>
-				<mx:Component>
+				<fx:Component>
                     <mx:HBox horizontalAlign="center" verticalAlign="middle">
                       <mx:Image source="@Embed('../../../embedded/delete_small.svg')"
                           click='event.stopPropagation();outerDocument.removeTag();'
                           buttonMode="true" useHandCursor="true" width="12" height="12">
                       </mx:Image>
 					</mx:HBox>
-				</mx:Component>
+				</fx:Component>
 			</mx:itemRenderer>
 		</mx:DataGridColumn>
 	</mx:columns>
 
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 
 		import net.systemeD.halcyon.connection.*;
 		import mx.collections.*;
@@ -136,5 +137,5 @@
 			return selectedEntity.getType();
 		}
 
-	]]></mx:Script>
+	]]></fx:Script>
 </mx:DataGrid>

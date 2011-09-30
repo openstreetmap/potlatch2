@@ -9,7 +9,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 	    public var choices:Array;
         
         public function ChoiceEditorFactory(inputXML:XML) {
-            super(inputXML);
+            super(inputXML,"horizontal");
             
             choices = [];
             for each( var choiceXML:XML in inputXML.choice ) {
