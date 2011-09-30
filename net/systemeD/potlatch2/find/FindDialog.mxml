@@ -74,8 +74,7 @@
         }
         
         private function goToSelected():void {
-            Application.application.theMap.updateCoordsFromLatLon(selectedResult.lat, selectedResult.lon);
-            Application.application.theMap.download();
+            Application.application.theMap.moveMapFromLatLon(selectedResult.lat, selectedResult.lon);
             //Application.application.theMap.redraw();            
             PopUpManager.removePopUp(this);
         }

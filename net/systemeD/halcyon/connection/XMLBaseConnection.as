@@ -22,7 +22,7 @@ package net.systemeD.halcyon.connection {
 		protected function loadedMap(event:Event):void {
 			var map:XML = new XML(URLLoader(event.target).data);
 			
-			if (map.localName=="osmError") {
+			if (map.name().localName=="osmError") {
 				dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map: " + map.message } ));
 			} else {
 				var id:Number;

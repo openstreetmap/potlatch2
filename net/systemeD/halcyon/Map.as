@@ -120,7 +120,7 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		/** Recalculate co-ordinates from new Flash origin */
 
-		public function updateCoords(tx:Number,ty:Number):void {
+		private function updateCoords(tx:Number,ty:Number):void {
 			setScrollRectXY(tx,ty);
 
 			edge_t=coord2lat(-ty          );
@@ -133,7 +133,7 @@ package net.systemeD.halcyon {
 		}
 		
 		/** Move the map to centre on a given latitude/longitude. */
-		public function updateCoordsFromLatLon(lat:Number,lon:Number):void {
+		private function updateCoordsFromLatLon(lat:Number,lon:Number):void {
 			var cy:Number=-(lat2coord(lat)-mapheight/2);
 			var cx:Number=-(lon2coord(lon)-mapwidth/2);
 			updateCoords(cx,cy);

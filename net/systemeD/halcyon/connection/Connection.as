@@ -440,13 +440,20 @@ package net.systemeD.halcyon.connection {
             return changeset;
         }
 
-        protected function addTrace(t:Object):void {
+        public function addTrace(t:Object):void {
             traces.push(t);
         }
 
         protected function clearTraces():void {
             traces = [];
         }
+
+		public function findTrace(id:int):Trace {
+			for each (var t:Trace in traces) {
+				if (t.id == id) return t;
+			}
+			return null;
+		}
 
         public function getTraces():Array {
             return traces;
