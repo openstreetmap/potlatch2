@@ -75,8 +75,8 @@
 				video.playheadTime = event.currentTarget.value; 
 				if (wasPlaying) playVideo();
 			} 
-			public function advanceProgress(event:VideoEvent):void {
-				progressBar.value = event.playheadTime;
+			public function advanceProgress(event:Event):void {
+				progressBar.value = mx.events.VideoEvent(event).playheadTime;
 			}
 			public function stopPlaying():void {
 				if (!video.playing) return;
