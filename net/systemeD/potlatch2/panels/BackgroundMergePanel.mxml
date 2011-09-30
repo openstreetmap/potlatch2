@@ -5,7 +5,7 @@
 -->
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
-  <mx:Text id="backgroundMergePanelText" text="W00t!!!" width="100%" styleName="helpInfo" />
+  <mx:Text id="backgroundMergePanelText" text="Review and Merge tags from the Background layer" width="100%" styleName="helpInfo" />
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="k" headerText="Key" />
