@@ -113,4 +113,9 @@
         <url>http://fugro.findvej.dk/fugro2005/$z/$x/$y.jpg</url>
         <sourcetag>Fugro (2005)</sourcetag>
     </set>
+	<set minlat="46.33" minlon="9.36" maxlat="49.09" maxlon="17.28">
+		<name>Austria - geoimage.at</name>
+		<url>http://geoimage.openstreetmap.at/4d80de696cd562a63ce463a58a61488d/$z/$x/$y.jpg</url>
+		<sourcetag>geoimage.at</sourcetag>
+	</set>
 </imagery>
