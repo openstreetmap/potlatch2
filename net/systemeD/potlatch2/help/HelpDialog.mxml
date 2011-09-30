@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         xmlns:help="net.systemeD.potlatch2.help.*"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="{getTitleText()}"
         width="660" height="500"
         verticalGap="0">
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
+
+	[Bindable] private var application:Object = FlexGlobals.topLevelApplication;
 
     /** Pops up a multi-tabbed help window in the middle of the screen, then remembers that the user has seen it. */
     public function init():void {
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(application), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, helpDialog_close);
 
@@ -106,19 +110,21 @@
                           ["/", "Cycle through overlapping ways"],
                           ];
         var text2:Array =  [["+", "Add new tag"],
+                            [", .", "Cycle through nodes in way"],
                             ["D", "Dim features"],
                             ["F", "Follow existing way"],
-                            ["R", "Repeat tags"],
-                            ["T", "Toggle between simple and advanced tags"],
+                            ["M", "Maximise editor"],
                             ["P", "Create parallel way"],
-                            ["V", "Reverse direction of way"]
+                            ["Q", "Make area right-angled"],
+                            ["R", "Repeat tags"],
                             ];
-        var text3:Array =  [["Q", "Make area right-angled"],
-                            ["S", "Save"],
+        var text3:Array =  [["S", "Save"],
+                            ["T", "Toggle between simple and advanced tags"],
+                            ["V", "Reverse direction of way"],
                             ["X", "Cut way at node"],
                             ["Z", "Undo"],
                             ["Esc", "Cancel edit"],
-                            ["Space", "Hold to realign background image"]
+                            ["Space", "Hold/drag to realign background image"]
                             ];
         shortcuts1.addChild(buildGrid(text));
         shortcuts2a.addChild(buildGrid(text2));
@@ -126,7 +132,7 @@
     }
 
               ]]>
-  </mx:Script>
+  </fx:Script>
   <mx:TabNavigator id="helpTN" width="100%" height="100%" styleName="helpTN" creationPolicy="all">
     <mx:VBox label="Welcome" id="welcome" width="100%" height="100%">
       <mx:Grid width="100%"><!-- prepare for a column of icons, at some point -->
@@ -353,7 +359,7 @@
   </mx:TabNavigator>
 
   <mx:ControlBar>
-    <mx:Label text="Version: {Application.application.version} Build: {Application.application.build_number}" />
+    <mx:Label text="Version: {application.version} Build: {application.build_number}" />
     <mx:Spacer width="100%"/>
     <mx:Button label="Ok" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
   </mx:ControlBar>

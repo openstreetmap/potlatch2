@@ -6,6 +6,7 @@ package net.systemeD.halcyon.styleparser {
 	import net.systemeD.halcyon.ExtendedURLLoader;
 	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.Entity;
+    import net.systemeD.halcyon.ImageBank;
 
     import net.systemeD.halcyon.connection.*;
 	
@@ -18,12 +19,7 @@ package net.systemeD.halcyon.styleparser {
 
 	public class RuleSet {
 
-		/** Is the RuleSet fully loaded and available for use? */
-		public var loaded:Boolean=false; 
-		/** Hash of loaded images. Hash key is filename, value is BitmapData for the image. */
-		public var images:Object=new Object();
-		/** Hash of image widths. Hash key is filename, value is pixel width. */
-		public var imageWidths:Object=new Object();	
+		public var loaded:Boolean=false; 			// is the RuleSet fully loaded and available for use?
 		private var redrawCallback:Function=null;	// function to call when CSS loaded
 		private var iconCallback:Function=null;		// function to call when all icons loaded
 		private var iconsToLoad:uint=0;				// number of icons left to load (fire iconCallback when ==0)
@@ -244,7 +240,7 @@ package net.systemeD.halcyon.styleparser {
 		public function getStyles(obj:Entity, tags:Object, zoom:uint):StyleList {
 			var sl:StyleList=new StyleList();
 			for each (var sc:StyleChooser in choosers) {
-				sc.updateStyles(obj,tags,sl,imageWidths,zoom);
+				sc.updateStyles(obj,tags,sl,zoom);
 			}
 			return sl;
 		}
@@ -277,10 +273,10 @@ package net.systemeD.halcyon.styleparser {
 
 
 		/// ------------------------------------------------------------------------------------------------
-		/** Load all images referenced in the RuleSet (for example, icons or bitmap fills).
-			FIXME: if an image is referenced twice, it'll be requested twice. */
+		/** Load all images referenced in the RuleSet (for example, icons or bitmap fills). */
 		
 		private function loadImages():void {
+			ImageBank.getInstance().addEventListener(ImageBank.IMAGES_LOADED,doIconCallback);
 			var filename:String;
 			for each (var chooser:StyleChooser in choosers) {
 				for each (var style:Style in chooser.styles) {
@@ -288,59 +284,17 @@ package net.systemeD.halcyon.styleparser {
 					else if (style is ShapeStyle  && ShapeStyle(style).fill_image   ) { filename=ShapeStyle(style).fill_image; }
 					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
 					else { continue; }
-					if (filename=='square' || filename=='circle') { continue; }
-			
-					iconsToLoad++;
-					var request:DebugURLRequest=new DebugURLRequest(filename);
-					var loader:ExtendedURLLoader=new ExtendedURLLoader();
-					loader.dataFormat=URLLoaderDataFormat.BINARY;
-					loader.info['filename']=filename;
-					loader.addEventListener(Event.COMPLETE, 					loadedImage,				false, 0, true);
-					loader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		httpStatusHandler,			false, 0, true);
-					loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	onImageLoadSecurityError,	false, 0, true);
-					loader.addEventListener(IOErrorEvent.IO_ERROR,				onImageLoadioError,			false, 0, true);
-					loader.load(request.request);
+
+					if (filename!='square' && filename!='circle')
+						ImageBank.getInstance().loadImage(filename);
 				}
 			}
 		}
-
-		private function loadedImage(event:Event):void {
-			var fn:String=event.target.info['filename'];
-			images[fn]=event.target.data; if (images[fn].length==0) return;
-
-			var loader:ExtendedLoader = new ExtendedLoader();
-			loader.info['filename']=fn;
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, measureWidth);
-			loader.loadBytes(images[fn]);
+		
+		private function doIconCallback(e:Event):void {
+			iconCallback();
 		}
 		
-		private function measureWidth(event:Event):void {
-			var fn:String=event.target.loader.info['filename'];
-			imageWidths[fn]=event.target.width;
-			// ** do we need to explicitly remove the loader object now?
-
-			oneLessImageToLoad();
-		}
-
-        private function oneLessImageToLoad():void {
-            iconsToLoad--;
-            if (iconsToLoad<=0 && iconCallback!=null) { iconCallback(); }
-        }
-
-        private function onImageLoadioError ( event:IOErrorEvent ):void {
-            trace("ioerrorevent: "+event.target.info['filename']);
-            oneLessImageToLoad();
-        }
-
-        private function onImageLoadSecurityError ( event:SecurityErrorEvent ):void {
-            trace("securityerrorevent: "+event.target.info['filename']);
-            oneLessImageToLoad();
-        }
-
-		private function httpStatusHandler( event:HTTPStatusEvent ):void { }
-		private function securityErrorHandler( event:SecurityErrorEvent ):void { trace("securityerrorevent"); }
-		private function ioErrorHandler( event:IOErrorEvent ):void { trace("ioerrorevent"); }
-
 		// ------------------------------------------------------------------------------------------------
 		// Parse CSS
 

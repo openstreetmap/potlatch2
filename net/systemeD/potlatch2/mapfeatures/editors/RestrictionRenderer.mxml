@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	width="50" height="50" maxWidth="50" maxHeight="50" minWidth="50" minHeight="50"
 	toolTip="{data.description}" enabled="{data.value != null}"

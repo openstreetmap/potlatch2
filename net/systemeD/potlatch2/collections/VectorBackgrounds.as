@@ -1,111 +1,117 @@
 package net.systemeD.potlatch2.collections {
 
-    import flash.events.*
-    import flash.net.*
-    import flash.system.Security;
-    import net.systemeD.halcyon.Map;
-    import net.systemeD.halcyon.MapPaint;
-    import net.systemeD.halcyon.connection.Connection;
-    import net.systemeD.halcyon.DebugURLRequest;
-    import net.systemeD.potlatch2.utils.*;
-        
-    public class VectorBackgrounds extends EventDispatcher {
+	import flash.events.*
+	import flash.net.*
+	import flash.system.Security;
+	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.MapPaint;
+	import net.systemeD.halcyon.connection.Connection;
+	import net.systemeD.halcyon.DebugURLRequest;
+	import net.systemeD.potlatch2.utils.*;
+		
+	public class VectorBackgrounds extends EventDispatcher {
 
-        private static const GLOBAL_INSTANCE:VectorBackgrounds = new VectorBackgrounds();
-        public static function instance():VectorBackgrounds { return GLOBAL_INSTANCE; }
+		private static const GLOBAL_INSTANCE:VectorBackgrounds = new VectorBackgrounds();
+		public static function instance():VectorBackgrounds { return GLOBAL_INSTANCE; }
 
-        private var _map:Map;
+		private var _map:Map;
 
 
-        public function init(map:Map):void {
-            _map = map;
-            var request:DebugURLRequest = new DebugURLRequest("vectors.xml");
-            var loader:URLLoader = new URLLoader();
-            loader.addEventListener(Event.COMPLETE, onConfigLoad);
-            loader.load(request.request);
-        }
+		public function init(map:Map):void {
+			_map = map;
+			var request:DebugURLRequest = new DebugURLRequest("vectors.xml");
+			var loader:URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, onConfigLoad);
+			loader.load(request.request);
+		}
 
-        public function onConfigLoad(e:Event):void {
-            var xml:XML = XML(e.target.data);
-            for each(var set:XML in xml.set) {
+		public function onConfigLoad(e:Event):void {
+			var xml:XML = XML(e.target.data);
 
-              // allow layers to be defined but disabled. This lets me put examples in the
-              // config file.
-              if (set.@disabled == "true") continue;
+			// reconstitute results as Array, as we can't run .forEach over an XMLList
+			var sets:Array = [];
+			for each (var set:XML in xml.set) { sets.push(set); }
+			
+			// use .forEach to avoid closure problem (http://stackoverflow.com/questions/422784/how-to-fix-closure-problem-in-actionscript-3-as3#3971784)
+			sets.forEach(function(set:XML, index:int, array:Array):void {
 
-              if (!(set.policyfile == undefined)) {
-                Security.loadPolicyFile(String(set.policyfile));
-              }
+				if (!(set.policyfile == undefined)) {
+					Security.loadPolicyFile(String(set.policyfile));
+				}
 
-              var name:String = (set.name == undefined) ? null : String(set.name);
-              var loader:String = set.loader;
-              switch (loader) {
-                case "TrackLoader":
-                  break;
-                case "KMLImporter":
-                  break;
-                case "GPXImporter":
-                   if (set.url) {
-                     if (set.@loaded == "true") {
-                        name ||= 'GPX file';
-                        var gpx_url:String = String(set.url);
+				if (set.@disabled == "true") {
+				} else {
 
-                        var connection:Connection = new Connection(name, gpx_url, null, null);
-                        var gpx:GpxImporter=new GpxImporter(connection, _map, [gpx_url],
-                                                function(success:Boolean,message:String=null):void {
-                                                    if (!success) return;
-                                                    var paint:MapPaint = _map.addLayer(connection, "stylesheets/gpx.css");
-                                                    paint.updateEntityUIs(false, false);
-                                                    dispatchEvent(new Event("layers_changed"));
-                                                }, false);
-                     } else {
-                       trace("configured but not loaded isn't supported yet");
-                     }
-                   } else {
-                     trace("AutoVectorBackground: no url for GPXImporter");
-                   }
-                  break;
+					var name:String = (set.name == undefined) ? null : String(set.name);
+					var loader:String = set.loader;
+					switch (loader) {
+						case "TrackLoader":
+							break;
+						case "KMLImporter":
+							break;
+						case "GPXImporter":
+							if (set.url) {
+								if (set.@loaded == "true") {
+									name ||= 'GPX file';
+									var gpx_url:String = String(set.url);
 
-                case "BugLoader":
-                  if (set.url && set.apiKey) {
-                    name ||= 'Bugs';
-                    var bugLoader:BugLoader = new BugLoader(_map, String(set.url), String(set.apikey), name, String(set.details));
-                    if (set.@loaded == "true") {
-                      bugLoader.load();
-                    }
-                  } else {
-                    trace("AutoVectorBackground: error with BugLoader");
-                  }
-                  break;
+									var connection:Connection = new Connection(name, gpx_url, null, null);
+									var gpx:GpxImporter=new GpxImporter(connection, _map, [gpx_url],
+									function(success:Boolean,message:String=null):void {
+										if (!success) return;
+										var paint:MapPaint = _map.addLayer(connection, "stylesheets/gpx.css");
+										paint.updateEntityUIs(false, false);
+										dispatchEvent(new Event("layers_changed"));
+									}, false);
+								} else {
+								trace("configured but not loaded isn't supported yet");
+								}
+							} else {
+								trace("AutoVectorBackground: no url for GPXImporter");
+							}
+							break;
 
-                case "BikeShopLoader":
-                  if (set.url) {
-                    name ||= 'Missing Bike Shops'
-                    var bikeShopLoader:BikeShopLoader = new BikeShopLoader(_map, String(set.url), name);
-                    if (set.@loaded == "true") {
-                      bikeShopLoader.load();
-                    }
-                  } else {
-                    trace("AutoVectorBackground: no url for BikeShopLoader");
-                  }
-                  break;
+						case "BugLoader":
+							if (set.url && set.apiKey) {
+								name ||= 'Bugs';
+								var bugLoader:BugLoader = new BugLoader(_map, String(set.url), String(set.apikey), name, String(set.details));
+								if (set.@loaded == "true") {
+									bugLoader.load();
+								}
+							} else {
+								trace("AutoVectorBackground: error with BugLoader");
+							}
+							break;
 
-                case "SnapshotLoader":
-                  if (set.url) {
-                    name ||= 'Snapshot Server'
-                    var snapshotLoader:SnapshotLoader = new SnapshotLoader(_map, String(set.url), name);
-                    if (set.@loaded == "true") {
-                      snapshotLoader.load();
-                    }
-                  } else {
-                    trace("VectorBackground: no url for SnapshotLoader");
-                  }
-                  break;
+						case "BikeShopLoader":
+							if (set.url) {
+								name ||= 'Missing Bike Shops'
+								var bikeShopLoader:BikeShopLoader = new BikeShopLoader(_map, String(set.url), name);
+								if (set.@loaded == "true") {
+									bikeShopLoader.load();
+								}
+							} else {
+								trace("AutoVectorBackground: no url for BikeShopLoader");
+							}
+							break;
 
-                default:
-                  trace("AutoVectorBackground: unknown loader");
-              }
-            }
-        }
-    }
+						case "SnapshotLoader":
+							if (set.url) {
+								name ||= 'Snapshot Server'
+								var snapshotLoader:SnapshotLoader = new SnapshotLoader(_map, String(set.url), name);
+								if (set.@loaded == "true") {
+									snapshotLoader.load();
+								}
+							} else {
+								trace("VectorBackground: no url for SnapshotLoader");
+							}
+							break;
+
+						default:
+							trace("AutoVectorBackground: unknown loader");
+					}
+				}
+			});
+		}
+	}
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" 
         width="500" height="300" verticalGap="0">
@@ -11,12 +12,12 @@
         <mx:DataGridColumn editable="true"  dataField="url" headerText="URL"/>
         <mx:DataGridColumn editable="false" headerText="Key" width="70">
 			<mx:itemRenderer>
-				<mx:Component>
+				<fx:Component>
 				<mx:ComboBox
 					selectedItem="{FunctionKeyManager.instance().getKeyFor(outerDocument.title,data.name)}"
 				    dataProvider="{FunctionKeyManager.fkeysCollection}"
  					change="FunctionKeyManager.instance().setKeyFromFString(selectedItem as String,outerDocument.title,data.name)" />
-				</mx:Component>
+				</fx:Component>
 			</mx:itemRenderer>
 		</mx:DataGridColumn>
     </mx:columns>
@@ -27,7 +28,7 @@
     <mx:LinkButton label="Add" click="addNewSource()"/>
   </mx:HBox>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
 	/*
 		Still to do:
@@ -41,6 +42,7 @@
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
 	import mx.collections.ArrayCollection;
 	import mx.controls.List;
 	import net.systemeD.potlatch2.FunctionKeyManager;
@@ -54,7 +56,7 @@
 		this.menu=menu;
 		collection=source;
 		dataCollection=new ArrayCollection(source.collection);
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
 		dataGrid.dataProvider=dataCollection;
@@ -79,6 +81,6 @@
 	}
 
   ]]>
-  </mx:Script>
+  </fx:Script>
 
 </mx:TitleWindow>

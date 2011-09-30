@@ -10,17 +10,13 @@ Many icons used in halcyon/potlatch2 are based on the awesome CC0-licensed SJJB 
 
 === What you'll need ===
 
-* Flex SDK 3.4 or 3.5 
+* Flex SDK 4.5
 ** Product page: http://www.adobe.com/products/flex/ 
-** Flex 3 Download page: http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+3 (free, OS X/Windows/Linux)
+** Flex 4 Download page: http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4 (free, OS X/Windows/Linux)
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
 * Ant
-
-***Do not use FlexSDK <= 3.3 or > 4***. There are compatibility errors with version 4, and 3.3
-and earlier have this bug: http://bugs.adobe.com/jira/browse/SDK-16705 which is a major issue for the
-tag editors.
 
 If you happen to have Adobe Flex Builder 3/Flash Builder 4, you can create a project and import files into it. 
 See http://wiki.openstreetmap.org/wiki/Potlatch_2/Developer_Documentation for details.
@@ -38,7 +34,7 @@ Compiling Potlatch 2:
   cp build.properties.template build.properties
   
 2) Edit the FLEX_HOME variable in build.properties  
- eg, FLEX_HOME=c:/flex_sdk/3.5.0.12683
+ eg, FLEX_HOME=c:/flex_sdk/4.5.0.20967
  
 3) ant
 
