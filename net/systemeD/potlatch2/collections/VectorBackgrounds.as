@@ -82,10 +82,10 @@ package net.systemeD.potlatch2.collections {
 										dispatchEvent(new Event("layers_changed"));
 									}, false);
 								} else {
-								trace("configured but not loaded isn't supported yet");
+								trace("VectorBackgrounds: configured but not loaded isn't supported yet");
 								}
 							} else {
-								trace("AutoVectorBackground: no url for GPXImporter");
+								trace("VectorBackgrounds: no url for GPXImporter");
 							}
 							break;
 
@@ -97,7 +97,7 @@ package net.systemeD.potlatch2.collections {
 									bugLoader.load();
 								}
 							} else {
-								trace("AutoVectorBackground: error with BugLoader");
+								trace("VectorBackgrounds: error with BugLoader");
 							}
 							break;
 
@@ -109,7 +109,7 @@ package net.systemeD.potlatch2.collections {
 									bikeShopLoader.load();
 								}
 							} else {
-								trace("AutoVectorBackground: no url for BikeShopLoader");
+								trace("VectorBackgrounds: no url for BikeShopLoader");
 							}
 							break;
 
@@ -121,12 +121,12 @@ package net.systemeD.potlatch2.collections {
 									snapshotLoader.load();
 								}
 							} else {
-								trace("VectorBackground: no url for SnapshotLoader");
+								trace("VectorBackgrounds: no url for SnapshotLoader");
 							}
 							break;
 
 						default:
-							trace("AutoVectorBackground: unknown loader");
+							trace("VectorBackgrounds: unknown loader: " + loader);
 					}
 				}
 			});
