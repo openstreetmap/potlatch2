@@ -24,6 +24,7 @@
     <input type="choice" name="Cycleway type" category="Cycle" description="What kind of bike path is this?" key="segregated" presence="onTagMatch" priority="low">
       <choice value="yes" text="Segregated" description="Cyclists and pedestrians are separated by a painted line or kerb." />
       <choice value="no" text="Shared" description="Cyclists and pedestrians share the full width of the path." />
+    </input>
   </feature>
 
   <feature name="Pedestrian street">
