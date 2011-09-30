@@ -17,8 +17,8 @@ node :hasTags :selectedway { z-index: 9; icon-image: square; icon-width: 8; colo
 
 way[_status=incomplete]::statushighlight { z-index: 0; width: 10; color: #d95f02; }
 way[_status=complete]::statushighlight { z-index: 0; width: 10; color: #1b9e77; opacity: 0.4; }
-node[_status=incomplete]::statushighlight { z-index: 0; icon-image: square; icon-width: 10; color: #d95f02; }
-node[_status=complete]::statushighlight { z-index: 0; icon-image: square; icon-width: 10; color: #1b9e77; opacity: 0.4; }
+node[_status=incomplete]::statushighlight :hasTags { z-index: 0; icon-image: square; icon-width: 10; color: #d95f02; }
+node[_status=complete]::statushighlight :hasTags { z-index: 0; icon-image: square; icon-width: 10; color: #1b9e77; opacity: 0.4; }
 
 
 
