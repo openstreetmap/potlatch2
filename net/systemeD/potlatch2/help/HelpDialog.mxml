@@ -110,19 +110,21 @@
                           ["/", "Cycle through overlapping ways"],
                           ];
         var text2:Array =  [["+", "Add new tag"],
+                            [", .", "Cycle through nodes in way"],
                             ["D", "Dim features"],
                             ["F", "Follow existing way"],
-                            ["R", "Repeat tags"],
-                            ["T", "Toggle between simple and advanced tags"],
+                            ["M", "Maximise editor"],
                             ["P", "Create parallel way"],
-                            ["V", "Reverse direction of way"]
+                            ["Q", "Make area right-angled"],
+                            ["R", "Repeat tags"],
                             ];
-        var text3:Array =  [["Q", "Make area right-angled"],
-                            ["S", "Save"],
+        var text3:Array =  [["S", "Save"],
+                            ["T", "Toggle between simple and advanced tags"],
+                            ["V", "Reverse direction of way"],
                             ["X", "Cut way at node"],
                             ["Z", "Undo"],
                             ["Esc", "Cancel edit"],
-                            ["Space", "Hold to realign background image"]
+                            ["Space", "Hold/drag to realign background image"]
                             ];
         shortcuts1.addChild(buildGrid(text));
         shortcuts2a.addChild(buildGrid(text2));
