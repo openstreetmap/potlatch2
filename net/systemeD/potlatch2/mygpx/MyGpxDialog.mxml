@@ -3,7 +3,7 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:mx="library://ns.adobe.com/flex/mx"
         layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="MyGpx Files"
+        horizontalAlign="center" title="My tracks"
         width="600" height="400"
         verticalGap="0">
   <fx:Script><![CDATA[
@@ -19,6 +19,7 @@
     import net.systemeD.potlatch2.utils.Importer;
     import net.systemeD.potlatch2.utils.GpxImporter;
     import mx.controls.Alert;
+    import com.bealearts.collection.VectorCollection;
 
     private var map:Map;
     private var conn:Connection;
@@ -52,8 +53,8 @@
     }
 
     [Bindable(event="traces_loaded")]
-    private function get traces():Vector.<Trace> {
-        return conn.getTraces();
+    private function get traces():VectorCollection {
+		return new VectorCollection(conn.getTraces());
     }
 
     public function loadFile(t:Trace):void {
