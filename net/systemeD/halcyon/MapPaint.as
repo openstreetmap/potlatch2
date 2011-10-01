@@ -249,6 +249,18 @@ package net.systemeD.halcyon {
 				if (nodeuis[node.id]) { deleteNodeUI(node); }
 			}
 		}
+		
+		/** Return WayUI properties */
+		public function wayUIProperties(way:Way):Object {
+			if (wayuis[way.id]) {
+				return { centroid_x: wayuis[way.id].centroid_x,
+					     centroid_y: wayuis[way.id].centroid_y,
+					     patharea:   wayuis[way.id].patharea,
+					     pathlength: wayuis[way.id].pathlength };
+			} else {
+				return {};
+			}
+		}
 
 		/** Make a UI object representing a node. */
 		public function createNodeUI(node:Node,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):NodeUI {

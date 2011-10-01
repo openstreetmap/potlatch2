@@ -35,6 +35,7 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==74) return mergeWays();	// 'J'
+			if (event.keyCode==75) return createMultipolygon();
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}
@@ -103,6 +104,72 @@ package net.systemeD.potlatch2.controller {
 				}
 			}
 			return false;
+		}
+		
+		/** Create multipolygon from selection, or add to existing multipolygon. */
+		
+		public function createMultipolygon():ControllerState {
+			var entity:Entity;
+			var relation:Relation;
+			var outer:Way;
+			var inner:Way;
+			var inners:Array=[];
+
+			// If there's an existing outer in the selection, use that
+			for each (entity in selection) {
+				if (!entity is Way) continue;
+				var r:Array=entity.findParentRelationsOfType('multipolygon','outer');
+				if (r.length) { outer=Way(entity); relation=r[0]; }
+			}
+
+			// Otherwise, find the way with the biggest area
+			var largest:Number=0;
+			if (!outer) {
+				for each (entity in selection) {
+					if (!entity is Way) continue;
+					if (!Way(entity).isArea()) continue;
+					var props:Object=layer.wayUIProperties(entity as Way);
+					if (props.patharea>largest) { outer=Way(entity); }
+				}
+			}
+			
+			// If we still don't have an outer, then squawk
+			if (!outer) {
+				controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "No areas selected"));
+				return this;
+			}
+			
+			// Identify the inners
+			for each (entity in selection) {
+				if (entity==outer) continue;
+				if (!entity is Way) continue;
+				if (!Way(entity).isArea()) continue;
+				var node:Node=Way(entity).getFirstNode();
+				if (outer.pointWithin(node.lon,node.lat)) inners.push(entity);
+			}
+			if (inners.length==0) {
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't identify inner areas"));
+				return this;
+			}
+
+			// If relation exists, add any inners that aren't currently present
+			if (relation) {
+				var action:CompositeUndoableAction = new CompositeUndoableAction("Add to multipolygon");
+				for each (inner in inners) {
+					if (!relation.hasMemberInRole(inner,'inner'))
+						relation.appendMember(new RelationMember(inner,'inner'),action.push);
+				}
+				MainUndoStack.getGlobalStack().addAction(action);
+				
+			// Otherwise, create whole new relation
+			} else {
+				var memberlist:Array=[new RelationMember(outer,'outer')];
+				for each (inner in inners) 
+					memberlist.push(new RelationMember(inner,'inner'));
+				relation = entity.connection.createRelation( { type: 'multipolygon' }, memberlist, MainUndoStack.getGlobalStack().addAction);
+			}
+
+			return new SelectedWay(outer);
 		}
 
 		override public function enterState():void {

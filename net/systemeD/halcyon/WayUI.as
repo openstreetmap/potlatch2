@@ -218,6 +218,7 @@ package net.systemeD.halcyon {
 				centroid_x=c[0];
 				centroid_y=c[1];
 			}
+			patharea=Math.abs(patharea);
 		}
 
 		// ------------------------------------------------------------------------------------------
