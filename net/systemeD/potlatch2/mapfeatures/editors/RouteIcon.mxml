@@ -12,7 +12,7 @@
     <mx:ComboBox id="dir" color="black" dataProvider="{routeDirs}" selectedItem="{findSelected(role)}"
         click="event.stopPropagation()"
         change="setRole(dir.selectedItem.data)" />
-	<mx:Image source="@Embed('../../../../../embedded/delete.svg')" click='event.stopPropagation();removeFromRelation()'
+	<mx:Image source="@Embed('../../../../../embedded/delete_small.svg')" click='event.stopPropagation();removeFromRelation()'
         buttonMode="true" useHandCursor="true" />
     
     <fx:Script><![CDATA[
