@@ -61,7 +61,8 @@ package net.systemeD.potlatch2.mapfeatures {
                 }
 
                 for each (var inputSet:XML in feature..inputSet) {
-                    tagsFromInputSet(definition.inputSet.(@id == String(inputSet.@ref)), f);
+                    var inputSetName:String=inputSet.@ref;	// Flex 4 breaks if this is included directly in the line below
+                    tagsFromInputSet(definition.inputSet.(@id == inputSetName), f);
                 }
             }
 
