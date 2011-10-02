@@ -303,6 +303,51 @@ package net.systemeD.potlatch2.controller {
 			return false;
 		}
 
+		/** Identify the inners and outer from the current selection for making a multipolygon. */
+		
+		public function multipolygonMembers():Object {
+			if (_selection.length<2) { return {}; }
+
+			var entity:Entity;
+			var relation:Relation;
+			var outer:Way;
+			var inners:Array=[];
+
+			// If there's an existing outer in the selection, use that
+			for each (entity in selection) {
+				if (!entity is Way) return {};
+				var r:Array=entity.findParentRelationsOfType('multipolygon','outer');
+				if (r.length) { outer=Way(entity); relation=r[0]; }
+			}
+
+			// Otherwise, find the way with the biggest area
+			var largest:Number=0;
+			if (!outer) {
+				for each (entity in selection) {
+					if (!entity is Way) return {};
+					if (!Way(entity).isArea()) return {};
+					var props:Object=layer.wayUIProperties(entity as Way);
+					if (props.patharea>largest) { outer=Way(entity); largest=props.patharea; }
+				}
+			}
+			if (!outer) return {};
+			
+			// Identify the inners
+			for each (entity in selection) {
+				if (entity==outer) continue;
+				if (!entity is Way) return {};
+				if (!Way(entity).isArea()) return {};
+				var node:Node=Way(entity).getFirstNode();
+				if (outer.pointWithin(node.lon,node.lat)) inners.push(entity);
+			}
+			if (inners.length==0) return {};
+			
+			return { outer: outer,
+			         inners: inners,
+			         relation: relation }
+		}
+
+
 		// Selection setters
 
 		public function set selection(items:Array):void {

@@ -48,11 +48,9 @@
 			alpha="{getAlpha('split')}" 
 			toolTip="Split way (X)" 
 			width="28" height="28" y="4" x="66" />
-		<s:Button icon="@Embed('../../../embedded/merge.svg')"
+		<s:Button 
 			id="mergeButton"
 			click='doMerge();'
-			enabled="{canDo('merge')}" 
-			alpha="{getAlpha('merge')}" 
 			toolTip="Merge ways" 
 			width="28" height="28" y="4" x="96" />
 
@@ -107,6 +105,9 @@
         public var deleteWay:String = "Delete Way (Shift+Delete)";
         public var deleteItem:String = "Delete Item"; // When nothing is selected
 
+      	[Bindable] [Embed(source="../../../embedded/merge.svg"       )] private var mergeIcon:Class;
+      	[Bindable] [Embed(source="../../../embedded/multipolygon.svg")] private var multipolygonIcon:Class;
+
 		public function init(controller:EditController):void {
 			this.controller=controller;
 			/* check if the toolbox was explictly turned off in a previous session */
@@ -124,6 +125,7 @@
 			dispatchEvent(new Event("updateSkin"));
 			dispatchEvent(new Event("updateAlpha"));
 			updateDirectionArrow();
+			updateMergeIcon();
 		}
 
 		private function handleDown(e:Event):void {
@@ -160,7 +162,6 @@
 				case 'circularise':			return controller.state.hasSelectedAreas();
 				case 'split':				return (controller.state is SelectedWayNode);
 				case 'parallelise':			return (controller.state is SelectedWay);
-				case 'merge':				return controller.state.hasAdjoiningWays();
 			}
 			return false;
 		}
@@ -196,6 +197,23 @@
             }
         }
 
+		private function updateMergeIcon():void {
+			var multi:Object=controller.state.multipolygonMembers();
+			if (multi.outer) {
+				mergeButton.setStyle("icon",multipolygonIcon);
+				mergeButton.alpha=1;
+				mergeButton.enabled=true;
+			} else if (controller.state.hasAdjoiningWays()) {
+				mergeButton.setStyle("icon",mergeIcon);
+				mergeButton.alpha=1;
+				mergeButton.enabled=true;
+			} else {
+				mergeButton.setStyle("icon",mergeIcon);
+				mergeButton.alpha=0.5;
+				mergeButton.enabled=false;
+			}
+		}
+
         private function reverseClicked():void {
             if(canDo('reverseDirection')) {
                 doReverseDirection();
@@ -221,7 +239,12 @@
 		}
 		
 		public function doMerge():void {
-			controller.setState(SelectedMultiple(controller.state).mergeWays());
+			var multi:Object=controller.state.multipolygonMembers();
+			if (multi.outer) {
+				controller.setState(SelectedMultiple(controller.state).createMultipolygon());
+			} else {
+				controller.setState(SelectedMultiple(controller.state).mergeWays());
+			}
 		}
 
 		public function doReverseDirection():void {
