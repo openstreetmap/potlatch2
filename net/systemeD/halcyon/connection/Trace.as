@@ -141,7 +141,7 @@ package net.systemeD.halcyon.connection {
             for each (var wpt:XML in file.wpt) {
                 var tags:Object = {};
                 for each (var tag:XML in wpt.children()) {
-                    tags[tag.name().localName]=tag.toString();
+                    tags[tag.name().localName]=tag.toString().substr(0,255);
                 }
                 var node:Node = connection.createNode(tags, wpt.@lat, wpt.@lon, action.push);
 				connection.registerPOI(node);

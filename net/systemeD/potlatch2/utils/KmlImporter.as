@@ -32,11 +32,11 @@ package net.systemeD.potlatch2.utils {
                 var tags:Object = {};
 
                 if (placemark.name.length() > 0) {
-                    tags["name"] = placemark.name;
+                    tags["name"] = placemark.name.substr(0,255);
                 }
 
                 if (placemark.description.length() > 0) {
-                    tags["description"] = placemark.description;
+                    tags["description"] = placemark.description.substr(0,255);
                 }
 
                 for each (var point:XML in placemark.Point) {

@@ -55,7 +55,7 @@ package net.systemeD.potlatch2.utils {
         private function parseTags(tagElements:XMLList):Object {
             var tags:Object = {};
             for each (var tagEl:XML in tagElements)
-                tags[tagEl.@k] = tagEl.@v;
+                tags[tagEl.@k] = tagEl.@v.substr(0,255);
             return tags;
         }
 
