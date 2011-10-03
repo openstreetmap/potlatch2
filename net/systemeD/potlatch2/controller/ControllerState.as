@@ -293,11 +293,13 @@ package net.systemeD.potlatch2.controller {
 			if (_selection.length<2) { return false; }
 			var endNodes:Object={};
 			for each (var item:Entity in _selection) {
-				if (item is Way && !Way(item).isArea()) {
-					if (endNodes[Way(item).getNode(0).id]) return true;
-					if (endNodes[Way(item).getLastNode().id]) return true;
-					endNodes[Way(item).getNode(0).id]=true;
-					endNodes[Way(item).getLastNode().id]=true;
+				if (item is Way && !Way(item).isArea() && Way(item).length>0) {
+					var startNode:int=Way(item).getNode(0).id;
+					var finishNode:int=Way(item).getLastNode().id;
+					if (endNodes[startNode ]) return true;
+					if (endNodes[finishNode]) return true;
+					endNodes[startNode ]=true;
+					endNodes[finishNode]=true;
 				}
 			}
 			return false;
