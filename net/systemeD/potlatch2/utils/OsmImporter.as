@@ -12,8 +12,9 @@ package net.systemeD.potlatch2.utils {
 
 		override protected function doImport(push:Function):void {
 			var map:XML = new XML(files[0]);
+			if (map.name().localName=='osmChange') { map=map.create[0]; }
+
 			var data:XML;
-			
             var oldid:Number;
             var tags:Object;
 
