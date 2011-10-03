@@ -4,7 +4,7 @@
 	Advanced tag grid
 -->
 
-<mx:DataGrid editable="true" doubleClickEnabled="true" doubleClick="addNewTag()"
+<mx:DataGrid editable="true" doubleClickEnabled="true" doubleClick="addNewTag(event)"
     xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:controls="net.systemeD.controls.*"
 	xmlns:mx="library://ns.adobe.com/flex/mx">
@@ -119,7 +119,8 @@
 		}
 
 		/** Create editing controls for a new key/value pair, with default values. */
-		public function addNewTag():void {
+		public function addNewTag(event:Event=null):void {
+			if (event && event.target is TextField) return;
 			var newKey:String = "(new tag)";
 			var newTag:Tag = new Tag(selectedEntity, newKey, "(new value)");
 			tagDataProvider.addItem(newTag);
@@ -129,7 +130,18 @@
 		/** Remove the selected tag from the selected entity. */
 		public function removeTag():void {
 			var k:String = selectedItem.key;
-			selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
+			if (selectedEntity.getTag(k)) {
+				// genuinely a tag on the Entity, so remove it
+				selectedEntity.setTag(k, null, MainUndoStack.getGlobalStack().addAction);
+			} else {
+				// a "(new key)=(new value)" pair, which is in the dataProvider but not the Entity
+				for (var i:uint=0; i<tagDataProvider.length; i++) {
+					if (tagDataProvider[i].key==k) {
+						tagDataProvider.removeItemAt(i);
+						return;
+					}
+				}
+			}
 		}
 
 		/** Return the type ("node", "way", "relation") of the selected entity. */
