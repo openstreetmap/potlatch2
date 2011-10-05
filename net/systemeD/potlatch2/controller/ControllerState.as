@@ -108,9 +108,13 @@ package net.systemeD.potlatch2.controller {
 			if ( paint && paint.isBackground ) {
 				if (event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
-					var newSelection:Array=[];
-					if (selection.indexOf(entity)==-1) { selection=[entity]; }
-					for each (var entity:Entity in selection) {
+					// first, create a list of the alt-clicked item, plus anything else already selected (assuming it's in the same layer!)
+					var itemsToPullThrough:Array=[]
+					if (_selection.length && firstSelected.connection==entity.connection) itemsToPullThrough=_selection.slice();
+					if (itemsToPullThrough.indexOf(entity)==-1) itemsToPullThrough.push(entity);
+					// make sure they're unhighlighted, and pull them through
+					var newSelection:Array=[]
+					for each (var entity:Entity in itemsToPullThrough) {
 						paint.setHighlight(entity, { hover:false, selected: false });
 						if (entity is Way) paint.setHighlightOnNodes(Way(entity), { selectedway: false });
 						newSelection.push(paint.pullThrough(entity,controller.map.editableLayer));
@@ -293,15 +297,62 @@ package net.systemeD.potlatch2.controller {
 			if (_selection.length<2) { return false; }
 			var endNodes:Object={};
 			for each (var item:Entity in _selection) {
-				if (item is Way && !Way(item).isArea()) {
-					if (endNodes[Way(item).getNode(0).id]) return true;
-					if (endNodes[Way(item).getLastNode().id]) return true;
-					endNodes[Way(item).getNode(0).id]=true;
-					endNodes[Way(item).getLastNode().id]=true;
+				if (item is Way && !Way(item).isArea() && Way(item).length>0) {
+					var startNode:int=Way(item).getNode(0).id;
+					var finishNode:int=Way(item).getLastNode().id;
+					if (endNodes[startNode ]) return true;
+					if (endNodes[finishNode]) return true;
+					endNodes[startNode ]=true;
+					endNodes[finishNode]=true;
 				}
 			}
 			return false;
 		}
+
+		/** Identify the inners and outer from the current selection for making a multipolygon. */
+		
+		public function multipolygonMembers():Object {
+			if (_selection.length<2) { return {}; }
+
+			var entity:Entity;
+			var relation:Relation;
+			var outer:Way;
+			var inners:Array=[];
+
+			// If there's an existing outer in the selection, use that
+			for each (entity in selection) {
+				if (!(entity is Way)) return {};
+				var r:Array=entity.findParentRelationsOfType('multipolygon','outer');
+				if (r.length) { outer=Way(entity); relation=r[0]; }
+			}
+
+			// Otherwise, find the way with the biggest area
+			var largest:Number=0;
+			if (!outer) {
+				for each (entity in selection) {
+					if (!(entity is Way)) return {};
+					if (!Way(entity).isArea()) return {};
+					var props:Object=layer.wayUIProperties(entity as Way);
+					if (props.patharea>largest) { outer=Way(entity); largest=props.patharea; }
+				}
+			}
+			if (!outer) return {};
+			
+			// Identify the inners
+			for each (entity in selection) {
+				if (entity==outer) continue;
+				if (!(entity is Way)) return {};
+				if (!Way(entity).isArea()) return {};
+				var node:Node=Way(entity).getFirstNode();
+				if (outer.pointWithin(node.lon,node.lat)) inners.push(entity);
+			}
+			if (inners.length==0) return {};
+			
+			return { outer: outer,
+			         inners: inners,
+			         relation: relation }
+		}
+
 
 		// Selection setters
 

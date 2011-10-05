@@ -4,7 +4,10 @@
     Marker Panel
 -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
+<mx:VBox
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    height="100%">
   <mx:Text id="markerPanelText" text="You have selected a marker." width="100%" styleName="helpInfo" />
   <mx:DataGrid editable="false" id="markerPanelDG" width="100%" height="50%">
     <mx:columns>
@@ -12,7 +15,7 @@
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.MapPaint;
@@ -41,5 +44,5 @@
             for each(var tag:Tag in tags) { tagDataProvider.addItem(tag); }
       }
       ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:VBox>

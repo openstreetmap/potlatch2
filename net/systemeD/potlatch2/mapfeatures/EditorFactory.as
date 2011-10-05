@@ -34,14 +34,15 @@ package net.systemeD.potlatch2.mapfeatures {
         }
 
         /** Translates a priority string ("highest") to a const (PRIORITY_HIGHEST). */
-        public static function getPriority(priority:String):uint {
+        public function getPriority(priority:String):uint {
+			var base:uint=subcategory ? 0 : 11;
             switch ( priority ) {
-            case "highest": return PRIORITY_HIGHEST;
-            case "high": return PRIORITY_HIGHEST;
-            case "normal": return PRIORITY_NORMAL;
-            case "low": return PRIORITY_LOW;
-            case "lowest": return PRIORITY_LOWEST;
-            default: return PRIORITY_NORMAL;
+            case "highest": return PRIORITY_HIGHEST+base;
+            case "high": return PRIORITY_HIGH+base;
+            case "normal": return PRIORITY_NORMAL+base;
+            case "low": return PRIORITY_LOW+base;
+            case "lowest": return PRIORITY_LOWEST+base;
+            default: return PRIORITY_NORMAL+base;
             }
         }
 
@@ -54,6 +55,9 @@ package net.systemeD.potlatch2.mapfeatures {
         /** Default category: "Standard" */
         public var category:String = "Standard";
 
+        /** Optional subcategory (rendered as a collapsible panel) */
+        public var subcategory:String;
+
         private var _name:String;
         private var _description:String;
 
@@ -62,6 +66,7 @@ package net.systemeD.potlatch2.mapfeatures {
             _name = String(inputXML.@name);
             _description = String(inputXML.@description);
             category = String(inputXML.@category);
+            subcategory = String(inputXML.@subcategory);
         }
 
         /** Whether the tags on an entity correspond to those for the edit control. By default, returns true - must be overriden by more useful behaviour. */

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	title="Load Relation" width="350" height="160"
 	creationComplete="requestedID.setFocus()"
@@ -14,7 +15,7 @@
       <mx:Spacer width="100%"/>
       <mx:Button label="Load" click="loadRelation();" styleName="titleWindowButton" />
     </mx:ControlBar>
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
@@ -60,6 +61,6 @@
 			MainUndoStack.getGlobalStack().addAction(undo);
 		}
 		
-    ]]></mx:Script>	
+    ]]></fx:Script>
 </mx:TitleWindow>
 

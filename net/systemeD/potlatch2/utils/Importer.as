@@ -42,9 +42,9 @@ package net.systemeD.potlatch2.utils {
 		}
 		
 		protected function fileLoaded(e:Event,filenum:uint):void {
-			trace("loaded file "+filenum); 
 			files[filenum]=e.target.data;
 			filesloaded++;
+			trace("loaded file "+filenum+" ("+filesloaded+"/"+filenames.length+")"); 
 			if (filesloaded==filenames.length) {
                 var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
 				doImport(action.push);

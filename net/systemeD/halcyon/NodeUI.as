@@ -10,6 +10,7 @@ package net.systemeD.halcyon {
 	import flash.geom.Point;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.ImageBank;
 	
 	/** The graphical representation of a Node (including POIs and nodes that are part of Ways). */
 	public class NodeUI extends EntityUI {
@@ -104,31 +105,27 @@ package net.systemeD.halcyon {
 					r=true;
 					if (s.rotation) { rotation=s.rotation; }
 					if (s.icon_image!=iconnames[subpart]) {
+						icon=new Sprite();
+						iconnames[subpart]=s.icon_image;
+						addToLayer(icon,STROKESPRITE,s.sublayer);
 						if (s.icon_image=='square') {
 							// draw square
-							icon=new Sprite();
-							addToLayer(icon,STROKESPRITE,s.sublayer);
 							w=styleIcon(icon,subpart);
 							icon.graphics.drawRect(0,0,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconnames[subpart]='_square';
 
 						} else if (s.icon_image=='circle') {
 							// draw circle
-							icon=new Sprite();
-							addToLayer(icon,STROKESPRITE,s.sublayer);
 							w=styleIcon(icon,subpart);
 							icon.graphics.drawCircle(w,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconnames[subpart]='_circle';
 
-						} else if (paint.ruleset.images[s.icon_image]) {
-							// 'load' icon (actually just from library)
-							var loader:ExtendedLoader = new ExtendedLoader();
-							loader.info['sublayer']=s.sublayer;
-							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon, false, 0, true);
-							loader.loadBytes(paint.ruleset.images[s.icon_image]);
-							iconnames[subpart]=s.icon_image;
+						} else if (ImageBank.getInstance().hasImage(s.icon_image)) {
+							// load icon from library
+							icon.addChild(ImageBank.getInstance().getAsDisplayObject(s.icon_image));
+//							addHitSprite(icon.width);			// ** check this - we're doing it below too
+							loaded=true; updatePosition();		// ** check this
+							if (s.interactive) { maxwidth=Math.max(icon.width,maxwidth); }
 						}
 					}
 				}
@@ -181,16 +178,6 @@ package net.systemeD.halcyon {
 			hitzone.graphics.drawRect(0,0,w,w);
 			hitzone.visible = false;
 			setListenSprite();
-		}
-
-		private function loadedIcon(event:Event):void {
-			var icon:Sprite=new Sprite();
-			var sublayer:Number=event.target.loader.info['sublayer'];
-			addToLayer(icon,STROKESPRITE,sublayer);
-			icon.addChild(Bitmap(event.target.content));
-			addHitSprite(icon.width);
-			loaded=true;
-			updatePosition();
 		}
 
 		private function updatePosition(xDelta:Number=0,yDelta:Number=0):void {

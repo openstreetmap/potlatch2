@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	borderStyle="inset" verticalAlign="middle" width="100%" paddingLeft="3"
@@ -11,10 +12,10 @@
     <mx:ComboBox id="dir" color="black" dataProvider="{routeDirs}" selectedItem="{findSelected(role)}"
         click="event.stopPropagation()"
         change="setRole(dir.selectedItem.data)" />
-	<mx:Image source="@Embed('../../../../../embedded/delete.svg')" click='event.stopPropagation();removeFromRelation()'
+	<mx:Image source="@Embed('../../../../../embedded/delete_small.svg')" click='event.stopPropagation();removeFromRelation()'
         buttonMode="true" useHandCursor="true" />
     
-    <mx:Script><![CDATA[
+    <fx:Script><![CDATA[
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.styleparser.RuleSet;
     import net.systemeD.potlatch2.mapfeatures.*;
@@ -97,6 +98,6 @@
 		Relation(_route["relation"]).removeMember(_route["entity"], MainUndoStack.getGlobalStack().addAction);
 	}
     
-    ]]></mx:Script>
+    ]]></fx:Script>
 </mx:HBox>
 

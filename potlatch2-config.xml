@@ -11,12 +11,18 @@
       <library-path append="true">
           <path-element>lib</path-element>
       </library-path>
+
+      <theme>
+        <filename>${flexlib}/themes/Halo/halo.swc</filename>
+      </theme>
    </compiler>
 
    <metadata>
       <title>Potlatch 2</title>
       <description>http://wiki.openstreetmap.org/wiki/Potlatch2</description>
    </metadata>
+
+
 
    <output>resources/potlatch2.swf</output>
 </flex-config>

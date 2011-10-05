@@ -1,4 +1,4 @@
-<project name="Potlatch2 über compile system" default="debug">
+<project name="Potlatch 2" default="debug">
 
   <!-- load properties from the environment -->
   <property environment="env" />
@@ -45,7 +45,7 @@
   </target>
 
   <!-- Build and output potlatch2.swf in release mode -->
-  <target name="release" depends="init">
+  <target name="release" depends="init"> <!-- FIXME convention is dist not release -->
     <mxmlc file="potlatch2.mxml">
       <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
       <source-path path-element="${FLEX_HOME}/frameworks"/>
@@ -63,12 +63,13 @@
       <arg line="-source-path ."/>
       <arg line="-doc-sources net/systemeD/"/>
       <arg line="-external-library-path=lib/"/>
+      <arg line="-target-player 10.0.0"/>
       <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes} ${com_classes}"/>
       <arg line="-output resources/docs/"/>
       <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
       <arg line="-main-title 'Halcyon and Potlatch2 Developer documentation'" />
       <arg line="-footer 'Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
-      <arg line="-package net.systemeD.controls 'Custom-built controls used in Poltatch2'" />
+      <arg line="-package net.systemeD.controls 'Custom-built controls used in Potlatch2'" />
       <arg line="-package net.systemeD.halcyon 'The AS3 rendering library'" />
       <arg line="-package net.systemeD.halcyon.connection 'The connection to the main OSM server, and the entities'" />
       <arg line="-package net.systemeD.halcyon.connection.actions 'The undoable actions that apply to OSM data'" />
@@ -76,6 +77,7 @@
       <arg line="-package net.systemeD.potlatch2 'The OpenStreetMap editor'" />
       <arg line="-package net.systemeD.potlatch2.collections 'Singletons for handling collections loaded from config files'" />
       <arg line="-package net.systemeD.potlatch2.controller 'The various controller states that p2 can be in'" />
+      <arg line="-package net.systemeD.potlatch2.find 'The search dialog for jumping to another place'" />
       <arg line="-package net.systemeD.potlatch2.help 'The Help dialog'" />
       <arg line="-package net.systemeD.potlatch2.mapfeatures 'The engine behind the mapfeatures parsing'" />
       <arg line="-package net.systemeD.potlatch2.mapfeatures.editors 'The various widgets used in the Simple panel'" />
@@ -172,6 +174,7 @@
        
       <!-- Sets java.awt.headless=true so font compilation works in headless environments -->
       <compiler.headless-server>true</compiler.headless-server>
+      <target-player>10.0.0</target-player>
      </mxmlc>
      
      <echo message="The ${test.application.name}.swf test runner has been created in ${test.bin.dir}" />
@@ -272,5 +275,20 @@
     <deployLocale locale="de_DE" />
     <deployLocale locale="pl_PL" />
   </target>
+
+
+  <target name="clean"
+    description="clean up" >
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <!--
+
+    FIXME what is supposed to be cleaned?
+
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+
+    -->
+  </target>
+
 
 </project>

@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.save {
     import flash.net.*;
     import mx.managers.PopUpManager;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
     import net.systemeD.halcyon.connection.*;
     import org.iotashan.oauth.*;
 
@@ -31,7 +32,7 @@ package net.systemeD.potlatch2.save {
 
         private function getNewToken(onCompletion:Function):void {
             var oauthPanel:OAuthPanel = OAuthPanel(
-                PopUpManager.createPopUp(Application(Application.application), OAuthPanel, true));
+                PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), OAuthPanel, true));
             PopUpManager.centerPopUp(oauthPanel);
 			oauthPanel.setConnection(_connection);
             
@@ -50,7 +51,7 @@ package net.systemeD.potlatch2.save {
         
         private function saveData():void {
             var saveDialog:SaveDialog = SaveDialog(
-                PopUpManager.createPopUp(Application(Application.application), SaveDialog, true));
+                PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), SaveDialog, true));
 			saveDialog.setConnection(_connection);
             PopUpManager.centerPopUp(saveDialog);
 

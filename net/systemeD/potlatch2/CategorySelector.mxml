@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:halcyon="net.systemeD.halcyon.*"
 	backgroundColor="white" borderStyle="inset">
 
@@ -15,14 +16,14 @@
                        width="420" height="100%" change="itemSelected(event);" styleName="catToggleTiles"
                        creationComplete="ensureSelection();">
               <mx:itemRenderer>
-                  <mx:Component>
+                  <fx:Component>
                       <mx:VBox width="100" height="75"
                           horizontalScrollPolicy="off" verticalScrollPolicy="off"
                           horizontalAlign="center" verticalGap="0" toolTip="{data.description}">
                           <mx:Image source="{data.image}" height="100%" verticalAlign="middle"/>
                           <mx:Text text="{data.name}"/>
                       </mx:VBox>
-                  </mx:Component>
+                  </fx:Component>
               </mx:itemRenderer>
           </mx:TileList>
           </mx:VBox>
@@ -31,7 +32,7 @@
   </mx:HBox>
 
   <!-- mx:Label id="hoverInfo" text="Hover Info goes here"/>-->
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
 
       import net.systemeD.halcyon.connection.*;
@@ -143,6 +144,6 @@
           settingSelection = false;
       }
 
-  ]]></mx:Script>
+  ]]></fx:Script>
 </mx:VBox>
 

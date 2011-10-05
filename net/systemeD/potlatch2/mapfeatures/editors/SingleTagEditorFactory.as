@@ -8,10 +8,11 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 	    private var tagKey:String;
 		private var boxDirection:String;
         
-        public function SingleTagEditorFactory(inputXML:XML) {
+        public function SingleTagEditorFactory(inputXML:XML, defaultLayout:String="vertical") {
             super(inputXML);
             tagKey = inputXML.@key;
-			boxDirection = inputXML.@layout=='horizontal' ? 'horizontal' : 'vertical';
+			boxDirection = inputXML.@layout;
+			if (!boxDirection) { boxDirection=defaultLayout; }
         }
         
         override public function areTagsMatching(entity:Entity):Boolean {

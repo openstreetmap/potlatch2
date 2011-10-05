@@ -20,6 +20,7 @@ package net.systemeD.controls {
 	import mx.core.UIComponent;
 	import mx.controls.ComboBox;
 	import mx.controls.DataGrid;
+	import mx.controls.TextInput;
 	import mx.controls.listClasses.ListBase;
 	import mx.collections.ArrayCollection;
 	import mx.collections.ListCollectionView;
@@ -179,7 +180,7 @@ package net.systemeD.controls {
 
 			if (dropdown) {
 				if (typedTextChanged) {
-					cursorPosition = textInput.selectionBeginIndex;
+					cursorPosition = TextInput(textInput).selectionBeginIndex;
 					updateDataProvider();
 
 					if( collection.length==0 || typedText=="" || typedText==null ) {
@@ -206,27 +207,26 @@ package net.systemeD.controls {
 			
 			if(selectedIndex == -1 && typedTextChanged && textInput.text!=typedText) { 
 				// not in menu
-				// trace("not in menu"); trace("- restoring to "+typedText);
 				textInput.text = typedText;
-				textInput.setSelection(cursorPosition, cursorPosition);
+				textInput.validateNow();
+				textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (dropdown && typedTextChanged && textInput.text!=typedText) {
 				// in menu, but user has typed
-				// trace("in menu, but user has typed"); trace("- restoring to "+typedText);
 				textInput.text = typedText;
-				textInput.setSelection(cursorPosition, cursorPosition);
+				textInput.validateNow();
+				textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text==selectedLabel) {
 				// force update if Flex has fucked up again
-				// trace("should force update");
-				textInput.htmlText=selectedLabel;
+				TextInput(textInput).htmlText=selectedLabel;
 				textInput.validateNow();
-				if (typedTextChanged) textInput.setSelection(cursorPosition, cursorPosition);
+				if (typedTextChanged) textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text!=selectedLabel && !typedTextChanged) {
 				// in menu, user has navigated with cursor keys/mouse
-				// trace("in menu, user has navigated with cursor keys/mouse");
 				textInput.text = selectedLabel;
-				textInput.setSelection(0, textInput.text.length);
+				textInput.validateNow();
+				textInput.selectRange(0, textInput.text.length);
 			} else if (textInput.text!="") {
-				textInput.setSelection(cursorPosition, cursorPosition);
+				textInput.selectRange(cursorPosition, cursorPosition);
 			}
 
 			if (showDropdown && !dropdown.visible) {
@@ -248,7 +248,7 @@ package net.systemeD.controls {
 			if (event.keyCode==Keyboard.ESCAPE && showingDropdown) {
 				// ESCAPE cancels dropdown
 				textInput.text = typedText;
-				textInput.setSelection(textInput.text.length, textInput.text.length);
+				textInput.selectRange(textInput.text.length, textInput.text.length);
 				showingDropdown = false;
 				dropdownClosed=true;
 

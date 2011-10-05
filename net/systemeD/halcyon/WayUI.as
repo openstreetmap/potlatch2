@@ -9,6 +9,7 @@ package net.systemeD.halcyon {
 	
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.styleparser.*;
+    import net.systemeD.halcyon.ImageBank;
 
 	/** The graphical representation of a Way. */ 
 	public class WayUI extends EntityUI {
@@ -217,6 +218,7 @@ package net.systemeD.halcyon {
 				centroid_x=c[0];
 				centroid_y=c[1];
 			}
+			patharea=Math.abs(patharea);
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -293,8 +295,11 @@ package net.systemeD.halcyon {
 					if ((!isNaN(s.fill_color) || s.fill_image) && entity.findParentRelationsOfType('multipolygon','inner').length==0 && isNaN(drawExcept)) {
 						fill=new Shape(); addToLayer(fill,FILLSPRITE,s.sublayer);
 						fill.graphics.moveTo(x0,y0);
-						if (s.fill_image) { new WayBitmapFiller(this,fill.graphics,s); }
-									 else { s.applyFill(fill.graphics); }
+						if (s.fill_image) {
+							fill.graphics.beginBitmapFill(ImageBank.getInstance().getAsBitmapData(s.fill_image));
+						} else {
+							s.applyFill(fill.graphics);
+						}
 						solidLines(fill.graphics,inners);
 						fill.graphics.endFill();
 						drawn=true;

@@ -95,12 +95,11 @@ package net.systemeD.potlatch2.collections {
             }
 
 			// Get any attribution and logo details
-			for each (bg in collection) {
+			collection.forEach(function(bg:Object, index:int, array:Array):void {
 				if (bg.logo) {
 					// load the logo
 					var loader:Loader = new Loader();
-					var thisbg1:Object = bg;			// scope it for the closure
-					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { onLogoLoad(e,thisbg1); });
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { onLogoLoad(e,bg); });
 					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
 					loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 					loader.load(new URLRequest(bg.logo));
@@ -108,13 +107,12 @@ package net.systemeD.potlatch2.collections {
 				if (bg.attribution_url) {
 					// load the attribution
 			        var urlloader:URLLoader = new URLLoader();
-					var thisbg2:Object = bg;			// scope it for the closure
-					urlloader.addEventListener(Event.COMPLETE, function(e:Event):void { onAttributionLoad(e,thisbg2); });
+					urlloader.addEventListener(Event.COMPLETE, function(e:Event):void { onAttributionLoad(e,bg); });
 					urlloader.addEventListener(IOErrorEvent.IO_ERROR, onError);
 					urlloader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 			        urlloader.load(new URLRequest(bg.attribution_url));
 				}
-			}
+			});
 
 			// Tell the function key manager that we'd like to receive function key calls
 			FunctionKeyManager.instance().registerListener('Background imagery',
