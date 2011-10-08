@@ -157,6 +157,39 @@ package net.systemeD.halcyon.connection {
             performAction(new ReverseNodesAction(this, nodes));
         }
 
+		
+		/** Is a point within this way?
+		* From http://as3.miguelmoraleda.com/2009/10/28/point-in-polygon-with-actionscript-3punto-dentro-de-un-poligono-con-actionscript-3/
+		*/
+
+		public function pointWithin(lon:Number,lat:Number):Boolean {
+			if (!isArea()) return false;
+			
+			var counter:uint = 0;
+			var p1x:Number = nodes[0].lon;
+			var p1y:Number = nodes[0].lat;
+			var p2x:Number, p2y:Number;
+ 
+			for (var i:uint = 1; i <= length; i++) {
+				p2x = nodes[i % length].lon;
+				p2y = nodes[i % length].lat;
+				if (lat > Math.min(p1y, p2y)) {
+					if (lat <= Math.max(p1y, p2y)) {
+						if (lon <= Math.max(p1x, p2x)) {
+							if (p1y != p2y) {
+								var xinters:Number = (lat - p1y) * (p2x - p1x) / (p2y - p1y) + p1x;
+								if (p1x == p2x || lon <= xinters) counter++;
+							}
+						}
+					}
+				}
+				p1x = p2x;
+				p1y = p2y;
+			}
+			if (counter % 2 == 0) { return false; }
+			else { return true; }
+		}
+
         /**
          * Finds the 1st way segment which intersects the projected
          * coordinate and adds the node to that segment. If snap is

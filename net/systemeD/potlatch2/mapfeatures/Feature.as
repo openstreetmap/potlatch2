@@ -20,7 +20,7 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _xml:XML;
         private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
         private var _tags:Array;
-	private var _withins:Array;
+        private var _withins:Array;
         private var _editors:Array;
 
         [Embed(source="../../../../embedded/missing_icon.png")]

@@ -52,7 +52,8 @@ package net.systemeD.halcyon.styleparser {
 		/** Merge two Style objects. */
 		public function mergeWith(additional:Style):void {
 			for each (var prop:String in properties) {
-				if (additional[prop]) {
+				// Note extra check for empty arrays, which we use to mean 'undefined' (see setPropertyFromString below)
+				if (additional[prop] && !((additional[prop] is Array) && additional[prop].length==0)) {
 					this[prop]=additional[prop];
 				}
 			}

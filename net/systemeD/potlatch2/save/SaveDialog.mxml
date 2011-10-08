@@ -28,7 +28,7 @@
             </mx:text>
           </mx:Text>
           <mx:Label text="Comment:"/>
-          <mx:TextArea id="comment" width="100%" height="100%" change="commentChanged(event);" textInput="monitorEnter(event);" />
+          <mx:TextArea id="comment" maxChars="255" width="100%" height="100%" change="commentChanged(event);" textInput="monitorEnter(event);" />
         </mx:VBox>
         
         <mx:VBox width="100%" height="100%" label="Advanced">

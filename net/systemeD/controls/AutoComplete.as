@@ -207,24 +207,23 @@ package net.systemeD.controls {
 			
 			if(selectedIndex == -1 && typedTextChanged && textInput.text!=typedText) { 
 				// not in menu
-				// trace("not in menu"); trace("- restoring to "+typedText);
 				textInput.text = typedText;
+				textInput.validateNow();
 				textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (dropdown && typedTextChanged && textInput.text!=typedText) {
 				// in menu, but user has typed
-				// trace("in menu, but user has typed"); trace("- restoring to "+typedText);
 				textInput.text = typedText;
+				textInput.validateNow();
 				textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text==selectedLabel) {
 				// force update if Flex has fucked up again
-				// trace("should force update");
 				TextInput(textInput).htmlText=selectedLabel;
 				textInput.validateNow();
 				if (typedTextChanged) textInput.selectRange(cursorPosition, cursorPosition);
 			} else if (showingDropdown && textInput.text!=selectedLabel && !typedTextChanged) {
 				// in menu, user has navigated with cursor keys/mouse
-				// trace("in menu, user has navigated with cursor keys/mouse");
 				textInput.text = selectedLabel;
+				textInput.validateNow();
 				textInput.selectRange(0, textInput.text.length);
 			} else if (textInput.text!="") {
 				textInput.selectRange(cursorPosition, cursorPosition);
