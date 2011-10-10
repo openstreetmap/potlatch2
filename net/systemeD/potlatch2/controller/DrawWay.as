@@ -101,8 +101,9 @@ package net.systemeD.potlatch2.controller {
 					} else {
                         // add junction node - another way
                         var jnct:CompositeUndoableAction = new CompositeUndoableAction("Junction Node");
+                        var ways:Array = layer.findWaysAtPoint(event.stageX, event.stageY, selectedWay);
                         node = createAndAddNode(event, jnct.push);
-                        Way(entity).insertNodeAtClosestPosition(node, true, jnct.push);
+                        for each (var w:Way in ways) { w.insertNodeAtClosestPosition(node, true, jnct.push); }
                         MainUndoStack.getGlobalStack().addAction(jnct);
                         layer.setHighlight(node, { selectedway: true });
                         layer.setPurgable([node], false);
