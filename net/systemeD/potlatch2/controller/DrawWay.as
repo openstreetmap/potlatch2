@@ -177,6 +177,7 @@ package net.systemeD.potlatch2.controller {
 				case Keyboard.DELETE:		
 				case Keyboard.BACKSPACE:	
 				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				case 79: /* O */			return new SelectedWayNode(firstSelected as Way, editEnd ? Way(firstSelected).length-1 : 0); //, event);
 				case 82: /* R */            repeatTags(firstSelected); return this;
 				case 70: /* F */            followWay(); return this;
 			}
@@ -225,7 +226,7 @@ package net.systemeD.potlatch2.controller {
 			if ( editEnd )
 				Way(firstSelected).appendNode(node, performAction);
 			else
-				Way(firstSelected).insertNode(0, node, performAction);
+				Way(firstSelected).prependNode(node, performAction);
 		}
 		
 		protected function backspaceNode(performAction:Function):ControllerState {

@@ -7,12 +7,14 @@ package net.systemeD.halcyon.connection.actions {
         private var nodeList:Array;
         private var index:int;
         private var firstNode:Node;
+        private var autoDelete:Boolean;		/* automatically delete way when undoing addition of node 2? */
         
-        public function AddNodeToWayAction(way:Way, node:Node, nodeList:Array, index:int) {
+        public function AddNodeToWayAction(way:Way, node:Node, nodeList:Array, index:int, autoDelete:Boolean=true) {
             super(way, "Add node "+node.id+" to");
             this.node = node;
             this.nodeList = nodeList;
             this.index = index;
+            this.autoDelete = autoDelete;
         }
             
         public override function doAction():uint {
@@ -47,7 +49,7 @@ package net.systemeD.halcyon.connection.actions {
 			//           simply refuse to undo adding the 2nd node if the way is in any relations. (This should
 			//           be a vanishingly small case anyway, because usually the AddMemberToRelationAction will
 			//           have been undone already.)
-			if (way.length==2 && way.parentRelations.length) return FAIL;
+			if (autoDelete && way.length==2 && way.parentRelations.length) return FAIL;
 
 			// remove node
             var removed:Array=nodeList.splice(index, 1);
@@ -56,7 +58,7 @@ package net.systemeD.halcyon.connection.actions {
             way.dispatchEvent(new WayNodeEvent(Connection.WAY_NODE_REMOVED, removed[0], way, index));
             
 			// delete way if it's now 1-length, and convert the one remaining node to a POI
-			if (way.length==1) {
+			if (autoDelete && way.length==1) {
 				way.setDeletedState(true);
 				way.dispatchEvent(new EntityEvent(Connection.WAY_DELETED, way));
 				firstNode=way.getNode(0);

@@ -213,13 +213,16 @@ package net.systemeD.potlatch2.controller {
 
 		/** Revert all selected items to previously saved state, via a dialog box. */
 		protected function revertSelection():void {
-			if (selectCount==0) return;
-			Alert.show("Revert selected items to the last saved version, discarding your changes?","Are you sure?",Alert.YES | Alert.CANCEL,null,revertHandler);
+			var revertable:Boolean=false;
+			for each (var item:Entity in _selection)
+				if (item.id>0) revertable=true;
+			if (revertable)
+				Alert.show("Revert selected items to the last saved version, discarding your changes?","Are you sure?",Alert.YES | Alert.CANCEL,null,revertHandler);
 		}
 		protected function revertHandler(event:CloseEvent):void {
 			if (event.detail==Alert.CANCEL) return;
 			for each (var item:Entity in _selection) {
-				item.connection.loadEntity(item);
+				if (item.id>0) item.connection.loadEntity(item);
 			}
 		}
 
