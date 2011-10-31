@@ -134,20 +134,15 @@ package net.systemeD.potlatch2.controller {
         }
 
 		/** Replace the selected node with a new one created at the mouse position. 
-			FIXME: currently two actions - should be undoable as one, but we need to execute the first action before we can run getNode(). */
+			The undo for this is two actions: first, replacement of the old node at the original mouse position; then, moving to the new position.
+			It's debatable whether this should be one or two but we can leave it as a FIXME for now.  */
 		public function replaceNode():ControllerState {
-			// create a new node
-			var newPoiAction:CreatePOIAction = new CreatePOIAction(
-				layer.connection,
-				{},
-				controller.map.coord2lat(layer.mouseY),
-				controller.map.coord2lon(layer.mouseX));
-			MainUndoStack.getGlobalStack().addAction(newPoiAction);
-
 			// replace old node
 			var oldNode:Node=firstSelected as Node;
-			var newNode:Node=newPoiAction.getNode();
-			oldNode.replaceWith(newNode, MainUndoStack.getGlobalStack().addAction);
+			var newNode:Node=oldNode.replaceWithNew(layer.connection,
+			                                        controller.map.coord2lat(layer.mouseY), 
+			                                        controller.map.coord2lon(layer.mouseX), {},
+			                                        MainUndoStack.getGlobalStack().addAction);
 
 			// start dragging
 			// we fake a MouseEvent because DragWayNode expects the x/y co-ords to be passed that way
