@@ -48,6 +48,7 @@ package net.systemeD.potlatch2 {
             this.tagViewer.controller = this;
 			this.toolbox = toolbox;
 			this.toolbox.init(this);
+			this.toolbox.updateSelectionUI();
             this.maximiseFunction = Globals.vars.flashvars["maximise_function"];
             this.minimiseFunction = Globals.vars.flashvars["minimise_function"];
             this.moveFunction     = Globals.vars.flashvars["move_function"];
