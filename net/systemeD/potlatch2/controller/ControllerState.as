@@ -11,6 +11,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
+	import mx.core.FlexGlobals;
 	
     /** Represents a particular state of the controller, such as "dragging a way" or "nothing selected". Key methods are 
     * processKeyboardEvent and processMouseEvent which take some action, and return a new state for the controller. 
@@ -77,6 +78,7 @@ package net.systemeD.potlatch2.controller {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
 				case 67:	editableLayer.connection.closeChangeset(); break;						// C - close changeset
 				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
+				case 71:	FlexGlobals.topLevelApplication.trackLoader.load(); break;				// G - GPS tracks **FIXME: move from Application to Map
 				case 83:	SaveManager.saveChanges(editableLayer.connection); break;				// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo

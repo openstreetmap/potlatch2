@@ -62,16 +62,8 @@ package net.systemeD.potlatch2.utils {
 		private function parseGPX(event:Event):void {
 			var file:XML = new XML(event.target.data);
 			var action:CompositeUndoableAction = new CompositeUndoableAction("add track objects");
-			for each (var ns:Namespace in file.namespaceDeclarations()) {
-				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
-					default xml namespace = ns;
-				}
-			}
-
 			Trace.parseTrkSegs(file,connection,action);
             action.doAction(); /* just do it, don't add to undo stack */
-
-			default xml namespace = new Namespace("");
 			layer.updateEntityUIs(false, false);
 		}
 

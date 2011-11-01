@@ -113,6 +113,7 @@
                             [", .", "Cycle through nodes in way"],
                             ["D", "Dim features"],
                             ["F", "Follow existing way"],
+                            ["G", "Load GPS points"],
                             ["M", "Maximise editor"],
                             ["P", "Create parallel way"],
                             ["Q", "Make area right-angled"],
