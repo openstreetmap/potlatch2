@@ -69,6 +69,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 189:					return removeNode();					// '-'
 				case 88:					return splitWay();						// 'X'
+				case 79:					return replaceNode();					// 'O'
                 case 81:  /* Q */           Quadrilateralise.quadrilateralise(parentWay, MainUndoStack.getGlobalStack().addAction); return this;
 				case 82:					repeatTags(firstSelected); return this;	// 'R'
 				case 87:					return new SelectedWay(parentWay);		// 'W'
@@ -131,6 +132,24 @@ package net.systemeD.potlatch2.controller {
 			else
 			    return new DrawWay(selectedWay, isLast, true);
         }
+
+		/** Replace the selected node with a new one created at the mouse position. 
+			The undo for this is two actions: first, replacement of the old node at the original mouse position; then, moving to the new position.
+			It's debatable whether this should be one or two but we can leave it as a FIXME for now.  */
+		public function replaceNode():ControllerState {
+			// replace old node
+			var oldNode:Node=firstSelected as Node;
+			var newNode:Node=oldNode.replaceWithNew(layer.connection,
+			                                        controller.map.coord2lat(layer.mouseY), 
+			                                        controller.map.coord2lon(layer.mouseX), {},
+			                                        MainUndoStack.getGlobalStack().addAction);
+
+			// start dragging
+			// we fake a MouseEvent because DragWayNode expects the x/y co-ords to be passed that way
+			var d:DragWayNode=new DragWayNode(parentWay, parentWay.indexOfNode(newNode), new MouseEvent(MouseEvent.CLICK, true, false, layer.mouseX, layer.mouseY), true);
+			d.forceDragStart();
+			return d;
+		}
 
 		/** Splits a way into two separate ways, at the currently selected node. Handles simple loops and P-shapes. Untested for anything funkier. */
 		public function splitWay():ControllerState {
@@ -218,6 +237,7 @@ package net.systemeD.potlatch2.controller {
             var msg:String = "Nodes merged"
             if (MergeNodesAction.lastTagsMerged) msg += ": check conflicting tags";
             controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+			if (n.isDeleted()) n=Node(firstSelected);
             return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
         }
         

@@ -107,6 +107,11 @@ package net.systemeD.halcyon.connection {
         public function replaceWith(target:Node, performAction:Function):void {
             performAction(new ReplaceNodeAction(this, target));
         }
+        public function replaceWithNew(connection:Connection, lat:Number, lon:Number, tags:Object, performAction:Function):Node {
+			var action:ReplaceNodeWithNewAction = new ReplaceNodeWithNewAction(this, connection, lat, lon, tags);
+			performAction(action);
+			return action.replacement;
+        }
 
         public function isDupe():Boolean {
             if (connection.getNode(this.id) == this // node could be part of a vector layer

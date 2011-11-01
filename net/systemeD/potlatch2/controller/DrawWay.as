@@ -177,12 +177,25 @@ package net.systemeD.potlatch2.controller {
 				case Keyboard.DELETE:		
 				case Keyboard.BACKSPACE:	
 				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				case 79: /* O */			return replaceNode();
 				case 82: /* R */            repeatTags(firstSelected); return this;
 				case 70: /* F */            followWay(); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 			
+		}
+
+		public function replaceNode():ControllerState {
+			var way:Way=Way(firstSelected);
+			var oldNode:Node=editEnd ? way.getLastNode() : way.getNode(0);
+			var newNode:Node=oldNode.replaceWithNew(layer.connection,
+			                                        controller.map.coord2lat(layer.mouseY), 
+			                                        controller.map.coord2lon(layer.mouseX), {},
+			                                        MainUndoStack.getGlobalStack().addAction);
+			var d:DragWayNode=new DragWayNode(way, way.indexOfNode(newNode), new MouseEvent(MouseEvent.CLICK, true, false, layer.mouseX, layer.mouseY), true);
+			d.forceDragStart();
+			return d;
 		}
 		
 		protected function keyExitDrawing():ControllerState {
@@ -225,7 +238,7 @@ package net.systemeD.potlatch2.controller {
 			if ( editEnd )
 				Way(firstSelected).appendNode(node, performAction);
 			else
-				Way(firstSelected).insertNode(0, node, performAction);
+				Way(firstSelected).prependNode(node, performAction);
 		}
 		
 		protected function backspaceNode(performAction:Function):ControllerState {

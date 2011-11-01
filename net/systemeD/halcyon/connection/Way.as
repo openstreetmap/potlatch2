@@ -90,7 +90,7 @@ package net.systemeD.halcyon.connection {
         public function insertNode(index:uint, node:Node, performAction:Function):void {
 			if (index>0 && getNode(index-1)==node) return;
 			if (index<nodes.length-1 && getNode(index)==node) return;
-			performAction(new AddNodeToWayAction(this, node, nodes, index));
+			performAction(new AddNodeToWayAction(this, node, nodes, index, false));
         }
 
         public function appendNode(node:Node, performAction:Function):uint {
