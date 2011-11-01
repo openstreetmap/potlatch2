@@ -4,23 +4,30 @@ package net.systemeD.potlatch2.tools {
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.MainUndoStack;
+	import flash.net.SharedObject;
 
 	/** Tool to reduce the number of nodes in a way by filtering out the "least important" ones, using the Douglas-Peucker algorithm. */
 	public class Simplify {
-
-		private static const TOLERANCE:Number=0.00005;
 
 		/** Carries out simplification on a way, adding an entry to global undo stack.
 		 * @param way Way to be simplified.
 		 * @param map Map it belongs to, for computing offscreen-ness.
 		 * @param keepOffscreen If true, don't delete any nodes that are not currently visible. 
+		 * @param tolerance Curve tolerance.
 		 * */
 
         /* FIXME this should take an action, and push the work onto that. Simplify is called from various places
         * so shouldn't be adding to the global undo stack */
 		  
-		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean):void {
+		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean, tolerance:Number=NaN):void {
 			if (way.length<3) { return; }
+			if (isNaN(tolerance)) {
+				if (SharedObject.getLocal("user_state").data['simplify_tolerance']!=undefined) {
+					tolerance=Number(SharedObject.getLocal("user_state").data['simplify_tolerance']);
+				} else {
+					tolerance=0.00005;
+				}
+			}
 
 			var action:CompositeUndoableAction = new CompositeUndoableAction("Simplify");
 			
@@ -46,7 +53,7 @@ package net.systemeD.potlatch2.tools {
 				// find furthest-out point
 				for (i=anchor+1; i<float; i+=1) {
 					d=getDistance(xa,ya,xb,yb,l,way.getNode(i).lon,way.getNode(i).latp);
-					if (d>furthdist && d>TOLERANCE) { furthest=i; furthdist=d; }
+					if (d>furthdist && d>tolerance) { furthest=i; furthdist=d; }
 				}
 			
 				if (furthest==0) {
