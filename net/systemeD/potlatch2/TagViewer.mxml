@@ -867,11 +867,22 @@
           var action:CompositeUndoableAction = new CompositeUndoableAction(
                   "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+newFeature.name);
 		  selectedEntity.suspend();
+          
+          // build a list of tags that are editable in new feature
+          var editableTags:Array = new Array();
+          for each( var editor:EditorFactory in newFeature.editors ) {
+              if ( editor is SingleTagEditorFactory ) {
+                  var singleTagEditor:SingleTagEditorFactory = editor as SingleTagEditorFactory;
+                  editableTags.push(singleTagEditor.key);
+              }
+          }
 
           // remove tags from the current feature
           if ( feature != null ) {
               for each( var oldtag:Object in feature.tags ) {
-                  selectedEntity.setTag(oldtag["k"], null, action.push);
+                  if ( editableTags.indexOf(oldtag["k"]) < 0 ) {
+                      selectedEntity.setTag(oldtag["k"], null, action.push);
+                  }
               }
           }
 
