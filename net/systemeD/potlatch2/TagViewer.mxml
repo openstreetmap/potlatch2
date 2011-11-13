@@ -224,6 +224,7 @@
       import net.systemeD.halcyon.MapPaint;
       import net.systemeD.potlatch2.EditController;
       import net.systemeD.potlatch2.mapfeatures.*;
+      import net.systemeD.potlatch2.mapfeatures.editors.*;
       import net.systemeD.potlatch2.utils.*;
       import net.systemeD.controls.CollapsiblePanel;
 
