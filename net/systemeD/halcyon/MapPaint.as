@@ -188,7 +188,7 @@ package net.systemeD.halcyon {
 			}
 
 			for each (poi in o.poisInside) {
-				if (!nodeuis[poi.id]) { createNodeUI(poi); }
+				if (!nodeuis[poi.id]) { createNodeUI(poi,true); }
 				else if (redraw) { nodeuis[poi.id].redraw(); }
 			}
 
@@ -263,11 +263,12 @@ package net.systemeD.halcyon {
 		}
 
 		/** Make a UI object representing a node. */
-		public function createNodeUI(node:Node,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):NodeUI {
+		public function createNodeUI(node:Node,isPOI:Boolean,rotation:Number=0,layer:int=NO_LAYER,stateClasses:Object=null):NodeUI {
 			if (!nodeuis[node.id]) {
-				nodeuis[node.id]=new NodeUI(node,this,rotation,layer,stateClasses);
+				nodeuis[node.id]=new NodeUI(node,this,isPOI,rotation,layer,stateClasses);
 				node.addEventListener(Connection.NODE_DELETED, nodeDeleted);
 			} else {
+				nodeuis[node.id].isPOI=isPOI;
 				for (var state:String in stateClasses) {
 					nodeuis[node.id].setStateClass(state,stateClasses[state]);
 				}
@@ -348,15 +349,14 @@ package net.systemeD.halcyon {
 		/** Redraw all entities */
 		public function redraw():void {
 			for each (var w:WayUI in wayuis) { w.recalculate(); w.invalidateStyleList(); w.redraw(); }
-			/* sometimes (e.g. in Map.setStyle) Mappaint.redrawPOIs() is called immediately afterwards anyway. FIXME? */
-			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
-            for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
+			for each (var p:NodeUI in nodeuis) { if (p.isPOI) { p.invalidateStyleList(); p.redraw(); } }
+			for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 
 		/** Redraw nodes and markers only */
 		public function redrawPOIs():void {
-			for each (var p:NodeUI in nodeuis) { p.invalidateStyleList(); p.redraw(); }
-            for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
+			for each (var p:NodeUI in nodeuis) { if (p.isPOI) { p.invalidateStyleList(); p.redraw(); } }
+			for each (var m:MarkerUI in markeruis) { m.invalidateStyleList(); m.redraw(); }
 		}
 		
 		/** Redraw a single entity if it exists */
@@ -393,7 +393,7 @@ package net.systemeD.halcyon {
         private function newPOICreatedListener(event:EntityEvent):void {
             var node:Node = event.entity as Node;
 			if (!node.within(map.edge_l, map.edge_r, map.edge_t, map.edge_b)) { return; }
-			createNodeUI(node);
+			createNodeUI(node,true);
         }
 
         private function newMarkerCreatedListener(event:EntityEvent):void {

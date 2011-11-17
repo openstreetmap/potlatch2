@@ -235,12 +235,17 @@ package net.systemeD.halcyon.styleparser {
 		}
 
 		/** Create a StyleList for an Entity, by creating a blank StyleList, then running each StyleChooser over it.
+		    Optionally, styleUntagged can be set to false, to abort (and return a blank StyleList) if the tag hash is empty.
 			@see net.systemeD.halcyon.styleparser.StyleList */
 
-		public function getStyles(obj:Entity, tags:Object, zoom:uint):StyleList {
+		public function getStyles(obj:Entity, tags:Object, zoom:uint, styleUntagged:Boolean=true):StyleList {
 			var sl:StyleList=new StyleList();
-			for each (var sc:StyleChooser in choosers) {
-				sc.updateStyles(obj,tags,sl,zoom);
+			var tagged:Boolean=styleUntagged;
+			for (var k:String in tags) { tagged=true; break; }
+			if (tagged) {
+				for each (var sc:StyleChooser in choosers) {
+					sc.updateStyles(obj,tags,sl,zoom);
+				}
 			}
 			return sl;
 		}

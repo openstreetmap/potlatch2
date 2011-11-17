@@ -347,7 +347,7 @@ package net.systemeD.halcyon {
 //				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
 				// ** FIXME - heading isn't currently applied
 				nodeStateClasses['junction']=(node.numParentWays>1);
-				paint.createNodeUI(node,r,layer,nodeStateClasses);
+				paint.createNodeUI(node,false,r,layer,nodeStateClasses);
 			}
 			if (!drawn) { return false; } // If not visible, no hitzone.
 			
