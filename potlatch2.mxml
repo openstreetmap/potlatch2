@@ -74,16 +74,16 @@
         <mx:Canvas id="map_area" resize="onResizeMap()"
             top="0" left="0" width="100%" height="100%" dragEnter="dragEnterHandler(event);" dragDrop="dragDropHandler(event);">
         </mx:Canvas>
-        <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
+        <mx:Image source="@Embed('embedded/zoomIn.svg')" left="5" top="5" click="theMap.zoomIn();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom in - currently z'+getScale()}" />
-        <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
+        <mx:Image source="@Embed('embedded/zoomOut.svg')" left="5" top="22" click="theMap.zoomOut();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom out - currently z'+getScale()}" />
-        <mx:Image source="@Embed('embedded/search.svg')" right="3" top="40" click="new FindDialog().init();"
+        <mx:Image source="@Embed('embedded/search.svg')" left="5" top="42" click="new FindDialog().init();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="Find place" />
-        <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
+        <mx:TextArea id="dataWorking" text="" right="5" top="5" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
-        <mx:TextArea id="coordsbox" left="0" top="0" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="33"
+        <mx:TextArea id="coordsbox" left="25" top="5" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="30"
             width="57" enabled="false" borderThickness="0" visible="false"/>
 
     </mx:Canvas>
