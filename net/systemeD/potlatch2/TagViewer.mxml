@@ -229,7 +229,10 @@
       import net.systemeD.controls.CollapsiblePanel;
 
       import mx.collections.*;
-      import mx.containers.*;
+      import mx.containers.VBox;
+      import mx.containers.HBox;
+      import mx.containers.TabNavigator;
+      import mx.containers.Accordion;
       import mx.events.*;
       import mx.core.*;
       import mx.managers.PopUpManager;
@@ -241,6 +244,8 @@
       import mx.managers.DragManager;
       import mx.core.DragSource;
       import mx.controls.TabBar;
+      import spark.components.Form;
+      import spark.layouts.FormLayout;
 //    import flexlib.containers.SuperTabNavigator;
 
       [Bindable] [Embed(source="../../../embedded/tab_basic.png"       )] private var tabIconBasic:Class;
@@ -455,7 +460,7 @@
 			// Add to basic editor box first
 			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
 				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-				if (editor) basicEditorBox.addChild(editor);
+				if (editor) Form(basicEditorBox.getChildByName("form")).addElement(UIComponent(editor));
 			}
 
 			// Then prepare to add to category panel
@@ -500,6 +505,11 @@
           box.percentWidth = 100;
           box.percentHeight = 100;
           box.styleName = "dndEditorContainer";
+          var form:Form = new Form();
+          form.name = "form";
+          var layout:FormLayout = new FormLayout();
+          form.layout = layout;
+          box.addChild(form);
           return box;
       }
 
