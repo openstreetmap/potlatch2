@@ -12,6 +12,7 @@
     import mx.events.CloseEvent;
     import mx.core.Application;
     import mx.core.FlexGlobals;
+    import net.systemeD.halcyon.Globals;
 
 	[Bindable] private var application:Object = FlexGlobals.topLevelApplication;
 
@@ -360,7 +361,10 @@
   </mx:TabNavigator>
 
   <mx:ControlBar>
-    <mx:Label text="Version: {application.version} Build: {application.build_number}" />
+    <mx:VBox>
+      <mx:Label text="Version: {application.version} Build: {application.build_number}" />
+      <mx:Label text="Locale: {Globals.vars.locale}" />
+    </mx:VBox>
     <mx:Spacer width="100%"/>
     <mx:Button label="Ok" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
   </mx:ControlBar>
