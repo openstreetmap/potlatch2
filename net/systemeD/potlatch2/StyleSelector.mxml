@@ -11,7 +11,7 @@
 	        dataProvider="{Stylesheets.instance().getCollection()}"
 	        rowCount="{Stylesheets.instance().getCollection().length}" />
 
-	<mx:Button label="Edit..." click="FlexGlobals.topLevelApplication.styleButton.close(); new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
+	<mx:Button id="editButton" label="Edit..." click="FlexGlobals.topLevelApplication.styleButton.close(); new BackgroundDialog().init('Map style',mapStyle,Stylesheets.instance());" />
 
 	<fx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
