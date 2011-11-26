@@ -2,6 +2,7 @@
 <edit:SingleTagEditor
 	xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
@@ -9,15 +10,16 @@
 	toolTip="{fieldDescription}"
     direction="horizontal" styleName="titledEditor">
 
-	<mx:Label text="{fieldName}:"/>
-	<mx:HSlider id="inputSlider"
-                 minimum="{sliderMinimum}" maximum="{sliderMaximum}"
-                 snapInterval="{sliderSnapInterval}" tickInterval="{sliderSnapInterval}"
-                 labels="{sliderLabels}" dataTipFormatFunction="formatDataTip"
-                 value="{translatedValue}"
-                 enabled="{isValueValid}"
-                 liveDragging="true"
-				 change="setTagValueFromSlider()" />
+    <s:FormItem label="{fieldName}">
+      <mx:HSlider id="inputSlider"
+                  minimum="{sliderMinimum}" maximum="{sliderMaximum}"
+                  snapInterval="{sliderSnapInterval}" tickInterval="{sliderSnapInterval}"
+                  labels="{sliderLabels}" dataTipFormatFunction="formatDataTip"
+                  value="{translatedValue}"
+                  enabled="{isValueValid}"
+                  liveDragging="true"
+                  change="setTagValueFromSlider()" />
+    </s:FormItem>
 
   <fx:Script><![CDATA[
 
