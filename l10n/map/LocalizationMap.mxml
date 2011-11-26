@@ -64,7 +64,7 @@
     <ResourceSetter property="newMembersText.htmlText" key="help.newMembers" />
     <!-- wanna call loaderInfo.parameters["site_name"] or getIntroText() -->
     <!-- <ResourceSetter property="introText.htmlText" key="help.introText" parameters="that"/> -->
-    <ResourceSetter property="Introduction.label" key="help.introduction" />
+    <ResourceSetter property="introduction.label" key="help.introduction" />
     <ResourceSetter property="Controls.label" key="help.controls" />
     <ResourceSetter property="interfaceControls.label" key="help.interfaceControls"/>
     <ResourceSetter property="background.label" key="help.background"/>
