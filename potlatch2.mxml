@@ -48,7 +48,7 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-		<mx:PopUpMenuButton id="gpsButton" styleName="appBarButton"
+		<mx:PopUpMenuButton id="gpsButton" label="GPS Data" styleName="appBarButton"
 		    itemClick="if (event.index==0) { trackLoader.load(); } 
 		          else if (event.index==1) { new MyGpxDialog().init(); } 
 		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
@@ -119,7 +119,7 @@
         import mx.managers.DragManager;
         import mx.core.DragSource;
         import mx.controls.Alert;
-        import com.mindspace.l10n.events.LocaleEvent;
+        import org.babelfx.events.LocaleEvent;
 
         public var theMap:Map;
         public var theController:EditController;
@@ -137,14 +137,16 @@
         include "version.as";
 
 		private function startInit():void {
-            /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. */
-            /* Change this to another locale (e.g. fr_FR) to see the differences. */
-            if (loaderInfo.parameters['locale']) {
-              dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
-            }
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
 			loader.load(new URLRequest("FontLibrary.swf"));
+
+            if (loaderInfo.parameters['locale']) {
+                Globals.vars.locale = loaderInfo.parameters['locale'];
+                dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, loaderInfo.parameters['locale']));
+                dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, 'en_US')); // think en_US is default
+                resourceManager.localeChain = [loaderInfo.parameters['locale'], 'en_US'];
+            }
 		}
 		
 		private function startApp(event:Event):void {
