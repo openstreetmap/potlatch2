@@ -518,7 +518,7 @@
           if ( components == null || tab == null || tab.numChildren >= components.length )
               return;
           for each (var component:DisplayObject in components ) {
-              tab.addChild(component);
+              Form(tab.getChildByName("form")).addElement(UIComponent(component));
           }
       }
 
