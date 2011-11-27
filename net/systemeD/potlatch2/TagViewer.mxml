@@ -481,9 +481,14 @@
 					subpanel.styleName="subcategoryPanel";
 					subpanel.title=subcategory;
 					subpanels[category][subcategory]=subpanel;
+					var form:Form = new Form();
+					form.name = "form";
+					var layout:FormLayout = new FormLayout();
+					form.layout = layout;
+					subpanel.addChild(form);
 					tabComponents[tab].push(subpanel);
 				}
-				subpanel.addChild(catEditor);
+				Form(subpanel.getChildByName("form")).addElement(UIComponent(catEditor));
 			} else {
 				tabComponents[tab].push(catEditor);
 			}
