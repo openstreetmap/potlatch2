@@ -5,16 +5,14 @@
     xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
-	verticalGap="0"
 	width="100%"
 	toolTip="{fieldDescription}"
-    direction="horizontal">
+	label="{fieldName}:">
 
-    <s:FormItem label="{fieldName}">
-      <mx:CheckBox id="inputBox" creationComplete="initCheckbox()"
-                  labelPlacement="right" label=""
-                  change="value=toYesNo()" />
-    </s:FormItem>
+    <mx:CheckBox id="inputBox" creationComplete="initCheckbox()"
+                labelPlacement="right" label=""
+                change="value=toYesNo()" />
+
 
   <fx:Script><![CDATA[
   

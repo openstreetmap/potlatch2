@@ -5,9 +5,9 @@
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	toolTip="{fieldDescription}"
-    direction="{fieldDirection}" styleName="titledEditor">
+	label="{fieldName}:"
+    styleName="titledEditor">
 
-  <s:FormItem label="{fieldName}">
     <s:DropDownList id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
         change="value = inputBox.selectedItem.value" labelField="label">
         <s:itemRenderer>
@@ -25,7 +25,6 @@
           </fx:Component>
         </s:itemRenderer>
     </s:DropDownList>
-  </s:FormItem>
 
   <fx:Script><![CDATA[
       import mx.collections.*;

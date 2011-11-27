@@ -5,21 +5,19 @@
     xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
-	verticalGap="0"
 	width="100%"
 	toolTip="{fieldDescription}"
-    direction="horizontal" styleName="titledEditor">
+	label="{fieldName}:"
+	styleName="titledEditor">
 
-    <s:FormItem label="{fieldName}">
-      <mx:HSlider id="inputSlider"
-                  minimum="{sliderMinimum}" maximum="{sliderMaximum}"
-                  snapInterval="{sliderSnapInterval}" tickInterval="{sliderSnapInterval}"
-                  labels="{sliderLabels}" dataTipFormatFunction="formatDataTip"
-                  value="{translatedValue}"
-                  enabled="{isValueValid}"
-                  liveDragging="true"
-                  change="setTagValueFromSlider()" />
-    </s:FormItem>
+    <mx:HSlider id="inputSlider"
+                minimum="{sliderMinimum}" maximum="{sliderMaximum}"
+                snapInterval="{sliderSnapInterval}" tickInterval="{sliderSnapInterval}"
+                labels="{sliderLabels}" dataTipFormatFunction="formatDataTip"
+                value="{translatedValue}"
+                enabled="{isValueValid}"
+                liveDragging="true"
+                change="setTagValueFromSlider()" />
 
   <fx:Script><![CDATA[
 

@@ -8,12 +8,11 @@
 	verticalGap="0"
 	width="100%"
 	toolTip="{fieldDescription}"
+	label="{fieldName}:"
 	initialize="addTurnRestrictions()">
 
-  <s:FormItem label="{fieldName}">
     <mx:VBox verticalGap="0" width="100%" id="turnRestrictionIcons"/>
     <mx:LinkButton label="Add new turn restriction" click="addNewTurnRestriction()" />
-  </s:FormItem>
 
   <fx:Script><![CDATA[
 	import net.systemeD.halcyon.connection.*;

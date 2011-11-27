@@ -8,13 +8,11 @@
 	xmlns:controls="net.systemeD.controls.*"
 	width="100%"
 	toolTip="{fieldDescription}"
-    direction="{fieldDirection}" styleName="titledEditor">
+    styleName="titledEditor" label="{fieldName}:">
 
-    <s:FormItem label="{fieldName}">
-      <controls:PromptingTextInputWarning id="inputBox" prompt="{prompt}" text="{value}" width="100%"
-        focusOut="value = inputBox.text" enter="value = inputBox.text"
-        restrict="&#x0020;-&#x10FFFF;" />
-    </s:FormItem>
+    <controls:PromptingTextInputWarning id="inputBox" prompt="{prompt}" text="{value}" width="100%"
+      focusOut="value = inputBox.text" enter="value = inputBox.text"
+      restrict="&#x0020;-&#x10FFFF;" />
   <fx:Script><![CDATA[
   
       [Bindable(event="factory_set")]
