@@ -15,6 +15,7 @@
     import net.systemeD.halcyon.Globals;
 
 	[Bindable] private var application:Object = FlexGlobals.topLevelApplication;
+	[Bindable] private var locale:String = Globals.vars.locale;
 
     /** Pops up a multi-tabbed help window in the middle of the screen, then remembers that the user has seen it. */
     public function init():void {
@@ -363,7 +364,7 @@
   <mx:ControlBar>
     <mx:VBox>
       <mx:Label text="Version: {application.version} Build: {application.build_number}" />
-      <mx:Label text="Locale: {Globals.vars.locale}" />
+      <mx:Label text="Locale: {locale}" />
     </mx:VBox>
     <mx:Spacer width="100%"/>
     <mx:Button label="Ok" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
