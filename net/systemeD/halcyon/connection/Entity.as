@@ -154,7 +154,7 @@ package net.systemeD.halcyon.connection {
 
         /** Change oldKey=[value] to newKey=[value], with optional undoability.
          * @param oldKey Name of key to rename
-         * @parame newKey New name of key
+         * @param newKey New name of key
          * @param performAction Single-argument function to pass a SetTagKeyAction to.
          * @example renameTag("building", "amenity", MainUndoStack.getGlobalStack().addAction);
          */

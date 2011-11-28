@@ -105,7 +105,7 @@ package net.systemeD.potlatch2.mapfeatures {
         }
 
         [Bindable(event="nameChanged")]
-        /** The human-readable name of the feature (@name), or null if none. */
+        /** The human-readable name of the feature (name), or null if none. */
         public function get name():String {
 			if (_xml.attribute('name').length()>0) { return _xml.@name; }
 			return null;
