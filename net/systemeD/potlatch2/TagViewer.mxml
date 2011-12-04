@@ -605,7 +605,7 @@
 			if      ( entity is Node     ) entityText = "Node";
 			else if ( entity is Way      ) entityText = "Way";
 			else if ( entity is Relation ) entityText = "Relation";
-			advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
+			advancedID.htmlText = entityText+": <b>"+entity.id+"</b> "+(entity.status ? entity.status : '');
 		}
 
 		removeRelationListeners();
