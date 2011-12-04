@@ -54,7 +54,7 @@
 			conn.statusFetcher=null;
 			userState.setProperty("licence_status",false);
 		} else {
-			conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/userlist",conn);
+			conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/problems",conn);
 			conn.statusFetcher.fetch(conn.getAllLoadedEntities());
 			userState.setProperty("licence_status",true);
 			// ** FIXME: needs to also switch map style
