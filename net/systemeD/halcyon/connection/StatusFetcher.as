@@ -66,9 +66,9 @@ package net.systemeD.halcyon.connection {
 				//		otherwise, status is 'unsure' (2, yellow)
 				var s:uint=3;	// ok
 				for each (var user:XML in exml.user) {
-					if (user.@severity=='harmless') continue;						// ignore if harmless
-					if (user.@decision=='no' && user.@version=='first') { s=0; }	// no from v1
-					else if (user.@decision=='no') { s=Math.min(s,1); }				// no from later version
+					if (user.@severity=='harmless' || user.@severity=='none') continue;	// ignore if harmless
+					if (user.@decision=='no' && user.@version=='first') { s=0; }		// no from v1
+					else if (user.@decision=='no') { s=Math.min(s,1); }					// no from later version
 					else if (user.@decision=='undecided' || user.@decision=='anonymous') { s=Math.min(s,2); }	// unsure
 				}
 				status=STATUSES[s];
