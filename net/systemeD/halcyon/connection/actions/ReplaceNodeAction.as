@@ -5,8 +5,8 @@ package net.systemeD.halcyon.connection.actions {
     /** Action that substitutes one node instead of another, in all the ways and relations that that node is part of. */
     public class ReplaceNodeAction extends CompositeUndoableAction {
 
-        private var node:Node;
-        private var replacement:Node;
+        protected var node:Node;
+        public var replacement:Node;
 
         /**
         * @param node The node we're getting rid of
@@ -19,7 +19,6 @@ package net.systemeD.halcyon.connection.actions {
         }
 
         public override function doAction():uint {
-
             for each (var way:Way in node.parentWays) {
               for (var x:uint=0; x<way.length; x++) {
                 if (way.getNode(x) == node) {

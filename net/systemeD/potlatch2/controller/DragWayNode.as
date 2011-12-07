@@ -33,19 +33,13 @@ package net.systemeD.potlatch2.controller {
         }
 
         private function addNode(selectedWay:Way,event:MouseEvent):int {
-			// find which other ways are under the mouse
-			var ways:Array=[]; var w:Way;
-			for each (var wayui:WayUI in controller.map.paint.wayuis) {
-				w=wayui.hitTest(event.stageX, event.stageY);
-				if (w && w!=selectedWay) { ways.push(w); }
-			}
-
+			var ways:Array = layer.findWaysAtPoint(event.stageX, event.stageY, selectedWay);
             var lat:Number = controller.map.coord2lat(event.localY);
             var lon:Number = controller.map.coord2lon(event.localX);
             var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
-            var node:Node = controller.connection.createNode({}, lat, lon, undo.push);
+            var node:Node = selectedWay.connection.createNode({}, lat, lon, undo.push);
             var index:int = selectedWay.insertNodeAtClosestPosition(node, true, undo.push);
-			for each (w in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
+			for each (var w:Way in ways) { w.insertNodeAtClosestPosition(node, true, undo.push); }
             MainUndoStack.getGlobalStack().addAction(undo);
 			return index;
         }
@@ -59,7 +53,7 @@ package net.systemeD.potlatch2.controller {
                 	return new SelectedWayNode(parentWay,draggingIndex);
 				} else if (event.shiftKey && !isNew) {
 					// start new way
-					var way:Way = controller.connection.createWay({}, [entity],
+					var way:Way = entity.connection.createWay({}, [entity],
 					    MainUndoStack.getGlobalStack().addAction);
 					return new DrawWay(way, true, false);
 				} else if (event.shiftKey && isNew) {
@@ -115,17 +109,17 @@ package net.systemeD.potlatch2.controller {
 			originalLat = draggingNode.lat;
 			originalLon = draggingNode.lon;
 
-			controller.map.setHighlightOnNodes(parentWay, { selectedway: true } );
-			controller.map.limitWayDrawing(parentWay, draggingIndex);
-			controller.map.setHighlight(draggingNode, { selected: true } );
-			controller.map.protectWay(parentWay);
-			controller.map.limitWayDrawing(parentWay, NaN, draggingIndex);
+			layer.setHighlightOnNodes(parentWay, { selectedway: true } );
+			layer.limitWayDrawing(parentWay, draggingIndex);
+			layer.setHighlight(draggingNode, { selected: true } );
+			layer.protectWay(parentWay);
+			layer.limitWayDrawing(parentWay, NaN, draggingIndex);
         }
         override public function exitState(newState:ControllerState):void {
-			controller.map.unprotectWay(parentWay);
-			controller.map.limitWayDrawing(parentWay);
-			controller.map.setHighlightOnNodes(parentWay, { selectedway: false } );
-			controller.map.setHighlight(draggingNode, { selected: false } );
+			layer.unprotectWay(parentWay);
+			layer.limitWayDrawing(parentWay);
+			layer.setHighlightOnNodes(parentWay, { selectedway: false } );
+			layer.setHighlight(draggingNode, { selected: false } );
         }
         override public function toString():String {
             return "DragWayNode";

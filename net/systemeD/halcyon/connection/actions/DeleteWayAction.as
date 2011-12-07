@@ -56,8 +56,8 @@ package net.systemeD.halcyon.connection.actions {
             } else {
               markClean();
             }
-            Connection.getConnection().dispatchEvent(new EntityEvent(Connection.NEW_WAY, way));
-            effects.undoAction();
+            entity.connection.dispatchEvent(new EntityEvent(Connection.NEW_WAY, way));
+            if (effects) effects.undoAction();
             for each(var node:Node in oldNodeList) {
                 nodeList.push(node);
             	node.addParent(way);

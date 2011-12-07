@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:VBox
-	xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:flexlib="flexlib.containers.*"
 	xmlns:controls="net.systemeD.controls.*"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
@@ -23,9 +24,9 @@
 		<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point', true)}" width="100%" height="1"
 			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)" styleName="dndPanelTileList">
 			<mx:itemRenderer>
-				<mx:Component>
+				<fx:Component>
 					<mx:VBox toolTip="{data.name}">
-						<mx:Script><![CDATA[
+						<fx:Script><![CDATA[
 							import mx.events.DragEvent;
 							import mx.managers.DragManager;
 							import mx.core.DragSource;
@@ -43,10 +44,10 @@
 								dragProxy.height = dragInitiator.height; // for non-embedded images
 								DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
 							}
-						]]></mx:Script>
+						]]></fx:Script>
 						<mx:Image id="foo" source="{data.dndimage}" height="24" width="24" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
 					</mx:VBox>
-				</mx:Component>
+				</fx:Component>
 			</mx:itemRenderer>
 		</mx:TileList>
 	</mx:Repeater>
@@ -88,17 +89,17 @@
                 <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
                 <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
                 <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
-                    <mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
+                    <mx:itemEditor><fx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></fx:Component></mx:itemEditor>
                 </mx:DataGridColumn>
 				<mx:DataGridColumn width="20" editable="false">
 					<mx:itemRenderer>
-						<mx:Component>
+						<fx:Component>
 		                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
 								<mx:PopUpButton arrowButtonWidth="12" paddingLeft="0" paddingRight="0" width="12" height="12" 
 								                open="{outerDocument.updateRelationMenu(event);}" 
 								                creationComplete="{outerDocument.createRelationMenu(PopUpButton(event.target));}"/>
 							</mx:HBox>
-						</mx:Component>
+						</fx:Component>
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
             </mx:columns>
@@ -120,7 +121,7 @@
             <mx:DataGridColumn editable="false" dataField="type" headerText="Type"/>
             <mx:DataGridColumn editable="false" dataField="id" headerText="ID"/>
             <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
-				<mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
+				<mx:itemEditor><fx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></fx:Component></mx:itemEditor>
 			</mx:DataGridColumn>
           </mx:columns>
         </mx:DataGrid>
@@ -142,7 +143,7 @@
 			disabledIcon="@Embed('../../../embedded/view_accordion_disabled.png')"
 			click="setEditorStackUI(false)" id="accordionLabel" paddingTop="6"
 			toolTip="Show in sliding windows"
-			enabled="{editorStack is SuperTabNavigator &amp;&amp; stack.selectedIndex==0}" />
+			enabled="{editorStack is TabNavigator &amp;&amp; stack.selectedIndex==0}" />
 	  </mx:HBox>
   </mx:VBox>
 
@@ -163,17 +164,17 @@
             <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
             <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
             <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
-                <mx:itemEditor><mx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></mx:Component></mx:itemEditor>
+                <mx:itemEditor><fx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></fx:Component></mx:itemEditor>
             </mx:DataGridColumn>
 			<mx:DataGridColumn width="20" editable="false">
 				<mx:itemRenderer>
-					<mx:Component>
+					<fx:Component>
 	                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
 							<mx:PopUpButton arrowButtonWidth="12" paddingLeft="0" paddingRight="0" width="12" height="12" 
 							                open="{outerDocument.updateRelationMenu(event);}" 
 							                creationComplete="{outerDocument.createRelationMenu(PopUpButton(event.target));}"/>
 						</mx:HBox>
-					</mx:Component>
+					</fx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
         </mx:columns>
@@ -204,12 +205,28 @@
     <sidepanel:BugPanel id="bugPanelContents" width="100%"/>
   </mx:VBox>
 
+  <!-- Background layer selection -->
+
+  <mx:VBox id="backgroundPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <sidepanel:BackgroundPanel id="backgroundPanelContents" width="100%"/>
+  </mx:VBox>
+
+  <!-- merge tags from background layer -->
+
+  <mx:VBox id="backgroundMergePanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <sidepanel:BackgroundMergePanel id="backgroundMergePanelContents" width="100%" />
+  </mx:VBox>
+
 </mx:ViewStack>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.VectorLayer;
+      import net.systemeD.halcyon.MapPaint;
+      import net.systemeD.potlatch2.EditController;
       import net.systemeD.potlatch2.mapfeatures.*;
+      import net.systemeD.potlatch2.mapfeatures.editors.*;
+      import net.systemeD.potlatch2.utils.*;
+      import net.systemeD.controls.CollapsiblePanel;
 
       import mx.collections.*;
       import mx.containers.*;
@@ -217,30 +234,45 @@
       import mx.core.*;
       import mx.managers.PopUpManager;
       import mx.controls.Menu;
+      import mx.controls.Alert;
       import flash.geom.Point;
       import flash.net.*;
       import mx.events.DragEvent;
       import mx.managers.DragManager;
       import mx.core.DragSource;
-      import flexlib.containers.SuperTabNavigator;
+      import mx.controls.TabBar;
+//    import flexlib.containers.SuperTabNavigator;
+
+      [Bindable] [Embed(source="../../../embedded/tab_basic.png"       )] private var tabIconBasic:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_address.png"     )] private var tabIconAddress:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_cycle.png"       )] private var tabIconCycle:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_details.png"     )] private var tabIconDetails:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_restrictions.png")] private var tabIconRestrictions:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_transport.png"   )] private var tabIconTransport:Class;
+      [Bindable] [Embed(source="../../../embedded/tab_walk.png"        )] private var tabIconWalk:Class;
+      private var tabIcons:Object= { Basic:tabIconBasic, Details:tabIconDetails, Address:tabIconAddress, Walk:tabIconWalk, Cycle:tabIconCycle, 
+	                                 Transport:tabIconTransport, Restrictions:tabIconRestrictions};
 
       [Bindable]
       public var dndPrompt:String="Add new points by dragging them onto the map";
 
-      private var editorStackTabNavigator:SuperTabNavigator;
+      private var editorStackTabNavigator:TabNavigator;
       private var editorStackAccordion:Accordion;
       [Bindable] private var editorStack:Container;
 
       public var mapFeatures:MapFeatures;
+      public var controller:EditController;
       private var selectedEntity:Entity;
+      private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
       private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
       private var feature:Feature = null;
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
 
-	  public function setEntity(entities:Array, layer:VectorLayer=null):void {
+	  public function setEntity(entities:Array, layer:MapPaint=null):void {
 		UIComponent.suspendBackgroundProcessing();
+		connection=null;
 
 		var firstSelected:Entity=null;
 		if (entities.length==1) { firstSelected=entities[0]; }
@@ -258,32 +290,47 @@
 		} else if (entities.length==1) {
 			// Single entity selected, so show tag panel
 			selectedEntity=firstSelected;
+			connection=firstSelected.connection;
 			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
-            if (selectedEntity is Marker && layer is BugLayer) {
-              bugPanelContents.init(selectedEntity, layer);
+            if (selectedEntity is Marker && connection is BugConnection) {
+              bugPanelContents.init(selectedEntity, BugConnection(connection));
               sidebar.selectedChild = bugPanel;
             } else if (selectedEntity is Marker) {
               markerPanelContents.init(selectedEntity, layer);
               sidebar.selectedChild = markerPanel;
+            } else if (connection is SnapshotConnection) {
+              backgroundPanelContents.init(selectedEntity, layer);
+              sidebar.selectedChild = backgroundPanel;
             } else {
               refreshFeatureIcon();
               initialiseEditors();
               sidebar.selectedChild = tagsPanel;
             }
 
+        } else if (entities.length==2
+                      && xor(entities[0].connection is SnapshotConnection, entities[1].connection is SnapshotConnection)
+                      && xor(!controller.map.getLayerForEntity(entities[0]).isBackground, !controller.map.getLayerForEntity(entities[1]).isBackground) ) {
+            backgroundMergePanelContents.init(entities);
+            sidebar.selectedChild = backgroundMergePanel;
+
 		} else if(isMultipleEditable(entities)) {
 			selectedEntity = new EntityCollection(entities);
 			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged);
             sidebar.selectedChild = multiplePanel;
 			setupMultiAdvanced(selectedEntity);
-
+			connection=entities[0].connection;
+			
 		} else {
 			//The selection contains elements which can't be edited all together.
 			sidebar.selectedChild = multipleInvalidPanel;
 		}
 		UIComponent.resumeBackgroundProcessing();
+      }
+
+      private function xor(a:Boolean, b:Boolean):Boolean {
+          return ( a || b) && !(a && b);
       }
 
       private function refreshFeatureIcon():void {
@@ -362,43 +409,92 @@
       }
 
       private var tabComponents:Object = {};
+      private var subpanelComponents:Object = {};
 
       private function initialiseEditors():void {
-          editorStack.removeAllChildren();
-          if ( selectedEntity == null || feature == null )
-              return;
+		editorStack.removeAllChildren();
+		if ( selectedEntity == null || feature == null )
+			return;
 
-          var editorBox:VBox = createEditorBox();
-          editorBox.label = "Basic";
-          editorStack.addChild(editorBox);
+		var basicEditorBox:VBox = createEditorBox();
+		basicEditorBox.label = "Basic";
+		basicEditorBox.icon=tabIconBasic;
+		editorStack.addChild(basicEditorBox);
 
-          var tabs:Object = {};
-          tabComponents = {};
+		var tabs:Object = {};
+		var tabList:Array = [];
+		tabComponents = {};
+		var subpanels:Object = {};
+		subpanelComponents = {};
 
-          for each (var factory:EditorFactory in feature.editors) {
-              if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
-                  var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-                  if ( editor != null )
-                      editorBox.addChild(editor);
-              }
-              var category:String = factory.category;
-              if (category!='') {
-	              var tab:VBox = tabs[category];
-	              if ( tab == null) {
-	                  tab = createEditorBox();
-	                  tab.label = category;
-	                  editorStack.addChild(tab);
-	                  tabs[category] = tab;
-	                  tabComponents[tab] = [];
-	              }
-	              var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
-	              if ( catEditor != null )
-	                  tabComponents[tab].push(catEditor);
-	              //    tab.addChild(catEditor);
-              }
-          }
+		// First create the tabs
+		for each (var factory:EditorFactory in feature.editors) {
+			var category:String = factory.category;
+			if (category!='') {
+				var tab:VBox = tabs[category];
+				if ( tab == null) {
+					tab = createEditorBox();
+					tab.label = category;
+					if (tabIcons[category]) tab.icon=tabIcons[category];
+					tabs[category] = tab;
+					tabList.push(tab);	
+				}
+			}
+		}
+
+		// Put the tabs on-screen in order
+		tabList.sort(sortCategories,16);
+		for each (tab in tabList) {
+			editorStack.addChild(tab);
+			tabComponents[tab] = [];
+		}
+
+		// Then add the individual editors to them
+		for each (factory in feature.editors) {
+
+			// Add to basic editor box first
+			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
+				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
+				if (editor) basicEditorBox.addChild(editor);
+			}
+
+			// Then prepare to add to category panel
+			category=factory.category;
+			if (factory.category=='') continue;
+			var catEditor:DisplayObject = factory.createEditorInstance(selectedEntity);
+			if (!catEditor) continue;
+			tab=tabs[category];
+			
+			// Create subcategory panel if needed
+			if (factory.subcategory) {
+				var subcategory:String = factory.subcategory;
+				if (!subpanels[category]) { subpanels[category]={}; }
+				var subpanel:CollapsiblePanel = subpanels[category][subcategory];
+				if (!subpanel) {
+					subpanel=new CollapsiblePanel(false);
+					subpanel.percentWidth=100;
+					subpanel.styleName="subcategoryPanel";
+					subpanel.title=subcategory;
+					subpanels[category][subcategory]=subpanel;
+					tabComponents[tab].push(subpanel);
+				}
+				subpanel.addChild(catEditor);
+			} else {
+				tabComponents[tab].push(catEditor);
+			}
+   		}
       }
 
+	// ** FIXME: Order probably shouldn't be hard-coded, but configurable
+	private static var categoryOrder:Array=["Restrictions","Transport","Cycle","Walk","Address","Details"];	// reverse order
+	private function sortCategories(a:VBox,b:VBox):int {
+		var a1:int=categoryOrder.indexOf(a.label);
+		var a2:int=categoryOrder.indexOf(b.label);
+		if (a1<a2) { return 1; }
+		else if (a1>a2) { return -1; }
+		return 0;
+	}
+	
       private function createEditorBox():VBox {
           var box:VBox = new VBox();
           box.percentWidth = 100;
@@ -417,16 +513,16 @@
       }
 
 	private function initEditorStackUIs():void {
-		editorStackTabNavigator = new SuperTabNavigator();
-		editorStackTabNavigator.allowTabSqueezing=false;
-		editorStackTabNavigator.minTabWidth=10;
-		editorStackTabNavigator.closePolicy="close_never";
-		editorStackTabNavigator.scrollSpeed=20;
+		editorStackTabNavigator = new TabNavigator();
+//		editorStackTabNavigator.allowTabSqueezing=false;
+//		editorStackTabNavigator.minTabWidth=10;
+//		editorStackTabNavigator.closePolicy="close_never";
+//		editorStackTabNavigator.scrollSpeed=20;
 		editorStackTabNavigator.creationPolicy="auto";
 		editorStackTabNavigator.percentWidth=100;
 		editorStackTabNavigator.percentHeight=100;
 		editorStackTabNavigator.styleName="dndStackTab";
-		editorStackTabNavigator.popUpButtonPolicy="off"
+//		editorStackTabNavigator.popUpButtonPolicy="off"
 
 
 		editorStackAccordion = new Accordion();
@@ -434,6 +530,10 @@
 		editorStackAccordion.percentHeight=100;
 		editorStackAccordion.creationPolicy="auto";
 		editorStackAccordion.styleName="dndStackAccordion";
+		/* FIXME: the accordion icons should be right-aligned. See:
+		http://www.kristoferjoseph.com/blog/2008/11/06/positioning-the-flex-accordion-header-icon
+		http://blog.flexexamples.com/2007/09/13/changing-text-alignment-in-an-flex-accordion-header/
+		*/
 
 		setEditorStackUI(true);
 	}
@@ -464,8 +564,8 @@
 	}
 
 	private function editorStackUIUpdate(event:Event):void {
-		if (editorStack is SuperTabNavigator) {
-			var e:SuperTabNavigator = editorStack as SuperTabNavigator;
+		if (editorStack is TabNavigator) {
+			var e:TabNavigator = editorStack as TabNavigator;
 			if (e.selectedIndex<0) { return; }
 			for (var i:uint=0; i<e.numChildren; i++) {
 				e.getTabAt(i).selected=(i==e.selectedIndex);
@@ -505,7 +605,7 @@
 			if      ( entity is Node     ) entityText = "Node";
 			else if ( entity is Way      ) entityText = "Way";
 			else if ( entity is Relation ) entityText = "Relation";
-			advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
+			advancedID.htmlText = entityText+": <b>"+entity.id+"</b> "+(entity.status ? entity.status : '');
 		}
 
 		removeRelationListeners();
@@ -621,8 +721,7 @@
           // but is at least robust for any kind of change.
           // Figuring out a better way is someone else's FIXME
 
-          var conn:Connection = Connection.getConnectionInstance();
-          var rel:Relation = selectedEntity as Relation
+          var rel:Relation = selectedEntity as Relation;
           var action:CompositeUndoableAction = new CompositeUndoableAction("Rearrange relation members for "+rel);
 
           // drop members
@@ -634,12 +733,10 @@
           for each(var memberObject:Object in membersGrid.dataProvider) {
             var e:Entity;
             var id:Number = memberObject.id;
-            if(memberObject.type == 'node') {
-              e = conn.getNode(id);
-            } else if (memberObject.type == 'way') {
-              e = conn.getWay(id);
-            } else if (memberObject.type == 'relation') {
-              e = conn.getRelation(id);
+			switch (memberObject.type) {
+				case 'node':		e = connection.getNode(id); break;
+            	case 'way':			e = connection.getWay(id); break;
+				case 'relation':	e = connection.getRelation(id); break;
             }
             rel.appendMember(new RelationMember(e, memberObject.role), action.push);
           }
@@ -648,8 +745,8 @@
 
       private function editRelation(id:Number):void {
           var panel:RelationEditorPanel = RelationEditorPanel(
-              PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
-          panel.setRelation(Connection.getConnectionInstance().getRelation(id));
+              PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
+          panel.setRelation(connection.getRelation(id));
           PopUpManager.centerPopUp(panel);
       }
 
@@ -659,7 +756,8 @@
 		var menu:Menu = new Menu(); 
 		var dp:Object = [ {label: "Select all members"}, 
 						  {label: "Deselect all members"}, 
-						  {label: "Add selection to this relation", enabled: false} ]; 
+						  {label: "Add selection to this relation", enabled: false},
+						  {label: "Delete relation"} ]; 
 		menu.dataProvider = dp; 
 		menu.addEventListener("itemClick", selectRelationMenu); 
 		button.popUp = menu;
@@ -686,7 +784,7 @@
 	public function selectRelationMenu(event:MenuEvent):void {
 		var rel:Relation=rowData.relation;
 		var entities:Array;
-		var controller:EditController=Application.application.theController;
+		var controller:EditController=FlexGlobals.topLevelApplication.theController;
 		switch (event.index) {
 			case 0: // Select all members
 				entities=selectedEntity.entities.concat(rel.memberEntities);
@@ -710,6 +808,14 @@
 				}
 				MainUndoStack.getGlobalStack().addAction(undo);
 				break;
+			
+			case 3:	// Delete relation
+				Alert.show("Do you really want to delete the relation?","Are you sure?",Alert.YES | Alert.CANCEL,null,
+					function(event:CloseEvent):void { 
+						if (event.detail==Alert.CANCEL) return;
+						rel.remove(MainUndoStack.getGlobalStack().addAction);
+					} );
+				break;
 		}
 	}
 
@@ -732,7 +838,7 @@
       public function openEntityPage():void {
           if (selectedEntity != null && selectedEntity.id >= 0) {
               // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
-              var urlBase:String = Connection.getConnectionInstance().apiBase + '../../browse/'
+              var urlBase:String = connection.apiBase + '../../browse/'
               navigateToURL(new URLRequest(urlBase+selectedEntity.getType()+'/'+selectedEntity.id), "potlatch_browse");
           }
       }
@@ -742,7 +848,7 @@
       }
 
       private function removeFromRelation(id:Number, index:int=-1):void {
-		var rel:Relation=Connection.getConnectionInstance().getRelation(id);
+		var rel:Relation=connection.getRelation(id);
 		if (index>-1) {
 			rel.removeMemberByIndex(index, MainUndoStack.getGlobalStack().addAction);
 		} else if (selectedEntity is EntityCollection) {
@@ -762,11 +868,22 @@
           var action:CompositeUndoableAction = new CompositeUndoableAction(
                   "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+newFeature.name);
 		  selectedEntity.suspend();
+          
+          // build a list of tags that are editable in new feature
+          var editableTags:Array = new Array();
+          for each( var editor:EditorFactory in newFeature.editors ) {
+              if ( editor is SingleTagEditorFactory ) {
+                  var singleTagEditor:SingleTagEditorFactory = editor as SingleTagEditorFactory;
+                  editableTags.push(singleTagEditor.key);
+              }
+          }
 
           // remove tags from the current feature
           if ( feature != null ) {
               for each( var oldtag:Object in feature.tags ) {
-                  selectedEntity.setTag(oldtag["k"], null, action.push);
+                  if ( editableTags.indexOf(oldtag["k"]) < 0 ) {
+                      selectedEntity.setTag(oldtag["k"], null, action.push);
+                  }
               }
           }
 
@@ -789,6 +906,6 @@
 		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
 		event.target.height=rows*(event.target.rowHeight+1);
 	}
-  ]]></mx:Script>
+  ]]></fx:Script>
 </mx:VBox>
 

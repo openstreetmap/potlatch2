@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Background Merge Panel
+-->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
+  <mx:Text id="backgroundMergePanelText" text="Review and Merge tags from the Background layer" width="100%" styleName="helpInfo" />
+  <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
+    <mx:columns>
+      <mx:DataGridColumn editable="false" dataField="k" headerText="Key" />
+      <mx:DataGridColumn editable="false" dataField="e" headerText="OSM value" />
+      <mx:DataGridColumn editable="false" headerText="Merge" width="50" textAlign="center">
+        <mx:itemRenderer>
+          <mx:Component>
+            <mx:HBox horizontalAlign="center" verticalAlign="middle">
+              <mx:Button label="&lt;&lt;" visible="{parentDocument.buttonVisible(data.b, data.e)}" click="parentDocument.mergeForKey(data.k);" />
+            </mx:HBox>
+          </mx:Component>
+        </mx:itemRenderer>
+      </mx:DataGridColumn>
+      <mx:DataGridColumn editable="false" itemRenderer="net.systemeD.potlatch2.panels.BackgroundMergeFieldComponent" dataField="b" headerText="Background value" />
+    </mx:columns>
+  </mx:DataGrid>
+  <mx:ViewStack id="statusStack" resizeToContent="true" width="100%">
+    <mx:VBox id="empty" />
+    <mx:VBox id="not_complete">
+      <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
+      <mx:Button label="Complete" click="markComplete()"/>
+    </mx:VBox>
+    <mx:VBox id="complete">
+      <mx:Text text="This feature has been marked as complete. If this is wrong, press the button below." />
+      <mx:Button label="Not complete" click="markNotComplete()"/>
+    </mx:VBox>
+  </mx:ViewStack>
+  <mx:Script><![CDATA[
+
+      import net.systemeD.halcyon.connection.*;
+      import net.systemeD.halcyon.MapPaint;
+      import net.systemeD.potlatch2.utils.SnapshotConnection;
+
+      import mx.collections.*;
+
+      private var editableEntity:Entity;
+      private var backgroundEntity:Entity;
+      private var tagDataProvider:ArrayCollection;
+
+      public function init(entities:Array):void {
+          if ( tagDataProvider == null ) {
+              tagDataProvider = new ArrayCollection();
+              backgroundPanelDG.dataProvider = tagDataProvider;
+          }
+
+          if (parentDocument.controller.map.getLayerForEntity(entities[0]).isBackground) {
+              backgroundEntity = entities[0];
+              editableEntity = entities[1];
+          } else {
+              backgroundEntity = entities[1];
+              editableEntity = entities[0];
+          }
+          backgroundEntity.addEventListener(Connection.STATUS_CHANGED, statusEvent, false, 0, true);
+          setStatusStack();
+          editableEntity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+          updateTagDataProvider();
+      }
+
+      private function updateTagDataProvider():void {
+          var tag:Tag;
+          var keys:Array = [];
+
+          tagDataProvider.removeAll();
+
+          for each (tag in backgroundEntity.getTagArray() ) {
+              keys.push(tag.key);
+          }
+
+          for each (tag in editableEntity.getTagArray() ) {
+              keys.push(tag.key);
+          }
+
+          keys=keys.filter(function(k:*, i:int, arr:Array):Boolean { return arr.indexOf(k) == i } ); // remove duplicates
+          keys.sort();
+
+          for each (var key:String in keys) {
+              tagDataProvider.addItem({k:key, e:editableEntity.getTag(key), b:backgroundEntity.getTag(key)});
+          }
+          backgroundPanelDG.invalidateList();
+      }
+
+      private function tagChanged(e:Event):void {
+          updateTagDataProvider();
+      }
+
+      public function buttonVisible(b:String, e:String):Boolean {
+          if (b != null && b != e) {
+              return true;
+          }
+          return false;
+      }
+
+      public function mergeForKey(key:String):void {
+          editableEntity.setTag(key, backgroundEntity.getTag(key), MainUndoStack.getGlobalStack().addAction);
+      }
+
+      // Don't call this for things you don't want coloured in. Like for empty tags.
+      public function getColorFor(i:int):int {
+          if (tagDataProvider[i].e == tagDataProvider[i].b) {
+              return 0xDDFFDD; // matching, green
+           } else if (tagDataProvider[i].e == null) {
+              return 0xDDDDFF; // new value, blue
+           } else if (tagDataProvider[i].b) {
+              return 0xFFDDDD; // conflicting, red
+           }
+           return NaN; // which is interpretted as black
+      }
+
+      private function statusEvent(e:Event):void {
+            setStatusStack();
+      }
+
+      private function setStatusStack():void {
+          switch (backgroundEntity.status) {
+              case 'incomplete':
+                  statusStack.selectedChild = not_complete;
+                  break;
+              case 'complete':
+                  statusStack.selectedChild = complete;
+                  break;
+              default:
+                  statusStack.selectedChild = empty;
+          }
+      }
+
+      private function markComplete():void {
+          if (backgroundEntity.connection is SnapshotConnection) {
+              SnapshotConnection(backgroundEntity.connection).markComplete(backgroundEntity);
+          }
+      }
+
+      private function markNotComplete():void {
+          if (backgroundEntity.connection is SnapshotConnection) {
+              SnapshotConnection(backgroundEntity.connection).markNotComplete(backgroundEntity);
+          }
+      }
+  ]]>
+  </mx:Script>
+</mx:VBox>

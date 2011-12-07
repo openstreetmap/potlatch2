@@ -16,7 +16,7 @@ package net.systemeD.halcyon.connection.actions {
     
         public override function doAction():uint {
             if (newWay==null) {
-				newWay = Connection.getConnection().createWay(
+				newWay = selectedWay.connection.createWay(
 					selectedWay.getTagsCopy(), 
 					selectedWay.sliceNodes(nodeIndex,selectedWay.length),
 					push);

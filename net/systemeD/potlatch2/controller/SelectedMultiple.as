@@ -4,12 +4,13 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.connection.actions.MergeWaysAction;
-    
+    import net.systemeD.halcyon.MapPaint;
 
 	public class SelectedMultiple extends ControllerState {
 		protected var initSelection:Array;
 		
-		public function SelectedMultiple(sel:Array) {
+		public function SelectedMultiple(sel:Array, layer:MapPaint=null) {
+			if (layer) this.layer=layer;
 			initSelection=sel.concat();
 		}
 
@@ -19,18 +20,22 @@ package net.systemeD.potlatch2.controller {
 
 			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey ) {
 				// modify selection
-				controller.map.setHighlight(entity, { selected: toggleSelection(entity) });
+				layer.setHighlight(entity, { selected: toggleSelection(entity) });
 				controller.updateSelectionUI();
 
 				if (selectCount>1) { return this; }
 				return controller.findStateForSelection(selection);
+
+			} else if ( event.type == MouseEvent.MOUSE_UP && selection.indexOf(focus)>-1 ) {
+				return this;
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
 		}
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if (event.keyCode==74) return mergeWays();	// 'J'
+			if (event.keyCode==74) return mergeWays();			// 'J' (join)
+			if (event.keyCode==72) return createMultipolygon();	// 'H' (hole)
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}
@@ -38,33 +43,27 @@ package net.systemeD.potlatch2.controller {
 		public function mergeWays():ControllerState {
 			var changed:Boolean;
 			var waylist:Array=selectedWays;
-			var conflictTags:Object={}; 
+			var tagConflict:Boolean=false; 
+			var relationConflict:Boolean=false;
 			var mergers:uint=0;
 			do {
 				// ** FIXME - we should have one CompositeUndoableAction for the whole caboodle,
 				// but that screws up the execution order and can make the merge not work
 				var undo:CompositeUndoableAction = new CompositeUndoableAction("Merge ways");
 				changed=tryMerge(waylist, undo);
-				if (changed)
-				    mergers ++;
-                MainUndoStack.getGlobalStack().addAction(undo);
-                
-                if (MergeWaysAction.lastProblemTags) {
-                	for each (var t:String in MergeWaysAction.lastProblemTags) {
-                		conflictTags[t]=t;
-                	}
-                }
-            				
+				if (changed) mergers++;
+				MainUndoStack.getGlobalStack().addAction(undo);
+				tagConflict     ||= MergeWaysAction.lastTagsMerged;
+				relationConflict||= MergeWaysAction.lastRelationsMerged;
+
 			} while (changed==true);
 
             if (mergers>0) {			                
-			    var msg:String = 1 + mergers + " ways merged."
-                var conflictTags2:Array = new Array();
-                // there must be a better way of avoiding duplicates...
-                for each (var conflict:String in conflictTags) conflictTags2.push(conflict);
-                if (conflictTags2.length>0)
-                    msg += " *Warning* The following tags conflicted and need attention: " + conflictTags2;
-                map.connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+			    var msg:String = 1 + mergers + " ways merged";
+                if (tagConflict && relationConflict) msg+=": check tags and relations";
+                else if (tagConflict) msg+=": check conflicting tags";
+                else if (relationConflict) msg+=": check relations";
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
             }
 
 			return controller.findStateForSelection(waylist);
@@ -106,20 +105,50 @@ package net.systemeD.potlatch2.controller {
 			}
 			return false;
 		}
+		
+		/** Create multipolygon from selection, or add to existing multipolygon. */
+		
+		public function createMultipolygon():ControllerState {
+			var inner:Way;
+			var multi:Object=multipolygonMembers();
+			if (!multi.outer) {
+				controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't make the multipolygon"));
+				return this;
+			}
 
+			// If relation exists, add any inners that aren't currently present
+			if (multi.relation) {
+				var action:CompositeUndoableAction = new CompositeUndoableAction("Add to multipolygon");
+				for each (inner in multi.inners) {
+					if (!multi.relation.hasMemberInRole(inner,'inner'))
+						multi.relation.appendMember(new RelationMember(inner,'inner'),action.push);
+				}
+				MainUndoStack.getGlobalStack().addAction(action);
+				
+			// Otherwise, create whole new relation
+			} else {
+				var memberlist:Array=[new RelationMember(multi.outer,'outer')];
+				for each (inner in multi.inners) 
+					memberlist.push(new RelationMember(inner,'inner'));
+				layer.connection.createRelation( { type: 'multipolygon' }, memberlist, MainUndoStack.getGlobalStack().addAction);
+			}
+
+			return new SelectedWay(multi.outer);
+		}
+		
 		override public function enterState():void {
 			selection=initSelection.concat();
 			for each (var entity:Entity in selection) {
-				controller.map.setHighlight(entity, { selected: true, hover: false });
+				layer.setHighlight(entity, { selected: true, hover: false });
 			}
 			controller.updateSelectionUI();
-			controller.map.setPurgable(selection,false);
+			layer.setPurgable(selection,false);
 		}
 
 		override public function exitState(newState:ControllerState):void {
-			controller.map.setPurgable(selection,true);
+			layer.setPurgable(selection,true);
 			for each (var entity:Entity in selection) {
-				controller.map.setHighlight(entity, { selected: false, hover: false });
+				layer.setHighlight(entity, { selected: false, hover: false });
 			}
 			selection = [];
 			if (!newState.isSelectionState()) { controller.updateSelectionUI(); }

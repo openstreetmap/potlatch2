@@ -7,8 +7,8 @@ package net.systemeD.halcyon.connection {
         private var _latproj:Number;
         private var _lon:Number;
 
-        public function Node(id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Node(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp);
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;
@@ -31,7 +31,6 @@ package net.systemeD.halcyon.connection {
         }
 
         private function setLatLonImmediate(lat:Number, lon:Number):void {
-            var connection:Connection = Connection.getConnection();
             connection.removeDupe(this);
             this._lat = lat;
             this._latproj = lat2latp(lat);
@@ -89,7 +88,6 @@ package net.systemeD.halcyon.connection {
         */
         public function join(ways:Array, performAction:Function):void {
             if (this.isDupe() || ways.length > 0) {
-              var connection:Connection = Connection.getConnection();
               var nodes:Array = connection.getNodesAtPosition(lat,lon);
               // filter the nodes array to remove any occurances of this.
               // Pass "this" as thisObject to get "this" into the callback function
@@ -109,9 +107,13 @@ package net.systemeD.halcyon.connection {
         public function replaceWith(target:Node, performAction:Function):void {
             performAction(new ReplaceNodeAction(this, target));
         }
+        public function replaceWithNew(connection:Connection, lat:Number, lon:Number, tags:Object, performAction:Function):Node {
+			var action:ReplaceNodeWithNewAction = new ReplaceNodeWithNewAction(this, connection, lat, lon, tags);
+			performAction(action);
+			return action.replacement;
+        }
 
         public function isDupe():Boolean {
-            var connection:Connection = Connection.getConnection();
             if (connection.getNode(this.id) == this // node could be part of a vector layer
                 && connection.nodesAtPosition(lat, lon) > 1) {
               return true;

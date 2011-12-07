@@ -25,7 +25,7 @@ package net.systemeD.halcyon.connection.actions {
             	way.dispatchEvent(new EntityEvent(Connection.WAY_REORDERED, way));	// no longer a junction, so force redraw
                 continue;
               } else {
-                var newNode:Node = Connection.getConnection().createNode(node.getTagsCopy(), node.lat, node.lon, push);
+                var newNode:Node = way.connection.createNode(node.getTagsCopy(), node.lat, node.lon, push);
                 for (var i:int = 0; i < way.length; i++) {
                   if(way.getNode(i) == node) {
                     way.removeNodeByIndex(i, push);

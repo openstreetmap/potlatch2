@@ -69,7 +69,7 @@ package {
 		}
 
 		private function onRefreshCSS(str:String):void {
-			theMap.setStyle(str);
+			theMap.editableLayer.setStyle(str);
 		}		
 		private function onJumpTo(lat:Number,lon:Number):void {
 			theMap.init(lat,lon);

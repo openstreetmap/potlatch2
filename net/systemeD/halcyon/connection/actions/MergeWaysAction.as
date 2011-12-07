@@ -7,7 +7,9 @@ package net.systemeD.halcyon.connection.actions {
         private var way2:Way;
         private var toPos:uint;
         private var fromPos:uint;
-        static public var lastProblemTags:Array;
+        // ** FIXME: not at all elegant having these stuffed in static variables; we should probably use events instead
+        static public var lastTagsMerged:Boolean;
+        static public var lastRelationsMerged:Boolean;
     
         public function MergeWaysAction(way1:Way, way2:Way, toPos:uint, fromPos:uint) {
             super("Merge ways "+way1.id+" "+way2.id);
@@ -15,7 +17,8 @@ package net.systemeD.halcyon.connection.actions {
             this.way2 = way2;
             this.toPos = toPos;
             this.fromPos = fromPos;
-            lastProblemTags=null;
+            lastTagsMerged = false;
+            lastRelationsMerged = false;
         }
         
         public override function doAction():uint {
@@ -26,7 +29,7 @@ package net.systemeD.halcyon.connection.actions {
             way1.suspend();
 
             mergeRelations();
-            lastProblemTags = way1.mergeTags(way2,push);
+            lastTagsMerged = way1.mergeTags(way2,push);
         	mergeNodes();
 			way2.remove(push);
 
@@ -49,6 +52,7 @@ package net.systemeD.halcyon.connection.actions {
 				// ** needs to copy roles as well
 				if (r.findEntityMemberIndex(way1)==-1) {
 					r.appendMember(new RelationMember(way1, ''), push);
+					lastRelationsMerged=true;
 				}
 			}
         }

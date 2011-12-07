@@ -10,12 +10,14 @@ package net.systemeD.halcyon {
 	import flash.geom.Point;
 	import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.ImageBank;
 	
 	/** The graphical representation of a Node (including POIs and nodes that are part of Ways). */
 	public class NodeUI extends EntityUI {
 		
 		public var loaded:Boolean=false;
-		private var iconnames:Object={};			// name of icon on each sublayer
+		public var isPOI:Boolean;
+		private var iconnames:Object={};			// name of icon on each subpart
 		private var heading:Number=0;				// heading within way
 		private var rotation:Number=0;				// rotation applied to this POI
 		private static const NO_LAYER:int=-99999;
@@ -26,9 +28,10 @@ package net.systemeD.halcyon {
 		 * @param heading Optional angle.
 		 * @param layer Which layer on the MapPaint object it sits on. @default Top layer
 		 * @param stateClasses A settings object definining the initial state of the node (eg, highlighted, hover...) */
-		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, layer:int=NO_LAYER, stateClasses:Object=null) {
+		public function NodeUI(node:Node, paint:MapPaint, isPOI:Boolean, heading:Number=0, layer:int=NO_LAYER, stateClasses:Object=null) {
 			super(node,paint);
 			if (layer==NO_LAYER) { this.layer=paint.maxlayer; } else { this.layer=layer; }
+			this.isPOI=isPOI;
 			this.heading = heading;
 			if (stateClasses) {
 				for (var state:String in stateClasses) {
@@ -74,8 +77,9 @@ package net.systemeD.halcyon {
             setStateClass('hasTags', entity.hasInterestingTags());
             setStateClass('dupe', Node(entity).isDupe());
 			tags=applyStateClasses(tags);
+			if (entity.status) { tags['_status']=entity.status; }
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
-				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
+				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale,isPOI); 
 			}
 
 			var suggestedLayer:Number=styleList.layerOverride();
@@ -95,47 +99,43 @@ package net.systemeD.halcyon {
 			var w:Number;
 			var icon:Sprite;
 			interactive=false;
-			for each (var sublayer:Number in styleList.sublayers) {
+			for each (var subpart:String in styleList.subparts) {
 
-				if (styleList.pointStyles[sublayer]) {
-					var s:PointStyle=styleList.pointStyles[sublayer];
+				if (styleList.pointStyles[subpart]) {
+					var s:PointStyle=styleList.pointStyles[subpart];
 					interactive||=s.interactive;
 					r=true;
 					if (s.rotation) { rotation=s.rotation; }
-					if (s.icon_image!=iconnames[sublayer]) {
+					if (s.icon_image!=iconnames[subpart]) {
+						icon=new Sprite();
+						iconnames[subpart]=s.icon_image;
+						addToLayer(icon,STROKESPRITE,s.sublayer);
 						if (s.icon_image=='square') {
 							// draw square
-							icon=new Sprite();
-							addToLayer(icon,STROKESPRITE,sublayer);
-							w=styleIcon(icon,sublayer);
+							w=styleIcon(icon,subpart);
 							icon.graphics.drawRect(0,0,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconnames[sublayer]='_square';
 
 						} else if (s.icon_image=='circle') {
 							// draw circle
-							icon=new Sprite();
-							addToLayer(icon,STROKESPRITE,sublayer);
-							w=styleIcon(icon,sublayer);
+							w=styleIcon(icon,subpart);
 							icon.graphics.drawCircle(w,w,w);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
-							iconnames[sublayer]='_circle';
 
-						} else if (paint.ruleset.images[s.icon_image]) {
-							// 'load' icon (actually just from library)
-							var loader:ExtendedLoader = new ExtendedLoader();
-							loader.info['sublayer']=sublayer;
-							loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadedIcon, false, 0, true);
-							loader.loadBytes(paint.ruleset.images[s.icon_image]);
-							iconnames[sublayer]=s.icon_image;
+						} else if (ImageBank.getInstance().hasImage(s.icon_image)) {
+							// load icon from library
+							icon.addChild(ImageBank.getInstance().getAsDisplayObject(s.icon_image));
+//							addHitSprite(icon.width);			// ** check this - we're doing it below too
+							loaded=true; updatePosition();		// ** check this
+							if (s.interactive) { maxwidth=Math.max(icon.width,maxwidth); }
 						}
 					}
 				}
 
 				// name sprite
 				var a:String='', t:TextStyle;
-				if (styleList.textStyles[sublayer]) {
-					t=styleList.textStyles[sublayer];
+				if (styleList.textStyles[subpart]) {
+					t=styleList.textStyles[subpart];
 					interactive||=t.interactive;
 					a=tags[t.text];
 				}
@@ -154,12 +154,12 @@ package net.systemeD.halcyon {
 		}
 
 
-		private function styleIcon(icon:Sprite, sublayer:Number):Number {
+		private function styleIcon(icon:Sprite, subpart:String):Number {
 			loaded=true;
 
 			// get colours
-			if (styleList.shapeStyles[sublayer]) {
-				var s:ShapeStyle=styleList.shapeStyles[sublayer];
+			if (styleList.shapeStyles[subpart]) {
+				var s:ShapeStyle=styleList.shapeStyles[subpart];
 				if (!isNaN(s.color)) { icon.graphics.beginFill(s.color, s.opacity ? s.opacity : 1);
 					}
 				if (s.casing_width || !isNaN(s.casing_color)) {
@@ -170,7 +170,7 @@ package net.systemeD.halcyon {
 			}
 
 			// return width
-			return styleList.pointStyles[sublayer].icon_width;
+			return styleList.pointStyles[subpart].icon_width;
 		}
 
 		private function addHitSprite(w:uint):void {
@@ -180,16 +180,6 @@ package net.systemeD.halcyon {
 			hitzone.graphics.drawRect(0,0,w,w);
 			hitzone.visible = false;
 			setListenSprite();
-		}
-
-		private function loadedIcon(event:Event):void {
-			var icon:Sprite=new Sprite();
-			var sublayer:Number=event.target.loader.info['sublayer'];
-			addToLayer(icon,STROKESPRITE,sublayer);
-			icon.addChild(Bitmap(event.target.content));
-			addHitSprite(icon.width);
-			loaded=true;
-			updatePosition();
 		}
 
 		private function updatePosition(xDelta:Number=0,yDelta:Number=0):void {

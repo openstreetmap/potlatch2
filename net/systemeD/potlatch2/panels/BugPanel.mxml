@@ -4,7 +4,11 @@
     Bug Panel
 -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%" paddingTop="10">
+<mx:VBox
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    height="100%"
+    paddingTop="10">
   <mx:HBox>
     <mx:Image source="{bugImage}" width="32" height="32" />
     <mx:Text text="{bugTitle}" fontWeight="bold" fontSize="18" />
@@ -56,16 +60,15 @@
     </mx:VBox>
   </mx:ViewStack>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.VectorLayer;
-      import net.systemeD.potlatch2.BugLayer;
+      import net.systemeD.potlatch2.BugConnection;
       import mx.collections.*;
       import com.adobe.utils.DateUtil;
 
       private var selectedEntity:Entity;
-      private var layer:VectorLayer;
+      private var connection:BugConnection;
 
       [Bindable] private var bugId:String;
       [Bindable] private var bugStatus:String;
@@ -77,8 +80,8 @@
       [Bindable] private var bugUpdated:Date;
       [Bindable] private var bugDetails:String;
 
-      public function init(entity:Entity, layer:VectorLayer):void {
-            this.layer = layer;
+      public function init(entity:Entity, connection:BugConnection):void {
+            this.connection = connection;
             selectedEntity=entity;
 
             bugId = selectedEntity.getTag("bug_id");
@@ -90,15 +93,15 @@
             bugCreated = DateUtil.parseW3CDTF(selectedEntity.getTag("date_created"));
             bugUpdated = DateUtil.parseW3CDTF(selectedEntity.getTag("date_updated"));
 
-            if ( bugStatus == BugLayer.status[int(BugLayer.BUG_STATUS_FIXED)] ) {
+            if ( bugStatus == BugConnection.status[int(BugConnection.BUG_STATUS_FIXED)] ) {
               bugControlStack.selectedChild = bugFixed;
-            } else if ( bugStatus == BugLayer.status[int(BugLayer.BUG_STATUS_INVALID)] ) {
+            } else if ( bugStatus == BugConnection.status[int(BugConnection.BUG_STATUS_INVALID)] ) {
               bugControlStack.selectedChild = bugInvalid;
             } else {
               bugControlStack.selectedChild = bugControl;
             }
 
-            var u:String = BugLayer(layer).bugDetailsUrl(Marker(selectedEntity));
+            var u:String = connection.bugDetailsUrl(Marker(selectedEntity));
             if (u) {
               bugDetails = u;
               bugDetailsHbox.visible=true;
@@ -106,14 +109,14 @@
       }
 
       private function closeBug():void {
-            var status:String = option_invalid.selected ? BugLayer.BUG_STATUS_INVALID : BugLayer.BUG_STATUS_FIXED;
+            var status:String = option_invalid.selected ? BugConnection.BUG_STATUS_INVALID : BugConnection.BUG_STATUS_FIXED;
             trace(status);
-            BugLayer(layer).closeBug(selectedEntity as Marker, nickName.text, closeComment.text, status);
+            connection.closeBug(selectedEntity as Marker, nickName.text, closeComment.text, status);
             bugStatus = selectedEntity.getTag("status");
             // this should really be a 'saving...' state, with a callback depending on the server result
             bugControlStack.selectedChild = option_invalid.selected ? bugInvalid : bugFixed;
       }
 
       ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:VBox>

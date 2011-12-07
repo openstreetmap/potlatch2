@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	layout="vertical"
 	horizontalAlign="center" title="Authorisation Required"
 	creationComplete="getRequestToken()"
@@ -20,7 +21,7 @@
 	    <mx:LinkButton id="link"
 	        label="http://oauth.dev.openstreetmap.org/oauth/authorize?somekey"
 	        click="openURL(authoriseURL); tryAccessButton.enabled=true;"/>
-	    <mx:Text width="100%">
+	    <mx:Text id="authorized" width="100%">
 	      <mx:text>Once you've authorised the access click the 'Try Access' button below</mx:text> <!-- ' -->
 	    </mx:Text>
 	    <mx:Text styleName="failText" visible="false" id="deniedLabel">
@@ -33,7 +34,7 @@
 	</mx:VBox>
 	
 	<mx:VBox id="permFailPanel" width="100%" height="100%">
-	  <mx:Text styleName="failText" width="100%" condenseWhite="true">
+	  <mx:Text id="permFail" styleName="failText" width="100%" condenseWhite="true">
 	    <mx:htmlText><![CDATA[
 	      <p>The server refused this application's credentials -- an authorisation link
 	      could not be obtained.
@@ -46,7 +47,7 @@
 	</mx:VBox>
 	
 	<mx:VBox id="tempFailPanel" width="100%" height="100%">
-	  <mx:Text width="100%">
+	  <mx:Text id="tempFail" width="100%">
 	    <mx:text>
 	      There was a problem contacting the server to get authorisation.
 	      This may be a temporary error, try again later.
@@ -62,46 +63,68 @@
 	        indeterminate="true"/>
         <mx:Spacer width="100%"/>
 
-	    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+	    <mx:Button id="cancelButton" label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
 	    <mx:Button id="tryAccessButton" label="Try Access" click="getAccessToken()" enabled="false" styleName="titleWindowButton" />
 	</mx:ControlBar>
 	
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
+		import flash.display.InteractiveObject;
         import flash.events.Event;
         import flash.net.*;
+		import flash.system.Capabilities;
         import mx.managers.PopUpManager;
         import net.systemeD.halcyon.connection.*;
         import org.iotashan.oauth.*;
+		import flash.external.ExternalInterface;
 
         private var connection:Connection;
         private var requestToken:OAuthToken;
         private var _accessToken:OAuthToken;
         private var authoriseURL:String;
         private var lastHTTPStatus:int = 0;
+        private var waiting:Boolean = false;
         
         public static var ACCESS_TOKEN_EVENT:String = "gotAccessToken";
         
         private function getAuthText():String {
             return "To save data you must authorise this application to edit "+
-                    Connection.serverName + " on your behalf.";
+                    connection.serverName + " on your behalf.";
         }
         
+		public function setConnection(connection:Connection):void {
+			this.connection=connection;
+			if (waiting) { waiting=false; getRequestToken(); }
+		}
+
         private function openURL(url:String):void {
-            var urlRequest:URLRequest = new URLRequest(url);
-            navigateToURL(urlRequest, "_blank");
-        }
+			if (ExternalInterface.available) {
+				var winH:int = 560;
+				var winW:int = 600;
+				var leftPos:int  = (Capabilities.screenResolutionX - winW) / 2;
+				var topPos:int = (Capabilities.screenResolutionY - winH) / 2;
+				ExternalInterface.call( "window.open", url,"oAuthWin","height=" + winH + ",width=" + winW +",top=" + topPos + ", left=" + leftPos +", toolbar=no,scrollbars=no,status=no,location=no,menubar=no,directories=no");
+				}		
+			else
+			{
+				var urlRequest:URLRequest = new URLRequest(url);
+				navigateToURL(urlRequest,"_blank");
+			}
+		}
         
         private function getRequestToken():void {
-            connection = Connection.getConnectionInstance();
-            
+            if (!connection) { waiting=true; return; }	// in case the connection hasn't been set yet
+
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
-            var url:String = Connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
+            var url:String = connection.getParam("oauth_request_url", "http://127.0.0.1:3000/oauth/request_token");
             
             var params:Object = new Object();
             var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, params, consumer, null);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
-            
+
+			//register the "pressTry" function so the oAuth callback page can try to advance the editor directly to the next step
+			ExternalInterface.addCallback("pressTry", pressTry);            
+			
             // build the actual request
             var urlReq:URLRequest = new URLRequest(String(urlStr));
             var loader:URLLoader = new URLLoader();
@@ -132,10 +155,10 @@
             trace("Yay! response: "+URLLoader(event.target).data);
             requestToken = getResponseToken(URLLoader(event.target));
             
-            var url:String = Connection.getParam("oauth_auth_url", "http://127.0.0.1:3000/oauth/authorize");            
+            var url:String = connection.getParam("oauth_auth_url", "http://127.0.0.1:3000/oauth/authorize");            
             link.label = url;
-            authoriseURL = url + "?oauth_token="+requestToken.key;
-            progress.visible = false;
+			authoriseURL = url + "?oauth_token="+requestToken.key;
+			progress.visible = false;
             gotLinkBox.visible = true;
         }
 
@@ -152,7 +175,7 @@
         private function getAccessToken():void {
             var sig:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
             var consumer:OAuthConsumer = getConsumer();
-            var url:String = Connection.getParam("oauth_access_url", "http://127.0.0.1:3000/oauth/access_token");
+            var url:String = connection.getParam("oauth_access_url", "http://127.0.0.1:3000/oauth/access_token");
 
             var oauthRequest:OAuthRequest = new OAuthRequest("GET", url, null, consumer, requestToken);
             var urlStr:Object = oauthRequest.buildRequest(sig, OAuthRequest.RESULT_TYPE_URL_STRING)
@@ -176,7 +199,7 @@
             PopUpManager.removePopUp(this);
             
             _accessToken = getResponseToken(URLLoader(event.target));
-            Connection.getConnectionInstance().setAuthToken(_accessToken);
+            connection.setAuthToken(_accessToken);
             dispatchEvent(new Event(ACCESS_TOKEN_EVENT));
         }
         
@@ -198,11 +221,15 @@
         }
         
         private function getConsumer():OAuthConsumer {
-            var key:String = Connection.getParam("oauth_consumer_key", "");
-            var secret:String = Connection.getParam("oauth_consumer_secret", "");
+            var key:String = connection.getParam("oauth_consumer_key", "");
+            var secret:String = connection.getParam("oauth_consumer_secret", "");
             return new OAuthConsumer(key, secret);
         }
+		
+		public function pressTry():void {
+			getAccessToken();
+		}
         
-	]]></mx:Script>
+	]]></fx:Script>
 </mx:TitleWindow>
 

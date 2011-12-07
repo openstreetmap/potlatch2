@@ -1,5 +1,6 @@
 package net.systemeD.halcyon.connection {
 
+    import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.utils.Dictionary;
     
@@ -8,6 +9,7 @@ package net.systemeD.halcyon.connection {
     /** An Entity is an object stored in the map database, and therefore uploaded and downloaded. This includes Nodes, Ways, 
     *   Relations but also Changesets etc. */
     public class Entity extends EventDispatcher {
+		private var _connection:Connection;
         private var _id:Number;
         private var _version:uint;
         private var _uid:Number;
@@ -16,13 +18,15 @@ package net.systemeD.halcyon.connection {
         private var modified:Boolean = false;
         private var _loaded:Boolean = true;
         private var parents:Dictionary = new Dictionary();
+		public var status:String;
         /** Lock against purging when off-screen */
         public var locked:Boolean = false;
         public var deleted:Boolean = false;
         /** Have all its parents (ie, relations that contain this object as a member, ways that contain this node) been loaded into memory */
         public var parentsLoaded:Boolean = true;
 
-        public function Entity(id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
+        public function Entity(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, uid:Number, timestamp:String) {
+			this._connection = connection;
             this._id = id;
             this._version = version;
             this._uid = uid;
@@ -62,6 +66,11 @@ package net.systemeD.halcyon.connection {
             return _timestamp;
         }
 
+		/** Connection to which this entity belongs. */
+		public function get connection():Connection {
+			return _connection;
+		}
+
         /** Set a bunch of properties in one hit. Implicitly makes entity not deleted. */
         public function updateEntityProperties(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, uid:Number, timestamp:String):void {
             _version=version; this.tags=tags; _loaded=loaded; this.parentsLoaded=parentsLoaded; _uid = uid; _timestamp = timestamp;
@@ -94,6 +103,16 @@ package net.systemeD.halcyon.connection {
             return false;
         }
 
+		/** Compare tags between two entities. */
+		public function sameTags(entity:Entity):Boolean {
+			var o:Object=entity.getTagsHash();
+			for (var k:String in tags)
+				if (!o[k] || o[k]!=tags[k]) return false;
+			for (k in o)
+				if (!tags[k] || tags[k]!=o[k]) return false;
+			return true;
+		}
+
         /** Rough function to detect entities untouched since TIGER import. */
         public function isUneditedTiger():Boolean {
             // todo: make this match the rules from the tiger edited map
@@ -108,6 +127,14 @@ package net.systemeD.halcyon.connection {
         public function getTag(key:String):String {
             return tags[key];
         }
+
+		/** Retrieve a key matching a regex. */
+		public function getTagByRegex(regex:RegExp):String {
+			for (var k:String in tags) {
+				if (k.match(regex)) return tags[k];
+			}
+			return null;
+		}
 
         /** @return true if there exists key=value */
         public function tagIs(key:String,value:String):Boolean {
@@ -127,7 +154,7 @@ package net.systemeD.halcyon.connection {
 
         /** Change oldKey=[value] to newKey=[value], with optional undoability.
          * @param oldKey Name of key to rename
-         * @parame newKey New name of key
+         * @param newKey New name of key
          * @param performAction Single-argument function to pass a SetTagKeyAction to.
          * @example renameTag("building", "amenity", MainUndoStack.getGlobalStack().addAction);
          */
@@ -160,6 +187,14 @@ package net.systemeD.halcyon.connection {
                 copy.push(new Tag(this, key, tags[key]));
             return copy;
         }
+
+		/** Change entity status. */
+		public function setStatus(s:String):void {
+			if (s=='') s=null;
+			if (s==status) return;
+			status=s;
+			dispatchEvent(new EntityEvent(Connection.STATUS_CHANGED,this));
+		}
 
 		// Clean/dirty methods
 
@@ -195,9 +230,9 @@ package net.systemeD.halcyon.connection {
             if (this is Node) {
                 var n:Node = Node(this);
                 if (isDeleted) {
-                    Connection.getConnection().removeDupe(n);
+                    connection.removeDupe(n);
                 } else {
-                    Connection.getConnection().addDupe(n);
+                    connection.addDupe(n);
                 }
             }
         }
@@ -377,7 +412,7 @@ package net.systemeD.halcyon.connection {
 		}
 
 
-                /** Basic description of Entity - should be overriden by subclass. */
+		/** Basic description of Entity - should be overriden by subclass. */
 		public function getDescription():String {
 			var basic:String=this.getType()+" "+_id;
 			if (tags['ref'] && tags['name']) { return tags['ref']+' '+tags['name']+' ('+basic+')'; }
@@ -398,30 +433,21 @@ package net.systemeD.halcyon.connection {
 		
         /** Copy tags from another entity into this one, creating "key=value1; value2" pairs if necessary.
         * * @return Array of keys that require manual merging, in order to warn the user. */ 
-        public function mergeTags(source: Entity, performAction:Function):Array {
+        public function mergeTags(source: Entity, performAction:Function):Boolean {
             var sourcetags:Object = source.getTagsHash();
-            var problem_keys:Array=new Array(); 
+            var conflict:Boolean = false;
             for (var k:String in sourcetags) {
                 var v1:String = tags[k];
                 var v2:String = sourcetags[k];
                 if ( v1 && v1 != v2) {
-                    // This can create broken tags (does anything support "highway=residential; tertiary"?). 
-                    // Probably better to do something like:
-                    // highway=residential
-                    // highway:tomerge=tertiary
-                    
                     setTag(k, v1+"; "+v2, performAction);
-                    problem_keys.push(k);
+                    conflict=true;
                 } else {
                     setTag(k, v2, performAction);
                 }
             }
-            if (problem_keys.length > 0)
-                return problem_keys;
-            else 
-                return null;
+            return conflict;
         }
-
 
     }
 

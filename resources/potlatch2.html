@@ -1,79 +1,91 @@
 <html>
+  <!-- Potlatch 2 script -->
+  <head>
+    <title>Potlatch Two</title>
+    <script type="text/javascript" src="swfobject.js"></script>
 
-<!-- Potlatch 2 script -->
-
-<head>
-<title>Potlatch TWO</title>
-<script type="text/javascript" src="swfobject.js"></script>
-</head>
-
-<body>
-
-<div id="map" style="width:100%; height: 100%; border: 1px solid black">
-</div>
-
-<script>
-	function getArgs() {
-		var args = new Object();
-		var query = location.search.substring(1);
-		var pairs = query.split("&");
-		for(var i = 0; i < pairs.length; i++) {
-			var pos = pairs[i].indexOf('=');
-			if (pos == -1) continue;
-			var argname = pairs[i].substring(0,pos);
-			var value = pairs[i].substring(pos+1);
-			args[argname] = unescape(value);
-		}
-		return args;
-	}
-
-    var changesaved=true;
-  
-    window.onbeforeunload=function() {
-        if (!changesaved) {
-            return 'You have unsaved changes. You need to press the Save button to save them';
+    <script>
+      function getArgs() {
+        var args = new Object();
+        var query = location.search.substring(1);
+        var pairs = query.split("&");
+        for(var i = 0; i < pairs.length; i++) {
+          var pos = pairs[i].indexOf('=');
+          if (pos == -1) continue;
+          var argname = pairs[i].substring(0,pos);
+          var value = pairs[i].substring(pos+1);
+          args[argname] = unescape(value);
         }
-    }
+        return args;
+      }
 
-    function markChanged(a) { changesaved=a; } /* called from flash */
+      var changesaved=true;
 
-	var args = getArgs();
-	var lat;
-	var lon;
-	var zoom;
-	if (args.lat && args.lon) {
-		lat = parseFloat(args.lat);
-		lon = parseFloat(args.lon);
-	} else {
-		lat=51.875;
-		lon=-1.492;
-	}
+      window.onbeforeunload=function() {
+        if (!changesaved) {
+          return 'You have unsaved changes. You need to press the Save button to save them';
+        }
+      }
 
-	if (args.zoom) {
-		zoom = parseInt(args.zoom);
-	} else {
-		zoom = 16;
-	}
+      function markChanged(a) { changesaved=a; } /* called from flash */
 
-	var fo = new SWFObject("potlatch2.swf?d="+Math.round(Math.random()*1000), "map", "100%", "100%", "9", "#FFFFFF");
-	fo.addVariable("lat",lat);
-	fo.addVariable("lon",lon);
-	fo.addVariable("zoom",zoom);
-	fo.addVariable("api","http://api06.dev.openstreetmap.org/api/0.6/");
-	fo.addVariable("policy","http://api06.dev.openstreetmap.org/api/crossdomain.xml");
-	fo.addVariable("connection","XML");
-	fo.addVariable("oauth_policy", "http://api06.dev.openstreetmap.org/oauth/crossdomain.xml");
-	fo.addVariable("oauth_request_url", "http://api06.dev.openstreetmap.org/oauth/request_token");
-	fo.addVariable("oauth_access_url", "http://api06.dev.openstreetmap.org/oauth/access_token");
-	fo.addVariable("oauth_auth_url", "http://api06.dev.openstreetmap.org/oauth/authorize");
-	fo.addVariable("oauth_consumer_key", "fiM1IoqnKJk4JCfcl63DA");
-	fo.addVariable("oauth_consumer_secret", "7fYgJK9M4vB1CvBZ6jEsPGxYK9UD1hEnI6NqTxNGs");
-	fo.addVariable("serverName", "api06 Test On Dev");
-	fo.write("map");
+      var attributes = {
+        id: "map",
+        name: "map"
+      };
 
 
-</script>
+      var args = getArgs();
+      var lat;
+      var lon;
+      var zoom;
+      if (args.lat && args.lon) {
+        lat = parseFloat(args.lat);
+        lon = parseFloat(args.lon);
+        } else {
+        lat=51.875;
+        lon=-1.492;
+        args["lat"] = lat;
+        args["lon"] = lon;
+      }
 
-</body>
+      if (args.zoom) {
+        zoom = parseInt(args.zoom);
+        } else {
+        zoom = 16;
+        args["zoom"] = 16;
+      }
+
+      args["api"] = "http://api06.dev.openstreetmap.org/api/0.6/";
+      args["policy"] = "http://api06.dev.openstreetmap.org/api/crossdomain.xml";
+      args["connection"] = "XML";
+      args["oauth_policy"] = "http://api06.dev.openstreetmap.org/oauth/crossdomain.xml";
+      args["oauth_request_url"] = "http://api06.dev.openstreetmap.org/oauth/request_token";
+      args["oauth_access_url"] = "http://api06.dev.openstreetmap.org/oauth/access_token";
+      args["oauth_auth_url"] = "http://api06.dev.openstreetmap.org/oauth/authorize";
+      args["oauth_consumer_key"] = "fiM1IoqnKJk4JCfcl63DA";
+      args["oauth_consumer_secret"] = "7fYgJK9M4vB1CvBZ6jEsPGxYK9UD1hEnI6NqTxNGs";
+      args["serverName"] = "api06 Test On Dev";
+      args["show_help"] = "once";
+      args["site_name"] = "OpenStreetMap";
+      args["force_auth"] = "force";
+      args["locale"] = 'en_US';      // you can enjoy de_DE, pl_PL, fr_FR, ja_JP, id_ID, en_GB
+
+      var params = false;
+
+      swfobject.embedSWF("potlatch2.swf?d="+Math.round(Math.random()*1000), "mapHolder", "100%", "100%", "10.1.85", "expressInstall.swf", args, params, attributes);
+    </script>
+
+
+  </head>
+
+  <body>
+
+    <div id="mapHolder" style="width:100%; height: 100%; border: 1px solid black">
+      If you see this message you need to install Flash Player 10.1.85 or above, from Adobe, <a href="http://get.adobe.com/flashplayer/" target="_blank">available here</a> in order to use Potlatch 2
+    </div>
+
+
+  </body>
 </html>
 

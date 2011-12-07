@@ -6,8 +6,8 @@ package net.systemeD.halcyon.connection {
         private var members:Array;
 		public static var entity_type:String = 'relation';
 
-        public function Relation(id:Number, version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Relation(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, members:Array, uid:Number = NaN, timestamp:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp);
             this.members = members;
 			for each (var member:RelationMember in members)
 			    member.entity.addParent(this);
@@ -59,6 +59,14 @@ package net.systemeD.halcyon.connection {
         public function getMember(index:uint):RelationMember {
             return members[index];
         }
+
+		public function getFirstMember():RelationMember {
+			return members[0];
+		}
+
+		public function getLastMember():RelationMember {
+			return members[members.length-1];
+		}
 
         public function setMember(index:uint, member:RelationMember, performAction:Function):void {
             var composite:CompositeUndoableAction = new CompositeUndoableAction("Set Member at index "+index);
@@ -112,20 +120,42 @@ package net.systemeD.halcyon.connection {
 			return (deleted || (members.length==0));
 		}
 
-        public override function getDescription():String {
-            var desc:String = "";
-            var relTags:Object = getTagsHash();
-            if ( relTags["type"] ) {
-                desc = relTags["type"];
-                if ( relTags[desc] )
-                    desc += " " + relTags[desc];
-            }
-            if ( relTags["ref"] )
-                desc += " " + relTags["ref"];
-            if ( relTags["name"] )
-                desc += " " + relTags["name"];
-            return desc;
-        }
+		public override function getDescription():String {
+			var desc:String = "";
+			var relTags:Object = getTagsHash();
+			var named:Boolean = false;
+			if ( relTags["type"] ) {
+				// type=route				--> "route"
+				desc = relTags["type"];
+				// type=route, route=bicycle--> "route bicycle"
+				if (relTags[desc]) { desc += " " + relTags[desc]; }
+			}
+			// type=route, route=bicycle, network=ncn, ref=54 -> "route bicycle ncn 54"
+			if ( relTags["network"]) { desc += " " + relTags["network"]; }
+			if ( relTags["ref"]    ) { desc += " " + relTags["ref"];  named=true; }
+			if ( relTags["name"]   ) { desc += " " + relTags["name"]; named=true; }
+			// handle node->node routes
+			if ( !named && relTags["type"] && relTags["type"]=="route" ) {
+				var firstName:String=getSignificantName(getFirstMember().entity);
+				var lastName:String=getSignificantName(getLastMember().entity);
+				if ((firstName+lastName)!='') desc+=" "+firstName+"-"+lastName;
+			}
+			return desc;
+		}
+		
+		private function getSignificantName(entity:Entity):String {
+			if (!entity.loaded || (entity is Relation)) return '';
+
+			var t:String;
+			if (entity is Way) {
+				t=getSignificantName(Way(entity).getFirstNode());
+				if (t=='') t=getSignificantName(Way(entity).getLastNode());
+				return t;
+			}
+			t=Node(entity).getTag('name');
+			if (!t) t=Node(entity).getTagByRegex(/ref$/);
+			return t ? t : '';
+		}
 
 		public override function getType():String {
 			return 'relation';

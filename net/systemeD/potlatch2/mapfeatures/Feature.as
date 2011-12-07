@@ -8,6 +8,7 @@ package net.systemeD.potlatch2.mapfeatures {
     import mx.core.BitmapAsset;
     import mx.graphics.codec.PNGEncoder;
     
+    import net.systemeD.halcyon.ImageBank;
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.potlatch2.utils.CachedDataLoader;
 
@@ -19,7 +20,7 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _xml:XML;
         private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
         private var _tags:Array;
-	private var _withins:Array;
+        private var _withins:Array;
         private var _editors:Array;
 
         [Embed(source="../../../../embedded/missing_icon.png")]
@@ -67,8 +68,12 @@ package net.systemeD.potlatch2.mapfeatures {
 
             for each(var inputSetRef:XML in xml.inputSet) {
                 var setName:String = String(inputSetRef.@ref);
-                for each (inputXML in mapFeatures.definition.inputSet.(@id==setName)) {
-                    addEditors(inputXML);
+                // Go on then, someone tell me why this stopped working. Namespaces?:
+                //for each (inputXML in mapFeatures.definition.inputSet.(@id == setName)) {
+                for each (inputXML in mapFeatures.definition.inputSet) {
+                    if (inputXML.@id == setName) {
+                        addEditors(inputXML);
+                    }
                 }
             }
 
@@ -81,11 +86,10 @@ package net.systemeD.potlatch2.mapfeatures {
             var inputType:String = inputXML.@type;
             var presenceStr:String = inputXML.@presence;
             var sortOrderStr:String = inputXML.@priority;
-//          _tags.push( { k:String(inputXML.@key) } ); /* add the key to tags so that e.g. addr:housenumber shows up on autocomplete */
             var editor:EditorFactory = EditorFactory.createFactory(inputType, inputXML);
             if ( editor != null ) {
                 editor.presence = Presence.getPresence(presenceStr);
-                editor.sortOrder = EditorFactory.getPriority(sortOrderStr);
+                editor.sortOrder = editor.getPriority(sortOrderStr);
                 _editors.push(editor);
             }
         }
@@ -101,7 +105,7 @@ package net.systemeD.potlatch2.mapfeatures {
         }
 
         [Bindable(event="nameChanged")]
-        /** The human-readable name of the feature (@name), or null if none. */
+        /** The human-readable name of the feature (name), or null if none. */
         public function get name():String {
 			if (_xml.attribute('name').length()>0) { return _xml.@name; }
 			return null;
@@ -135,8 +139,7 @@ package net.systemeD.potlatch2.mapfeatures {
         * @param dnd if true, overrides the normal image and returns the one defined by the dnd property instead. */
         private function getImage(dnd:Boolean = false):ByteArray {
             var icon:XMLList = _xml.icon;
-            var imageURL:String = null;
-            var img:ByteArray;
+            var imageURL:String;
 
             if ( dnd && icon.length() > 0 && icon[0].hasOwnProperty("@dnd") ) {
                 imageURL = icon[0].@dnd;
@@ -144,11 +147,12 @@ package net.systemeD.potlatch2.mapfeatures {
                 imageURL = icon[0].@image;
             }
 
-            if ( imageURL != null ) {
-                img = CachedDataLoader.loadData(imageURL, imageLoaded);
-            }
-            if (img) {
-              return img;
+            if ( imageURL ) {
+				if (ImageBank.getInstance().hasImage(imageURL)) {
+					return ImageBank.getInstance().getAsByteArray(imageURL)
+				} else {
+	                return CachedDataLoader.loadData(imageURL, imageLoaded);
+				}
             }
             var bitmap:BitmapAsset = new missingIconCls() as BitmapAsset;
             return new PNGEncoder().encode(bitmap.bitmapData);

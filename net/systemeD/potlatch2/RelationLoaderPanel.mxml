@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
+	title="Load Relation" width="350" height="160"
+	creationComplete="requestedID.setFocus()"
+	showCloseButton="true" close="PopUpManager.removePopUp(this);">
+	
+	<mx:HBox paddingLeft="3" paddingTop="4">
+		<mx:Label text="Relation ID: " />
+		<mx:TextInput id="requestedID" restrict="0-9" />
+	</mx:HBox>
+    <mx:ControlBar>
+      <mx:Spacer width="100%"/>
+      <mx:Button label="Load" click="loadRelation();" styleName="titleWindowButton" />
+    </mx:ControlBar>
+	<fx:Script><![CDATA[
+		import net.systemeD.halcyon.*;
+		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.potlatch2.*;
+		import mx.managers.PopUpManager;
+
+		private var entity:Entity;
+		private var connection:Connection;
+		private var relid:Number;
+		
+		public function setEntity(e:Entity):void {
+			entity=e;
+			connection=e.connection;
+		}
+
+		private function loadRelation():void {
+			relid = Number(requestedID.text);
+			PopUpManager.removePopUp(this);
+
+			if (!relid) return;
+			if (connection.getRelation(relid)) {
+				relationLoaded(null);
+			} else {
+				connection.loadEntityByID("relation",relid);
+				connection.addEventListener(Connection.LOAD_COMPLETED, relationLoaded);
+			}
+		}
+		
+		private function relationLoaded(event:Event):void {
+			var relation:Relation = connection.getRelation(relid);
+			connection.removeEventListener(Connection.LOAD_COMPLETED, relationLoaded);
+			if (!relation) return;
+
+			var undo:CompositeUndoableAction = new CompositeUndoableAction("Add to relation");
+			if (entity is EntityCollection) {
+				for each (var e:Entity in EntityCollection(entity).entities) {
+					if (relation.findEntityMemberIndex(e)==-1) {
+						relation.appendMember(new RelationMember(e, ''), undo.push);
+					}
+				}
+			} else {
+				relation.appendMember(new RelationMember(entity, ''), undo.push);
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+		}
+		
+    ]]></fx:Script>
+</mx:TitleWindow>
+

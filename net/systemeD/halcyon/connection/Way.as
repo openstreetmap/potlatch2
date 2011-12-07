@@ -11,8 +11,8 @@ package net.systemeD.halcyon.connection {
 		private var edge_b:Number;
 		public static var entity_type:String = 'way';
 
-        public function Way(id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null) {
-            super(id, version, tags, loaded, uid, timestamp);
+        public function Way(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, nodes:Array, uid:Number = NaN, timestamp:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp);
             this.nodes = nodes;
 			for each (var node:Node in nodes) { node.addParent(this); }
 			calculateBbox();
@@ -51,7 +51,7 @@ package net.systemeD.halcyon.connection {
 			    (edge_b>top    && edge_b>top   ) || deleted) { return false; }
 			return true;
 		}
-        
+
         public function getNode(index:uint):Node {
             return nodes[index];
         }
@@ -90,7 +90,7 @@ package net.systemeD.halcyon.connection {
         public function insertNode(index:uint, node:Node, performAction:Function):void {
 			if (index>0 && getNode(index-1)==node) return;
 			if (index<nodes.length-1 && getNode(index)==node) return;
-			performAction(new AddNodeToWayAction(this, node, nodes, index));
+			performAction(new AddNodeToWayAction(this, node, nodes, index, false));
         }
 
         public function appendNode(node:Node, performAction:Function):uint {
@@ -156,6 +156,39 @@ package net.systemeD.halcyon.connection {
         public function reverseNodes(performAction:Function):void {
             performAction(new ReverseNodesAction(this, nodes));
         }
+
+		
+		/** Is a point within this way?
+		* From http://as3.miguelmoraleda.com/2009/10/28/point-in-polygon-with-actionscript-3punto-dentro-de-un-poligono-con-actionscript-3/
+		*/
+
+		public function pointWithin(lon:Number,lat:Number):Boolean {
+			if (!isArea()) return false;
+			
+			var counter:uint = 0;
+			var p1x:Number = nodes[0].lon;
+			var p1y:Number = nodes[0].lat;
+			var p2x:Number, p2y:Number;
+ 
+			for (var i:uint = 1; i <= length; i++) {
+				p2x = nodes[i % length].lon;
+				p2y = nodes[i % length].lat;
+				if (lat > Math.min(p1y, p2y)) {
+					if (lat <= Math.max(p1y, p2y)) {
+						if (lon <= Math.max(p1x, p2x)) {
+							if (p1y != p2y) {
+								var xinters:Number = (lat - p1y) * (p2x - p1x) / (p2y - p1y) + p1x;
+								if (p1x == p2x || lon <= xinters) counter++;
+							}
+						}
+					}
+				}
+				p1x = p2x;
+				p1y = p2y;
+			}
+			if (counter % 2 == 0) { return false; }
+			else { return true; }
+		}
 
         /**
          * Finds the 1st way segment which intersects the projected
@@ -291,5 +324,51 @@ package net.systemeD.halcyon.connection {
 			}
 			return null;
 		}
+
+		public function intersects(left:Number,right:Number,top:Number,bottom:Number):Boolean {
+			// simple test first: are any nodes contained?
+			for (var i:uint=0; i<nodes.length; i++) {
+				if (nodes[i].within(left,right,top,bottom)) return true;
+			}
+			// more complex test: do any segments cross?
+			for (i=0; i<nodes.length-1; i++) {
+				if (lineIntersectsRectangle(
+					nodes[i  ].lon, nodes[i  ].lat,
+					nodes[i+1].lon, nodes[i+1].lat,
+					left,right,top,bottom)) return true;
+			}
+			return false;
+		}
+		
+		private function lineIntersectsRectangle(x0:Number, y0:Number, x1:Number, y1:Number, l:Number, r:Number, b:Number, t:Number):Boolean {
+			// from http://sebleedelisle.com/2009/05/super-fast-trianglerectangle-intersection-test/
+			// note that t and b are transposed above because we're dealing with lat (top=90), not AS3 pixels (top=0)
+			var m:Number = (y1-y0) / (x1-x0);
+			var c:Number = y0 -(m*x0);
+			var top_intersection:Number, bottom_intersection:Number;
+			var toptrianglepoint:Number, bottomtrianglepoint:Number;
+
+			if (m>0) {
+				top_intersection = (m*l  + c);
+				bottom_intersection = (m*r  + c);
+			} else {
+				top_intersection = (m*r  + c);
+				bottom_intersection = (m*l  + c);
+			}
+
+			if (y0<y1) {
+				toptrianglepoint = y0;
+				bottomtrianglepoint = y1;
+			} else {
+				toptrianglepoint = y1;
+				bottomtrianglepoint = y0;
+			}
+
+			var topoverlap:Number = top_intersection>toptrianglepoint ? top_intersection : toptrianglepoint;
+			var botoverlap:Number = bottom_intersection<bottomtrianglepoint ? bottom_intersection : bottomtrianglepoint;
+			return (topoverlap<botoverlap) && (!((botoverlap<t) || (topoverlap>b)));
+		}
+
+
     }
 }

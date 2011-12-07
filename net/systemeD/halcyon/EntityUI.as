@@ -55,6 +55,7 @@ package net.systemeD.halcyon {
 			this.entity=entity;
 			this.paint=paint;
             entity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+            entity.addEventListener(Connection.STATUS_CHANGED, statusChanged, false, 0, true);
 			entity.addEventListener(Connection.ADDED_TO_RELATION, relationAdded, false, 0, true);
 			entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved, false, 0, true);
 			entity.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw, false, 0, true);
@@ -71,6 +72,7 @@ package net.systemeD.halcyon {
 		/** Remove the default event listeners. */
 		protected function removeGenericEventListeners():void {
             entity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
+            entity.removeEventListener(Connection.STATUS_CHANGED, statusChanged);
 			entity.removeEventListener(Connection.ADDED_TO_RELATION, relationAdded);
 			entity.removeEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved);
 			entity.removeEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
@@ -123,6 +125,11 @@ package net.systemeD.halcyon {
             redraw();
         }
 		
+        protected function statusChanged(event:EntityEvent):void {
+			invalidateStyleList();
+            redraw();
+        }
+
         protected function mouseEvent(event:MouseEvent):void {
 			paint.map.entityMouseEvent(event, entity);
         }
@@ -132,13 +139,13 @@ package net.systemeD.halcyon {
 
 		/** Add object (stroke/fill/roadname) to layer sprite*/
 		
-		protected function addToLayer(s:DisplayObject,t:uint,sublayer:int=-1):void {
+		protected function addToLayer(s:DisplayObject,spritetype:uint,sublayer:int=-1):void {
 			var l:Sprite, o:Sprite;
 			if (sublayer!=-1) {
-				o=paint.sublayer(layer,sublayer);
+				o=paint.sublayer(layer,spritetype,sublayer);
 			} else {
 				l=paint.getPaintSpriteAt(layer);
-				o=l.getChildAt(t) as Sprite;
+				o=l.getChildAt(spritetype) as Sprite;
 			}
 			o.addChild(s);
 			if (sprites.indexOf(s)==-1) { sprites.push(s); }
@@ -148,7 +155,6 @@ package net.systemeD.halcyon {
             }
 		}
 
-		// What does this do, could someone please document?
 		protected function setListenSprite():void {
 			var l:Sprite=paint.getHitSpriteAt(layer);
 			var s:Sprite;

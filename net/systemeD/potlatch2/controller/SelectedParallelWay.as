@@ -21,11 +21,12 @@ package net.systemeD.potlatch2.controller {
         }
 
         override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
-			if (event.type==MouseEvent.MOUSE_MOVE) {
+			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.MOUSE_UP) {
 				var lon:Number =controller.map.coord2lon(controller.map.mouseX);
 				var latp:Number=controller.map.coord2latp(controller.map.mouseY);
 				parallelise.draw(distanceFromWay(lon,latp));
-			} else if (event.type==MouseEvent.MOUSE_UP) {
+			}
+			if (event.type==MouseEvent.MOUSE_UP) {
 				return new SelectedWay(firstSelected as Way);
 			}
 			return this;
@@ -76,7 +77,7 @@ package net.systemeD.potlatch2.controller {
 		/** Creates the WayUI for the parallel way. */
 		override public function enterState():void {
 			selection=[parallelise.parallelWay];
-			controller.map.paint.createWayUI(firstSelected as Way);
+			layer.createWayUI(firstSelected as Way);
 			startlon =controller.map.coord2lon(controller.map.mouseX);
 			startlatp=controller.map.coord2latp(controller.map.mouseY);
         }

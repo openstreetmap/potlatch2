@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <edit:SingleTagEditor
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	verticalGap="0"
@@ -18,7 +19,7 @@
                  liveDragging="true"
 				 change="setTagValueFromSlider()" />
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
     private function setTagValueFromSlider():void {
         // unset the tag if being set to the default
@@ -79,6 +80,6 @@
         return parsed;
     }
 	
-  ]]></mx:Script>
+  ]]></fx:Script>
 </edit:SingleTagEditor>
 

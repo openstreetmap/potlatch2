@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.utils {
 
-    import net.systemeD.halcyon.MapPaint;
+    import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.connection.Connection;
     import net.systemeD.halcyon.connection.Node;
     import net.systemeD.halcyon.connection.Way;
     import net.systemeD.halcyon.connection.Relation;
@@ -12,11 +13,11 @@ package net.systemeD.potlatch2.utils {
      */
     public class KmlImporter extends Importer {
 
-        public function KmlImporter(container:*, paint:MapPaint, filenames:Array, callback:Function=null, simplify:Boolean=false) {
-            super(container, paint, filenames, callback, simplify);
+        public function KmlImporter(connection:Connection, map:Map, filenames:Array, callback:Function=null, simplify:Boolean=false) {
+            super(connection, map, filenames, callback, simplify);
         }
 
-        override protected function doImport(): void {
+        override protected function doImport(push:Function): void {
             var kml:XML = new XML(files[0]);
 
             for each (var ns:Namespace in kml.namespaceDeclarations()) {
@@ -31,23 +32,23 @@ package net.systemeD.potlatch2.utils {
                 var tags:Object = {};
 
                 if (placemark.name.length() > 0) {
-                    tags["name"] = placemark.name;
+                    tags["name"] = placemark.name.substr(0,255);
                 }
 
                 if (placemark.description.length() > 0) {
-                    tags["description"] = placemark.description;
+                    tags["description"] = placemark.description.substr(0,255);
                 }
 
                 for each (var point:XML in placemark.Point) {
-                    importNode(point.coordinates, tags);
+                    importNode(point.coordinates, tags, push);
                 }
 
                 for each (var linestring:XML in placemark.LineString) {
-                    importWay(linestring.coordinates, tags, false);
+                    importWay(linestring.coordinates, tags, false, push);
                 }
 
                 for each (var linearring:XML in placemark.LinearRing) {
-                    importWay(linearring.coordinates, tags, true);
+                    importWay(linearring.coordinates, tags, true, push);
                 }
 
                 for each (var polygon:XML in placemark.Polygon) {
@@ -55,39 +56,39 @@ package net.systemeD.potlatch2.utils {
                         var members:Array = [];
                         var way:Way;
 
-                        way = importWay(polygon.outerBoundaryIs.LinearRing.coordinates, {}, true);
+                        way = importWay(polygon.outerBoundaryIs.LinearRing.coordinates, {}, true, push);
                         members.push(new RelationMember(way, "outer"));
 
                         for each (var inner:XML in polygon.innerBoundaryIs) {
-                            way = importWay(inner.LinearRing.coordinates, {}, true);
+                            way = importWay(inner.LinearRing.coordinates, {}, true, push);
                             members.push(new RelationMember(way, "inner"));
                         }
 
                         tags["type"] = "multipolygon";
 
-                        container.createRelation(tags, members);
+                        connection.createRelation(tags, members, push);
                     } else {
-                        importWay(polygon.outerBoundaryIs.LinearRing.coordinates, tags, true);
+                        importWay(polygon.outerBoundaryIs.LinearRing.coordinates, tags, true, push);
                     }
                 }
             }
 			default xml namespace = new Namespace("");
         }
 
-        private function importNode(coordinates:String, tags:Object): Node {
+        private function importNode(coordinates:String, tags:Object, push:Function): Node {
             var coords:Array = coordinates.split(",");
             var lon:Number = coords[0];
             var lat:Number = coords[1];
             //var ele:Number = coords[2];
 
-            var node:Node = container.createNode(tags, lat, lon);
+            var node:Node = connection.createNode(tags, lat, lon, push);
 
-            container.registerPOI(node);
+            connection.registerPOI(node);
 
             return node;
         }
 
-        private function importWay(coordinates:String, tags:Object, polygon:Boolean): Way {
+        private function importWay(coordinates:String, tags:Object, polygon:Boolean, push:Function): Way {
             var way:Way;
             var nodestring:Array = [];
 
@@ -101,7 +102,7 @@ package net.systemeD.potlatch2.utils {
                 var lat:Number = coords[1];
                 //var ele:Number = coords[2];
 
-                nodestring.push(container.createNode({}, lat, lon));
+                nodestring.push(connection.createNode({}, lat, lon, push));
             }
 
             if (polygon) {
@@ -109,8 +110,8 @@ package net.systemeD.potlatch2.utils {
             }
 
             if (nodestring.length > 0) {
-                way = container.createWay(tags, nodestring);
-                if (simplify) { Simplify.simplify(way, paint.map, false); }
+                way = connection.createWay(tags, nodestring, push);
+                if (simplify) { Simplify.simplify(way, map, false); }
             }
 
             return way;

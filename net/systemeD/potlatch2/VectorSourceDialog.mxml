@@ -1,39 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml" 
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Load vector file"
-        width="400" height="350" verticalGap="0">
+        width="500" height="350" verticalGap="0">
 
 	<mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" 
 		dataProvider="{vectorLayers}" itemEditEnd="dataEdited(event)">
 	    <mx:columns>
-	        <mx:DataGridColumn editable="false" dataField="visible" headerText="Show" width="45">
+	        <mx:DataGridColumn editable="false" dataField="visible" headerText="Show?" width="45">
 				<mx:itemRenderer>
-					<mx:Component>
+					<fx:Component>
 						<mx:CheckBox selectedField="isSelected"
 									 click="data.isSelected=!data.isSelected; this.parent.parent.dispatchEvent(new Event('visibility_changed'));" 
 									 paddingLeft="5"/>
-					</mx:Component>
+					</fx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+	        <mx:DataGridColumn editable="false" dataField="interactive" headerText="Select?" width="45">
+				<mx:itemRenderer>
+					<!-- There should really be a way to hide this for the editable layer. See
+					     http://stackoverflow.com/questions/6329895/how-do-i-change-the-style-of-one-individual-cell-in-a-flex-datagrid 
+					     Leave it as a FIXME until we move to Flex 4 -->
+					<fx:Component>
+						<mx:CheckBox selectedField="isInteractive"
+									 click="data.isInteractive=!data.isInteractive; this.parent.parent.dispatchEvent(new Event('interactive_changed'));" 
+						             paddingLeft="5"/>
+					</fx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
 	        <mx:DataGridColumn editable="true"  dataField="name"  headerText="Name"/>
 	        <mx:DataGridColumn editable="false" dataField="url"   headerText="URL"/>
 	        <mx:DataGridColumn editable="false" dataField="style" headerText="Style">
 				<mx:itemRenderer>
-					<mx:Component>
+					<fx:Component>
 					<mx:ComboBox
 							selectedItem="{outerDocument.whichStyle(data)}"
 					        change="outerDocument.styleEdited(data.name,selectedItem.url)"
 					        dataProvider="{outerDocument.styles}" 
 							labelField="name" />
-					</mx:Component>
+					</fx:Component>
 				</mx:itemRenderer>
 			</mx:DataGridColumn>
 	    </mx:columns>
 	</mx:DataGrid>
 	<mx:HBox horizontalAlign="right" width="100%">
-		<mx:LinkButton label="Delete" click="removeVectorLayer()" enabled="{dataGrid.selectedItem != null? true : false}"/>
+		<mx:LinkButton label="Delete" click="removeLayer()" enabled="{dataGrid.selectedItem != null &amp;&amp; dataGrid.selectedItem.isBackground}"/>
 	</mx:HBox>
 
 	<mx:VBox width="100%" paddingTop="10">
@@ -44,20 +57,31 @@
 			<mx:RadioButton width="100%" groupName="filetype" value="kml" id="kml" label="KML" />
 			<mx:RadioButton width="100%" groupName="filetype" value="osm" id="osm" label="OSM" />
 			<mx:RadioButton width="100%" groupName="filetype" value="shp" id="shp" label="Shapefile" />
+		</mx:HBox>
+		<mx:HBox>
+			<mx:Label text="Shapefile projection:" />
+			<mx:ComboBox id="projection"> 
+				<mx:ArrayCollection>
+					<fx:Object label="Lat/long" data="" />
+					<fx:Object label="Ordnance Survey GB" data="EPSG:27700" />
+					<fx:Object label="NAD83" data="EPSG:4269" />
+				</mx:ArrayCollection>
+			</mx:ComboBox>
 			<mx:CheckBox width="100%" label="Simplify paths" selected="true" id="simplify" />
 		</mx:HBox>
 		<mx:HBox>
 			<mx:Text text="URL:"/>
-			<mx:TextInput width="100%" id="src" text="" />
-			<mx:Button label="Load" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected);" enabled="{src.text == '' ? false : true}"/>
+			<mx:TextInput width="100%" id="src" text="" change="selectByExtension()" />
+			<mx:Button label="Load" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected, projection.selectedItem.data);" enabled="{src.text == '' ? false : true}"/>
 		</mx:HBox>
 	</mx:VBox>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
 	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.MapPaint;
 	import net.systemeD.halcyon.Globals;
-	import net.systemeD.halcyon.VectorLayer;
+	import net.systemeD.halcyon.connection.Connection;
 	import net.systemeD.potlatch2.utils.Importer;
 	import net.systemeD.potlatch2.utils.GpxImporter;
 	import net.systemeD.potlatch2.utils.KmlImporter;
@@ -68,22 +92,23 @@
     import mx.events.DataGridEvent;
     import mx.events.CloseEvent;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 
 	private var map:Map;
 
 	public function styleEdited(name:String,stylesheet:String):void {
-		map.vectorlayers[name].style=stylesheet;
-		map.vectorlayers[name].redrawFromCSS(stylesheet)
+		map.findLayer(name).setStyle(stylesheet);
 	}
 
 
     public function init():void {
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, vectorDialog_close);
 		dataGrid.addEventListener("visibility_changed", toggleVisibility);
+		dataGrid.addEventListener("interactive_changed", toggleInteractive);
 		map = Globals.vars.root;
 		dispatchEvent(new Event("layers_changed"));
     }
@@ -102,16 +127,19 @@
 
 	[Bindable(event="layers_changed")]
 	private function get vectorLayers():Array {
-		var v:Array=[];
-		for (var a:String in map.vectorlayers) {
-			var vl:VectorLayer=map.vectorlayers[a];
-			v.push( { name:a, visible:vl.paint.visible, url:vl.url, style:vl.style } );
-		}
+        var v:Array=[];
+        for each (var a:MapPaint in map.getLayers() ) {
+            v.push( { name:a.connection.name, visible:a.visible, interactive:a.interactive, url:a.connection.apiBase, style:a.style, isBackground:a.isBackground } );
+        }
 		return v;
 	}
 	
 	private function toggleVisibility(event:Event):void {
-		map.vectorlayers[dataGrid.selectedItem.name].paint.visible = !map.vectorlayers[dataGrid.selectedItem.name].paint.visible;
+		map.findLayer(dataGrid.selectedItem.name).visible = !map.findLayer(dataGrid.selectedItem.name).visible;
+	}
+
+	private function toggleInteractive(event:Event):void {
+		map.findLayer(dataGrid.selectedItem.name).interactive = !map.findLayer(dataGrid.selectedItem.name).interactive;
 	}
 	
 	private function dataEdited(event:DataGridEvent):void {
@@ -119,55 +147,68 @@
 			// Rename field
 			var a:String=dataGrid.selectedItem.name;
 			var b:String=dataGrid.itemEditorInstance['text'];	// this is, unbelievably, how you get data within an itemEditEnd event
-			if (a==b || map.vectorlayers[b]) {
+			if (a==b || map.findLayer(b)) {
 				event.preventDefault();
 			} else {
-				map.vectorlayers[b]=map.vectorlayers[a];
-				delete map.vectorlayers[a];
+				map.findLayer(a).connection.name = b;
 			}
 			dispatchEvent(new Event("layers_changed"));
 		}
 	}
 
-	private function removeVectorLayer():void {
-		map.removeVectorLayer(map.vectorlayers[dataGrid.selectedItem.name]);
+	private function removeLayer():void {
+		map.removeLayerByName(dataGrid.selectedItem.name);
 		dispatchEvent(new Event("layers_changed"));
 	}
     
+	private function selectByExtension():void {
+		if      (src.text.match(/\.shp$/i)) filetype.selectedValue='shp'
+		else if (src.text.match(/\.osm$/i)) filetype.selectedValue='osm'
+		else if (src.text.match(/\.gpx$/i)) filetype.selectedValue='gpx'
+		else if (src.text.match(/\.kml$/i)) filetype.selectedValue='kml'
+	}
+
     private function vectorDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
     }
 
-	private function loadFiles(url:String,type:String,simplify:Boolean):void {
+	private function loadFiles(url:String,type:String,simplify:Boolean,projection:String=""):void {
 		var names:Array=url.split('/'); var name:String=names[names.length-1];
 		var stylesheet:String="stylesheets/potlatch.css";
 		if (type=='gpx') { stylesheet="stylesheets/gpx.css"; }
-		var vectorlayer:VectorLayer=new VectorLayer(name,map,stylesheet);
-		vectorlayer.url=url;
+
+		var connection:Connection = new Connection(name, url, null, null);
 
                 var filesLoaded:Function = function(success:Boolean,message:String=null):void {
                         if (success) {
-                                map.addVectorLayer(vectorlayer);
-                                dispatchEvent(new Event("layers_changed"));
+                            var paint:MapPaint = map.addLayer(connection, stylesheet);
+                            paint.updateEntityUIs(false, false);
+                            dispatchEvent(new Event("layers_changed"));
                         } else {
-                                Alert.show(message, 'Error', mx.controls.Alert.OK);
+                            Alert.show(message, 'Error', mx.controls.Alert.OK);
                         }
                 }
 
 		if (type=='gpx') {
-			var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
+			var gpx:GpxImporter=new GpxImporter(connection, map, [url], filesLoaded, simplify);
 		} else if (type=='kml') {
-			var kml:KmlImporter=new KmlImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
+			var kml:KmlImporter=new KmlImporter(connection, map, [url], filesLoaded, simplify);
 		} else if (type=='osm') {
-			var osm:OsmImporter=new OsmImporter(vectorlayer, vectorlayer.paint, [url], filesLoaded, simplify);
+			var osm:OsmImporter=new OsmImporter(connection, map, [url], filesLoaded, simplify);
 		} else {
+			/* FIXME: 
+			   we're currently hardcoding the projection values. We could populate this directly from 
+			   proj4as, or better still, parse the WKT in the .PRJ file:
+					http://trac.osgeo.org/proj4js/ticket/47
+					http://trac.osgeo.org/proj4js/changeset/1873
+			*/
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
-			var shp:ShpImporter=new ShpImporter(vectorlayer,
-			                                    vectorlayer.paint,
-			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify);
+			var shp:ShpImporter=new ShpImporter(connection,
+			                                    map,
+			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify, projection);
 		}
 	}
 
               ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:TitleWindow>

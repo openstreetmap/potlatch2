@@ -1,62 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+<mx:Application
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:halcyon="net.systemeD.halcyon.*"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
 	layout="vertical"
 	horizontalScrollPolicy="off"
 	verticalScrollPolicy="off"
 	horizontalAlign="center" 
-	addedToStage="initApp()"
+	addedToStage="startInit()"
 	preloader="net.systemeD.potlatch2.Preloader">
 
-    <map:LocalizationMap xmlns:map="l10n.map.*" />
 
-	<mx:Style source="styles/Application.css"/>
 
-    <mx:Glow id="glowImage" duration="100" 
-        alphaFrom="0.3" alphaTo="1.0" 
-        blurXFrom="0.0" blurXTo="5.0" 
-        blurYFrom="0.0" blurYTo="5.0" 
-        color="0xFF8000"/>
-    <mx:Glow id="unglowImage" duration="100" 
-        alphaFrom="1.0" alphaTo="0.3" 
-        blurXFrom="5.0" blurXTo="0.0" 
-        blurYFrom="5.0" blurYTo="0.0" 
-        color="0xFF8000"/>
-    <mx:WipeLeft id="wipeOut" duration="250"/>
-    <mx:WipeRight id="wipeIn" duration="250"/>
+	<fx:Style source="styles/Application.css"/>
 
-    <mx:ApplicationControlBar dock="true">
-        <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton"
-            creationComplete="bgButton.popUp = new BackgroundSelector();"/>
-        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
-            creationComplete="styleButton.popUp = new StyleSelector();"/>
-		<mx:PopUpMenuButton id="gpsButton" styleName="appBarButton"
-		    itemClick="if (event.index==0) { trackLoader.load(); } 
-		          else if (event.index==1) { new MyGpxDialog().init(); } 
-		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
-		    	                             mx.controls.Menu(gpsButton.popUp).selectedIndex=0; /* Yes, we do need to call it twice */
-		    	                             theMap.removeVectorLayer(theMap.findVectorLayer('GPS tracks')); }">
-			<mx:dataProvider>
-				<mx:Array>
-					<mx:Object label="GPS data" id="gpsData" />
-					<mx:Object label="My tracks" id="myTracks" />
-					<mx:Object label="Clear" id="clearGps" />
-				</mx:Array>
-			</mx:dataProvider>
-		</mx:PopUpMenuButton>
-        <mx:Spacer width="100%"/>
+    <fx:Declarations>
+        <map:LocalizationMap xmlns:map="l10n.map.*" />
+        <mx:Glow id="glowImage" duration="100"
+            alphaFrom="0.3" alphaTo="1.0"
+            blurXFrom="0.0" blurXTo="5.0"
+            blurYFrom="0.0" blurYTo="5.0"
+            color="0xFF8000"/>
+        <mx:Glow id="unglowImage" duration="100"
+            alphaFrom="1.0" alphaTo="0.3"
+            blurXFrom="5.0" blurXTo="0.0"
+            blurYFrom="5.0" blurYTo="0.0"
+            color="0xFF8000"/>
+        <mx:WipeLeft id="wipeOut" duration="250"/>
+        <mx:WipeRight id="wipeIn" duration="250"/>
+    </fx:Declarations>
+
+    <mx:ApplicationControlBar id="controlbar" dock="true">
+        <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
+			click="SaveManager.saveChanges(theMap.editableLayer.connection);" id="saveButton" enabled="false"/>
+        <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
+        <mx:Spacer width="40"/>
         <mx:Button id="undo" label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"
             toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />
         <mx:Button id="redo" label="Redo" click="MainUndoStack.getGlobalStack().redo();" styleName="appBarButton"
-            enabled="{MainUndoStack.getGlobalStack().canRedo()}"/>
+            enabled="{MainUndoStack.getGlobalStack().canRedo()}"
+            toolTip="{MainUndoStack.getGlobalStack().getRedoDescription() ? 'Redo '+MainUndoStack.getGlobalStack().getRedoDescription() : 'Redo last action'}" />
         <mx:Spacer width="100%"/>
-        <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
+        <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton"
+            creationComplete="bgButton.popUp = new BackgroundSelector();"/>
+        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
+            creationComplete="styleButton.popUp = new StyleSelector();"/>
+		<mx:PopUpMenuButton id="gpsButton" label="GPS Data" styleName="appBarButton"
+		    itemClick="if (event.index==0) { trackLoader.load(); } 
+		          else if (event.index==1) { new MyGpxDialog().init(); } 
+		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
+		    	                             mx.controls.Menu(gpsButton.popUp).selectedIndex=0; /* Yes, we do need to call it twice */
+		    	                             theMap.removeLayerByName('GPS tracks'); }">
+			<mx:dataProvider>
+				<fx:Array>
+					<fx:Object label="GPS data" id="gpsData" />
+					<fx:Object label="My tracks" id="myTracks" />
+					<fx:Object label="Clear" id="clearGps" />
+				</fx:Array>
+			</mx:dataProvider>
+		</mx:PopUpMenuButton>
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
-        <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
-			click="SaveManager.saveChanges();" id="saveButton" enabled="false"/>
     </mx:ApplicationControlBar>
     
     <mx:HDividedBox width="100%" height="100%">
@@ -68,25 +74,28 @@
         <mx:Canvas id="map_area" resize="onResizeMap()"
             top="0" left="0" width="100%" height="100%" dragEnter="dragEnterHandler(event);" dragDrop="dragDropHandler(event);">
         </mx:Canvas>
-        <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
+        <mx:Image source="@Embed('embedded/zoomIn.svg')" left="5" top="5" click="theMap.zoomIn();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom in - currently z'+getScale()}" />
-        <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
+        <mx:Image source="@Embed('embedded/zoomOut.svg')" left="5" top="22" click="theMap.zoomOut();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom out - currently z'+getScale()}" />
-        <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
+        <mx:Image source="@Embed('embedded/search.svg')" left="5" top="42" click="new FindDialog().init();"
+            rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="Find place" />
+        <mx:TextArea id="dataWorking" text="" right="5" top="5" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
-        <mx:TextArea id="coordsbox" left="0" top="0" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="33"
+        <mx:TextArea id="coordsbox" left="25" top="5" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="30"
             width="57" enabled="false" borderThickness="0" visible="false"/>
 
     </mx:Canvas>
 
     </mx:HDividedBox>
 
-	<mx:Script><![CDATA[
+	<fx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.save.SaveManager;
+		import net.systemeD.potlatch2.find.*;
 		import net.systemeD.potlatch2.collections.*;
 		import net.systemeD.potlatch2.controller.*;
 		import net.systemeD.potlatch2.help.*;
@@ -97,17 +106,20 @@
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
+		import flash.utils.Timer;
+		import flash.events.TimerEvent;
 		import flash.events.MouseEvent;
 		import flash.display.Sprite;
 		import mx.core.IChildList;
         import mx.containers.Canvas;
 		import mx.core.Application;
+		import mx.core.FlexGlobals;
         import mx.events.DragEvent;
         import mx.events.CloseEvent;
         import mx.managers.DragManager;
         import mx.core.DragSource;
         import mx.controls.Alert;
-        import com.mindspace.l10n.events.LocaleEvent;
+        import org.babelfx.events.LocaleEvent;
 
         public var theMap:Map;
         public var theController:EditController;
@@ -119,21 +131,39 @@
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
+		private var saveLabel:String='Save';
+		private var saveTimer:Timer;
 
         include "version.as";
 
-		private function initApp():void {
+		private function startInit():void {
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
+			loader.load(new URLRequest("FontLibrary.swf"));
 
-            /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. */
-            /* Change this to another locale (e.g. fr_FR) to see the differences. */
             if (loaderInfo.parameters['locale']) {
-              dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
+                Globals.vars.locale = loaderInfo.parameters['locale'];
+                dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, loaderInfo.parameters['locale']));
+                dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, 'en_US')); // think en_US is default
+                resourceManager.localeChain = [loaderInfo.parameters['locale'], 'en_US'];
             }
+		}
+		
+		private function startApp(event:Event):void {
+			controlbar.setStyle('dropShadowEnabled',"false");	// Flex 4 doesn't permit this in Application.css
+
+			// Set font
+			var FontLibrary:Class = event.target.applicationDomain.getDefinition("FontLibrary") as Class;
+			Font.registerFont(FontLibrary.DejaVu);
 
 			Globals.vars.map_area = map_area;
 			Globals.vars.root = map_area.rawChildren;			// set up global reference to root level
 			var _root:IChildList = map_area.rawChildren;		// convenient local shorthand
 			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
+			Globals.vars.flashvars = loaderInfo.parameters;
+
+			// Remember localised Save text, because we change this dynamically
+			saveLabel=saveButton.label;
 
 			// populate sharedObject with loaderInfo parameters if supplied
 			var obj:SharedObject = SharedObject.getLocal("user_state");
@@ -162,28 +192,47 @@
 
 			// pass additional parameters to map
 			var params:Object={}; var k:String;
-			for (k in this.loaderInfo.parameters) {
-				params[k]=this.loaderInfo.parameters[k];
-			}
-			for (k in SharedObject.getLocal('user_state').data) {
-				params[k]=SharedObject.getLocal('user_state').data[k];
-			}
-			params['tileblocks']=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			for (k in this.loaderInfo.parameters) params[k]=this.loaderInfo.parameters[k];
+			for (k in SharedObject.getLocal('user_state').data) params[k]=SharedObject.getLocal('user_state').data[k];
 
-			// create map and Yahoo
-			theMap=new Map(params);
-
-            // Auto-load vector backgrounds from config
-            // This could go spectacularly wrong if map.init completes before the event listener below is added
-            theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
-
+			// Create map
+			theMap=new Map();
 			theMap.backdrop=b;
-			yahoo=new Yahoo(w,h,theMap);
+            theMap.updateSize(w,h);
+			theMap.addEventListener(MapEvent.SCALE, scaleHandler);
+
+			yahoo=new Yahoo(theMap);
 			yahoo.hide();
 			_root.addChild(yahoo);
 			_root.addChild(theMap);
-            theMap.updateSize(w,h);
-			theMap.addEventListener(MapEvent.SCALE, scaleHandler);
+
+			// Initialise stylesheets
+			Stylesheets.instance().init();
+			Stylesheets.instance().addEventListener(CollectionEvent.SELECT,
+				function(e:CollectionEvent):void { theMap.editableLayer.setStyle(String(e.data)); }
+			);
+
+			// Add core data layer
+			var conn:Connection = new XMLConnection("Main", params['api'], params['policy'], params);
+            conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
+            conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
+            conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
+            conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
+            conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
+            conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
+			conn.addEventListener(MapEvent.ERROR, onMapError);
+			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
+			conn.addEventListener(AttentionEvent.ALERT, onAlert);
+			if (params['licence_status']) conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/problems",conn);
+			theMap.addLayer(conn, Stylesheets.instance().selected, false, true);
+
+            // Auto-load vector backgrounds from config
+            theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
+
+			// Set start position of map
+			// ** FIXME: if lat/lon/zoom aren't supplied, we need to keep the map in a non-loading state 
+			//           until the user has decided where to start editing (e.g. when the first GPX loads)
+			theMap.init(params['lat'], params['lon'], params['zoom']);
 
 			// add attribution/logo sprite
 			var overlay:Sprite=new Sprite();
@@ -206,11 +255,16 @@
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
-			// initialise imagery and stylesheets
+			// initialise imagery
+			theMap.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			theMap.tileset.setDimming(params['background_dim']    ==null ? true  : params['background_dim']);
+			theMap.tileset.setSharpen(params['background_sharpen']==null ? false : params['background_sharpen']);
 			Imagery.instance().init(theMap, overlay, yahoo);
-			Stylesheets.instance().init(theMap);
 			Imagery.instance().addEventListener(MapEvent.BUMP, bumpHandler);
-
+			Imagery.instance().addEventListener(CollectionEvent.SELECT,
+				function(e:CollectionEvent):void { theMap.tileset.init(e.data, e.data!=''); }
+			);
+			
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
             
@@ -232,20 +286,12 @@
             t.visible = loaderInfo.parameters["show_debug"] == 'true';
 			Globals.vars.root=theMap;	// just for the addDebug function
 
+			// create controller
             theController = new EditController(theMap, tagViewer, toolbox);
             theController.setActive();
+			theController.addEventListener(AttentionEvent.ATTENTION, onAttention);
+			theController.addEventListener(AttentionEvent.ALERT, onAlert);
             
-            var conn:Connection = Connection.getConnectionInstance();
-            conn.addEventListener(Connection.LOAD_STARTED, onDataStart);
-            conn.addEventListener(Connection.LOAD_COMPLETED, onDataComplete);
-            conn.addEventListener(Connection.SAVE_STARTED, onDataStart);
-            conn.addEventListener(Connection.SAVE_COMPLETED, onDataComplete);
-            conn.addEventListener(Connection.DATA_DIRTY, onDataDirty);
-            conn.addEventListener(Connection.DATA_CLEAN, onDataClean);
-			conn.addEventListener(MapEvent.ERROR, onMapError);
-			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
-			conn.addEventListener(AttentionEvent.ALERT, onAlert);
-
             // set the access token from saved cookie
             var tokenObject:SharedObject = SharedObject.getLocal("access_token");
             conn.setAccessToken(tokenObject.data["oauth_token"], tokenObject.data["oauth_token_secret"]);
@@ -256,20 +302,23 @@
                 if (conn.hasAccessToken()) { 
                     loadTrace(id);
                 } else {
-                    SaveManager.ensureAccess(function ():void { loadTrace(id); });
+                    SaveManager.ensureAccess(function ():void { loadTrace(id); }, conn);
                 }
             }
 
 			// Load arbitrary GPX from provided URL
 			if (loaderInfo.parameters['gpx_url']) {
-				var vectorlayer:VectorLayer=new VectorLayer(name,theMap,"stylesheets/gpx.css");
-				vectorlayer.url=loaderInfo.parameters['gpx_url'];
-				var gpx:GpxImporter=new GpxImporter(vectorlayer, vectorlayer.paint, [vectorlayer.url], 
-				                                    function(success:Boolean,message:String=null):void {
-					if (!success) return;
-					theMap.addVectorLayer(vectorlayer);
-					dispatchEvent(new Event("layers_changed"));
-				                                    }, false);
+
+                var gpx_url:String = loaderInfo.parameters['gpx_url'];
+
+                var connection:Connection = new Connection(name, gpx_url, null, null);
+                var gpx:GpxImporter=new GpxImporter(connection, theMap, [gpx_url],
+                                                function(success:Boolean,message:String=null):void {
+                                                    if (!success) return;
+                                                    var paint:MapPaint = theMap.addLayer(connection, "stylesheets/gpx.css");
+                                                    paint.updateEntityUIs(false, false);
+                                                    dispatchEvent(new Event("layers_changed"));
+                                                }, false);
 			}
 
 			// create GPS trackloader
@@ -279,7 +328,7 @@
             // force_auth == force => checks for access token, and displays OAuth panel if needed
             var force_auth:String = loaderInfo.parameters["force_auth"];
             if (!conn.hasAccessToken() && force_auth == 'force') {
-              SaveManager.ensureAccess(onAccessChecked);
+              SaveManager.ensureAccess(onAccessChecked, conn);
             }
 
             // show help dialog on startup, if required
@@ -320,7 +369,7 @@
 			if (entity is Relation) {
 				// If it's a relation, just bring up the editor panel
 				var panel:RelationEditorPanel = RelationEditorPanel(
-					PopUpManager.createPopUp(Application(Application.application), RelationEditorPanel, true));
+					PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), RelationEditorPanel, true));
 				panel.setRelation(entity as Relation);
 				PopUpManager.centerPopUp(panel);
 				return;
@@ -399,15 +448,37 @@
             if (ExternalInterface.available) {
               ExternalInterface.call("markChanged", false);
             }
+			if (!saveTimer || !saveTimer.running) {
+				saveTimer=new Timer(60*1000,0);
+				saveTimer.addEventListener(TimerEvent.TIMER,saveTimeUpdate);
+				saveTimer.start();
+			}
 		}
 		private function onDataClean(event:Event):void {
 			saveButton.enabled=false;
             if (ExternalInterface.available) {
               ExternalInterface.call("markChanged", true);
             }
+            if (saveTimer && saveTimer.running) {
+				saveTimer.stop();
+				saveTimer.removeEventListener(TimerEvent.TIMER,saveTimeUpdate);
+				saveTimeWrite(0);
+			}
 		}
-		
-
+		private function saveTimeUpdate(event:TimerEvent):void {
+			var timer:Timer=Timer(event.target);
+			saveTimeWrite(uint(timer.delay*timer.currentCount/1000/60));
+		}
+		private function saveTimeWrite(minutes:uint):void {
+			if (minutes<5) {
+				saveButton.label=saveLabel;
+			} else {
+				saveButton.label=saveLabel+" ("+minutes+"m"+")"; 
+				if (minutes>=20 && minutes/5==int(minutes/5)) {
+					theController.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, minutes+"m since last save - please save regularly"));
+				}
+			}
+		}
 
 		private function scaleHandler(event:MapEvent):void {
 			dispatchEvent(new Event("rescale"));
@@ -445,11 +516,12 @@
             
             var createAction:CompositeUndoableAction = new CompositeUndoableAction("Create POI");
             
-            var node:Node = Connection.getConnectionInstance().createNode({}, lat, lon, createAction.push);
+			var conn:Connection = theMap.editableLayer.connection;
+            var node:Node = conn.createNode({}, lat, lon, createAction.push);
             for each ( var tag:Object in tags ) {
                 node.setTag(tag.k, tag.v, createAction.push);
             }
-			Connection.getConnectionInstance().registerPOI(node);
+			conn.registerPOI(node);
 			MainUndoStack.getGlobalStack().addAction(createAction);
             theController.setState(new SelectedPOINode(node));
         }
@@ -460,16 +532,17 @@
         }
 
         private function loadTrace(id:Number):void {
-            var conn:Connection = Connection.getConnectionInstance();
-            conn.addEventListener(Connection.TRACES_LOADED, function (e:Event):void {
-                for each (var trace:Trace in conn.getTraces()) {
-                    if (trace.id == id) { trace.addToMap(); }
-                }
-            });
-            conn.fetchUserTraces();
+			var conn:Connection = theMap.editableLayer.connection;
+			conn.addEventListener(Connection.TRACES_LOADED, function (e:Event):void {
+				var t:Trace = conn.findTrace(id);
+				if (!t) { t=new Trace(conn,id); conn.addTrace(t); }
+				t.addToMap();
+				conn.removeEventListener(Connection.TRACES_LOADED, arguments.callee);
+			});
+			conn.fetchUserTraces();
         }
 
-	]]></mx:Script>
+	]]></fx:Script>
 
 </mx:Application>
 

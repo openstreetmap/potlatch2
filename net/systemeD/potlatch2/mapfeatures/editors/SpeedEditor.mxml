@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <edit:SingleTagEditor
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	toolTip="{fieldDescription}"
 	direction="horizontal" styleName="titledEditor">
@@ -14,7 +15,7 @@
       fontWeight="normal">
   </edit:ChoiceComboBox>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
       import mx.collections.*;
       import mx.utils.*;
       import net.systemeD.potlatch2.mapfeatures.Feature;
@@ -65,6 +66,6 @@
           choice.value = null;
           return choice;
       }
-  ]]></mx:Script>
+  ]]></fx:Script>
 </edit:SingleTagEditor>
 

@@ -28,10 +28,8 @@ package net.systemeD.halcyon {
 		/** don't zoom in past this */
 		public const MAXSCALE:uint=23; 
 
-		/** sprite for ways and (POI/tagged) nodes in core layer */
-		public var paint:MapPaint;						 
-		/** sprite for vector background layers */
-		public var vectorbg:Sprite;
+		// Container for MapPaint objects
+		private var paintContainer:Sprite;
 
 		/** map scale */
 		public var scale:uint=14;						 
@@ -69,112 +67,60 @@ package net.systemeD.halcyon {
 		/** How far the map can be dragged without actually triggering a pan. */
 		public const TOLERANCE:uint=7;					//  |
 		
-		/** object containing HTML page parameters */
+		/** object containing HTML page parameters: lat, lon, zoom, background_dim, background_sharpen, tileblocks */
 		public var initparams:Object; 
 
 		/** reference to backdrop sprite */
 		public var backdrop:Object; 
 		/** background tile object */
 		public var tileset:TileSet; 
-		/** background tile URL, name and scheme */
-		private var tileparams:Object={ url:'' }; 
-		/** internal style URL */
-		private var styleurl:String=''; 
 		/** show all objects, even if unstyled? */
 		public var showall:Boolean=true; 
 		
-		/** server connection */
-		public var connection:Connection; 
-		/** VectorLayer objects */
-		public var vectorlayers:Object={};  
-		
 		// ------------------------------------------------------------------------------------------
 		/** Map constructor function */
-        public function Map(initparams:Object) {
+        public function Map() {
+			// Remove any existing sprites
+			while (numChildren) { removeChildAt(0); }
 
-			this.initparams=initparams;
-			connection = Connection.getConnection(initparams);
-            connection.addEventListener(Connection.NEW_WAY, newWayCreated);
-            connection.addEventListener(Connection.NEW_POI, newPOICreated);
-            connection.addEventListener(Connection.WAY_RENUMBERED, wayRenumbered);
-            connection.addEventListener(Connection.NODE_RENUMBERED, nodeRenumbered);
-			gotEnvironment(null);
+			// 900913 background
+			tileset=new TileSet(this);
+			addChild(tileset);
+
+			// Container for all MapPaint objects
+			paintContainer = new Sprite();
+			addChild(paintContainer);
 
 			addEventListener(Event.ENTER_FRAME, everyFrame);
 			scrollRect=new Rectangle(0,0,800,600);
-        }
 
-		public function gotEnvironment(r:Object):void {
-			var loader:Loader = new Loader();
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, gotFont);
-			loader.load(new URLRequest("FontLibrary.swf"));
-		}
-		
-		public function gotFont(r:Event):void {
-			var FontLibrary:Class = r.target.applicationDomain.getDefinition("FontLibrary") as Class;
-			Font.registerFont(FontLibrary.DejaVu);
-
-			if (initparams['lat'] != null) {
-				// parameters sent from HTML
-				init(initparams['lat'],
-					 initparams['lon'],
-					 initparams['zoom']);
-
-			} else {
-				// somewhere innocuous
-				init(53.09465,-2.56495,17);
+			if (ExternalInterface.available) {
+				ExternalInterface.addCallback("setPosition", function (lat:Number,lon:Number,zoom:uint):void {
+					updateCoordsFromLatLon(lat, lon);
+					changeScale(zoom);
+				});
 			}
 		}
 
 		// ------------------------------------------------------------------------------------------
 		/** Initialise map at a given lat/lon */
         public function init(startlat:Number, startlon:Number, startscale:uint=0):void {
-			while (numChildren) { removeChildAt(0); }
-
-			tileset=new TileSet(this);					// 0 - 900913 background
-			if (initparams['tileblocks']) {				//   | option to block dodgy tile sources
-				tileset.blocks=initparams['tileblocks'];//   |
-			}											//   |
-			addChild(tileset);							//   |
-			tileset.init(tileparams, false, 
-			             initparams['background_dim']    ==null ? true  : initparams['background_dim'],
-			             initparams['background_sharpen']==null ? false : initparams['background_sharpen']);
-
-			vectorbg = new Sprite();					// 1 - vector background layers
-			addChild(vectorbg);							//   |
-
- 			paint = new MapPaint(this,-5,5);			// 2 - core paint object
-			addChild(paint);							//   |
-			paint.isBackground=false;					//   |
-
-			if (styleurl) {								// if we've only just set up paint, then setStyle won't have created the RuleSet
-				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-				paint.ruleset.loadFromCSS(styleurl);
-			}
 			if (startscale>0) {
 				scale=startscale;
 				this.dispatchEvent(new MapEvent(MapEvent.SCALE, {scale:scale}));
 			}
-
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			baselon    =startlon          -(mapwidth /2)/scalefactor;
 			basey      =lat2latp(startlat)+(mapheight/2)/scalefactor;
 			updateCoords(0,0);
             this.dispatchEvent(new Event(MapEvent.INITIALISED));
 			download();
-
-            if (ExternalInterface.available) {
-              ExternalInterface.addCallback("setPosition", function (lat:Number,lon:Number,zoom:uint):void {
-                  updateCoordsFromLatLon(lat, lon);
-                  changeScale(zoom);
-              });
-            }
         }
 
 		// ------------------------------------------------------------------------------------------
 		/** Recalculate co-ordinates from new Flash origin */
 
-		public function updateCoords(tx:Number,ty:Number):void {
+		private function updateCoords(tx:Number,ty:Number):void {
 			setScrollRectXY(tx,ty);
 
 			edge_t=coord2lat(-ty          );
@@ -187,7 +133,7 @@ package net.systemeD.halcyon {
 		}
 		
 		/** Move the map to centre on a given latitude/longitude. */
-		public function updateCoordsFromLatLon(lat:Number,lon:Number):void {
+		private function updateCoordsFromLatLon(lat:Number,lon:Number):void {
 			var cy:Number=-(lat2coord(lat)-mapheight/2);
 			var cx:Number=-(lon2coord(lon)-mapwidth/2);
 			updateCoords(cx,cy);
@@ -220,14 +166,14 @@ package net.systemeD.halcyon {
 
 		private function moveMap(dx:Number,dy:Number):void {
 			updateCoords(getX()+dx,getY()+dy);
-			updateEntityUIs(false, false);
+			updateAllEntityUIs(false, false);
 			download();
 		}
 		
 		/** Recentre map at given lat/lon, updating the UI and downloading entities. */
 		public function moveMapFromLatLon(lat:Number,lon:Number):void {
 			updateCoordsFromLatLon(lat,lon);
-			updateEntityUIs(false,false);
+			updateAllEntityUIs(false,false);
 			download();
 		}
 		
@@ -236,7 +182,6 @@ package net.systemeD.halcyon {
             if (lat> edge_t || lat < edge_b || lon < edge_l || lon > edge_r) {
                 moveMapFromLatLon(lat, lon);
             }
-
 		}
 
 		// Co-ordinate conversion functions
@@ -273,84 +218,15 @@ package net.systemeD.halcyon {
             }
 		}
 
-        /** Download map data. Data is downloaded for the connection and the vector layers, where supported.
+        /** Download map data. Data is downloaded for the currently visible layers
         * The bounding box for the download is taken from the current map edges.
         */
 		public function download():void {
 			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
-			connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
-
-            // Do the same for vector layers
-            for each (var layer:VectorLayer in vectorlayers) {
-              layer.loadBbox(edge_l,edge_r,edge_t,edge_b);
-            }
-		}
-
-        private function newWayCreated(event:EntityEvent):void {
-            var way:Way = event.entity as Way;
-			if (!way.loaded || !way.within(edge_l,edge_r,edge_t,edge_b)) { return; }
-			paint.createWayUI(way);
-        }
-
-        private function newPOICreated(event:EntityEvent):void {
-            var node:Node = event.entity as Node;
-			if (!node.within(edge_l,edge_r,edge_t,edge_b)) { return; }
-			paint.createNodeUI(node);
-        }
-
-		private function wayRenumbered(event:EntityRenumberedEvent):void {
-            var way:Way = event.entity as Way;
-			paint.renumberWayUI(way,event.oldID);
-		}
-
-		private function nodeRenumbered(event:EntityRenumberedEvent):void {
-            var node:Node = event.entity as Node;
-			paint.renumberNodeUI(node,event.oldID);
-		}
-
-        /** Visually mark an entity as highlighted. */
-        public function setHighlight(entity:Entity, settings:Object):void {
-			if      ( entity is Way  && paint.wayuis[entity.id] ) { paint.wayuis[entity.id].setHighlight(settings);  }
-			else if ( entity is Node && paint.nodeuis[entity.id]) { paint.nodeuis[entity.id].setHighlight(settings); }
-        }
-
-        public function setHighlightOnNodes(way:Way, settings:Object):void {
-			if (paint.wayuis[way.id]) paint.wayuis[way.id].setHighlightOnNodes(settings);
-        }
-
-		public function protectWay(way:Way):void {
-			if (paint.wayuis[way.id]) paint.wayuis[way.id].protectSprites();
-		}
-
-		public function unprotectWay(way:Way):void {
-			if (paint.wayuis[way.id]) paint.wayuis[way.id].unprotectSprites();
-		}
-		
-		public function limitWayDrawing(way:Way,except:Number=NaN,only:Number=NaN):void {
-			if (!paint.wayuis[way.id]) return;
-			paint.wayuis[way.id].drawExcept=except;
-			paint.wayuis[way.id].drawOnly  =only;
-			paint.wayuis[way.id].redraw();
-		}
-
-		/** Protect Entities and EntityUIs against purging. This prevents the currently selected items
-		   from being purged even though they're off-screen. */
-
-		public function setPurgable(entities:Array, purgable:Boolean):void {
-			for each (var entity:Entity in entities) {
-				entity.locked=!purgable;
-				if ( entity is Way  ) {
-					var way:Way=entity as Way;
-					if (paint.wayuis[way.id]) { paint.wayuis[way.id].purgable=purgable; }
-					for (var i:uint=0; i<way.length; i++) {
-						var node:Node=way.getNode(i)
-						node.locked=!purgable;
-						if (paint.nodeuis[node.id]) { paint.nodeuis[node.id].purgable=purgable; }
-					}
-				} else if ( entity is Node && paint.nodeuis[entity.id]) { 
-					paint.nodeuis[entity.id].purgable=purgable;
-				}
-			}
+			for (var i:uint=0; i<paintContainer.numChildren; i++)
+				if(getLayerAt(i).visible == true) {
+                    getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+                }
 		}
 
         // Handle mouse events on ways/nodes
@@ -364,27 +240,63 @@ package net.systemeD.halcyon {
         public function entityMouseEvent(event:MouseEvent, entity:Entity):void {
             if ( mapController != null )
                 mapController.entityMouseEvent(event, entity);
-				
         }
 
 		// ------------------------------------------------------------------------------------------
-		// Add vector layer
+		// Add layers
 		
-		public function addVectorLayer(layer:VectorLayer):void {
-			vectorlayers[layer.name]=layer;
-			vectorbg.addChild(layer.paint);
+		public function addLayer(connection:Connection, styleurl:String, backgroundlayer:Boolean=true, interactive:Boolean=false):MapPaint {
+			var paint:MapPaint=new MapPaint(this, connection, styleurl, -5, 5);
+			paintContainer.addChildAt(paint,0);
+			paint.isBackground=backgroundlayer;
+			paint.interactive=interactive;
+			return paint;
+		}
+
+		public function removeLayerByName(name:String):void {
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				if (getLayerAt(i).connection.name==name)
+					paintContainer.removeChildAt(i);
+					// >>>> REFACTOR: needs to do the equivalent of VectorLayer.blank()
+			}
 		}
 		
-		public function removeVectorLayer(layer:VectorLayer):void {
-			if (!layer) return;
-			layer.blank();
-			vectorbg.removeChild(layer.paint);
-			delete vectorlayers[layer.name];
+		public function findLayer(name:String):MapPaint {
+			for (var i:uint=0; i<paintContainer.numChildren; i++)
+				if (getLayerAt(i).connection.name==name) return getLayerAt(i);
+			return null;
 		}
+
+		private function getLayerAt(i:uint):MapPaint {
+			return MapPaint(paintContainer.getChildAt(i));
+		}
+
+        /** Get all the layers available for this Map object
+        *   @return An array of MapPaint objects */
+        public function getLayers():Array {
+            var a:Array = [];
+            for (var i:uint=0; i<paintContainer.numChildren; i++) {
+                a.push(getLayerAt(i));
+            }
+            return a;
+        }
 		
-		public function findVectorLayer(name:String):VectorLayer {
-			for each (var layer:VectorLayer in vectorlayers) {
-				if (layer.name==name) { return layer; }
+		/* Find which layer is editable */
+		public function get editableLayer():MapPaint {
+			var editableLayer:MapPaint;
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				if (!getLayerAt(i).isBackground) {
+					if (editableLayer) trace("Multiple editable layers found");
+					editableLayer=getLayerAt(i);
+				}
+			}
+			return editableLayer;
+		}
+
+		/** Find which paint object an entity will be displayed on. */
+		public function getLayerForEntity(entity:Entity):MapPaint {
+			for (var i:uint=0; i<paintContainer.numChildren; i++) {
+				if (getLayerAt(i).sameConnection(entity)) return getLayerAt(i);
 			}
 			return null;
 		}
@@ -392,33 +304,25 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out
 		
-		public function updateEntityUIs(redraw:Boolean,remove:Boolean):void {
-			paint.updateEntityUIs(connection.getObjectsByBbox(edge_l, edge_r, edge_t, edge_b), redraw, remove);
-			for each (var v:VectorLayer in vectorlayers) {
-				v.paint.updateEntityUIs(v.getObjectsByBbox(edge_l, edge_r, edge_t, edge_b), redraw, remove);
-			}
+		private function updateAllEntityUIs(redraw:Boolean,remove:Boolean):void {
+			for (var i:uint=0; i<paintContainer.numChildren; i++)
+				getLayerAt(i).updateEntityUIs(redraw, remove);
 		}
-		/** Redraw everything, including in every vector layer. */
 		public function redraw():void {
-			paint.redraw();
-			for each (var v:VectorLayer in vectorlayers) { v.paint.redraw(); }
+			for (var i:uint=0; i<paintContainer.numChildren; i++)
+				getLayerAt(i).redraw();
 		}
-		/** Redraw POI's, including in every vector layer. */
 		public function redrawPOIs():void { 
-			paint.redrawPOIs();
-			for each (var v:VectorLayer in vectorlayers) { v.paint.redrawPOIs(); }
+			for (var i:uint=0; i<paintContainer.numChildren; i++)
+				getLayerAt(i).redrawPOIs();
 		}
 		
-		/** Increase scale. */
 		public function zoomIn():void {
-			if (scale==MAXSCALE) { return; }
-			changeScale(scale+1);
+			if (scale!=MAXSCALE) changeScale(scale+1);
 		}
 
-		/** Decrease scale. */
 		public function zoomOut():void {
-			if (scale==MINSCALE) { return; }
-			changeScale(scale-1);
+			if (scale!=MINSCALE) changeScale(scale-1);
 		}
 
 		private function changeScale(newscale:uint):void {
@@ -427,23 +331,8 @@ package net.systemeD.halcyon {
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
 			updateCoordsFromLatLon((edge_t+edge_b)/2,(edge_l+edge_r)/2);	// recentre
 			tileset.changeScale(scale);
-			updateEntityUIs(true,true);
+			updateAllEntityUIs(true,true);
 			download();
-		}
-
-		/** Switch to new MapCSS. */
-		public function setStyle(url:String):void {
-			styleurl=url;
-			if (paint) { 
-				paint.ruleset=new RuleSet(MINSCALE,MAXSCALE,redraw,redrawPOIs);
-				paint.ruleset.loadFromCSS(url);
-			}
-        }
-
-		/** Select a new background imagery. */
-		public function setBackground(bg:Object):void {
-			tileparams=bg;
-			if (tileset) { tileset.init(bg, bg.url!=''); }
 		}
 
 		/** Set background dimming on/off. */

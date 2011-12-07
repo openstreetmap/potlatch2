@@ -18,7 +18,10 @@ package net.systemeD.halcyon.connection {
 		private var delayedEvents:Array = [];
 
         public function EntityCollection(entities:Array) {
-			super(-1, 0, {}, true, -1, "");
+			var conn:Connection=entities[0].connection;
+			// ** FIXME: this really is a very nasty way of finding the connection
+			
+			super(conn, -1, 0, {}, true, -1, "");
             _entities = entities;
 			
 			//To avoid firing on every contained entity, we wait some short time before firing the events
