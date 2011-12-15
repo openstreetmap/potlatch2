@@ -483,8 +483,7 @@
 					subpanels[category][subcategory]=subpanel;
 					var form:Form = new Form();
 					form.name = "form";
-					var layout:FormLayout = new FormLayout();
-					form.layout = layout;
+					form.layout = getFormLayout();
 					subpanel.addChild(form);
 					tabComponents[tab].push(subpanel);
 				}
@@ -512,8 +511,7 @@
           box.styleName = "dndEditorContainer";
           var form:Form = new Form();
           form.name = "form";
-          var layout:FormLayout = new FormLayout();
-          form.layout = layout;
+          form.layout = getFormLayout();
           box.addChild(form);
           return box;
       }
@@ -921,6 +919,14 @@
 		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
 		event.target.height=rows*(event.target.rowHeight+1);
 	}
+
+    private function getFormLayout():FormLayout {
+        var layout:FormLayout = new FormLayout();
+          // This is ugly, and should really be done with a skin. See
+          // http://stackoverflow.com/questions/5126756/flex-spark-form-item-gap
+        layout.gap = -8;
+        return layout;
+    }
   ]]></fx:Script>
 </mx:VBox>
 
