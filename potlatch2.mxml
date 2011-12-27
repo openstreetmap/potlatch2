@@ -437,10 +437,12 @@
             updateDataWorking();
         }
 		private function updateDataWorking():void {
-			if (loadcount>0 && savecount>0) { dataWorking.text="Loading/saving..."; }
-			else if (loadcount>0)           { dataWorking.text="Loading data..."; }
-			else if (savecount>0)           { dataWorking.text="Saving data..."; }
-			else                            { dataWorking.text=""; }
+			var t:String;
+			if (loadcount>0 && savecount>0) { t="Loading/saving#..."; }
+			else if (loadcount>0)           { t="Loading data#..."; }
+			else if (savecount>0)           { t="Saving data..."; }
+			else                            { t=""; }
+			dataWorking.text=t.replace("#",(loadcount>1) ? (" ("+loadcount+")") : "");
 			dataWorking.visible=(dataWorking.text!="");
 		}
         private function onDataDirty(event:Event):void {

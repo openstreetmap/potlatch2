@@ -222,7 +222,6 @@ package net.systemeD.halcyon {
         * The bounding box for the download is taken from the current map edges.
         */
 		public function download():void {
-			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
 				if(getLayerAt(i).visible == true) {
                     getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);

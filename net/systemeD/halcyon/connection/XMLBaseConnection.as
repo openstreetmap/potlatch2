@@ -7,6 +7,7 @@ package net.systemeD.halcyon.connection {
 	import org.iotashan.oauth.*;
 
 	import net.systemeD.halcyon.MapEvent;
+    import net.systemeD.halcyon.connection.bboxes.*;
 
 	/**
 	* XMLBaseConnection is the common code between connecting to an OSM server
@@ -42,6 +43,7 @@ package net.systemeD.halcyon.connection {
 					minlat=map.bounds.@minlat;
 					maxlat=map.bounds.@maxlat;
 					singleEntityRequest=false;
+					fetchSet.add(new Box().fromBbox(minlon,minlat,maxlon,maxlat));
 				}
 
 				for each(var relData:XML in map.relation) {
@@ -155,8 +157,6 @@ package net.systemeD.halcyon.connection {
 						}
 					}
 				}
-			
-				markBboxLoaded(minlon,maxlon,maxlat,minlat);
 				registerPOINodes();
 			}
 
