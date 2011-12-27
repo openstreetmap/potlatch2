@@ -42,7 +42,12 @@ package net.systemeD.halcyon.connection {
 								top:Number,bottom:Number):void {
             purgeIfFull(left,right,top,bottom);
 			var requestBox:Box=new Box().fromBbox(left,bottom,right,top);
-			var boxes:Array=fetchSet.getBoxes(requestBox,MAX_BBOXES);
+			var boxes:Array;
+			try {
+				boxes=fetchSet.getBoxes(requestBox,MAX_BBOXES);
+			} catch(err:Error) {
+				boxes=[requestBox];
+			}
 			for each (var box:Box in boxes) {
 				// enlarge bbox by given margin on each edge
 				var xmargin:Number=(box.right-box.left)*MARGIN;

@@ -90,6 +90,13 @@ package net.systemeD.halcyon.connection.bboxes {
 					((y.equals(other.y)) && ((x._min == other.x._max) || (x._max == other.x._min))));
 		}
 
+		// Does this box enclose another one entirely?
+		
+		public function encloses(other:Box):Boolean {
+			return (x.contains(other.x._min) && x.contains(other.x._max) && 
+			        y.contains(other.y._min) && y.contains(other.x._max));
+		}
+
 		// Merge as many boxes as possible without increasing the total area of the set of boxes. This is done by
 		// identifying edges along which boxes are adjacent. Note that the input set must be disjoint.
 		//

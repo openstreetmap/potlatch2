@@ -81,7 +81,7 @@ package net.systemeD.halcyon.connection {
 
 		/** maximum number of /map calls to request for each pan/zoom */
 		protected const MAX_BBOXES:uint=3;
-		protected var fetchSet:FetchSet = new FetchSet(MAX_BBOXES);
+		protected var fetchSet:FetchSet = new FetchSet();
 
         // store the data we download
         private var negativeID:Number = -1;
@@ -400,7 +400,7 @@ package net.systemeD.halcyon.connection {
 		public function purgeIfFull(left:Number,right:Number,top:Number,bottom:Number):void {
 			if (waycount<=MAXWAYS) return;
 			purgeOutside(left,right,top,bottom);
-			fetchSet=new FetchSet(MAX_BBOXES);
+			fetchSet=new FetchSet();
 			fetchSet.add(new Box().fromBbox(left,bottom,right,top));
 		}
 

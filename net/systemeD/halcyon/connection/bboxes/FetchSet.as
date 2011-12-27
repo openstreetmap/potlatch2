@@ -4,7 +4,7 @@ package net.systemeD.halcyon.connection.bboxes {
 
 		private var existing:Array;
 
-		function FetchSet(max:int):void {
+		function FetchSet():void {
 			existing=[];
 		}
 
@@ -16,10 +16,18 @@ package net.systemeD.halcyon.connection.bboxes {
 		
 		public function add(bbox:Box):void {
 			existing.push(bbox);
+			existing=existing.filter(function(item:Box,i:uint,arr:Array):Boolean {
+				return !bbox.encloses(item);
+			});
+		}
+
+		public function get size():int {
+			return existing.length;
 		}
 
 		private function partitions(set:Array, yield:Function):void {
 			if (set.length==0) { yield([]); return; }
+			if (set.length>6) { throw new Error("Too complex"); }
 			var z:Number=Math.pow(2,set.length)/2;
 			for (var i:uint=0; i<z; i++) {
 				var parts:Array= [ [], [] ];
@@ -82,6 +90,10 @@ package net.systemeD.halcyon.connection.bboxes {
 				});
 				return box;
 			});
+		}
+		
+		public function toString():String {
+			return "["+existing.join(",")+"]";
 		}
 
 	}
