@@ -32,6 +32,8 @@
 							import mx.core.DragSource;
 
 							private function dragPOI(event:MouseEvent, tags:Array):void {
+								if (outerDocument.controller.map.dragstate==outerDocument.controller.map.DRAGGING) return;
+
 								// Get the drag initiator component from the event object.
 								var dragInitiator:Image = event.currentTarget as Image;
 								var dragSource:DragSource = new DragSource();

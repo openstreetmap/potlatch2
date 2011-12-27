@@ -64,6 +64,7 @@ package net.systemeD.halcyon {
 		public const NOT_DRAGGING:uint=0;				//  |
 		public const NOT_MOVED:uint=1;					//  |
 		public const DRAGGING:uint=2;					//  |
+		public const SWALLOW_MOUSEUP:uint=3;			//  |
 		/** How far the map can be dragged without actually triggering a pan. */
 		public const TOLERANCE:uint=7;					//  |
 		
@@ -389,7 +390,8 @@ package net.systemeD.halcyon {
 		/** Prepare for being dragged by recording start time and location of mouse. */
 		public function mouseDownHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
-			dragstate=NOT_MOVED;
+			if (dragstate==DRAGGING) { moveMap(x,y); dragstate=SWALLOW_MOUSEUP; }	// cancel drag if mouse-up occurred outside the window (thanks, Safari)
+			else { dragstate=NOT_MOVED; }
 			lastxmouse=stage.mouseX; downX=stage.mouseX;
 			lastymouse=stage.mouseY; downY=stage.mouseY;
 			downTime=new Date().getTime();
