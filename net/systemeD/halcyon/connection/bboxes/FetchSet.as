@@ -3,6 +3,7 @@ package net.systemeD.halcyon.connection.bboxes {
 	public class FetchSet {
 
 		private var existing:Array;
+		private static const MAX_PARTITION_TRIALS:uint = 100;
 
 		function FetchSet():void {
 			existing=[];
@@ -25,33 +26,37 @@ package net.systemeD.halcyon.connection.bboxes {
 			return existing.length;
 		}
 
-		private function partitions(set:Array, yield:Function):void {
-			if (set.length==0) { yield([]); return; }
-			if (set.length>6) { throw new Error("Too complex"); }
-			var z:Number=Math.pow(2,set.length)/2;
-			for (var i:uint=0; i<z; i++) {
-				var parts:Array= [ [], [] ];
-				var c:uint=i;
-				for each (var item:Box in set) {
-					parts[c & 1].push(item);
-					c>>=1;
+		private function rgString(prefix:Array, numSets:int, numElts:int, numTries:int):Array {
+			if (numElts==0) return [prefix];
+			var maxDigit:Number=Math.min(maxValue(prefix)+1,numSets-1);
+			var result:Array=[];
+			for (var digit:uint=0; digit<=maxDigit; digit++) {
+				if (numTries>0) {
+					var rv:Array=rgString(prefix.concat([digit]),numSets,numElts-1,numTries);
+					numTries-=rv.length;
+					result=result.concat(rv);
 				}
-				partitions(parts[1],function(b:Array):void {
-					var result:Array;
-					if (b.length) { result=[parts[0]].concat(b); } else { result=[parts[0]]; }
-					yield(result);
-				});
 			}
+			return result;
 		}
-		
+
 		// select only the partitions of the set which have a certain size, or smaller
 
-		private function partsOfSize(n:int, set:Array):Array {
-			var rv:Array=[];
-			partitions(set, function(x:Array):void {
-				if (x.length<=n) rv.push(x);
-			});
-			return rv;
+		private function partsOfSize(n:int,set:Array):Array {
+			if (set.length==0) { return []; }
+			return (rgString([0], n, set.length-1, MAX_PARTITION_TRIALS).map(
+				function(rgs:Array,index:uint,array:Array):* {
+					var ary:Array=[];
+					for (var j:uint=0; j<=maxValue(rgs); j++) ary.push([]);
+					for (var i:uint=0; i<rgs.length; i++) ary[rgs[i]].push(set[i]);
+					return ary;
+				}));
+		}
+		
+		private function maxValue(a:Array):Number {
+			var m:Number=Number.NEGATIVE_INFINITY;
+			for each (var n:Number in a) m=Math.max(m,n);
+			return m;
 		}
 
 		// find the optimal partition - the one which requests the smallest amount of extra space - 
@@ -59,6 +64,7 @@ package net.systemeD.halcyon.connection.bboxes {
 
 		private function optimalPart(n:int, set:Array):Array {
 			var p:Array=partsOfSize(n,set);
+			if (p.length==0) return [];
 			var q:Array=p.sort(function(a:Array,b:Array):Number {
 				var aw:Number = wasteSize(a, set);
 				var bw:Number = wasteSize(b, set);
