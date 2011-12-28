@@ -130,12 +130,12 @@ package net.systemeD.potlatch2.controller {
 				// set cursor depending on whether we're floating over the start of this way, 
 				// another random node, a possible junction...
 				if (entity is Node && focus is Way && Way(focus).endsWith(Node(entity))) {
-					if (focus==firstSelected) { controller.setCursor(controller.pen_so); }
-					                     else { controller.setCursor(controller.pen_o); }
+					if (focus==firstSelected) { controller.setCursor("pen_so"); }
+					                     else { controller.setCursor("pen_o"); }
 				} else if (entity is Node) {
-					controller.setCursor(controller.pen_x);
+					controller.setCursor("pen_x");
 				} else {
-					controller.setCursor(controller.pen_plus);
+					controller.setCursor("pen_plus");
 				}
 			} else if ( event.type == MouseEvent.MOUSE_OUT && !isBackground ) {
 				if (focus is Way && entity!=firstSelected) {
@@ -144,7 +144,7 @@ package net.systemeD.potlatch2.controller {
 					// ** We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
 					// useful optimisation.
 				}
-				controller.setCursor(controller.pen);
+				controller.setCursor("pen");
 			}
 
 			return this;
@@ -341,14 +341,14 @@ package net.systemeD.potlatch2.controller {
 			var node:Node = Way(firstSelected).getNode(editEnd ? Way(firstSelected).length-1 : 0);
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
-			controller.setCursor(controller.pen);
+			controller.setCursor("pen");
 		}
 		override public function exitState(newState:ControllerState):void {
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_ADDED, fixElastic);
 
 			super.exitState(newState);
-			controller.setCursor(null);
+			controller.setCursor();
 			elastic.removeSprites();
 			elastic = null;
 		}

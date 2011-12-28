@@ -11,7 +11,10 @@ package net.systemeD.potlatch2 {
     import flash.external.ExternalInterface;
     import flash.events.*;
 	import flash.geom.*;
+	import flash.display.*;
 	import flash.ui.Keyboard;
+	import flash.ui.Mouse;
+	import flash.ui.MouseCursorData;
 	import flash.text.TextField;
     import mx.controls.TextArea;
 
@@ -64,6 +67,12 @@ package net.systemeD.potlatch2 {
             if (this.moveFunction) {
                 map.addEventListener(MapEvent.MOVE, moveHandler);
             }
+
+			createBitmapCursor("pen"     ,new pen());
+			createBitmapCursor("pen_x"   ,new pen_x());
+			createBitmapCursor("pen_o"   ,new pen_o());
+			createBitmapCursor("pen_so"  ,new pen_so());
+			createBitmapCursor("pen_plus",new pen_plus());
         }
 
         public function setActive():void {
@@ -178,9 +187,18 @@ package net.systemeD.potlatch2 {
 		}
 
 		/** Set a mouse pointer. */
-		public function setCursor(cursor:Class):void {
-			CursorManager.removeAllCursors();
-			if (cursor && cursorsEnabled) { CursorManager.setCursor(cursor,2,-4,0); }
+		public function setCursor(name:String=""):void {
+			if (name && cursorsEnabled) { Mouse.cursor=name; }
+			else { Mouse.cursor=flash.ui.MouseCursor.AUTO; }
+		}
+
+		private function createBitmapCursor(name:String, source:Bitmap, hotX:int=4, hotY:int=0):void {
+			var bitmapVector:Vector.<BitmapData> = new Vector.<BitmapData>(1, true);
+			bitmapVector[0] = source.bitmapData;
+			var cursorData:MouseCursorData = new MouseCursorData();
+			cursorData.hotSpot = new Point(hotX,hotY);
+			cursorData.data = bitmapVector;
+			Mouse.registerCursor(name, cursorData);
 		}
 
         private function toggleSize():void {
