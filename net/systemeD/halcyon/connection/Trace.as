@@ -126,7 +126,7 @@ package net.systemeD.halcyon.connection {
 				}
 			}
 
-			Trace.parseTrkSegs(file,connection,action);
+			Trace.parseTrkSegs(file,connection,action,false);
 			
             for each (var wpt:XML in file.wpt) {
                 var tags:Object = {};
@@ -143,9 +143,10 @@ package net.systemeD.halcyon.connection {
         }
 
 		/* Draw ways from <trkseg>s, with elementary filter to remove points within 3 metres of each other. 
+		   Optionally split way if more than 50m from previous point.
 		   FIXME: do auto-joining of dupes as per Importer. */
 
-		public static function parseTrkSegs(file:XML, connection:Connection, action:CompositeUndoableAction):void {
+		public static function parseTrkSegs(file:XML, connection:Connection, action:CompositeUndoableAction, smartSplitting:Boolean=false):void {
 			for each (var ns:Namespace in file.namespaceDeclarations()) {
 				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) { default xml namespace = ns; }
 			}
@@ -160,8 +161,8 @@ package net.systemeD.halcyon.connection {
 					if (isNaN(lastlat)) { lastlat = lat; lastlon = lon; }
 					dist=Trace.greatCircle(lat, lon, lastlat, lastlon);
 					if (dist>3) {
-						if (dist>50 || nodestring.length>500) {
-							if (dist<=50) nodestring.push(connection.createNode({}, lat, lon, action.push));
+						if ((dist>50 && smartSplitting) || nodestring.length>500) {
+							if (dist<=50 || !smartSplitting) nodestring.push(connection.createNode({}, lat, lon, action.push));
 							if (nodestring.length>1) connection.createWay({}, nodestring, action.push);
 							nodestring=[];
 						}

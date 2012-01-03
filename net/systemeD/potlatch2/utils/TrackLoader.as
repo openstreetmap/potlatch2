@@ -62,7 +62,7 @@ package net.systemeD.potlatch2.utils {
 		private function parseGPX(event:Event):void {
 			var file:XML = new XML(event.target.data);
 			var action:CompositeUndoableAction = new CompositeUndoableAction("add track objects");
-			Trace.parseTrkSegs(file,connection,action);
+			Trace.parseTrkSegs(file,connection,action,true);
             action.doAction(); /* just do it, don't add to undo stack */
 			layer.updateEntityUIs(false, false);
 		}
