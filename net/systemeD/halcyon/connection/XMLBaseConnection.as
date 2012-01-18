@@ -150,6 +150,7 @@ package net.systemeD.halcyon.connection {
 							setWay(way,false);
 							createdEntities.push(way);
 						} else {
+							if (!way.loaded) createdEntities.push(way);
 							waycount++;
 							way.update(version, tags, true, true, nodelist, uid, timestamp);
 							if ( inlineStatus ) { way.status = data.@status; }
