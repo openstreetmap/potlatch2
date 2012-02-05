@@ -629,8 +629,8 @@
       }
 
 	  public function addNewTag():void {
-		if (stack.selectedChild!=advancedContainer) { return; }
-		advancedTagGrid.addNewTag();
+		if (sidebar.selectedChild==multiplePanel) { multiAdvancedTagGrid.addNewTag(); }
+		else if (stack.selectedChild==advancedContainer) { advancedTagGrid.addNewTag(); }
 	  }
 
       private function addedToRelation(event:RelationMemberEvent):void {
