@@ -179,15 +179,15 @@
 
 		var connection:Connection = new Connection(name, url, null, null);
 
-                var filesLoaded:Function = function(success:Boolean,message:String=null):void {
-                        if (success) {
-                            var paint:MapPaint = map.addLayer(connection, stylesheet);
-                            paint.updateEntityUIs(false, false);
-                            dispatchEvent(new Event("layers_changed"));
-                        } else {
-                            Alert.show(message, 'Error', mx.controls.Alert.OK);
-                        }
-                }
+		var filesLoaded:Function = function(success:Boolean,message:String=null):void {
+			if (success) {
+				var paint:MapPaint = map.addLayer(connection, stylesheet);
+				paint.updateEntityUIs(false, false);
+				dispatchEvent(new Event("layers_changed"));
+			} else {
+				Alert.show(message, 'Error', mx.controls.Alert.OK);
+			}
+		}
 
 		if (type=='gpx') {
 			var gpx:GpxImporter=new GpxImporter(connection, map, [url], filesLoaded, simplify);
