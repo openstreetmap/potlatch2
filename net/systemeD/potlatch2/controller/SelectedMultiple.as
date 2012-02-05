@@ -18,7 +18,7 @@ package net.systemeD.potlatch2.controller {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey ) {
+			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey && !event.altKey ) {
 				// modify selection
 				layer.setHighlight(entity, { selected: toggleSelection(entity) });
 				controller.updateSelectionUI();

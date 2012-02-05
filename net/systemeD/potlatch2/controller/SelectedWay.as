@@ -58,7 +58,7 @@ package net.systemeD.potlatch2.controller {
                 var d:DragWayNode=new DragWayNode(firstSelected as Way, -1, event, true);
 				d.forceDragStart();
 				return d;
-			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && entity && entity!=firstSelected) {
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected) {
 				// multiple selection
 				return new SelectedMultiple([firstSelected,entity],layer);
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus==firstSelected ) {

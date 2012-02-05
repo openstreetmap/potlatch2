@@ -110,12 +110,13 @@ package net.systemeD.potlatch2.controller {
 			if ( paint && paint.isBackground ) {
 				if (event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
-					// first, create a list of the alt-clicked item, plus anything else already selected (assuming it's in the same layer!)
+					// extend the current selection (alt-ctrl) or create a new one (alt)?
+					var newSelection:Array=(event.altKey && event.ctrlKey) ? _selection : [];
+					// create a list of the alt-clicked item, plus anything else already selected (assuming it's in the same layer!)
 					var itemsToPullThrough:Array=[]
 					if (_selection.length && firstSelected.connection==entity.connection) itemsToPullThrough=_selection.slice();
 					if (itemsToPullThrough.indexOf(entity)==-1) itemsToPullThrough.push(entity);
 					// make sure they're unhighlighted, and pull them through
-					var newSelection:Array=[]
 					for each (var entity:Entity in itemsToPullThrough) {
 						paint.setHighlight(entity, { hover:false, selected: false });
 						if (entity is Way) paint.setHighlightOnNodes(Way(entity), { selectedway: false });
