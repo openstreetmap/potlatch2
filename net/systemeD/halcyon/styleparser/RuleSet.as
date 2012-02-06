@@ -59,12 +59,15 @@ package net.systemeD.halcyon.styleparser {
 		private static const CONDITION_LE:RegExp        =/^ \s* ([:\w]+) \s* <= \s* (.+) \s* $/sx;
 		private static const CONDITION_REGEX:RegExp     =/^ \s* ([:\w]+) \s* =~\/ \s* (.+) \/ \s* $/sx;
 
-		private static const ASSIGNMENT_EVAL:RegExp	=/^ \s* (\S+) \s* \:      \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
-		private static const ASSIGNMENT:RegExp		=/^ \s* (\S+) \s* \:      \s*          (.+?) \s*                   $/sx;
-		private static const SET_TAG_EVAL:RegExp	=/^ \s* set \s+(\S+)\s* = \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
-		private static const SET_TAG:RegExp			=/^ \s* set \s+(\S+)\s* = \s*          (.+?) \s*                   $/isx;
-		private static const SET_TAG_TRUE:RegExp	=/^ \s* set \s+(\S+)\s* $/isx;
-		private static const EXIT:RegExp			=/^ \s* exit \s* $/isx;
+		private static const ASSIGNMENT_EVAL:RegExp		=/^ \s* (\S+) \s* \:      \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
+		private static const ASSIGNMENT_TAGVALUE:RegExp	=/^ \s* (\S+) \s* \:      \s* tag  \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
+		private static const ASSIGNMENT:RegExp			=/^ \s* (\S+) \s* \:      \s*          (.+?) \s*                   $/sx;
+		private static const SET_TAG_EVAL:RegExp		=/^ \s* set \s+(\S+)\s* = \s* eval \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
+		private static const SET_TAG_TAGVALUE:RegExp	=/^ \s* set \s+(\S+)\s* = \s* tag  \s* \( \s* ' (.+?) ' \s* \) \s* $/isx;
+		private static const SET_TAG:RegExp				=/^ \s* set \s+(\S+)\s* = \s*          (.+?) \s*                   $/isx;
+		private static const SET_TAG_TRUE:RegExp		=/^ \s* set \s+(\S+)\s* $/isx;
+		private static const DELETE_TAG:RegExp			=/^ \s* delete \s+(\S+)\s* $/isx;
+		private static const EXIT:RegExp				=/^ \s* exit \s* $/isx;
 
 		private static const oZOOM:uint=2;
 		private static const oGROUP:uint=3;
@@ -250,6 +253,14 @@ package net.systemeD.halcyon.styleparser {
 			return sl;
 		}
 
+		/** Run instruction styles only, for CSSTransform. */
+		public function runInstructions(obj:Entity, tags:Object):Object {
+			for each (var sc:StyleChooser in choosers) {
+				tags=sc.runInstructions(obj,tags);
+			}
+			return tags;
+		}
+
 		// ---------------------------------------------------------------------------------------------------------
 		// Loading stylesheet
 
@@ -430,11 +441,14 @@ package net.systemeD.halcyon.styleparser {
 			var xs:InstructionStyle=new InstructionStyle(); 
 
 			for each (a in s.split(';')) {
-				if ((o=ASSIGNMENT_EVAL.exec(a)))   { t[o[1].replace(DASH,'_')]=saveEval(o[2]); }
-				else if ((o=ASSIGNMENT.exec(a)))   { t[o[1].replace(DASH,'_')]=o[2]; }
-				else if ((o=SET_TAG_EVAL.exec(a))) { xs.addSetTag(o[1],saveEval(o[2])); }
-				else if ((o=SET_TAG.exec(a)))      { xs.addSetTag(o[1],o[2]); }
-				else if ((o=SET_TAG_TRUE.exec(a))) { xs.addSetTag(o[1],true); }
+				if      ((o=ASSIGNMENT_EVAL.exec(a)))		{ t[o[1].replace(DASH,'_')]=saveEval(o[2]); }
+				else if ((o=ASSIGNMENT_TAGVALUE.exec(a)))	{ t[o[1].replace(DASH,'_')]=new TagValue(o[2]); }
+				else if ((o=ASSIGNMENT.exec(a)))			{ t[o[1].replace(DASH,'_')]=o[2]; }
+				else if ((o=SET_TAG_EVAL.exec(a)))			{ xs.addSetTag(o[1],saveEval(o[2])); }
+				else if ((o=SET_TAG_TAGVALUE.exec(a)))		{ xs.addSetTag(o[1],new TagValue(o[2])); }
+				else if ((o=SET_TAG.exec(a)))				{ xs.addSetTag(o[1],o[2]); }
+				else if ((o=SET_TAG_TRUE.exec(a)))			{ xs.addSetTag(o[1],true); }
+				else if ((o=DELETE_TAG.exec(a)))			{ xs.addSetTag(o[1],''); }
 				else if ((o=EXIT.exec(a))) { xs.setPropertyFromString('breaker',true); }
 			}
 

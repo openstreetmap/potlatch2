@@ -9,22 +9,25 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.connection.actions.*;
     import net.systemeD.halcyon.connection.bboxes.*;
     import net.systemeD.halcyon.Globals;
+    import net.systemeD.halcyon.styleparser.CSSTransform;
 
 	public class Connection extends EventDispatcher {
 
 		public var name:String;
 		public var statusFetcher:StatusFetcher;
 		public var inlineStatus:Boolean = false;
+		public var cssTransform:CSSTransform;
         protected var apiBaseURL:String;
         protected var policyURL:String;
         protected var params:Object;
 
-		public function Connection(cname:String,api:String,policy:String,initparams:Object=null) {
+		public function Connection(cname:String,api:String,policy:String,initparams:Object=null,transform:CSSTransform=null) {
 			initparams = (initparams!=null ? initparams:{});
 			name=cname;
 			apiBaseURL=api;
 			policyURL=policy;
 			params=initparams;
+			cssTransform=transform;
 		}
 
         public function getParam(name:String, defaultValue:String):String {

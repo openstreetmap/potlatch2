@@ -31,6 +31,7 @@ package net.systemeD.halcyon.connection {
             this._version = version;
             this._uid = uid;
             this._timestamp = timestamp;
+            if (connection.cssTransform) tags=connection.cssTransform.run(this,tags);
             this.tags = tags;
 			this._loaded = loaded;
             modified = id < 0;
