@@ -50,6 +50,11 @@ package net.systemeD.halcyon {
 		public function init(params:Object, update:Boolean=false):void {
 			baseurl=params.url;
 			scheme =params.scheme ? params.scheme : '900913';
+			requests=[]; waiting=loadcount=0;
+			for (var tilename:String in tiles) {
+				if (tiles[tilename] is Loader) tiles[tilename].unload();
+				tiles[tilename]=null;
+			}
 			tiles={};
 			offset_lon=offset_lat=x=y=0;
 			while (numChildren) { removeChildAt(0); }
@@ -133,8 +138,8 @@ package net.systemeD.halcyon {
 					waiting++;
 					var loader:Loader = new Loader();
 					tiles[map.scale+','+tx+','+ty]=loader;
-					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit);
-            		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError);
+					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit, false, 0, true);
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError, false, 0, true);
 					loader.load(new URLRequest(tileURL(tx,ty,tz)), 
 					            new LoaderContext(true));
 					l=this.getChildAt(map.scale-map.MINSCALE);
