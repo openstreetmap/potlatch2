@@ -1,5 +1,4 @@
 package net.systemeD.potlatch2.mapfeatures {
-
     import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.net.*;
@@ -12,13 +11,15 @@ package net.systemeD.potlatch2.mapfeatures {
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.potlatch2.utils.CachedDataLoader;
 
-        /** A "map feature" is sort of a template for a map entity. It consists of a few crucial key/value pairs that define the feature, so that
-         * entities can be recognised. It also contains optional keys, with associated editing controls, that are defined as being appropriate
-         * for the feature. */
+
+    /** A "map feature" is sort of a template for a map entity. It consists of a few crucial key/value pairs that define the feature, so that
+     * entities can be recognised. It also contains optional keys, with associated editing controls, that are defined as being appropriate
+     * for the feature. */
 	public class Feature extends EventDispatcher {
         private var mapFeatures:MapFeatures;
         private var _xml:XML;
-        private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
+        // match ${foo|bar|baz|...} - see makeHTMLIcon()
+        private static var variablesPattern:RegExp = /\$\{([^|}]+)\|?([^|}]+)?\|?([^|}]+)?\|?([^|}]+)?\|?([^|}]+)?\|?([^}]+)?\}/g;
         private var _tags:Array;
         private var _withins:Array;
         private var _editors:Array;
@@ -175,17 +176,30 @@ package net.systemeD.potlatch2.mapfeatures {
             return makeHTMLIcon(icon, entity);
         }
 
-        /** Convert the contents of the "icon" tag as an HTML string, with variable substitution. */
+        /** Convert the contents of the "icon" tag as an HTML string, with variable substitution:
+        *   ${highway} shows the value of the highway key
+        *   ${name|operator|network} - if there's no name value, show operator, or network, or nothing.
+        *   (${ref}) - renders as nothing if $ref is valueless.
+        */
         public static function makeHTMLIcon(icon:XMLList, entity:Entity):String {
             if ( icon == null )
                 return "";
 
             var txt:String = icon.children().toXMLString();
+            // Args to this function: "string matched", "substring 1", "substring 2"..., index of match, whole string
             var replaceTag:Function = function():String {
-                var value:String = entity.getTag(arguments[1]);
+            	var matchnum=0;
+            	var args=arguments;
+            	var value:String = null;
+            	while ((value == null || value == "") && matchnum < args.length - 3  ) {
+                  value = entity.getTag(args[matchnum + 1]);
+                  matchnum++;
+            	}
                 return value == null ? "" : htmlEscape(value);
             };
             txt = txt.replace(variablesPattern, replaceTag);
+            // a slightly hacky way of making "${name} (${ref})" look ok even if ref is undefined.
+            txt = txt.replace("()", ""); 
             return txt;
         }
 
