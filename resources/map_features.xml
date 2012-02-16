@@ -597,6 +597,7 @@
       <choice value="138000" text="138 kV"/>
       <choice value="220000" text="220 kV"/>
       <choice value="380000" text="380 kV"/>
+      <choice value="500000" text="500 kV"/>
     </input>
   </inputSet>
 
