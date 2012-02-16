@@ -37,6 +37,9 @@
 			click="SaveManager.saveChanges(theMap.editableLayer.connection);" id="saveButton" enabled="false"/>
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
         <mx:Spacer width="40"/>
+        <mx:Button id="fullscreen" icon="@Embed('embedded/fullscreen.svg')" click="theController.toggleSize();" styleName="appBarButton"
+            enabled="{true}"
+            toolTip="Toggle fullscreen (M)" />
         <mx:Button id="undo" label="Undo" click="MainUndoStack.getGlobalStack().undo();" styleName="appBarButton"
             enabled="{MainUndoStack.getGlobalStack().canUndo()}"
             toolTip="{MainUndoStack.getGlobalStack().getUndoDescription() ? 'Undo '+MainUndoStack.getGlobalStack().getUndoDescription() : 'Undo last action'}" />

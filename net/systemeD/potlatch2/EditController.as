@@ -201,7 +201,7 @@ package net.systemeD.potlatch2 {
 			Mouse.registerCursor(name, cursorData);
 		}
 
-        private function toggleSize():void {
+        public function toggleSize():void {
             if (maximised) {
                 if (minimiseFunction) {
                     ExternalInterface.call(minimiseFunction);
