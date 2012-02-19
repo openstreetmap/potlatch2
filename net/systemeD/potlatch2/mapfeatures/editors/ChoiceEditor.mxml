@@ -6,10 +6,10 @@
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	toolTip="{fieldDescription}"
     direction="{fieldDirection}" styleName="titledEditor">
-
+      
   <mx:Label text="{fieldName}:"/>
   <s:DropDownList id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
-      change="value = inputBox.selectedItem.value" labelField="label">
+      change="value = inputBox.selectedItem.value" labelField="label" typicalItem="{_longestChoice}">
       <s:itemRenderer>
         <fx:Component>
         <mx:HBox toolTip="{data.description}" horizontalScrollPolicy="off">
@@ -33,6 +33,7 @@
       
       private var _choices:ArrayCollection = null;
       private var _unknownChoice:Choice = null;
+      private var _longestChoice:Choice = null;
 
       [Bindable(event="factory_set")]
       protected function get choices():ArrayCollection {
@@ -41,6 +42,12 @@
               _choices = new ArrayCollection();
               for each ( var choice:Choice in ChoiceEditorFactory(_factory).choices ) {
                   _choices.addItem(choice);
+                  if (_longestChoice == null)
+                      _longestChoice = choice;
+                  else {
+                      if (choice.label.length > _longestChoice.label.length)
+                          _longestChoice = choice;
+                  }
               }
               _choices.addItem(createUnsetChoice());
           }
