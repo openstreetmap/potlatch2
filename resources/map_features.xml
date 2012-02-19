@@ -269,6 +269,7 @@
       <choice value="750" text="750V"/>
       <choice value="1500" text="1500V"/>
       <choice value="3000" text="3000V"/>
+      <choice value="12000" text="12kV"/>
       <choice value="15000" text="15kV"/>
       <choice value="25000" text="25kV"/>
     </input>
