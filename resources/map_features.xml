@@ -315,6 +315,13 @@
       <role role="via"/>
     </input>
   </inputSet>
+  
+  <inputSet id="trafficSignals">
+    <!-- can't add as standalone feature due to current limitations, would conflict with junction node feature -->
+    <input type="choice" key="highway" name="Traffic signals" description="Intersection controlled by traffic lights" category="Restrictions" presence="always">
+      <choice value="traffic_signals" text="Yes"/>
+    </input>
+  </inputSet>
 
   <inputSet id="pedestrians">
     <input type="choice" name="Pedestrians" description="Can pedestrians use this road, including footpaths if any?" category="Walk" key="foot">
@@ -503,14 +510,18 @@
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
     </input>
 
-    <input type="choice" name="Horses" category="Restrictions" key="horse" description="Are cars and other private vehicles allowed?">
+    <inputSet ref="hores-permission" />
+
+  </inputSet>
+
+  <inputSet id="horse-permission">
+    <input type="choice" name="Horses" category="Restrictions" key="horse" description="Are horses allowed?">
       <choice value="yes" text="Allowed" description="General right of way."/>
       <choice value="no" text="Prohibited" description="No access to the public."/>
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
     </input>
-
   </inputSet>
 
   <inputSet id="places">
