@@ -9,13 +9,15 @@ package net.systemeD.halcyon.styleparser {
     import net.systemeD.halcyon.ImageBank;
 
     import net.systemeD.halcyon.connection.*;
-	
-	/** A complete stylesheet, as loaded from a MapCSS file. It contains all selectors, declarations, 
-		and embedded images.																				</p><p>
-		
-		The RuleSet class has two principal methods: getStyles, which calculates the styles that apply
-		to an entity (returned as a StyleList); and parse, which parses a MapCSS stylesheet into
-		a complete RuleSet. */
+
+    /**
+    * A complete stylesheet, as loaded from a MapCSS file. It contains all selectors, declarations,
+    * and embedded images.
+    *
+    * <p>The RuleSet class has two principal methods: getStyles, which calculates the styles that apply
+    * to an entity (returned as a StyleList); and parse, which parses a MapCSS stylesheet into
+    * a complete RuleSet.</p>
+    */
 
 	public class RuleSet {
 
