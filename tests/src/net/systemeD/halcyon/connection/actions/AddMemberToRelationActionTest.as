@@ -8,21 +8,26 @@ package net.systemeD.halcyon.connection.actions {
     import net.systemeD.halcyon.connection.UndoableAction;
     import net.systemeD.halcyon.connection.*;
 
+    [RunWith("org.mockito.integrations.flexunit4.MockitoClassRunner")]
     public class AddMemberToRelationActionTest {
+
+        [Mock(type="net.systemeD.halcyon.connection.Connection", argsList="constructorArgs")]
+        public var connection:Connection;
+        public var constructorArgs:Array = ["name", "api", "policy"];
 
         [Before]
         public function setUp():void {
             //Instantiate the connection first to prevent errors
-            Connection.getConnection();
+            //Connection.getConnection();
         }
 
 
         [Test]
         public function addMember():void {
 
-            var n:Node = new Node(1,1,{},true,5,10);
+            var n:Node = new Node(connection,1,1,{},true,5,10);
 
-            var rel:Relation = new Relation(1,1,{},true,[]);
+            var rel:Relation = new Relation(connection,1,1,{},true,[]);
             var member:RelationMember = new RelationMember(n, "foo");
 
             rel.appendMember(member, function(action:UndoableAction):void { action.doAction(); });
@@ -46,15 +51,15 @@ package net.systemeD.halcyon.connection.actions {
 
         [Test]
         public function appendMember():void {
-            var n:Node = new Node(1,1,{},true,5,10);
-            var n2:Node = new Node(2,1,{},true,5,10);
-            var n3:Node = new Node(3,1,{},true,5,10);
+            var n:Node = new Node(connection,1,1,{},true,5,10);
+            var n2:Node = new Node(connection,2,1,{},true,5,10);
+            var n3:Node = new Node(connection,3,1,{},true,5,10);
 
             var member1:RelationMember = new RelationMember(n, "first");
             var member2:RelationMember = new RelationMember(n2, "second");
             var member3:RelationMember = new RelationMember(n3, "third");
 
-            var rel:Relation = new Relation(1,1,{},true, [member1, member2]);
+            var rel:Relation = new Relation(connection,1,1,{},true, [member1, member2]);
             Assert.assertEquals(2, rel.length);
 
             rel.appendMember(member3, function(action:UndoableAction):void { action.doAction(); });
@@ -63,15 +68,15 @@ package net.systemeD.halcyon.connection.actions {
 
         [Test]
         public function setMember():void {
-            var n:Node = new Node(1,1,{},true,5,10);
-            var n2:Node = new Node(2,1,{},true,5,10);
-            var n3:Node = new Node(3,1,{},true,5,10);
+            var n:Node = new Node(connection,1,1,{},true,5,10);
+            var n2:Node = new Node(connection,2,1,{},true,5,10);
+            var n3:Node = new Node(connection,3,1,{},true,5,10);
 
             var member1:RelationMember = new RelationMember(n, "first");
             var member2:RelationMember = new RelationMember(n2, "second");
             var member3:RelationMember = new RelationMember(n3, "third");
 
-            var rel:Relation = new Relation(1,1,{},true, [member1, member2]);
+            var rel:Relation = new Relation(connection,1,1,{},true, [member1, member2]);
             Assert.assertEquals(2, rel.length);
 
             rel.setMember(1, member3, function(action:UndoableAction):void { action.doAction(); });
