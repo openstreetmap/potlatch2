@@ -23,13 +23,13 @@
       <s:VGroup width="100%">
         <s:RichText width="100%">If all the information from this feature is accounted for in the main layer, you can mark this feature as 'complete'.</s:RichText>
         <s:RichText width="100%">This lets other contributors see what still needs reconciling.</s:RichText>
-        <mx:Button label="Mark feature as Complete" click="markComplete()"/>
+        <s:Button label="Mark feature as Complete" click="markComplete()"/>
       </s:VGroup>
     </mx:VBox>
     <mx:VBox id="complete" width="100%">
       <s:VGroup width="100%">
         <s:RichText width="100%">This feature has been marked as 'complete'. If this is incorrect, and there is still reconciling required, you can mark this feature as 'not complete'.</s:RichText>
-        <mx:Button label="Mark feature as Not complete" click="markNotComplete()"/>
+        <s:Button label="Mark feature as Not complete" click="markNotComplete()"/>
       </s:VGroup>
     </mx:VBox>
   </mx:ViewStack>
