@@ -7,8 +7,10 @@
 <mx:VBox
     xmlns:fx="http://ns.adobe.com/mxml/2009"
     xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
     height="100%">
   <mx:Text id="backgroundPanelText" text="You have selected a Background Feature." width="100%" styleName="helpInfo" />
+  <s:RichText text="{connectionName}" />
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="key" headerText="key" />
@@ -36,6 +38,8 @@
       private var selectedEntity:Entity;
       private var tagDataProvider:ArrayCollection;
       private var layer:MapPaint;
+      [Bindable]
+      private var connectionName:String;
 
       public function init(entity:Entity, layer:MapPaint):void {
           this.layer = layer;
@@ -46,6 +50,7 @@
 
           selectedEntity=entity;
           selectedEntity.addEventListener(Connection.STATUS_CHANGED, statusEvent, false, 0, true);
+          connectionName = selectedEntity.connection.name;
           setStatusStack();
           updateTagDataProvider();
       }
