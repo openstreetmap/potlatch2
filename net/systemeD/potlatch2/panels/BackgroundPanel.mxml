@@ -9,14 +9,19 @@
     xmlns:mx="library://ns.adobe.com/flex/mx"
     xmlns:s="library://ns.adobe.com/flex/spark"
     height="100%">
-  <s:RichText id="backgroundPanelText" text="You have selected a Background Feature." />
-  <s:RichText text="{connectionName}" />
+  <s:VGroup width="100%">
+    <s:RichText width="100%" id="backgroundPanelText" text="You have selected a Background Feature." />
+    <s:RichText text="{connectionName}" />
+  </s:VGroup>
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="key" headerText="key" />
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
+  <s:VGroup width="100%">
+    <s:RichText width="100%">You can see a side-by-side tagging comparison by ctrl+clicking a feature on the main layer.</s:RichText>
+  </s:VGroup>
   <mx:ViewStack id="statusStack" resizeToContent="true" width="100%">
     <mx:VBox id="empty" />
     <mx:VBox id="not_complete" width="100%">
