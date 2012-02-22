@@ -31,18 +31,15 @@
   <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.MapPaint;
       import net.systemeD.potlatch2.utils.SnapshotConnection;
       import mx.collections.*;
 
       private var selectedEntity:Entity;
       private var tagDataProvider:ArrayCollection;
-      private var layer:MapPaint;
       [Bindable]
       private var connectionName:String;
 
-      public function init(entity:Entity, layer:MapPaint):void {
-          this.layer = layer;
+      public function init(entity:Entity):void {
           if ( tagDataProvider == null ) {
               tagDataProvider = new ArrayCollection();
               backgroundPanelDG.dataProvider = tagDataProvider;
