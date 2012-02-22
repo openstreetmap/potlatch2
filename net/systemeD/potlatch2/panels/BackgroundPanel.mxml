@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--
-    Background Panel
+<!---
+    The Background Panel displays details about the background feature selected. It is currently only used
+    by the SnapshotConnection, and so has functionality to allow marking features as "complete".
 -->
 
 <mx:VBox
