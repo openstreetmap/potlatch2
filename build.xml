@@ -63,18 +63,18 @@
   <!-- note that there's an asdoc target in Flex 4, if/when we move to that -->
   <target name="docs" depends="manifests,makeLocalesList">
     <exec executable="${ASDOC}" failonerror="true">
-      <arg line="-source-path ."/>
-      <arg line="-doc-sources net/systemeD/"/>
+      <arg line="-source-path=."/>
+      <arg line="-doc-sources=net/systemeD/"/>
       <arg line="-external-library-path=lib/"/>
       <arg line="-external-library-path=${FLEX_HOME}/frameworks/libs/"/>
       <arg line="-external-library-path=${FLEX_HOME}/frameworks/libs/player/10.2/"/>
       <arg line="-lenient"/>
-      <arg line="-target-player 10.2.0"/>
-      <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes} ${com_classes}"/>
-      <arg line="-output resources/docs/"/>
-      <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
-      <arg line="-main-title 'Halcyon and Potlatch2 Developer documentation'" />
-      <arg line="-footer 'Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
+      <arg line="-target-player=10.2.0"/>
+      <arg line="-exclude-classes=${org_classes},${it_classes},${hxasm_classes},${com_classes}"/>
+      <arg line="-output=resources/docs/"/>
+      <arg line="-window-title='Halcyon and Potlatch2 Developer documentation'" />
+      <arg line="-main-title='Halcyon and Potlatch2 Developer documentation'" />
+      <arg line="-footer='Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
       <arg line="-package net.systemeD.controls 'Custom-built controls used in Potlatch2'" />
       <arg line="-package net.systemeD.halcyon 'The AS3 rendering library'" />
       <arg line="-package net.systemeD.halcyon.connection 'The connection to the main OSM server, and the entities'" />
@@ -94,9 +94,8 @@
       <arg line="-package net.systemeD.potlatch2.tools 'Data manipulation tools'" />
       <arg line="-package net.systemeD.potlatch2.utils 'Data loading utilities'" />
       
-      <arg line="-left-frameset-width 300" />
-      <arg line="-locale=${locales.list}" />
-      <arg line="-allow-source-path-overlap true" />
+      <arg line="-left-frameset-width=300" />
+      <arg line="-allow-source-path-overlap=true" />
     </exec>
   </target>
 
@@ -110,7 +109,7 @@
 
         <fileset id="com_sources" dir="${basedir}/com/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="com_classes" pathsep=" " refid="com_sources">
+        <pathconvert property="com_classes" pathsep="," refid="com_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -120,7 +119,7 @@
         <!-- Get the list of all files in the org directory -->
         <fileset id="org_sources" dir="${basedir}/org/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="org_classes" pathsep=" " refid="org_sources">
+        <pathconvert property="org_classes" pathsep="," refid="org_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -129,7 +128,7 @@
 
         <fileset id="it_sources" dir="${basedir}/it/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="it_classes" pathsep=" " refid="it_sources">
+        <pathconvert property="it_classes" pathsep="," refid="it_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -138,7 +137,7 @@
 
         <fileset id="hxasm_sources" dir="${basedir}/hxasm/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="hxasm_classes" pathsep=" " refid="hxasm_sources">
+        <pathconvert property="hxasm_classes" pathsep="," refid="hxasm_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>

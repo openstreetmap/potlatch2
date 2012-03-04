@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+  The TagViewer is the container for the entire sidebar. It has a number of components, and subpanels, in a ViewStack that change
+  depending on what is selected, i.e. the ControllerState.
+
+  @see net.systemeD.potlatch2.controller.ControllerState
+    -->
 <mx:VBox
     xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:mx="library://ns.adobe.com/flex/mx"

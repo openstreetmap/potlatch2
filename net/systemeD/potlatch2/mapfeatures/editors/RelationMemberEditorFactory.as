@@ -6,12 +6,12 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
 
 	public class RelationMemberEditorFactory extends EditorFactory {
-	    /** Contains "route"=["hiking","foot"] key/values. The <match> map_features tag is parsed here from
+	    /** Contains "route"=["hiking","foot"] key/values. The &lt;match&gt; map_features tag is parsed here from
 	    * "hiking|foot" pipe-separated values. */
 	    private var _relationTagPatterns:Object;
 		private var _role:String;
         
-        /** Constructs the editing panel for a relation(###), given its <relation> in map_features.xml */
+        /** Constructs the editing panel for a relation(###), given its &lt;relation&gt; in map_features.xml */
         public function RelationMemberEditorFactory(inputXML:XML) {
             super(inputXML);
             _relationTagPatterns = {};

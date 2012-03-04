@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--
-    Background Merge Panel
+<!---
+    The Background Merge Panel allows the tags from two features - one from
+    a read-only vector background layer, one from an editable layer - to be
+    compared. Tags are highlighted depending whether they match, and tags from
+    the background layer can be easily merged.
 -->
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
@@ -45,6 +47,10 @@
       private var backgroundEntity:Entity;
       private var tagDataProvider:ArrayCollection;
 
+      /**
+      * @param entities The two entities that are being compared. One should be from a background layer, but the
+      *                 order is not important.
+      */
       public function init(entities:Array):void {
           if ( tagDataProvider == null ) {
               tagDataProvider = new ArrayCollection();
@@ -91,6 +97,12 @@
           updateTagDataProvider();
       }
 
+      /**
+      * Should the button for merging tags be shown?
+      *
+      * @param b The tag value for the background entity
+      * @param e The tag value for the editable entity
+      */
       public function buttonVisible(b:String, e:String):Boolean {
           if (b != null && b != e) {
               return true;
@@ -98,11 +110,22 @@
           return false;
       }
 
+      /**
+      * Merge the data for the given key. Results in the value being copied to the editable entity, using the
+      * global undo stack.
+      *
+      * @param key The tag key to be merged.
+      */
       public function mergeForKey(key:String):void {
           editableEntity.setTag(key, backgroundEntity.getTag(key), MainUndoStack.getGlobalStack().addAction);
       }
 
-      // Don't call this for things you don't want coloured in. Like for empty tags.
+      /**
+      * Figure out an appropriate background color for the row. Don't call this for things you don't want coloured in. Like for empty tags.
+      *
+      * @param i The row index in the tagDataProvider
+      * @return The colour to be used as the background of the field
+      */
       public function getColorFor(i:int):int {
           if (tagDataProvider[i].e == tagDataProvider[i].b) {
               return 0xDDFFDD; // matching, green
