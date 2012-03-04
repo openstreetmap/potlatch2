@@ -6,17 +6,22 @@ package net.systemeD.halcyon.connection.actions {
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.halcyon.connection.Connection;
 
+    [RunWith("org.mockito.integrations.flexunit4.MockitoClassRunner")]
     public class SetTagActionTest {
+
+        [Mock(type="net.systemeD.halcyon.connection.Connection", argsList="constructorArgs")]
+        public var connection:Connection;
+        public var constructorArgs:Array = ["name", "api", "policy"];
 
         [Before]
         public function setUp():void {
             //Instantiate the connection first to prevent errors
-            Connection.getConnection();
+            //Connection.getConnection();
         }
 
         [Test]
         public function setTag():void {
-            var e:Entity = new Entity(1,1,{},true,1,"");
+            var e:Entity = new Entity(connection,1,1,{},true,1,"");
             var action:UndoableAction = new SetTagAction(e, "foo", "bar");
             action.doAction();
 
@@ -25,7 +30,7 @@ package net.systemeD.halcyon.connection.actions {
 
         [Test]
         public function setNullTag():void {
-            var e:Entity = new Entity(1,1,{foo: "bar"},true,1,"");
+            var e:Entity = new Entity(connection,1,1,{foo: "bar"},true,1,"");
             var action:UndoableAction = new SetTagAction(e, "foo", null);
             action.doAction();
 
