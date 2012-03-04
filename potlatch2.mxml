@@ -354,12 +354,10 @@
 		
 		public function onMapError(mapEvent:MapEvent):void {
 			var buttons:uint=0;
-			if (mapEvent.params.no) { trace("no is set"); }
 			if (mapEvent.params.yes             ) buttons|=mx.controls.Alert.YES;
 			if (mapEvent.params.no              ) buttons|=mx.controls.Alert.NO;
 			if (mapEvent.params.cancel          ) buttons|=mx.controls.Alert.CANCEL;
 			if (mapEvent.params.ok || buttons==0) buttons|=mx.controls.Alert.OK;
-			trace("showing alert with "+buttons);
 			Alert.show(mapEvent.params.message, 'Error', buttons, null, function(closeEvent:CloseEvent):void { 
 				switch (closeEvent.detail) {
 					case mx.controls.Alert.CANCEL:	mapEvent.params.cancel(); break; //fixme? this gets called if user presses escape, even if there's no cancel button.

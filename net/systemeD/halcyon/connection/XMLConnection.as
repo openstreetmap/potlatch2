@@ -74,18 +74,23 @@ package net.systemeD.halcyon.connection {
 
 		private function sendLoadRequest(request:URLRequest):void {
 			var mapLoader:URLLoader = new URLLoader();
+            var errorHandler:Function = function(event:IOErrorEvent):void {
+                errorOnMapLoad(event, request);
+            }
 			mapLoader.addEventListener(Event.COMPLETE, loadedMap);
-			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
+			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
 			mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
             request.requestHeaders.push(new URLRequestHeader("X-Error-Format", "XML"));
 			mapLoader.load(request);
 			dispatchEvent(new Event(LOAD_STARTED));
 		}
 
-        private function errorOnMapLoad(event:Event):void {
-			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map" } ));
-			dispatchEvent(new Event(LOAD_COMPLETED));
+        private function errorOnMapLoad(event:Event, request:URLRequest):void {
+            var url:String = request.url + '?' + URLVariables(request.data).toString(); // for get reqeusts, at least
+            dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "There was a problem loading the map data.\nPlease check your internet connection, or try zooming in.\n\n" + url } ));
+            dispatchEvent(new Event(LOAD_COMPLETED));
         }
+
         private function mapLoadStatus(event:HTTPStatusEvent):void {
         }
 
