@@ -237,7 +237,10 @@
       import net.systemeD.controls.CollapsiblePanel;
 
       import mx.collections.*;
-      import mx.containers.*;
+      import mx.containers.VBox;
+      import mx.containers.HBox;
+      import mx.containers.TabNavigator;
+      import mx.containers.Accordion;
       import mx.events.*;
       import mx.core.*;
       import mx.managers.PopUpManager;
@@ -249,6 +252,8 @@
       import mx.managers.DragManager;
       import mx.core.DragSource;
       import mx.controls.TabBar;
+      import spark.components.Form;
+      import spark.layouts.FormLayout;
 //    import flexlib.containers.SuperTabNavigator;
 
       [Bindable] [Embed(source="../../../embedded/tab_basic.png"       )] private var tabIconBasic:Class;
@@ -463,7 +468,7 @@
 			// Add to basic editor box first
 			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
 				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-				if (editor) basicEditorBox.addChild(editor);
+				if (editor) Form(basicEditorBox.getChildByName("form")).addElement(UIComponent(editor));
 			}
 
 			// Then prepare to add to category panel
@@ -484,9 +489,13 @@
 					subpanel.styleName="subcategoryPanel";
 					subpanel.title=subcategory;
 					subpanels[category][subcategory]=subpanel;
+					var form:Form = new Form();
+					form.name = "form";
+					form.layout = getFormLayout();
+					subpanel.addChild(form);
 					tabComponents[tab].push(subpanel);
 				}
-				subpanel.addChild(catEditor);
+				Form(subpanel.getChildByName("form")).addElement(UIComponent(catEditor));
 			} else {
 				tabComponents[tab].push(catEditor);
 			}
@@ -508,6 +517,10 @@
           box.percentWidth = 100;
           box.percentHeight = 100;
           box.styleName = "dndEditorContainer";
+          var form:Form = new Form();
+          form.name = "form";
+          form.layout = getFormLayout();
+          box.addChild(form);
           return box;
       }
 
@@ -516,7 +529,7 @@
           if ( components == null || tab == null || tab.numChildren >= components.length )
               return;
           for each (var component:DisplayObject in components ) {
-              tab.addChild(component);
+              Form(tab.getChildByName("form")).addElement(UIComponent(component));
           }
       }
 
@@ -914,6 +927,14 @@
 		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
 		event.target.height=rows*(event.target.rowHeight+1);
 	}
+
+    private function getFormLayout():FormLayout {
+        var layout:FormLayout = new FormLayout();
+          // This is ugly, and should really be done with a skin. See
+          // http://stackoverflow.com/questions/5126756/flex-spark-form-item-gap
+        layout.gap = -8;
+        return layout;
+    }
   ]]></fx:Script>
 </mx:VBox>
 

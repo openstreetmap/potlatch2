@@ -4,16 +4,18 @@
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	toolTip="{fieldDescription}"
-	direction="horizontal" styleName="titledEditor">
+	label="{fieldName}:"
+    styleName="titledEditor">
 
-  <mx:Label text="{fieldName}:"/>
-  <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
-      dropdownFactory="mx.controls.TileList"
-      change="value = inputBox.selectedItem.value"
-      itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.RestrictionRenderer"
-      dropdownWidth="250" rowCount="4"
-      fontWeight="normal">
-  </edit:ChoiceComboBox>
+  <mx:VBox> <!-- This wrapper shouldn't be necessary, but without it the layout goes nuts -->
+    <edit:ChoiceComboBox id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
+        dropdownFactory="mx.controls.TileList"
+        change="value = inputBox.selectedItem.value"
+        itemRenderer="net.systemeD.potlatch2.mapfeatures.editors.RestrictionRenderer"
+        dropdownWidth="250" rowCount="4"
+        fontWeight="normal">
+    </edit:ChoiceComboBox>
+  </mx:VBox>
 
   <fx:Script><![CDATA[
       import mx.collections.*;

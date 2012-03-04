@@ -2,10 +2,10 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.mapfeatures.*;
-    import mx.containers.Box;
+    import spark.components.FormItem;
     import flash.events.*;
 
-    public class SingleTagEditor extends Box {
+    public class SingleTagEditor extends FormItem {
 
       protected var _factory:SingleTagEditorFactory;
       protected var _entity:Entity;

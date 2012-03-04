@@ -59,6 +59,10 @@ mx|Label {
 	fontWeight: normal;
 }
 
+s|FormItem s|Label#labelDisplay {
+    textAlign: right;
+}
+
 /* Main window */
 
 mx|Application {
