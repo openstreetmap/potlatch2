@@ -7,38 +7,49 @@
 <mx:VBox
     xmlns:fx="http://ns.adobe.com/mxml/2009"
     xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
     height="100%">
-  <mx:Text id="backgroundPanelText" text="You have selected a Background Feature." width="100%" styleName="helpInfo" />
+  <s:VGroup width="100%">
+    <s:RichText width="100%" id="backgroundPanelText" text="You have selected a Background Feature." />
+    <s:RichText text="{connectionName}" />
+  </s:VGroup>
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="key" headerText="key" />
       <mx:DataGridColumn editable="false" dataField="value" headerText="value" />
     </mx:columns>
   </mx:DataGrid>
+  <s:VGroup width="100%">
+    <s:RichText width="100%">You can see a side-by-side tagging comparison by ctrl+clicking a feature on the main layer.</s:RichText>
+  </s:VGroup>
   <mx:ViewStack id="statusStack" resizeToContent="true" width="100%">
     <mx:VBox id="empty" />
-    <mx:VBox id="not_complete">
-      <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
-      <mx:Button label="Complete" click="markComplete()"/>
+    <mx:VBox id="not_complete" width="100%">
+      <s:VGroup width="100%">
+        <s:RichText width="100%">If all the information from this feature is accounted for in the main layer, you can mark this feature as 'complete'.</s:RichText>
+        <s:RichText width="100%">This lets other contributors see what still needs reconciling.</s:RichText>
+        <s:Button label="Mark feature as Complete" click="markComplete()"/>
+      </s:VGroup>
     </mx:VBox>
-    <mx:VBox id="complete">
-      <mx:Text text="This feature has been marked as complete. If this is wrong, press the button below." />
-      <mx:Button label="Not complete" click="markNotComplete()"/>
+    <mx:VBox id="complete" width="100%">
+      <s:VGroup width="100%">
+        <s:RichText width="100%">This feature has been marked as 'complete'. If this is incorrect, and there is still reconciling required, you can mark this feature as 'not complete'.</s:RichText>
+        <s:Button label="Mark feature as Not complete" click="markNotComplete()"/>
+      </s:VGroup>
     </mx:VBox>
   </mx:ViewStack>
   <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
-      import net.systemeD.halcyon.MapPaint;
       import net.systemeD.potlatch2.utils.SnapshotConnection;
       import mx.collections.*;
 
       private var selectedEntity:Entity;
       private var tagDataProvider:ArrayCollection;
-      private var layer:MapPaint;
+      [Bindable]
+      private var connectionName:String;
 
-      public function init(entity:Entity, layer:MapPaint):void {
-          this.layer = layer;
+      public function init(entity:Entity):void {
           if ( tagDataProvider == null ) {
               tagDataProvider = new ArrayCollection();
               backgroundPanelDG.dataProvider = tagDataProvider;
@@ -46,6 +57,7 @@
 
           selectedEntity=entity;
           selectedEntity.addEventListener(Connection.STATUS_CHANGED, statusEvent, false, 0, true);
+          connectionName = selectedEntity.connection.name;
           setStatusStack();
           updateTagDataProvider();
       }

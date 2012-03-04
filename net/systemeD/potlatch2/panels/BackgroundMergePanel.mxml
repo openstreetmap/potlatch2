@@ -6,19 +6,23 @@
     the background layer can be easily merged.
 -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" height="100%">
-  <mx:Text id="backgroundMergePanelText" text="Review and Merge tags from the Background layer" width="100%" styleName="helpInfo" />
+<mx:VBox
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    height="100%">
+  <s:RichText id="backgroundMergePanelText" width="100%">Review and Merge tags from the Background layer</s:RichText>
   <mx:DataGrid editable="false" id="backgroundPanelDG" width="100%" height="50%">
     <mx:columns>
       <mx:DataGridColumn editable="false" dataField="k" headerText="Key" />
       <mx:DataGridColumn editable="false" dataField="e" headerText="OSM value" />
-      <mx:DataGridColumn editable="false" headerText="Merge" width="50" textAlign="center">
+      <mx:DataGridColumn editable="false" headerText="Merge" width="150" textAlign="center">
         <mx:itemRenderer>
-          <mx:Component>
-            <mx:HBox horizontalAlign="center" verticalAlign="middle">
-              <mx:Button label="&lt;&lt;" visible="{parentDocument.buttonVisible(data.b, data.e)}" click="parentDocument.mergeForKey(data.k);" />
+          <fx:Component>
+            <mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%">
+              <s:Button width="50" label="&lt;&lt;" visible="{parentDocument.buttonVisible(data.b, data.e)}" click="parentDocument.mergeForKey(data.k);" />
             </mx:HBox>
-          </mx:Component>
+          </fx:Component>
         </mx:itemRenderer>
       </mx:DataGridColumn>
       <mx:DataGridColumn editable="false" itemRenderer="net.systemeD.potlatch2.panels.BackgroundMergeFieldComponent" dataField="b" headerText="Background value" />
@@ -27,15 +31,20 @@
   <mx:ViewStack id="statusStack" resizeToContent="true" width="100%">
     <mx:VBox id="empty" />
     <mx:VBox id="not_complete">
-      <mx:Text text="All the data copied to the main layer? Click 'complete'!" />
-      <mx:Button label="Complete" click="markComplete()"/>
+      <s:VGroup width="100%">
+        <s:RichText width="100%">If all the information from this feature is accounted for in the main layer, you can mark this feature as 'complete'.</s:RichText>
+        <s:RichText width="100%">This lets other contributors see what still needs reconciling.</s:RichText>
+        <s:Button label="Mark feature as Complete" click="markComplete()"/>
+      </s:VGroup>
     </mx:VBox>
-    <mx:VBox id="complete">
-      <mx:Text text="This feature has been marked as complete. If this is wrong, press the button below." />
-      <mx:Button label="Not complete" click="markNotComplete()"/>
+    <mx:VBox id="complete" width="100%">
+      <s:VGroup width="100%">
+        <s:RichText width="100%">This feature has been marked as 'complete'. If this is incorrect, and there is still reconciling required, you can mark this feature as 'not complete'.</s:RichText>
+        <s:Button label="Mark feature as Not complete" click="markNotComplete()"/>
+      </s:VGroup>
     </mx:VBox>
   </mx:ViewStack>
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.MapPaint;
@@ -166,5 +175,5 @@
           }
       }
   ]]>
-  </mx:Script>
+  </fx:Script>
 </mx:VBox>

@@ -309,7 +309,7 @@
               markerPanelContents.init(selectedEntity, layer);
               sidebar.selectedChild = markerPanel;
             } else if (connection is SnapshotConnection) {
-              backgroundPanelContents.init(selectedEntity, layer);
+              backgroundPanelContents.init(selectedEntity);
               sidebar.selectedChild = backgroundPanel;
             } else {
               refreshFeatureIcon();
