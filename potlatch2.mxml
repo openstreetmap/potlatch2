@@ -103,6 +103,7 @@
 		import net.systemeD.potlatch2.utils.*;
         import net.systemeD.potlatch2.mygpx.*;
 		import net.systemeD.controls.FloatingAlert;
+		import net.systemeD.controls.Spinner;
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
@@ -131,6 +132,7 @@
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
+		private var spinner:Spinner;
 		private var saveLabel:String='Save';
 		private var saveTimer:Timer;
 
@@ -228,6 +230,12 @@
 
             // Auto-load vector backgrounds from config
             theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
+
+			// Add loading 'spinner' indicator
+			spinner=new Spinner();
+			_root.addChild(spinner);
+			spinner.x=dataWorking.x-20;
+			spinner.y=dataWorking.y+dataWorking.height/2;
 
 			// Set start position of map
 			// ** FIXME: if lat/lon/zoom aren't supplied, we need to keep the map in a non-loading state 
@@ -443,7 +451,12 @@
 			else if (savecount>0)           { t="Saving data..."; }
 			else                            { t=""; }
 			dataWorking.text=t.replace("#",(loadcount>1) ? (" ("+loadcount+")") : "");
-			dataWorking.visible=(dataWorking.text!="");
+
+			var previousState:Boolean=dataWorking.visible;
+			var newState:Boolean=(dataWorking.text!="");
+			if (!previousState && newState) spinner.start();
+			if (previousState && !newState) spinner.stop();
+			dataWorking.visible=newState;
 		}
         private function onDataDirty(event:Event):void {
 			saveButton.enabled=true;
