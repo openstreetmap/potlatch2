@@ -531,7 +531,7 @@ package net.systemeD.halcyon.styleparser {
 
         public static function parseCSSColor(colorStr:String):uint {
             colorStr = colorStr.toLowerCase();
-            if (CSSCOLORS[colorStr]) {
+            if (CSSCOLORS[colorStr] != undefined) {
                 return CSSCOLORS[colorStr];
             } else {
                 var match:Object = HEX.exec(colorStr);
