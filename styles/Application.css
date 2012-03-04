@@ -185,6 +185,15 @@ mx|ApplicationControlBar {
 	fontWeight: bold;
 }
 
+/* Simple tag view - form */
+
+s|Form {
+	skinClass: ClassReference("net.systemeD.potlatch2.skins.CustomFormSkin");
+}
+s|FormItem {
+	skinClass: ClassReference("net.systemeD.potlatch2.skins.CustomFormItemSkin");
+}
+
 /* Simple tag view - header */
 
 .dndTagHeader {

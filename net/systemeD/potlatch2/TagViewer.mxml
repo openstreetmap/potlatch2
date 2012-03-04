@@ -489,10 +489,7 @@
 					subpanel.styleName="subcategoryPanel";
 					subpanel.title=subcategory;
 					subpanels[category][subcategory]=subpanel;
-					var form:Form = new Form();
-					form.name = "form";
-					form.layout = getFormLayout();
-					subpanel.addChild(form);
+					addConstrainedForm(subpanel);
 					tabComponents[tab].push(subpanel);
 				}
 				Form(subpanel.getChildByName("form")).addElement(UIComponent(catEditor));
@@ -512,17 +509,28 @@
 		return 0;
 	}
 	
-      private function createEditorBox():VBox {
-          var box:VBox = new VBox();
-          box.percentWidth = 100;
-          box.percentHeight = 100;
-          box.styleName = "dndEditorContainer";
-          var form:Form = new Form();
-          form.name = "form";
-          form.layout = getFormLayout();
-          box.addChild(form);
-          return box;
-      }
+	private function createEditorBox():VBox {
+		var box:VBox = new VBox();
+		box.percentWidth = 100;
+		box.percentHeight = 100;
+		box.styleName = "dndEditorContainer";
+		addConstrainedForm(box);
+		return box;
+	}
+	
+	private function addConstrainedForm(parentObject:DisplayObjectContainer):void {
+		var form:Form = new Form();
+		form.name = "form";
+		form.percentWidth=100;
+		form.addEventListener(mx.events.ResizeEvent.RESIZE, formResizeHandler, false, 0, true);
+		parentObject.addChild(form);
+		if (parentObject.width>0) form.maxWidth=parentObject.width;
+	}
+	
+	private function formResizeHandler(e:Event):void {
+		var form:Form=Form(e.target);
+		if (form.parent.width>0) form.maxWidth=form.parent.width;
+	}
 
       private function ensureEditorsPopulated(tab:VBox):void {
           var components:Array = tabComponents[tab];
@@ -928,13 +936,6 @@
 		event.target.height=rows*(event.target.rowHeight+1);
 	}
 
-    private function getFormLayout():FormLayout {
-        var layout:FormLayout = new FormLayout();
-          // This is ugly, and should really be done with a skin. See
-          // http://stackoverflow.com/questions/5126756/flex-spark-form-item-gap
-        layout.gap = -8;
-        return layout;
-    }
   ]]></fx:Script>
 </mx:VBox>
 
