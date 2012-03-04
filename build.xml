@@ -243,6 +243,7 @@
 
 
         <source-path path-element="${basedir}/l10n/locale/@{locale}"/>
+        <source-path path-element="${basedir}/l10n/locale/en_US"/>
         <include-resource-bundles>help_dialog</include-resource-bundles>
         <include-resource-bundles>p2_main</include-resource-bundles>
 
