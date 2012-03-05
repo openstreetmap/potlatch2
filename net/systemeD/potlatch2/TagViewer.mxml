@@ -532,14 +532,14 @@
 		if (form.parent.width>0) form.maxWidth=form.parent.width;
 	}
 
-      private function ensureEditorsPopulated(tab:VBox):void {
-          var components:Array = tabComponents[tab];
-          if ( components == null || tab == null || tab.numChildren >= components.length )
-              return;
-          for each (var component:DisplayObject in components ) {
-              Form(tab.getChildByName("form")).addElement(UIComponent(component));
-          }
-      }
+	private function ensureEditorsPopulated(tab:VBox):void {
+		var components:Array = tabComponents[tab];
+		var form:Form=Form(tab.getChildByName("form"));
+		if ( components == null || tab == null || form.numElements >= components.length ) return;
+		for each (var component:DisplayObject in components ) {
+			form.addElement(UIComponent(component));
+		}
+	}
 
 	private function initEditorStackUIs():void {
 		editorStackTabNavigator = new TabNavigator();
