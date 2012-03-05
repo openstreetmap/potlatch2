@@ -8,7 +8,7 @@ package net.systemeD.potlatch2.mapfeatures {
     import mx.core.BitmapAsset;
     import mx.graphics.codec.PNGEncoder;
     
-    import net.systemeD.halcyon.ImageBank;
+    import net.systemeD.halcyon.FileBank;
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.potlatch2.utils.CachedDataLoader;
 
@@ -148,8 +148,8 @@ package net.systemeD.potlatch2.mapfeatures {
             }
 
             if ( imageURL ) {
-				if (ImageBank.getInstance().hasImage(imageURL)) {
-					return ImageBank.getInstance().getAsByteArray(imageURL)
+				if (FileBank.getInstance().hasFile(imageURL)) {
+					return FileBank.getInstance().getAsByteArray(imageURL);
 				} else {
 	                return CachedDataLoader.loadData(imageURL, imageLoaded);
 				}

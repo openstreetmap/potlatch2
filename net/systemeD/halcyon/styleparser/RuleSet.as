@@ -6,7 +6,7 @@ package net.systemeD.halcyon.styleparser {
 	import net.systemeD.halcyon.ExtendedURLLoader;
 	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.Entity;
-    import net.systemeD.halcyon.ImageBank;
+    import net.systemeD.halcyon.FileBank;
 
     import net.systemeD.halcyon.connection.*;
 	
@@ -281,7 +281,7 @@ package net.systemeD.halcyon.styleparser {
 		/** Load all images referenced in the RuleSet (for example, icons or bitmap fills). */
 		
 		private function loadImages():void {
-			ImageBank.getInstance().addEventListener(ImageBank.IMAGES_LOADED,doIconCallback);
+			FileBank.getInstance().addEventListener(FileBank.FILES_LOADED,doIconCallback);
 			var filename:String;
 			for each (var chooser:StyleChooser in choosers) {
 				for each (var style:Style in chooser.styles) {
@@ -291,7 +291,7 @@ package net.systemeD.halcyon.styleparser {
 					else { continue; }
 
 					if (filename!='square' && filename!='circle')
-						ImageBank.getInstance().loadImage(filename);
+						FileBank.getInstance().addFromFile(filename);
 				}
 			}
 		}
