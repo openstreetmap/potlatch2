@@ -237,7 +237,10 @@
       import net.systemeD.controls.CollapsiblePanel;
 
       import mx.collections.*;
-      import mx.containers.*;
+      import mx.containers.VBox;
+      import mx.containers.HBox;
+      import mx.containers.TabNavigator;
+      import mx.containers.Accordion;
       import mx.events.*;
       import mx.core.*;
       import mx.managers.PopUpManager;
@@ -249,6 +252,8 @@
       import mx.managers.DragManager;
       import mx.core.DragSource;
       import mx.controls.TabBar;
+      import spark.components.Form;
+      import spark.layouts.FormLayout;
 //    import flexlib.containers.SuperTabNavigator;
 
       [Bindable] [Embed(source="../../../embedded/tab_basic.png"       )] private var tabIconBasic:Class;
@@ -463,7 +468,7 @@
 			// Add to basic editor box first
 			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
 				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-				if (editor) basicEditorBox.addChild(editor);
+				if (editor) Form(basicEditorBox.getChildByName("form")).addElement(UIComponent(editor));
 			}
 
 			// Then prepare to add to category panel
@@ -484,9 +489,10 @@
 					subpanel.styleName="subcategoryPanel";
 					subpanel.title=subcategory;
 					subpanels[category][subcategory]=subpanel;
+					addConstrainedForm(subpanel);
 					tabComponents[tab].push(subpanel);
 				}
-				subpanel.addChild(catEditor);
+				Form(subpanel.getChildByName("form")).addElement(UIComponent(catEditor));
 			} else {
 				tabComponents[tab].push(catEditor);
 			}
@@ -503,22 +509,37 @@
 		return 0;
 	}
 	
-      private function createEditorBox():VBox {
-          var box:VBox = new VBox();
-          box.percentWidth = 100;
-          box.percentHeight = 100;
-          box.styleName = "dndEditorContainer";
-          return box;
-      }
+	private function createEditorBox():VBox {
+		var box:VBox = new VBox();
+		box.percentWidth = 100;
+		box.percentHeight = 100;
+		box.styleName = "dndEditorContainer";
+		addConstrainedForm(box);
+		return box;
+	}
+	
+	private function addConstrainedForm(parentObject:DisplayObjectContainer):void {
+		var form:Form = new Form();
+		form.name = "form";
+		form.percentWidth=100;
+		form.addEventListener(mx.events.ResizeEvent.RESIZE, formResizeHandler, false, 0, true);
+		parentObject.addChild(form);
+		if (parentObject.width>0) form.maxWidth=parentObject.width;
+	}
+	
+	private function formResizeHandler(e:Event):void {
+		var form:Form=Form(e.target);
+		if (form.parent.width>0) form.maxWidth=form.parent.width;
+	}
 
-      private function ensureEditorsPopulated(tab:VBox):void {
-          var components:Array = tabComponents[tab];
-          if ( components == null || tab == null || tab.numChildren >= components.length )
-              return;
-          for each (var component:DisplayObject in components ) {
-              tab.addChild(component);
-          }
-      }
+	private function ensureEditorsPopulated(tab:VBox):void {
+		var components:Array = tabComponents[tab];
+		var form:Form=Form(tab.getChildByName("form"));
+		if ( components == null || tab == null || form.numElements >= components.length ) return;
+		for each (var component:DisplayObject in components ) {
+			form.addElement(UIComponent(component));
+		}
+	}
 
 	private function initEditorStackUIs():void {
 		editorStackTabNavigator = new TabNavigator();
@@ -914,6 +935,7 @@
 		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
 		event.target.height=rows*(event.target.rowHeight+1);
 	}
+
   ]]></fx:Script>
 </mx:VBox>
 

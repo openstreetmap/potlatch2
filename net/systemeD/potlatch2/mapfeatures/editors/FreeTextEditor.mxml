@@ -2,18 +2,17 @@
 <edit:SingleTagEditor
 	xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
+    xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	xmlns:controls="net.systemeD.controls.*"
 	width="100%"
 	toolTip="{fieldDescription}"
-    direction="{fieldDirection}" styleName="titledEditor">
+    styleName="titledEditor" label="{fieldName}:">
 
-  <mx:Label text="{fieldName}:"/>
-  <controls:PromptingTextInputWarning id="inputBox" prompt="{prompt}" text="{value}" width="100%" 
+    <controls:PromptingTextInputWarning id="inputBox" prompt="{prompt}" text="{value}" width="100%"
       focusOut="value = inputBox.text" enter="value = inputBox.text"
       restrict="&#x0020;-&#x10FFFF;" />
-
   <fx:Script><![CDATA[
   
       [Bindable(event="factory_set")]
