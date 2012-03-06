@@ -615,7 +615,7 @@ package net.systemeD.halcyon {
 		/* Interaction */
         // TODO: can this be sped up? Hit testing for long ways (that go off the screen) seems to be very slow. */
 		public function hitTest(x:Number, y:Number):Way {
-			if (hitzone.hitTestPoint(x,y,true)) { return entity as Way; }
+			if (hitzone && hitzone.hitTestPoint(x,y,true)) { return entity as Way; }
 			return null;
 		}
 	}
