@@ -368,6 +368,16 @@
     </input>
   </inputSet>
 
+  <inputSet id="train-route">
+    <input type="route" name="Train Route" description="Train route" category="Transport" priority="low" presence="onTagMatch">
+      <match k="type" v="route"/>
+      <match k="route" v="train"/>
+      <icon image="features/transport__railway.png">
+        <font size="12pt">${name|operator} <b>(${ref})</b></font>
+      </icon>
+    </input>
+  </inputSet>
+
   <inputSet id="cycle">
     <inputSet ref="bicycle-permission"/>
     <input type="route" name="National Cycle Routes" description="A signposted route in a National Cycle Network, or nearest equivalent." category="Cycle" priority="low">
@@ -625,6 +635,14 @@
       <choice value="volleyball" text="Volleyball"/>
     </input>
   </inputSet>
+  
+  <inputSet id="wheelchair-basic">
+    <input type="choice" name="Wheelchair" key="wheelchair" presence="onTagMatch" category="Details">
+      <choice value="yes" text="Yes: ramps/elevators/etc" />
+      <choice value="no" text="No: inaccessible to wheelchairs" />
+      <choice value="limited" text="Limited accessibility" />
+    </input>
+  </inputSet>      
 
 <!-- Features -->
 
