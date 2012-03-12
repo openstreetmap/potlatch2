@@ -151,6 +151,11 @@ package net.systemeD.halcyon.connection {
 			return desc;
 		}
 		
+		public function getRelationType():String {
+			var relTags:Object = getTagsHash();
+			return relTags["type"] ? relTags["type"] : getType();
+		}
+		
 		private function getSignificantName(entity:Entity):String {
 			if (!entity.loaded || (entity is Relation)) return '';
 
