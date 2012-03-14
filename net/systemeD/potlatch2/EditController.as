@@ -29,7 +29,7 @@ package net.systemeD.potlatch2 {
         /** The current ControllerState */
         public var state:ControllerState;
         
-		private var keys:Object={};
+		public var spaceHeld:Boolean=false;
 		public var clipboards:Object={};
 		public var cursorsEnabled:Boolean=true;
         private var maximised:Boolean=false;
@@ -101,24 +101,18 @@ package net.systemeD.potlatch2 {
         
         private function keyDownHandler(event:KeyboardEvent):void {
 			if ((event.target is TextField) || (event.target is TextArea)) return;
-			keys[event.keyCode]=true;
+			if (event.keyCode==Keyboard.SPACE) spaceHeld=true;
 		}
 
         private function keyUpHandler(event:KeyboardEvent):void {
-            if (!keys[event.keyCode]) return;
-            delete keys[event.keyCode];
-            if ((event.target is TextField) || (event.target is TextArea)) return;				// not meant for us
+			if ((event.target is TextField) || (event.target is TextArea)) return;
+			if (event.keyCode==Keyboard.SPACE) spaceHeld=false;
 
 			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
             
             if (event.keyCode == 77) { toggleSize(); } // 'M'
             var newState:ControllerState = state.processKeyboardEvent(event);
             setState(newState);            
-		}
-
-		/** Is the given key currently pressed? */
-		public function keyDown(key:Number):Boolean {
-			return Boolean(keys[key]);
 		}
 
         private function mapMouseEvent(event:MouseEvent):void {

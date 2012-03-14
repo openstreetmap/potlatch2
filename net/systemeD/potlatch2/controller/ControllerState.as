@@ -140,7 +140,7 @@ package net.systemeD.potlatch2.controller {
 				if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
 					// select node within this way
 					return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
-				} else if ( controller.keyDown(Keyboard.SPACE) ) {
+				} else if ( controller.spaceHeld ) {
 					// drag the background imagery to compensate for poor alignment
 					return new DragBackground(event);
 				} else if (entity && selection.indexOf(entity)>-1) {

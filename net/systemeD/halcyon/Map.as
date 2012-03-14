@@ -430,6 +430,7 @@ package net.systemeD.halcyon {
 
 		private function everyFrame(event:Event):void {
 			if (tileset) { tileset.serviceQueue(); }
+			if (stage.focus && !stage.contains(stage.focus)) { stage.focus=stage; }
 		}
 
 		// ------------------------------------------------------------------------------------------
