@@ -100,11 +100,19 @@ package net.systemeD.halcyon.connection {
         }
 
 		public function removeMember(entity:Entity, performAction:Function):void {
-			performAction(new RemoveEntityFromRelationAction(this, entity, members));
+			if (length>1) {
+				performAction(new RemoveEntityFromRelationAction(this, entity, members));
+			} else {
+				performAction(new DeleteRelationAction(this, setDeletedState, members));
+			}
 		}
 
         public function removeMemberByIndex(index:uint, performAction:Function):void {
-            performAction(new RemoveMemberByIndexAction(this, members, index));
+			if (length>1) {
+				performAction(new RemoveMemberByIndexAction(this, members, index));
+			} else {
+				performAction(new DeleteRelationAction(this, setDeletedState, members));
+			}
         }
 
 		public override function remove(performAction:Function):void {
@@ -141,6 +149,11 @@ package net.systemeD.halcyon.connection {
 				if ((firstName+lastName)!='') desc+=" "+firstName+"-"+lastName;
 			}
 			return desc;
+		}
+		
+		public function getRelationType():String {
+			var relTags:Object = getTagsHash();
+			return relTags["type"] ? relTags["type"] : getType();
 		}
 		
 		private function getSignificantName(entity:Entity):String {

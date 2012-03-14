@@ -235,7 +235,7 @@ package net.systemeD.potlatch2.controller {
 			for each (var item:Entity in _selection)
 				if (item.id>0) revertable=true;
 			if (revertable)
-				Alert.show("Revert selected items to the last saved version, discarding your changes?","Are you sure?",Alert.YES | Alert.CANCEL,null,revertHandler);
+				Alert.show("Revert selected items to the last saved version, discarding your changes?","Are you sure?",Alert.YES | Alert.CANCEL,null,revertHandler,null,Alert.CANCEL);
 		}
 		protected function revertHandler(event:CloseEvent):void {
 			if (event.detail==Alert.CANCEL) return;

@@ -264,7 +264,7 @@
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
 			// initialise imagery
-			theMap.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			theMap.tileset.blocks=[/google\./i];	// hard-coded block on Google tiles
 			theMap.tileset.setDimming(params['background_dim']    ==null ? true  : params['background_dim']);
 			theMap.tileset.setSharpen(params['background_sharpen']==null ? false : params['background_sharpen']);
 			Imagery.instance().init(theMap, overlay, yahoo);

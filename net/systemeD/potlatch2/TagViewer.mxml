@@ -839,11 +839,13 @@
 				break;
 			
 			case 3:	// Delete relation
-				Alert.show("Do you really want to delete the relation?","Are you sure?",Alert.YES | Alert.CANCEL,null,
+				var warning:String="This relation has # members. Deleting it will affect all of them and erase this $. Are you really sure?";
+				warning=warning.replace("#",rel.length).replace("$",rel.getRelationType());
+				Alert.show(warning,"Are you sure?",Alert.YES | Alert.CANCEL,null,
 					function(event:CloseEvent):void { 
 						if (event.detail==Alert.CANCEL) return;
 						rel.remove(MainUndoStack.getGlobalStack().addAction);
-					} );
+					} , null, Alert.CANCEL);
 				break;
 		}
 	}
