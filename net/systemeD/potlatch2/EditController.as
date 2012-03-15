@@ -29,6 +29,11 @@ package net.systemeD.potlatch2 {
         /** The current ControllerState */
         public var state:ControllerState;
         
+		/** Hash of when a key was pressed. A user can keyDown within a TextInput, press Enter (leaving
+		    the TextInput), and then keyup - resulting in the keypress being interpreted again. 
+		    We prevent this by tracking keyDowns within the TextInput and ignoring corresponding keyUps. */
+		private var keys:Object={};
+
 		public var spaceHeld:Boolean=false;
 		public var clipboards:Object={};
 		public var cursorsEnabled:Boolean=true;
@@ -100,13 +105,19 @@ package net.systemeD.potlatch2 {
 		}
         
         private function keyDownHandler(event:KeyboardEvent):void {
-			if ((event.target is TextField) || (event.target is TextArea)) return;
+			if ((event.target is TextField) || (event.target is TextArea)) {
+				keys[event.keyCode]=new Date().getTime();
+				return;
+			}
+			delete keys[event.keyCode];
 			if (event.keyCode==Keyboard.SPACE) spaceHeld=true;
 		}
 
         private function keyUpHandler(event:KeyboardEvent):void {
 			if ((event.target is TextField) || (event.target is TextArea)) return;
 			if (event.keyCode==Keyboard.SPACE) spaceHeld=false;
+			if (keys[event.keyCode] && new Date().getTime()-keys[event.keyCode]<300) return;
+			delete keys[event.keyCode];
 
 			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
             
