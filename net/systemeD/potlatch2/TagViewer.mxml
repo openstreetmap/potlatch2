@@ -63,8 +63,8 @@
 
   <!-- Standard tagging panel -->
 
-  <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto" tabChildren="false">
-    <mx:ViewStack id="stack" width="100%" height="100%">
+  <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto" tabChildren="true">
+    <mx:ViewStack id="stack" width="100%" height="100%" change="tagsPanel.tabChildren=(event.newIndex==0)">
       <mx:VBox width="100%" height="100%" label="Simple" id="editorContainer" creationComplete="initEditorStackUIs()" styleName="dndPanelVbox">
         <mx:VBox width="100%" verticalGap="1" styleName="dndTagHeader">
           <mx:HBox width="100%" id="iconContainer" styleName="featureSelector">

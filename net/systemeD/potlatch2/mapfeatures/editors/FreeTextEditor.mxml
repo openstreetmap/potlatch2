@@ -11,10 +11,9 @@
     styleName="titledEditor" label="{fieldName}:">
 
     <controls:PromptingTextInputWarning id="inputBox" prompt="{prompt}" text="{value}" width="100%"
-      focusOut="value = inputBox.text" enter="value = inputBox.text"
+      focusOut="value = inputBox.text" enter="value = inputBox.text; focusManager.getNextFocusManagerComponent().setFocus();"
       restrict="&#x0020;-&#x10FFFF;" />
   <fx:Script><![CDATA[
-  
       [Bindable(event="factory_set")]
       protected function get prompt():String {
           return _factory == null ? null : FreeTextEditorFactory(_factory).notPresentText;
