@@ -48,7 +48,7 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-		<mx:PopUpMenuButton id="gpsButton" label="GPS Data" styleName="appBarButton"
+		<mx:PopUpMenuButton id="gpsButton" label="GPS" styleName="appBarButton"
 		    itemClick="if (event.index==0) { trackLoader.load(); } 
 		          else if (event.index==1) { new MyGpxDialog().init(); } 
 		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
@@ -143,7 +143,8 @@
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
 			loader.load(new URLRequest("FontLibrary.swf"));
 
-            if (loaderInfo.parameters['locale']) {
+            if (loaderInfo.parameters['locale'] && loaderInfo.parameters['locale']!='en_US') {
+                // we don't bother with localisation if the user is en_US, as P2 is in English by default
                 Globals.vars.locale = loaderInfo.parameters['locale'];
                 dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, loaderInfo.parameters['locale']));
                 dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, 'en_US')); // think en_US is default

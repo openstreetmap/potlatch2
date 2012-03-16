@@ -32,6 +32,9 @@
                                   { label : rMngr.getString('p2_main','main.my_tracks') },
                                   { label : rMngr.getString('p2_main','main.clear_gps') }
                                 ];
+          // ** FIXME: If the locale is en_US, then the above rMngr.getString calls return null.
+          //           Conversely, with any locale, the actual Label of gpsButton is never
+          //           updated and keeps showing 'GPS'.
 
           // Iterate all view instances and inject new dataProvider
           for each (var inst:potlatch2 in sri.targetInstances) {
