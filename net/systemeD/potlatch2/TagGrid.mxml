@@ -93,6 +93,7 @@
 
 		/** Update dataProvider in response to a tag being edited or removed */
 		private function tagChanged(event:TagEvent):void {
+			if (event.key==event.oldKey && event.oldValue==event.newValue) return;
 			var set:Boolean=false;
 			for (var i:uint=0; i<tagDataProvider.length; i++) {
 				if (tagDataProvider[i].key==event.oldKey || tagDataProvider[i].key==event.key) {

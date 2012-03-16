@@ -294,6 +294,7 @@
 			selectedEntity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
 			selectedEntity.removeEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
 			selectedEntity.removeEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
+			if (selectedEntity is EntityCollection) EntityCollection(selectedEntity).releaseListeners();
 		}
 
 		if (entities.length==0) {

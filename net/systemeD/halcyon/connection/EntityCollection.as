@@ -36,6 +36,14 @@ package net.systemeD.halcyon.connection {
 			}
         }
 		
+		public function releaseListeners():void {
+			for each(var entity:Entity in _entities) {
+				entity.removeEventListener(Connection.TAG_CHANGED, onTagChanged);
+				entity.removeEventListener(Connection.ADDED_TO_RELATION, onAddedToRelation);
+				entity.removeEventListener(Connection.REMOVED_FROM_RELATION, onRemovedFromRelation);
+			}
+		}
+		
 		public override function get entities():Array {
 			return _entities;
 		}
@@ -115,6 +123,7 @@ package net.systemeD.halcyon.connection {
 		}
 		
 		public override function setTag(key:String, value:String, performAction:Function):void {
+            if (value==DIFFERENT) return;
 			var oldValue:String = getMergedTags()[key];	
 			var undoAction:CompositeUndoableAction = new CompositeUndoableAction("set_tag_entity_collection");
 			for each (var entity:Entity in _entities) {
@@ -126,7 +135,9 @@ package net.systemeD.halcyon.connection {
         public override function renameTag(oldKey:String, newKey:String, performAction:Function):void {
 			var undoAction:CompositeUndoableAction = new CompositeUndoableAction("rename_tag_entity_collection");
 			for each (var entity:Entity in _entities) {
-				undoAction.push(new SetTagKeyAction(entity, oldKey, newKey));
+				if (entity.getTag(oldKey)) {
+					undoAction.push(new SetTagKeyAction(entity, oldKey, newKey));
+				}
 			}
             performAction(undoAction);
         }

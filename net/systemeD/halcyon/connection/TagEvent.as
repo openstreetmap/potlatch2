@@ -22,7 +22,7 @@ package net.systemeD.halcyon.connection {
         public function get newValue():String { return _newValue; }
 
         public override function toString():String {
-            return super.toString() + "::'"+_oldKey+"' '"+_key +"' '"+_oldValue+"' '"+_newValue+"'";
+            return super.toString() + "::'"+_oldKey+"' '"+_key +"' '"+_oldValue+"' '"+_newValue+"' ["+item+"]";
         }
     }
 

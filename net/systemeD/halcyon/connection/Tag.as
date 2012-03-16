@@ -19,7 +19,7 @@ package net.systemeD.halcyon.connection {
             var oldKey:String = _key;
             var realVal:String = entity.getTag(oldKey);
             _key = key;
-            if ( oldKey != null && realVal != null && realVal != "" )
+            if ( oldKey != null && realVal != null && realVal != "" && oldKey!=key )
                 entity.renameTag(oldKey, key, MainUndoStack.getGlobalStack().addAction);
         }
 
