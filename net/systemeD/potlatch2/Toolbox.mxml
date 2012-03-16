@@ -14,7 +14,7 @@
 		<!-- Top row -->
 
 		<s:Button icon="@Embed('../../../embedded/delete.svg')"
-			click='doDelete();' 
+			click='doDelete(event.ctrlKey,event.shiftKey);' 
 			enabled="{canDo('delete')}" 
 			alpha="{getAlpha('delete')}" 
 			toolTip="{deleteToolTipText()}" 
@@ -223,18 +223,34 @@
 		// --------------------------------------------------------------------------------
 		// Individual toolbox actions
 
-		public function doDelete():void {
+		public function doDelete(controlKey:Boolean,shiftKey:Boolean):void {
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Delete objects");
-			for each (var entity:Entity in controller.state.selection) {
-				if (entity is Node) { entity.connection.unregisterPOI(Node(entity)); }
-				entity.remove(undo.push);
-			}
-			MainUndoStack.getGlobalStack().addAction(undo);
-
-			if (controller.state is SelectedWayNode) {
-				controller.setState(new SelectedWay(SelectedWayNode(controller.state).selectedWay));
-			} else {
+			if (controlKey) {
+				// Temporary function to delete everything with non-accepting status
+				var conn:Connection=controller.state.selection[0].connection;
+				var o:Object=conn.getObjectsByBbox(controller.map.edge_l, controller.map.edge_r, controller.map.edge_t, controller.map.edge_b);
+				for each (var way:Way in o.waysInside) {
+					if (way.status=='no' || (shiftKey && way.status=='partial')) { way.remove(undo.push); }
+				}
+				for each (var poi:Node in o.poisInside) {
+					if (poi.status=='no' || (shiftKey && way.status=='partial')) { poi.connection.unregisterPOI(poi); poi.remove(undo.push); }
+				}
+				MainUndoStack.getGlobalStack().addAction(undo);
 				controller.setState(new NoSelection());
+				
+			} else {
+				// Standard delete function
+				for each (var entity:Entity in controller.state.selection) {
+					if (entity is Node) { entity.connection.unregisterPOI(Node(entity)); }
+					entity.remove(undo.push);
+				}
+				MainUndoStack.getGlobalStack().addAction(undo);
+
+				if (controller.state is SelectedWayNode) {
+					controller.setState(new SelectedWay(SelectedWayNode(controller.state).selectedWay));
+				} else {
+					controller.setState(new NoSelection());
+				}
 			}
 		}
 		
