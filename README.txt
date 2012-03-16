@@ -60,7 +60,8 @@ You can create and run the unit tests (not that there are that many) using flexu
 * ant test
 
 If you're using Mac OS X, you may need to tell ant to use more memory, by
-typing export ANT_OPTS=-Xmx500M beforehand (you can put this in your .profile).
+typing export ANT_OPTS="-Xms768m -Xmx1024m -XX:MaxPermSize=512m" 
+beforehand (you can put this in your .profile).
 
 
 Compiling during development:
