@@ -3,33 +3,26 @@
 <!-- Halcyon example embed script -->
 
 <head>
-<title>Halcyon</title>
-<script type="text/javascript" src="swfobject.js"></script>
-</head>
 
-<body>
+	<title>Halcyon</title>
+	<script type="text/javascript" src="swfobject.js"></script>
 
-<div id="map" style="width:800px; height: 600px; border: 1px solid black; float:left; margin-right: 10px">
-</div>
-
-<script>
-
-	function respond(event,object,id,attr) {
-		alert (event+": "+object+" "+id+", highway="+attr['highway']);
+    <script>
+	function getArgs() {
+		var args = new Object();
+		var query = location.search.substring(1);
+		var pairs = query.split("&");
+		for(var i = 0; i < pairs.length; i++) {
+			var pos = pairs[i].indexOf('=');
+			if (pos == -1) continue;
+			var argname = pairs[i].substring(0,pos);
+			var value = pairs[i].substring(pos+1);
+			args[argname] = unescape(value);
+		}
+		return args;
 	}
 
-	var fo = new SWFObject("halcyon_viewer.swf?d="+Math.round(Math.random()*1000), "mapswf", "100%", "100%", "9", "#FFFFFF");
-	fo.addVariable("lat",51.875);
-	fo.addVariable("lon",-1.482);
-	fo.addVariable("zoom",14);
-	fo.addVariable("api","http://www.openstreetmap.org/api/0.6/");
-	fo.addVariable("policy","http://www.openstreetmap.org/api/crossdomain.xml");
-	fo.addVariable("connection","AMF");
-	fo.addVariable("responder","respond");
-	fo.addVariable("tileurl","http://npe.openstreetmap.org/$z/$x/$y.png");
-	fo.addVariable("style","test.css?d="+Math.round(Math.random()*1000));
-	fo.addVariable("show_debug","false");
-	fo.write("map");
+	function respond(event,object,id,attr) { alert (event+": "+object+" "+id+", highway="+attr['highway']); }
 
 	function refreshCSS() {
 		if (document.getElementById("mapswf")) { 
@@ -42,10 +35,50 @@
 			document.getElementById("mapswf").jumpTo(document.getElementById("lat").value,document.getElementById("lon").value);
 		}
 	}
-	
-</script>
 
-<div id="ui">
+	var args = getArgs();
+	var lat;
+	var lon;
+	var zoom;
+	if (args.lat && args.lon) {
+		lat = parseFloat(args.lat);
+		lon = parseFloat(args.lon);
+	} else {
+		lat=51.875;
+		lon=-1.492;
+		args["lat"] = lat;
+		args["lon"] = lon;
+	}
+
+	if (args.zoom) {
+		zoom = parseInt(args.zoom);
+	} else {
+		zoom = 18;
+		args["zoom"] = 18;
+	}
+
+	args["api"] = "http://www.openstreetmap.org/api/0.6/";
+	args["policy"] = "http://www.openstreetmap.org/api/crossdomain.xml";
+	args["connection"] = "XML";	// or AMF
+	args["tileurl"]="http://npe.openstreetmap.org/$z/$x/$y.png";
+	args["style"]="stylesheets/potlatch.css";
+	args["responder"]="respond";
+
+	var params = false;
+
+	swfobject.embedSWF("halcyon_viewer.swf?d="+Math.round(Math.random()*1000), "mapHolder", "800px", "100%", "10.1.85", "expressInstall.swf", args, params, { id: "map", name: "map" });
+
+</script>
+</head>
+
+<body>
+
+<div id="mapHolder" style="width:800px; height: 100%; border: 1px solid black; float:left; margin-right: 10px;">
+	If you see this message you need to install Flash Player 10.1.85 or above, from Adobe, <a href="http://get.adobe.com/flashplayer/" target="_blank">available here</a> in order to use Potlatch 2
+</div>
+
+
+<div id="ui" style="float:right">
 <p>Lat: <input id='lat' value='51.875' size='6'> Lon: <input id='lon' value='-1.482' size='6'>
 <input type='button' onClick='javascript:jumpTo();' value=" Go ">
 <p>

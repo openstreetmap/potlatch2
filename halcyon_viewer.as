@@ -7,6 +7,7 @@ package {
 	import flash.events.*;
 	import flash.events.MouseEvent;
 	import flash.display.*;
+	import flash.text.Font;
 	import flash.text.TextField;
 	import flash.external.*;
 //	import bustin.dev.Inspector;
@@ -18,30 +19,45 @@ package {
 		function halcyon_viewer():void {
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
-			this.loaderInfo.addEventListener(Event.COMPLETE, init);
+			this.loaderInfo.addEventListener(Event.COMPLETE, startInit);
 		}
 	
-		private function init(e:Event):void {
+		private function startInit(e:Event):void {
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
+			loader.load(new URLRequest("FontLibrary.swf"));
+		}
 
-			theMap = new Map(this.loaderInfo.parameters);
+		private function startApp(event:Event):void {
+			// Initialise font
+			var FontLibrary:Class = event.target.applicationDomain.getDefinition("FontLibrary") as Class;
+			Font.registerFont(FontLibrary.DejaVu);
+
+			// Get parameters
+			var params:Object={}; var k:String;
+			for (k in this.loaderInfo.parameters) params[k]=this.loaderInfo.parameters[k];
+			Globals.vars.flashvars = loaderInfo.parameters;	// ** FIXME - not sure we should use flashvars anywhere in Halcyon/P2
+
+			// Initialise map
+			theMap = new Map();
             theMap.updateSize(stage.stageWidth, stage.stageHeight);
 			addChild(theMap);
-			Globals.vars.root=theMap;
-			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
 
-			// add debug field
-			var t:TextField=new TextField();
-			t.width=400; t.height=100; t.x=400; t.border=true;
-			t.multiline=true;
-			addChild(t);
-			Globals.vars.debug=t;
-            t.visible = loaderInfo.parameters["show_debug"] == 'true';
+			// Add connection
+			// ** FIXME - should get the stylesheet from parameters
+			var conn:Connection = new XMLConnection("Main", params['api'], params['policy'], params);
+			theMap.addLayer(conn, params['style'], false, true);
+			theMap.init(params['lat'], params['lon'], params['zoom']);
+
+			Globals.vars.root=theMap;	// ** FIXME - should no longer be necessary
+			Globals.vars.nocache = loaderInfo.parameters['nocache'] == 'true';
 
 			stage.addEventListener(MouseEvent.MOUSE_UP, theMap.mouseUpHandler);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, theMap.mouseMoveHandler);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 //			Inspector.getInstance().init(stage);
 
+			// Zoom buttons
 			var z1:Sprite=new Sprite();
 			z1.graphics.beginFill(0x0000FF); z1.graphics.drawRoundRect(0,0,20,20,5); z1.graphics.endFill();
 			z1.graphics.lineStyle(2,0xFFFFFF);
