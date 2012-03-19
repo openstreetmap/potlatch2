@@ -449,21 +449,5 @@ package net.systemeD.halcyon {
 			}
 		}
 
-		// ------------------------------------------------------------------------------------------
-		// Debugging
-		
-		public function clearDebug():void {
-			if (!Globals.vars.hasOwnProperty('debug')) return;
-			Globals.vars.debug.text='';
-		}
-			
-		public function addDebug(text:String):void {
-			trace(text);
-			if (!Globals.vars.hasOwnProperty('debug')) return;
-			if (!Globals.vars.debug.visible) return;
-			Globals.vars.debug.appendText(text+"\n");
-			Globals.vars.debug.scrollV=Globals.vars.debug.maxScrollV;
-		}
-
 	}
 }
