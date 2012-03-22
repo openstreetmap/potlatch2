@@ -8,6 +8,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.potlatch2.EditController;
 	import net.systemeD.potlatch2.save.SaveManager;
 	import net.systemeD.potlatch2.utils.SnapshotConnection;
+    import net.systemeD.halcyon.AttentionEvent;
 	import flash.ui.Keyboard;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
@@ -197,11 +198,47 @@ package net.systemeD.potlatch2.controller {
 				object.setTag(k, controller.clipboards[object.getType()][k], undo.push)
 			}
 			MainUndoStack.getGlobalStack().addAction(undo);
-                        controller.updateSelectionUI();
+            controller.updateSelectionUI();
 			object.resume();
-
-
 		}
+
+        /** Create a "repeat relations" action on the current entity, if possible. */
+        protected function repeatRelations(object:Entity):void {
+            if (!controller.relationClipboards[object.getType()]) { return; }
+            object.suspend();
+
+            var undo:CompositeUndoableAction = new CompositeUndoableAction("Repeat relations");
+            var relationsadded: int;
+            for each (var rr:Object in controller.relationClipboards[object.getType()]) {
+                if (!rr.relation.hasMemberInRole(object, null)) {
+                	rr.relation.appendMember(new RelationMember(object, rr.role), undo.push);
+                	relationsadded ++;
+                	
+                }
+            }
+            MainUndoStack.getGlobalStack().addAction(undo);
+            controller.updateSelectionUI();
+            object.resume();
+            if (relationsadded > 0) {
+	            var msg:String=relationsadded.toString() + " relation(s) added to " + object.getType() + ".";
+	            controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, msg));
+	        }
+        }
+        
+        /** Copy list of relations from current object, for future repeatRelation() call. */
+        protected function copyRelations(object: Entity):void {
+        	// Leave existing relations alone if it doesn't have any
+        	if (object.parentRelations.length == 0)
+        	   return;
+        	controller.relationClipboards[object.getType()]=[];
+        	for each (var rm:Object in object.getRelationMemberships() ) {
+        		var rr:Object={
+        		  relation: rm.relation,
+        		  role: rm.role
+               	};
+               	controller.relationClipboards[object.getType()].push(rr);
+            }
+        }
 		
 		/** Remove all tags from current selection. */
 		protected function removeTags():void {

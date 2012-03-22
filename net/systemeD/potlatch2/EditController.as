@@ -36,7 +36,8 @@ package net.systemeD.potlatch2 {
 		private var keys:Object={};
 
 		public var spaceHeld:Boolean=false;
-		public var clipboards:Object={};
+		public var clipboards:Object={};          // one array of tags to repeat, per object type 
+		public var relationClipboards:Object={};  // one array of relations to repeat, per object type
 		public var cursorsEnabled:Boolean=true;
         private var maximised:Boolean=false;
         private var maximiseFunction:String;

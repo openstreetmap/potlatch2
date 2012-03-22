@@ -71,7 +71,9 @@ package net.systemeD.potlatch2.controller {
 				case 88:					return splitWay();						// 'X'
 				case 79:					return replaceNode();					// 'O'
                 case 81:  /* Q */           Quadrilateralise.quadrilateralise(parentWay, MainUndoStack.getGlobalStack().addAction); return this;
-				case 82:					repeatTags(firstSelected); return this;	// 'R'
+                case 82:  /* R */           { if (! event.shiftKey) repeatTags(firstSelected); 
+                                              else                  repeatRelations(firstSelected);
+                                              return this; }
 				case 87:					return new SelectedWay(parentWay);		// 'W'
 				case 191:					return cycleWays();						// '/'
                 case 74:                    if (event.shiftKey) { return unjoin() }; return join();// 'J'
@@ -113,6 +115,7 @@ package net.systemeD.potlatch2.controller {
             if (firstSelected.hasTags()) {
               controller.clipboards['node']=firstSelected.getTagsCopy();
             }
+            copyRelations(firstSelected);
 			layer.setPurgable(selection,true);
             clearSelection(newState);
         }
