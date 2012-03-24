@@ -1,47 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow
-        xmlns:mx="http://www.adobe.com/2006/mxml"
+<s:TitleWindow
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
+        xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:help="net.systemeD.potlatch2.help.*"
-        layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="History"
-        width="600" height="400"
-        verticalGap="0">
+        title="History"
+        width="600" height="400">
 
-  <mx:VBox width="100%" height="100%">
-    <mx:HBox width="100%">
-      <mx:Text text="History for {entity.getType()} {entity.id}" selectable="false" width="50%" />
-      <mx:Text text="Loading data..." visible="{ entityStates == null }" selectable="false" />
-    </mx:HBox>
-    <mx:HBox width="100%" height="100%">
-      <mx:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
-        <mx:columns>
-          <mx:DataGridColumn editable="false" dataField="version" headerText="version" width="50" textAlign="center"/>
-          <mx:DataGridColumn editable="false" dataField="timestamp" headerText="timestamp"/>
-          <mx:DataGridColumn editable="false" dataField="user" headerText="username" />
-          <mx:DataGridColumn editable="false">
-            <mx:itemRenderer>
-              <mx:Component>
-                <mx:HBox horizontalAlign="center" verticalAlign="middle">
-                  <mx:Button label="Contact User"
-                    click="parentDocument.message(data)"/>
-                </mx:HBox>
-              </mx:Component>
-            </mx:itemRenderer>
-          </mx:DataGridColumn>
-        </mx:columns>
-      </mx:DataGrid>
-    </mx:HBox>
-  </mx:VBox>
+  <s:layout>
+    <s:VerticalLayout />
+  </s:layout>
+
+  <s:VGroup width="100%" height="100%">
+    <s:HGroup width="100%">
+      <s:RichText text="History for {entity.getType()} {entity.id}" width="50%" />
+      <s:RichText text="Loading data..." visible="{ entityStates == null }" />
+    </s:HGroup>
+      <s:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
+        <s:columns>
+          <s:ArrayList>
+            <s:GridColumn editable="false" dataField="version" headerText="version" width="50">
+              <s:itemRenderer>
+                <fx:Component>
+                  <s:DefaultGridItemRenderer textAlign="center" />
+                </fx:Component>
+              </s:itemRenderer>
+            </s:GridColumn>
+            <s:GridColumn editable="false" dataField="timestamp" headerText="timestamp" />
+            <s:GridColumn editable="false" dataField="user" headerText="username" />
+            <s:GridColumn editable="false">
+              <s:itemRenderer>
+                <fx:Component>
+                  <s:GridItemRenderer>
+                    <s:VGroup horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
+                      <s:Button label="Contact User"
+                          click="parentDocument.message(data)"/>
+                    </s:VGroup>
+                  </s:GridItemRenderer>
+                </fx:Component>
+              </s:itemRenderer>
+            </s:GridColumn>
+          </s:ArrayList>
+        </s:columns>
+      </s:DataGrid>
+  </s:VGroup>
 
 
-  <mx:ControlBar>
-    <mx:Button label="Revert" enabled="false" styleName="titleWindowButton" />
-    <mx:Spacer width="100%"/>
-    <mx:Button label="More Details..." enabled="{entity.id >= 0}" click="openEntityPage()" styleName="titleWindowButton" />
-    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
-  </mx:ControlBar>
+  <s:controlBarContent>
+    <s:Button label="Revert" enabled="false" styleName="titleWindowButton" />
+    <s:Spacer width="100%"/>
+    <s:Button label="More Details..." enabled="{entity.id >= 0}" click="openEntityPage()" styleName="titleWindowButton" />
+    <s:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+  </s:controlBarContent>
 
-  <mx:Script><![CDATA[
+  <fx:Script><![CDATA[
 
     import mx.managers.PopUpManager;
     import mx.core.Application;
@@ -59,7 +71,7 @@
     // These are the various states that the entity as been in - so is a list
     // of Nodes (all with the same id) or Ways etc
     [Bindable]
-    private var entityStates:Array;
+    private var entityStates:ArrayList = new ArrayList();
 
     // store intermediate states for ways
     private var wayStates:Array; // an array of ways
@@ -106,7 +118,7 @@
     private function processNode(results:Array):void {
         // Simply copy the nodes into the states array
         // todo sorting or somesuch
-        entityStates = results.reverse();
+        entityStates.source = results.reverse();
     }
 
     private function processWay(results:Array):void {
@@ -208,7 +220,7 @@
           es.push(entitystate)
         }
 
-        entityStates = es.reverse();
+        entityStates.source = es.reverse();
     }
 
     // given a list of entities sorted with oldest first, find the last version before that date.
@@ -233,9 +245,9 @@
         }
     }
     ]]>
-  </mx:Script>
+  </fx:Script>
 
 
-</mx:TitleWindow>
+</s:TitleWindow>
 
 
