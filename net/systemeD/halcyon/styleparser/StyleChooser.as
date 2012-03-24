@@ -1,7 +1,7 @@
 package net.systemeD.halcyon.styleparser {
 
 	import net.systemeD.halcyon.connection.Entity;
-    import net.systemeD.halcyon.ImageBank;
+    import net.systemeD.halcyon.FileBank;
 
 	public class StyleChooser {
 
@@ -68,8 +68,8 @@ package net.systemeD.halcyon.styleparser {
 							if (PointStyle(r).icon_width && !PointStyle(r).evals['icon_width']) {
 								// ** FIXME: we should check this is the bit being used for 'square', 'circle' etc.
 								w=PointStyle(r).icon_width;
-							} else if (PointStyle(r).icon_image && ImageBank.getInstance().hasImage(PointStyle(r).icon_image)) {
-								w=ImageBank.getInstance().getWidth(PointStyle(r).icon_image);
+							} else if (PointStyle(r).icon_image && FileBank.getInstance().hasFile(PointStyle(r).icon_image)) {
+								w=FileBank.getInstance().getWidth(PointStyle(r).icon_image);
 							}
 							if (w>sl.maxwidth) { sl.maxwidth=w; }
 						} else if (r is InstructionStyle) {

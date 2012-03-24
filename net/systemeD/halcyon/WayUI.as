@@ -9,7 +9,7 @@ package net.systemeD.halcyon {
 	
 	import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.styleparser.*;
-    import net.systemeD.halcyon.ImageBank;
+    import net.systemeD.halcyon.FileBank;
 
 	/** The graphical representation of a Way. */ 
 	public class WayUI extends EntityUI {
@@ -296,7 +296,7 @@ package net.systemeD.halcyon {
 						fill=new Shape(); addToLayer(fill,FILLSPRITE,s.sublayer);
 						fill.graphics.moveTo(x0,y0);
 						if (s.fill_image) {
-							fill.graphics.beginBitmapFill(ImageBank.getInstance().getAsBitmapData(s.fill_image));
+							fill.graphics.beginBitmapFill(FileBank.getInstance().getAsBitmapData(s.fill_image));
 						} else {
 							s.applyFill(fill.graphics);
 						}
