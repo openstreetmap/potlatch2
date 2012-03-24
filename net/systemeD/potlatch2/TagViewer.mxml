@@ -279,6 +279,7 @@
       private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
       private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
+      private var categorySelectorEntity:Entity;	// entity used to draw the categorySelector
       private var feature:Feature = null;
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
@@ -354,19 +355,24 @@
 
       private function refreshFeatureIcon():void {
           var oldFeature:Feature = feature;
+          var oldEntity:Entity = categorySelectorEntity;
+
           feature = selectedEntity == null ? null : mapFeatures.findMatchingFeature(selectedEntity);
-          if ( feature != oldFeature ) {
-              if ( oldFeature != null )
-                  oldFeature.removeEventListener("imageChanged", featureImageChanged);
-              if ( feature != null )
-                  feature.addEventListener("imageChanged", featureImageChanged);
+          if (oldFeature==feature && categorySelectorEntity==selectedEntity) {
+              updateCategoryImageAndText(selectedEntity,feature);
+              return;
           }
-          setCategorySelector(selectedEntity, feature);
+
+          categorySelectorEntity=selectedEntity;
+          if ( oldFeature != null ) { oldFeature.removeEventListener("imageChanged", featureImageChanged); }
+          if ( feature != null )    { feature.addEventListener("imageChanged", featureImageChanged); }
+		  setCategorySelector(selectedEntity, feature);
       }
 
       private function featureImageChanged(event:Event):void {
           setCategorySelector(selectedEntity, feature);
       }
+
 
       /** Set the icon, categorySelector and help text for the current entity. */
       private function setCategorySelector(entity:Entity, feature:Feature):void {
@@ -386,13 +392,20 @@
 			currentCategorySelector=categorySelectors[lt];
 			currentCategorySelector.addEventListener("selectedType", changeFeatureType, false, 0, true);
 
-			// Update surrounding icon/text display
+			updateCategoryImageAndText(entity,feature);
+			currentCategorySelector.setSelectedFeature(feature);
+
+			// Set it as the popup, and make sure it's visible
+			popupChange.popUp=currentCategorySelector;
+			currentCategorySelector.visible=true;
+      }
+
+      private function updateCategoryImageAndText(entity:Entity, feature:Feature):void {
 			if (feature) {
 				iconImage.source = feature.image;
 				iconText.htmlText = feature.htmlDetails(entity);
 				popupChange.label = feature.name;
 				helpLabel.visible = feature.hasHelpURL();
-				currentCategorySelector.setSelectedFeature(feature);
 			} else {
 				iconImage.source = null;
 				popupChange.label = "unknown";
@@ -404,13 +417,8 @@
 				} else {
 					iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
 				}
-				currentCategorySelector.setSelectedFeature(null);
 			}
-
-			// Set it as the popup, and make sure it's visible
-			popupChange.popUp=currentCategorySelector;
-			currentCategorySelector.visible=true;
-      }
+	  }
 
 	  private function isMultipleEditable(entities:Array):Boolean {
 		for each(var entity:Entity in entities) {
