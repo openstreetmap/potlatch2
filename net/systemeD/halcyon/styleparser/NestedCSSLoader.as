@@ -1,9 +1,8 @@
 package net.systemeD.halcyon.styleparser {
 
-	import flash.events.*;
-	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLRequest;
+    import net.systemeD.halcyon.FileBank;
+
+    import flash.events.*;
 
 	/** A class permitting you to load CSS files containing 'import' rules, which will be 
 		automatically replaced with the contents of the file.									<p>
@@ -18,9 +17,7 @@ package net.systemeD.halcyon.styleparser {
 	*/
 
 	public class NestedCSSLoader extends EventDispatcher {
-		private var sourceCSS:String;
 		public var css:String;
-		private var url:String;
 		private var count:int;
 
 		private static const IMPORT:RegExp=/@import\s*[^'"]*['"]([^'"]+)['"][^;]*;/g;		// '
@@ -29,28 +26,21 @@ package net.systemeD.halcyon.styleparser {
 		}
 		
 		public function load(url:String):void {
-			this.url=url;
-			var request:URLRequest=new URLRequest(url+"?d="+Math.random());
-			var loader:URLLoader = new URLLoader();
-			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			loader.addEventListener(Event.COMPLETE, fileLoaded);
-			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, fileError);
-			loader.addEventListener(IOErrorEvent.IO_ERROR, fileError);
-			loader.load(request);
+            FileBank.getInstance().addFromFile(url, fileLoaded);
 		}
 		
-		private function fileLoaded(event:Event):void {
-			sourceCSS=URLLoader(event.target).data;
-			css=sourceCSS;
-			count=0;
+		private function fileLoaded(fileBank:FileBank, filename:String):void {
+			css = fileBank.getAsString(filename);
+			count = 1;
 
-			var result:Object=IMPORT.exec(sourceCSS);
-			while (result!=null) {
+			var results:Array = css.match(IMPORT);
+            while (results.length > 0) {
+                IMPORT.lastIndex = 0;
+                var result:Object = IMPORT.exec(results.shift());
 				count++;
 				replaceCSS(result[1],result[0]);
-				result=IMPORT.exec(sourceCSS);
 			}
-			if (count==0) { fireComplete(); }
+            decreaseCount();
 		}
 
 		private function replaceCSS(filename:String, toReplace:String):void {
@@ -60,13 +50,7 @@ package net.systemeD.halcyon.styleparser {
 				css=css.replace(replaceText,event.target.css);
 				decreaseCount();
 			});
-			cssLoader.load(filename+"?d="+Math.random());
-		}
-
-		private function fileError(event:Event):void {
-			// just fire a complete event so we don't get an error dialogue
-			trace("Error while trying to load "+url);
-			fireComplete();
+			cssLoader.load(filename);
 		}
 		
 		private function decreaseCount():void {
