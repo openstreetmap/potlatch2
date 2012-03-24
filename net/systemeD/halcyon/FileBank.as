@@ -56,7 +56,17 @@ package net.systemeD.halcyon {
 			}
 		}
 
-		private function loadedImage(event:Event):void {
+        public function onFilesLoaded(callback:Function):void {
+            if (filesRequested > filesReceived) {
+                addEventListener(FileBank.FILES_LOADED, function(e:Event):void {
+                    callback();
+                });
+            } else {
+                callback();
+            }
+        }
+
+        private function loadedImage(event:Event):void {
 			fileReceived();
 		}
 		private function httpStatusHandler(event:HTTPStatusEvent):void { }

@@ -294,7 +294,6 @@ package net.systemeD.halcyon.styleparser {
 		/** Load all images referenced in the RuleSet (for example, icons or bitmap fills). */
 		
 		private function loadImages():void {
-			FileBank.getInstance().addEventListener(FileBank.FILES_LOADED,doIconCallback);
 			var filename:String;
 			for each (var chooser:StyleChooser in choosers) {
 				for each (var style:Style in chooser.styles) {
@@ -307,10 +306,7 @@ package net.systemeD.halcyon.styleparser {
 						FileBank.getInstance().addFromFile(filename);
 				}
 			}
-		}
-		
-		private function doIconCallback(e:Event):void {
-			iconCallback();
+            FileBank.getInstance().onFilesLoaded(iconCallback);
 		}
 		
 		// ------------------------------------------------------------------------------------------------
