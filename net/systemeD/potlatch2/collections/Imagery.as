@@ -95,11 +95,12 @@ package net.systemeD.potlatch2.collections {
 			collection.forEach(function(bg:Object, index:int, array:Array):void {
 				if (bg.logo) {
 					// load the logo
-					var loader:Loader = new Loader();
-					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { onLogoLoad(e,bg); });
-					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
-					loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-					loader.load(new URLRequest(bg.logo));
+                    FileBank.getInstance().addFromFile(bg.logo, function (fb:FileBank, name:String):void {
+                        bg.logoData = fb.getAsBitmapData(name);
+                        bg.logoWidth = fb.getWidth(name);
+                        bg.logoHeight = fb.getHeight(name);
+                        setLogo();
+                    });
 				}
 				if (bg.attribution_url) {
 					// load the attribution
@@ -119,13 +120,6 @@ package net.systemeD.potlatch2.collections {
 		
 		private function onError(e:Event):void {
 			// placeholder error routine so exception isn't thrown
-		}
-		
-		public function onLogoLoad(e:Event, bg:Object):void {
-			bg.logoData  = Bitmap(LoaderInfo(e.target).content).bitmapData;
-			bg.logoWidth = e.target.loader.width;
-			bg.logoHeight= e.target.loader.height;
-			setLogo();
 		}
 		
 		public function onAttributionLoad(e:Event,bg: Object):void {
