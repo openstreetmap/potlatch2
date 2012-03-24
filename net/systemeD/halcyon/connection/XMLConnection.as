@@ -508,6 +508,8 @@ package net.systemeD.halcyon.connection {
             var results:Array = [];
             var dummyConn:Connection = new Connection("dummy", null, null);
 
+            dispatchEvent(new Event(LOAD_COMPLETED));
+
             // only one type of entity should be returned, but this handles any
 
             for each(var nodeData:XML in _xml.node) {
