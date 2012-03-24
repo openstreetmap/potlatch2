@@ -4,7 +4,7 @@
         xmlns:mx="library://ns.adobe.com/flex/mx"
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:help="net.systemeD.potlatch2.help.*"
-        title="History"
+        title="History for {entity.getType()} {entity.id}"
         width="600" height="400">
 
   <s:layout>
@@ -12,9 +12,8 @@
   </s:layout>
 
   <s:VGroup width="100%" height="100%">
-    <s:HGroup width="100%">
-      <s:RichText text="History for {entity.getType()} {entity.id}" width="50%" />
-      <s:RichText text="Loading data..." visible="{ entityStates == null }" />
+    <s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="5">
+      <s:RichText text="Loading data..." visible="{ entityStates.length == 0 }" />
     </s:HGroup>
       <s:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
         <s:columns>
