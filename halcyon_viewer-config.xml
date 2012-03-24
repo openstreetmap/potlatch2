@@ -11,7 +11,10 @@
       <library-path append="true">
           <path-element>lib</path-element>
       </library-path>
+
+	
    </compiler>
+	<static-link-runtime-shared-libraries>true</static-link-runtime-shared-libraries>
 
    <metadata>
       <title>Halcyon</title>

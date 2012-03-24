@@ -24,7 +24,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
         }
         
         public function get direction():String {
-            return boxDirection;
+            return "ltr";
         }
         
         override public function createEditorInstance(entity:Entity):DisplayObject {

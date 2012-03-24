@@ -34,6 +34,9 @@ package net.systemeD.halcyon.styleparser {
 		/** Compiled SWFs for each eval. We keep it here, not in the property itself, so that we can retain typing for each property. */
 		public var evals:Object={};
 		
+		/** TagValue assignments, e.g. { width: tag('lanes'); } */
+		public var tagvalues:Object={};
+		
 		/** Make an exact copy of an object.
 			Used when merging cascading styles. (FIXME: this needs some benchmarking - it may be quicker to simply iterate over .properties, 
 			copying each one. */
@@ -52,7 +55,8 @@ package net.systemeD.halcyon.styleparser {
 		/** Merge two Style objects. */
 		public function mergeWith(additional:Style):void {
 			for each (var prop:String in properties) {
-				if (additional[prop]) {
+				// Note extra check for empty arrays, which we use to mean 'undefined' (see setPropertyFromString below)
+				if (additional[prop]!=undefined && !((additional[prop] is Number) && isNaN(additional[prop])) && !((additional[prop] is Array) && additional[prop].length==0)) {
 					this[prop]=additional[prop];
 				}
 			}
@@ -69,7 +73,7 @@ package net.systemeD.halcyon.styleparser {
 			return false;
 		}
 		
-		/** Are there any eval functions defined? */
+		/** Are there any eval functions defined? (This isn't used.) */
 		public function hasEvals():Boolean {
 			for (var k:String in evals) { return true; }
 			return false;
@@ -78,16 +82,14 @@ package net.systemeD.halcyon.styleparser {
 		/** Run all evals for this Style over the supplied tags.
 			If, for example, the stylesheet contains width=eval('_width+2'), then this will set Style.width to 7. */
 		public function runEvals(tags:Object):void {
-			for (var k:String in evals) {
-				// ** Do we need to do typing here?
-				this[k]=evals[k].exec(tags);
-			}
+			for (var k:String in evals) this[k]=evals[k].exec(tags);
 		}
-
+		
 		/** Set a property, casting as correct type. */
 		public function setPropertyFromString(k:String,v:*):Boolean {
 			if (!this.hasOwnProperty(k)) { return false; }
 			if (v is Eval) { evals[k]=v; v=1; }
+			else if (v is TagValue) { tagvalues[k]=v; v=1; }
 
 			// Arrays don't return a proper typeof, so check manually
 			// Note that undefined class variables always have typeof=object,
@@ -116,6 +118,7 @@ package net.systemeD.halcyon.styleparser {
             for each (var k:String in this.properties) {
 				if (this.hasOwnProperty(k)) { str+=k+"="+this[k]+"; "; }
 			}
+			for each (k in tagvalues) str+=k+";"; 
 			return str;
         }
 	}

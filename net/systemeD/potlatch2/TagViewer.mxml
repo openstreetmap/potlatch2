@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+  The TagViewer is the container for the entire sidebar. It has a number of components, and subpanels, in a ViewStack that change
+  depending on what is selected, i.e. the ControllerState.
+
+  @see net.systemeD.potlatch2.controller.ControllerState
+    -->
 <mx:VBox
     xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
@@ -32,6 +38,8 @@
 							import mx.core.DragSource;
 
 							private function dragPOI(event:MouseEvent, tags:Array):void {
+								if (outerDocument.controller.map.dragstate==outerDocument.controller.map.DRAGGING) return;
+
 								// Get the drag initiator component from the event object.
 								var dragInitiator:Image = event.currentTarget as Image;
 								var dragSource:DragSource = new DragSource();
@@ -55,8 +63,8 @@
 
   <!-- Standard tagging panel -->
 
-  <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto">
-    <mx:ViewStack id="stack" width="100%" height="100%">
+  <mx:VBox id="tagsPanel" width="100%" height="100%" creationPolicy="auto" tabChildren="true">
+    <mx:ViewStack id="stack" width="100%" height="100%" change="tagsPanel.tabChildren=(event.newIndex==0)">
       <mx:VBox width="100%" height="100%" label="Simple" id="editorContainer" creationComplete="initEditorStackUIs()" styleName="dndPanelVbox">
         <mx:VBox width="100%" verticalGap="1" styleName="dndTagHeader">
           <mx:HBox width="100%" id="iconContainer" styleName="featureSelector">
@@ -211,18 +219,29 @@
     <sidepanel:BackgroundPanel id="backgroundPanelContents" width="100%"/>
   </mx:VBox>
 
+  <!-- merge tags from background layer -->
+
+  <mx:VBox id="backgroundMergePanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
+    <sidepanel:BackgroundMergePanel id="backgroundMergePanelContents" width="100%" />
+  </mx:VBox>
+
 </mx:ViewStack>
 
   <fx:Script><![CDATA[
       import net.systemeD.halcyon.connection.*;
       import net.systemeD.halcyon.MapPaint;
+      import net.systemeD.potlatch2.EditController;
       import net.systemeD.potlatch2.mapfeatures.*;
       import net.systemeD.potlatch2.history.HistoryDialog;
+      import net.systemeD.potlatch2.mapfeatures.editors.*;
       import net.systemeD.potlatch2.utils.*;
       import net.systemeD.controls.CollapsiblePanel;
 
       import mx.collections.*;
-      import mx.containers.*;
+      import mx.containers.VBox;
+      import mx.containers.HBox;
+      import mx.containers.TabNavigator;
+      import mx.containers.Accordion;
       import mx.events.*;
       import mx.core.*;
       import mx.managers.PopUpManager;
@@ -234,6 +253,8 @@
       import mx.managers.DragManager;
       import mx.core.DragSource;
       import mx.controls.TabBar;
+      import spark.components.Form;
+      import spark.layouts.FormLayout;
 //    import flexlib.containers.SuperTabNavigator;
 
       [Bindable] [Embed(source="../../../embedded/tab_basic.png"       )] private var tabIconBasic:Class;
@@ -254,6 +275,7 @@
       [Bindable] private var editorStack:Container;
 
       public var mapFeatures:MapFeatures;
+      public var controller:EditController;
       private var selectedEntity:Entity;
       private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
@@ -273,6 +295,7 @@
 			selectedEntity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
 			selectedEntity.removeEventListener(Connection.ADDED_TO_RELATION, addedToRelation);
 			selectedEntity.removeEventListener(Connection.REMOVED_FROM_RELATION, removedFromRelation);
+			if (selectedEntity is EntityCollection) EntityCollection(selectedEntity).releaseListeners();
 		}
 
 		if (entities.length==0) {
@@ -293,13 +316,19 @@
               markerPanelContents.init(selectedEntity, layer);
               sidebar.selectedChild = markerPanel;
             } else if (connection is SnapshotConnection) {
-              backgroundPanelContents.init(selectedEntity, layer);
+              backgroundPanelContents.init(selectedEntity);
               sidebar.selectedChild = backgroundPanel;
             } else {
               refreshFeatureIcon();
               initialiseEditors();
               sidebar.selectedChild = tagsPanel;
             }
+
+        } else if (entities.length==2
+                      && xor(entities[0].connection is SnapshotConnection, entities[1].connection is SnapshotConnection)
+                      && xor(!controller.map.getLayerForEntity(entities[0]).isBackground, !controller.map.getLayerForEntity(entities[1]).isBackground) ) {
+            backgroundMergePanelContents.init(entities);
+            sidebar.selectedChild = backgroundMergePanel;
 
 		} else if(isMultipleEditable(entities)) {
 			selectedEntity = new EntityCollection(entities);
@@ -313,6 +342,10 @@
 			sidebar.selectedChild = multipleInvalidPanel;
 		}
 		UIComponent.resumeBackgroundProcessing();
+      }
+
+      private function xor(a:Boolean, b:Boolean):Boolean {
+          return ( a || b) && !(a && b);
       }
 
       private function refreshFeatureIcon():void {
@@ -437,7 +470,7 @@
 			// Add to basic editor box first
 			if ( factory.presence.isEditorPresent(factory, selectedEntity, null) ) {
 				var editor:DisplayObject = factory.createEditorInstance(selectedEntity);
-				if (editor) basicEditorBox.addChild(editor);
+				if (editor) Form(basicEditorBox.getChildByName("form")).addElement(UIComponent(editor));
 			}
 
 			// Then prepare to add to category panel
@@ -458,9 +491,10 @@
 					subpanel.styleName="subcategoryPanel";
 					subpanel.title=subcategory;
 					subpanels[category][subcategory]=subpanel;
+					addConstrainedForm(subpanel);
 					tabComponents[tab].push(subpanel);
 				}
-				subpanel.addChild(catEditor);
+				Form(subpanel.getChildByName("form")).addElement(UIComponent(catEditor));
 			} else {
 				tabComponents[tab].push(catEditor);
 			}
@@ -477,22 +511,37 @@
 		return 0;
 	}
 	
-      private function createEditorBox():VBox {
-          var box:VBox = new VBox();
-          box.percentWidth = 100;
-          box.percentHeight = 100;
-          box.styleName = "dndEditorContainer";
-          return box;
-      }
+	private function createEditorBox():VBox {
+		var box:VBox = new VBox();
+		box.percentWidth = 100;
+		box.percentHeight = 100;
+		box.styleName = "dndEditorContainer";
+		addConstrainedForm(box);
+		return box;
+	}
+	
+	private function addConstrainedForm(parentObject:DisplayObjectContainer):void {
+		var form:Form = new Form();
+		form.name = "form";
+		form.percentWidth=100;
+		form.addEventListener(mx.events.ResizeEvent.RESIZE, formResizeHandler, false, 0, true);
+		parentObject.addChild(form);
+		if (parentObject.width>0) form.maxWidth=parentObject.width;
+	}
+	
+	private function formResizeHandler(e:Event):void {
+		var form:Form=Form(e.target);
+		if (form.parent.width>0) form.maxWidth=form.parent.width;
+	}
 
-      private function ensureEditorsPopulated(tab:VBox):void {
-          var components:Array = tabComponents[tab];
-          if ( components == null || tab == null || tab.numChildren >= components.length )
-              return;
-          for each (var component:DisplayObject in components ) {
-              tab.addChild(component);
-          }
-      }
+	private function ensureEditorsPopulated(tab:VBox):void {
+		var components:Array = tabComponents[tab];
+		var form:Form=Form(tab.getChildByName("form"));
+		if ( components == null || tab == null || form.numElements >= components.length ) return;
+		for each (var component:DisplayObject in components ) {
+			form.addElement(UIComponent(component));
+		}
+	}
 
 	private function initEditorStackUIs():void {
 		editorStackTabNavigator = new TabNavigator();
@@ -587,7 +636,7 @@
 			if      ( entity is Node     ) entityText = "Node";
 			else if ( entity is Way      ) entityText = "Way";
 			else if ( entity is Relation ) entityText = "Relation";
-			advancedID.htmlText = entityText+": <b>"+entity.id+"</b>";
+			advancedID.htmlText = entityText+": <b>"+entity.id+"</b> "+(entity.status ? entity.status : '');
 		}
 
 		removeRelationListeners();
@@ -609,8 +658,8 @@
       }
 
 	  public function addNewTag():void {
-		if (stack.selectedChild!=advancedContainer) { return; }
-		advancedTagGrid.addNewTag();
+		if (sidebar.selectedChild==multiplePanel) { multiAdvancedTagGrid.addNewTag(); }
+		else if (stack.selectedChild==advancedContainer) { advancedTagGrid.addNewTag(); }
 	  }
 
       private function addedToRelation(event:RelationMemberEvent):void {
@@ -792,11 +841,13 @@
 				break;
 			
 			case 3:	// Delete relation
-				Alert.show("Do you really want to delete the relation?","Are you sure?",Alert.YES | Alert.CANCEL,null,
+				var warning:String="This relation has # members. Deleting it will affect all of them and erase this $. Are you really sure?";
+				warning=warning.replace("#",rel.length).replace("$",rel.getRelationType());
+				Alert.show(warning,"Are you sure?",Alert.YES | Alert.CANCEL,null,
 					function(event:CloseEvent):void { 
 						if (event.detail==Alert.CANCEL) return;
 						rel.remove(MainUndoStack.getGlobalStack().addAction);
-					} );
+					} , null, Alert.CANCEL);
 				break;
 		}
 	}
@@ -841,11 +892,22 @@
           var action:CompositeUndoableAction = new CompositeUndoableAction(
                   "Set "+selectedEntity.getType()+" "+selectedEntity.id+" to "+newFeature.name);
 		  selectedEntity.suspend();
+          
+          // build a list of tags that are editable in new feature
+          var editableTags:Array = new Array();
+          for each( var editor:EditorFactory in newFeature.editors ) {
+              if ( editor is SingleTagEditorFactory ) {
+                  var singleTagEditor:SingleTagEditorFactory = editor as SingleTagEditorFactory;
+                  editableTags.push(singleTagEditor.key);
+              }
+          }
 
           // remove tags from the current feature
           if ( feature != null ) {
               for each( var oldtag:Object in feature.tags ) {
-                  selectedEntity.setTag(oldtag["k"], null, action.push);
+                  if ( editableTags.indexOf(oldtag["k"]) < 0 ) {
+                      selectedEntity.setTag(oldtag["k"], null, action.push);
+                  }
               }
           }
 
@@ -868,6 +930,7 @@
 		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
 		event.target.height=rows*(event.target.rowHeight+1);
 	}
+
   ]]></fx:Script>
 </mx:VBox>
 

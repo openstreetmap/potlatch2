@@ -16,6 +16,7 @@ package net.systemeD.halcyon {
 	public class NodeUI extends EntityUI {
 		
 		public var loaded:Boolean=false;
+		public var isPOI:Boolean;
 		private var iconnames:Object={};			// name of icon on each subpart
 		private var heading:Number=0;				// heading within way
 		private var rotation:Number=0;				// rotation applied to this POI
@@ -27,9 +28,10 @@ package net.systemeD.halcyon {
 		 * @param heading Optional angle.
 		 * @param layer Which layer on the MapPaint object it sits on. @default Top layer
 		 * @param stateClasses A settings object definining the initial state of the node (eg, highlighted, hover...) */
-		public function NodeUI(node:Node, paint:MapPaint, heading:Number=0, layer:int=NO_LAYER, stateClasses:Object=null) {
+		public function NodeUI(node:Node, paint:MapPaint, isPOI:Boolean, heading:Number=0, layer:int=NO_LAYER, stateClasses:Object=null) {
 			super(node,paint);
 			if (layer==NO_LAYER) { this.layer=paint.maxlayer; } else { this.layer=layer; }
+			this.isPOI=isPOI;
 			this.heading = heading;
 			if (stateClasses) {
 				for (var state:String in stateClasses) {
@@ -77,7 +79,7 @@ package net.systemeD.halcyon {
 			tags=applyStateClasses(tags);
 			if (entity.status) { tags['_status']=entity.status; }
 			if (!styleList || !styleList.isValidAt(paint.map.scale)) {
-				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale); 
+				styleList=paint.ruleset.getStyles(entity,tags,paint.map.scale,isPOI); 
 			}
 
 			var suggestedLayer:Number=styleList.layerOverride();

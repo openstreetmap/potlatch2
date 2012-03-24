@@ -101,8 +101,9 @@ package net.systemeD.potlatch2.controller {
 					} else {
                         // add junction node - another way
                         var jnct:CompositeUndoableAction = new CompositeUndoableAction("Junction Node");
+                        var ways:Array = layer.findWaysAtPoint(event.stageX, event.stageY, selectedWay);
                         node = createAndAddNode(event, jnct.push);
-                        Way(entity).insertNodeAtClosestPosition(node, true, jnct.push);
+                        for each (var w:Way in ways) { w.insertNodeAtClosestPosition(node, true, jnct.push); }
                         MainUndoStack.getGlobalStack().addAction(jnct);
                         layer.setHighlight(node, { selectedway: true });
                         layer.setPurgable([node], false);
@@ -129,12 +130,12 @@ package net.systemeD.potlatch2.controller {
 				// set cursor depending on whether we're floating over the start of this way, 
 				// another random node, a possible junction...
 				if (entity is Node && focus is Way && Way(focus).endsWith(Node(entity))) {
-					if (focus==firstSelected) { controller.setCursor(controller.pen_so); }
-					                     else { controller.setCursor(controller.pen_o); }
+					if (focus==firstSelected) { controller.setCursor("pen_so"); }
+					                     else { controller.setCursor("pen_o"); }
 				} else if (entity is Node) {
-					controller.setCursor(controller.pen_x);
+					controller.setCursor("pen_x");
 				} else {
-					controller.setCursor(controller.pen_plus);
+					controller.setCursor("pen_plus");
 				}
 			} else if ( event.type == MouseEvent.MOUSE_OUT && !isBackground ) {
 				if (focus is Way && entity!=firstSelected) {
@@ -143,7 +144,7 @@ package net.systemeD.potlatch2.controller {
 					// ** We could do with an optional way of calling WayUI.redraw to only do the nodes, which would be a
 					// useful optimisation.
 				}
-				controller.setCursor(controller.pen);
+				controller.setCursor("pen");
 			}
 
 			return this;
@@ -176,12 +177,25 @@ package net.systemeD.potlatch2.controller {
 				case Keyboard.DELETE:		
 				case Keyboard.BACKSPACE:	
 				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
+				case 79: /* O */			return replaceNode();
 				case 82: /* R */            repeatTags(firstSelected); return this;
 				case 70: /* F */            followWay(); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 			
+		}
+
+		public function replaceNode():ControllerState {
+			var way:Way=Way(firstSelected);
+			var oldNode:Node=editEnd ? way.getLastNode() : way.getNode(0);
+			var newNode:Node=oldNode.replaceWithNew(layer.connection,
+			                                        controller.map.coord2lat(layer.mouseY), 
+			                                        controller.map.coord2lon(layer.mouseX), {},
+			                                        MainUndoStack.getGlobalStack().addAction);
+			var d:DragWayNode=new DragWayNode(way, way.indexOfNode(newNode), new MouseEvent(MouseEvent.CLICK, true, false, layer.mouseX, layer.mouseY), true);
+			d.forceDragStart();
+			return d;
 		}
 		
 		protected function keyExitDrawing():ControllerState {
@@ -224,7 +238,7 @@ package net.systemeD.potlatch2.controller {
 			if ( editEnd )
 				Way(firstSelected).appendNode(node, performAction);
 			else
-				Way(firstSelected).insertNode(0, node, performAction);
+				Way(firstSelected).prependNode(node, performAction);
 		}
 		
 		protected function backspaceNode(performAction:Function):ControllerState {
@@ -327,14 +341,14 @@ package net.systemeD.potlatch2.controller {
 			var node:Node = Way(firstSelected).getNode(editEnd ? Way(firstSelected).length-1 : 0);
 			var start:Point = new Point(node.lon, node.latp);
 			elastic = new Elastic(controller.map, start, start);
-			controller.setCursor(controller.pen);
+			controller.setCursor("pen");
 		}
 		override public function exitState(newState:ControllerState):void {
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_ADDED, fixElastic);
 
 			super.exitState(newState);
-			controller.setCursor(null);
+			controller.setCursor();
 			elastic.removeSprites();
 			elastic = null;
 		}

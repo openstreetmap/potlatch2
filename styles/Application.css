@@ -59,6 +59,14 @@ mx|Label {
 	fontWeight: normal;
 }
 
+s|FormItem s|Label#labelDisplay {
+    textAlign: right;
+}
+
+s|FormHeading {
+	fontSize: 12;
+}
+
 /* Main window */
 
 mx|Application {
@@ -179,6 +187,15 @@ mx|ApplicationControlBar {
 	color: #444444;
 	fontSize: 11;
 	fontWeight: bold;
+}
+
+/* Simple tag view - form */
+
+s|Form {
+	skinClass: ClassReference("net.systemeD.potlatch2.skins.CustomFormSkin");
+}
+s|FormItem {
+	skinClass: ClassReference("net.systemeD.potlatch2.skins.CustomFormItemSkin");
 }
 
 /* Simple tag view - header */

@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.geom.Point;
     import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.halcyon.MapPaint;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.connection.actions.*;
 
@@ -14,6 +15,8 @@ package net.systemeD.potlatch2.controller {
         private var downX:Number;
         private var downY:Number;
 		private var dragstate:uint=NOT_MOVED;
+		private var initialMouseEvent:MouseEvent;
+		private var wayList:Array;
 		/** Not used? */
 		private const NOT_DRAGGING:uint=0;
 		
@@ -24,11 +27,13 @@ package net.systemeD.potlatch2.controller {
 		private const DRAGGING:uint=2;
         
         /** Start the drag by recording the dragged way, where it started, and when. */
-        public function DragSelection(sel:Array, event:MouseEvent) {
+        public function DragSelection(sel:Array, event:MouseEvent, ways:Array = null) {
             selection = sel.concat();
             downX = event.localX;
             downY = event.localY;
+            wayList = ways;
 			enterTime = (new Date()).getTime();
+			initialMouseEvent = event;
         }
  
        /** Handle dragging and end drag events. Filters out very short or quick drags. */
@@ -72,6 +77,7 @@ package net.systemeD.potlatch2.controller {
 
 		/** Abort dragging if ESC pressed. */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
+            if (event.keyCode==Keyboard.SPACE) { return cycleAllWays(initialMouseEvent); }
 			if (event.keyCode==Keyboard.ESCAPE) {
 				for each (var entity:Entity in selection) {
 					entity.dispatchEvent(new EntityDraggedEvent(Connection.ENTITY_DRAGGED, entity, 0, 0));
@@ -91,6 +97,22 @@ package net.systemeD.potlatch2.controller {
 		public function forceDragStart():void {
 			dragstate=NOT_MOVED;
 		}
+
+        private function cycleAllWays(event:MouseEvent):ControllerState {
+            if (!(downX && downY) || (wayList && wayList.length<2) || selection.length != 1) { return this; }
+            if (!wayList) {
+                wayList=selection
+                for each (var l:MapPaint in controller.map.getLayers()) {
+//                  trace("Layer "+l.connection.name);
+//                  trace(l.findWaysAtPoint(event.stageX, event.stageY).length);
+                    wayList = wayList.concat(l.findWaysAtPoint(event.stageX, event.stageY,selection[0]));
+                }
+            }
+//          for each (var way:Way in wayList) { trace(way + "::" + way.connection.name); }
+            wayList=wayList.slice(1).concat(wayList[0]);
+            // Find the new way's index of the currently "selected" node, to facilitate keyboard navigation
+            return new DragSelection([wayList[0]], event, wayList);
+        }
 
         /** Highlight the dragged selection. */
         override public function enterState():void {

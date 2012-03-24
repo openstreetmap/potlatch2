@@ -10,13 +10,26 @@ package net.systemeD.halcyon.connection {
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.MapEvent;
 	import net.systemeD.halcyon.ExtendedURLLoader;
+    import net.systemeD.halcyon.connection.bboxes.*;
 
     /**
     * XMLConnection provides all the methods required to connect to a live
     * OSM server. See OSMConnection for connecting to a read-only .osm file
+    *
+    * @see OSMConnection
     */
 	public class XMLConnection extends XMLBaseConnection {
 
+		private const MARGIN:Number=0.05;
+
+        /**
+        * Create a new XML connection
+        * @param name The name of the connection
+        * @param api The url of the OSM API server, e.g. http://api06.dev.openstreetmap.org/api/0.6/
+        * @param policy The url of the flash crossdomain policy to load,
+                        e.g. http://api06.dev.openstreetmap.org/api/crossdomain.xml
+        * @param initparams Any further parameters for the connection, such as the serverName
+        */
 		public function XMLConnection(name:String,api:String,policy:String,initparams:Object) {
 
 			super(name,api,policy,initparams);
@@ -29,21 +42,29 @@ package net.systemeD.halcyon.connection {
 		override public function loadBbox(left:Number,right:Number,
 								top:Number,bottom:Number):void {
             purgeIfFull(left,right,top,bottom);
-            if (isBboxLoaded(left,right,top,bottom)) return;
+			var requestBox:Box=new Box().fromBbox(left,bottom,right,top);
+			var boxes:Array;
+			try {
+				boxes=fetchSet.getBoxes(requestBox,MAX_BBOXES);
+			} catch(err:Error) {
+				boxes=[requestBox];
+			}
+			for each (var box:Box in boxes) {
+				// enlarge bbox by given margin on each edge
+				var xmargin:Number=(box.right-box.left)*MARGIN;
+				var ymargin:Number=(box.top-box.bottom)*MARGIN;
+				left  =box.left  -xmargin; right=box.right+xmargin;
+				bottom=box.bottom-ymargin; top  =box.top  +ymargin;
 
-            // enlarge bbox by 20% on each edge
-            var xmargin:Number=(right-left)/5;
-            var ymargin:Number=(top-bottom)/5;
-            left-=xmargin; right+=xmargin;
-            bottom-=ymargin; top+=ymargin;
+				dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:left, maxlon:right, maxlat:top, minlat:bottom} ));
 
-            var mapVars:URLVariables = new URLVariables();
-            mapVars.bbox= left+","+bottom+","+right+","+top;
-
-            var mapRequest:URLRequest = new URLRequest(apiBaseURL+"map");
-            mapRequest.data = mapVars;
-
-            sendLoadRequest(mapRequest);
+				// send HTTP request
+				var mapVars:URLVariables = new URLVariables();
+				mapVars.bbox=left+","+bottom+","+right+","+top;
+				var mapRequest:URLRequest = new URLRequest(apiBaseURL+"map");
+				mapRequest.data = mapVars;
+				sendLoadRequest(mapRequest);
+			}
 		}
 
 		override public function loadEntityByID(type:String, id:Number):void {
@@ -54,20 +75,24 @@ package net.systemeD.halcyon.connection {
 
 		private function sendLoadRequest(request:URLRequest):void {
 			var mapLoader:URLLoader = new URLLoader();
+            var errorHandler:Function = function(event:IOErrorEvent):void {
+                errorOnMapLoad(event, request);
+            }
 			mapLoader.addEventListener(Event.COMPLETE, loadedMap);
-			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad);
+			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
 			mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
             request.requestHeaders.push(new URLRequestHeader("X-Error-Format", "XML"));
 			mapLoader.load(request);
 			dispatchEvent(new Event(LOAD_STARTED));
 		}
 
-        private function errorOnMapLoad(event:Event):void {
-			dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "Couldn't load the map" } ));
-			dispatchEvent(new Event(LOAD_COMPLETED));
+        private function errorOnMapLoad(event:Event, request:URLRequest):void {
+            var url:String = request.url + '?' + URLVariables(request.data).toString(); // for get reqeusts, at least
+            dispatchEvent(new MapEvent(MapEvent.ERROR, { message: "There was a problem loading the map data.\nPlease check your internet connection, or try zooming in.\n\n" + url } ));
+            dispatchEvent(new Event(LOAD_COMPLETED));
         }
+
         private function mapLoadStatus(event:HTTPStatusEvent):void {
-            trace("loading map status = "+event.status);
         }
 
         protected var appID:OAuthConsumer;

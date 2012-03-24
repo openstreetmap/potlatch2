@@ -37,7 +37,7 @@ package net.systemeD.potlatch2.controller {
 			if (event.type==MouseEvent.MOUSE_MOVE) { return this; }
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
 
-			if (event.type==MouseEvent.MOUSE_DOWN && event.ctrlKey && entity && entity!=firstSelected && paint==layer) {
+			if (event.type==MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected && paint==layer) {
 				return new SelectedMultiple([firstSelected,entity],layer);
 			} else if (event.type==MouseEvent.MOUSE_DOWN && event.shiftKey && !entity && !layer.isBackground) {
 				return new DrawQuadrilateral(firstSelected as Node);

@@ -60,14 +60,15 @@ package net.systemeD.halcyon.connection {
 
 				// **** Specific WTFE-parsing code starts here
 				// FIXME: should be generalised
-				//		if all users are "yes" or "auto", status is 'ok' (green)
-				//		if first user is "no", status is 'no' (red)
-				//		if any other users are no, status is 'partial' (softer red)
-				//		otherwise, status is 'unsure' (yellow)
+				//		if all users are "yes" or "auto", status is 'ok' (3, green)
+				//		if first user is "no", status is 'no' (0, red)
+				//		if any other users are no, status is 'partial' (1, softer red)
+				//		otherwise, status is 'unsure' (2, yellow)
 				var s:uint=3;	// ok
 				for each (var user:XML in exml.user) {
-					if (user.@decision=='no' && user.@version=='first') { s=0; }	// no from v1
-					else if (user.@decision=='no') { s=Math.min(s,1); }				// no from later version
+					if (user.@severity=='harmless' || user.@severity=='none') continue;	// ignore if harmless
+					if (user.@decision=='no' && user.@version=='first') { s=0; }		// no from v1
+					else if (user.@decision=='no') { s=Math.min(s,1); }					// no from later version
 					else if (user.@decision=='undecided' || user.@decision=='anonymous') { s=Math.min(s,2); }	// unsure
 				}
 				status=STATUSES[s];

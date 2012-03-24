@@ -1,4 +1,4 @@
-<project name="Potlatch 2" default="debug">
+<project name="Potlatch 2" default="debug" xmlns:ac="antlib:net.sf.antcontrib">
 
   <!-- load properties from the environment -->
   <property environment="env" />
@@ -8,6 +8,9 @@
 
   <!-- flexTasks comes with flex, but apparently it's good practice to put in the libs folder -->
   <taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar"/>
+
+  <!-- ant-contrib to build multiple locales -->
+  <taskdef uri="antlib:net.sf.antcontrib" resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/lib/ant-contrib-1.0b3.jar"/>
 
   <!-- if you are running git-svn, you need to run "git tag -a 0.4 0ac0de" where 0ac0de corresponds to the commitid of
       potlatch2 v0.4 . You need to do this for each point release while we're still in SVN.
@@ -58,18 +61,21 @@
   </target>
 
   <!-- note that there's an asdoc target in Flex 4, if/when we move to that -->
-  <target name="docs" depends="manifests">
+  <target name="docs" depends="manifests,makeLocalesList">
     <exec executable="${ASDOC}" failonerror="true">
-      <arg line="-source-path ."/>
-      <arg line="-doc-sources net/systemeD/"/>
+      <arg line="-source-path=."/>
+      <arg line="-doc-sources=net/systemeD/"/>
       <arg line="-external-library-path=lib/"/>
-      <arg line="-target-player 10.0.0"/>
-      <arg line="-exclude-classes ${org_classes} ${it_classes} ${hxasm_classes} ${com_classes}"/>
-      <arg line="-output resources/docs/"/>
-      <arg line="-window-title 'Halcyon and Potlatch2 Developer documentation'" />
-      <arg line="-main-title 'Halcyon and Potlatch2 Developer documentation'" />
-      <arg line="-footer 'Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
-      <arg line="-package net.systemeD.controls 'Custom-built controls used in Poltatch2'" />
+      <arg line="-external-library-path=${FLEX_HOME}/frameworks/libs/"/>
+      <arg line="-external-library-path=${FLEX_HOME}/frameworks/libs/player/10.2/"/>
+      <arg line="-lenient"/>
+      <arg line="-target-player=10.2.0"/>
+      <arg line="-exclude-classes=${org_classes},${it_classes},${hxasm_classes},${com_classes}"/>
+      <arg line="-output=resources/docs/"/>
+      <arg line="-window-title='Halcyon and Potlatch2 Developer documentation'" />
+      <arg line="-main-title='Halcyon and Potlatch2 Developer documentation'" />
+      <arg line="-footer='Found an error? Help us fix it. http://wiki.openstreetmap.org/wiki/Potlatch2'"/>
+      <arg line="-package net.systemeD.controls 'Custom-built controls used in Potlatch2'" />
       <arg line="-package net.systemeD.halcyon 'The AS3 rendering library'" />
       <arg line="-package net.systemeD.halcyon.connection 'The connection to the main OSM server, and the entities'" />
       <arg line="-package net.systemeD.halcyon.connection.actions 'The undoable actions that apply to OSM data'" />
@@ -77,6 +83,7 @@
       <arg line="-package net.systemeD.potlatch2 'The OpenStreetMap editor'" />
       <arg line="-package net.systemeD.potlatch2.collections 'Singletons for handling collections loaded from config files'" />
       <arg line="-package net.systemeD.potlatch2.controller 'The various controller states that p2 can be in'" />
+      <arg line="-package net.systemeD.potlatch2.find 'The search dialog for jumping to another place'" />
       <arg line="-package net.systemeD.potlatch2.help 'The Help dialog'" />
       <arg line="-package net.systemeD.potlatch2.mapfeatures 'The engine behind the mapfeatures parsing'" />
       <arg line="-package net.systemeD.potlatch2.mapfeatures.editors 'The various widgets used in the Simple panel'" />
@@ -87,7 +94,8 @@
       <arg line="-package net.systemeD.potlatch2.tools 'Data manipulation tools'" />
       <arg line="-package net.systemeD.potlatch2.utils 'Data loading utilities'" />
       
-      <arg line="-left-frameset-width 300" />
+      <arg line="-left-frameset-width=300" />
+      <arg line="-allow-source-path-overlap=true" />
     </exec>
   </target>
 
@@ -101,7 +109,7 @@
 
         <fileset id="com_sources" dir="${basedir}/com/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="com_classes" pathsep=" " refid="com_sources">
+        <pathconvert property="com_classes" pathsep="," refid="com_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -111,7 +119,7 @@
         <!-- Get the list of all files in the org directory -->
         <fileset id="org_sources" dir="${basedir}/org/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="org_classes" pathsep=" " refid="org_sources">
+        <pathconvert property="org_classes" pathsep="," refid="org_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -120,7 +128,7 @@
 
         <fileset id="it_sources" dir="${basedir}/it/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="it_classes" pathsep=" " refid="it_sources">
+        <pathconvert property="it_classes" pathsep="," refid="it_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -129,7 +137,7 @@
 
         <fileset id="hxasm_sources" dir="${basedir}/hxasm/" />
         <!-- convert the names of excluded classes to packages with class names -->
-        <pathconvert property="hxasm_classes" pathsep=" " refid="hxasm_sources">
+        <pathconvert property="hxasm_classes" pathsep="," refid="hxasm_sources">
                 <chainedmapper>
                         <globmapper from="${basedir}/*" to="*"/>
                         <mapper type="package" from="*.as" to="*"/>
@@ -173,7 +181,7 @@
        
       <!-- Sets java.awt.headless=true so font compilation works in headless environments -->
       <compiler.headless-server>true</compiler.headless-server>
-      <target-player>10.0.0</target-player>
+      <target-player>10.2.0</target-player>
      </mxmlc>
      
      <echo message="The ${test.application.name}.swf test runner has been created in ${test.bin.dir}" />
@@ -234,6 +242,7 @@
 
 
         <source-path path-element="${basedir}/l10n/locale/@{locale}"/>
+        <source-path path-element="${basedir}/l10n/locale/en_US"/>
         <include-resource-bundles>help_dialog</include-resource-bundles>
         <include-resource-bundles>p2_main</include-resource-bundles>
 
@@ -256,23 +265,44 @@
     </sequential>
   </macrodef>
 
-  <target name="buildLocales">
-    <echo>Building Localization .swf's</echo>
-    <compileLocale locale="en_US" />
-    <compileLocale locale="en_GB" />
-    <compileLocale locale="fr_FR" />
-    <compileLocale locale="de_DE" />
-    <compileLocale locale="pl_PL" />
+  <target name="makeLocalesList">
+    <ac:for param="dirname">
+      <path>
+        <dirset dir="${basedir}/l10n/locale/">
+          <include name="*"/>
+          <exclude name="bundles"/>
+        </dirset>
+      </path>
+      <sequential>
+        <ac:var name="localename" unset="true"/>
+        <basename property="localename" file="@{dirname}" />
+        <script language="javascript"><![CDATA[
+            if ((l = project.getProperty("locales.list")) != null) {
+               project.setUserProperty("locales.list", l+ "," +project.getProperty("localename"));
+            } else {
+               project.setUserProperty("locales.list", project.getProperty("localename"));
+            }
+        ]]></script>
+      </sequential>
+    </ac:for>
   </target>
 
+  <target name="buildLocales" depends="makeLocalesList">
+    <echo>Building Localization .swf's</echo>
+    <ac:for list="${locales.list}" keepgoing="true" param="localename">
+      <sequential>
+        <compileLocale locale="@{localename}" />
+      </sequential>
+    </ac:for>
+  </target>
 
   <target name="deployLocales" depends="buildLocales">
     <echo>Deploying the compiled swf and assets package for the given locales</echo>
-    <deployLocale locale="en_US" />
-    <deployLocale locale="en_GB" />
-    <deployLocale locale="fr_FR" />
-    <deployLocale locale="de_DE" />
-    <deployLocale locale="pl_PL" />
+    <ac:for list="${locales.list}" keepgoing="true" param="localename">
+      <sequential>
+        <deployLocale locale="@{localename}" />
+      </sequential>
+    </ac:for>
   </target>
 
 

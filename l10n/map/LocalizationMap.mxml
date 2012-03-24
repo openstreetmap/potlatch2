@@ -2,27 +2,39 @@
 <LocaleMap enableLog="false"
     xmlns:mx="http://www.adobe.com/2006/mxml"
     xmlns:factory="mx.core.*"
-    xmlns="library://ns.babelfx.org/l10n/flex/" >
+    xmlns="http://l10n.babelfx.org/" >
 
   <!-- Support for Locale ResourceBundle changes -->
   <mx:Script>
     <![CDATA[
-      import com.mindspace.l10n.commands.ExternalLocaleCommand;
+      import org.babelfx.commands.ExternalLocaleCommand;
+      import org.babelfx.events.LocaleEvent;
       import mx.resources.ResourceManager;
       import mx.resources.IResourceManager;
 
       import net.systemeD.potlatch2.help.HelpDialog;
+
       import net.systemeD.potlatch2.TagViewer;
       import net.systemeD.potlatch2.Toolbox;
+      import net.systemeD.potlatch2.StyleSelector;
+      import net.systemeD.potlatch2.BackgroundSelector;
+
+      import net.systemeD.potlatch2.save.OAuthPanel;
+      import net.systemeD.potlatch2.save.SaveDialog;
+
+      import net.systemeD.potlatch2.options.OptionsDialog;
 
       private function onLocaleChanged(event:Event):void {
           var rMngr : IResourceManager = ResourceManager.getInstance();
-          var sri : SmartResourceInjector = event.target as SmartResourceInjector;
+          var sri : ResourceInjector = event.target as ResourceInjector;
           var options : Array = [
                                   { label : rMngr.getString('p2_main','main.gps_data') },
                                   { label : rMngr.getString('p2_main','main.my_tracks') },
                                   { label : rMngr.getString('p2_main','main.clear_gps') }
                                 ];
+          // ** FIXME: If the locale is en_US, then the above rMngr.getString calls return null.
+          //           Conversely, with any locale, the actual Label of gpsButton is never
+          //           updated and keeps showing 'GPS'.
 
           // Iterate all view instances and inject new dataProvider
           for each (var inst:potlatch2 in sri.targetInstances) {
@@ -42,42 +54,113 @@
   </commandFactory>
 
   <!--
-  SmartResourceInjectors for targeted class instantiations. Instead of dependency injection of UI instances,
-  we use SRI(s) here to remove any need to know view hierarchy relationships... we simply want a reference
+  ResourceInjectors(at v2) for targeted class instantiations. Instead of dependency injection of UI instances,
+  we use RI(s) here to remove any need to know view hierarchy relationships... we simply want a reference
   to the UI instance when ready.
   -->
 
-  <SmartResourceInjector bundleName="help_dialog" target="{HelpDialog}">
-    <ResourceProxy property="gettingStarted.text" key="help.gettingStarted" />
-    <ResourceProxy property="welcome.label" key="help.welcome" />
-  </SmartResourceInjector>
+  <ResourceInjector bundleName="help_dialog" target="{HelpDialog}">
+    <ResourceSetter property="gettingStarted.text" key="help.gettingStarted" />
+    <ResourceSetter property="welcome.label" key="help.welcome" />
+    <ResourceSetter property="whyOpenStreetMap.htmlText" key="help.whyOpenstreetmap" />
+    <ResourceSetter property="activeMembers.htmlText" key="help.activeMembers" />
+    <ResourceSetter property="newMembersText.htmlText" key="help.newMembers" />
+    <!-- wanna call loaderInfo.parameters["site_name"] or getIntroText() -->
+    <!-- <ResourceSetter property="introText.htmlText" key="help.introText" parameters="that"/> -->
+    <ResourceSetter property="introduction.label" key="help.introduction" />
+    <ResourceSetter property="Controls.label" key="help.controls" />
+    <ResourceSetter property="interfaceControls.label" key="help.interfaceControls"/>
+    <ResourceSetter property="background.label" key="help.background"/>
+    <ResourceSetter property="mapBackground.htmlText" key="help.mapBackground"/>
+    <ResourceSetter property="mapStyle.label" key="help.mapStyle"/>
+    <ResourceSetter property="colourStyle.htmlText" key="help.colourStyle"/>
+    <ResourceSetter property="gps.label" key="help.gps"/>
+    <ResourceSetter property="createOsmMap.htmlText" key="help.createOsmMap"/>
+    <ResourceSetter property="undoRedo.label" key="help.undoRedo" />
+    <ResourceSetter property="madeMistake.htmlText" key="help.madeMistake" />
+    <ResourceSetter property="help.label" key="help.help" />
+    <ResourceSetter property="guideInfomation.htmlText" key="help.guideInfomation" />
+    <ResourceSetter property="save.label" key="help.save" />
+ <!--   <ResourceSetter property="saveText.htmlText" key="help.saveText" />    -->
+    <ResourceSetter property="addingFeatures.label" key="help.addingFeatures" />
+    <ResourceSetter property="addingFeaturesText.htmlText" key="help.addingFeaturesText" />
+    <ResourceSetter property="editBeg.label" key="help.editBeg" />
+    <ResourceSetter property="editingFeatures.label" key="help.editingFeatures" />
+    <ResourceSetter property="editingFeaturesText.htmlText" key="help.editingFeaturesText" />
+    <ResourceSetter property="editAdv.label" key="help.editAdv" />
+    <ResourceSetter property="editingFeaturesAdv.label" key="help.editingFeaturesAdv"/>
+    <ResourceSetter property="editingFeaturesAdvText.htmlText" key="help.editingFeaturesAdvText"/>
+    <ResourceSetter property="tag.label" key="help.tag" />
+    <ResourceSetter property="taggingFeatures.label" key="help.taggingFeatures" />
+    <ResourceSetter property="taggingFeaturesText.htmlText" key="help.taggingFeaturesText" />
+    <ResourceSetter property="shortcuts.label" key="help.shortcuts" />
+    <ResourceSetter property="keyboardShortcuts.label" key="help.keyboardShortcuts" />
+  </ResourceInjector>
 
-  <SmartResourceInjector bundleName="p2_main" target="{potlatch2}" localeChange="onLocaleChanged(event)">
-    <ResourceProxy property="bgButton.label" key="main.background" />
-    <ResourceProxy property="styleButton.label" key="main.map_style" />
-    <ResourceProxy property="undo.label" key="main.undo" />
-    <ResourceProxy property="redo.label" key="main.redo" />
-    <ResourceProxy property="helpButton.label" key="main.help" />
-    <ResourceProxy property="optionsButton.label" key="main.options" />
-    <ResourceProxy property="saveButton.label" key="main.save" />
-  </SmartResourceInjector>
+  <ResourceInjector bundleName="p2_main" target="{potlatch2}" localeChange="onLocaleChanged(event);">
+    <ResourceSetter property="bgButton.label" key="main.background" />
+    <ResourceSetter property="styleButton.label" key="main.map_style" />
+    <ResourceSetter property="undo.label" key="main.undo" />
+    <ResourceSetter property="redo.label" key="main.redo" />
+    <ResourceSetter property="helpButton.label" key="main.help" />
+    <ResourceSetter property="optionsButton.label" key="main.options" />
+    <ResourceSetter property="saveButton.label" key="main.save" />
+    <ResourceSetter property="gpsButton.label" key="main.gpsButton" />
+  <!--   These are setted on onLocaleChanged()
+    <ResourceSetter property="gpsData.label" key="main.gps_data" />
+    <ResourceSetter property="myTrack.label" key="main.my_track" />
+    <ResourceSetter property="clearGps.label" key="main.clear_gps" />
+    -->
+  </ResourceInjector>
 
-  <SmartResourceInjector bundleName="p2_main" target="{TagViewer}">
-    <ResourceProxy property="dndPrompt" key="tag_viewer.dndprompt" />
-  </SmartResourceInjector>
+  <ResourceInjector bundleName="p2_main" target="{OAuthPanel}">
+    <ResourceSetter property="gotLinkBox.text" key="oauth.gotLinkBox" />
+    <ResourceSetter property="authorized.text" key="oauth.authorized" />
+    <ResourceSetter property="deniedLabel.text" key="oauth.deniedLabel" />
+    <ResourceSetter property="rememberMe.label" key="oauth.rememberMe" />
+    <ResourceSetter property="permFail.htmlText" key="oauth.permFail" />
+    <ResourceSetter property="tempFail.text" key="oauth.tempFail" />
+    <ResourceSetter property="tryAccessButton.label" key="oauth.tryAccessButton" />
+    <ResourceSetter property="cancelButton.label" key="oauth.cancelButton" />
+  </ResourceInjector>
 
-  <SmartResourceInjector bundleName="p2_main" target="{Toolbox}">
-    <ResourceProxy property="deleteNode" key="toolbox.delete_node" />
-    <ResourceProxy property="deleteWay" key="toolbox.delete_way" />
-    <ResourceProxy property="deleteArea" key="toolbox.delete_area" />
-    <ResourceProxy property="deleteItem" key="toolbox.delete_item" />
-    <ResourceProxy property="reverseButton.toolTip" key="toolbox.reverse_direction" />
-    <ResourceProxy property="splitButton.toolTip" key="toolbox.split_way" />
-    <ResourceProxy property="mergeButton.toolTip" key="toolbox.merge_ways" />
-    <ResourceProxy property="straightenButton.toolTip" key="toolbox.straighten_way" />
-    <ResourceProxy property="circulariseButton.toolTip" key="toolbox.make_circular" />
-    <ResourceProxy property="quadrilateraliseButton.toolTip" key="toolbox.make_right_angled" />
-    <ResourceProxy property="parralleliseButton.toolTip" key="toolbox.create_parrallel_way" />
-  </SmartResourceInjector>
+  <ResourceInjector bundleName="p2_main" target="{TagViewer}">
+    <ResourceSetter property="dndPrompt" key="tag_viewer.dndprompt" />
+  </ResourceInjector>
 
+  <ResourceInjector bundleName="p2_main" target="{Toolbox}">
+    <ResourceSetter property="deleteNode" key="toolbox.delete_node" />
+    <ResourceSetter property="deleteWay" key="toolbox.delete_way" />
+    <ResourceSetter property="deleteArea" key="toolbox.delete_area" />
+    <ResourceSetter property="deleteItem" key="toolbox.delete_item" />
+    <ResourceSetter property="reverseButton.toolTip" key="toolbox.reverse_direction" />
+    <ResourceSetter property="splitButton.toolTip" key="toolbox.split_way" />
+    <ResourceSetter property="mergeButton.toolTip" key="toolbox.merge_ways" />
+    <ResourceSetter property="straightenButton.toolTip" key="toolbox.straighten_way" />
+    <ResourceSetter property="circulariseButton.toolTip" key="toolbox.make_circular" />
+    <ResourceSetter property="quadrilateraliseButton.toolTip" key="toolbox.make_right_angled" />
+    <ResourceSetter property="parralleliseButton.toolTip" key="toolbox.create_parrallel_way" />
+  </ResourceInjector>
+
+  <ResourceInjector bundleName="p2_main" target="{StyleSelector}">
+    <ResourceSetter property="editButton.label" key="styleSelector.editButton" />
+  </ResourceInjector>
+
+  <ResourceInjector bundleName="p2_main" target="{BackgroundSelector}">
+    <ResourceSetter property="dim.label" key="backgroundSelector.dim" />
+    <ResourceSetter property="sharpen.label" key="backgroundSelector.sharpen" />
+    <ResourceSetter property="editButton.label" key="backgroundSelector.editButton" />
+    <ResourceSetter property="vectorButton.label" key="backgroundSelector.vectorButton" />
+  </ResourceInjector>
+
+  <ResourceInjector bundleName="p2_main" target="{SaveDialog}">
+    <ResourceSetter property="editDescription.text" key="save.editDescription" />
+    <ResourceSetter property="commentLabel.label" key="save.commentLabel" />
+  </ResourceInjector>
+
+  <ResourceInjector bundleName="p2_main" target="{OptionsDialog}">
+    <ResourceSetter property="tbcheck.label" key="options.tbcheck" />
+    <ResourceSetter property="cursorcheck.label" key="options.cursorcheck" />
+    <ResourceSetter property="ok.label" key="option.ok" />
+  </ResourceInjector>
 </LocaleMap>

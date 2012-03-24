@@ -13,6 +13,7 @@ package net.systemeD.potlatch2.controller {
 	import flash.ui.Keyboard;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
+	import mx.core.FlexGlobals;
 	
     /** Represents a particular state of the controller, such as "dragging a way" or "nothing selected". Key methods are 
     * processKeyboardEvent and processMouseEvent which take some action, and return a new state for the controller. 
@@ -76,9 +77,11 @@ package net.systemeD.potlatch2.controller {
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			var editableLayer:MapPaint=controller.map.editableLayer;								// shorthand for this method
 			switch (event.keyCode) {
+				case 48:	removeTags(); break;													// 0 - remove all tags
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
 				case 67:	editableLayer.connection.closeChangeset(); break;						// C - close changeset
 				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
+				case 71:	FlexGlobals.topLevelApplication.trackLoader.load(); break;				// G - GPS tracks **FIXME: move from Application to Map
                 case 72:    showHistory(); break;                                                   // H - History
 				case 83:	SaveManager.saveChanges(editableLayer.connection); break;				// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
@@ -111,9 +114,14 @@ package net.systemeD.potlatch2.controller {
 			if ( paint && paint.isBackground ) {
 				if (event.type == MouseEvent.MOUSE_DOWN && ((event.shiftKey && event.ctrlKey) || event.altKey) ) {
 					// alt-click to pull data out of vector background layer
-					var newSelection:Array=[];
-					if (selection.indexOf(entity)==-1) { selection=[entity]; }
-					for each (var entity:Entity in selection) {
+					// extend the current selection (alt-ctrl) or create a new one (alt)?
+					var newSelection:Array=(event.altKey && event.ctrlKey) ? _selection : [];
+					// create a list of the alt-clicked item, plus anything else already selected (assuming it's in the same layer!)
+					var itemsToPullThrough:Array=[]
+					if (_selection.length && firstSelected.connection==entity.connection) itemsToPullThrough=_selection.slice();
+					if (itemsToPullThrough.indexOf(entity)==-1) itemsToPullThrough.push(entity);
+					// make sure they're unhighlighted, and pull them through
+					for each (var entity:Entity in itemsToPullThrough) {
 						paint.setHighlight(entity, { hover:false, selected: false });
 						if (entity is Way) paint.setHighlightOnNodes(Way(entity), { selectedway: false });
 						newSelection.push(paint.pullThrough(entity,controller.map.editableLayer));
@@ -135,7 +143,7 @@ package net.systemeD.potlatch2.controller {
 				if ( entity is Node && selectedWay && entity.hasParent(selectedWay) ) {
 					// select node within this way
 					return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
-				} else if ( controller.keyDown(Keyboard.SPACE) ) {
+				} else if ( controller.spaceHeld ) {
 					// drag the background imagery to compensate for poor alignment
 					return new DragBackground(event);
 				} else if (entity && selection.indexOf(entity)>-1) {
@@ -195,6 +203,20 @@ package net.systemeD.potlatch2.controller {
                         controller.updateSelectionUI();
 			object.resume();
 		}
+		
+		/** Remove all tags from current selection. */
+		protected function removeTags():void {
+			if (selectCount==0) return;
+			var undo:CompositeUndoableAction = new CompositeUndoableAction("Remove tags");
+			for each (var item:Entity in _selection) {
+				item.suspend();
+				var tags:Array=item.getTagArray();
+				for each (var tag:Tag in tags) item.setTag(tag.key,null,undo.push);
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+			controller.updateSelectionUI();
+			for each (item in _selection) item.resume();
+		}
 
         /** Show the history dialog, if only one object is selected. */
         protected function showHistory():void {
@@ -221,13 +243,16 @@ package net.systemeD.potlatch2.controller {
 
 		/** Revert all selected items to previously saved state, via a dialog box. */
 		protected function revertSelection():void {
-			if (selectCount==0) return;
-			Alert.show("Revert selected items to the last saved version, discarding your changes?","Are you sure?",Alert.YES | Alert.CANCEL,null,revertHandler);
+			var revertable:Boolean=false;
+			for each (var item:Entity in _selection)
+				if (item.id>0) revertable=true;
+			if (revertable)
+				Alert.show("Revert selected items to the last saved version, discarding your changes?","Are you sure?",Alert.YES | Alert.CANCEL,null,revertHandler,null,Alert.CANCEL);
 		}
 		protected function revertHandler(event:CloseEvent):void {
 			if (event.detail==Alert.CANCEL) return;
 			for each (var item:Entity in _selection) {
-				item.connection.loadEntity(item);
+				if (item.id>0) item.connection.loadEntity(item);
 			}
 		}
 
@@ -305,15 +330,62 @@ package net.systemeD.potlatch2.controller {
 			if (_selection.length<2) { return false; }
 			var endNodes:Object={};
 			for each (var item:Entity in _selection) {
-				if (item is Way && !Way(item).isArea()) {
-					if (endNodes[Way(item).getNode(0).id]) return true;
-					if (endNodes[Way(item).getLastNode().id]) return true;
-					endNodes[Way(item).getNode(0).id]=true;
-					endNodes[Way(item).getLastNode().id]=true;
+				if (item is Way && !Way(item).isArea() && Way(item).length>0) {
+					var startNode:int=Way(item).getNode(0).id;
+					var finishNode:int=Way(item).getLastNode().id;
+					if (endNodes[startNode ]) return true;
+					if (endNodes[finishNode]) return true;
+					endNodes[startNode ]=true;
+					endNodes[finishNode]=true;
 				}
 			}
 			return false;
 		}
+
+		/** Identify the inners and outer from the current selection for making a multipolygon. */
+		
+		public function multipolygonMembers():Object {
+			if (_selection.length<2) { return {}; }
+
+			var entity:Entity;
+			var relation:Relation;
+			var outer:Way;
+			var inners:Array=[];
+
+			// If there's an existing outer in the selection, use that
+			for each (entity in selection) {
+				if (!(entity is Way)) return {};
+				var r:Array=entity.findParentRelationsOfType('multipolygon','outer');
+				if (r.length) { outer=Way(entity); relation=r[0]; }
+			}
+
+			// Otherwise, find the way with the biggest area
+			var largest:Number=0;
+			if (!outer) {
+				for each (entity in selection) {
+					if (!(entity is Way)) return {};
+					if (!Way(entity).isArea()) return {};
+					var props:Object=layer.wayUIProperties(entity as Way);
+					if (props.patharea>largest) { outer=Way(entity); largest=props.patharea; }
+				}
+			}
+			if (!outer) return {};
+			
+			// Identify the inners
+			for each (entity in selection) {
+				if (entity==outer) continue;
+				if (!(entity is Way)) return {};
+				if (!Way(entity).isArea()) return {};
+				var node:Node=Way(entity).getFirstNode();
+				if (outer.pointWithin(node.lon,node.lat)) inners.push(entity);
+			}
+			if (inners.length==0) return {};
+			
+			return { outer: outer,
+			         inners: inners,
+			         relation: relation }
+		}
+
 
 		// Selection setters
 

@@ -7,22 +7,27 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.AttentionEvent;
     import net.systemeD.halcyon.MapEvent;
     import net.systemeD.halcyon.connection.actions.*;
+    import net.systemeD.halcyon.connection.bboxes.*;
     import net.systemeD.halcyon.Globals;
+    import net.systemeD.halcyon.styleparser.CSSTransform;
 
 	public class Connection extends EventDispatcher {
 
 		public var name:String;
 		public var statusFetcher:StatusFetcher;
+		public var inlineStatus:Boolean = false;
+		public var cssTransform:CSSTransform;
         protected var apiBaseURL:String;
         protected var policyURL:String;
         protected var params:Object;
 
-		public function Connection(cname:String,api:String,policy:String,initparams:Object=null) {
+		public function Connection(cname:String,api:String,policy:String,initparams:Object=null,transform:CSSTransform=null) {
 			initparams = (initparams!=null ? initparams:{});
 			name=cname;
 			apiBaseURL=api;
 			policyURL=policy;
 			params=initparams;
+			cssTransform=transform;
 		}
 
         public function getParam(name:String, defaultValue:String):String {
@@ -77,6 +82,10 @@ package net.systemeD.halcyon.connection {
 		public static var RESUME_REDRAW:String = "resume_redraw";
         public static var TRACES_LOADED:String = "traces_loaded";
 
+		/** maximum number of /map calls to request for each pan/zoom */
+		protected const MAX_BBOXES:uint=3;
+		protected var fetchSet:FetchSet = new FetchSet();
+
         // store the data we download
         private var negativeID:Number = -1;
         private var nodes:Object = {};
@@ -93,7 +102,6 @@ package net.systemeD.halcyon.connection {
         private var traces:Vector.<Trace> = new Vector.<Trace>();
         private var nodePositions:Object = {};
         protected var traces_loaded:Boolean = false;
-		private var loadedBboxes:Array = [];
 
 		/** maximum number of ways to keep in memory before purging */
 		protected const MAXWAYS:uint=3000;
@@ -391,29 +399,12 @@ package net.systemeD.halcyon.connection {
 			return modified;
 		}
 
-		// Keep track of the bboxes we've loaded
-
-		/** Has the data within this bbox already been loaded? */
-		protected function isBboxLoaded(left:Number,right:Number,top:Number,bottom:Number):Boolean {
-			var l:Number,r:Number,t:Number,b:Number;
-			for each (var box:Array in loadedBboxes) {
-				l=box[0]; r=box[1]; t=box[2]; b=box[3];
-				if (left>=l && left<=r && right>=l && right<=r && top>=b && top<=t && bottom>=b && bottom<=t) {
-					return true;
-				}
-			}
-			return false;
-		}
-		/** Mark that bbox is loaded */
-		protected function markBboxLoaded(left:Number,right:Number,top:Number,bottom:Number):void {
-			if (isBboxLoaded(left,right,top,bottom)) return;
-			loadedBboxes.push([left,right,top,bottom]);
-		}
 		/** Purge all data if number of ways exceeds limit */
 		public function purgeIfFull(left:Number,right:Number,top:Number,bottom:Number):void {
 			if (waycount<=MAXWAYS) return;
 			purgeOutside(left,right,top,bottom);
-			loadedBboxes=[[left,right,top,bottom]];
+			fetchSet=new FetchSet();
+			fetchSet.add(new Box().fromBbox(left,bottom,right,top));
 		}
 
 		// Changeset tracking
@@ -580,6 +571,9 @@ package net.systemeD.halcyon.connection {
 
         // these are functions that the Connection implementation is expected to
         // provide. This class has some generic helpers for the implementation.
+        /**
+        * Load data for the bounding box given. Usually called in response to pan / zoom requests
+        */
 		public function loadBbox(left:Number, right:Number,
 								top:Number, bottom:Number):void {
 	    }

@@ -23,7 +23,7 @@ package net.systemeD.potlatch2.controller {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if (event.type==MouseEvent.MOUSE_UP && (focus==null || (paint && paint.isBackground)) && map.dragstate!=map.DRAGGING) {
+			if (event.type==MouseEvent.MOUSE_UP && (focus==null || (paint && paint.isBackground)) && map.dragstate!=map.DRAGGING && map.dragstate!=map.SWALLOW_MOUSEUP) {
 				map.dragstate=map.NOT_DRAGGING;
 				// ** FIXME: BeginWayAction ought to be a discrete class
 				var undo:CompositeUndoableAction = new BeginWayAction();

@@ -4,8 +4,12 @@ package net.systemeD.halcyon.connection {
     import net.systemeD.halcyon.connection.Node;
     import net.systemeD.halcyon.connection.UndoableAction;
 
+    [RunWith("org.mockito.integrations.flexunit4.MockitoClassRunner")]
     public class NodeTest {
 
+      [Mock(type="net.systemeD.halcyon.connection.Connection", argsList="constructorArgs")]
+      public var connection:Connection;
+      public var constructorArgs:Array = ["name", "api", "policy"];
     
       [Test]
       public function dummy():void {
@@ -14,13 +18,13 @@ package net.systemeD.halcyon.connection {
 
       [Test]
       public function newNode():void {
-          var n:Node = new Node(1,1,{},true,5,10);
+          var n:Node = new Node(connection,1,1,{},true,5,10);
           Assert.assertEquals(n.lat, 5);
       }
 
       [Test]
       public function moveNode():void {
-          var n:Node = new Node(1,1,{},true,5,10);
+          var n:Node = new Node(connection,1,1,{},true,5,10);
           n.setLatLon(14,41, function(action:UndoableAction):void { action.doAction(); });
           Assert.assertEquals(n.lat, 14);
           Assert.assertEquals(n.lon, 41);
@@ -28,7 +32,7 @@ package net.systemeD.halcyon.connection {
 
       [Test]
       public function within():void {
-          var n:Node = new Node(1,1,{},true,5,10);
+          var n:Node = new Node(connection,1,1,{},true,5,10);
           Assert.assertTrue(n.within(9,11,6,4));
           Assert.assertFalse(n.within(9,11,1,2));
           Assert.assertFalse(n.within(11,12,6,4));

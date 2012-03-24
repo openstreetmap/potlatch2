@@ -17,7 +17,7 @@ package net.systemeD.halcyon {
 		public static const NUDGE_BACKGROUND:String = "nudge_background";
         /** Map has been created and is ready, although data is not yet downloaded. */
         public static const INITIALISED:String = "initialized";
-		/** Backrgound imagery has changed to one with attribution that must not be obscured. */
+		/** Background imagery has changed to one with attribution that must not be obscured. */
 		public static const BUMP:String = "bump";
 		public static const MOUSE_MOVE:String="mouse_move";
 		public static const ERROR:String = "error";				// ** FIXME - this should be a dedicated ErrorEvent class

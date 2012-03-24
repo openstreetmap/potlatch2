@@ -90,7 +90,7 @@ package net.systemeD.halcyon.connection {
         public function insertNode(index:uint, node:Node, performAction:Function):void {
 			if (index>0 && getNode(index-1)==node) return;
 			if (index<nodes.length-1 && getNode(index)==node) return;
-			performAction(new AddNodeToWayAction(this, node, nodes, index));
+			performAction(new AddNodeToWayAction(this, node, nodes, index, false));
         }
 
         public function appendNode(node:Node, performAction:Function):uint {
@@ -156,6 +156,39 @@ package net.systemeD.halcyon.connection {
         public function reverseNodes(performAction:Function):void {
             performAction(new ReverseNodesAction(this, nodes));
         }
+
+		
+		/** Is a point within this way?
+		* From http://as3.miguelmoraleda.com/2009/10/28/point-in-polygon-with-actionscript-3punto-dentro-de-un-poligono-con-actionscript-3/
+		*/
+
+		public function pointWithin(lon:Number,lat:Number):Boolean {
+			if (!isArea()) return false;
+			
+			var counter:uint = 0;
+			var p1x:Number = nodes[0].lon;
+			var p1y:Number = nodes[0].lat;
+			var p2x:Number, p2y:Number;
+ 
+			for (var i:uint = 1; i <= length; i++) {
+				p2x = nodes[i % length].lon;
+				p2y = nodes[i % length].lat;
+				if (lat > Math.min(p1y, p2y)) {
+					if (lat <= Math.max(p1y, p2y)) {
+						if (lon <= Math.max(p1x, p2x)) {
+							if (p1y != p2y) {
+								var xinters:Number = (lat - p1y) * (p2x - p1x) / (p2y - p1y) + p1x;
+								if (p1x == p2x || lon <= xinters) counter++;
+							}
+						}
+					}
+				}
+				p1x = p2x;
+				p1y = p2y;
+			}
+			if (counter % 2 == 0) { return false; }
+			else { return true; }
+		}
 
         /**
          * Finds the 1st way segment which intersects the projected

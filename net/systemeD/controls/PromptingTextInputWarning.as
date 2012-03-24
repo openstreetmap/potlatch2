@@ -3,6 +3,12 @@ package net.systemeD.controls {
 	import flash.display.DisplayObject;
 	import mx.controls.Image;
 
+    /**
+    * The PromptingTextInputWarning is a custom PromptingTextInput component that highlights values containing semicolons.
+    * It does so using colour and a warning icon. Simply use in place of a flexlib PromptingTextInput component.
+    *
+    * @see DataGridWarningField
+    */
 	public class PromptingTextInputWarning extends PromptingTextInput {
 
 		private var _image:Image;

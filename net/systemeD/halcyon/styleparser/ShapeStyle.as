@@ -4,7 +4,7 @@ package net.systemeD.halcyon.styleparser {
 	
 	public class ShapeStyle extends Style {
 
-		public var width:Number=0;
+		public var width:Number;
 		public var color:Number;
 		public var opacity:Number;
 		public var dashes:Array=[];
@@ -32,7 +32,7 @@ package net.systemeD.halcyon.styleparser {
 		}
 		
 		override public function get drawn():Boolean {
-			return (fill_image || !isNaN(fill_color) || width || casing_width);
+			return (fill_image || !isNaN(fill_color) || !isNaN(width) || casing_width);
 		}
 
 		public function applyStrokeStyle(g:Graphics):void {

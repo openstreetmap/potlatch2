@@ -21,7 +21,7 @@
 	    <mx:LinkButton id="link"
 	        label="http://oauth.dev.openstreetmap.org/oauth/authorize?somekey"
 	        click="openURL(authoriseURL); tryAccessButton.enabled=true;"/>
-	    <mx:Text width="100%">
+	    <mx:Text id="authorized" width="100%">
 	      <mx:text>Once you've authorised the access click the 'Try Access' button below</mx:text> <!-- ' -->
 	    </mx:Text>
 	    <mx:Text styleName="failText" visible="false" id="deniedLabel">
@@ -34,7 +34,7 @@
 	</mx:VBox>
 	
 	<mx:VBox id="permFailPanel" width="100%" height="100%">
-	  <mx:Text styleName="failText" width="100%" condenseWhite="true">
+	  <mx:Text id="permFail" styleName="failText" width="100%" condenseWhite="true">
 	    <mx:htmlText><![CDATA[
 	      <p>The server refused this application's credentials -- an authorisation link
 	      could not be obtained.
@@ -47,7 +47,7 @@
 	</mx:VBox>
 	
 	<mx:VBox id="tempFailPanel" width="100%" height="100%">
-	  <mx:Text width="100%">
+	  <mx:Text id="tempFail" width="100%">
 	    <mx:text>
 	      There was a problem contacting the server to get authorisation.
 	      This may be a temporary error, try again later.
@@ -63,7 +63,7 @@
 	        indeterminate="true"/>
         <mx:Spacer width="100%"/>
 
-	    <mx:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+	    <mx:Button id="cancelButton" label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
 	    <mx:Button id="tryAccessButton" label="Try Access" click="getAccessToken()" enabled="false" styleName="titleWindowButton" />
 	</mx:ControlBar>
 	

@@ -64,6 +64,7 @@ package net.systemeD.halcyon {
 		public const NOT_DRAGGING:uint=0;				//  |
 		public const NOT_MOVED:uint=1;					//  |
 		public const DRAGGING:uint=2;					//  |
+		public const SWALLOW_MOUSEUP:uint=3;			//  |
 		/** How far the map can be dragged without actually triggering a pan. */
 		public const TOLERANCE:uint=7;					//  |
 		
@@ -218,13 +219,14 @@ package net.systemeD.halcyon {
             }
 		}
 
-        /** Download map data. Data is downloaded for the connection and the vector layers, where supported.
+        /** Download map data. Data is downloaded for the currently visible layers
         * The bounding box for the download is taken from the current map edges.
         */
 		public function download():void {
-			this.dispatchEvent(new MapEvent(MapEvent.DOWNLOAD, {minlon:edge_l, maxlon:edge_r, maxlat:edge_t, minlat:edge_b} ));
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
-				getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+				if(getLayerAt(i).visible == true) {
+                    getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
+                }
 		}
 
         // Handle mouse events on ways/nodes
@@ -388,7 +390,8 @@ package net.systemeD.halcyon {
 		/** Prepare for being dragged by recording start time and location of mouse. */
 		public function mouseDownHandler(event:MouseEvent):void {
 			if (!_draggable) { return; }
-			dragstate=NOT_MOVED;
+			if (dragstate==DRAGGING) { moveMap(x,y); dragstate=SWALLOW_MOUSEUP; }	// cancel drag if mouse-up occurred outside the window (thanks, Safari)
+			else { dragstate=NOT_MOVED; }
 			lastxmouse=stage.mouseX; downX=stage.mouseX;
 			lastymouse=stage.mouseY; downY=stage.mouseY;
 			downTime=new Date().getTime();
@@ -427,6 +430,7 @@ package net.systemeD.halcyon {
 
 		private function everyFrame(event:Event):void {
 			if (tileset) { tileset.serviceQueue(); }
+			if (stage.focus && !stage.contains(stage.focus)) { stage.focus=stage; }
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -443,22 +447,6 @@ package net.systemeD.halcyon {
 				case Keyboard.RIGHT:	moveMap(-mapwidth/2,0); break;   // right cursor
 				case Keyboard.DOWN:	moveMap(0,-mapheight/2); break;      // down cursor
 			}
-		}
-
-		// ------------------------------------------------------------------------------------------
-		// Debugging
-		
-		public function clearDebug():void {
-			if (!Globals.vars.hasOwnProperty('debug')) return;
-			Globals.vars.debug.text='';
-		}
-			
-		public function addDebug(text:String):void {
-			trace(text);
-			if (!Globals.vars.hasOwnProperty('debug')) return;
-			if (!Globals.vars.debug.visible) return;
-			Globals.vars.debug.appendText(text+"\n");
-			Globals.vars.debug.scrollV=Globals.vars.debug.maxScrollV;
 		}
 
 	}

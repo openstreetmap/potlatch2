@@ -18,7 +18,7 @@ package net.systemeD.potlatch2.controller {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey ) {
+			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey && !event.altKey ) {
 				// modify selection
 				layer.setHighlight(entity, { selected: toggleSelection(entity) });
 				controller.updateSelectionUI();
@@ -34,7 +34,8 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if (event.keyCode==74) return mergeWays();	// 'J'
+			if (event.keyCode==74) return mergeWays();			// 'J' (join)
+			if (event.keyCode==72) return createMultipolygon();	// 'H' (hole)
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
 		}
@@ -104,7 +105,37 @@ package net.systemeD.potlatch2.controller {
 			}
 			return false;
 		}
+		
+		/** Create multipolygon from selection, or add to existing multipolygon. */
+		
+		public function createMultipolygon():ControllerState {
+			var inner:Way;
+			var multi:Object=multipolygonMembers();
+			if (!multi.outer) {
+				controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't make the multipolygon"));
+				return this;
+			}
 
+			// If relation exists, add any inners that aren't currently present
+			if (multi.relation) {
+				var action:CompositeUndoableAction = new CompositeUndoableAction("Add to multipolygon");
+				for each (inner in multi.inners) {
+					if (!multi.relation.hasMemberInRole(inner,'inner'))
+						multi.relation.appendMember(new RelationMember(inner,'inner'),action.push);
+				}
+				MainUndoStack.getGlobalStack().addAction(action);
+				
+			// Otherwise, create whole new relation
+			} else {
+				var memberlist:Array=[new RelationMember(multi.outer,'outer')];
+				for each (inner in multi.inners) 
+					memberlist.push(new RelationMember(inner,'inner'));
+				layer.connection.createRelation( { type: 'multipolygon' }, memberlist, MainUndoStack.getGlobalStack().addAction);
+			}
+
+			return new SelectedWay(multi.outer);
+		}
+		
 		override public function enterState():void {
 			selection=initSelection.concat();
 			for each (var entity:Entity in selection) {

@@ -18,7 +18,7 @@
 	</mx:HBox>
 
 	<mx:HBox>
-	<mx:Button label="Edit..." click="FlexGlobals.topLevelApplication.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
+	<mx:Button id="editLabel" label="Edit..." click="FlexGlobals.topLevelApplication.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
 	<mx:Button label="Vector file..." click="FlexGlobals.topLevelApplication.bgButton.close(); new VectorSourceDialog().init();" />
 	</mx:HBox>
 

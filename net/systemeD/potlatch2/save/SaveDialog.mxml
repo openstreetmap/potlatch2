@@ -21,14 +21,14 @@
     <mx:VBox width="100%" height="100%" verticalGap="0">
       <mx:ViewStack id="tagStack" width="100%" height="100%">
         <mx:VBox width="100%" height="100%" label="Simple">
-          <mx:Text width="100%">
+          <mx:Text id="editDescription" width="100%">
             <mx:text>
                Please enter a description of your edits. This will be used to give other
                mappers an idea of what changes you are making.
             </mx:text>
           </mx:Text>
-          <mx:Label text="Comment:"/>
-          <mx:TextArea id="comment" width="100%" height="100%" change="commentChanged(event);" textInput="monitorEnter(event);" />
+          <mx:Label id="commentLabel" text="Comment:"/>
+          <mx:TextArea id="comment" maxChars="255" width="100%" height="100%" change="commentChanged(event);" textInput="monitorEnter(event);" />
         </mx:VBox>
         
         <mx:VBox width="100%" height="100%" label="Advanced">

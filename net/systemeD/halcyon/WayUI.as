@@ -218,6 +218,7 @@ package net.systemeD.halcyon {
 				centroid_x=c[0];
 				centroid_y=c[1];
 			}
+			patharea=Math.abs(patharea);
 		}
 
 		// ------------------------------------------------------------------------------------------
@@ -346,7 +347,7 @@ package net.systemeD.halcyon {
 //				     else { nodetags['_heading']=(heading[i]+heading[i-1])/2; }
 				// ** FIXME - heading isn't currently applied
 				nodeStateClasses['junction']=(node.numParentWays>1);
-				paint.createNodeUI(node,r,layer,nodeStateClasses);
+				paint.createNodeUI(node,false,r,layer,nodeStateClasses);
 			}
 			if (!drawn) { return false; } // If not visible, no hitzone.
 			
@@ -614,7 +615,7 @@ package net.systemeD.halcyon {
 		/* Interaction */
         // TODO: can this be sped up? Hit testing for long ways (that go off the screen) seems to be very slow. */
 		public function hitTest(x:Number, y:Number):Way {
-			if (hitzone.hitTestPoint(x,y,true)) { return entity as Way; }
+			if (hitzone && hitzone.hitTestPoint(x,y,true)) { return entity as Way; }
 			return null;
 		}
 	}

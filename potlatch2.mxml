@@ -32,7 +32,7 @@
         <mx:WipeRight id="wipeIn" duration="250"/>
     </fx:Declarations>
 
-    <mx:ApplicationControlBar id="controlbar" dock="true">
+    <mx:ApplicationControlBar id="controlbar" dock="true" tabChildren="false" >
         <mx:Button label="Save" icon="@Embed('embedded/upload.svg')" disabledIcon="@Embed('embedded/upload_disabled.svg')" styleName="appBarButton"
 			click="SaveManager.saveChanges(theMap.editableLayer.connection);" id="saveButton" enabled="false"/>
         <mx:Button id="helpButton" label="Help" click="new HelpDialog().init();" styleName="appBarButton" />
@@ -48,7 +48,7 @@
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
         <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-		<mx:PopUpMenuButton id="gpsButton" styleName="appBarButton"
+		<mx:PopUpMenuButton id="gpsButton" label="GPS" styleName="appBarButton"
 		    itemClick="if (event.index==0) { trackLoader.load(); } 
 		          else if (event.index==1) { new MyGpxDialog().init(); } 
 		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
@@ -74,16 +74,16 @@
         <mx:Canvas id="map_area" resize="onResizeMap()"
             top="0" left="0" width="100%" height="100%" dragEnter="dragEnterHandler(event);" dragDrop="dragDropHandler(event);">
         </mx:Canvas>
-        <mx:Image source="@Embed('embedded/zoomIn.svg')" right="3" top="3" click="theMap.zoomIn();"
+        <mx:Image source="@Embed('embedded/zoomIn.svg')" left="5" top="5" click="theMap.zoomIn();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom in - currently z'+getScale()}" />
-        <mx:Image source="@Embed('embedded/zoomOut.svg')" right="3" top="20" click="theMap.zoomOut();"
+        <mx:Image source="@Embed('embedded/zoomOut.svg')" left="5" top="22" click="theMap.zoomOut();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="{'Zoom out - currently z'+getScale()}" />
-        <mx:Image source="@Embed('embedded/search.svg')" right="3" top="40" click="new FindDialog().init();"
+        <mx:Image source="@Embed('embedded/search.svg')" left="5" top="42" click="new FindDialog().init();"
             rollOverEffect="glowImage" rollOutEffect="unglowImage" toolTip="Find place" />
-        <mx:TextArea id="dataWorking" text="" right="20" top="3" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
+        <mx:TextArea id="dataWorking" text="" right="5" top="5" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="18"
             enabled="false" borderThickness="0"
             showEffect="{wipeIn}" hideEffect="{wipeOut}"/>
-        <mx:TextArea id="coordsbox" left="0" top="0" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="33"
+        <mx:TextArea id="coordsbox" left="25" top="5" disabledColor="black" backgroundDisabledColor="0xFFFFEA" height="33"
             width="57" enabled="false" borderThickness="0" visible="false"/>
 
     </mx:Canvas>
@@ -103,6 +103,7 @@
 		import net.systemeD.potlatch2.utils.*;
         import net.systemeD.potlatch2.mygpx.*;
 		import net.systemeD.controls.FloatingAlert;
+		import net.systemeD.controls.Spinner;
 		import mx.managers.PopUpManager;
 		import flash.system.Security;
 		import flash.net.*;
@@ -119,7 +120,7 @@
         import mx.managers.DragManager;
         import mx.core.DragSource;
         import mx.controls.Alert;
-        import com.mindspace.l10n.events.LocaleEvent;
+        import org.babelfx.events.LocaleEvent;
 
         public var theMap:Map;
         public var theController:EditController;
@@ -131,20 +132,24 @@
 
 		private var savecount:uint=0;
 		private var loadcount:uint=0;
+		private var spinner:Spinner;
 		private var saveLabel:String='Save';
 		private var saveTimer:Timer;
 
         include "version.as";
 
 		private function startInit():void {
-            /* For reasons that I don't yet understand, the en_US locale is the default and doesn't work at all. */
-            /* Change this to another locale (e.g. fr_FR) to see the differences. */
-            if (loaderInfo.parameters['locale']) {
-              dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE,loaderInfo.parameters['locale']));
-            }
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
 			loader.load(new URLRequest("FontLibrary.swf"));
+
+            if (loaderInfo.parameters['locale'] && loaderInfo.parameters['locale']!='en_US') {
+                // we don't bother with localisation if the user is en_US, as P2 is in English by default
+                Globals.vars.locale = loaderInfo.parameters['locale'];
+                dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, loaderInfo.parameters['locale']));
+                dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, 'en_US')); // think en_US is default
+                resourceManager.localeChain = [loaderInfo.parameters['locale'], 'en_US'];
+            }
 		}
 		
 		private function startApp(event:Event):void {
@@ -221,10 +226,17 @@
 			conn.addEventListener(MapEvent.ERROR, onMapError);
 			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
 			conn.addEventListener(AttentionEvent.ALERT, onAlert);
+			if (params['licence_status']) conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/problems",conn);
 			theMap.addLayer(conn, Stylesheets.instance().selected, false, true);
 
             // Auto-load vector backgrounds from config
             theMap.addEventListener(MapEvent.INITIALISED, function(e:Event):void { VectorBackgrounds.instance().init(theMap); });
+
+			// Add loading 'spinner' indicator
+			spinner=new Spinner();
+			_root.addChild(spinner);
+			spinner.x=dataWorking.x-20;
+			spinner.y=dataWorking.y+dataWorking.height/2;
 
 			// Set start position of map
 			// ** FIXME: if lat/lon/zoom aren't supplied, we need to keep the map in a non-loading state 
@@ -253,7 +265,7 @@
 			Globals.vars.map_area.addEventListener(MouseEvent.MOUSE_DOWN, theMap.mouseDownHandler);
 
 			// initialise imagery
-			theMap.tileset.blocks=[new RegExp("google","i")];	// hard-coded block on Google tiles
+			theMap.tileset.blocks=[/google\./i];	// hard-coded block on Google tiles
 			theMap.tileset.setDimming(params['background_dim']    ==null ? true  : params['background_dim']);
 			theMap.tileset.setSharpen(params['background_sharpen']==null ? false : params['background_sharpen']);
 			Imagery.instance().init(theMap, overlay, yahoo);
@@ -261,7 +273,7 @@
 			Imagery.instance().addEventListener(CollectionEvent.SELECT,
 				function(e:CollectionEvent):void { theMap.tileset.init(e.data, e.data!=''); }
 			);
-
+			
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
             
@@ -343,12 +355,10 @@
 		
 		public function onMapError(mapEvent:MapEvent):void {
 			var buttons:uint=0;
-			if (mapEvent.params.no) { trace("no is set"); }
 			if (mapEvent.params.yes             ) buttons|=mx.controls.Alert.YES;
 			if (mapEvent.params.no              ) buttons|=mx.controls.Alert.NO;
 			if (mapEvent.params.cancel          ) buttons|=mx.controls.Alert.CANCEL;
 			if (mapEvent.params.ok || buttons==0) buttons|=mx.controls.Alert.OK;
-			trace("showing alert with "+buttons);
 			Alert.show(mapEvent.params.message, 'Error', buttons, null, function(closeEvent:CloseEvent):void { 
 				switch (closeEvent.detail) {
 					case mx.controls.Alert.CANCEL:	mapEvent.params.cancel(); break; //fixme? this gets called if user presses escape, even if there's no cancel button.
@@ -434,11 +444,18 @@
             updateDataWorking();
         }
 		private function updateDataWorking():void {
-			if (loadcount>0 && savecount>0) { dataWorking.text="Loading/saving..."; }
-			else if (loadcount>0)           { dataWorking.text="Loading data..."; }
-			else if (savecount>0)           { dataWorking.text="Saving data..."; }
-			else                            { dataWorking.text=""; }
-			dataWorking.visible=(dataWorking.text!="");
+			var t:String;
+			if (loadcount>0 && savecount>0) { t="Loading/saving#..."; }
+			else if (loadcount>0)           { t="Loading data#..."; }
+			else if (savecount>0)           { t="Saving data..."; }
+			else                            { t=""; }
+			dataWorking.text=t.replace("#",(loadcount>1) ? (" ("+loadcount+")") : "");
+
+			var previousState:Boolean=dataWorking.visible;
+			var newState:Boolean=(dataWorking.text!="");
+			if (!previousState && newState) spinner.start();
+			if (previousState && !newState) spinner.stop();
+			dataWorking.visible=newState;
 		}
         private function onDataDirty(event:Event):void {
 			saveButton.enabled=true;

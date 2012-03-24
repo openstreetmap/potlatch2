@@ -126,22 +126,12 @@ package net.systemeD.halcyon.connection {
 				}
 			}
 
-            for each (var trkseg:XML in file..trkseg) {
-                var way:Way;
-                var nodestring:Array = [];
-                for each (var trkpt:XML in trkseg.trkpt) {
-                    nodestring.push(connection.createNode({}, trkpt.@lat, trkpt.@lon, action.push));
-                }
-                if (nodestring.length > 0) {
-                    way = connection.createWay({}, nodestring, action.push);
-                    //if (simplify) { Simplify.simplify(way, paint.map, false); }
-                }
-            }
-
+			Trace.parseTrkSegs(file,connection,action,false);
+			
             for each (var wpt:XML in file.wpt) {
                 var tags:Object = {};
                 for each (var tag:XML in wpt.children()) {
-                    tags[tag.name().localName]=tag.toString();
+                    tags[tag.name().localName]=tag.toString().substr(0,255);
                 }
                 var node:Node = connection.createNode(tags, wpt.@lat, wpt.@lon, action.push);
 				connection.registerPOI(node);
@@ -151,5 +141,49 @@ package net.systemeD.halcyon.connection {
 			default xml namespace = new Namespace("");
             layer.updateEntityUIs(true, false);
         }
+
+		/* Draw ways from <trkseg>s, with elementary filter to remove points within 3 metres of each other. 
+		   Optionally split way if more than 50m from previous point.
+		   FIXME: do auto-joining of dupes as per Importer. */
+
+		public static function parseTrkSegs(file:XML, connection:Connection, action:CompositeUndoableAction, smartSplitting:Boolean=false):void {
+			for each (var ns:Namespace in file.namespaceDeclarations()) {
+				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) { default xml namespace = ns; }
+			}
+			for each (var trkseg:XML in file..trkseg) {
+				var nodestring:Array = [];
+				var lat:Number = NaN, lastlat:Number = NaN;
+				var lon:Number = NaN, lastlon:Number = NaN;
+				var dist:Number=0;
+				for each (var trkpt:XML in trkseg.trkpt) {
+					lat = trkpt.@lat;
+					lon = trkpt.@lon;
+					if (isNaN(lastlat)) { lastlat = lat; lastlon = lon; }
+					dist=Trace.greatCircle(lat, lon, lastlat, lastlon);
+					if (dist>3) {
+						if ((dist>50 && smartSplitting) || nodestring.length>500) {
+							if (dist<=50 || !smartSplitting) nodestring.push(connection.createNode({}, lat, lon, action.push));
+							if (nodestring.length>1) connection.createWay({}, nodestring, action.push);
+							nodestring=[];
+						}
+						nodestring.push(connection.createNode({}, lat, lon, action.push));
+						lastlat=lat; lastlon=lon;
+					}
+				}
+				if (nodestring.length > 1) { connection.createWay({}, nodestring, action.push); }
+			}
+		}
+		
+		public static function greatCircle(lat1:Number,lon1:Number,lat2:Number,lon2:Number):Number {
+			var dlat:Number=(lat2-lat1)*Math.PI/180;
+			var dlon:Number=(lon2-lon1)*Math.PI/180;
+			var a:Number=Math.pow(Math.sin(dlat / 2),2) + 
+			             Math.cos(lat1*Math.PI/180) * 
+			             Math.cos(lat2*Math.PI/180) * 
+			             Math.pow(Math.sin(dlon / 2),2);
+			a=Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+			return a*3958.75*1609;
+		}
+		
     }
 }

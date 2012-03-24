@@ -16,6 +16,7 @@ package net.systemeD.halcyon.connection {
 		private var addedToRelationTimer:Timer;
 		private var removedFromRelationTimer:Timer;
 		private var delayedEvents:Array = [];
+		private static const DIFFERENT:String = "<different>";
 
         public function EntityCollection(entities:Array) {
 			var conn:Connection=entities[0].connection;
@@ -34,6 +35,14 @@ package net.systemeD.halcyon.connection {
 				entity.addEventListener(Connection.REMOVED_FROM_RELATION, onRemovedFromRelation, false, 0, true);
 			}
         }
+		
+		public function releaseListeners():void {
+			for each(var entity:Entity in _entities) {
+				entity.removeEventListener(Connection.TAG_CHANGED, onTagChanged);
+				entity.removeEventListener(Connection.ADDED_TO_RELATION, onAddedToRelation);
+				entity.removeEventListener(Connection.REMOVED_FROM_RELATION, onRemovedFromRelation);
+			}
+		}
 		
 		public override function get entities():Array {
 			return _entities;
@@ -66,20 +75,19 @@ package net.systemeD.halcyon.connection {
 		
 		private function getMergedTags():Object {
 			//Builds an object with tags of all entities in this collection. If the value of a tag differs or is not set in all entities, value is marked
-			var differentMarker:String = "<different>";
 			var mergedTags:Object = _entities[0].getTagsCopy();
 			for each(var entity:Entity in _entities) {
 				var entityTags:Object = entity.getTagsHash();
 				for(var key:String in entityTags) {
 					var value:String = entityTags[key];
 					if(mergedTags[key] == null || mergedTags[key] != value) {
-						mergedTags[key] = differentMarker;
+						mergedTags[key] = DIFFERENT;
 					}
 				}
 				for(var mergedKey:String in mergedTags) {
 					var mergedValue:String = mergedTags[mergedKey];
 					if(entityTags[mergedKey] == null || entityTags[mergedKey] != mergedValue) {
-						mergedTags[mergedKey] = differentMarker;
+						mergedTags[mergedKey] = DIFFERENT;
 					}
 				}
 			}
@@ -115,6 +123,7 @@ package net.systemeD.halcyon.connection {
 		}
 		
 		public override function setTag(key:String, value:String, performAction:Function):void {
+            if (value==DIFFERENT) return;
 			var oldValue:String = getMergedTags()[key];	
 			var undoAction:CompositeUndoableAction = new CompositeUndoableAction("set_tag_entity_collection");
 			for each (var entity:Entity in _entities) {
@@ -126,7 +135,9 @@ package net.systemeD.halcyon.connection {
         public override function renameTag(oldKey:String, newKey:String, performAction:Function):void {
 			var undoAction:CompositeUndoableAction = new CompositeUndoableAction("rename_tag_entity_collection");
 			for each (var entity:Entity in _entities) {
-				undoAction.push(new SetTagKeyAction(entity, oldKey, newKey));
+				if (entity.getTag(oldKey)) {
+					undoAction.push(new SetTagKeyAction(entity, oldKey, newKey));
+				}
 			}
             performAction(undoAction);
         }
@@ -171,7 +182,7 @@ package net.systemeD.halcyon.connection {
 						if (!relations[rel.id]) {
 							relations[rel.id]= { role: role, relation: rel, distinctCount: 0};
 						} else if (relations[rel.id].role!=role) {
-							relations[rel.id].role="<different>";
+							relations[rel.id].role=DIFFERENT;
 						}
 					}
 					relations[rel.id].distinctCount++;

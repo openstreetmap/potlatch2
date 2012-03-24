@@ -234,6 +234,8 @@
   </feature>
 
 
+  <!-- Generic building. Should be last in the entire xml chain -->
+  <!-- When user changes feature to some amenity, building tag is cleared. This should not be. -->
   <feature name="Building">
     <category>buildings</category>
     <icon image="features/pois/building_generic.png">
@@ -243,30 +245,10 @@
 
     <area/>
     <point/>
-    <!-- This should catch all the "building=*" tags in use: yes, hut, house, residential, entrance, apartments, garage, industrial,  garages, service, manufacture, collapsed... 
-         Is this possible? -->
-    <!-- <tag k="building" v="*"/> -->
-    <tag k="building" v="yes"/>
-    <inputSet ref="names"/>
-    <inputSet ref="buildingAddress"/>
-    <inputSet ref="common"/>
-  </feature>
-
-
-  <feature name="Sports centre">
-    <category>buildings</category>
-    <icon image="features/pois/sport_leisure_centre.n.24.png">
-      <b>${name} ${addr:housename}</b><br/>
-      ${addr:housenumber} ${addr:street} ${addr:postcode}
-    </icon>
-
-    <area/>
-    <point/>
-    <tag k="leisure" v="sports_centre"/>
-    <inputSet ref="names"/>
-    <inputSet ref="buildingAddress"/>
-    <inputSet ref="pitchSport"/>
+    <tag k="building" v="yes" vmatch="*"/>
     <inputSet ref="isBuilding"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
     <inputSet ref="common"/>
   </feature>
 </featureGroup>

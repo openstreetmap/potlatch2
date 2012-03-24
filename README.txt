@@ -12,7 +12,7 @@ Many icons used in halcyon/potlatch2 are based on the awesome CC0-licensed SJJB 
 
 * Flex SDK 4.5
 ** Product page: http://www.adobe.com/products/flex/ 
-** Flex 4 Download page: http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4 (free, OS X/Windows/Linux)
+** Flex 4.5 Download page: http://opensource.adobe.com/wiki/display/flexsdk/Download+Flex+4.5 (free, OS X/Windows/Linux)
 * AS3 docs - http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/
 * Flash debug player - http://www.adobe.com/support/flashplayer/downloads.html
 * Basically you might as well just sell your soul to Adobe
@@ -60,7 +60,8 @@ You can create and run the unit tests (not that there are that many) using flexu
 * ant test
 
 If you're using Mac OS X, you may need to tell ant to use more memory, by
-typing export ANT_OPTS=-Xmx500M beforehand (you can put this in your .profile).
+typing export ANT_OPTS="-Xms768m -Xmx1024m -XX:MaxPermSize=512m" 
+beforehand (you can put this in your .profile).
 
 
 Compiling during development:

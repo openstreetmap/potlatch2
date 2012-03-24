@@ -20,7 +20,7 @@ package net.systemeD.potlatch2.mapfeatures {
         private var _xml:XML;
         private static var variablesPattern:RegExp = /[$][{]([^}]+)[}]/g;
         private var _tags:Array;
-	private var _withins:Array;
+        private var _withins:Array;
         private var _editors:Array;
 
         [Embed(source="../../../../embedded/missing_icon.png")]
@@ -105,7 +105,7 @@ package net.systemeD.potlatch2.mapfeatures {
         }
 
         [Bindable(event="nameChanged")]
-        /** The human-readable name of the feature (@name), or null if none. */
+        /** The human-readable name of the feature (name), or null if none. */
         public function get name():String {
 			if (_xml.attribute('name').length()>0) { return _xml.@name; }
 			return null;
