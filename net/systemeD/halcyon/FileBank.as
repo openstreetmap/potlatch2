@@ -33,27 +33,46 @@ package net.systemeD.halcyon {
 		   Used when we want to load a file for use later on (e.g. an image referenced in a stylesheet)
 		   ========================================================================================== */
 
-		public function addFromFile(filename:String):void {
-			if (files[filename]) return;
-			filesRequested++;
+		public function addFromFile(filename:String, callback:Function = null):void {
+			if (files[filename]) {
+                if (callback != null) {
+                    if (files[filename].info.callbacks) {
+                        files[filename].info.callbacks.push(callback);
+                    } else {
+                        callback(this, filename);
+                    }
+                }
+            } else {
+                var request:URLRequest = new URLRequest(filename);
+                var loader:Object;
+                var loaderInfo:EventDispatcher;
+                
+                if (isImageType(filename)) {
+                    loader = new ExtendedLoader();
+                    loaderInfo = loader.contentLoaderInfo;
+                    loaderInfo.addEventListener(Event.COMPLETE, loadedImage);
+                } else {
+                    loader = loaderInfo = new ExtendedURLLoader();
+                    loaderInfo.addEventListener(Event.COMPLETE, loadedFile);
+                }
 
-			var request:URLRequest=new URLRequest(filename);
-			if (isImageType(filename)) {
-				var loader:Loader=new Loader();
-				files[filename]=loader;
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE,						loadedImage);
-				loader.contentLoaderInfo.addEventListener(HTTPStatusEvent.HTTP_STATUS,			httpStatusHandler);
-				loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR,	securityErrorHandler);
-				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,				ioErrorHandler);
-				loader.load(request);
-			} else {
-				var urlloader:URLLoader = new URLLoader();
-				urlloader.addEventListener(Event.COMPLETE,                    loadedImage);
-				urlloader.addEventListener(HTTPStatusEvent.HTTP_STATUS,		  httpStatusHandler);
-				urlloader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-				urlloader.addEventListener(IOErrorEvent.IO_ERROR,             ioErrorHandler);
-				urlloader.load(request);
-			}
+                loader.info.filename = filename;
+                loader.info.callbacks = new Array();
+                
+                if (callback != null) {
+                    loader.info.callbacks.push(callback);
+                }
+
+                files[filename] = loader;
+
+                loaderInfo.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+                loaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+                loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+
+                filesRequested++;
+
+                loader.load(request);
+            }
 		}
 
         public function onFilesLoaded(callback:Function):void {
@@ -67,7 +86,19 @@ package net.systemeD.halcyon {
         }
 
         private function loadedImage(event:Event):void {
-			fileReceived();
+			fileLoaded(event.target.loader.info);
+        }
+        private function loadedFile(event:Event):void {
+			fileLoaded(event.target.info);
+        }
+        private function fileLoaded(info:Object):void {
+            for (var c:uint = 0; c < info.callbacks.length; c++) {
+                var callback:Function = info.callbacks[c];
+                callback(this, info.filename);
+            }
+            info.callbacks = null;
+
+            fileReceived();
 		}
 		private function httpStatusHandler(event:HTTPStatusEvent):void { }
 		private function securityErrorHandler(event:SecurityErrorEvent):void { 
@@ -164,7 +195,11 @@ package net.systemeD.halcyon {
 		public function getAsByteArray(name:String):ByteArray {
 			return files[name].contentLoaderInfo.bytes;
 		}
-
+		
+		public function getAsString(name:String):String {
+			return files[name].data;
+		}
+        
 		/* ==========================================================================================
 		   Get file information
 		   ========================================================================================== */
