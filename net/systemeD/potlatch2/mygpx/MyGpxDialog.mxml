@@ -26,7 +26,7 @@
               <s:GridItemRenderer>
                 <s:VGroup horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
                   <s:Button label="Load"
-                      click="parentDocument.loadFile(data)"/>
+                      click="outerDocument.loadFile(data)"/>
                 </s:VGroup>
               </s:GridItemRenderer>
             </fx:Component>
@@ -95,7 +95,8 @@
         return a.id - b.id
     }
 
-    public function loadFile(t:Trace):void {
+    public function loadFile(o:Object):void {
+        var t:Trace = Trace(o);
         t.addToMap();
     }
 
