@@ -19,10 +19,10 @@
       </s:layout>
     </s:List>
 
-    <s:HGroup>
-      <s:CheckBox width="100%" label="Dim" selected="{application.theMap.getDimming()}" id="dim"
+    <s:HGroup width="100%" horizontalAlign="center">
+      <s:CheckBox label="Dim" selected="{application.theMap.getDimming()}" id="dim"
           change="setDimming(dim.selected)" />
-      <s:CheckBox width="100%" label="Sharpen" selected="{application.theMap.getSharpen()}" id="sharpen"
+      <s:CheckBox label="Sharpen" selected="{application.theMap.getSharpen()}" id="sharpen"
           change="setSharpen(sharpen.selected)" />
     </s:HGroup>
 
