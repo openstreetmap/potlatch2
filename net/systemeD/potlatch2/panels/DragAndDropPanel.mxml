@@ -48,6 +48,8 @@
 	private static const MINIMISED:uint=0;
 	private static const MAXIMISED:uint=1;
 	private static const TOO_SMALL:uint=2;
+	private static const ICON_WIDTH:uint=24;
+	private static const ICON_HEIGHT:uint=24;
 
 	/** Start POI drag-and-drop. */
 	private function mouseDownHandler(event:MouseEvent):void {
@@ -61,8 +63,8 @@
 
 		var dragProxy:Image = new Image();
 		dragProxy.source = item.dndimage;
-		dragProxy.width = 24;	// must set width and height explicitly
-		dragProxy.height = 24;	// for non-embedded images
+		dragProxy.width = ICON_WIDTH;	// must set width and height explicitly
+		dragProxy.height = ICON_HEIGHT;	// for non-embedded images
 
 		DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
 		TileList(event.currentTarget).selectedItem=null;
