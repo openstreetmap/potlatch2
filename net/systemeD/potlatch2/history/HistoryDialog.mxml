@@ -45,6 +45,7 @@
 
     import mx.managers.PopUpManager;
     import mx.core.Application;
+    import mx.core.FlexGlobals;
     import mx.events.CloseEvent;
     import flash.events.Event;
     import com.adobe.utils.ArrayUtil;
@@ -71,7 +72,7 @@
     public function init(e:Entity):void {
         if (e == null) {return;}
 
-        PopUpManager.addPopUp(this, Application(Application.application), true);
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, historyDialog_close);
 
