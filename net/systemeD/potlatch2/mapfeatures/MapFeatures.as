@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.mapfeatures {
     import flash.events.EventDispatcher;
     import flash.net.*;
     
+    import net.systemeD.halcyon.FileBank;
     import net.systemeD.halcyon.NestedXMLLoader;
     import net.systemeD.halcyon.connection.*;
 
@@ -71,7 +72,9 @@ package net.systemeD.potlatch2.mapfeatures {
                 if ( catXML.child("category").length() == 0 )
                   _categories.push(new Category(this, catXML.@name, catXML.@id, _categories.length));
             }
-            dispatchEvent(new Event("featuresLoaded"));
+            FileBank.getInstance().onFilesLoaded(function():void {
+                dispatchEvent(new Event("featuresLoaded"));
+            });
         }
 
         private function tagsFromInputSet(inputSet:XMLList, f:Feature):void {

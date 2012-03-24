@@ -10,7 +10,6 @@ package net.systemeD.potlatch2.mapfeatures {
     
     import net.systemeD.halcyon.FileBank;
     import net.systemeD.halcyon.connection.Entity;
-    import net.systemeD.potlatch2.utils.CachedDataLoader;
 
         /** A "map feature" is sort of a template for a map entity. It consists of a few crucial key/value pairs that define the feature, so that
          * entities can be recognised. It also contains optional keys, with associated editing controls, that are defined as being appropriate
@@ -32,8 +31,21 @@ package net.systemeD.potlatch2.mapfeatures {
         public function Feature(mapFeatures:MapFeatures, _xml:XML) {
             this.mapFeatures = mapFeatures;
             this._xml = _xml;
+            loadImages();
             parseConditions();
             parseEditors();
+        }
+
+        private function loadImages():void {
+            var icon:XMLList = _xml.icon;
+            if ( icon.length() > 0 ) {
+                if ( icon[0].hasOwnProperty("@dnd") ) {
+                    FileBank.getInstance().addFromFile(icon[0].@dnd);
+                }
+                if ( icon[0].hasOwnProperty("@image") ) {
+                    FileBank.getInstance().addFromFile(icon[0].@image);
+                }
+            }
         }
 
         private function parseConditions():void {
@@ -147,12 +159,8 @@ package net.systemeD.potlatch2.mapfeatures {
                 imageURL = icon[0].@image;
             }
 
-            if ( imageURL ) {
-				if (FileBank.getInstance().hasFile(imageURL)) {
-					return FileBank.getInstance().getAsByteArray(imageURL);
-				} else {
-	                return CachedDataLoader.loadData(imageURL, imageLoaded);
-				}
+            if ( imageURL && FileBank.getInstance().hasFile(imageURL) ) {
+                return FileBank.getInstance().getAsByteArray(imageURL);
             }
             var bitmap:BitmapAsset = new missingIconCls() as BitmapAsset;
             return new PNGEncoder().encode(bitmap.bitmapData);
@@ -164,10 +172,6 @@ package net.systemeD.potlatch2.mapfeatures {
         public function canDND():Boolean {
         	var point:XMLList = _xml.elements("point");
         	return point.length() > 0 && !(XML(point[0]).attribute("draganddrop")[0] == "no");
-        }
-
-        private function imageLoaded(url:String, data:ByteArray):void {
-            dispatchEvent(new Event("imageChanged"));
         }
 
         public function htmlDetails(entity:Entity):String {
