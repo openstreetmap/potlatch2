@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!---
+    The History Dialog displays information about the history of an entity. As well as showing the different versions
+    of the entity, it displays synthetic history based on the entity's children. For example, the intermediate states
+    of a way while the nodes are rearranged are show.
+-->
 <s:TitleWindow
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:mx="library://ns.adobe.com/flex/mx"
