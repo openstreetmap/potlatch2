@@ -54,7 +54,11 @@
 
     [Bindable(event="traces_loaded")]
     private function get traces():VectorCollection {
-		return new VectorCollection(conn.getTraces());
+		return new VectorCollection(conn.getTraces().sort(f).reverse());
+    }
+
+    private function f(a:Trace, b:Trace):int {
+        return a.id - b.id
     }
 
     public function loadFile(t:Trace):void {
