@@ -65,6 +65,7 @@
 		dragProxy.height = 24;	// for non-embedded images
 
 		DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
+		TileList(event.currentTarget).selectedItem=null;
 	}
 
 	/** Handle user's click on show/hide label. */
