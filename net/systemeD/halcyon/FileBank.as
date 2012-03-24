@@ -16,9 +16,11 @@ package net.systemeD.halcyon {
 		private var files:Object={};
 		private var filesRequested:uint=0;
 		private var filesReceived:uint=0;
+		private var zipsRequested:uint=0;
+		private var zipsReceived:uint=0;
+        private var zipCallbacks:Array=[];
 		
 		public static const FILES_LOADED:String="filesLoaded";
-		public static const ZIP_LOADED:String="zipLoaded";
 		
 		private static const GLOBAL_INSTANCE:FileBank = new FileBank();
 		public static function getInstance():FileBank { return GLOBAL_INSTANCE; }
@@ -34,7 +36,7 @@ package net.systemeD.halcyon {
 		   ========================================================================================== */
 
 		public function addFromFile(filename:String, callback:Function = null):void {
-			if (files[filename]) {
+            if (files[filename]) {
                 if (callback != null) {
                     if (files[filename].info.callbacks) {
                         files[filename].info.callbacks.push(callback);
@@ -42,6 +44,10 @@ package net.systemeD.halcyon {
                         callback(this, filename);
                     }
                 }
+            } else if (zipsRequested > zipsReceived) {
+                zipCallbacks.push(function ():void {
+                    addFromFile(filename, callback);
+                });
             } else {
                 var request:URLRequest = new URLRequest(filename);
                 var loader:Object;
@@ -122,7 +128,10 @@ package net.systemeD.halcyon {
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat="binary";
 			loader.addEventListener(Event.COMPLETE, function(e:Event):void { zipReady(e,prefix); } );
-			loader.load(new URLRequest(filename));
+            loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, zipSecurityErrorHandler);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, zipIoErrorHandler);
+            zipsRequested++;
+            loader.load(new URLRequest(filename));
 		}
 		private function zipReady(event:Event, prefix:String):void {
 			var zip:ZipFile = new ZipFile(event.target.data);
@@ -131,15 +140,36 @@ package net.systemeD.halcyon {
 				var data:ByteArray = zip.getInput(fileref);
 				if (isImageType(fileref.name)) {
 					// Store as an image
-					var loader:Loader=new Loader();
+					var loader:ExtendedLoader=new ExtendedLoader();
 					files[prefix+fileref.name]=loader;
+                    loader.info.filename = prefix+fileref.name;
 					loader.loadBytes(data);
 				} else {
 					// Store as a document
-					files[prefix+fileref.name]=data.toString();
+					var urlloader:ExtendedURLLoader=new ExtendedURLLoader();
+					files[prefix+fileref.name]=urlloader;
+                    urlloader.info.filename = prefix+fileref.name;
+                    urlloader.data = data.toString();
 				}
 			}
-			dispatchEvent(new Event(ZIP_LOADED));
+            zipReceived();
+		}
+		private function zipSecurityErrorHandler(event:SecurityErrorEvent):void { 
+			trace("securityErrorEvent: "+event.target.url);
+			zipReceived();
+		}
+		private function zipIoErrorHandler(event:IOErrorEvent):void { 
+			trace("ioErrorEvent: "+event.target.url); 
+			zipReceived();
+		}
+		private function zipReceived():void {
+			zipsReceived++;
+			if (zipsReceived == zipsRequested) {
+                while (zipCallbacks.length > 0) {
+                    var callback:Function = zipCallbacks.shift();
+                    callback();
+                }
+            }
 		}
 		private function isImageType(filename:String):Boolean {
 			if (filename.match(/\.jpe?g$/i) ||
