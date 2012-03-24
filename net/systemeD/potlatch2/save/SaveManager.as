@@ -6,6 +6,7 @@ package net.systemeD.potlatch2.save {
     import mx.core.Application;
     import mx.core.FlexGlobals;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.potlatch2.controller.*;
     import org.iotashan.oauth.*;
 
     public class SaveManager {
@@ -22,6 +23,7 @@ package net.systemeD.potlatch2.save {
         }
 
         private function save(callback:Function, connection:Connection):void {
+			FlexGlobals.topLevelApplication.theController.setState(new NoSelection());
 			_connection=connection;
             if (connection.hasAccessToken()) {
                 callback();

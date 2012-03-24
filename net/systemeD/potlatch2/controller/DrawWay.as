@@ -201,10 +201,7 @@ package net.systemeD.potlatch2.controller {
 		protected function keyExitDrawing():ControllerState {
 			var cs:ControllerState=stopDrawing();
 			if (selectedWay.length==1) { 
-				if (MainUndoStack.getGlobalStack().undoIfAction(BeginWayAction)) { 
-					return new NoSelection();
-				}
-				return deleteWay();
+				return new NoSelection();
 			}
 			return cs;
 		}
@@ -344,6 +341,10 @@ package net.systemeD.potlatch2.controller {
 			controller.setCursor("pen");
 		}
 		override public function exitState(newState:ControllerState):void {
+			if (selectedWay.length==1 && !MainUndoStack.getGlobalStack().undoIfAction(BeginWayAction)) { 
+				selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
+			}
+
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_REMOVED, fixElastic);
             Way(firstSelected).removeEventListener(Connection.WAY_NODE_ADDED, fixElastic);
 
