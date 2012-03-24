@@ -4,7 +4,7 @@ package net.systemeD.potlatch2.collections {
 	import flash.display.*;
 	import flash.net.*;
 	import flash.text.TextField;
-	import net.systemeD.halcyon.DebugURLRequest;
+	import net.systemeD.halcyon.FileBank;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapEvent;
 	import net.systemeD.potlatch2.FunctionKeyManager;
@@ -38,18 +38,15 @@ package net.systemeD.potlatch2.collections {
 			_yahoo = yahoo;
 
 			// load imagery file
-	        var request:DebugURLRequest = new DebugURLRequest("imagery.xml");
-	        var loader:URLLoader = new URLLoader();
-	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
-	        loader.load(request.request);
+            FileBank.getInstance().addFromFile("imagery.xml", onImageryLoad);
 
 			// create map listeners
 			map.addEventListener(MapEvent.MOVE, moveHandler);
 			map.addEventListener(MapEvent.RESIZE, resizeHandler);
 		}
 
-        private function onImageryLoad(event:Event):void {
-			var xml:XML = new XML(URLLoader(event.target).data);
+		private function onImageryLoad(fileBank:FileBank, filename:String):void {
+			var xml:XML = new XML(fileBank.getAsString(filename));
 			var saved:Object = {};
 			var bg:Object;
 			if (SharedObject.getLocal("user_state").data['background_url']!=undefined) {
