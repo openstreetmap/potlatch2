@@ -10,7 +10,8 @@
 		<mx:HBox width="100%" styleName="dndPanelCategory">
 			<mx:Label text="{dndRep.currentItem.name}:" styleName="dndPanelCategoryLabel"/>
 			<mx:Spacer width="100%" />
-			<mx:Label text="" click="showHide(event)" />
+			<mx:Label click="showHide(event)" text="" />
+			<mx:Image click="showHide(event)" source="{closedIcon}" />
 		</mx:HBox>
 
 		<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point', true)}" width="100%" height="1"
@@ -36,6 +37,9 @@
 	import mx.controls.Button;
 	import mx.controls.TileList;
 	import mx.controls.scrollClasses.*;
+
+	[Bindable] [Embed(source="../../../../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonDown")] private var openIcon:Class;
+	[Bindable] [Embed(source="../../../../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonOver")] private var closedIcon:Class;
 
 	[Bindable] public var dndPrompt:String="Add new points by dragging them onto the map";
 
@@ -95,10 +99,11 @@
 		var pos:uint=tilelist.parent.getChildIndex(tilelist);
 		var hbox:HBox=HBox(tilelist.parent.getChildAt(pos-1));
 		var label:Label=Label(hbox.getChildAt(2));
+		var button:Image=Image(hbox.getChildAt(3));
 		switch (state) {
-			case TOO_SMALL:	label.text=""; break;
-			case MINIMISED:	label.text="Show all"; break;
-			case MAXIMISED:	label.text="Collapse"; break;
+			case TOO_SMALL:	label.text="";         button.visible=false; break;
+			case MINIMISED:	label.text="Show all"; button.source =closedIcon; break;
+			case MAXIMISED:	label.text="Collapse"; button.source =openIcon; break;
 		}
 		return state;
 	}
