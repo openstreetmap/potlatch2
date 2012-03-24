@@ -44,7 +44,7 @@
     import mx.core.Application;
     import mx.core.FlexGlobals;
 	import mx.collections.ArrayCollection;
-	import mx.controls.List;
+	import spark.components.List;
 	import net.systemeD.potlatch2.FunctionKeyManager;
 
 	public var dataCollection:ArrayCollection;
@@ -64,7 +64,6 @@
     
     private function backgroundDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
-		if (menu) { menu.invalidateList(); }
     }
 
 	private function addNewSource():void {
