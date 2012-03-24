@@ -300,12 +300,15 @@
 		if (entities.length==0) {
 			// Nothing selected, so show drag-and-drop panel
 			sidebar.selectedChild = dndPanel;
+			selectedEntity=null;
 
 		} else if (entities.length==1) {
 			// Single entity selected, so show tag panel
+			if (firstSelected!=null && selectedEntity!=firstSelected) { 
+				firstSelected.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+			}
 			selectedEntity=firstSelected;
 			connection=firstSelected.connection;
-			if (selectedEntity!=null) { selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged); }
 			if (advancedID!=null) { setupAdvanced(firstSelected); }
 			if (firstSelected is Relation) { stack.addChild(membersVBox); }
             if (selectedEntity is Marker && connection is BugConnection) {
@@ -328,10 +331,11 @@
                       && xor(!controller.map.getLayerForEntity(entities[0]).isBackground, !controller.map.getLayerForEntity(entities[1]).isBackground) ) {
             backgroundMergePanelContents.init(entities);
             sidebar.selectedChild = backgroundMergePanel;
+			// ** FIXME: do we need to set selectedEntity here?
 
 		} else if(isMultipleEditable(entities)) {
 			selectedEntity = new EntityCollection(entities);
-			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged);
+			selectedEntity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
             sidebar.selectedChild = multiplePanel;
 			setupMultiAdvanced(selectedEntity);
 			connection=entities[0].connection;
@@ -339,6 +343,7 @@
 		} else {
 			//The selection contains elements which can't be edited all together.
 			sidebar.selectedChild = multipleInvalidPanel;
+			selectedEntity=null;
 		}
 		UIComponent.resumeBackgroundProcessing();
       }
