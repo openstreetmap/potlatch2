@@ -49,7 +49,11 @@ package net.systemeD.potlatch2 {
 				for each (var file:String in loaderInfo.parameters['assets'].split(';')) {
 					var asset:Array=file.split('=');
 					assetscount++;
-					FileBank.getInstance().addFromZip(asset[0],asset[1]);
+                    if (asset.length == 1) {
+                        FileBank.getInstance().addFromZip(asset[0]);
+                    } else {
+                        FileBank.getInstance().addFromZip(asset[0], asset[1]);
+                    }
 				}
 			}
         }
