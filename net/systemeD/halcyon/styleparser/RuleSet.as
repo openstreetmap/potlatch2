@@ -2,9 +2,6 @@ package net.systemeD.halcyon.styleparser {
 
 	import flash.events.*;
 	import flash.net.*;
-	import net.systemeD.halcyon.ExtendedLoader;
-	import net.systemeD.halcyon.ExtendedURLLoader;
-	import net.systemeD.halcyon.DebugURLRequest;
     import net.systemeD.halcyon.connection.Entity;
     import net.systemeD.halcyon.FileBank;
 
