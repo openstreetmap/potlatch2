@@ -11,7 +11,7 @@
 
 	<s:List width="100%" height="100%" id="mapStyle"
 	        labelField="name"
-	        change="FlexGlobals.topLevelApplication.styleButton.close(); Stylesheets.instance().setStylesheet(mapStyle.selectedItem.name, mapStyle.selectedItem.url);"
+	        change="FlexGlobals.topLevelApplication.styleButton.close(); Stylesheets.instance().setStylesheet(mapStyle.selectedItem);"
             dataProvider="{Stylesheets.instance().getCollection()}"
             selectedItem="{Stylesheets.instance().selected}">
       <s:layout>
