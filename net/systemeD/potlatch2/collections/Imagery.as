@@ -249,6 +249,11 @@ package net.systemeD.potlatch2.collections {
 			if (_selected.attribution) positionAttribution();
 		}
 
+        [Bindable(event="collection_changed")]
+        public function getCollection():ArrayCollection {
+            return new ArrayCollection(collection);
+        }
+
 		[Bindable(event="collection_changed")]
 		public function getAvailableImagery():ArrayCollection {
 			var available:Array=[];

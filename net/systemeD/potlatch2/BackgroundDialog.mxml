@@ -55,7 +55,7 @@
 		this.title=title;
 		this.menu=menu;
 		collection=source;
-		dataCollection=new ArrayCollection(source.collection);
+		dataCollection = source.getCollection();
         PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
