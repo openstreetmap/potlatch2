@@ -24,10 +24,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                 choice.match = String(choiceXML.@match);
                 if (choiceXML.hasOwnProperty("@icon")) {
                     var icon:String = String(choiceXML.@icon);
-                    fileBank.addFromFile(icon, function (fb:FileBank, name:String):void {
-                        choice.icon = fb.getAsByteArray(name);
-                        choice.dispatchEvent(new Event("iconLoaded"));
-                    });
+                    fileBank.addFromFile(icon, choice.imageLoaded);
                 }
                 choices.push(choice);
             }
