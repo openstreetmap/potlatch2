@@ -120,6 +120,7 @@
                             ["P", "Create parallel way"],
                             ["Q", "Make area right-angled"],
                             ["R", "Repeat tags"],
+                            ["Shift-R", "Repeat relations"],
                             ];
         var text3:Array =  [["S", "Save"],
                             ["T", "Toggle between simple and advanced tags"],

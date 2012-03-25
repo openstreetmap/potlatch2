@@ -71,7 +71,9 @@ package net.systemeD.potlatch2.controller {
 		/** Behaviour includes: parallel way, repeat tags, reverse direction, simplify, cycle way selection, delete */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			switch (event.keyCode) {
-				case 82:  /* R */           repeatTags(firstSelected); return this;
+				case 82:  /* R */           { if (! event.shiftKey) repeatTags(firstSelected); 
+				                              else                  repeatRelations(firstSelected);
+				                              return this; }
 				case 191: /* / */           return cycleWays();
 				case Keyboard.BACKSPACE:	
 				case Keyboard.DELETE:		if (event.shiftKey) { return deleteWay(); } break;
@@ -121,12 +123,13 @@ package net.systemeD.potlatch2.controller {
 			}
 			layer.setPurgable(selection,false);
         }
-        /** Officially leave the state, remembering the current way's tags for future repeats. */
+        /** Officially leave the state, remembering the current way's tags and relations for future repeats. */
         // TODO: tweak this so that repeat tags aren't remembered if you only select a way in order to branch off it. (a la PL1) 
         override public function exitState(newState:ControllerState):void {
 			if (firstSelected.hasTags()) {
               controller.clipboards['way']=firstSelected.getTagsCopy();
             }
+            copyRelations(firstSelected);
 			layer.setPurgable(selection,true);
             firstSelected.removeEventListener(Connection.WAY_REORDERED, updateSelectionUI);
             clearSelection(newState);
