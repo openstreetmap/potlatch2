@@ -83,11 +83,10 @@ package net.systemeD.halcyon.connection {
 			return a;
 		}
 
-		/** Is there an entity member in this specific role. (role=null for any role) */
-		public function hasMemberInRole(entity:Entity,role:String=null):Boolean {
+		/** Is there an entity member in this specific role? */
+		public function hasMemberInRole(entity:Entity,role:String):Boolean {
             for (var index:uint = 0; index < members.length; index++) {
-				if (members[index].entity == entity &&
-				    (members[index].role==role || role == null)) { return true; }
+				if (members[index].entity == entity && members[index].role==role) { return true; }
 			}
 			return false;
 		}

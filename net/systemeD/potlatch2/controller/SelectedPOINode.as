@@ -52,9 +52,9 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case Keyboard.BACKSPACE:	return deletePOI();
 				case Keyboard.DELETE:		return deletePOI();
-                case 82:  /* R */           { if (! event.shiftKey) repeatTags(firstSelected); 
-                                              else                  repeatRelations(firstSelected);
-                                              return this; }
+				case 82: /* R */			if (!event.shiftKey) { repeatTags(firstSelected); }
+											else { repeatRelations(firstSelected); }
+											return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;

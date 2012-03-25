@@ -178,9 +178,9 @@ package net.systemeD.potlatch2.controller {
 				case Keyboard.BACKSPACE:	
 				case 189: /* minus */       return backspaceNode(MainUndoStack.getGlobalStack().addAction);
 				case 79: /* O */			return replaceNode();
-                case 82:  /* R */           { if (! event.shiftKey) repeatTags(firstSelected); 
-                                              else                  repeatRelations(firstSelected);
-                                              return this; }
+				case 82: /* R */			if (!event.shiftKey) { repeatTags(firstSelected); }
+											else { repeatRelations(firstSelected); }
+											return this;
 				case 70: /* F */            followWay(); return this;
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
