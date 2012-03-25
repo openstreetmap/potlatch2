@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:VBox width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox"
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:controls="net.systemeD.controls.*"
+	xmlns:mx="library://ns.adobe.com/flex/mx">
+
+	<mx:Text id="dndPanelText" text="{dndPrompt}" width="100%" styleName="helpInfo" />
+	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}" styleName="dndRepeater">
+		<mx:HBox width="100%" styleName="dndPanelCategory">
+			<mx:Label text="{dndRep.currentItem.name}:" styleName="dndPanelCategoryLabel"/>
+			<mx:Spacer width="100%" />
+			<mx:Label click="showHide(event)" text="" />
+			<mx:Image click="showHide(event)" source="{closedIcon}" />
+		</mx:HBox>
+
+		<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point', true)}" width="100%" height="1"
+		             id="tl" dragEnabled="true" mouseDown="mouseDownHandler(event)" verticalScrollPolicy="off" 
+		             rowHeight="32" columnWidth="100" updateComplete="sizePOIGrid(event)" styleName="dndPanelTileList">
+			<mx:itemRenderer>
+				<fx:Component>
+					<mx:HBox toolTip="{data.name}" horizontalScrollPolicy="off" >
+						<mx:Image id="foo" source="{data.dndimage}" height="24" width="24" toolTip="{data.name}" />
+						<mx:Label text="{data.name}" />
+					</mx:HBox>
+				</fx:Component>
+			</mx:itemRenderer>
+		</mx:TileList>
+	</mx:Repeater>
+
+	<fx:Script><![CDATA[
+
+	import net.systemeD.potlatch2.mapfeatures.*;
+	import mx.core.DragSource;
+	import mx.managers.DragManager;
+	import mx.controls.Image;
+	import mx.controls.Button;
+	import mx.controls.TileList;
+	import mx.controls.scrollClasses.*;
+
+	[Bindable] [Embed(source="../../../../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonDown")] private var openIcon:Class;
+	[Bindable] [Embed(source="../../../../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonOver")] private var closedIcon:Class;
+
+	[Bindable] public var dndPrompt:String="Add new points by dragging them onto the map";
+
+	private var inited:Object={};
+	private static const MINIMISED_ROWS:uint=2;		// we could perhaps set this by category (e.g. two for shopping, one for tourism...)
+	private static const MINIMISED:uint=0;
+	private static const MAXIMISED:uint=1;
+	private static const TOO_SMALL:uint=2;
+	private static const ICON_WIDTH:uint=24;
+	private static const ICON_HEIGHT:uint=24;
+
+	/** Start POI drag-and-drop. */
+	private function mouseDownHandler(event:MouseEvent):void {
+		if (event.target is ScrollThumb || event.target is Button) return;
+
+		var item:Feature=Feature(TileList(event.currentTarget).selectedItem);
+		var dragInitiator:HBox = event.currentTarget.itemToItemRenderer(item);
+		var dragSource:DragSource = new DragSource();
+		dragSource.addData(item.tags, 'tags');
+		dragSource.addData(event.currentTarget, 'container');
+
+		var dragProxy:Image = new Image();
+		dragProxy.source = item.dndimage;
+		dragProxy.width = ICON_WIDTH;	// must set width and height explicitly
+		dragProxy.height = ICON_HEIGHT;	// for non-embedded images
+
+		DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
+		TileList(event.currentTarget).selectedItem=null;
+	}
+
+	/** Handle user's click on show/hide label. */
+	public function showHide(event:Event):void {
+		// find out which tilelist was clicked
+		var theHBox:HBox=event.currentTarget.parent;
+		var pos:uint=theHBox.parent.getChildIndex(theHBox);
+		var tilelist:TileList=TileList(theHBox.parent.getChildAt(pos+1));
+		
+		// now adjust the number of rows
+		setHeight(tilelist,(isAtMaximumSize(tilelist)));
+	}
+
+	/** Set a POI grid to the correct size when it's created. Non-functional if called later. */
+	private function sizePOIGrid(event:Event):void {
+		var tilelist:TileList=TileList(event.target);
+		if (inited[tilelist]) { return; }
+		inited[tilelist]=true;
+		setHeight(tilelist,true);
+	}
+	
+	/** Set a POI grid to minimised or maximised state, and return the state it's been set to. */
+	private function setHeight(tilelist:TileList,minimise:Boolean):uint {
+		// Set required state
+		var rows:Number=rowsForAll(tilelist);
+		var state:uint;
+		if (rows<=MINIMISED_ROWS) { applyHeight(tilelist,rows); state=TOO_SMALL; }
+		else if (minimise) { applyHeight(tilelist,MINIMISED_ROWS); state=MINIMISED; }
+		else { applyHeight(tilelist,rows); state=MAXIMISED; }
+		
+		// Update the clickable label
+		var pos:uint=tilelist.parent.getChildIndex(tilelist);
+		var hbox:HBox=HBox(tilelist.parent.getChildAt(pos-1));
+		var label:Label=Label(hbox.getChildAt(2));
+		var button:Image=Image(hbox.getChildAt(3));
+		switch (state) {
+			case TOO_SMALL:	label.text="";         button.visible=false; break;
+			case MINIMISED:	label.text="Show all"; button.source =closedIcon; break;
+			case MAXIMISED:	label.text="Collapse"; button.source =openIcon; break;
+		}
+		return state;
+	}
+	
+	/** Called by setHeight to actually apply the row height to the Flex TileList object. */
+	private function applyHeight(tilelist:TileList,rows:uint):void {
+		tilelist.height=rows*(tilelist.rowHeight+1);
+	}
+	
+	/** Is the POI grid at its maximum size? */
+	private function isAtMaximumSize(tilelist:TileList):Boolean {
+		var size:Number=tilelist.height/(tilelist.rowHeight+1);
+		return (size==rowsForAll(tilelist));
+	}
+	
+	/** How many rows are required to show everything in this POI grid? */
+	private function rowsForAll(tilelist:TileList):Number {
+		var rows:Number=tilelist.dataProvider.length/tilelist.columnCount;
+		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
+		return rows;
+	}
+
+	]]></fx:Script>
+
+</mx:VBox>

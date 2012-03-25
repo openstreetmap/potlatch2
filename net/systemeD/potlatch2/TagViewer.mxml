@@ -18,48 +18,7 @@
 
 <mx:ViewStack id="sidebar" width="100%" height="100%" creationPolicy="all">
 
-  <!-- Drag & drop icon panel -->
-
-  <mx:VBox id="dndPanel" width="100%" height="100%" horizontalScrollPolicy="off" styleName="dndPanelVbox">
-    <mx:Text id="dndPanelText" text="{dndPrompt}" width="100%" styleName="helpInfo" />
-	<mx:Repeater id="dndRep" dataProvider="{MapFeatures.getInstance().getCategoriesForType('point')}" styleName="dndRepeater">
-		<mx:HBox width="100%" styleName="dndPanelCategory">
-			<mx:Label text="{dndRep.currentItem.name}:" styleName="dndPanelCategoryLabel"/>
-		</mx:HBox>
-
-		<mx:TileList dataProvider="{dndRep.currentItem.getFeaturesForType('point', true)}" width="100%" height="1"
-			             rowHeight="32" columnWidth="32" updateComplete="resizePOIGrid(event)" styleName="dndPanelTileList">
-			<mx:itemRenderer>
-				<fx:Component>
-					<mx:VBox toolTip="{data.name}">
-						<fx:Script><![CDATA[
-							import mx.events.DragEvent;
-							import mx.managers.DragManager;
-							import mx.core.DragSource;
-
-							private function dragPOI(event:MouseEvent, tags:Array):void {
-								if (outerDocument.controller.map.dragstate==outerDocument.controller.map.DRAGGING) return;
-
-								// Get the drag initiator component from the event object.
-								var dragInitiator:Image = event.currentTarget as Image;
-								var dragSource:DragSource = new DragSource();
-								dragSource.addData(tags, 'tags');
-								dragSource.addData(event.target.parent.parent.parent.parent, 'container');
-
-								var dragProxy:Image = new Image();
-								dragProxy.source = dragInitiator.source;
-								dragProxy.width = dragInitiator.width;   // must set width and height explicitly
-								dragProxy.height = dragInitiator.height; // for non-embedded images
-								DragManager.doDrag(dragInitiator, dragSource, event, dragProxy);
-							}
-						]]></fx:Script>
-						<mx:Image id="foo" source="{data.dndimage}" height="24" width="24" mouseMove="dragPOI(event, data.tags)" toolTip="{data.name}" />
-					</mx:VBox>
-				</fx:Component>
-			</mx:itemRenderer>
-		</mx:TileList>
-	</mx:Repeater>
-  </mx:VBox>
+  <sidepanel:DragAndDropPanel id="dndPanel" />
 
   <!-- Standard tagging panel -->
 
@@ -265,9 +224,6 @@
       [Bindable] [Embed(source="../../../embedded/tab_walk.png"        )] private var tabIconWalk:Class;
       private var tabIcons:Object= { Basic:tabIconBasic, Details:tabIconDetails, Address:tabIconAddress, Walk:tabIconWalk, Cycle:tabIconCycle, 
 	                                 Transport:tabIconTransport, Restrictions:tabIconRestrictions};
-
-      [Bindable]
-      public var dndPrompt:String="Add new points by dragging them onto the map";
 
       private var editorStackTabNavigator:TabNavigator;
       private var editorStackAccordion:Accordion;
@@ -945,12 +901,6 @@
           initialiseEditors();
           UIComponent.resumeBackgroundProcessing();
       }
-
-	private function resizePOIGrid(event:Event):void {
-		var rows:Number=event.target.dataProvider.length/event.target.columnCount;
-		if (rows!=Math.floor(rows)) { rows=Math.floor(rows+1); }
-		event.target.height=rows*(event.target.rowHeight+1);
-	}
 
   ]]></fx:Script>
 </mx:VBox>
