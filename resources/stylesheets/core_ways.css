@@ -34,7 +34,6 @@ way[highway=bridleway] { z-index:9; color: #996644; width: 2; dashes: 4, 2, 2, 2
 way[highway=track]     { color: #996644; width: 2; dashes: 4, 2; set .path;}
 way[highway=path]      { color: brown; width: 2; dashes: 2, 2; set .path;}
 way[highway=cycleway]  { color: blue; width: 2; dashes: 4, 2; set .path;}
-way[railway=tram]      { z-index: 11; color: #999999; width: 2; casing-color: black; casing-width: 2; }
 way .path              { text: name; text-color: black; text-position: offset; text-offset: 7; font-size: 12; }
 
 /* Under construction */
