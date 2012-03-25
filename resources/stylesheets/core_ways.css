@@ -132,5 +132,5 @@ way[tunnel=yes][!waterway]::bridge2 { z-index: 3; color: black; width: eval('_wi
 
 /* Attribute decoration */
 
-way[oneway=yes]::arrows, way[junction=roundabout]::arrows { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows; }
-way[oneway=-1]::arrows { z-index: 15; color: #444444; width: 2; dashes: 15,35; line-style: arrows-reversed; }
+way[oneway=yes]::arrows, way[junction=roundabout]::arrows { z-index: 15; color: #555555; width: 2; dashes: 10,50; line-style: arrows; }
+way[oneway=-1]::arrows { z-index: 15; color: #555555; width: 2; dashes: 10,50; line-style: arrows-reversed; }
