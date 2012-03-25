@@ -26,6 +26,8 @@
 				</fx:Component>
 			</mx:itemRenderer>
 		</mx:TileList>
+
+		<mx:VBox width="100%" height="5"/>
 	</mx:Repeater>
 
 	<fx:Script><![CDATA[

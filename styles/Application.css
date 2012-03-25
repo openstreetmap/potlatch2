@@ -135,7 +135,7 @@ mx|ApplicationControlBar {
 
 .dndPanelTileList {
 	borderColor: #dddddd;
-	backgroundColor: #dddddd;
+	backgroundColor: white;
 }
 
 .dndEditorContainer {
@@ -180,11 +180,16 @@ mx|ApplicationControlBar {
 .dndRepeater {
 }
 .dndPanelCategory {
-	backgroundColor: white;
+	paddingTop: 1;
+	paddingLeft: 2;
+	paddingRight: 2;
+
+	backgroundColor: #6495ED;
+	color: white;
 }
 .dndPanelCategoryLabel {
 	paddingTop: 0;
-	color: #444444;
+	color: white;
 	fontSize: 11;
 	fontWeight: bold;
 }
