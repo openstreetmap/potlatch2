@@ -49,7 +49,7 @@
 	import spark.components.List;
 	import net.systemeD.potlatch2.FunctionKeyManager;
 
-	public var dataCollection:ArrayCollection;
+	[Bindable] public var dataCollection:ArrayCollection;
 	private var menu:List;
 	private var collection:Object;
 

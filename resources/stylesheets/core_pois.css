@@ -83,6 +83,6 @@ node[leisure=marina] { icon-image: icons/transport_marina.n.16.png; z-index: 20;
 
 /* Addressing */
 
-node[addr:housenumber],
-node[addr:housename] { icon-image: circle; icon-width: 4; color: #B0E0E6; casing-color:blue; casing-width: 1; }
+node[addr:housenumber] !:drawn,
+node[addr:housename] !:drawn { icon-image: circle; icon-width: 8; color: #B0E0E6; casing-color:blue; casing-width: 1; z-index: 20; }
 way[addr:interpolation] { color: #B0E0E6; width: 3; dashes: 3,3;}

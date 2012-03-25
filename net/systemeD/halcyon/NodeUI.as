@@ -119,7 +119,7 @@ package net.systemeD.halcyon {
 						} else if (s.icon_image=='circle') {
 							// draw circle
 							w=styleIcon(icon,subpart);
-							icon.graphics.drawCircle(w,w,w);
+							icon.graphics.drawCircle(w/2,w/2,w/2);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
 
 						} else if (FileBank.getInstance().hasFile(s.icon_image)) {
