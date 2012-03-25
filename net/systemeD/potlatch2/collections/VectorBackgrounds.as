@@ -73,7 +73,7 @@ package net.systemeD.potlatch2.collections {
 
 										var connection:Connection = new Connection(name, gpx_url, null, null);
 										var gpx:GpxImporter=new GpxImporter(connection, _map, 
-										function(success:Boolean,message:String=null):void {
+										function(connection:Connection,options:Object,success:Boolean,message:String=null):void {
 											if (!success) return;
 											var paint:MapPaint = _map.addLayer(connection, "stylesheets/gpx.css");
 											paint.updateEntityUIs(false, false);
