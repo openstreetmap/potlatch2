@@ -10,7 +10,7 @@
     <mx:columns>
         <mx:DataGridColumn editable="true"  dataField="name" headerText="Name"/>
         <mx:DataGridColumn editable="true"  dataField="url" headerText="URL"/>
-        <mx:DataGridColumn editable="false" headerText="Key" width="70">
+        <mx:DataGridColumn editable="false" dataField="name" headerText="Key" width="70">
 			<mx:itemRenderer>
 				<fx:Component>
 				<mx:ComboBox
