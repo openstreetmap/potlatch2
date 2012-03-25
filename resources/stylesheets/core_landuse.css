@@ -14,7 +14,7 @@ way[leisure] :area                         { color: #8CD6B5; width: 1; fill-colo
 way[tourism] :area                          { color: #F7CECE; width: 1; fill-color: #F7CECE; fill-opacity: 0.2; set .area_small_name;}
 way[historic] :area,way[ruins] :area        { color: #F7F7DE; width: 1; fill-color: #F7F7DE; fill-opacity: 0.2; set .area_small_name;}
 way[military] :area                         { color: #D6D6D6; width: 1; fill-color: #D6D6D6; fill-opacity: 0.2; set .area_small_name;}
-way[building] :area                         { color: #ff6ec7; width: 1; fill-color: #ff6ec7; fill-opacity: 0.2; }
+way[building] :area                         { color: #bca9a9; width: 1; fill-color: #ff6ec7; fill-opacity: 0.2; }
 way[natural=water],
 way[waterway][waterway!=dam] :area          { color: blue;    width: 2; fill-color: blue;    fill-opacity: 0.2; set .area_small_name;}
 way[waterway=dam]							{ color: black; width: 1; fill-color: #222222; fill-opacity: 0.1; set .area_small_name;}
