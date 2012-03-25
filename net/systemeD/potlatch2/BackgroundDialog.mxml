@@ -6,7 +6,7 @@
         horizontalAlign="center" 
         width="500" height="300" verticalGap="0">
 
-  <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" itemEditEnd="updateSource()">
+  <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" itemEditEnd="updateSource()" dataProvider="{dataCollection}">
     <mx:columns>
         <mx:DataGridColumn editable="true"  dataField="name" headerText="Name"/>
         <mx:DataGridColumn editable="true"  dataField="url" headerText="URL"/>
@@ -59,7 +59,6 @@
         PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
-		dataGrid.dataProvider=dataCollection;
     }
     
     private function backgroundDialog_close(evt:CloseEvent):void {
