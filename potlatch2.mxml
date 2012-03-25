@@ -150,6 +150,7 @@
             if (loaderInfo.parameters['locale'] && loaderInfo.parameters['locale']!='en_US') {
                 // we don't bother with localisation if the user is en_US, as P2 is in English by default
                 Globals.vars.locale = loaderInfo.parameters['locale'];
+                Globals.vars.locale_paths = loaderInfo.parameters['locale_paths'];
                 dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, loaderInfo.parameters['locale']));
                 dispatchEvent(new LocaleEvent(LocaleEvent.LOAD_LOCALE, 'en_US')); // think en_US is default
                 resourceManager.localeChain = [loaderInfo.parameters['locale'], 'en_US'];
