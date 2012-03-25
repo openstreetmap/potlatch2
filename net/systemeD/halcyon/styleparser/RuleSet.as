@@ -303,7 +303,7 @@ package net.systemeD.halcyon.styleparser {
 						FileBank.getInstance().addFromFile(filename);
 				}
 			}
-            FileBank.getInstance().onFilesLoaded(iconCallback);
+            if (iconCallback!=null) { FileBank.getInstance().onFilesLoaded(iconCallback); }
 		}
 		
 		// ------------------------------------------------------------------------------------------------
