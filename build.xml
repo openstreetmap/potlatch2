@@ -68,6 +68,7 @@
       <arg line="-external-library-path=lib/"/>
       <arg line="-external-library-path=${FLEX_HOME}/frameworks/libs/"/>
       <arg line="-external-library-path=${FLEX_HOME}/frameworks/libs/player/10.2/"/>
+      <arg line="-compiler.theme ${flexlib}/themes/Halo/halo.swc"/>
       <arg line="-lenient"/>
       <arg line="-target-player=10.2.0"/>
       <arg line="-exclude-classes=${org_classes},${it_classes},${hxasm_classes},${com_classes}"/>
