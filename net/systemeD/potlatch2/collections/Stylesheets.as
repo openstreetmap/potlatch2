@@ -51,7 +51,10 @@ package net.systemeD.potlatch2.collections {
             // Also ensure the saved_url is in the menu (might be either saved from before, or supplied via loaderInfo)
             collection = new Vector.<Stylesheet>;
 			for each(var set:XML in xml.stylesheet) {
-                var s:Stylesheet = new Stylesheet(set.name, set.url, set.corestyle);
+                var corestyle:Boolean = true;
+                if (set.corestyle == "no" || set.corestyle == "false") { corestyle = false }
+
+                var s:Stylesheet = new Stylesheet(set.name, set.url, corestyle);
                 collection.push(s);
 				if (s.url==saved_url) { isInMenu=true; }
 				else if (s.name==saved_name && s.name!='Custom') { isInMenu=true; saved_url=s.url; }
