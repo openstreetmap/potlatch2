@@ -201,11 +201,10 @@ package net.systemeD.potlatch2.mapfeatures {
             var txt:String = icon.children().toXMLString();
             // Args to this function: "string matched", "substring 1", "substring 2"..., index of match, whole string
             var replaceTag:Function = function():String {
-            	var matchnum=0;
-            	var args=arguments;
+            	var matchnum:uint=0;
             	var value:String = null;
-            	while ((value == null || value == "") && matchnum < args.length - 3  ) {
-                  value = entity.getTag(args[matchnum + 1]);
+            	while ((value == null || value == "") && matchnum < arguments.length - 3  ) {
+                  value = entity.getTag(arguments[matchnum + 1]);
                   matchnum++;
             	}
                 return value == null ? "" : htmlEscape(value);
