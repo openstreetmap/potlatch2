@@ -123,6 +123,7 @@
 	import mx.controls.Alert;
 
 	private var map:Map;
+	private var localFileReference:FileReference;
 
 	public function styleEdited(name:String,stylesheet:String):void {
 		map.findLayer(name).setStyle(stylesheet);
@@ -217,17 +218,18 @@
 	
 	/** Present an 'Open File' dialogue. */
 	private function loadFileLocal():void {
-		var file:FileReference=new FileReference(); 
+		// note scoping issues - http://blog.wrench.com.au/2010/06/16/filereferenceload-keep-it-in-scope/
+		localFileReference=new FileReference(); 
 		var fileTypes:FileFilter=new FileFilter("*."+selectedType, "*."+selectedType); 
-		file.browse([fileTypes]); 
-		file.addEventListener(Event.SELECT, selectFileLocal);
+		localFileReference.browse([fileTypes]); 
+		localFileReference.addEventListener(Event.SELECT, selectFileLocal);
 	}
 	
 	/** The user has chosen a file in the local 'Open File' dialogue. */
 	private function selectFileLocal(event:Event):void {
-		var connection:Connection = new Connection(name, url, null, null, CSSTransform.getInstance());
+		var connection:Connection = new Connection(localFileReference.name, '', null, null, CSSTransform.getInstance());
 		var importer:Importer = findImporter(connection);
-		importer.importFromLocalFile();
+		importer.importFromLocalFile(localFileReference);
 	}
 	
 	/** Create an Importer object of the type selected by the user. */

@@ -31,7 +31,7 @@ package net.systemeD.potlatch2.utils {
 		public function importFromRemoteFiles(filenames:Array):void {
 			this.filenames=filenames;
 			// Use forEach to avoid closure problem (http://stackoverflow.com/questions/422784/how-to-fix-closure-problem-in-actionscript-3-as3#3971784)
-			filenames.forEach(function(file:*, index:int, array:Array):void {
+			filenames.forEach(function(file:String, index:int, array:Array):void {
 				trace("requesting file "+index);
 				var loader:URLLoader = new URLLoader();
 				loader.dataFormat=URLLoaderDataFormat.BINARY;
@@ -44,11 +44,16 @@ package net.systemeD.potlatch2.utils {
 			});
 		}
 		
-		public function importFromLocalFiles():void {
-			// ** FIXME: if it's a zip, do something clever
+		public function importFromLocalFile(file:FileReference):void {
+			filenames=['local'];
+			file.addEventListener(Event.COMPLETE, fileLoaded);
+			file.addEventListener(IOErrorEvent.IO_ERROR,ioErrorHandler);
+			file.addEventListener(SecurityErrorEvent.SECURITY_ERROR,securityErrorHandler);
+			file.load();
+			// ** FIXME: if it's a zip (e.g. shapefiles), do something really amazingly clever
 		}
 		
-		protected function fileLoaded(e:Event,filenum:uint):void {
+		protected function fileLoaded(e:Event,filenum:uint=0):void {
 			files[filenum]=e.target.data;
 			filesloaded++;
 			trace("loaded file "+filenum+" ("+filesloaded+"/"+filenames.length+")"); 
