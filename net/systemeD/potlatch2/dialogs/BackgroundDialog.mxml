@@ -13,10 +13,12 @@
         <mx:DataGridColumn editable="false" headerText="Key" width="70">
 			<mx:itemRenderer>
 				<fx:Component>
-				<mx:ComboBox
-					selectedItem="{FunctionKeyManager.instance().getKeyFor(outerDocument.title,data.name)}"
-				    dataProvider="{FunctionKeyManager.fkeysCollection}"
- 					change="FunctionKeyManager.instance().setKeyFromFString(selectedItem as String,outerDocument.title,data.name)" />
+					<mx:ComboBox
+						selectedItem="{FunctionKeyManager.instance().getKeyFor(outerDocument.title,data.name)}"
+					    dataProvider="{FunctionKeyManager.fkeysCollection}"
+	 					change="FunctionKeyManager.instance().setKeyFromFString(selectedItem as String,outerDocument.title,data.name)">
+	 					<fx:Script><![CDATA[ import net.systemeD.potlatch2.FunctionKeyManager; ]]></fx:Script>
+					</mx:ComboBox>
 				</fx:Component>
 			</mx:itemRenderer>
 		</mx:DataGridColumn>

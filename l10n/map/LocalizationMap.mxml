@@ -22,7 +22,7 @@
       import net.systemeD.potlatch2.save.OAuthPanel;
       import net.systemeD.potlatch2.save.SaveDialog;
 
-      import net.systemeD.potlatch2.options.OptionsDialog;
+      import net.systemeD.potlatch2.dialogs.OptionsDialog;
 
       private function onLocaleChanged(event:Event):void {
           var rMngr : IResourceManager = ResourceManager.getInstance();
