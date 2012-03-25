@@ -149,7 +149,7 @@
 
 	[Bindable(event="bogus")]
 	public function get styles():ArrayCollection {
-		return new ArrayCollection(Stylesheets.instance().collection);
+		return Stylesheets.instance().getFullCollection();
 	}
 
 	[Bindable(event="layers_changed")]

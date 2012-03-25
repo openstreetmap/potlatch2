@@ -1,10 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow
+<s:TitleWindow
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:mx="library://ns.adobe.com/flex/mx"
-        layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="Options"
-        width="350" height="250" verticalGap="0">
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        title="Options"
+        width="350" height="250">
+
+    <s:layout>
+      <s:VerticalLayout
+          paddingLeft="5" paddingRight="5"
+          paddingTop="5" paddingBottom="5" />
+    </s:layout>
+
+	<s:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
+	    change="FlexGlobals.topLevelApplication.toolbox.toggle()" />
+
+	<s:CheckBox width="100%" label="Use custom cursors" selected="true" id="cursorcheck"
+	    change="FlexGlobals.topLevelApplication.theController.cursorsEnabled=cursorcheck.selected" />
+
+    <s:CheckBox width="100%" label="Highlight unedited TIGER (US roads)" selected="false" id="tigercheck"
+        change="tigerToggle()" />
+
+	<s:CheckBox width="100%" label="Show mouse latitude/longitude" selected="false" id="latlongcheck"
+		change="FlexGlobals.topLevelApplication.coordsbox.visible=latlongcheck.selected" />
+
+    <s:CheckBox width="100%" label="Show licence status" selected="false" id="licencecheck"
+        change="licenceToggle()" />
+
+	<s:HGroup width="100%" verticalAlign="middle">
+      <s:Label text="Simplify accuracy: "/>
+      <mx:HSlider id="simplifyslider"
+		minimum="1" maximum="5"
+		dataTipPlacement="top" tickColor="black" labels="[High,Low]"
+		snapInterval="1" tickInterval="1"
+		allowTrackClick="true" liveDragging="true"
+		change="simplifySet();"/>
+	</s:HGroup>
+
+    <s:controlBarContent>
+      <s:Button id="ok" label="OK" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+    </s:controlBarContent>
+
+    <s:controlBarLayout>
+      <s:HorizontalLayout horizontalAlign="right"
+          paddingLeft="5" paddingRight="5"
+          paddingTop="5" paddingBottom="5" />
+    </s:controlBarLayout>
+
   <fx:Script><![CDATA[
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
@@ -63,34 +105,4 @@
 	
               ]]>
   </fx:Script>
-	<mx:CheckBox width="100%" label="Show toolbox" selected="true" id="tbcheck"
-	    change="FlexGlobals.topLevelApplication.toolbox.toggle()" />
-
-	<mx:CheckBox width="100%" label="Use custom cursors" selected="true" id="cursorcheck"
-	    change="FlexGlobals.topLevelApplication.theController.cursorsEnabled=cursorcheck.selected" />
-
-    <mx:CheckBox width="100%" label="Highlight unedited TIGER (US roads)" selected="false" id="tigercheck"
-        change="tigerToggle()" />
-
-	<mx:CheckBox width="100%" label="Show mouse latitude/longitude" selected="false" id="latlongcheck" 
-		change="FlexGlobals.topLevelApplication.coordsbox.visible=latlongcheck.selected" />
-
-    <mx:CheckBox width="100%" label="Show licence status" selected="false" id="licencecheck"
-        change="licenceToggle()" />
-
-	<mx:HBox width="100%" verticalAlign="middle">
-    <mx:Label text="Simplify accuracy: "/>
-	<mx:HSlider id="simplifyslider"
-		minimum="1" maximum="5"
-		dataTipPlacement="top" tickColor="black" labels="[High,Low]" 
-		snapInterval="1" tickInterval="1"
-		allowTrackClick="true" liveDragging="true"
-		change="simplifySet();"/>
-	</mx:HBox>
-
-  <mx:ControlBar>
-    <mx:Spacer width="100%"/>
-    <mx:Button id="ok" label="Ok" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
-  </mx:ControlBar>
-
-</mx:TitleWindow>
+</s:TitleWindow>

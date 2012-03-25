@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:mx="library://ns.adobe.com/flex/mx"
-	paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"
-	horizontalAlign="left" backgroundColor="white" borderStyle="inset">
-	
-	<mx:List width="100%" height="100%" id="background"
-			labelField="name"
-			change="FlexGlobals.topLevelApplication.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);"
-	        dataProvider="{Imagery.instance().getAvailableImagery()}"
-	        rowCount="{Imagery.instance().getAvailableImagery().length}"/>
-	<mx:HBox>
-	<mx:CheckBox width="100%" label="Dim" selected="{application.theMap.getDimming()}" id="dim"
-	    change="setDimming(dim.selected)" />
-	<mx:CheckBox width="100%" label="Sharpen" selected="{application.theMap.getSharpen()}" id="sharpen"
-	    change="setSharpen(sharpen.selected)" />
-	</mx:HBox>
+<s:BorderContainer
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark">
 
-	<mx:HBox>
-	<mx:Button id="editLabel" label="Edit..." click="FlexGlobals.topLevelApplication.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
-	<mx:Button label="Vector file..." click="FlexGlobals.topLevelApplication.bgButton.close(); new VectorSourceDialog().init();" />
-	</mx:HBox>
+    <s:layout>
+      <s:VerticalLayout
+          paddingLeft="5" paddingRight="5"
+          paddingTop="5" paddingBottom="5"/>
+    </s:layout>
+
+    <s:List width="100%" height="100%" id="background"
+            labelField="name"
+            change="FlexGlobals.topLevelApplication.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);"
+            dataProvider="{Imagery.instance().getAvailableImagery()}"
+            selectedItem="{Imagery.instance().selected}">
+      <s:layout>
+        <s:VerticalLayout requestedRowCount="{Imagery.instance().getAvailableImagery().length}" gap="0" horizontalAlign="contentJustify"/>
+      </s:layout>
+    </s:List>
+
+    <s:HGroup width="100%" horizontalAlign="center">
+      <s:CheckBox label="Dim" selected="{application.theMap.getDimming()}" id="dim"
+          change="setDimming(dim.selected)" />
+      <s:CheckBox label="Sharpen" selected="{application.theMap.getSharpen()}" id="sharpen"
+          change="setSharpen(sharpen.selected)" />
+    </s:HGroup>
+
+    <s:HGroup>
+      <s:Button id="editLabel" label="Edit..." click="FlexGlobals.topLevelApplication.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
+      <s:Button label="Vector file..." click="FlexGlobals.topLevelApplication.bgButton.close(); new VectorSourceDialog().init();" />
+    </s:HGroup>
 
 	<fx:Script><![CDATA[
 
@@ -48,5 +57,4 @@
 			obj.flush();
 		}
     ]]></fx:Script>
-</mx:VBox>
-
+</s:BorderContainer>

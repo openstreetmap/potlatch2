@@ -6,11 +6,11 @@
         horizontalAlign="center" 
         width="500" height="300" verticalGap="0">
 
-  <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" itemEditEnd="updateSource()">
+  <mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" itemEditEnd="updateSource()" dataProvider="{dataCollection}">
     <mx:columns>
         <mx:DataGridColumn editable="true"  dataField="name" headerText="Name"/>
         <mx:DataGridColumn editable="true"  dataField="url" headerText="URL"/>
-        <mx:DataGridColumn editable="false" headerText="Key" width="70">
+        <mx:DataGridColumn editable="false" dataField="name" headerText="Key" width="70">
 			<mx:itemRenderer>
 				<fx:Component>
 					<mx:ComboBox
@@ -46,7 +46,7 @@
     import mx.core.Application;
     import mx.core.FlexGlobals;
 	import mx.collections.ArrayCollection;
-	import mx.controls.List;
+	import spark.components.List;
 	import net.systemeD.potlatch2.FunctionKeyManager;
 
 	public var dataCollection:ArrayCollection;
@@ -57,16 +57,14 @@
 		this.title=title;
 		this.menu=menu;
 		collection=source;
-		dataCollection=new ArrayCollection(source.collection);
+		dataCollection = source.getCollection();
         PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, backgroundDialog_close);
-		dataGrid.dataProvider=dataCollection;
     }
     
     private function backgroundDialog_close(evt:CloseEvent):void {
         PopUpManager.removePopUp(this);
-		if (menu) { menu.invalidateList(); }
     }
 
 	private function addNewSource():void {
