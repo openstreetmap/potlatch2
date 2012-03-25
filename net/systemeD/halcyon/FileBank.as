@@ -30,7 +30,19 @@ package net.systemeD.halcyon {
 			return false;
 		}
 
-		/* ==========================================================================================
+        public function fileLoaded(name:String, callback:Function):Boolean {
+            var loaded:Boolean = false;
+            if (files[name]) {
+                if (files[name].info.callbacks) {
+                    files[name].info.callbacks.push(callback);
+                } else {
+                    loaded = true;
+                }
+            }
+            return loaded;
+        }
+
+        /* ==========================================================================================
 		   Add an individual file to bank (not from a .zip file)
 		   Used when we want to load a file for use later on (e.g. an image referenced in a stylesheet)
 		   ========================================================================================== */
@@ -92,17 +104,18 @@ package net.systemeD.halcyon {
         }
 
         private function loadedImage(event:Event):void {
-			fileLoaded(event.target.loader.info);
+			fileLoadComplete(event.target.loader.info);
         }
         private function loadedFile(event:Event):void {
-			fileLoaded(event.target.info);
+			fileLoadComplete(event.target.info);
         }
-        private function fileLoaded(info:Object):void {
-            for (var c:uint = 0; c < info.callbacks.length; c++) {
-                var callback:Function = info.callbacks[c];
+        private function fileLoadComplete(info:Object):void {
+            var callbacks:Array = info.callbacks;
+            info.callbacks = null;
+            while (callbacks.length > 0) {
+                var callback:Function = callbacks.shift();
                 callback(this, info.filename);
             }
-            info.callbacks = null;
 
             fileReceived();
 		}

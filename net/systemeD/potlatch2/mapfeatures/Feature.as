@@ -150,6 +150,7 @@ package net.systemeD.potlatch2.mapfeatures {
         /** Fetches the feature's image, as defined by the icon element in the feature definition.
         * @param dnd if true, overrides the normal image and returns the one defined by the dnd property instead. */
         private function getImage(dnd:Boolean = false):ByteArray {
+            var fileBank:FileBank = FileBank.getInstance();
             var icon:XMLList = _xml.icon;
             var imageURL:String;
 
@@ -159,8 +160,12 @@ package net.systemeD.potlatch2.mapfeatures {
                 imageURL = icon[0].@image;
             }
 
-            if ( imageURL && FileBank.getInstance().hasFile(imageURL) ) {
-                return FileBank.getInstance().getAsByteArray(imageURL);
+            if ( imageURL && fileBank.hasFile(imageURL) ) {
+                if (fileBank.fileLoaded(imageURL, imageLoaded)) {
+                    return fileBank.getAsByteArray(imageURL);
+                } else {
+                    return null;
+                }
             }
             var bitmap:BitmapAsset = new missingIconCls() as BitmapAsset;
             return new PNGEncoder().encode(bitmap.bitmapData);
@@ -172,6 +177,10 @@ package net.systemeD.potlatch2.mapfeatures {
         public function canDND():Boolean {
         	var point:XMLList = _xml.elements("point");
         	return point.length() > 0 && !(XML(point[0]).attribute("draganddrop")[0] == "no");
+        }
+
+        private function imageLoaded(fileBank:FileBank, url:String):void {
+            dispatchEvent(new Event("imageChanged"));
         }
 
         public function htmlDetails(entity:Entity):String {
