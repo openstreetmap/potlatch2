@@ -267,11 +267,13 @@
 			theMap.tileset.blocks=[/google\./i];	// hard-coded block on Google tiles
 			theMap.tileset.setDimming(params['background_dim']    ==null ? true  : params['background_dim']);
 			theMap.tileset.setSharpen(params['background_sharpen']==null ? false : params['background_sharpen']);
-			Imagery.instance().init(theMap, overlay);
-			Imagery.instance().addEventListener(MapEvent.BUMP, bumpHandler);
-			Imagery.instance().addEventListener(CollectionEvent.SELECT,
+			var imagery:Imagery = Imagery.instance();
+			imagery.init(theMap, overlay, yahoo);
+			imagery.addEventListener(MapEvent.BUMP, bumpHandler);
+			imagery.addEventListener(CollectionEvent.SELECT,
 				function(e:CollectionEvent):void { theMap.tileset.init(e.data, e.data!=''); }
 			);
+			theMap.tileset.init(imagery.selected, imagery.selected != '');
 			
 			// keyboard event attached to stage
 			stage.addEventListener(KeyboardEvent.KEY_UP, theMap.keyUpHandler);
