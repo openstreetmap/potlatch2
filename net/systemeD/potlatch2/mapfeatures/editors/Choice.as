@@ -2,6 +2,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
     import flash.events.*;
     import flash.utils.ByteArray;
+    import net.systemeD.halcyon.FileBank;
 
 	public class Choice extends EventDispatcher {
 
@@ -27,8 +28,10 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                 _match = new RegExp("^("+matchStr+")$");
             }
         }
+
+        public function imageLoaded(fileBank:FileBank, name:String):void {
+            icon = fileBank.getAsByteArray(name);
+            dispatchEvent(new Event("iconLoaded"));
+        }        
     }
-
 }
-
-
