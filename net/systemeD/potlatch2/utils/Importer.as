@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.utils {
 	import flash.display.LoaderInfo;
 	import flash.events.*;
 	import flash.net.*;
+	import flash.utils.ByteArray;
 	import nochump.util.zip.*;
 
 	public class Importer {
@@ -51,29 +52,44 @@ package net.systemeD.potlatch2.utils {
 			file.addEventListener(IOErrorEvent.IO_ERROR,ioErrorHandler);
 			file.addEventListener(SecurityErrorEvent.SECURITY_ERROR,securityErrorHandler);
 			file.load();
-			// ** FIXME: if it's a zip (e.g. shapefiles), do something really amazingly clever
 		}
 		
 		protected function fileLoaded(e:Event,filenum:uint=0):void {
 			var rawData:ByteArray=e.target.data;
-			var firstFour:ByteArray;
+			var firstFour:ByteArray=new ByteArray();
 			rawData.readBytes(firstFour,0,4);
 			rawData.position=0;
 			
 			if (firstFour.toString()=="PK"+String.fromCharCode(3)+String.fromCharCode(4)) {
-				trace("looks like a zip file to me");
+				// Zip file (we assume there'll only be one of these...)
+				var zip:ZipFile = new ZipFile(rawData);
+				for (var i:uint=0; i<zip.entries.length; i++) {
+					filenames[i]=zip.entries[i].name;
+					files[i]=zip.getInput(zip.entries[i]);
+					filesloaded++;
+				}
+				runImporter();
 			} else {
-				trace("not a zip file");
+				// Standard file
 				files[filenum]=rawData;
 				filesloaded++;
 				trace("loaded file "+filenum+" ("+filesloaded+"/"+filenames.length+")"); 
-				if (filesloaded==filenames.length) {
-	                var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
-					doImport(action.push);
-					action.doAction(); // just do it, don't add to undo stack
-					if (callback!=null) { callback(connection,options,true); }
-				}
+				if (filesloaded==filenames.length) { runImporter(); }
 			}
+		}
+
+		private function runImporter():void {
+			var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
+			doImport(action.push);
+			action.doAction(); // just do it, don't add to undo stack
+			if (callback!=null) { callback(connection,options,true); }
+		}
+
+		protected function getFileByName(regex:RegExp):* {
+			for (var i:uint=0; i<filenames.length; i++) {
+				if (filenames[i].match(regex)) { return files[i]; }
+			}
+			return null;
 		}
 		
 		protected function doImport(push:Function):void {

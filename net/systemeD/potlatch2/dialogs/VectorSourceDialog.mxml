@@ -209,10 +209,10 @@
 		var connection:Connection = new Connection(name, url, null, null, CSSTransform.getInstance());
 		var importer:Importer = findImporter(connection);
 		if (selectedType=='shp') {
-			importer.importFromRemoteFiles([url]);
-		} else {
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
 			importer.importFromRemoteFiles([url+".shp",url+".shx",url+".dbf"]);
+		} else {
+			importer.importFromRemoteFiles([url]);
 		}
 	}
 	
@@ -220,8 +220,8 @@
 	private function loadFileLocal():void {
 		// note scoping issues - http://blog.wrench.com.au/2010/06/16/filereferenceload-keep-it-in-scope/
 		localFileReference=new FileReference(); 
-		var fileTypes:FileFilter=new FileFilter("*."+selectedType, "*."+selectedType); 
-		localFileReference.browse([fileTypes]); 
+		var fileTypes:String=selectedType=='shp' ? "*.zip" : ("*.zip;*."+selectedType);
+		localFileReference.browse([new FileFilter(fileTypes,fileTypes)]); 
 		localFileReference.addEventListener(Event.SELECT, selectFileLocal);
 	}
 	
