@@ -10,7 +10,7 @@
     <mx:Image x="0" y="0" source="@Embed('../../../../../embedded/restriction.svg')" />
     
     <mx:TextInput id="valueText" text="{data.value==null ? '--' : data.scalar}" editable="{data.isEditable}"
-        fontWeight="bold" fontSize="16" textAlign="center" borderStyle="none"
+        fontWeight="bold" fontSize="16" textAlign="center" borderStyle="none" backgroundAlpha="0"
         width="50" x="0" y="7" />
     
     <mx:Label id="unitText" text="{data.unit}"
