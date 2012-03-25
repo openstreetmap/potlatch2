@@ -4,6 +4,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.Map;
 	import net.systemeD.potlatch2.tools.Parallelise;
+	import net.systemeD.halcyon.connection.actions.*;
 
     /** The state midway during the use of the "parallelise tool", where a parallel way has been created but is stuck to the 
     * mouse cursor, allowing the user to choose how far from the original way it should go. This transforms it in the process. */
@@ -36,6 +37,10 @@ package net.systemeD.potlatch2.controller {
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
 			if (event.keyCode==27) {			// Escape
 				Way(firstSelected).remove(MainUndoStack.getGlobalStack().addAction);
+				// Parallel way wasn't created, so remove it from undo history.
+				MainUndoStack.getGlobalStack().removeLastIfAction(DeleteWayAction);
+                MainUndoStack.getGlobalStack().removeLastIfAction(CreateEntityAction);
+				
 				return new NoSelection();
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
