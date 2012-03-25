@@ -141,7 +141,11 @@
 		private function startInit():void {
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, startApp);
-			loader.load(new URLRequest("FontLibrary.swf"));
+            if (loaderInfo.parameters['font_library']) {
+			    loader.load(new URLRequest(loaderInfo.parameters['font_library']));
+            } else {
+			    loader.load(new URLRequest("FontLibrary.swf"));
+            }
 
             if (loaderInfo.parameters['locale'] && loaderInfo.parameters['locale']!='en_US') {
                 // we don't bother with localisation if the user is en_US, as P2 is in English by default
