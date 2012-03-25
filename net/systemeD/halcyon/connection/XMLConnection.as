@@ -489,8 +489,13 @@ package net.systemeD.halcyon.connection {
 				function(e:Event):void { 
             		dispatchEvent(new Event(LOAD_COMPLETED));
 					callback(e);
-				}, errorOnMapLoad, mapLoadStatus); // needs error handlers
+				}, errorOnTraceLoad, mapLoadStatus); // needs error handlers
             dispatchEvent(new Event(LOAD_STARTED)); //specifc to map or reusable?
+        }
+
+        private function errorOnTraceLoad(event:Event):void {
+            trace("Trace load error");
+            dispatchEvent(new Event(LOAD_COMPLETED));
         }
 	}
 }

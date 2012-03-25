@@ -46,6 +46,7 @@ package net.systemeD.halcyon.connection {
             _id = Number(xml.@id);
             _filename = xml.@name;
             _description = xml.description;
+            tags = [];
             for each(var tag:XML in xml.tag) {
               tags.push(String(tag));
             }

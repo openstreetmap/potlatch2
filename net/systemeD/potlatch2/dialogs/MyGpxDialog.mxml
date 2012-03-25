@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:TitleWindow
+<s:TitleWindow
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:mx="library://ns.adobe.com/flex/mx"
-        layout="vertical" showCloseButton="true"
-        horizontalAlign="center" title="My tracks"
-        width="600" height="400"
-        verticalGap="0">
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        title="My tracks"
+        width="600" height="400">
+
+  <s:layout>
+    <s:VerticalLayout />
+  </s:layout>
+   
+  <s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="5">
+    <s:RichText text="Traces" id="results" />
+  </s:HGroup>
+  <s:DataGrid dataProvider="{traces}" width="100%" height="100%" id="traceGrid">
+    <s:columns>
+      <s:ArrayCollection>
+        <s:GridColumn editable="false" dataField="id" headerText="id" width="45"/>
+        <s:GridColumn editable="false" dataField="filename" headerText="filename"/>
+        <s:GridColumn editable="false" dataField="description" headerText="description"/>
+        <s:GridColumn editable="false" dataField="tagsText" headerText="tags"/>
+        <s:GridColumn editable="false">
+          <s:itemRenderer>
+            <fx:Component>
+              <s:GridItemRenderer>
+                <s:VGroup horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
+                  <s:Button label="Load"
+                      click="outerDocument.loadFile(data)"/>
+                </s:VGroup>
+              </s:GridItemRenderer>
+            </fx:Component>
+          </s:itemRenderer>
+        </s:GridColumn>
+      </s:ArrayCollection>
+    </s:columns>
+  </s:DataGrid>
+
+  <s:controlBarContent>
+    <s:Button label="Refresh List" click="fetchList(true)" />
+  </s:controlBarContent>
+
   <fx:Script><![CDATA[
     import mx.managers.PopUpManager;
     import mx.events.CloseEvent;
@@ -29,9 +63,9 @@
         PopUpManager.centerPopUp(this);
         this.addEventListener(CloseEvent.CLOSE, myGpxDialog_close);
 
-		// >>>> REFACTOR: really horrible way of getting both map and connection
+        // >>>> REFACTOR: really horrible way of getting both map and connection
         map = Globals.vars.root;
-		conn = map.editableLayer.connection;
+        conn = map.editableLayer.connection;
 
         conn.addEventListener(Connection.TRACES_LOADED, onTracesLoaded);
         SaveManager.ensureAccess(fetchList, conn);
@@ -54,10 +88,15 @@
 
     [Bindable(event="traces_loaded")]
     private function get traces():VectorCollection {
-		return new VectorCollection(conn.getTraces());
+        return new VectorCollection(conn.getTraces().sort(f).reverse());
     }
 
-    public function loadFile(t:Trace):void {
+    private function f(a:Trace, b:Trace):int {
+        return a.id - b.id
+    }
+
+    public function loadFile(o:Object):void {
+        var t:Trace = Trace(o);
         t.addToMap();
     }
 
@@ -70,27 +109,4 @@
     }
               ]]>
   </fx:Script>
-
-  <mx:Text text="Traces" id="results" />
-  <mx:DataGrid dataProvider="{traces}" width="100%" height="100%" id="traceGrid">
-    <mx:columns>
-            <mx:DataGridColumn editable="false" dataField="id" headerText="id" width="45"/>
-            <mx:DataGridColumn editable="false" dataField="filename" headerText="filename"/>
-            <mx:DataGridColumn editable="false" dataField="description" headerText="description"/>
-            <mx:DataGridColumn editable="false" dataField="tagsText" headerText="tags"/>
-            <mx:DataGridColumn editable="false">
-              <mx:itemRenderer>
-                <fx:Component>
-                  <mx:VBox>
-                    <mx:Button label="Load"
-                      click="parentDocument.loadFile(data)"/>
-                  </mx:VBox>
-                </fx:Component>
-              </mx:itemRenderer>
-            </mx:DataGridColumn>
-    </mx:columns>
-  </mx:DataGrid>
-  <mx:ControlBar>
-    <mx:Button label="Refresh List" click="fetchList(true)" />
-  </mx:ControlBar>
-</mx:TitleWindow>
+</s:TitleWindow>
