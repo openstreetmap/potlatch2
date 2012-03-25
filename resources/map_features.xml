@@ -48,7 +48,7 @@
    </inputSet> 
 
   <inputSet id="source">
-    <input type="freetext" category="Details" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Yahoo, ...)" priority="lowest"/>
+    <input type="freetext" category="Details" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Bing, ...)" priority="lowest"/>
   </inputSet>
 
   <inputSet id="designation">

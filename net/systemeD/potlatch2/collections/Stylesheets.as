@@ -6,7 +6,6 @@ package net.systemeD.potlatch2.collections {
 	import net.systemeD.halcyon.FileBank;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.potlatch2.FunctionKeyManager;
-	import net.systemeD.potlatch2.Yahoo;
 	import mx.collections.ArrayCollection;
 
 	public class Stylesheets extends EventDispatcher {

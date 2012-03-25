@@ -37,7 +37,6 @@
 
 		public function setDimming(v:Boolean):void {
 			FlexGlobals.topLevelApplication.theMap.setDimming(dim.selected);
-			FlexGlobals.topLevelApplication.yahoo.alpha = dim.selected ? 0.5 : 1;
 			var obj:SharedObject=SharedObject.getLocal("user_state");
 			obj.setProperty('background_dim',v);
 			obj.flush();
