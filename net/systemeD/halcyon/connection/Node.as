@@ -7,15 +7,15 @@ package net.systemeD.halcyon.connection {
         private var _latproj:Number;
         private var _lon:Number;
 
-        public function Node(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null) {
-            super(connection, id, version, tags, loaded, uid, timestamp);
+        public function Node(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null, user:String = null) {
+            super(connection, id, version, tags, loaded, uid, timestamp, user);
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;
         }
 
-		public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null):void {
-			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp); setLatLonImmediate(lat,lon);
+		public function update(version:uint, tags:Object, loaded:Boolean, parentsLoaded:Boolean, lat:Number, lon:Number, uid:Number = NaN, timestamp:String = null, user:String = null):void {
+			updateEntityProperties(version,tags,loaded,parentsLoaded,uid,timestamp,user); setLatLonImmediate(lat,lon);
 		}
 
         public function get lat():Number {

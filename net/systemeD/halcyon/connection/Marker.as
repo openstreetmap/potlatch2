@@ -11,7 +11,7 @@ package net.systemeD.halcyon.connection {
         private var _lon:Number;
 
         public function Marker(connection:Connection, id:Number, version:uint, tags:Object, loaded:Boolean, lat:Number, lon:Number) {
-            super(connection, id, version, tags, loaded, 0, null);
+            super(connection, id, version, tags, loaded, NaN, null, null);
             this._lat = lat;
             this._latproj = lat2latp(lat);
             this._lon = lon;

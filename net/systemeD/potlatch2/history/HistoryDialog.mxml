@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+    The History Dialog displays information about the history of an entity. As well as showing the different versions
+    of the entity, it displays synthetic history based on its children. For example, the intermediate states
+    of a way while the nodes are rearranged are shown.
+-->
+<s:TitleWindow
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:help="net.systemeD.potlatch2.help.*"
+        title="History for {entity.getType()} {entity.id}"
+        width="600" height="400">
+
+  <s:layout>
+    <s:VerticalLayout />
+  </s:layout>
+
+  <s:VGroup width="100%" height="100%">
+    <s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" paddingTop="5">
+      <s:RichText text="Loading data..." visible="{ entityStates.length == 0 }" />
+    </s:HGroup>
+      <s:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
+        <s:columns>
+          <s:ArrayList>
+            <s:GridColumn editable="false" dataField="version" headerText="version" width="60">
+              <s:itemRenderer>
+                <fx:Component>
+                  <s:DefaultGridItemRenderer textAlign="center" />
+                </fx:Component>
+              </s:itemRenderer>
+            </s:GridColumn>
+            <s:GridColumn editable="false" dataField="timestamp" headerText="timestamp" />
+            <s:GridColumn editable="false" dataField="user" headerText="username" />
+            <s:GridColumn editable="false">
+              <s:itemRenderer>
+                <fx:Component>
+                  <s:GridItemRenderer>
+                    <s:VGroup horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
+                      <s:Button label="Contact Mapper" click="parentDocument.parentDocument.message(data.user)"/>
+                    </s:VGroup>
+                  </s:GridItemRenderer>
+                </fx:Component>
+              </s:itemRenderer>
+            </s:GridColumn>
+          </s:ArrayList>
+        </s:columns>
+      </s:DataGrid>
+  </s:VGroup>
+
+
+  <s:controlBarContent>
+    <!-- <s:Button label="Revert" enabled="false" styleName="titleWindowButton" /> -->
+    <s:Spacer width="100%"/>
+    <s:Button label="More Details..." enabled="{entity.id >= 0}" click="openEntityPage()" styleName="titleWindowButton" />
+    <s:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+  </s:controlBarContent>
+
+  <fx:Script><![CDATA[
+
+    import mx.managers.PopUpManager;
+    import mx.core.Application;
+    import mx.core.FlexGlobals;
+    import mx.events.CloseEvent;
+    import flash.events.Event;
+    import com.adobe.utils.ArrayUtil;
+
+    import net.systemeD.halcyon.connection.*
+
+    // This is the entity that we're requesting the history for.
+    [Bindable]
+    private var entity:Entity;
+
+    // These are the various states that the entity as been in - so is a list
+    // of Nodes (all with the same id) or Ways etc
+    [Bindable]
+    private var entityStates:ArrayList = new ArrayList();
+
+    // store intermediate states for ways
+    private var wayStates:Array; // an array of ways
+    private var wayNodeStates:Array; // an array of arrays of nodes
+
+    // the number of outstanding asynchronous node history requests,
+    // so we know when all have been fetched
+    private var pendingNodeFetches:uint;
+
+    public function init(e:Entity):void {
+        if (e == null) {return;}
+
+        PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
+        PopUpManager.centerPopUp(this);
+        this.addEventListener(CloseEvent.CLOSE, historyDialog_close);
+
+        entity = e;
+        fetchHistory();
+    }
+
+    private function historyDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+    }
+
+    /** Open up a new browser page showing OSM's view of the current entity. */
+    private function openEntityPage():void {
+        if (entity != null && entity.id >= 0) {
+            // This is slightly hard-coded, but not drastically. The ../s could be changed for string manipulation of the apiBase
+            var urlBase:String = entity.connection.apiBase + '../../browse/';
+            navigateToURL(new URLRequest(urlBase+entity.getType()+'/'+entity.id), "potlatch_browse");
+        }
+    }
+
+    private function fetchHistory():void {
+        if (entity is Node) {
+            entity.connection.fetchHistory(entity, processNode);
+        } else if (entity is Way) {
+            entity.connection.fetchHistory(entity, processWay);
+        } else {
+            // not implemented
+        }
+    }
+
+    private function processNode(results:Array):void {
+        // Simply copy the nodes into the states array
+        // todo sorting or somesuch
+        entityStates.source = results.reverse();
+    }
+
+    private function processWay(results:Array):void {
+        // This is much more complicated that nodes.
+        // In potlatch(2) we show the user the number of different states, bearing in mind
+        // node movements (and tag changes?).
+
+        wayStates = results;
+
+        // figure out the list of nodes that have ever been involved in the way, and fetch them.
+        // pendingNode will store each one, and trigger an event when they are all downloaded.
+        wayNodeStates = [];
+        addEventListener("pendingNodesAllFetched", processWayStates);
+
+        var nodes:Object = {};
+        var count:uint = 0;
+
+        for each(var oldWay:Way in results) {
+            for (var i:uint = 0; i< oldWay.length; i++) {
+                var node:Node = oldWay.getNode(i);
+                if(!nodes[node.id]) {
+                    nodes[node.id] = node;
+                    count++;
+                }
+            }
+        }
+
+        pendingNodeFetches = count;
+
+        for each (var n:Node in nodes) {
+            entity.connection.fetchHistory(n, pendingNode);
+        }
+    }
+
+    // Callback for fetching a node history as part of a way; when there's no outstanding
+    // nodes remaining this will trigger an event.
+    private function pendingNode(results:Array):void {
+        wayNodeStates.push(results)
+        pendingNodeFetches--;
+        trace("fetched node "+results[0].id+" , "+pendingNodeFetches+" more to go");
+        if (pendingNodeFetches == 0) {
+            dispatchEvent(new Event("pendingNodesAllFetched"));
+        }
+    }
+
+    private function processWayStates(e:Event):void {
+        // we now have all the node histories for
+        // for each node that has ever been part of the way.
+
+        // Build a list of every timestamp of interest, along with who
+        // the person was that triggered that timestamp (either from a way version
+        // change, or from changing a node.
+        var revdates:Array = [];
+        var revusers:Object = {};
+
+        for each (var way:Way in wayStates) {
+            revdates.push(way.timestamp);
+            revusers[way.timestamp] = way.user;
+        }
+
+        for each (var nodeStates:Array in wayNodeStates) {
+            for each (var node:Node in nodeStates) {
+                revdates.push(node.timestamp);
+                revusers[node.timestamp] = node.user;
+            }
+        }
+
+        // sort the dates and remove duplicates and those before the first version of the way
+
+        revdates = revdates.sort();
+        revdates = ArrayUtil.createUniqueCopy(revdates); // (corelib) de-duplicates
+        revdates = revdates.filter(function(e:*, i:int, arr:Array):Boolean { return e >= wayStates[0].timestamp});
+
+        var version:int = 1;
+        var subversion:int = 0;
+        var es:Array = []; // entityStates
+
+        for each (var revdate:String in revdates) {
+          var entitystate:Object = {};
+
+          var w:Way = getEntityAtDate(wayStates, revdate) as Way;
+
+          if (w.version == version) {
+              subversion++;
+          } else {
+              version = w.version;
+              subversion = 1;
+          }
+
+          //for (i = 0, i < w.length; i++) {
+          //    var generalNode:Node = w.getNode(i);
+          //    var specificNode:Node = getEntityAtDate(wayNodeStates[generalNode.id], revdate);
+          //    where was I going with this? Oh, yes, it'll be needed for building the object to revert to.
+          //}
+
+          entitystate.version = String(version) + "." + String(subversion);
+          entitystate.timestamp = revdate;
+          entitystate.user = revusers[revdate];
+          es.push(entitystate)
+        }
+
+        entityStates.source = es.reverse();
+    }
+
+    // given a list of entities sorted with oldest first, find the last version before that date.
+    private function getEntityAtDate(list:Array, date:String):Entity {
+        trace("find for date : "+date);
+        for(var i:int = list.length-1; i >= 0; i--) {
+            var entity:Entity = list[i];
+            trace (entity.timestamp + " : " + date);
+            if (entity.timestamp <= date) {
+                trace("returning version " + entity.version);
+                return entity;
+            }
+        }
+        trace("ERROR");
+        return null;
+    }
+
+    public function message(user:String):void {
+        if (user) {
+            var urlBase:String = entity.connection.apiBase + '../../message/new/';
+            navigateToURL(new URLRequest(urlBase+user), "potlatch_message");
+        }
+    }
+    ]]>
+  </fx:Script>
+
+
+</s:TitleWindow>
+
+

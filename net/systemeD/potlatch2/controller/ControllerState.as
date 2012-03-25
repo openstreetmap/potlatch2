@@ -4,8 +4,10 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.Map;
     import net.systemeD.halcyon.MapPaint;
     import net.systemeD.halcyon.connection.*;
+    import net.systemeD.halcyon.AttentionEvent;
     import net.systemeD.potlatch2.collections.Imagery;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.potlatch2.history.HistoryDialog;
 	import net.systemeD.potlatch2.save.SaveManager;
 	import net.systemeD.potlatch2.utils.SnapshotConnection;
 	import flash.ui.Keyboard;
@@ -80,6 +82,7 @@ package net.systemeD.potlatch2.controller {
 				case 67:	editableLayer.connection.closeChangeset(); break;						// C - close changeset
 				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
 				case 71:	FlexGlobals.topLevelApplication.trackLoader.load(); break;				// G - GPS tracks **FIXME: move from Application to Map
+                case 72:    showHistory(); break;                                                   // H - History
 				case 83:	SaveManager.saveChanges(editableLayer.connection); break;				// S - save
 				case 84:	controller.tagViewer.togglePanel(); return null;						// T - toggle tags panel
 				case 90:	if (!event.shiftKey) { MainUndoStack.getGlobalStack().undo(); return null;}// Z - undo
@@ -199,8 +202,6 @@ package net.systemeD.potlatch2.controller {
 			MainUndoStack.getGlobalStack().addAction(undo);
                         controller.updateSelectionUI();
 			object.resume();
-
-
 		}
 		
 		/** Remove all tags from current selection. */
@@ -216,6 +217,17 @@ package net.systemeD.potlatch2.controller {
 			controller.updateSelectionUI();
 			for each (item in _selection) item.resume();
 		}
+
+        /** Show the history dialog, if only one object is selected. */
+        protected function showHistory():void {
+            if (selectCount == 1) {
+                new HistoryDialog().init(firstSelected);
+            } else if (selectCount == 0) {
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, nothing selected"));
+            } else {
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, multiple objects selected"));
+            }
+        }
 
 		/** Create an action to add "source=*" tag to current entity based on background imagery. This is a convenient shorthand for users. */
 		protected function setSourceTag():void {

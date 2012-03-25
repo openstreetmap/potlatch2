@@ -73,8 +73,12 @@
 == l10n ==
 * Fix the en_US / default locale problem
 
+== history ==
+* Think about what happens if a node, which used to be part of a way and isn't any more, changes. Does that put a fake "version" in?
+
 == other ==
 * Simplify.as shouldn't add an action to the global undo stack, since it's called from e.g. importing into other layers
+
 
 Requested enhancements
 ----------------------

@@ -22,7 +22,7 @@ package net.systemeD.halcyon.connection {
 			var conn:Connection=entities[0].connection;
 			// ** FIXME: this really is a very nasty way of finding the connection
 			
-			super(conn, -1, 0, {}, true, -1, "");
+			super(conn, -1, 0, {}, true, NaN, null, null);
             _entities = entities;
 			
 			//To avoid firing on every contained entity, we wait some short time before firing the events

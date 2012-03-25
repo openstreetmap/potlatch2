@@ -101,7 +101,6 @@
 		import net.systemeD.potlatch2.help.*;
 		import net.systemeD.potlatch2.dialogs.*;
 		import net.systemeD.potlatch2.utils.*;
-        import net.systemeD.potlatch2.mygpx.*;
 		import net.systemeD.controls.FloatingAlert;
 		import net.systemeD.controls.Spinner;
 		import mx.managers.PopUpManager;

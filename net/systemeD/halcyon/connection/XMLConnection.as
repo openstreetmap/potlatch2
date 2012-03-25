@@ -9,6 +9,7 @@ package net.systemeD.halcyon.connection {
 
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.MapEvent;
+	import net.systemeD.halcyon.ExtendedURLLoader;
     import net.systemeD.halcyon.connection.bboxes.*;
 
     /**
@@ -496,6 +497,75 @@ package net.systemeD.halcyon.connection {
         private function errorOnTraceLoad(event:Event):void {
             trace("Trace load error");
             dispatchEvent(new Event(LOAD_COMPLETED));
+		}
+
+        /** Fetch the history for the given entity. The callback function will be given an array of entities of that type, representing the different versions */
+        override public function fetchHistory(entity:Entity, callback:Function):void {
+            if (entity.id >= 0) {
+              var request:URLRequest = new URLRequest(apiBaseURL + entity.getType() + "/" + entity.id + "/history");
+              var loader:ExtendedURLLoader = new ExtendedURLLoader();
+              loader.addEventListener(Event.COMPLETE, loadedHistory);
+              loader.addEventListener(IOErrorEvent.IO_ERROR, errorOnMapLoad); //needs error handlers
+              loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
+              loader.info['callback'] = callback; //store the callback so we can use it later
+              loader.load(request);
+              dispatchEvent(new Event(LOAD_STARTED));
+            } else {
+              // objects created locally only have one state, their current one
+              callback([entity]);
+            }
+        }
+
+        private function loadedHistory(event:Event):void {
+            var _xml:XML = new XML(ExtendedURLLoader(event.target).data);
+            var results:Array = [];
+            var dummyConn:Connection = new Connection("dummy", null, null);
+
+            dispatchEvent(new Event(LOAD_COMPLETED));
+
+            // only one type of entity should be returned, but this handles any
+
+            for each(var nodeData:XML in _xml.node) {
+                var newNode:Node = new Node(
+                    dummyConn,
+                    Number(nodeData.@id),
+                    uint(nodeData.@version),
+                    parseTags(nodeData.tag),
+                    true,
+                    Number(nodeData.@lat),
+                    Number(nodeData.@lon),
+                    Number(nodeData.@uid),
+                    nodeData.@timestamp,
+                    nodeData.@user
+                    );
+                results.push(newNode);
+            }
+
+            for each(var wayData:XML in _xml.way) {
+                var nodes:Array = [];
+                for each(var nd:XML in wayData.nd) {
+                  nodes.push(new Node(dummyConn,Number(nd.@ref), NaN, null, false, NaN, NaN));
+                }
+                var newWay:Way = new Way(
+                    dummyConn,
+                    Number(wayData.@id),
+                    uint(wayData.@version),
+                    parseTags(wayData.tag),
+                    true,
+                    nodes,
+                    Number(wayData.@uid),
+                    wayData.@timestamp,
+                    wayData.@user
+                    );
+                results.push(newWay);
+            }
+
+            for each(var relData:XML in _xml.relation) {
+                trace("relation history not implemented");
+            }
+
+            // use the callback we stored earlier, and pass it the results
+            ExtendedURLLoader(event.target).info['callback'](results);
         }
 	}
 }

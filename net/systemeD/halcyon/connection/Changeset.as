@@ -4,7 +4,7 @@ package net.systemeD.halcyon.connection {
 		public static var entity_type:String = 'changeset';
 
         public function Changeset(connection:Connection, id:Number, tags:Object) {
-            super(connection, id, 0, tags, true, NaN, '');
+            super(connection, id, 0, tags, true, NaN, null, null);
         }
 
         public override function toString():String {
