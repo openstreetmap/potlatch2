@@ -94,7 +94,7 @@
 
         <s:FormItem label="Tag transform:">
 			<s:HGroup>
-				<s:Button label="Open..." />
+				<s:Button label="Open..." click="loadTransformLocal()" />
 				<s:Rect width="20" height="1" />
 				<s:TextInput id="transformsrc" text="{CSSTransform.getInstance().url}"/>
 				<s:Button label="Fetch" click="loadTransform(transformsrc.text);" enabled="{transformsrc.text == '' ? false : true}"/>
@@ -258,9 +258,24 @@
 		}
 	}
 	
+	/** Load CSS transformation file from remote URL. */
 	private function loadTransform(url:String):void {
 		CSSTransform.getInstance().loadFromUrl(url);
 	}
+	/** Load CSS transformation file from local disc. */
+	private function loadTransformLocal():void {
+		localFileReference=new FileReference(); 
+		localFileReference.browse([new FileFilter("MapCSS file","*.css;*.mapcss")]); 
+		localFileReference.addEventListener(Event.SELECT, selectTransformLocal);
+	}
+	private function selectTransformLocal(event:Event):void {
+		localFileReference.addEventListener(Event.COMPLETE, transformFileLoaded);
+		localFileReference.load();
+	}
+	private function transformFileLoaded(event:Event):void {
+		CSSTransform.getInstance().loadFromUrl(event.target.data);
+	}
+	/** Cancel CSS transformation. */
 	private function clearTransform():void {
 		CSSTransform.getInstance().clear();
 	}
