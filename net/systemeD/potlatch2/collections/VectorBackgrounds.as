@@ -72,13 +72,14 @@ package net.systemeD.potlatch2.collections {
 										var gpx_url:String = String(set.url);
 
 										var connection:Connection = new Connection(name, gpx_url, null, null);
-										var gpx:GpxImporter=new GpxImporter(connection, _map, [gpx_url],
+										var gpx:GpxImporter=new GpxImporter(connection, _map, 
 										function(success:Boolean,message:String=null):void {
 											if (!success) return;
 											var paint:MapPaint = _map.addLayer(connection, "stylesheets/gpx.css");
 											paint.updateEntityUIs(false, false);
 											dispatchEvent(new Event("layers_changed"));
 										}, false);
+										gpx.importFromRemoteFiles([gpx_url]);
 									} else {
 									trace("VectorBackgrounds: configured but not loaded isn't supported yet");
 									}

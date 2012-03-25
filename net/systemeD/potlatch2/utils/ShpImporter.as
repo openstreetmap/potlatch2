@@ -8,20 +8,23 @@ package net.systemeD.potlatch2.utils {
 	import net.systemeD.halcyon.connection.Node;
 	import net.systemeD.halcyon.connection.Way;
 	import net.systemeD.potlatch2.tools.Simplify;
+	import flash.utils.ByteArray;
 
 	public class ShpImporter extends Importer {
 
 		private var projection:String;
 
-		public function ShpImporter(connection:Connection, map:Map, filenames:Array, callback:Function=null, simplify:Boolean=false, projection:String="") {
-			if (projection!='') this.projection=projection;
-			super(connection,map,filenames,callback,simplify);
+		public function ShpImporter(connection:Connection, map:Map, callback:Function=null, simplify:Boolean=false, options:Object=null) {
+			if (options[projection]) this.projection=options[projection];
+			super(connection,map,callback,simplify,options);
 		}
 
 		override protected function doImport(push:Function): void {
 			// we load .shp as files[0], .shx as files[1], .dbf as files[2]
-			var shp:ShpHeader=new ShpHeader(files[0]);
-			var dbf:DbfHeader=new DbfHeader(files[2]);
+			var shpFile:ByteArray=getFileByName(/.shp$/);
+			var dbfFile:ByteArray=getFileByName(/.dbf$/);
+			var shp:ShpHeader=new ShpHeader(shpFile);
+			var dbf:DbfHeader=new DbfHeader(dbfFile);
 
 			if (projection) {
 				var proj:Proj4as=new Proj4as();
@@ -35,12 +38,12 @@ package net.systemeD.potlatch2.utils {
 			if (shp.shapeType==ShpType.SHAPE_POLYGON || shp.shapeType==ShpType.SHAPE_POLYLINE) {
 
 				// Loop through all polylines in the shape
-				var polyArray:Array = ShpTools.readRecords(files[0]);
+				var polyArray:Array = ShpTools.readRecords(shpFile);
 				for (var i:uint=0; i<polyArray.length; i++) {
 
 					// Get attributes and create a tags hash
 					// (note that dr.values is a Dictionary)
-					var dr:DbfRecord = DbfTools.getRecord(files[2], dbf, i);
+					var dr:DbfRecord = DbfTools.getRecord(dbfFile, dbf, i);
 					var tags:Object={};
 					for (key in dr.values) {
 						v=dr.values[key];

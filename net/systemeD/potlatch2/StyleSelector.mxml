@@ -18,6 +18,7 @@
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
 		import net.systemeD.potlatch2.collections.Stylesheets;
+		import net.systemeD.potlatch2.dialogs.*;
 		import mx.core.*;
     ]]></fx:Script>
 </mx:VBox>

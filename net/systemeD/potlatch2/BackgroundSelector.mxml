@@ -27,6 +27,7 @@
 		import net.systemeD.halcyon.*;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.potlatch2.*;
+		import net.systemeD.potlatch2.dialogs.*;
 		import net.systemeD.potlatch2.collections.Imagery;
 		import mx.core.*;
 		import mx.collections.ArrayCollection;
