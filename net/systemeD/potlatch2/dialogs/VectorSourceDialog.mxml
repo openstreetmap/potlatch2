@@ -5,7 +5,7 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
         layout="vertical" showCloseButton="true"
         horizontalAlign="center" title="Load vector file"
-        width="600" height="450" verticalGap="0">
+        width="630" height="450" verticalGap="0">
 
 	<mx:DataGrid editable="true" width="100%" height="100%" id="dataGrid" 
 		dataProvider="{vectorLayers}" itemEditEnd="dataEdited(event)">
@@ -84,14 +84,18 @@
 
         <s:FormItem label="File:">
 			<s:HGroup>
+				<s:Button label="Open..." click="loadFileLocal()" />
+				<s:Rect width="20" height="1" />
 	            <s:TextInput id="src" text="" change="selectByExtension()" />
-				<s:Button label="Fetch" click="loadFiles(src.text, filetype.selectedValue.toString(), simplify.selected, projection.selectedItem.data);" enabled="{src.text == '' ? false : true}"/>
+				<s:Button label="Fetch" click="loadFiles(src.text);" enabled="{src.text == '' ? false : true}"/>
 			</s:HGroup>
             <s:helpContent><s:Label text="URL of file to load" /></s:helpContent>
         </s:FormItem>
 
         <s:FormItem label="Tag transform:">
 			<s:HGroup>
+				<s:Button label="Open..." />
+				<s:Rect width="20" height="1" />
 				<s:TextInput id="transformsrc" text="{CSSTransform.getInstance().url}"/>
 				<s:Button label="Fetch" click="loadTransform(transformsrc.text);" enabled="{transformsrc.text == '' ? false : true}"/>
 				<s:Button label="Clear" click="clearTransform();"                 enabled="{transformsrc.text == '' ? false : true}"/>
@@ -156,6 +160,10 @@
 		return v;
 	}
 	
+	private function get selectedType():String {
+		return filetype.selectedValue.toString();
+	}
+	
 	private function toggleVisibility(event:Event):void {
 		map.findLayer(dataGrid.selectedItem.name).visible = !map.findLayer(dataGrid.selectedItem.name).visible;
 	}
@@ -194,40 +202,57 @@
         PopUpManager.removePopUp(this);
     }
 
-	private function loadFiles(url:String,type:String,simplify:Boolean,projection:String=""):void {
+	/** Launch importer for remotely hosted files. */
+	private function loadFiles(url:String):void {
 		var names:Array=url.split('/'); var name:String=names[names.length-1];
-		var stylesheet:String="stylesheets/potlatch.css";
-		if (type=='gpx') { stylesheet="stylesheets/gpx.css"; }
-
 		var connection:Connection = new Connection(name, url, null, null, CSSTransform.getInstance());
-
-		var filesLoaded:Function = function(success:Boolean,message:String=null):void {
-			if (success) {
-				var paint:MapPaint = map.addLayer(connection, stylesheet);
-				paint.updateEntityUIs(false, false);
-				dispatchEvent(new Event("layers_changed"));
-			} else {
-				Alert.show(message, 'Error', mx.controls.Alert.OK);
-			}
-		}
-
-		if (type=='gpx') {
-			var gpx:GpxImporter=new GpxImporter(connection, map, [url], filesLoaded, simplify);
-		} else if (type=='kml') {
-			var kml:KmlImporter=new KmlImporter(connection, map, [url], filesLoaded, simplify);
-		} else if (type=='osm') {
-			var osm:OsmImporter=new OsmImporter(connection, map, [url], filesLoaded, simplify);
+		var importer:Importer = findImporter(connection);
+		if (selectedType=='shp') {
+			importer.importFromRemoteFiles([url]);
 		} else {
-			/* FIXME: 
-			   we're currently hardcoding the projection values. We could populate this directly from 
-			   proj4as, or better still, parse the WKT in the .PRJ file:
-					http://trac.osgeo.org/proj4js/ticket/47
-					http://trac.osgeo.org/proj4js/changeset/1873
-			*/
 			var re:RegExp=/.shp$/i; url=url.replace(re,'');
-			var shp:ShpImporter=new ShpImporter(connection,
-			                                    map,
-			                                    [url+".shp",url+".shx",url+".dbf"], filesLoaded, simplify, projection);
+			importer.importFromRemoteFiles([url+".shp",url+".shx",url+".dbf"]);
+		}
+	}
+	
+	/** Present an 'Open File' dialogue. */
+	private function loadFileLocal():void {
+		var file:FileReference=new FileReference(); 
+		var fileTypes:FileFilter=new FileFilter("*."+selectedType, "*."+selectedType); 
+		file.browse([fileTypes]); 
+		file.addEventListener(Event.SELECT, selectFileLocal);
+	}
+	
+	/** The user has chosen a file in the local 'Open File' dialogue. */
+	private function selectFileLocal(event:Event):void {
+		var connection:Connection = new Connection(name, url, null, null, CSSTransform.getInstance());
+		var importer:Importer = findImporter(connection);
+		importer.importFromLocalFile();
+	}
+	
+	/** Create an Importer object of the type selected by the user. */
+	private function findImporter(connection:Connection):Importer {
+		var simplifyPath:Boolean=simplify.selected;
+		var reproject:String=projection.selectedItem.data;
+		var stylesheet:String="stylesheets/potlatch.css"; if (selectedType=='gpx') { stylesheet="stylesheets/gpx.css"; }
+
+		switch (selectedType) {
+			case 'gpx':	return new GpxImporter(connection, map, filesLoaded, simplifyPath, { stylesheet: stylesheet });
+			case 'kml':	return new KmlImporter(connection, map, filesLoaded, simplifyPath, { stylesheet: stylesheet });
+			case 'osm': return new OsmImporter(connection, map, filesLoaded, simplifyPath, { stylesheet: stylesheet });
+			case 'shp': return new ShpImporter(connection, map, filesLoaded, simplifyPath, { stylesheet: stylesheet, projection: reproject });
+		}
+		return null;
+	}
+	
+	/** Callback routine when import has completed. */
+	private function filesLoaded(connection:Connection,options:Object,success:Boolean,message:String=null):void {
+		if (success) {
+			var paint:MapPaint = map.addLayer(connection, options['stylesheet']);
+			paint.updateEntityUIs(false, false);
+			dispatchEvent(new Event("layers_changed"));
+		} else {
+			Alert.show(message, 'Error', mx.controls.Alert.OK);
 		}
 	}
 	

@@ -12,8 +12,8 @@ package net.systemeD.potlatch2.utils {
     */
 	public class GpxImporter extends Importer {
 
-		public function GpxImporter(connection:Connection, map:Map, filenames:Array, callback:Function=null, simplify:Boolean=false) {
-			super(connection,map,filenames,callback,simplify);
+		public function GpxImporter(connection:Connection, map:Map, callback:Function=null, simplify:Boolean=false, options:Object=null) {
+			super(connection,map,callback,simplify,options);
 		}
 
 		override protected function doImport(push:Function): void {
