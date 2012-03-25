@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.utils {
 	import flash.display.LoaderInfo;
 	import flash.events.*;
 	import flash.net.*;
+	import nochump.util.zip.*;
 
 	public class Importer {
 
@@ -54,14 +55,24 @@ package net.systemeD.potlatch2.utils {
 		}
 		
 		protected function fileLoaded(e:Event,filenum:uint=0):void {
-			files[filenum]=e.target.data;
-			filesloaded++;
-			trace("loaded file "+filenum+" ("+filesloaded+"/"+filenames.length+")"); 
-			if (filesloaded==filenames.length) {
-                var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
-				doImport(action.push);
-				action.doAction(); // just do it, don't add to undo stack
-				if (callback!=null) { callback(connection,options,true); }
+			var rawData:ByteArray=e.target.data;
+			var firstFour:ByteArray;
+			rawData.readBytes(firstFour,0,4);
+			rawData.position=0;
+			
+			if (firstFour.toString()=="PK"+String.fromCharCode(3)+String.fromCharCode(4)) {
+				trace("looks like a zip file to me");
+			} else {
+				trace("not a zip file");
+				files[filenum]=rawData;
+				filesloaded++;
+				trace("loaded file "+filenum+" ("+filesloaded+"/"+filenames.length+")"); 
+				if (filesloaded==filenames.length) {
+	                var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
+					doImport(action.push);
+					action.doAction(); // just do it, don't add to undo stack
+					if (callback!=null) { callback(connection,options,true); }
+				}
 			}
 		}
 		
