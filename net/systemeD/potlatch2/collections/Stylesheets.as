@@ -3,7 +3,7 @@ package net.systemeD.potlatch2.collections {
 	import flash.events.EventDispatcher;
 	import flash.events.Event;
 	import flash.net.*;
-	import net.systemeD.halcyon.DebugURLRequest;
+	import net.systemeD.halcyon.FileBank;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.potlatch2.FunctionKeyManager;
 	import net.systemeD.potlatch2.Yahoo;
@@ -28,14 +28,13 @@ package net.systemeD.potlatch2.collections {
 			_selected=_selected ? _selected : DEFAULT;
 			
 			// Load the stylesheet catalogue
-			var request:DebugURLRequest = new DebugURLRequest("stylesheets.xml");
-			var loader:URLLoader = new URLLoader();
-	        loader.addEventListener(Event.COMPLETE, function(e:Event):void { onStylesheetsLoad(e,request_url); });
-	        loader.load(request.request);
+            FileBank.getInstance().addFromFile("stylesheets.xml", function (fb:FileBank, name:String):void {
+                onStylesheetsLoad(fb, name, request_url);
+            });
 		}
 
-		private function onStylesheetsLoad(event:Event, request_url:String=null):void {
-			var xml:XML = new XML(URLLoader(event.target).data);
+		private function onStylesheetsLoad(fileBank:FileBank, filename:String, request_url:String=null):void {
+			var xml:XML = new XML(fileBank.getAsString(filename));
 			var saved_url:String = SharedObject.getLocal("user_state").data['stylesheet_url'];
 			var saved_name:String= SharedObject.getLocal("user_state").data['stylesheet_name'];
 			if (request_url && request_url!=saved_url) { saved_url=request_url; saved_name='Custom'; }

@@ -4,7 +4,7 @@ package net.systemeD.potlatch2.collections {
 	import flash.display.*;
 	import flash.net.*;
 	import flash.text.TextField;
-	import net.systemeD.halcyon.DebugURLRequest;
+	import net.systemeD.halcyon.FileBank;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapEvent;
 	import net.systemeD.potlatch2.FunctionKeyManager;
@@ -38,18 +38,15 @@ package net.systemeD.potlatch2.collections {
 			_yahoo = yahoo;
 
 			// load imagery file
-	        var request:DebugURLRequest = new DebugURLRequest("imagery.xml");
-	        var loader:URLLoader = new URLLoader();
-	        loader.addEventListener(Event.COMPLETE, onImageryLoad);
-	        loader.load(request.request);
+            FileBank.getInstance().addFromFile("imagery.xml", onImageryLoad);
 
 			// create map listeners
 			map.addEventListener(MapEvent.MOVE, moveHandler);
 			map.addEventListener(MapEvent.RESIZE, resizeHandler);
 		}
 
-        private function onImageryLoad(event:Event):void {
-			var xml:XML = new XML(URLLoader(event.target).data);
+		private function onImageryLoad(fileBank:FileBank, filename:String):void {
+			var xml:XML = new XML(fileBank.getAsString(filename));
 			var saved:Object = {};
 			var bg:Object;
 			if (SharedObject.getLocal("user_state").data['background_url']!=undefined) {
@@ -98,11 +95,12 @@ package net.systemeD.potlatch2.collections {
 			collection.forEach(function(bg:Object, index:int, array:Array):void {
 				if (bg.logo) {
 					// load the logo
-					var loader:Loader = new Loader();
-					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void { onLogoLoad(e,bg); });
-					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
-					loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
-					loader.load(new URLRequest(bg.logo));
+                    FileBank.getInstance().addFromFile(bg.logo, function (fb:FileBank, name:String):void {
+                        bg.logoData = fb.getAsBitmapData(name);
+                        bg.logoWidth = fb.getWidth(name);
+                        bg.logoHeight = fb.getHeight(name);
+                        setLogo();
+                    });
 				}
 				if (bg.attribution_url) {
 					// load the attribution
@@ -122,13 +120,6 @@ package net.systemeD.potlatch2.collections {
 		
 		private function onError(e:Event):void {
 			// placeholder error routine so exception isn't thrown
-		}
-		
-		public function onLogoLoad(e:Event, bg:Object):void {
-			bg.logoData  = Bitmap(LoaderInfo(e.target).content).bitmapData;
-			bg.logoWidth = e.target.loader.width;
-			bg.logoHeight= e.target.loader.height;
-			setLogo();
 		}
 		
 		public function onAttributionLoad(e:Event,bg: Object):void {

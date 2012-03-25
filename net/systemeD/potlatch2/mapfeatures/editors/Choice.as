@@ -27,11 +27,6 @@ package net.systemeD.potlatch2.mapfeatures.editors {
                 _match = new RegExp("^("+matchStr+")$");
             }
         }
-        
-        public function imageLoaded(url:String, data:ByteArray):void {
-            icon = data;
-            dispatchEvent(new Event("iconLoaded"));
-        }
     }
 
 }

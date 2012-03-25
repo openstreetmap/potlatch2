@@ -6,7 +6,7 @@ package net.systemeD.potlatch2 {
     import flash.geom.Matrix;
     import flash.text.TextField;
     import flash.text.TextFormat;
-    import net.systemeD.halcyon.ImageBank;
+    import net.systemeD.halcyon.FileBank;
 
 
     public class Preloader extends net.systemeD.potlatch2.PreloaderDisplayBase {
@@ -20,9 +20,6 @@ package net.systemeD.potlatch2 {
         private var bar:Sprite=new Sprite();
         private var barFrame:Sprite;
         private var mainColor:uint=0x045966;
-
-		private var assetscount:uint=0;
-		private var queuedEvents:Array=[];
 
         public function Preloader()
         {
@@ -45,31 +42,16 @@ package net.systemeD.potlatch2 {
 
 			// request .zip files
 			if (loaderInfo.parameters['assets']) {
-				ImageBank.getInstance().addEventListener(ImageBank.ZIP_LOADED, zipLoaded);
 				for each (var file:String in loaderInfo.parameters['assets'].split(';')) {
 					var asset:Array=file.split('=');
-					assetscount++;
-					ImageBank.getInstance().loadFromZip(asset[0],asset[1]);
+                    if (asset.length == 1) {
+                        FileBank.getInstance().addFromZip(asset[0]);
+                    } else {
+                        FileBank.getInstance().addFromZip(asset[0], asset[1]);
+                    }
 				}
 			}
         }
-
-		override protected function initProgressHandler(e:Event):void {
-			// We don't let anything happen until the .zips are loaded
-			// see http://stackoverflow.com/questions/2773617/how-to-preload-a-file-in-flex-before-the-application-initializes
-			if (assetscount>0) {
-				queuedEvents.push(e);
-				e.stopImmediatePropagation();
-			}
-			draw();
-		}
-		
-		private function zipLoaded(e:Event):void {
-			assetscount--; if (assetscount>0) return;
-			for each (var q:Event in queuedEvents) {
-				dispatchEvent(q);
-			}
-		}
 		
         //this is our "animation" bit
         override protected function draw():void

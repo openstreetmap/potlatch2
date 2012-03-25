@@ -10,7 +10,7 @@ package net.systemeD.halcyon {
     import flash.geom.Point;
     import net.systemeD.halcyon.styleparser.*;
     import net.systemeD.halcyon.connection.*;
-    import net.systemeD.halcyon.ImageBank;
+    import net.systemeD.halcyon.FileBank;
 
     public class MarkerUI extends EntityUI {
 
@@ -100,9 +100,9 @@ package net.systemeD.halcyon {
                             icon.graphics.drawCircle(w,w,w);
                             if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
 
-						} else if (ImageBank.getInstance().hasImage(s.icon_image)) {
+						} else if (FileBank.getInstance().hasFile(s.icon_image)) {
 							// load icon from library
-							icon.addChild(ImageBank.getInstance().getAsDisplayObject(s.icon_image));
+							icon.addChild(FileBank.getInstance().getAsDisplayObject(s.icon_image));
 //							addHitSprite(icon.width);			// ** check this - we're doing it below too
 //							loaded=true; updatePosition();		// ** check this
 							if (s.interactive) { maxwidth=Math.max(icon.width,maxwidth); }

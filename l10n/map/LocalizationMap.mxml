@@ -7,7 +7,7 @@
   <!-- Support for Locale ResourceBundle changes -->
   <mx:Script>
     <![CDATA[
-      import org.babelfx.commands.ExternalLocaleCommand;
+      import net.systemeD.potlatch2.CustomLocaleCommand;
       import org.babelfx.events.LocaleEvent;
       import mx.resources.ResourceManager;
       import mx.resources.IResourceManager;
@@ -46,9 +46,9 @@
   </mx:Script>
 
   <commandFactory>
-    <factory:ClassFactory generator="{ExternalLocaleCommand}">
+    <factory:ClassFactory generator="{CustomLocaleCommand}">
       <factory:properties>
-        <mx:Object externalPath="locales/\{0\}.swf"/>
+        <mx:Object defaultExternalPath="locales/\{0\}.swf"/>
       </factory:properties>
     </factory:ClassFactory>
   </commandFactory>
