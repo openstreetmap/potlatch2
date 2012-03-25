@@ -268,7 +268,7 @@
 			theMap.tileset.setDimming(params['background_dim']    ==null ? true  : params['background_dim']);
 			theMap.tileset.setSharpen(params['background_sharpen']==null ? false : params['background_sharpen']);
 			var imagery:Imagery = Imagery.instance();
-			imagery.init(theMap, overlay, yahoo);
+			imagery.init(theMap, overlay);
 			imagery.addEventListener(MapEvent.BUMP, bumpHandler);
 			imagery.addEventListener(CollectionEvent.SELECT,
 				function(e:CollectionEvent):void { theMap.tileset.init(e.data, e.data!=''); }
