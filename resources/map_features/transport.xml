@@ -111,7 +111,7 @@
     
         <line/>
         <tag k="railway" v="tram"/>
-        <input ref="tram-route"/>
+        <inputSet ref="tram-route"/>
         <inputSet ref="bridge"/>
         <inputSet ref="tunnel"/>
         <inputSet ref="embankment-cutting"/>

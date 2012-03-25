@@ -142,6 +142,7 @@
     <inputSet ref="cycle"/>
     <inputSet ref="bicycle-lane"/>
     <inputSet ref="bus-route"/>
+    <inputSet ref="tram-route"/>
     <inputSet ref="pedestrians"/>
     <inputSet ref="roadLanes"/>
     <inputSet ref="roadRoundabout"/>
@@ -156,6 +157,7 @@
     <inputSet ref="cycle"/>
     <inputSet ref="bicycle-lane"/>
     <inputSet ref="bus-route"/>
+    <inputSet ref="tram-route"/>
     <inputSet ref="pedestrians"/>
     <inputSet ref="roadLanes"/>
     <inputSet ref="roadRoundabout"/>
