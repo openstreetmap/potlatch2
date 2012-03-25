@@ -162,11 +162,19 @@ package net.systemeD.halcyon.connection {
 	    }
 
         private function changesetCreateComplete(event:Event):void {
-            // response should be a Number changeset id
-            var id:Number = Number(URLLoader(event.target).data);
+            var result:String = URLLoader(event.target).data;
+
+            if (result.match(/^^\d+$/)) {
+                // response should be a Number changeset id
+                var id:Number = Number(URLLoader(event.target).data);
             
-            // which means we now have a new changeset!
-            setActiveChangeset(new Changeset(this, id, lastUploadedChangesetTags));
+                // which means we now have a new changeset!
+                setActiveChangeset(new Changeset(this, id, lastUploadedChangesetTags));
+            } else {
+                var results:XML = XML(result);
+
+                throwServerError(results.message);
+            }
         }
 
         private function changesetCreateError(event:IOErrorEvent):void {
