@@ -168,7 +168,6 @@
     <inputSet ref="simpleName"/>
     <inputSet ref="roadPhysical"/>
     <inputSet ref="cycle"/>
-    <inputSet ref="ldp"/>
     <inputSet ref="pedestrians"/>
     <inputSet ref="permissions"/>
   </inputSet>
@@ -327,10 +326,37 @@
   </inputSet>
 
   <inputSet id="pedestrians">
-    <input type="choice" name="Pedestrians" description="Can pedestrians use this road, including footpaths if any?" category="Walk" key="foot">
+    <input type="choice" name="Pedestrians permitted" description="Can pedestrians use this road, including footpaths if any?" category="Walk" key="foot">
       <choice value="yes" text="Allowed"/>
       <choice value="no" text="Prohibited"/>
       <choice value="designated" text="Designated"/>
+    </input>
+    <input type="route" name="National Walking Route" description="National walking route" category="Walk" priority="low">
+      <match k="type" v="route"/>
+      <match k="route" v="hiking|foot"/>
+      <match k="network" v="nwn"/>
+      <icon image="features/route__nwn.png" background="red" foreground="white">
+        <font size="14pt"><b>${ref}</b></font><br/>
+        <font size="12pt">${name}</font>
+      </icon>
+    </input>
+    <input type="route" name="Regional Walking Route" description="Regional walking route" category="Walk" priority="low">
+      <match k="type" v="route"/>
+      <match k="route" v="hiking|foot"/>
+      <match k="network" v="rwn"/>
+      <icon image="features/route__rwn.png" background="cyan" foreground="white">
+        <font size="14pt"><b>${ref}</b></font><br/>
+        <font size="12pt">${name}</font>
+      </icon>
+    </input>
+    <input type="route" name="Local Walking Route" description="Local walking route" category="Walk" priority="lowest">
+      <match k="type" v="route"/>
+      <match k="route" v="hiking|foot"/>
+      <match k="network" v="lwn"/>
+      <icon image="features/route__lwn.png" background="blue" foreground="white">
+        <font size="14pt"><b>${ref}</b></font><br/>
+        <font size="12pt">${name}</font>
+      </icon>
     </input>
   </inputSet>
 
@@ -451,36 +477,6 @@
       <choice value="opposite_track" text="Contraflow track" description="Separated by kerb or parked cars, and allowing bicycles in both directions in an otherwise one-way street."/>
       <choice value="opposite" text="Contraflow unmarked" description="The route may be cycled in the direction opposite of other traffic, but does not have a dedicated lane."/>
       <help>http://wiki.openstreetmap.org/wiki/Key:cycleway</help>
-    </input>
-  </inputSet>
-
-  <inputSet id="ldp">
-    <input type="route" name="National Walking Route" description="National walking route" category="Walk" priority="normal">
-      <match k="type" v="route"/>
-      <match k="route" v="hiking|foot"/>
-      <match k="network" v="nwn"/>
-      <icon image="features/route__nwn.png" background="red" foreground="white">
-        <font size="14pt"><b>${ref}</b></font><br/>
-        <font size="12pt">${name}</font>
-      </icon>
-    </input>
-    <input type="route" name="Regional Walking Route" description="Regional walking route" category="Walk" priority="low">
-      <match k="type" v="route"/>
-      <match k="route" v="hiking|foot"/>
-      <match k="network" v="rwn"/>
-      <icon image="features/route__rwn.png" background="cyan" foreground="white">
-        <font size="14pt"><b>${ref}</b></font><br/>
-        <font size="12pt">${name}</font>
-      </icon>
-    </input>
-    <input type="route" name="Local Walking Route" description="Local walking route" category="Walk" priority="lowest">
-      <match k="type" v="route"/>
-      <match k="route" v="hiking|foot"/>
-      <match k="network" v="lwn"/>
-      <icon image="features/route__lwn.png" background="blue" foreground="white">
-        <font size="14pt"><b>${ref}</b></font><br/>
-        <font size="12pt">${name}</font>
-      </icon>
     </input>
   </inputSet>
 
