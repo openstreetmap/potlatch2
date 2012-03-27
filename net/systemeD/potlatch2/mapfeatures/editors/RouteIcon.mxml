@@ -19,6 +19,7 @@
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.styleparser.RuleSet;
     import net.systemeD.potlatch2.mapfeatures.*;
+    import net.systemeD.halcyon.FileBank;
     import flash.events.*;
 
     import mx.collections.ArrayCollection;
@@ -29,7 +30,8 @@
           {label:"<<", data:"backward"}, 
           {label:"<>", data:""} ]);
 
-    private var _iconImage:String = null;
+    private var _iconImageName:String = null;
+    private var _iconImageData:ByteArray = null;
     private var _iconHTML:String = "";
     private var _bg:String = "white";
     private var _fg:String = "black";
@@ -50,7 +52,7 @@
 
         if ( icon.length() > 0 ) {
             if (icon[0].hasOwnProperty("@image"))
-                _iconImage = icon[0].@image;
+                _iconImageName = icon[0].@image;
             if (icon[0].hasOwnProperty("@foreground"))
                 _fg = icon[0].@foreground;
             if (icon[0].hasOwnProperty("@background"))
@@ -61,10 +63,18 @@
     }
     
     [Bindable(event="route_changed")]
-    private function get iconImage():String {
-        return _iconImage;
+    private function get iconImage():ByteArray {
+        if (_iconImageName && !_iconImageData) {
+            FileBank.getInstance().addFromFile(_iconImageName, iconImageLoaded);
+        }
+        return _iconImageData;
     }
-    
+
+    private function iconImageLoaded(fileBank:FileBank, name:String):void {
+        _iconImageData = fileBank.getAsByteArray(name);
+        dispatchEvent(new Event("route_changed"));
+    }
+
     [Bindable(event="route_changed")]
     private function get iconHTML():String {
         return _iconHTML;
