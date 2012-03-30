@@ -30,6 +30,12 @@ package net.systemeD.halcyon.connection {
             return nodes.length;
         }
 
+		public function get nodeList():Array {
+			var arr:Array=[];
+			for each (var node:Node in nodes) { arr.push(node.id); }
+			return arr;
+		}
+
 		private function calculateBbox():void {
 			edge_l=999999; edge_r=-999999;
 			edge_b=999999; edge_t=-999999;

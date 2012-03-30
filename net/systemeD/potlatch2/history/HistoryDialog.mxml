@@ -23,15 +23,16 @@
       <s:DataGrid dataProvider="{entityStates}" width="100%" height="100%" enabled="{ entityStates != null }">
         <s:columns>
           <s:ArrayList>
-            <s:GridColumn editable="false" dataField="version" headerText="version" width="60">
+            <s:GridColumn editable="false" dataField="version" headerText="Version" width="60">
               <s:itemRenderer>
                 <fx:Component>
                   <s:DefaultGridItemRenderer textAlign="center" />
                 </fx:Component>
               </s:itemRenderer>
             </s:GridColumn>
-            <s:GridColumn editable="false" dataField="timestamp" headerText="timestamp" />
-            <s:GridColumn editable="false" dataField="user" headerText="username" />
+            <s:GridColumn editable="false" dataField="timestamp" headerText="Date" />
+            <s:GridColumn editable="false" dataField="diff" headerText="Changes" width="200" showDataTips="true" />
+            <s:GridColumn editable="false" dataField="user" headerText="User" />
             <s:GridColumn editable="false">
               <s:itemRenderer>
                 <fx:Component>
@@ -121,8 +122,43 @@
     private function processNode(results:Array):void {
         // Simply copy the nodes into the states array
         // todo sorting or somesuch
-        entityStates.source = results.reverse();
+		var arr:Array=[];
+		var oldNode:Node;
+		for each (var node:Node in results) {
+			var changes:Array=[];
+			if (node.version==1) {
+				changes.push("Created");
+				for (var k:String in node.getTagsHash()) { changes.push(k+"="+node.getTag(k)); }
+			} else {
+				if (node.lat!=oldNode.lat || node.lon!=oldNode.lon) changes.push("Moved");
+				diffTags(oldNode,node,changes);
+				// do something with visible?
+			}
+			arr.push({
+				version: node.version,
+				timestamp: node.timestamp.replace('T',' ').replace('Z',''),
+				user: node.user,
+				diff: changes.length==0 ? "None" : changes.join('; ')
+			});
+			oldNode=node;
+		}
+        entityStates.source = arr.reverse();
     }
+
+	/** Describe tag differences between two objects. */
+	private function diffTags(oldObj:Entity,newObj:Entity,changes:Array):void {
+		var k:String;
+		for (k in oldObj.getTagsHash()) {
+			// - if old tag not in new, add "Deleted"
+			if (!newObj.getTag(k)) { changes.push("Deleted "+k); }
+			// - if old tag in new but different, add "Changed"
+			else if (newObj.getTag(k)!=oldObj.getTag(k)) { changes.push("Changed "+k+"="+newObj.getTag(k)); }
+		}
+		for (k in newObj.getTagsHash()) {
+			// - if new tag not in old, add "Added"
+			if (!oldObj.getTag(k)) { changes.push("Added "+k+"="+newObj.getTag(k)); }
+		}
+	}
 
     private function processWay(results:Array):void {
         // This is much more complicated that nodes.
@@ -161,7 +197,6 @@
     private function pendingNode(results:Array):void {
         wayNodeStates.push(results)
         pendingNodeFetches--;
-        trace("fetched node "+results[0].id+" , "+pendingNodeFetches+" more to go");
         if (pendingNodeFetches == 0) {
             dispatchEvent(new Event("pendingNodesAllFetched"));
         }
@@ -176,16 +211,39 @@
         // change, or from changing a node.
         var revdates:Array = [];
         var revusers:Object = {};
+        var revdiffs:Object = {};
 
+        var oldWay:Way;
         for each (var way:Way in wayStates) {
+            // assemble diff
+            var changes:Array=[];
+            if (way.version==1) {
+                changes.push("Created");
+                for (var k:String in way.getTagsHash()) { changes.push(k+"="+way.getTag(k)); }
+            } else {
+                var oldNodes:Array=oldWay.nodeList;
+                var nodes:Array=way.nodeList;
+                if (!ArrayUtil.arraysAreEqual(oldNodes,nodes)) {
+                    if      (includes(oldNodes,nodes)) { changes.push("Shortened"); }
+                    else if (includes(nodes,oldNodes)) { changes.push("Extended"); }
+                    else if (ArrayUtil.arraysAreEqual(oldNodes,nodes.reverse())) { changes.push("Reversed"); }
+                    else { changes.push("Nodes changed"); }
+                }
+                diffTags(oldWay,way,changes);
+            }
+
+            // push entity state
             revdates.push(way.timestamp);
+            revdiffs[way.timestamp] = changes;
             revusers[way.timestamp] = way.user;
+            oldWay=way;
         }
 
         for each (var nodeStates:Array in wayNodeStates) {
             for each (var node:Node in nodeStates) {
                 revdates.push(node.timestamp);
                 revusers[node.timestamp] = node.user;
+                addRevDiff(revdiffs,node.timestamp,"(Node edit)");
             }
         }
 
@@ -217,27 +275,39 @@
           //    where was I going with this? Oh, yes, it'll be needed for building the object to revert to.
           //}
 
-          entitystate.version = String(version) + "." + String(subversion);
-          entitystate.timestamp = revdate;
-          entitystate.user = revusers[revdate];
-          es.push(entitystate)
+          es.push({
+              version: String(version) + "." + String(subversion),
+              timestamp: revdate.replace('T',' ').replace('Z',''),
+              user: revusers[revdate],
+              diff: revdiffs[revdate].length==0 ? "None" : revdiffs[revdate].join('; ')
+          });
         }
 
         entityStates.source = es.reverse();
     }
 
-    // given a list of entities sorted with oldest first, find the last version before that date.
+	/** Add a diff description to the hash for a given timestamp, unless it's a dupe. */
+	private function addRevDiff(revdiffs:Object,timestamp:String,diff:String):void {
+		if (!revdiffs[timestamp]) { revdiffs[timestamp]=[diff]; return; }
+		if (revdiffs[timestamp].indexOf(diff)>-1) return;
+		revdiffs[timestamp].push(diff);
+	}
+
+	/** Find out whether one array is a subscript of another.
+	    Bit of a hack, but will be fine as long as the array generates unique toString()s with no # in them! */
+	private function includes(array1:Array,array2:Array):Boolean {
+		if (array1.length<array2.length) return false;
+		return (array1.join('#').indexOf(array2.join('#'))>-1);
+	}
+
+    /** Given a list of entities sorted with oldest first, find the last version before that date. */
     private function getEntityAtDate(list:Array, date:String):Entity {
-        trace("find for date : "+date);
         for(var i:int = list.length-1; i >= 0; i--) {
             var entity:Entity = list[i];
-            trace (entity.timestamp + " : " + date);
             if (entity.timestamp <= date) {
-                trace("returning version " + entity.version);
                 return entity;
             }
         }
-        trace("ERROR");
         return null;
     }
 
