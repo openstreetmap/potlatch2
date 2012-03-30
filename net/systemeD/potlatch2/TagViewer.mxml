@@ -236,7 +236,8 @@
       private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
       private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
-      private var categorySelectorEntity:Entity;	// entity used to draw the categorySelector
+      private var categorySelectorEntity:Entity;	// entity used to draw the most recent categorySelector
+      private var categorySelectorLimitType:String;	// limit type used to draw the most recent categorySelector
       private var feature:Feature = null;
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
@@ -315,12 +316,15 @@
           var oldEntity:Entity = categorySelectorEntity;
 
           feature = selectedEntity == null ? null : mapFeatures.findMatchingFeature(selectedEntity);
-          if (oldFeature==feature && categorySelectorEntity==selectedEntity) {
+          if (oldFeature==feature && 
+              categorySelectorEntity==selectedEntity && 
+              categorySelectorLimitType==limitType(selectedEntity)) {
               updateCategoryImageAndText(selectedEntity,feature);
               return;
           }
 
           categorySelectorEntity=selectedEntity;
+          categorySelectorLimitType=limitType(selectedEntity);
           if ( oldFeature != null ) { oldFeature.removeEventListener("imageChanged", featureImageChanged); }
           if ( feature != null )    { feature.addEventListener("imageChanged", featureImageChanged); }
 		  setCategorySelector(selectedEntity, feature);
