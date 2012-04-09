@@ -104,7 +104,10 @@ node[amenity=taxi] { icon-image: icons/taxi.png; }
 node[amenity=telephone] { icon-image: icons/telephone.png; }
 way node[barrier=gate], way node[highway=gate] { icon-image: icons/gate.png; }
 node[barrier=cattle_grid] { icon-image: icons/cattle_grid.png; }*/
-	
+
+/* Important shops */
+node[shop=bicycle] { icon-image: icons/shopping_bicycle.n.16.png; text-offset: 15; text: name; }
+
 /* We can stack styles at different z-index (depth) */
 
 way[railway=rail] { z-index: 6; color: #444444; width: 5; }
