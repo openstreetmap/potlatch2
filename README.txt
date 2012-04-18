@@ -59,6 +59,13 @@ You can create and run the unit tests (not that there are that many) using flexu
 
 * ant test
 
+For those that don't need I8n, the following give a much speedier build as it skips the all the language translation build steps.
+As an extra bonus, this uses much less memory and you may get away without needing to tell ant to use more memory (see below).
+
+* ant debug-no-locales
+or
+* ant release-no-locales
+
 If you're using Mac OS X, you may need to tell ant to use more memory, by
 typing export ANT_OPTS="-Xms768m -Xmx1024m -XX:MaxPermSize=512m" 
 beforehand (you can put this in your .profile).
