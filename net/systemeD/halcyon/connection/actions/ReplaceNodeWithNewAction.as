@@ -2,7 +2,7 @@ package net.systemeD.halcyon.connection.actions {
 
     import net.systemeD.halcyon.connection.*;
 
-    /** Action that substitutes one node instead of another, in all the ways and relations that that node is part of. */
+    /** Action that creates a new node, then replaces an existing one with the new one in all the ways and relations that that node was part of. */
     public class ReplaceNodeWithNewAction extends ReplaceNodeAction {
 
         private var connection:Connection;
@@ -12,7 +12,7 @@ package net.systemeD.halcyon.connection.actions {
 
         /**
         * @param node The node we're getting rid of
-        * @param replacement The node we want to end up with
+        * @param connection, lat, lon, tags: Properties to define the new node.
         */
         public function ReplaceNodeWithNewAction(node:Node, connection:Connection, lat:Number, lon:Number, tags:Object) {
 			super(node,null);
@@ -22,13 +22,10 @@ package net.systemeD.halcyon.connection.actions {
             this.tags = tags;
         }
 
+        /** Create new node, then as for ReplaceNodeAction.doAction() */
         public override function doAction():uint {
             replacement = connection.createNode(tags,lat,lon,push);
 			return super.doAction();
-        }
-
-        public override function undoAction():uint {
-            return super.undoAction();
         }
     }
 }

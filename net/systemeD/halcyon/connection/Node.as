@@ -138,8 +138,10 @@ package net.systemeD.halcyon.connection {
 		}
 		
         /** Merge another node into this one, removing the other one. */
-        public function mergeWith(node:Node, performAction:Function):void {
-            performAction(new MergeNodesAction(this, node));
+        public function mergeWith(node:Node, performAction:Function):MergeNodesAction {
+            var mna:MergeNodesAction = new MergeNodesAction(this, node);
+            performAction(mna);
+            return mna; // Access to the action is useful for stacking more actions onto it.
         }
 		
     }
