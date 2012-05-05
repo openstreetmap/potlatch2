@@ -31,10 +31,16 @@
   </target>
 
   <!-- delete and create the DEPLOY dir again -->
-  <target name="init" depends="git-buildnumber,svn-buildnumber,deployLocales">
+  <target name="build-number" depends="git-buildnumber,svn-buildnumber">
     <echo>Build Number ${build_number}</echo>
     <copy file="version.as.template" tofile="version.as" overwrite="true" />
     <replace file="version.as" token="@@@buildnumber@@@" value="${build_number}" />
+  </target>
+
+  <target name="init" depends="build-number, deployLocales">
+  </target>
+
+  <target name="init-no-locales" depends="build-number">
   </target>
 
   <!-- Build and output potlatch2.swf in debug mode -->
@@ -47,8 +53,25 @@
     </mxmlc>
   </target>
 
+  <target name="debug-no-locales" depends="init-no-locales">
+    <mxmlc file="potlatch2.mxml">
+      <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+      <load-config filename="debug-config.xml"/>
+      <source-path path-element="${FLEX_HOME}/frameworks"/>
+      <compiler.debug>true</compiler.debug>
+    </mxmlc>
+  </target>
+
   <!-- Build and output potlatch2.swf in release mode -->
   <target name="release" depends="init"> <!-- FIXME convention is dist not release -->
+    <mxmlc file="potlatch2.mxml">
+      <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+      <source-path path-element="${FLEX_HOME}/frameworks"/>
+      <compiler.debug>false</compiler.debug>
+    </mxmlc>
+  </target>
+
+  <target name="release-no-locales" depends="init-no-locales"> <!-- FIXME convention is dist not release -->
     <mxmlc file="potlatch2.mxml">
       <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
       <source-path path-element="${FLEX_HOME}/frameworks"/>
