@@ -162,6 +162,16 @@ package net.systemeD.halcyon.connection {
         public function reverseNodes(performAction:Function):void {
             performAction(new ReverseNodesAction(this, nodes));
         }
+        
+        /** Check for, and remove, consecutive series of the same node */ 
+        public function removeRepeatedNodes(performAction:Function):void {
+        	var n: Node = nodes[0];
+        	for (var i:int = 1; i < nodes.length; i++) {
+        		if (nodes[i] == nodes[i-1]) {
+        			removeNodeByIndex(i, performAction);
+        		}
+        	}
+        } 
 
 		
 		/** Is a point within this way?

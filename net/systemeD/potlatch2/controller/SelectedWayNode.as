@@ -235,7 +235,14 @@ package net.systemeD.potlatch2.controller {
         }
         
         private function doMergeNodes(n:Node): ControllerState {
-        	n.mergeWith(Node(firstSelected), MainUndoStack.getGlobalStack().addAction);
+        	var nways:Array = n.parentWays.concat(Node(firstSelected).parentWays);
+        	var mna:MergeNodesAction = n.mergeWith(Node(firstSelected), MainUndoStack.getGlobalStack().addAction);
+            /* Duplicated consecutive nodes happen if the two merged nodes are consecutive nodes of a (different) way */
+            for each (var w:Way in nways) {
+               // If there's a node to remove, jam that action into the existing MergeNodesAction. 
+               w.removeRepeatedNodes(function (a:UndoableAction):void { a.doAction(); mna.push(a); } );
+            }
+               
             // only merge one node at a time - too confusing otherwise?
             var msg:String = "Nodes merged"
             if (MergeNodesAction.lastTagsMerged) msg += ": check conflicting tags";
