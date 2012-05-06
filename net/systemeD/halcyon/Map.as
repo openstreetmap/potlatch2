@@ -185,13 +185,13 @@ package net.systemeD.halcyon {
             }
 		}
 
-		// Co-ordinate conversion functions
-
+		// Convert between lat/lon (map coords) and screen coords
 		public function latp2coord(a:Number):Number	{ return -(a-basey)*scalefactor; }
 		public function coord2latp(a:Number):Number	{ return a/-scalefactor+basey; }
 		public function lon2coord(a:Number):Number	{ return (a-baselon)*scalefactor; }
 		public function coord2lon(a:Number):Number	{ return a/scalefactor+baselon; }
 
+		// Convert between straight latitudes and projected latitudes 
 		public function latp2lat(a:Number):Number	{ return 180/Math.PI * (2 * Math.atan(Math.exp(a*Math.PI/180)) - Math.PI/2); }
 		public function lat2latp(a:Number):Number	{ return 180/Math.PI * Math.log(Math.tan(Math.PI/4+a*(Math.PI/180)/2)); }
 
