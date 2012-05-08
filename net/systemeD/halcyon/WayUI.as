@@ -175,52 +175,57 @@ package net.systemeD.halcyon {
 		/** Calculate pathlength, patharea, centroid_x, centroid_y, heading[]. 
 		* ** this could be made scale-independent - would speed up redraw
 		*/
-		public function recalculate():void {
-			if (suspended) { recalculateDue=true; return; }
-			
-			var lx:Number, ly:Number, sc:Number;
-			var node:Node, latp:Number, lon:Number;
-			var cx:Number=0, cy:Number=0;
-			var way:Way=entity as Way;
-			
-			pathlength=0;
-			patharea=0;
-			if (way.length==0) { return; }
-			
-			lx = way.getNode(way.length-1).lon;
-			ly = way.getNode(way.length-1).latp;
-			for ( var i:uint = 0; i < way.length; i++ ) {
+        public function recalculate():void {
+            if (suspended) { recalculateDue=true; return; }
+
+            var lx:Number, ly:Number; // last lon; last lat 
+            var node:Node, latp:Number, lon:Number; // current node and its location
+            var cx:Number=0, cy:Number=0; // cumulative value of centroid
+            var way:Way=entity as Way;
+
+            pathlength=0;
+            patharea=0;
+            if (way.length==0) { return; }
+
+            lx = way.getNode(way.length-1).lon;
+            ly = way.getNode(way.length-1).latp;
+            for ( var i:uint = 0; i < way.length; i++ ) {
                 node = way.getNode(i);
                 latp = node.latp;
                 lon  = node.lon;
+                
+                // Calculate way area
+                var dlon:Number = lon - lx;
+                var dlat:Number = latp - ly;
 
-				// length and area
-				if ( i>0 ) { pathlength += Math.sqrt( Math.pow(lon-lx,2)+Math.pow(latp-ly,2) ); }
-				sc = (lx*latp-lon*ly)*paint.map.scalefactor;
-				cx += (lx+lon)*sc;
-				cy += (ly+latp)*sc;
-				patharea += sc;
-				
-				// heading
-				if (i>0) { heading[i-1]=Math.atan2((lon-lx),(latp-ly)); }
+                // this reworking of the standard centroid calculation formula works better for tiny polygons
+                var sc: Number = (lon * dlat - dlon * latp) * paint.map.scalefactor;
+                cx += (lx + lon) * sc;
+                cy += (ly + latp) * sc;
+                patharea += sc;
 
-				lx=lon; ly=latp;
-			}
-			heading[way.length-1]=heading[way.length-2];
+                // Calculate path length and heading of segments.
+                if (i > 0) { 
+                    pathlength += Math.sqrt( Math.pow(dlon, 2) + Math.pow(dlat, 2) ); 
+                    heading[i-1] = Math.atan2(dlon, dlat); 
+                }
 
-			pathlength*=paint.map.scalefactor;
-			patharea/=2;
-			if (patharea!=0 && way.isArea()) {
-				centroid_x=paint.map.lon2coord(cx/patharea/6);
-				centroid_y=paint.map.latp2coord(cy/patharea/6);
-			} else if (pathlength>0) {
-				var c:Array=pointAt(0.5);
-				centroid_x=c[0];
-				centroid_y=c[1];
-			}
-			patharea=Math.abs(patharea);
-		}
+                lx=lon; ly=latp;
+            }
+            heading[way.length-1] = heading[way.length-2];
 
+            pathlength *= paint.map.scalefactor;
+            patharea /= 2;
+            if (patharea != 0 && way.isArea()) {
+                centroid_x = paint.map.lon2coord(cx / patharea / 6);
+                centroid_y = paint.map.latp2coord(cy / patharea / 6);
+            } else if (pathlength>0) {
+                var c:Array = pointAt(0.5);
+                centroid_x = c[0];
+                centroid_y = c[1];
+            }
+            patharea=Math.abs(patharea);
+        }
 		// ------------------------------------------------------------------------------------------
 	
 		/** Go through the complex process of drawing this way, including applying styles, casings, fills, fonts... */
