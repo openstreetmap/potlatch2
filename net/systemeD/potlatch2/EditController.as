@@ -175,7 +175,6 @@ package net.systemeD.potlatch2 {
             if ( state != null )
                 state.exitState(newState);
             newState.setController(this);
-            newState.setPreviousState(state);
             state = newState;
             state.enterState();
         }

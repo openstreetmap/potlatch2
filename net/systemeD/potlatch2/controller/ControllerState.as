@@ -25,7 +25,6 @@ package net.systemeD.potlatch2.controller {
 
         protected var controller:EditController;
 		public var layer:MapPaint;
-        protected var previousState:ControllerState;
 
 		protected var _selection:Array=[];
 
@@ -34,11 +33,6 @@ package net.systemeD.potlatch2.controller {
         public function setController(controller:EditController):void {
             this.controller=controller;
             if (!layer) layer=controller.map.editableLayer;
-        }
-
-        public function setPreviousState(previousState:ControllerState):void {
-            if ( this.previousState == null )
-                this.previousState = previousState;
         }
 
 		public function isSelectionState():Boolean {
@@ -146,7 +140,7 @@ package net.systemeD.potlatch2.controller {
 					return new DragWayNode(selectedWay,  getNodeIndex(selectedWay,entity as Node),  event, false);
 				} else if ( controller.spaceHeld ) {
 					// drag the background imagery to compensate for poor alignment
-					return new DragBackground(event);
+					return new DragBackground(event, this);
 				} else if (entity && selection.indexOf(entity)>-1) {
 					return new DragSelection(selection, event);
 				} else if (entity) {

@@ -10,11 +10,13 @@ package net.systemeD.potlatch2.controller {
 
         private var downX:Number;
         private var downY:Number;
+        protected var previousState:ControllerState;
         
         /** Start the drag by recording the location of the mouse. */
-        public function DragBackground(event:MouseEvent) {
+        public function DragBackground(event:MouseEvent, previousState:ControllerState) {
             downX = event.localX;
             downY = event.localY;
+            this.previousState = previousState;
         }
  
        /** Respond to dragging and end drag. */
