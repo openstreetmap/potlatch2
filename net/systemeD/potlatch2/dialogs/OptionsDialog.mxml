@@ -57,7 +57,7 @@
     import net.systemeD.halcyon.connection.Connection;
     import net.systemeD.halcyon.connection.StatusFetcher;
 
-	private var userState:SharedObject=SharedObject.getLocal("user_state");
+	private var userState:SharedObject=SharedObject.getLocal("user_state","/");
     
     public function init():void {
         PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);

@@ -33,7 +33,7 @@
 			PopUpManager.centerPopUp(this);
 			this.addEventListener(CloseEvent.CLOSE, findDialog_close);
 			
-			var obj:SharedObject = SharedObject.getLocal("user_state");
+			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 	
 		}
 		

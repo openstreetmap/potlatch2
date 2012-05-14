@@ -172,7 +172,7 @@
 			saveLabel=saveButton.label;
 
 			// populate sharedObject with loaderInfo parameters if supplied
-			var obj:SharedObject = SharedObject.getLocal("user_state");
+			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 			var objChanged:Boolean = false;
 			if (loaderInfo.parameters['tileurl']) {
 				obj.setProperty('background_url',loaderInfo.parameters['tileurl']); 
@@ -199,7 +199,7 @@
 			// pass additional parameters to map
 			var params:Object={}; var k:String;
 			for (k in this.loaderInfo.parameters) params[k]=this.loaderInfo.parameters[k];
-			for (k in SharedObject.getLocal('user_state').data) params[k]=SharedObject.getLocal('user_state').data[k];
+			for (k in SharedObject.getLocal('user_state',"/").data) params[k]=SharedObject.getLocal('user_state',"/").data[k];
 
 			// Create map
 			theMap=new Map();
@@ -303,7 +303,7 @@
 			theController.addEventListener(AttentionEvent.ALERT, onAlert);
             
             // set the access token from saved cookie
-            var tokenObject:SharedObject = SharedObject.getLocal("access_token");
+            var tokenObject:SharedObject = SharedObject.getLocal("access_token","/");
             conn.setAccessToken(tokenObject.data["oauth_token"], tokenObject.data["oauth_token_secret"]);
 
             // Load any requested GPX track

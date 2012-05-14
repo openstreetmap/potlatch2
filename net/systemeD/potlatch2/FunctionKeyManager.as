@@ -26,8 +26,8 @@ package net.systemeD.potlatch2 {
 
 		public function FunctionKeyManager() {
 			for (var i:uint=1; i<16; i++) {
-				if (SharedObject.getLocal("user_state").data['F'+i]) {
-					keys[i]=SharedObject.getLocal("user_state").data['F'+i];
+				if (SharedObject.getLocal("user_state","/").data['F'+i]) {
+					keys[i]=SharedObject.getLocal("user_state","/").data['F'+i];
 				}
 			}
 		}
@@ -42,7 +42,7 @@ package net.systemeD.potlatch2 {
 
 		public function setKey(fkey:uint, code:String, value:String):void {
 			keys[fkey]={ code:code, value:value };
-			var obj:SharedObject=SharedObject.getLocal("user_state");
+			var obj:SharedObject=SharedObject.getLocal("user_state","/");
 			obj.setProperty('F'+fkey,{ code:code, value:value });
 			obj.flush();
 			dispatchEvent(new Event("key_changed"));
@@ -52,7 +52,7 @@ package net.systemeD.potlatch2 {
 			if (key=='') {
 				var oldKey:String=getKeyFor(code,value);
 				keys[Number(oldKey.substr(1))]=null;
-				var obj:SharedObject=SharedObject.getLocal("user_state");
+				var obj:SharedObject=SharedObject.getLocal("user_state","/");
 				obj.setProperty(oldKey,null);
 				obj.flush();
 			} else {

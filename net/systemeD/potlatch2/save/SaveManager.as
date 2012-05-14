@@ -41,7 +41,7 @@ package net.systemeD.potlatch2.save {
             var listener:Function = function(event:Event):void {
                 var accessToken:OAuthToken = oauthPanel.accessToken;
                 if ( oauthPanel.shouldRemember ) {
-                    var obj:SharedObject = SharedObject.getLocal("access_token");
+                    var obj:SharedObject = SharedObject.getLocal("access_token","/");
                     obj.setProperty("oauth_token", accessToken.key);
                     obj.setProperty("oauth_token_secret", accessToken.secret);
                     obj.flush();

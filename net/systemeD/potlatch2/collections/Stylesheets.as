@@ -27,7 +27,7 @@ package net.systemeD.potlatch2.collections {
 		public function init(request_url:String=null):void {
 			// First, we set _selected in case it's needed before the stylesheet catalogue loads
 			var url:String = request_url;
-			url = url ? url : SharedObject.getLocal("user_state").data['stylesheet_url'];
+			url = url ? url : SharedObject.getLocal("user_state","/").data['stylesheet_url'];
 			url = url ? url : DEFAULT;
 
 			_selected = new Stylesheet("Default", url);
@@ -40,8 +40,8 @@ package net.systemeD.potlatch2.collections {
 
 		private function onStylesheetsLoad(fileBank:FileBank, filename:String, request_url:String=null):void {
 			var xml:XML = new XML(fileBank.getAsString(filename));
-			var saved_url:String = SharedObject.getLocal("user_state").data['stylesheet_url'];
-			var saved_name:String= SharedObject.getLocal("user_state").data['stylesheet_name'];
+			var saved_url:String = SharedObject.getLocal("user_state","/").data['stylesheet_url'];
+			var saved_name:String= SharedObject.getLocal("user_state","/").data['stylesheet_name'];
 			if (request_url && request_url!=saved_url) { saved_url=request_url; saved_name='Custom'; }
 			var isInMenu:Boolean=false, isSet:Boolean=false;
 
@@ -87,7 +87,7 @@ package net.systemeD.potlatch2.collections {
 		public function setStylesheet(ss:Stylesheet):void {
 			_selected=ss;
 			dispatchEvent(new CollectionEvent(CollectionEvent.SELECT, ss.url));
-			var obj:SharedObject = SharedObject.getLocal("user_state");
+			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 			obj.setProperty("stylesheet_url",ss.url);
 			obj.setProperty("stylesheet_name",ss.name);
 			obj.flush();

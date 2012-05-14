@@ -45,9 +45,9 @@ package net.systemeD.potlatch2.collections {
 			var xml:XML = new XML(fileBank.getAsString(filename));
 			var saved:Object = {};
 			var bg:Object;
-			if (SharedObject.getLocal("user_state").data['background_url']!=undefined) {
-				saved={ name: SharedObject.getLocal("user_state").data['background_name'],
-						url:  SharedObject.getLocal("user_state").data['background_url' ] };
+			if (SharedObject.getLocal("user_state","/").data['background_url']!=undefined) {
+				saved={ name: SharedObject.getLocal("user_state","/").data['background_name'],
+						url:  SharedObject.getLocal("user_state","/").data['background_url' ] };
 			}
 
 			var isSet:Boolean=false;
@@ -148,7 +148,7 @@ package net.systemeD.potlatch2.collections {
 			_overlay.visible=bg.attribution || bg.logo || bg.terms_url;
 			setLogo(); setAttribution(); setTerms();
 			// save as SharedObject for next time
-			var obj:SharedObject = SharedObject.getLocal("user_state");
+			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 			obj.setProperty('background_url' ,String(bg.url));
 			obj.setProperty('background_name',String(bg.name));
 			obj.flush();

@@ -22,8 +22,8 @@ package net.systemeD.potlatch2.tools {
 		public static function simplify(way:Way, map:Map, keepOffscreen:Boolean, tolerance:Number=NaN):void {
 			if (way.length<3) { return; }
 			if (isNaN(tolerance)) {
-				if (SharedObject.getLocal("user_state").data['simplify_tolerance']!=undefined) {
-					tolerance=Number(SharedObject.getLocal("user_state").data['simplify_tolerance']);
+				if (SharedObject.getLocal("user_state","/").data['simplify_tolerance']!=undefined) {
+					tolerance=Number(SharedObject.getLocal("user_state","/").data['simplify_tolerance']);
 				} else {
 					tolerance=0.00005;
 				}
