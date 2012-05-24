@@ -49,13 +49,29 @@
 		<sourcekey>source:name</sourcekey>
 	</set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
-		<name>OS 1:25k historic</name>
+		<name>OS 1:25k historic (OSM)</name>
 		<url>http://ooc.openstreetmap.org/os1/$z/$x/$y.jpg</url>
 		<sourcetag>OS 1:25k</sourcetag>
 	</set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
-		<name>OS 7th Series historic</name>
+		<name>OS 1:25k historic (NLS)</name>
+		<scheme>tms</scheme>
+		<url>http://geo.nls.uk/mapdata2/os/25000/$z/$x/$y.png</url>
+		<logo>icons/logo_nls70-nq8.png</logo>
+		<logo_url>http://geo.nls.uk/maps/</logo_url>
+		<sourcetag>OS 1:25k</sourcetag>
+	</set>
+	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
+		<name>OS 7th Series historic (OSM)</name>
 		<url>http://ooc.openstreetmap.org/os7/$z/$x/$y.jpg</url>
+		<sourcetag>OS7</sourcetag>
+	</set>
+	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
+		<name>OS 7th Series historic (NLS)</name>
+		<scheme>tms</scheme>
+		<url>http://geo.nls.uk/mapdata2/os/seventh/$z/$x/$y.png</url>
+		<logo>icons/logo_nls70-nq8.png</logo>
+		<logo_url>http://geo.nls.uk/maps/</logo_url>
 		<sourcetag>OS7</sourcetag>
 	</set>
 	<set minlat="49.8" minlon="-5.8" maxlat="55.8" maxlon="1.9">
