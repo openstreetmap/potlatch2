@@ -188,6 +188,14 @@ package net.systemeD.halcyon.connection {
             }
         }
 
+        public function registerPOINodes():void {
+            for each (var nodeID:Number in getAllNodeIDs()) {
+                var node:Node = getNode(nodeID);
+                if (!node.hasParentWays)
+                    registerPOI(node);
+            }
+        }
+
         public function getNode(id:Number):Node {
             return nodes[id];
         }

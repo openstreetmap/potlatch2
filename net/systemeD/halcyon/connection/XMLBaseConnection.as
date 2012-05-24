@@ -171,14 +171,6 @@ package net.systemeD.halcyon.connection {
 			if (statusFetcher) statusFetcher.fetch(createdEntities); 
 		}
 		
-		protected function registerPOINodes():void {
-			for each (var nodeID:Number in getAllNodeIDs()) {
-				var node:Node = getNode(nodeID);
-				if (!node.hasParentWays)
-					registerPOI(node);
-			}
-		}
-
 		protected function parseTags(tagElements:XMLList):Object {
 			var tags:Object = {};
 			for each (var tagEl:XML in tagElements)

@@ -82,6 +82,7 @@ package net.systemeD.potlatch2.utils {
 			var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
 			doImport(action.push);
 			action.doAction(); // just do it, don't add to undo stack
+			connection.registerPOINodes();
 			if (callback!=null) { callback(connection,options,true); }
 		}
 

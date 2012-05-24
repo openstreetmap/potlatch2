@@ -42,7 +42,6 @@ package net.systemeD.potlatch2.utils {
 					tags[tag.name().localName]=tag.toString().substr(0,255);
 				}
 				var node:Node = connection.createNode(tags, wpt.@lat, wpt.@lon, push);
-				connection.registerPOI(node);
 			}
 
 			default xml namespace = new Namespace("");
