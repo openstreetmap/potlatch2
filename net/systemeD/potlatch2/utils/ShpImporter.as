@@ -15,7 +15,7 @@ package net.systemeD.potlatch2.utils {
 		private var projection:String;
 
 		public function ShpImporter(connection:Connection, map:Map, callback:Function=null, simplify:Boolean=false, options:Object=null) {
-			if (options[projection]) this.projection=options[projection];
+			if (options['projection']) this.projection=options['projection'];
 			super(connection,map,callback,simplify,options);
 		}
 
