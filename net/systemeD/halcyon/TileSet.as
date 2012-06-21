@@ -214,6 +214,7 @@ package net.systemeD.halcyon {
 		
 		private function tileURL(tx:int,ty:int,tz:uint):String {
 			var t:String='';
+			var tmsy:int=Math.pow(2,tz)-1-ty;
 			switch (scheme.toLowerCase()) {
 
 				case 'microsoft':
@@ -228,13 +229,12 @@ package net.systemeD.halcyon {
 					t=baseurl.replace('$quadkey',u); break;
 
 				case 'tms':
-					ty=Math.pow(2,tz)-1-ty;
-					t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+					t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',tmsy);
 					break;
 
 				default:
 					if (baseurl.indexOf('$x')>-1) {
-						t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty);
+						t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty).replace('$-y',tmsy);
 					} else {
 						t=baseurl.replace('!',map.scale).replace('!',tx).replace('!',ty);
 					}
