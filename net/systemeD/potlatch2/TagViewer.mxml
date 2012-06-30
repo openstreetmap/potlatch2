@@ -34,6 +34,9 @@
             <mx:PopUpButton id="popupChange" openAlways="true" width="100%" styleName="dndTagPopUpMenu" closeDuration="0" />
             <mx:LinkButton icon="@Embed('../../../embedded/information.svg')" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
           </mx:HBox>
+          <mx:HBox width="100%" id="summaryContainer" visible="false">
+            <mx:Text condenseWhite="true" width="100%" id="featureSummary" link="togglePanel()" />
+          </mx:HBox>
         </mx:VBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
@@ -367,20 +370,60 @@
 				iconText.htmlText = feature.htmlDetails(entity);
 				popupChange.label = feature.name;
 				helpLabel.visible = feature.hasHelpURL();
+				setSummary('');
 			} else {
 				iconImage.source = null;
 				popupChange.label = "unknown";
 				helpLabel.visible = false;
 				if (entity==null) {
 					iconText.htmlText = "<i>Nothing selected</i>";
+					setSummary('');
 				} else if (entity.hasTags()) {
 					iconText.htmlText = "<b>Not recognised</b><br/><font size='10pt'>Try looking at the tags under the advanced properties</font>";
+					setSummary(tagSummary(entity));
 				} else {
 					iconText.htmlText = "<b>No tags set</b><br/><font size='10pt'>Please use the menu below to define what this "+entity.getType()+" is</font>";
+					setSummary('');
 				}
 			}
 	  }
 
+	/** Construct an HTML string that summarises the tags of an object. */
+	private function tagSummary(entity:Entity):String {
+		var tags:Object=entity.getTagsCopy();
+		var len:uint=entity.getTagList().length;
+		var expl:Array=[];
+		var t:String;
+		if (tags['name']) {
+			expl.push("<b>"+tags['name']+"</b>"); delete tags['name']; len--;
+		}
+		for (var k:String in tags) {
+			if (nounKeys.indexOf(k)>-1) {
+				expl.push("<b>"+k+"</b>="+tags[k]); len--;
+			}
+		}
+		if (expl.length) {
+			switch (len) {
+				case 1:		expl.push("and 1 other tag"); break;
+				case 0: 	break;
+				default:	expl.push("and "+len+" other tags"); break;
+			}
+			t=expl.join('; ');
+		} else {
+			t=entity.getTagList().toString();
+		}
+		return "<p>Tags: "+t+" <b>(<a href='event:openAdvanced'>edit tags</a>)</b></p>";
+	}
+	
+	/** List of 'noun' keys (i.e. those that define the type of the object, rather than its properties). FIXME: should be defined in a config file. */
+	private static var nounKeys:Array=['amenity','barrier','boundary','building','construction','highway','historic','landuse','leisure',
+	                                   'man_made','natural','office','place','power','railway','service','shop','tourism','traffic_calming','waterway'];
+
+	private function setSummary(text:String):void {
+		featureSummary.htmlText=text;
+		summaryContainer.visible=(text!='');
+	}
+	
 	  private function isMultipleEditable(entities:Array):Boolean {
 		for each(var entity:Entity in entities) {
 			if(!(entity is Node || entity is Way))
@@ -518,16 +561,10 @@
 
 	private function initEditorStackUIs():void {
 		editorStackTabNavigator = new TabNavigator();
-//		editorStackTabNavigator.allowTabSqueezing=false;
-//		editorStackTabNavigator.minTabWidth=10;
-//		editorStackTabNavigator.closePolicy="close_never";
-//		editorStackTabNavigator.scrollSpeed=20;
 		editorStackTabNavigator.creationPolicy="auto";
 		editorStackTabNavigator.percentWidth=100;
 		editorStackTabNavigator.percentHeight=100;
 		editorStackTabNavigator.styleName="dndStackTab";
-//		editorStackTabNavigator.popUpButtonPolicy="off"
-
 
 		editorStackAccordion = new Accordion();
 		editorStackAccordion.percentWidth=100;

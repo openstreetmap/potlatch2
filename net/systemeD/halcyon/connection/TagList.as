@@ -24,10 +24,10 @@ package net.systemeD.halcyon.connection {
         }
 
         public function toString():String {
-            var str:String = "{";
+            var arr:Array = [];
             for (var i:uint = 0; i < length; i++)
-                str += "\""+getTagKey(i) + "=" + getTagValue(i) + "\",";
-            return str+"}";
+                arr.push(getTagKey(i) + "=" + getTagValue(i));
+            return arr.join('; ');
         }
     }
 
