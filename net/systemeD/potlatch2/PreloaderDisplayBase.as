@@ -38,7 +38,7 @@ package net.systemeD.potlatch2
         // This function is called when the PreloaderDisplayBase has been created and is ready for action.
         virtual public function initialize():void
         {
-            _timer = new Timer(1);
+            _timer = new Timer(20);
             _timer.addEventListener(TimerEvent.TIMER, timerHandler);
             _timer.start();
         }
