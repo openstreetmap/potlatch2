@@ -56,7 +56,7 @@ package net.systemeD.potlatch2 {
         //this is our "animation" bit
         override protected function draw():void
         {
-            t.text = int(_fractionLoaded*100).toString()+"%";
+            t.text = _fractionLoaded==1 ? "Preparing..." : int(_fractionLoaded*100).toString()+"%";
             //make objects below follow loading progress
             //positions are completely arbitrary
             //d tells us the x value of where the loading bar is at
