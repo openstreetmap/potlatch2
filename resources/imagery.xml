@@ -18,11 +18,7 @@
     </set>
 	<set>
 		<name>OSM - Mapnik</name>
-		<url>http://c.tile.openstreetmap.org/$z/$x/$y.png</url>
-	</set>
-	<set>
-		<name>OSM - Osmarender</name>
-		<url>http://tah.openstreetmap.org/Tiles/tile/$z/$x/$y.png</url>
+		<url>http://${a|b|c}.tile.openstreetmap.org/$z/$x/$y.png</url>
 	</set>
     <set>
         <name>OSM - OpenCycleMap</name>

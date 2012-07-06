@@ -25,6 +25,9 @@ package net.systemeD.halcyon {
 		private var scheme:String;			// 900913 or microsoft
 		public var blocks:Array;			// array of regexes which are verboten
 
+		private var count:Number=0;			// counter incremented to provide a/b/c/d tile swapping
+		private static const ROUNDROBIN:RegExp =/\$\{([^}]+)\}/;
+
 		private var map:Map;
 		private const MAXTILEREQUESTS:uint= 4;
 		private const MAXTILESLOADED:uint=30;
@@ -241,6 +244,14 @@ package net.systemeD.halcyon {
 					break;
 
 			}
+			var o:Object=new Object();
+			if ((o=ROUNDROBIN.exec(t))) {
+				var prefixes:Array=o[1].split('|');
+				var p:String = prefixes[count % prefixes.length];
+				t=t.replace(ROUNDROBIN,p);
+				count++;
+			}
+
 			for each (var block:* in blocks) { if (t.match(block)) return ''; }
 			return t;
 		}
