@@ -122,8 +122,8 @@ node[man_made=tower] { icon-image: icons/manmade_tower.png; z-index: 20; }
 /* Yes these power stations seem a little backward - but that's seemingly what the side menu uses ATM */
 node[power=station] { icon-image: icons/power_substation.n.16.png; z-index: 20; }
 node[power=generator] { icon-image: icons/power_station.png; z-index: 20; text-offset:15; text: name; font-size: 10; z-index: 20; }
-node[power=tower] { icon-image: icons/power_tower_high2.n.16.png; z-index: 20; }
-node[power=pole] { icon-image: icons/power_tower_low.n.16.png; z-index: 20; }
+node[power=tower] { icon-image: cross; icon-width: 7; width: 3; color: #F44; z-index: 20; }
+node[power=pole] { icon-image: cross; icon-width: 7; width: 3; color: #444; z-index: 20; }
 node[waterway=weir] { icon-image: icons/transport_weir.n.16.png; z-index: 20; }
 
 /* Addressing */

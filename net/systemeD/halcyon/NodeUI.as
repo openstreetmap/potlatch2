@@ -122,6 +122,13 @@ package net.systemeD.halcyon {
 							icon.graphics.drawCircle(w/2,w/2,w/2);
 							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
 
+						} else if (s.icon_image=='cross') {
+							// draw circle
+							w=styleIconAsStroke(icon,subpart);
+							icon.graphics.moveTo(0,0); icon.graphics.lineTo(w,w);
+							icon.graphics.moveTo(0,w); icon.graphics.lineTo(w,0);
+							if (s.interactive) { maxwidth=Math.max(w,maxwidth); }
+
 						} else if (FileBank.getInstance().hasFile(s.icon_image)) {
 							// load icon from library
 							icon.addChild(FileBank.getInstance().getAsDisplayObject(s.icon_image));
@@ -170,6 +177,19 @@ package net.systemeD.halcyon {
 			}
 
 			// return width
+			return styleList.pointStyles[subpart].icon_width;
+		}
+		
+		private function styleIconAsStroke(icon:Sprite, subpart:String):Number {
+			loaded=true;
+			if (styleList.shapeStyles[subpart]) {
+				var s:ShapeStyle=styleList.shapeStyles[subpart];
+				if (!isNaN(s.color) || s.width) {
+					icon.graphics.lineStyle(s.width ? s.width : 1,
+											s.color ? s.color : 0,
+											s.opacity ? s.opacity : 1);
+				}
+			}
 			return styleList.pointStyles[subpart].icon_width;
 		}
 

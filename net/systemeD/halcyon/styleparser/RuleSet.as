@@ -299,7 +299,7 @@ package net.systemeD.halcyon.styleparser {
 					else if (style is ShieldStyle && ShieldStyle(style).shield_image) { filename=ShieldStyle(style).shield_image; }
 					else { continue; }
 
-					if (filename!='square' && filename!='circle')
+					if (filename!='square' && filename!='circle' && filename!='cross')
 						FileBank.getInstance().addFromFile(filename);
 				}
 			}
