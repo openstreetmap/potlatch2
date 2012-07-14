@@ -33,6 +33,21 @@
       <type>900913</type>
       <url>http://tiger-osm.mapquest.com/tiles/1.0.0/tiger/$z/$x/$y.png</url>
     </set>
+    <set minlat="17" minlon="175" maxlat="72" maxlon="-46">
+      <name>OSM US TIGER 2011 Roads Overlay</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
+    </set>
+    <set minlat="17" minlon="175" maxlat="72" maxlon="-46">
+      <name>OSM US USGS Topographic Maps</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    </set>
+    <set minlat="17" minlon="175" maxlat="72" maxlon="-46">
+      <name>OSM US USGS Large Scale Aerial Imagery</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
+    </set>
 	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
 		<name>OS OpenData Streetview</name>
 		<url>http://os.openstreetmap.org/sv/$z/$x/$y.png</url>
