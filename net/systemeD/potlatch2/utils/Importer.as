@@ -68,20 +68,17 @@ package net.systemeD.potlatch2.utils {
 					files[i]=zip.getInput(zip.entries[i]);
 					filesloaded++;
 				}
-				runImporter();
+				doImport();
 			} else {
 				// Standard file
 				files[filenum]=rawData;
 				filesloaded++;
 				trace("loaded file "+filenum+" ("+filesloaded+"/"+filenames.length+")"); 
-				if (filesloaded==filenames.length) { runImporter(); }
+				if (filesloaded==filenames.length) { doImport(); }
 			}
 		}
 
-		private function runImporter():void {
-			var action:CompositeUndoableAction = new CompositeUndoableAction("Import layer "+connection.name);
-			doImport(action.push);
-			action.doAction(); // just do it, don't add to undo stack
+		protected function finish():void {
 			connection.registerPOINodes();
 			if (callback!=null) { callback(connection,options,true); }
 		}
@@ -93,7 +90,7 @@ package net.systemeD.potlatch2.utils {
 			return null;
 		}
 		
-		protected function doImport(push:Function):void {
+		protected function doImport():void {
 		}
 
 		protected function securityErrorHandler( event:SecurityErrorEvent ):void { callback(connection,options,false,"You don't have permission to open that file."); }
