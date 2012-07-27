@@ -79,6 +79,7 @@ package net.systemeD.halcyon {
             recalculate();
 		    redraw();
 			redrawMultis();
+			updateHighlights();
 		}
 		    
 		private function wayNodeRemoved(event:WayNodeEvent):void {
@@ -339,7 +340,6 @@ package net.systemeD.halcyon {
 
 			// Draw icons
 			var r:Number;
-			var nodeSelected:int=stateClasses["nodeSelected"];
 			for (var i:uint = indexStart; i < indexEnd; i++) {
                 var node:Node = Way(entity).getNode(i);
 				var nodeStateClasses:Object={};

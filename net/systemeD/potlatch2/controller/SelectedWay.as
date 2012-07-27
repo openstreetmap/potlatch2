@@ -49,15 +49,28 @@ package net.systemeD.potlatch2.controller {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);
 
-            if ( event.type == MouseEvent.MOUSE_UP && entity is Node && event.shiftKey && !layer.isBackground ) {
+            if ( event.type == MouseEvent.MOUSE_DOWN && entity is Node && focus==firstSelected && event.shiftKey && !layer.isBackground ) {
 				// start new way
 				var way:Way = entity.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
 				return new DrawWay(way, true, false);
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Way && focus==firstSelected && event.shiftKey && !layer.isBackground ) {
-				// insert node within way (shift-click)
-                var d:DragWayNode=new DragWayNode(firstSelected as Way, -1, event, true);
+				// shift-clicked way to insert node
+				var d:DragWayNode=new DragWayNode(firstSelected as Way, -1, event, true);
 				d.forceDragStart();
 				return d;
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Node && focus!=firstSelected && event.shiftKey && !layer.isBackground ) {
+				// shift-clicked POI node to insert it
+				Way(firstSelected).insertNodeAtClosestPosition(Node(entity), false, MainUndoStack.getGlobalStack().addAction);
+				return this;
+			} else if ( event.type == MouseEvent.MOUSE_UP && !entity && event.shiftKey ) {
+				// shift-clicked nearby to insert node
+				var lat:Number = controller.map.coord2lat(event.localY);
+				var lon:Number = controller.map.coord2lon(event.localX);
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+				var node:Node = firstSelected.connection.createNode({}, lat, lon, undo.push);
+				Way(firstSelected).insertNodeAtClosestPosition(node, false, undo.push);
+				MainUndoStack.getGlobalStack().addAction(undo);
+				return this;
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected) {
 				// multiple selection
 				return new SelectedMultiple([firstSelected,entity],layer);
