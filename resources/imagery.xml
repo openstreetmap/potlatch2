@@ -168,4 +168,16 @@
 		<url>http://agri.openstreetmap.org/$z/$x/$y.png</url>
 		<sourcetag>AGRI</sourcetag>
 	</set>
+         <set minlat="47.13" minlon="7.69" maxlat="47.63" maxlon="8.48">
+		<name>Switzerland - Canton Aargau - AGIS 25cm 2011</name>
+		<url>http://tiles.poole.ch/AGIS/OF2011/$z/$x/$y.png</url>
+		<sourcetag>AGIS OF2011</sourcetag>
+	</set>
+         <set minlat="47.06" minlon="7.33" maxlat="47.5" maxlon="8.04">
+		<name>Switzerland - Canton Solothurn - SOGIS 2007</name>
+		<url>http://mapproxy.sosm.ch:8080/tiles/sogis2007/EPSG900913/$z/$x/$y.png?origin=nw</url>
+		<sourcetag>Orthofoto 2007 WMS Solothurn</sourcetag>
+	</set>
+
+
 </imagery>
