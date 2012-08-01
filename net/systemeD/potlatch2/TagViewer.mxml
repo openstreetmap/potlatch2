@@ -378,7 +378,7 @@
 				if (entity==null) {
 					iconText.htmlText = "<i>Nothing selected</i>";
 					setSummary('');
-				} else if (entity.hasTags()) {
+				} else if (entity.hasTags() || entity.parentRelations.length>0) {
 					iconText.htmlText = "<b>Not recognised</b><br/><font size='10pt'>Try looking at the tags under the advanced properties</font>";
 					setSummary(tagSummary(entity));
 				} else {
@@ -388,12 +388,13 @@
 			}
 	  }
 
-	/** Construct an HTML string that summarises the tags of an object. */
+	/** Construct an HTML string that summarises the tags and relation memberships of an object. */
 	private function tagSummary(entity:Entity):String {
+		// Process tags
 		var tags:Object=entity.getTagsCopy();
 		var len:uint=entity.getTagList().length;
 		var expl:Array=[];
-		var t:String;
+		var t:String="none";
 		if (tags['name']) {
 			expl.push("<b>"+tags['name']+"</b>"); delete tags['name']; len--;
 		}
@@ -409,10 +410,23 @@
 				default:	expl.push("and "+len+" other tags"); break;
 			}
 			t=expl.join('; ');
-		} else {
+		} else if (len>0) {
 			t=entity.getTagList().toString();
 		}
-		return "<p>Tags: "+t+" <b>(<a href='event:openAdvanced'>edit tags</a>)</b></p>";
+
+		// Process relations
+		expl=[];
+		for each (var rel:Relation in entity.parentRelations) {
+			tags=rel.getTagsHash();
+			if (tags['type'] && tags['name']) { expl.push("<b>"+tags['type']+"</b> ("+tags['name']+")"); }
+			else if (tags['type']) { expl.push("<b>"+tags['type']+"</b>"); }
+			else if (tags['name']) { expl.push(tags['name']); }
+			else if (tags['ref' ]) { expl.push(tags['ref']); }
+			else { expl.push('unknown'); }
+		}
+
+		// Assemble complete string
+		return "<p>Tags: "+t+(expl.length ? "<br>Relations: "+expl.join('; ') : '')+" <b>(<a href='event:openAdvanced'>edit</a>)</b></p>";
 	}
 	
 	/** List of 'noun' keys (i.e. those that define the type of the object, rather than its properties). FIXME: should be defined in a config file. */
@@ -674,10 +688,12 @@
 
       private function addedToRelation(event:RelationMemberEvent):void {
          resetRelationsGrid(selectedEntity);
+         refreshFeatureIcon();
       }
 
       private function removedFromRelation(event:RelationMemberEvent):void {
          resetRelationsGrid(selectedEntity);
+         refreshFeatureIcon();
       }
 
       private function removeRelationListeners():void {
@@ -730,6 +746,7 @@
 
       private function relationTagChanged(event:TagEvent):void {
           resetRelationsGrid(selectedEntity);
+          refreshFeatureIcon();
       }
 
       private function entityRelationMemberChanged(event:RelationMemberEvent):void {
