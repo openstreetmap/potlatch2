@@ -102,7 +102,7 @@ package net.systemeD.halcyon.connection {
 
         public override function hasInterestingTags():Boolean {
 			for (var key:String in getMergedTags()) {
-              if (key != "attribution" && key != "created_by" && key != "source" && key.indexOf('tiger:') != 0) {
+              if (key != "attribution" && key != "created_by" && key != "source" && key!='odbl' && key.indexOf('tiger:') != 0) {
                 return true;
               }
             }

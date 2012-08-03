@@ -103,7 +103,7 @@ package net.systemeD.halcyon.connection {
         /** Whether the entity has any tags other than meta-tags (attribution, created_by, source, tiger:...) */
         public function hasInterestingTags():Boolean {
             for (var key:String in tags) {
-              if (key != "attribution" && key != "created_by" && key != "source" && key.indexOf('tiger:') != 0) {
+              if (key != "attribution" && key != "created_by" && key != "source" && key!='odbl' && key.indexOf('tiger:') != 0) {
                 //trace(key);
                 return true;
               }
