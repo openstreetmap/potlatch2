@@ -178,6 +178,11 @@
 		<url>http://mapproxy.sosm.ch:8080/tiles/sogis2007/EPSG900913/$z/$x/$y.png?origin=nw</url>
 		<sourcetag>Orthofoto 2007 WMS Solothurn</sourcetag>
 	</set>
+	<set minlat="48.9" minlon="14" maxlat="55" maxlon="24.2">
+		<name>Poland - Media-Lab fleet GPS masstracks</name>
+		<url>http://masstracks.media-lab.com.pl/$z/$x/$y.png</url>
+		<sourcetag>masstracks</sourcetag>
+	</set>
 
 
 </imagery>
