@@ -1,6 +1,7 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
 	import flash.display.Stage;
+	import flash.ui.Keyboard;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.Map;
 	import net.systemeD.potlatch2.tools.Parallelise;
@@ -35,7 +36,7 @@ package net.systemeD.potlatch2.controller {
 
 		/** Cancel parallel way creation if ESC pressed. */
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if (event.keyCode==27) {			// Escape
+			if (event.keyCode==Keyboard.ESCAPE) {
 				Way(firstSelected).remove(MainUndoStack.getGlobalStack().addAction);
 				// Parallel way wasn't created, so remove it from undo history.
 				MainUndoStack.getGlobalStack().removeLastIfAction(DeleteWayAction);
