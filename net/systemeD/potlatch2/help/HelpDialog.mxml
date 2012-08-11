@@ -98,6 +98,11 @@
         return grid;
     }
 
+    // common keycodes used in:
+    //  net/systemeD/potlatch2/controller/ControllerState.as
+    // others spread around where used mostly here:
+    //  net/systemeD/potlatch2/controller/*as
+    // Also see: http://wiki.openstreetmap.org/wiki/Potlatch_2/Shortcuts
     private function buildShortCuts():void {
         var text:Array = [["Click+Drag", "Drag the map to move around"],
                           ["Single Click", "Start a new way"],
@@ -111,22 +116,33 @@
                           ["Ctrl+Click", "Select multiple nodes or ways (Command+Click on Mac)"],
                           ["/", "Cycle through overlapping ways"],
                           ];
-        var text2:Array =  [["+", "Add new tag"],
+        var text2:Array =  [["+", "Add new tag (and also '=')"],
                             [", .", "Cycle through nodes in way"],
+                            ["0", "Zero (but not on the numpad) - Remove ALL tags on selected item"],
+                            ["B", "Set source tag according to the Background"],
+                            ["C", "Close changeset"],
                             ["D", "Dim features"],
                             ["F", "Follow existing way"],
                             ["G", "Load GPS points"],
+                            ["H", "History of single selected item"],
+                            ["H", "Create Multipolygon Hole (multiple items selected)"],
+                            ["J", "Join (merge) ways"],
+                            ["Shift-J", "Unjoin ways"],
                             ["M", "Maximise editor"],
+                            ["O", "Replace node on way"],
                             ["P", "Create parallel way"],
-                            ["Q", "Make area right-angled"],
+                            ];
+        var text3:Array =  [["Q", "Make area right-angled"],
                             ["R", "Repeat tags"],
                             ["Shift-R", "Repeat relations"],
-                            ];
-        var text3:Array =  [["S", "Save"],
+                            ["S", "Save"],
                             ["T", "Toggle between simple and advanced tags"],
                             ["V", "Reverse direction of way"],
+                            ["W", "Select the way of the selected node"],
                             ["X", "Cut way at node"],
+                            ["Y", "Simplify way"],
                             ["Z", "Undo"],
+                            ["Shift-Z", "Redo"],
                             ["Esc", "Cancel edit"],
                             ["Space", "Hold/drag to realign background image"]
                             ];
