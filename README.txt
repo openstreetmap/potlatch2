@@ -104,7 +104,7 @@ of a much larger swf file.. but we're developing so that doesn't matter!).
 Running:
 
 * Flash security model sucks. If you want to use internet resource (e.g. map calls to the dev
-  server) the binary must have been served from "teh internets". Run resources/server.rb to launch a local 
+  server) the binary must have been served from "teh internets". Run resources/server.rb to launch a local
   server, then go to http://localhost:3333/potlatch2.html to get started (or if you're already running e.g. 
   Apache locally, feel free to use that instead.)
   
