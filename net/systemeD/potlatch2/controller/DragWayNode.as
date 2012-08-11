@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.ui.Keyboard;
     import net.systemeD.potlatch2.EditController;
     import net.systemeD.halcyon.connection.*;
 	import net.systemeD.halcyon.WayUI;
@@ -81,7 +82,7 @@ package net.systemeD.potlatch2.controller {
         }
 
 		override public function processKeyboardEvent(event:KeyboardEvent):ControllerState {
-			if (event.keyCode==27) {
+			if (event.keyCode==Keyboard.ESCAPE) {
 				draggingNode.setLatLon( originalLat, originalLon, MainUndoStack.getGlobalStack().addAction );
                	return new SelectedWayNode(parentWay,draggingIndex);
 			}
