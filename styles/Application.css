@@ -282,6 +282,12 @@ s|FormItem {
 	closedIcon: Embed(source="../embedded/CollapsiblePanelAssets.swf", symbol="CollapseButtonOver");
 }
 
+/* Tag tooltips */
+
+.errorTip {
+    borderColor: #2929CE;
+}
+
 /* Toolbox */
 
 .theToolBox {

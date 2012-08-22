@@ -51,6 +51,34 @@ package net.systemeD.potlatch2.mapfeatures.editors {
           dispatchEvent(new Event("tag_changed"));
       }
 
+		[Embed(source="../../../../../embedded/help.png")] private var infoIcon:Class;
+
+		import spark.components.*;
+		import mx.managers.ToolTipManager;
+		import mx.controls.ToolTip;
+		import mx.core.IUIComponent;
+		import flash.geom.Point;
+		private var _tip:ToolTip;
+
+		[Bindable(event="factory_set")]
+		protected function get help():Image {
+			var image:Image = new Image();
+			image.source = infoIcon;
+			image.width = 16;
+			image.height = 16;
+			image.addEventListener("mouseOver",showHelpBalloon,false,0,true);
+			image.addEventListener("mouseOut" ,hideHelpBalloon,false,0,true);
+			return image;
+		}
+
+		private function showHelpBalloon(e:Event):void {
+			var point:Point=e.target.contentToGlobal(new Point(-8,16));
+			_tip=ToolTipManager.createToolTip(fieldDescription,point.x,point.y,"errorTipBelow",IUIComponent(e.target)) as ToolTip;
+		}
+		private function hideHelpBalloon(e:Event):void {
+			ToolTipManager.destroyToolTip(_tip);
+		}
+
     }
 
 }

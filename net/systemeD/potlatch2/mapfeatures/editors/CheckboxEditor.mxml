@@ -6,7 +6,7 @@
 	xmlns:edit="net.systemeD.potlatch2.mapfeatures.editors.*"
 	xmlns:flexlib="flexlib.controls.*"
 	width="100%"
-	toolTip="{fieldDescription}"
+	helpContent="{fieldDescription ? help : null}" 
 	label="{fieldName}:">
 
     <mx:CheckBox id="inputBox" creationComplete="initCheckbox()"

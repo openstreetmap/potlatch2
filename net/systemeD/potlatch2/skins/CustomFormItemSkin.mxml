@@ -126,7 +126,7 @@ Move the indicator tooltip string to a resource bundle
              bottom="row1:0" baseline="row1:0"/>
     <!--- @copy spark.components.FormItem#labelDisplay -->
     <s:Label id="labelDisplay"
-             fontWeight="bold"
+             maxWidth="75"
              left="labelCol:0" right="labelCol:5" 
              bottom="row1:0" baseline="row1:0"/>  
     <!--- @copy spark.components.SkinnableContainer#contentGroup -->
