@@ -28,7 +28,7 @@
             </mx:text>
           </mx:Text>
           <mx:HBox width="100%">
-            <mx:Image data="@Embed('../../../../embedded/warning.png')" top="15" />
+            <mx:Image data="@Embed('../../../../embedded/read_this.png')" />
             <mx:Text id="databaseWarning" width="100%">
               <mx:text>
                  Your changes are saved to the main OpenStreetMap database for everyone to 
