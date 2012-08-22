@@ -52,7 +52,7 @@
   </inputSet>
 
   <inputSet id="designation">
-    <input type="freetext" category="Details" presence="onTagMatch" description="Official designation or classification" name="Designation" key="designation" priority="lowest" />
+    <input type="freetext" category="Details" presence="onTagMatch" description="The official designation or classification (if any). Only use this if the organisation that runs it has its own classification system." name="Official classification" key="designation" priority="lowest" />
   </inputSet>
 
   <inputSet id="common">
