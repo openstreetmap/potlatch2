@@ -90,7 +90,7 @@ package net.systemeD.potlatch2.collections {
 			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 			obj.setProperty("stylesheet_url",ss.url);
 			obj.setProperty("stylesheet_name",ss.name);
-			obj.flush();
+			try { obj.flush(); } catch (e:Error) {}
 		}
 
 		/** The currently selected stylesheet */

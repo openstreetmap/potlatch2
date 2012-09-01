@@ -81,12 +81,12 @@
         FlexGlobals.topLevelApplication.theMap.redraw();
 
         userState.setProperty("tiger_highlighted",tigercheck.selected);
-        userState.flush();
+        try { userState.flush(); } catch (e:Error) {}
     }
 
 	private function simplifySet():void {
         userState.setProperty("simplify_tolerance",simplifyslider.value*0.00001);
-        userState.flush();
+        try { userState.flush(); } catch (e:Error) {}
 	}
 
 	private function licenceToggle():void {

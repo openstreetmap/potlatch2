@@ -151,7 +151,7 @@ package net.systemeD.potlatch2.collections {
 			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 			obj.setProperty('background_url' ,String(bg.url));
 			obj.setProperty('background_name',String(bg.name));
-			obj.flush();
+			try { obj.flush(); } catch (e:Error) {}
 		}
 		
 		public function get selected():Object { return _selected; }

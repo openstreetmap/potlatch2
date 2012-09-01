@@ -44,7 +44,7 @@ package net.systemeD.potlatch2.save {
                     var obj:SharedObject = SharedObject.getLocal("access_token","/");
                     obj.setProperty("oauth_token", accessToken.key);
                     obj.setProperty("oauth_token_secret", accessToken.secret);
-                    obj.flush();
+                    try { obj.flush(); } catch (e:Error) {}
                 }
                 onCompletion();
             }

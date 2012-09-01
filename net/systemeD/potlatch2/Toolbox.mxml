@@ -142,7 +142,7 @@
 			this.visible=!this.visible;
 			var obj:SharedObject = SharedObject.getLocal("user_state","/");
 			obj.setProperty("toolbox_visible",this.visible);
-			obj.flush();
+			try { obj.flush(); } catch (e:Error) {}
 		}
 		
 		// --------------------------------------------------------------------------------

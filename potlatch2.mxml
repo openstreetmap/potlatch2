@@ -184,7 +184,7 @@
 				obj.setProperty('stylesheet_name','Custom');
 				objChanged=true; 
 			}
-			if (objChanged) { obj.flush(); }
+			if (objChanged) { try { obj.flush(); } catch (e:Error) {} }
 
 			// map backdrop object
             var w:uint = map_area.width;

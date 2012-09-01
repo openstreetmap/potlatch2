@@ -44,7 +44,7 @@ package net.systemeD.potlatch2 {
 			keys[fkey]={ code:code, value:value };
 			var obj:SharedObject=SharedObject.getLocal("user_state","/");
 			obj.setProperty('F'+fkey,{ code:code, value:value });
-			obj.flush();
+			try { obj.flush(); } catch (e:Error) {}
 			dispatchEvent(new Event("key_changed"));
 		}
 
@@ -54,7 +54,7 @@ package net.systemeD.potlatch2 {
 				keys[Number(oldKey.substr(1))]=null;
 				var obj:SharedObject=SharedObject.getLocal("user_state","/");
 				obj.setProperty(oldKey,null);
-				obj.flush();
+				try { obj.flush(); } catch (e:Error) {}
 			} else {
 				setKey(Number(key.substr(1)),code,value);
 			}

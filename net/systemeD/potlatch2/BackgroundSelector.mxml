@@ -48,13 +48,13 @@
 			FlexGlobals.topLevelApplication.theMap.setDimming(dim.selected);
 			var obj:SharedObject=SharedObject.getLocal("user_state","/");
 			obj.setProperty('background_dim',v);
-			obj.flush();
+			try { obj.flush(); } catch (e:Error) {}
 		}
 		public function setSharpen(v:Boolean):void {
 			FlexGlobals.topLevelApplication.theMap.setSharpen(sharpen.selected);
 			var obj:SharedObject=SharedObject.getLocal("user_state","/");
 			obj.setProperty('background_sharpen',v);
-			obj.flush();
+			try { obj.flush(); } catch (e:Error) {}
 		}
     ]]></fx:Script>
 </s:BorderContainer>
