@@ -48,6 +48,13 @@
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
     </set>
+    <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-123.346">
+      <name>British Columbia bc_mosaic</name>
+      <type>900913</type>
+      <url>http://${a|b|c|d}.imagery.paulnorman.ca/tiles/bc_mosaic/$z/$x/$y.png</url>
+      <attribution_url>http://imagery.paulnorman.ca/tiles/about.html</attribution_url>
+      <sourcetag>bc_mosaic</sourcetag>
+    </set>
 	<set minlat="49.86" minlon="-8.72" maxlat="60.92" maxlon="1.84">
 		<name>OS OpenData Streetview</name>
 		<url>http://os.openstreetmap.org/sv/$z/$x/$y.png</url>
