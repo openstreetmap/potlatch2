@@ -48,7 +48,7 @@
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
     </set>
-	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
+	<set minlat="49.86" minlon="-8.72" maxlat="60.92" maxlon="1.84">
 		<name>OS OpenData Streetview</name>
 		<url>http://os.openstreetmap.org/sv/$z/$x/$y.png</url>
 		<sourcetag>OS_OpenData_StreetView</sourcetag>
