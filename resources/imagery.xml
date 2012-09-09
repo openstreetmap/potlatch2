@@ -3,10 +3,10 @@
 <imagery>
 	<set>
 		<name>Bing aerial imagery</name>
-		<url>http://ecn.t0.tiles.virtualearth.net/tiles/a$quadkey.jpeg?g=587&mkt=en-gb&n=z</url>
+		<url>http://ecn.t0.tiles.virtualearth.net/tiles/a$quadkey.jpeg?g=587&amp;mkt=en-gb&amp;n=z</url>
 		<scheme>microsoft</scheme>
 		<sourcetag>Bing</sourcetag>
-		<attribution_url>http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=Arzdiw4nlOJzRwOz__qailc8NiR31Tt51dN2D7cm57NrnceZnCpgOkmJhNpGoppU&include=ImageryProviders&output=xml</attribution_url>
+		<attribution_url>http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&amp;mapVersion=v1&amp;key=Arzdiw4nlOJzRwOz__qailc8NiR31Tt51dN2D7cm57NrnceZnCpgOkmJhNpGoppU&amp;include=ImageryProviders&amp;output=xml</attribution_url>
 		<logo>bing_maps.png</logo>
 		<logo_url>http://www.bing.com/maps</logo_url>
 		<terms_url>http://opengeodata.org/microsoft-imagery-details</terms_url>
@@ -48,7 +48,14 @@
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
     </set>
-	<set minlat="49.8" minlon="-9" maxlat="61.1" maxlon="1.9">
+    <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-123.346">
+      <name>British Columbia bc_mosaic</name>
+      <type>900913</type>
+      <url>http://${a|b|c|d}.imagery.paulnorman.ca/tiles/bc_mosaic/$z/$x/$y.png</url>
+      <attribution_url>http://imagery.paulnorman.ca/tiles/about.html</attribution_url>
+      <sourcetag>bc_mosaic</sourcetag>
+    </set>
+	<set minlat="49.86" minlon="-8.72" maxlat="60.92" maxlon="1.84">
 		<name>OS OpenData Streetview</name>
 		<url>http://os.openstreetmap.org/sv/$z/$x/$y.png</url>
 		<sourcetag>OS_OpenData_StreetView</sourcetag>
@@ -155,12 +162,12 @@
 	</set>
 	<set minlon="19.02" minlat="40.96" maxlon="77.34" maxlat="70.48">
 		<name>Russia - Kosmosnimki.ru IRS Satellite</name>
-		<url>http://irs.gis-lab.info/?layers=irs&request=GetTile&z=$z&x=$x&y=$y</url>
+		<url>http://irs.gis-lab.info/?layers=irs&amp;request=GetTile&amp;z=$z&amp;x=$x&amp;y=$y</url>
 		<sourcetag>Kosmosnimki.ru IRS</sourcetag>
 	</set>
 	<set minlon="23.16" minlat="51.25" maxlon="32.83" maxlat="56.19">
 		<name>Belarus - Kosmosnimki.ru SPOT4 Satellite</name>
-		<url>http://irs.gis-lab.info/?layers=spot&request=GetTile&z=$z&x=$x&y=$y</url>
+		<url>http://irs.gis-lab.info/?layers=spot&amp;request=GetTile&amp;z=$z&amp;x=$x&amp;y=$y</url>
 		<sourcetag>Kosmosnimki.ru SPOT4</sourcetag>
 	</set>
 	<set minlon="96" minlat="-44" maxlon="168" maxlat="-9">
