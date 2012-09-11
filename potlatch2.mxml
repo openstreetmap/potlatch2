@@ -44,11 +44,11 @@
             enabled="{MainUndoStack.getGlobalStack().canRedo()}"
             toolTip="{MainUndoStack.getGlobalStack().getRedoDescription() ? 'Redo '+MainUndoStack.getGlobalStack().getRedoDescription() : 'Redo last action'}" />
         <mx:Spacer width="100%"/>
-        <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton"
+        <mx:PopUpButton id="bgButton" label="Background" openAlways="true" styleName="appBarButton" open="disableMapMouse();" close="enableMapMouse();" 
             creationComplete="bgButton.popUp = new BackgroundSelector();"/>
-        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton"
+        <mx:PopUpButton id="styleButton" label="Map Style" openAlways="true" styleName="appBarButton" open="disableMapMouse();" close="enableMapMouse();" 
             creationComplete="styleButton.popUp = new StyleSelector();"/>
-		<mx:PopUpMenuButton id="gpsButton" label="GPS" styleName="appBarButton"
+		<mx:PopUpMenuButton id="gpsButton" label="GPS" styleName="appBarButton" open="disableMapMouse();" close="enableMapMouse();" 
 		    itemClick="if (event.index==0) { trackLoader.load(); } 
 		          else if (event.index==1) { new MyGpxDialog().init(); } 
 		                              else { mx.controls.Menu(gpsButton.popUp).selectedIndex=0; 
@@ -133,6 +133,7 @@
 		private var spinner:Spinner;
 		private var saveLabel:String='Save';
 		private var saveTimer:Timer;
+		private var mouseTimer:Timer;
 
         include "version.as";
 
@@ -423,6 +424,24 @@
 			if (toolbox) {
 				toolbox.y=Math.min(toolbox.y,stage.stageHeight-toolbox.height-10-e.params.y);
 			}
+		}
+
+		private function disableMapMouse():void {
+			map_area.mouseChildren=false;
+			map_area.mouseEnabled=false;
+		}
+
+		private function enableMapMouse():void {
+			mouseTimer=new Timer(300);
+			mouseTimer.addEventListener(TimerEvent.TIMER, doEnable, false, 0, true);
+			mouseTimer.start();
+		}
+		
+		private function doEnable(event:Event):void {
+			map_area.mouseChildren=true;
+			map_area.mouseEnabled=true;
+			mouseTimer.removeEventListener(TimerEvent.TIMER, doEnable);
+			mouseTimer=null;
 		}
 
         private function mouseoverHandler(e:MapEvent):void {
