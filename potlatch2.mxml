@@ -226,7 +226,6 @@
 			conn.addEventListener(MapEvent.ERROR, onMapError);
 			conn.addEventListener(AttentionEvent.ATTENTION, onAttention);
 			conn.addEventListener(AttentionEvent.ALERT, onAlert);
-			if (params['licence_status']) conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/problems",conn);
 			theMap.addLayer(conn, Stylesheets.instance().selected.url, false, true);
 
             // Auto-load vector backgrounds from config

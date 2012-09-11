@@ -7,7 +7,7 @@ package net.systemeD.halcyon.connection {
 	public class StatusFetcher {
 
 		/* Class to fetch the status for newly loaded objects.
-		   At present this is rather specialised to WTFE (wtfe.gryph.de).
+		   Not currently functional.
 		*/
 
 		public var _url:String;
@@ -58,21 +58,7 @@ package net.systemeD.halcyon.connection {
 					case "node":	entity=conn.getNode(exml.@id); break;
 				}
 
-				// **** Specific WTFE-parsing code starts here
-				// FIXME: should be generalised
-				//		if all users are "yes" or "auto", status is 'ok' (3, green)
-				//		if first user is "no", status is 'no' (0, red)
-				//		if any other users are no, status is 'partial' (1, softer red)
-				//		otherwise, status is 'unsure' (2, yellow)
-				var s:uint=3;	// ok
-				for each (var user:XML in exml.user) {
-					if (user.@severity=='harmless' || user.@severity=='none') continue;	// ignore if harmless
-					if (user.@decision=='no' && user.@version=='first') { s=0; }		// no from v1
-					else if (user.@decision=='no') { s=Math.min(s,1); }					// no from later version
-					else if (user.@decision=='undecided' || user.@decision=='anonymous') { s=Math.min(s,2); }	// unsure
-				}
-				status=STATUSES[s];
-				// **** Specific WTFE-parsing code ends here
+				// FIXME: needs some code to parse the XML, and set 'status' accordingly
 				entity.setStatus(status);
 			}
 		}

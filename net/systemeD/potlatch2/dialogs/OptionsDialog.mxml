@@ -24,9 +24,6 @@
 	<s:CheckBox width="100%" label="Show mouse latitude/longitude" selected="false" id="latlongcheck"
 		change="FlexGlobals.topLevelApplication.coordsbox.visible=latlongcheck.selected" />
 
-    <s:CheckBox width="100%" label="Show licence status" selected="false" id="licencecheck"
-        change="licenceToggle()" />
-
 	<s:HGroup width="100%" verticalAlign="middle">
       <s:Label text="Simplify accuracy: "/>
       <mx:HSlider id="simplifyslider"
@@ -68,7 +65,6 @@
         cursorcheck.selected = FlexGlobals.topLevelApplication.theController.cursorsEnabled;
         tigercheck.selected = userState.data['tiger_highlighted'];
         latlongcheck.selected = FlexGlobals.topLevelApplication.coordsbox.visible;
-		licencecheck.selected = Map(Globals.vars.root).editableLayer.connection.statusFetcher!=null;
 		simplifyslider.value = userState.data['simplify_tolerance'] ? userState.data['simplify_tolerance']/0.00001 : 5;
     }
     
@@ -87,20 +83,6 @@
 	private function simplifySet():void {
         userState.setProperty("simplify_tolerance",simplifyslider.value*0.00001);
         try { userState.flush(); } catch (e:Error) {}
-	}
-
-	private function licenceToggle():void {
-		// ** FIXME: this is an inelegant patch for the short-term issue of highlighting licensing status
-		var conn:Connection=Map(Globals.vars.root).editableLayer.connection;
-		if (conn.statusFetcher) {
-			conn.statusFetcher=null;
-			userState.setProperty("licence_status",false);
-		} else {
-			conn.statusFetcher=new StatusFetcher("http://wtfe.gryph.de/api/0.6/problems",conn);
-			conn.statusFetcher.fetch(conn.getAllLoadedEntities());
-			userState.setProperty("licence_status",true);
-			// ** FIXME: needs to also switch map style
-		}
 	}
 	
               ]]>
