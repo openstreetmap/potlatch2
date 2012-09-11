@@ -190,6 +190,9 @@
 		<url>http://masstracks.media-lab.com.pl/$z/$x/$y.png</url>
 		<sourcetag>masstracks</sourcetag>
 	</set>
-
-
+	<set minlat="-34.95" minlon="17.64" maxlat="-22.05" maxlon="32.87">
+		<name>South Africa - CD:NGI Aerial</name>
+		<url>http://${a|b|c}.aerial.openstreetmap.org.za/ngi-aerial/$z/$x/$y.jpg</url>
+		<sourcetag>ngi-aerial</sourcetag>
+	</set>
 </imagery>
