@@ -38,7 +38,17 @@
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="24.005" minlon="-125.991" maxlat="50.009" maxlon="-65.988">
+      <name>OSM US USGS Topographic Maps</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    </set>
+    <set minlat="18.902" minlon="-160.579" maxlat="22.508" maxlon="-154.793">
+      <name>OSM US USGS Topographic Maps</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    </set>
+    <set minlat="51.255" minlon="-178.001" maxlat="71.999" maxlon="-130.004">
       <name>OSM US USGS Topographic Maps</name>
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
