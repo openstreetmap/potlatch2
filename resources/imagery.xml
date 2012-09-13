@@ -53,7 +53,7 @@
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="24.496" minlon="-124.819" maxlat="49.443" maxlon="-66.931">
       <name>OSM US USGS Large Scale Aerial Imagery</name>
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
