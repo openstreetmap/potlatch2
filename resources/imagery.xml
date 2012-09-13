@@ -28,31 +28,61 @@
         <name>OSM - MapQuest</name>
         <url>http://otile1.mqcdn.com/tiles/1.0.0/osm/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="24.055" minlon="-124.810" maxlat="49.386" maxlon="-66.865">
       <name>OSM - Tiger Edited Map</name>
       <type>900913</type>
       <url>http://tiger-osm.mapquest.com/tiles/1.0.0/tiger/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="50.858" minlon="-179.754" maxlat="71.463" maxlon="-129.899">
+      <name>OSM - Tiger Edited Map</name>
+      <type>900913</type>
+      <url>http://tiger-osm.mapquest.com/tiles/1.0.0/tiger/$z/$x/$y.png</url>
+    </set>
+    <set minlat="18.702" minlon="-174.460" maxlat="26.501" maxlon="-154.516">
+      <name>OSM - Tiger Edited Map</name>
+      <type>900913</type>
+      <url>http://tiger-osm.mapquest.com/tiles/1.0.0/tiger/$z/$x/$y.png</url>
+    </set>
+    <set minlat="24.055" minlon="-124.810" maxlat="49.386" maxlon="-66.865">
       <name>OSM US TIGER 2011 Roads Overlay</name>
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="50.858" minlon="-179.754" maxlat="71.463" maxlon="-129.899">
+      <name>OSM US TIGER 2011 Roads Overlay</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
+    </set>
+    <set minlat="18.702" minlon="-174.460" maxlat="26.501" maxlon="-154.516">
+      <name>OSM US TIGER 2011 Roads Overlay</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
+    </set>
+    <set minlat="24.005" minlon="-125.991" maxlat="50.009" maxlon="-65.988">
       <name>OSM US USGS Topographic Maps</name>
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="18.902" minlon="-160.579" maxlat="22.508" maxlon="-154.793">
+      <name>OSM US USGS Topographic Maps</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    </set>
+    <set minlat="51.255" minlon="-178.001" maxlat="71.999" maxlon="-130.004">
+      <name>OSM US USGS Topographic Maps</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    </set>
+    <set minlat="24.496" minlon="-124.819" maxlat="49.443" maxlon="-66.931">
       <name>OSM US USGS Large Scale Aerial Imagery</name>
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
     </set>
-    <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-123.346">
+    <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-121.346">
       <name>British Columbia bc_mosaic</name>
       <type>900913</type>
       <url>http://${a|b|c|d}.imagery.paulnorman.ca/tiles/bc_mosaic/$z/$x/$y.png</url>
-      <attribution_url>http://imagery.paulnorman.ca/tiles/about.html</attribution_url>
+      <terms_url>http://imagery.paulnorman.ca/tiles/about.html</terms_url>
       <sourcetag>bc_mosaic</sourcetag>
     </set>
 	<set minlat="49.86" minlon="-8.72" maxlat="60.92" maxlon="1.84">
