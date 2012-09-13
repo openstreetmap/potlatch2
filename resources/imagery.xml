@@ -43,7 +43,17 @@
       <type>900913</type>
       <url>http://tiger-osm.mapquest.com/tiles/1.0.0/tiger/$z/$x/$y.png</url>
     </set>
-    <set minlat="17" minlon="-175" maxlat="72" maxlon="-46">
+    <set minlat="24.055" minlon="-124.810" maxlat="49.386" maxlon="-66.865">
+      <name>OSM US TIGER 2011 Roads Overlay</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
+    </set>
+    <set minlat="50.858" minlon="-179.754" maxlat="71.463" maxlon="-129.899">
+      <name>OSM US TIGER 2011 Roads Overlay</name>
+      <type>900913</type>
+      <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
+    </set>
+    <set minlat="18.702" minlon="-174.460" maxlat="26.501" maxlon="-154.516">
       <name>OSM US TIGER 2011 Roads Overlay</name>
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/tiger2011_roads/$z/$x/$y.png</url>
