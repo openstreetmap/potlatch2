@@ -78,7 +78,7 @@
       <type>900913</type>
       <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
     </set>
-    <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-123.346">
+    <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-121.346">
       <name>British Columbia bc_mosaic</name>
       <type>900913</type>
       <url>http://${a|b|c|d}.imagery.paulnorman.ca/tiles/bc_mosaic/$z/$x/$y.png</url>
