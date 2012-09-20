@@ -43,6 +43,14 @@
 
 		private function goFetch(q:String):void {
 
+			var matches:Array=q.match(/^([\-\.\d]+)[\s,]+([\-\.\d]+)$/i);
+			if (matches) {
+				// lat/lon pair
+				FlexGlobals.topLevelApplication.theMap.moveMapFromLatLon(Number(matches[1]), Number(matches[2]));
+				PopUpManager.removePopUp(this);
+				return;
+			}
+
 			var searchCall:String = nominatimURL;
 			for (var item:String in nomOptions) {
 				searchCall += item + "="; 
