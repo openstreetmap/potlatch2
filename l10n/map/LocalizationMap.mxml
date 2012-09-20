@@ -155,6 +155,7 @@
 
   <ResourceInjector bundleName="p2_main" target="{SaveDialog}">
     <ResourceSetter property="editDescription.text" key="save.editDescription" />
+    <ResourceSetter property="databaseWarning.text" key="save.databaseWarning" />
     <ResourceSetter property="commentLabel.label" key="save.commentLabel" />
   </ResourceInjector>
 
