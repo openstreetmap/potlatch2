@@ -47,6 +47,11 @@ package net.systemeD.halcyon.connection {
 					fetchSet.add(new Box().fromBbox(minlon,minlat,maxlon,maxlat));
 				}
 
+				for each(var csData:XML in map.changeset) {
+					var cs:Changeset = new Changeset(this, csData.@id, parseTags(csData.tag) );
+					setChangeset(cs);
+				}
+
 				for each(var relData:XML in map.relation) {
 					id = Number(relData.@id);
 					version = uint(relData.@version);

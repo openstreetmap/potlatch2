@@ -19,7 +19,9 @@ package net.systemeD.halcyon.connection {
         private var modified:Boolean = false;
         private var _loaded:Boolean = true;
         private var parents:Dictionary = new Dictionary();
-		public var status:String;
+        public var status:String;
+        /** Last changeset in which the Entity was updated. Used only by history calls, therefore we don't bloat the constructor by initialising it. */
+        public var lastChangeset:Number;
         /** Lock against purging when off-screen */
         public var locked:Boolean = false;
         public var deleted:Boolean = false;

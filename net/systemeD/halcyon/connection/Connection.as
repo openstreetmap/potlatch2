@@ -95,6 +95,7 @@ package net.systemeD.halcyon.connection {
         private var pois:Array = [];
         private var changeset:Changeset = null;
 		private var changesetUpdated:Number;
+		private var changesets:Object = {}; 	// used for fetching history only
 		private var modified:Boolean = false;
 		public var nodecount:int=0;
 		public var waycount:int=0;
@@ -128,6 +129,10 @@ package net.systemeD.halcyon.connection {
             relations[relation.id] = relation;
             if (relation.loaded) { sendEvent(new EntityEvent(NEW_RELATION, relation),queue); }
         }
+
+		protected function setChangeset(changeset:Changeset):void {
+			changesets[changeset.id] = changeset;
+		}
 
 		protected function setOrUpdateNode(newNode:Node, queue:Boolean):void {
         	if (nodes[newNode.id]) {
@@ -210,6 +215,10 @@ package net.systemeD.halcyon.connection {
 
         public function getMarker(id:Number):Marker {
             return markers[id];
+        }
+
+        public function getChangeset(id:Number):Changeset {
+            return changesets[id];
         }
 
 		protected function findEntity(type:String, id:*):Entity {

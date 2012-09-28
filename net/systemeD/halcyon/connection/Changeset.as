@@ -14,6 +14,13 @@ package net.systemeD.halcyon.connection {
 		public override function getType():String {
 			return 'changeset';
 		}
+
+		public function get comment():String {
+			var t:Object=getTagsHash();
+			var s:String=t['comment'] ? t['comment'] : '';
+			if (t['source']) { s+=" ["+t['source']+"]"; }
+			return s;
+		}
     }
 
 }

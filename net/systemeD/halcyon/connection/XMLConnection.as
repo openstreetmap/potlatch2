@@ -538,6 +538,7 @@ package net.systemeD.halcyon.connection {
                     nodeData.@timestamp,
                     nodeData.@user
                     );
+                newNode.lastChangeset=nodeData.@changeset;
                 results.push(newNode);
             }
 
@@ -557,6 +558,7 @@ package net.systemeD.halcyon.connection {
                     wayData.@timestamp,
                     wayData.@user
                     );
+                newWay.lastChangeset=wayData.@changeset;
                 results.push(newWay);
             }
 

@@ -10,7 +10,7 @@
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:help="net.systemeD.potlatch2.help.*"
         title="History for {entity.getType()} {entity.id}"
-        width="600" height="400">
+        width="640" height="400">
 
   <s:layout>
     <s:VerticalLayout />
@@ -32,18 +32,16 @@
             </s:GridColumn>
             <s:GridColumn editable="false" dataField="timestamp" headerText="Date" />
             <s:GridColumn editable="false" dataField="diff" headerText="Changes" width="200" showDataTips="true" />
-            <s:GridColumn editable="false" dataField="user" headerText="User" />
             <s:GridColumn editable="false">
-              <s:itemRenderer>
-                <fx:Component>
-                  <s:GridItemRenderer>
-                    <s:VGroup horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
-                      <s:Button label="Contact Mapper" click="parentDocument.parentDocument.message(data.user)"/>
-                    </s:VGroup>
-                  </s:GridItemRenderer>
-                </fx:Component>
-              </s:itemRenderer>
+              <s:itemRenderer><fx:Component><s:GridItemRenderer>
+                <s:VGroup horizontalAlign="center" verticalAlign="middle" width="100%" height="100%">
+                  <s:Label text="{data.user}" 
+                      color="0x336699"  textDecoration="underline" buttonMode="true" 
+                      click="parentDocument.parentDocument.userPage(data.user)"/>
+                </s:VGroup>
+              </s:GridItemRenderer></fx:Component></s:itemRenderer>
             </s:GridColumn>
+            <s:GridColumn editable="false" dataField="comment" headerText="Comment" width="200" showDataTips="true" />
           </s:ArrayList>
         </s:columns>
       </s:DataGrid>
@@ -77,9 +75,13 @@
     [Bindable]
     private var entityStates:ArrayList = new ArrayList();
 
-    // store intermediate states for ways
-    private var wayStates:Array; // an array of ways
+    // store intermediate states
+    private var entityStateList:Array; // an array of objects
     private var wayNodeStates:Array; // an array of arrays of nodes
+
+    /** Changesets used in the history. */
+    private var changesets:Array=[];
+    private var pendingChangesetFetches:uint;
 
     // the number of outstanding asynchronous node history requests,
     // so we know when all have been fetched
@@ -119,12 +121,18 @@
         }
     }
 
-    private function processNode(results:Array):void {
-        // Simply copy the nodes into the states array
-        // todo sorting or somesuch
+	private function processNode(results:Array):void {
+		entityStateList = results;
+		for each(var node:Node in results) {
+			changesets.push(node.lastChangeset);
+		}
+		fetchChangesets();
+	}
+	
+	private function displayNodeResults(e:Event):void {
 		var arr:Array=[];
 		var oldNode:Node;
-		for each (var node:Node in results) {
+		for each (var node:Node in entityStateList) {
 			var changes:Array=[];
 			if (node.version==1) {
 				changes.push("Created");
@@ -138,7 +146,8 @@
 				version: node.version,
 				timestamp: node.timestamp.replace('T',' ').replace('Z',''),
 				user: node.user,
-				diff: changes.length==0 ? "None" : changes.join('; ')
+				diff: changes.length==0 ? "None" : changes.join('; '),
+				comment: entity.connection.getChangeset(node.lastChangeset).comment
 			});
 			oldNode=node;
 		}
@@ -165,12 +174,12 @@
         // In potlatch(2) we show the user the number of different states, bearing in mind
         // node movements (and tag changes?).
 
-        wayStates = results;
+        entityStateList = results;
 
         // figure out the list of nodes that have ever been involved in the way, and fetch them.
         // pendingNode will store each one, and trigger an event when they are all downloaded.
         wayNodeStates = [];
-        addEventListener("pendingNodesAllFetched", processWayStates);
+        addEventListener("pendingNodesAllFetched", fetchChangesets);
 
         var nodes:Object = {};
         var count:uint = 0;
@@ -183,6 +192,7 @@
                     count++;
                 }
             }
+            changesets.push(oldWay.lastChangeset);
         }
 
         pendingNodeFetches = count;
@@ -196,11 +206,26 @@
     // nodes remaining this will trigger an event.
     private function pendingNode(results:Array):void {
         wayNodeStates.push(results)
+        for each (var n:Node in results) changesets.push(n.lastChangeset);
         pendingNodeFetches--;
         if (pendingNodeFetches == 0) {
             dispatchEvent(new Event("pendingNodesAllFetched"));
         }
     }
+
+	/** Work out which changesets were used, and fetch details for all of them. */
+	private function fetchChangesets(e:Event=null):void {
+		changesets=ArrayUtil.createUniqueCopy(changesets);
+		pendingChangesetFetches=changesets.length;
+		entity.connection.addEventListener(Connection.LOAD_COMPLETED, pendingChangeset);
+		for each (var id:Number in changesets) entity.connection.loadEntityByID("changeset",id);
+        addEventListener("pendingChangesetsAllFetched", (entity is Way) ? processWayStates : displayNodeResults);
+	}
+	
+	private function pendingChangeset(e:Event):void {
+        pendingChangesetFetches--;
+        if (pendingChangesetFetches == 0) dispatchEvent(new Event("pendingChangesetsAllFetched"));
+	}
 
     private function processWayStates(e:Event):void {
         // we now have all the node histories for
@@ -212,9 +237,10 @@
         var revdates:Array = [];
         var revusers:Object = {};
         var revdiffs:Object = {};
+		var revchangesets:Object = {};
 
         var oldWay:Way;
-        for each (var way:Way in wayStates) {
+        for each (var way:Way in entityStateList) {
             // assemble diff
             var changes:Array=[];
             if (way.version==1) {
@@ -236,6 +262,7 @@
             revdates.push(way.timestamp);
             revdiffs[way.timestamp] = changes;
             revusers[way.timestamp] = way.user;
+            revchangesets[way.timestamp] = entity.connection.getChangeset(way.lastChangeset);
             oldWay=way;
         }
 
@@ -243,6 +270,7 @@
             for each (var node:Node in nodeStates) {
                 revdates.push(node.timestamp);
                 revusers[node.timestamp] = node.user;
+                revchangesets[node.timestamp] = entity.connection.getChangeset(node.lastChangeset);
                 addRevDiff(revdiffs,node.timestamp,"(Node edit)");
             }
         }
@@ -251,7 +279,7 @@
 
         revdates = revdates.sort();
         revdates = ArrayUtil.createUniqueCopy(revdates); // (corelib) de-duplicates
-        revdates = revdates.filter(function(e:*, i:int, arr:Array):Boolean { return e >= wayStates[0].timestamp});
+        revdates = revdates.filter(function(e:*, i:int, arr:Array):Boolean { return e >= entityStateList[0].timestamp});
 
         var version:int = 1;
         var subversion:int = 0;
@@ -260,7 +288,7 @@
         for each (var revdate:String in revdates) {
           var entitystate:Object = {};
 
-          var w:Way = getEntityAtDate(wayStates, revdate) as Way;
+          var w:Way = getEntityAtDate(entityStateList, revdate) as Way;
 
           if (w.version == version) {
               subversion++;
@@ -279,7 +307,8 @@
               version: String(version) + "." + String(subversion),
               timestamp: revdate.replace('T',' ').replace('Z',''),
               user: revusers[revdate],
-              diff: revdiffs[revdate].length==0 ? "None" : revdiffs[revdate].join('; ')
+              diff: revdiffs[revdate].length==0 ? "None" : revdiffs[revdate].join('; '),
+              comment: revchangesets[revdate].comment
           });
         }
 
@@ -311,10 +340,10 @@
         return null;
     }
 
-    public function message(user:String):void {
+    public function userPage(user:String):void {
         if (user) {
-            var urlBase:String = entity.connection.apiBase + '../../message/new/';
-            navigateToURL(new URLRequest(urlBase+user), "potlatch_message");
+            var urlBase:String = entity.connection.apiBase + '../../user/';
+            navigateToURL(new URLRequest(urlBase+user), "potlatch_user");
         }
     }
     ]]>
