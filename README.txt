@@ -67,7 +67,7 @@ or
 * ant release-no-locales
 
 If you're using Mac OS X, you may need to tell ant to use more memory, by
-typing export ANT_OPTS="-Xms768m -Xmx1024m -XX:MaxPermSize=512m" 
+typing export ANT_OPTS="-Xms768m -Xmx1024m -XX:MaxPermSize=768m -XX:ReservedCodeCacheSize=512m" 
 beforehand (you can put this in your .profile).
 
 
