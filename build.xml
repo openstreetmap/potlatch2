@@ -332,15 +332,11 @@
 
   <target name="clean"
     description="clean up" >
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <!--
-
-    FIXME what is supposed to be cleaned?
-
-    <delete dir="${build}"/>
-    <delete dir="${dist}"/>
-
-    -->
+    <delete dir="${basedir}/resources/generated"/>
+    <delete dir="${basedir}/resources/locales"/>
+    <delete>
+      <fileset dir="${basedir}/resources" includes="potlatch2.swf*"/>
+    </delete>
   </target>
 
 
