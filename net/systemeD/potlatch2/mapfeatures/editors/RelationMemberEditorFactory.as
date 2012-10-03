@@ -41,7 +41,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 				var match:Boolean=true;
                 for ( var k:String in _relationTagPatterns ) {
                     var relVal:String = relation.getTag(k);
-                    if (k.indexOf(relVal) < 0) { match=false; break; }
+                    if (_relationTagPatterns[k].indexOf(relVal) < 0) { match=false; break; }
 					if ( _role && !relation.hasMemberInRole(entity,_role) ) { match=false; break; }
                 }
 				if (match) { return true; }
