@@ -156,6 +156,8 @@
         <tag k="railway" v="platform"/>
         <input type="freetext" presence="onTagMatch" category="Details" name="Reference" key="ref" description="The number of the platform" priority="low"/>
         <inputSet ref="common"/>
+	    <inputSet ref="bridge"/>
+	    <inputSet ref="tunnel"/>
       </feature>
     
   <feature name="Car Wash">
