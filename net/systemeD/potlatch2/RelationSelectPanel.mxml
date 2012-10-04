@@ -44,8 +44,10 @@
           //relationSelector.dataProvider = relationList;
           for each (var id:Number in relationList) {
             var relation:Relation = conn.getRelation(id);
-            titles.push({label:id + ": " + relation.getDescription(), relId:id});
+            titles.push({label:relation.getDescription(), relId:id});
           }
+          titles.sortOn('label');
+          titles.forEach(function(item:Object, index:int, arr:Array):void { arr[index].label=item.relId+": "+item.label; });
           relationSelector.dataProvider = titles;
         }
         
