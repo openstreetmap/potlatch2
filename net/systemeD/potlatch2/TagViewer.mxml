@@ -56,18 +56,27 @@
             itemDoubleClick="editRelation(relationsGrid.selectedItem.id)"
             doubleClick="if (event.target.parent==relationsGrid) { addToRelation(); }">
             <mx:columns>
-                <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
+                <mx:DataGridColumn editable="false" dataField="description" headerText="Relation" minWidth="100">
+                    <mx:itemRenderer>
+                        <fx:Component>
+                            <mx:Text x="4" y="0" width="100%" selectable="false" htmlText="{outerDocument.adaptHTMLDescription(data.description)}" height="20"/>
+                        </fx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
                 <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
                 <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
                     <mx:itemEditor><fx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></fx:Component></mx:itemEditor>
                 </mx:DataGridColumn>
-				<mx:DataGridColumn width="20" editable="false">
+				<mx:DataGridColumn width="40" minWidth="40" editable="false">
 					<mx:itemRenderer>
 						<fx:Component>
-		                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
+							<mx:HBox horizontalAlign="center" verticalAlign="middle" paddingLeft="4">
 								<mx:PopUpButton arrowButtonWidth="12" paddingLeft="0" paddingRight="0" width="12" height="12" 
 								                open="{outerDocument.updateRelationMenu(event);}" 
 								                creationComplete="{outerDocument.createRelationMenu(PopUpButton(event.target));}"/>
+								<mx:Image source="@Embed('../../../embedded/delete_small.svg')"
+								          click='event.stopPropagation();outerDocument.removeFromRelation(data.id, data.index);'
+								          buttonMode="true" useHandCursor="true" width="12" height="12" />
 							</mx:HBox>
 						</fx:Component>
 					</mx:itemRenderer>
@@ -131,18 +140,27 @@
         itemDoubleClick="editRelation(multiRelationsGrid.selectedItem.id)"
         doubleClick="if (event.target.parent==multiRelationsGrid) { addToRelation(); }">
         <mx:columns>
-            <mx:DataGridColumn editable="false" dataField="description" headerText="Relation"/>
+            <mx:DataGridColumn editable="false" dataField="description" headerText="Relation">
+                <mx:itemRenderer>
+                    <fx:Component>
+                        <mx:Text x="4" y="0" width="100%" selectable="false" htmlText="{outerDocument.adaptHTMLDescription(data.description)}" height="20"/>
+                    </fx:Component>
+                </mx:itemRenderer>
+            </mx:DataGridColumn>
             <mx:DataGridColumn editable="false" dataField="id_idx" headerText="ID"/>
             <mx:DataGridColumn editable="true" dataField="role" headerText="Role">
                 <mx:itemEditor><fx:Component><mx:TextInput restrict="&#x0020;-&#x10FFFF;" /></fx:Component></mx:itemEditor>
             </mx:DataGridColumn>
-			<mx:DataGridColumn width="20" editable="false">
+			<mx:DataGridColumn width="40" minWidth="40" editable="false">
 				<mx:itemRenderer>
 					<fx:Component>
 	                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
 							<mx:PopUpButton arrowButtonWidth="12" paddingLeft="0" paddingRight="0" width="12" height="12" 
 							                open="{outerDocument.updateRelationMenu(event);}" 
 							                creationComplete="{outerDocument.createRelationMenu(PopUpButton(event.target));}"/>
+							<mx:Image source="@Embed('../../../embedded/delete_small.svg')"
+							          click='event.stopPropagation();outerDocument.removeFromRelation(data.id);'
+							          buttonMode="true" useHandCursor="true" width="12" height="12" />
 						</mx:HBox>
 					</fx:Component>
 				</mx:itemRenderer>
@@ -894,11 +912,21 @@
               navigateToURL(new URLRequest(feature.helpURL), "potlatch_help");
       }
 
+      /** Slightly poshify the description by making it HTML. 
+          In theory we could have embedded images here, but htmlText is completely broken. **/
+      public function adaptHTMLDescription(text:String):String {
+          text=text.replace(/^route (\w+) /,"<b>$1</b> ");
+          text=text.replace(/ncn (\d+)/,"<font color='#FF0000'>$1</font>");
+          text=text.replace(/rcn (\d+)/,"<font color='#00CCCC'>$1</font>");
+          text=text.replace(/lcn (\d+)/,"<font color='#0000FF'>$1</font>");
+          return text;
+      }
+
       public function addToRelation():void {
           new RelationSelectPanel().init(selectedEntity,new Object());
       }
 
-      private function removeFromRelation(id:Number, index:int=-1):void {
+      public function removeFromRelation(id:Number, index:int=-1):void {
 		var rel:Relation=connection.getRelation(id);
 		if (index>-1) {
 			rel.removeMemberByIndex(index, MainUndoStack.getGlobalStack().addAction);
