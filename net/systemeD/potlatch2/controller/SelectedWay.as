@@ -49,7 +49,7 @@ package net.systemeD.potlatch2.controller {
 			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
             var focus:Entity = getTopLevelFocusEntity(entity);
 
-            if ( event.type == MouseEvent.MOUSE_DOWN && entity is Node && focus==firstSelected && event.shiftKey && !layer.isBackground ) {
+            if ( event.type == MouseEvent.MOUSE_DOWN && entity is Node && entity.hasParent(firstSelected) && event.shiftKey && !layer.isBackground ) {
 				// start new way
 				var way:Way = entity.connection.createWay({}, [entity], MainUndoStack.getGlobalStack().addAction);
 				return new DrawWay(way, true, false);
