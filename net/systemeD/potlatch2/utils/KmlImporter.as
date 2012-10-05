@@ -90,12 +90,13 @@ package net.systemeD.potlatch2.utils {
         private function importWay(coordinates:String, tags:Object, polygon:Boolean, push:Function): Way {
             var way:Way;
             var nodestring:Array = [];
+            var nodemap:Object = [];
 
-            if (polygon) {
-                coordinates = coordinates.slice(0, coordinates.lastIndexOf(" "));
-            }
+            var tuples:Array=coordinates.split(" ");
+            if (tuples[0]==tuples[tuples.length-1]) { polygon=true; }
+            if (polygon) { tuples.splice(-1,1); }
 
-            for each (var tuple:String in coordinates.split(" ")) {
+            for each (var tuple:String in tuples) {
                 var coords:Array = tuple.split(",");
                 var lon:Number = coords[0];
                 var lat:Number = coords[1];
