@@ -345,6 +345,16 @@
         presence="always" category="Cycle" name="Capacity" key="capacity"
         description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
     <inputSet ref="fee"/>
+    <input type="choice" presence="always" category="Cycle" name="Type" key="bicycle_parking" description="They type of bicycle parking">
+      <choice value="anchors" text="Anchors" description="Small loops, usually attached to a wall for putting a lock through to secure the bicycle."/>
+      <choice value="building" text="Building" description="Similar to shed, but instead a building structure."/>
+      <choice value="ground_slots" text="Slots in the ground that hold your wheel."/>
+      <choice value="informal" text="Informal" description="Notable large or well used railing, fences or other street furnature which nobody objects to having bikes stored at. Only use for longer railings."/>
+      <choice value="lockers" text="Lockers" description="A cabinet for storing bikes induvidually."/>
+      <choice value="shed" text="Shed" description="A custom built shed in which many bikes can be stored."/>
+      <choice value="stands" text="Stands" description="Bent piece of metal, often called Sheffield stands in the UK, or staple racks in the US."/>
+      <choice value="wall_hoops" text="Wall Hoops" description="Hoops to lock the wheel. Sometimes called 'Wheelbenders'."/>
+    </input>
     <input type="choice" presence="always" category="Cycle" name="Covered" key="covered" description="Is the cycle parking covered, so that the bikes are kept dry?">
       <choice value="yes" text="Yes"/>
       <choice value="no" text="No"/>
