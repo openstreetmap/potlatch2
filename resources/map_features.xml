@@ -206,14 +206,6 @@
       <choice value="dirt" text="Dirt"/>
       <choice value="grass" text="Grass"/>
     </input>
-    <input type="choice" presence="onTagMatch"
-        name="Sidewalks" category="Details" description="Whether there is a sidewalk at the side of the street"
-        key="sidewalk" layout="horizontal">
-      <choice value="both" text="Both" description="There is a sidewalk on both sides of the road"/>
-      <choice value="left" text="Left" description="The sidewalk is on the left of the direction of the road"/>
-      <choice value="right" text="Right" description="The sidewalk is on the right of the direction of the road"/>
-      <choice value="none" text="None" decription="There is no sidewalk on this section of road"/>
-    </input>
     <inputSet ref="bridge"/>
     <inputSet ref="tunnel"/>
     <inputSet ref="embankment-cutting"/>
@@ -338,6 +330,15 @@
       <choice value="yes" text="Allowed"/>
       <choice value="no" text="Prohibited"/>
       <choice value="designated" text="Designated"/>
+    </input>
+    <input type="choice" presence="onTagMatch"
+        name="Sidewalks" category="Walk" description="Whether there is a sidewalk at the side of the street"
+        key="sidewalk" layout="horizontal">
+      <choice value="both" text="Both" description="There is a sidewalk on both sides of the road." match="yes"/>
+      <choice value="left" text="Left" description="The sidewalk is on the left of the direction of the road."/>
+      <choice value="right" text="Right" description="The sidewalk is on the right of the direction of the road."/>
+      <choice value="separate" text="Separate" description="The sidewalk has been mapped as a separate line parallel."/>
+      <choice value="none" text="None" description="There is no sidewalk on this section of road." match="no"/>
     </input>
     <input type="route" name="National Walking Route" description="National walking route" category="Walk" priority="low">
       <match k="type" v="route"/>
