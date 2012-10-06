@@ -40,6 +40,13 @@ package net.systemeD.halcyon.connection {
         }
 
         /**
+        * Are there any actions set?
+        */
+        public function get empty():Boolean {
+            return actions.length==0;
+        }
+
+        /**
         * Do all the actions on the list. Can be overridden by an specific implementation, usually to manage
         * the suspending and resuming of entities. If so, you'll want to call super.doAction from that implementation
         * to actually execute the list of actions that you've added via push

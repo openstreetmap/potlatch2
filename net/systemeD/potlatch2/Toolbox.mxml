@@ -89,6 +89,7 @@
 
 		import flash.events.Event;
 		import flash.events.MouseEvent;
+		import net.systemeD.halcyon.AttentionEvent;
 		import net.systemeD.halcyon.connection.*;
 		import net.systemeD.halcyon.connection.actions.*;
 		import net.systemeD.potlatch2.controller.*;
@@ -286,10 +287,12 @@
 
 		public function doStraighten():void {
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Straighten objects");
+			var success:Boolean=true;
 			for each (var way:Way in controller.state.selectedWays) {
-				Straighten.straighten(way, controller.map, undo.push);
+				success &&= Straighten.straighten(way, controller.map, undo.push);
 			}
-			MainUndoStack.getGlobalStack().addAction(undo);
+			if (!success) controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Too bendy to straighten"));
+			if (!undo.empty) MainUndoStack.getGlobalStack().addAction(undo);
 		}
 
 		public function doCircularise():void {
