@@ -561,7 +561,7 @@
   </inputSet>
 
   <inputSet id="isBuilding">
-    <input type="choice" presence="withCategory" category="Details" name="Building type, if it is one" key="building">
+    <input type="choice" presence="always" category="Details" name="Building type, if it is one" key="building">
       <choice value="yes" text="Generic building"/>
       <choice value="residential" text="Generic residential"/>
       <choice value="apartments" text="Big apartments house"/>
