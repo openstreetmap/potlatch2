@@ -345,7 +345,7 @@
         presence="always" category="Cycle" name="Capacity" key="capacity"
         description="The number of bicycles that can be parked in the group of bicycle parking racks"/>
     <inputSet ref="fee"/>
-    <input type="choice" presence="always" category="Cycle" name="Type" key="bicycle_parking" description="They type of bicycle parking">
+    <input type="choice" presence="always" category="Cycle" name="Type" key="bicycle_parking" description="The type of bicycle parking">
       <choice value="anchors" text="Anchors" description="Small loops, usually attached to a wall for putting a lock through to secure the bicycle."/>
       <choice value="building" text="Building" description="Similar to shed, but instead a building structure."/>
       <choice value="ground_slots" text="Slots in the ground that hold your wheel."/>
