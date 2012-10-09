@@ -14,7 +14,7 @@
 	</set>
     <set>
         <name>MapQuest Open Aerial</name>
-        <url>http://oatile1.mqcdn.com/naip/$z/$x/$y.png</url>
+        <url>http://oatile1.mqcdn.com/tiles/1.0.0/sat/$z/$x/$y.jpg</url>
     </set>
 	<set>
 		<name>OSM - Mapnik</name>
@@ -26,7 +26,7 @@
     </set>
     <set>
         <name>OSM - MapQuest</name>
-        <url>http://otile1.mqcdn.com/tiles/1.0.0/osm/$z/$x/$y.png</url>
+        <url>http://otile1.mqcdn.com/tiles/1.0.0/osm/$z/$x/$y.jpg</url>
     </set>
     <set minlat="24.055" minlon="-124.810" maxlat="49.386" maxlon="-66.865">
       <name>OSM - Tiger Edited Map</name>
