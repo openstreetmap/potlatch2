@@ -85,7 +85,7 @@ package net.systemeD.potlatch2 {
             if (result) { // api returns 204 no content for no bugs, and the JSON parser treats '' as an error
               try {
                 // wrap in a try/catch block in case we're given bogus JSON from the server
-                var featureCollection:Object = JSON.decode(result);
+                var featureCollection:Object = com.adobe.serialization.json.JSON.decode(result);
 
                 for each (var feature:Object in featureCollection.features) {
                   // geoJSON spec is x,y,z i.e. lon, lat, ele
