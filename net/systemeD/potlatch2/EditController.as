@@ -29,6 +29,7 @@ package net.systemeD.potlatch2 {
 
         /** The current ControllerState */
         public var state:ControllerState;
+        public static var CHANGED_STATE:String="changed_state";
         
 		/** Hash of when a key was pressed. A user can keyDown within a TextInput, press Enter (leaving
 		    the TextInput), and then keyup - resulting in the keypress being interpreted again. 
@@ -177,6 +178,7 @@ package net.systemeD.potlatch2 {
             newState.setController(this);
             state = newState;
             state.enterState();
+            dispatchEvent(new Event(CHANGED_STATE));
         }
 
 		/** Given what is currently selected (or not), find the matching ControllerState. */

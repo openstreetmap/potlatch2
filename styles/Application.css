@@ -319,6 +319,13 @@ s|FormItem {
 	tabOffset: 10px;
 }
 
+.contextualHelp {
+	backgroundColor: #71A2FA;
+	color: white;
+	borderThickness: 0;
+	fontSize: 12pt;
+	textAlign: center;
+}
 
 /* Don't appear to be used */
 

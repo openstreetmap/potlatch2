@@ -68,6 +68,12 @@ package net.systemeD.potlatch2.controller {
 		public function toString():String {
 			return "(No state)";
 		}
+
+		/** Return contextual help string for this state. */
+		public function contextualHelpId():String {
+			return toString();
+		}
+
 		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			var editableLayer:MapPaint=controller.map.editableLayer;								// shorthand for this method
