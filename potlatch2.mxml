@@ -434,10 +434,12 @@
 			}
 		}
 		private function suggestToolboxX():int {
-			return theMap.localToGlobal(new Point(theMap.width,theMap.height)).x - toolbox.width - 5;
+			var rhCP:Point=rhContent.localToGlobal(new Point(0,0));
+			return rhCP.x + theMap.scrollRect.width - toolbox.width - 5;
 		}
 		private function suggestToolboxY(yOffset:int=0):int {
-			return theMap.localToGlobal(new Point(theMap.width,theMap.height)).y - toolbox.height - 5 - yOffset;
+			var rhCP:Point=rhContent.localToGlobal(new Point(0,0));	// stage co-ordinates of right-hand content area
+			return rhCP.y + theMap.scrollRect.height - toolbox.height - 5 - yOffset;
 		}
 
 		private function disableMapMouse():void {
