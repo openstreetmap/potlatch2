@@ -4,14 +4,14 @@
  xmlns:mx="library://ns.adobe.com/flex/mx"
  backgroundColor="#71A2FA">
 
-  <mx:Box id="contextNoSelection"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextNoSelection"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Click object</b> to select. <b>Click blank area</b> to start drawing way. 
 			<b>Double-click blank area</b> to create point. <b>Drag blank area</b> to move map.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextSelectedWay"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextSelectedWay"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Click node</b> to select it. <b>Shift-click node</b> to start branching way. 
 			<b>Shift-click way</b> to insert new node. 
@@ -19,61 +19,61 @@
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextDragSelection"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextDragSelection"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Drag item</b> - release when done.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextDragWayNode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextDragWayNode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Drag node</b> - release when done.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextDrawQuadrilateral"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextDrawQuadrilateral"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Stretch and rotate to fit</b> - release when done.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextDrawWay"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextDrawWay"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Click blank space</b> to add new point. <b>Click way</b> to make junction. 
 			<b>Double-click</b> or press Enter to finish drawing. <b>Backspace</b> to cancel last.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextSelectArea"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextSelectArea"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Drag</b> to select area. <b>Release</b> when done.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextSelectedMultiple"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextSelectedMultiple"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Control-click</b> to add/remove items from selection.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextSelectedParallelWay"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextSelectedParallelWay"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Move mouse</b> to adjust position. <b>Click</b> to create. <b>Escape</b> to cancel.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextSelectedPOINode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextSelectedPOINode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Click, hold and drag</b> to move. <b>Backspace/delete</b> to delete.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextSelectedWayNode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true">
+  <mx:Box id="contextSelectedWayNode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
 			<b>Click, hold and drag</b> to move. <b>Backspace/delete</b> to delete.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
-  <mx:Box id="contextNotFound"><mx:TextArea styleName="contextualHelp" width="100%" htmlText="(No help available)"/></mx:Box>
+  <mx:Box id="contextNotFound"><mx:TextArea styleName="contextualHelp" width="100%" editable="false" focusIn="stage.focus=stage" htmlText="(No help available)"/></mx:Box>
 
 </mx:ViewStack>
