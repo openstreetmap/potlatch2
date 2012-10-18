@@ -206,6 +206,7 @@ package net.systemeD.halcyon {
 			mapwidth = w; centre_lon=coord2lon(-getX()+w/2);
 			mapheight= h; centre_lat=coord2lat(-getY()+h/2);
 			setScrollRectSize(w,h);
+			updateCoords(getX(),getY());
 
 			this.dispatchEvent(new MapEvent(MapEvent.RESIZE, {width:w, height:h}));
 			

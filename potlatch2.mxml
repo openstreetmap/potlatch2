@@ -137,6 +137,7 @@
 		private var saveLabel:String='Save';
 		private var saveTimer:Timer;
 		private var mouseTimer:Timer;
+		private var resizeTimer:Timer;
 
         include "version.as";
 
@@ -420,14 +421,25 @@
 		}
 
         public function onResizeMap():void {
-            if ( theMap != null )
-                theMap.updateSize(map_area.width, map_area.height);
+			if (!theMap) return;
+			theMap.updateSize(map_area.width, map_area.height);
 
 			if (toolbox) {
 				toolbox.x=Math.min(toolbox.x,suggestToolboxX());
 				toolbox.y=Math.min(toolbox.y,suggestToolboxY());
 			}
+
+			if (!resizeTimer) {
+				resizeTimer=new Timer(300);
+				resizeTimer.addEventListener(TimerEvent.TIMER, resizeMapEnd, false, 0, true);
+			}
+			resizeTimer.reset();
+			resizeTimer.start();
         }
+		private function resizeMapEnd(e:Event):void {
+			resizeTimer.stop();
+			theMap.download();
+		}
 		private function bumpHandler(e:MapEvent):void {
 			if (toolbox) { 
 				toolbox.y=Math.min(toolbox.y,suggestToolboxY(e.params.y+5));
