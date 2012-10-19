@@ -8,7 +8,7 @@
 	label="{fieldName}:"
     styleName="titledEditor">
 
-    <s:DropDownList id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}"
+    <s:DropDownList id="inputBox" dataProvider="{choices}" selectedItem="{selectFromTag}" width="100%"
         change="value = inputBox.selectedItem.value" labelField="label">
         <s:itemRenderer>
           <fx:Component>
@@ -18,6 +18,7 @@
               <fx:Script><![CDATA[
                     public function getStyledLabel(choice:Choice):String {
                         if (choice.value==null) return "<font color='#a0a0a0'><i>"+choice.label+"</i></font>";
+                        if (choice.description=="Unknown value") return "<i>Unknown</i> "+choice.label;
                         return choice.label;
                     }
               ]]></fx:Script>
@@ -61,7 +62,7 @@
               _unknownChoice.description = "Unknown value";
               _choices.addItem(_unknownChoice);
           }
-          _unknownChoice.label = "<i>Unknown:</i> "+Feature.htmlEscape(tagValue);
+          _unknownChoice.label = "("+Feature.htmlEscape(tagValue)+")";
           _unknownChoice.icon = null;
           _unknownChoice.value = tagValue;
           
