@@ -41,6 +41,7 @@ node[amenity=emergency_phone] { icon-image: icons/emergency-telephone-16.png; z-
 node[amenity=fountain] { icon-image: icons/amenity_fountain2.n.16.png; z-index: 20; }
 node[amenity=hunting_stand] { icon-image: icons/sport_shooting.n.16.png; z-index: 20; }
 node[amenity=kindergarten] { icon-image: icons/education_nursery3.n.16.png; z-index: 20; text-offset:15; text: name; font-size: 10; z-index: 20; }
+node[amenity=library] { icon-image: icons/amenity_library.n.16.png; text-offset:15; text: name; font-size: 10; z-index: 20; }
 node[amenity=place_of_worship]  { icon-image: icons/place_of_worship_unknown.n.16.png; text-offset:15; text: name; font-size: 10; z-index: 20; }
 node[amenity=post_office] { icon-image: icons/amenity_post_office.n.16.png; z-index: 20; }
 node[amenity=shelter] { icon-image: icons/accommodation_shelter2.n.16.png; z-index: 20; }
