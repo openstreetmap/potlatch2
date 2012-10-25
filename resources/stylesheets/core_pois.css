@@ -28,6 +28,7 @@ way[amenity=school] :area { color: yellow; fill-color: yellow; fill-opacity: 0.1
 node[amenity=bar] { icon-image: icons/food_bar.n.16.png; text-offset:15; text: name; font-size: 10; z-index: 20; }
 node[amenity=cafe] { icon-image: icons/food_cafe.n.16.png; text-offset:15; text: name; font-size: 10; z-index: 20; }
 node[amenity=fast_food] { icon-image: icons/food_fastfood.n.16.png; z-index: 20; }
+node[amenity=nightclub] { icon-image: icons/food_nightclub.n.16.png; text-offset: 15; text: name; font-size: 10; z-index: 20; }
 node[amenity=pub] { icon-image: icons/food_pub.n.16.png; text-offset: 15; text: name; font-size: 10; z-index: 20; }
 node[amenity=restaurant] { icon-image: icons/food_restaurant.n.16.png; text-offset:15; text: name; font-size: 10; z-index: 20; }
 node[amenity=hospital] { icon-image: icons/health_hospital.n.16.png; z-index: 20; }

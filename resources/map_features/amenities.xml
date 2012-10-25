@@ -509,5 +509,21 @@
     <inputSet ref="cuisine"/>
     <inputSet ref="common"/>
   </feature>
+ 
+
+  <feature name="Nightclub">
+    <category>foodanddrink</category>
+    <category>sport</category>
+    <icon image="features/pois/food_nightclub.n.24.png">
+      ${name}
+    </icon>
+    <point/>
+    <tag k="amenity" v="nightclub"/>
+    <inputSet ref="names"/>
+    <inputSet ref="web"/>
+    <inputSet ref="buildingAddress"/>
+    <inputSet ref="wifi"/>
+    <inputSet ref="common"/>
+  </feature>
   
 </featureGroup>
