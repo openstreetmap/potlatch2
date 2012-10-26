@@ -428,6 +428,7 @@
     <inputSet ref="simpleName"/>
     <input type="freetext" presence="always" name="Product" key="vending" description="What is being sold: tickets, food, maps..."/>
     <inputSet ref="simpleOperator" />
+    <inputSet ref="payments"/>
   </feature>
 
   <!-- ========= Entertainment ========= -->

@@ -131,7 +131,58 @@
       <help>http://wiki.openstreetmap.org/wiki/Key:cuisine</help>
     </input>
   </inputSet>
-
+  
+  <inputSet id="payments">
+    <inputSet ref="paymentsCash"/>
+    <inputSet ref="paymentsDebitCards"/>
+    <inputSet ref="paymentsCreditCards"/>
+  </inputSet>
+      
+  <inputSet id="paymentsCash">
+    <input type="choice" name="Coins" key="payment:coins" category="Payments" subcategory="Cash">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Notes" key="payment:notes" category="Payments" subcategory="Cash">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+  </inputSet>
+  
+  <inputSet id="paymentsDebitCards">
+    <input type="choice" name="Maestro" key="payment:maestro" category="Payments" subcategory="Debit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Laser" key="payment:laser" category="Payments" subcategory="Debit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+  </inputSet>
+  
+  <inputSet id="paymentsCreditCards">
+    <input type="choice" name="Mastercard" key="payment:mastercard" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Visa" key="payment:visa" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="American Express" key="payment:american_express" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Discover Card" key="payment:discover_card" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Diners Club" key="payment:diners_club" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+  </inputSet>
+  
   <!-- Roads -->
 
   <inputSet id="majorRoad">
