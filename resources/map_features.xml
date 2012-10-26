@@ -330,6 +330,7 @@
       <choice value="yes" text="Allowed"/>
       <choice value="no" text="Prohibited"/>
       <choice value="designated" text="Designated"/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
     <input type="choice" presence="onTagMatch"
         name="Sidewalks" category="Walk" description="Whether there is a sidewalk at the side of the street"
@@ -471,6 +472,7 @@
       <choice value="private" text="Private"/>
       <choice value="dismount" text="Cyclists dismount" description="Signage states that cyclists should dismount and push their bike for the selected path or road."/>
       <choice value="designated" text="Designated"/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
       <help>http://wiki.openstreetmap.org/wiki/Key:access</help>
     </input>
   </inputSet>
@@ -508,6 +510,7 @@
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
   </inputSet>
 
@@ -527,9 +530,10 @@
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
 
-    <inputSet ref="hores-permission" />
+    <inputSet ref="horse-permission" />
 
   </inputSet>
 
@@ -540,6 +544,7 @@
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
   </inputSet>
 
