@@ -71,7 +71,7 @@ package net.systemeD.potlatch2.controller {
 				Way(firstSelected).insertNodeAtClosestPosition(node, false, undo.push);
 				MainUndoStack.getGlobalStack().addAction(undo);
 				return this;
-			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected) {
+			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected && paint.interactive) {
 				// multiple selection
 				return new SelectedMultiple([firstSelected,entity],layer);
 			} else if ( event.type == MouseEvent.MOUSE_UP && focus==firstSelected ) {
