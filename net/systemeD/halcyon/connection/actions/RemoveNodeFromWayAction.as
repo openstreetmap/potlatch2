@@ -32,7 +32,7 @@ package net.systemeD.halcyon.connection.actions {
 			
 			if ( nodeRemovedFrom.length > 0 ) {
 			    node.removeParent(entity);
-			    entity.deleted = nodeList.length <= 1;
+			    entity.deleted = nodeList.length == 0;
 			    markDirty();
 			    return SUCCESS;
 			}
