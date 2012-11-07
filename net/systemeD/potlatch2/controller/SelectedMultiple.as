@@ -1,5 +1,6 @@
 package net.systemeD.potlatch2.controller {
 	import flash.events.*;
+	import flash.display.DisplayObject;
 	
 	import net.systemeD.halcyon.AttentionEvent;
 	import net.systemeD.halcyon.connection.*;
@@ -16,9 +17,10 @@ package net.systemeD.potlatch2.controller {
 
 		override public function processMouseEvent(event:MouseEvent, entity:Entity):ControllerState {
 			if (event.type==MouseEvent.MOUSE_MOVE || event.type==MouseEvent.ROLL_OVER || event.type==MouseEvent.MOUSE_OUT) { return this; }
+			var paint:MapPaint = getMapPaint(DisplayObject(event.target));
 			var focus:Entity = getTopLevelFocusEntity(entity);
 
-			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey && !event.altKey ) {
+			if ( event.type == MouseEvent.MOUSE_DOWN && entity && event.ctrlKey && !event.altKey && paint.interactive ) {
 				// modify selection
 				layer.setHighlight(entity, { selected: toggleSelection(entity) });
 				controller.updateSelectionUI();
