@@ -51,6 +51,8 @@ node[amenity=toilets] { icon-image: icons/amenity_toilets.n.16.png; z-index: 20;
 node[amenity=vending_machine] { icon-image: icons/shopping_vending_machine.n.16.png; z-index: 20; }
 node[amenity=veterinary] { icon-image: icons/health_veterinary.n.8E7409.16.png; z-index: 20; }
 node[amenity=waste_basket] { icon-image: icons/amenity_waste_bin.n.16.png; z-index: 20; }
+node[amenity=fire_hydrant] { icon-image: icons/emergency_hydrant.n.16.png; z-index: 20; }
+node[emergency=fire_hydrant] { icon-image: icons/emergency_hydrant.n.16.png; z-index: 20; }
 /* Shops */
 node[shop=alcohol] { icon-image: icons/shopping_alcohol.n.16.png; z-index: 20; }
 node[shop=bakery] { icon-image: icons/shopping_bakery.n.16.png; z-index: 20; }
