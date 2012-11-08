@@ -70,7 +70,7 @@
 
   <mx:Box id="contextSelectedWayNode"><mx:TextArea styleName="contextualHelp" width="100%" condenseWhite="true" editable="false" focusIn="stage.focus=stage">
 		<mx:htmlText><![CDATA[
-			<b>Click, hold and drag</b> to move. <b>Backspace/delete</b> to delete.
+			<b>Click, hold and drag</b> to move. <b>Shift-click</b> to start branching way. <b>Backspace/delete</b> to delete.
 		]]></mx:htmlText>
 	</mx:TextArea></mx:Box>
 
