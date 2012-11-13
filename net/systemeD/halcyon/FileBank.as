@@ -104,7 +104,9 @@ package net.systemeD.halcyon {
         }
 
         private function loadedImage(event:Event):void {
-			fileLoadComplete(event.target.loader.info);
+			var loader:ExtendedLoader = event.target.loader;
+			loader.info.bytes = loader.contentLoaderInfo.bytes;
+			fileLoadComplete(loader.info);
         }
         private function loadedFile(event:Event):void {
 			fileLoadComplete(event.target.info);
@@ -156,6 +158,7 @@ package net.systemeD.halcyon {
 					var loader:ExtendedLoader=new ExtendedLoader();
 					files[prefix+fileref.name]=loader;
                     loader.info.filename = prefix+fileref.name;
+					loader.info.bytes = data;
 					loader.loadBytes(data);
 				} else {
 					// Store as a document
@@ -236,7 +239,7 @@ package net.systemeD.halcyon {
 		}
 		
 		public function getAsByteArray(name:String):ByteArray {
-			return files[name].contentLoaderInfo.bytes;
+			return files[name].info.bytes;
 		}
 		
 		public function getAsString(name:String):String {
