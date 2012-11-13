@@ -131,7 +131,58 @@
       <help>http://wiki.openstreetmap.org/wiki/Key:cuisine</help>
     </input>
   </inputSet>
-
+  
+  <inputSet id="payments">
+    <inputSet ref="paymentsCash"/>
+    <inputSet ref="paymentsDebitCards"/>
+    <inputSet ref="paymentsCreditCards"/>
+  </inputSet>
+      
+  <inputSet id="paymentsCash">
+    <input type="choice" name="Coins" key="payment:coins" category="Payments" subcategory="Cash">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Notes" key="payment:notes" category="Payments" subcategory="Cash">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+  </inputSet>
+  
+  <inputSet id="paymentsDebitCards">
+    <input type="choice" name="Maestro" key="payment:maestro" category="Payments" subcategory="Debit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Laser" key="payment:laser" category="Payments" subcategory="Debit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+  </inputSet>
+  
+  <inputSet id="paymentsCreditCards">
+    <input type="choice" name="Mastercard" key="payment:mastercard" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Visa" key="payment:visa" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="American Express" key="payment:american_express" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Discover Card" key="payment:discover_card" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+    <input type="choice" name="Diners Club" key="payment:diners_club" category="Payments" subcategory="Credit Cards">
+      <choice value="yes" text="Accepted" />
+      <choice value="no" text="Not accepted" />
+    </input>
+  </inputSet>
+  
   <!-- Roads -->
 
   <inputSet id="majorRoad">
@@ -330,6 +381,7 @@
       <choice value="yes" text="Allowed"/>
       <choice value="no" text="Prohibited"/>
       <choice value="designated" text="Designated"/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
     <input type="choice" presence="onTagMatch"
         name="Sidewalks" category="Walk" description="Whether there is a sidewalk at the side of the street"
@@ -471,6 +523,7 @@
       <choice value="private" text="Private"/>
       <choice value="dismount" text="Cyclists dismount" description="Signage states that cyclists should dismount and push their bike for the selected path or road."/>
       <choice value="designated" text="Designated"/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
       <help>http://wiki.openstreetmap.org/wiki/Key:access</help>
     </input>
   </inputSet>
@@ -508,6 +561,7 @@
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
   </inputSet>
 
@@ -527,9 +581,10 @@
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
 
-    <inputSet ref="hores-permission" />
+    <inputSet ref="horse-permission" />
 
   </inputSet>
 
@@ -540,6 +595,7 @@
       <choice value="permissive" text="Permissive" description="Access permitted through private land."/>
       <choice value="private" text="Private" description="No access to the public, except individual exceptions."/>
       <choice value="designated" text="Designated" description="Permitted, according to signs or specific local laws."/>
+      <choice value="destination" text="Destination" description="Access only allowed to reach a destination."/>
     </input>
   </inputSet>
 
