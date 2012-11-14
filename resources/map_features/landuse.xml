@@ -308,7 +308,7 @@
     <inputSet ref="common"/>
   </feature>
 
-  <feature name="Forest">
+  <feature name="Managed Forest">
     <category>natural</category>
     <icon image="features/pois/landuse_coniferous.n.24.png"/>
 
@@ -318,6 +318,16 @@
     <inputSet ref="common"/>
   </feature>
 
+  <feature name="Woodland">
+    <category>natural</category>
+    <icon image="features/pois/landuse_coniferous.n.24.png"/>
+
+    <area/>
+    <tag k="natural" v="wood"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+  
   <feature name="Meadow">
     <category>natural</category>
     <icon image="icons/natural_blank.png"/>
