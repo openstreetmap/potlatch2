@@ -21,6 +21,12 @@ package net.systemeD.halcyon.connection {
 	public class XMLConnection extends XMLBaseConnection {
 
 		private const MARGIN:Number=0.05;
+		private var discardTags:Array=["created_by",
+			"tiger:upload_uuid", "tiger:tlid", "tiger:source", "tiger:separated",
+			"geobase:datasetName", "geobase:uuid", "sub_sea:type",
+			"odbl", "odbl:note",
+			"yh:LINE_NAME", "yh:LINE_NUM", "yh:STRUCTURE", "yh:TOTYUMONO",
+			"yh:TYPE", "yh:WIDTH_RANK"];
 
         /**
         * Create a new XML connection
@@ -453,8 +459,8 @@ package net.systemeD.halcyon.connection {
             xml.@id = entity.id;
             xml.@version = entity.version;
             for each( var tag:Tag in entity.getTagArray() ) {
-              if (tag.key == 'created_by') {
-                entity.setTag('created_by', null, MainUndoStack.getGlobalStack().addAction);
+              if (discardTags.indexOf(tag.key) > -1) {
+                entity.setTag(tag.key, null, MainUndoStack.getGlobalStack().addAction);
                 continue;
               }
               var tagXML:XML = <tag/>
