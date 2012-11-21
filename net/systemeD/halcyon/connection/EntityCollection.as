@@ -16,7 +16,7 @@ package net.systemeD.halcyon.connection {
 		private var addedToRelationTimer:Timer;
 		private var removedFromRelationTimer:Timer;
 		private var delayedEvents:Array = [];
-		private static const DIFFERENT:String = "<different>";
+		public static const DIFFERENT:String = "<different>";
 
         public function EntityCollection(entities:Array) {
 			var conn:Connection=entities[0].connection;

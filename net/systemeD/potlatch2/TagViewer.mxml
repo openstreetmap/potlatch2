@@ -751,6 +751,7 @@
 		var newRole:String=event.itemRenderer.data['role'];
 
 		if (selectedEntity is EntityCollection) {
+			if (newRole==EntityCollection.DIFFERENT) return;
 			for each (var entity:Entity in EntityCollection(selectedEntity).entities) {
 				var indexes:Array=relation.findEntityMemberIndexes(entity);
 				for each (var index:int in indexes) {
