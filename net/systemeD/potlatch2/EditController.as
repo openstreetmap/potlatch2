@@ -73,6 +73,12 @@ package net.systemeD.potlatch2 {
             map.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 
             if (this.moveFunction) {
+                var lon:Number = ( map.edge_r + map.edge_l ) / 2;
+                var lat:Number = ( map.edge_b + map.edge_t ) / 2;
+
+                ExternalInterface.call(this.moveFunction, lon, lat, map.scale,
+                                       map.edge_l, map.edge_b, map.edge_r, map.edge_t);
+
                 map.addEventListener(MapEvent.MOVE, moveHandler);
             }
 
