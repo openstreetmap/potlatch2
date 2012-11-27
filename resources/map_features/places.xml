@@ -21,6 +21,17 @@
     <inputSet ref="common"/>
   </feature>
 
+  <feature name="Neighbourhood">
+    <category>places</category>
+    <icon image="features/pois/poi_place_suburb.p.24.png"/>
+    <point/>
+    <area/>
+    <tag k="place" v="neighbourhood" />
+    <inputSet ref="names"/>
+    <inputSet ref="places"/>
+    <inputSet ref="common"/>
+  </feature>
+
   <feature name="Town">
     <category>places</category>
     <icon image="features/pois/poi_place_town.p.24.png"/>
