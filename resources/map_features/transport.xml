@@ -242,7 +242,7 @@
         <tag k="aeroway" v="runway"/>
         <line/>
         <inputSet ref="names"/>
-        <input type="freetext" presence="always" category="Details" name="Runway number (01-36)" key="ref"/>
+        <input type="freetext" presence="always" category="Details" name="Runway number (18-36)" key="ref"/>
         <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
