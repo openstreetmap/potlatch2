@@ -5,6 +5,8 @@ package net.systemeD.potlatch2.save {
     import mx.managers.PopUpManager;
     import mx.core.Application;
     import mx.core.FlexGlobals;
+    import mx.controls.Alert;
+    import mx.events.CloseEvent;
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.controller.*;
     import org.iotashan.oauth.*;
@@ -14,7 +16,21 @@ package net.systemeD.potlatch2.save {
         private static var instance:SaveManager = new SaveManager();
 		private var _connection:Connection;
 
-        public static function saveChanges(connection:Connection):void {
+        public static function saveChanges(connection:Connection, accept:Boolean=false):void {
+			if (connection.changesAreDestructive() && !accept) {
+				var check:String=connection.getParam('user_check','');
+				if (check=='warn') {
+					Alert.show("You are deleting data from OpenStreetMap. Remember, you are changing the map everyone sees, not just your own private map. Are you really sure?","Are you sure?",
+						Alert.CANCEL | Alert.YES, null, function(e:CloseEvent):void {
+							if (e.detail==Alert.CANCEL) return;
+							SaveManager.saveChanges(connection,true);
+						}, null, Alert.CANCEL);
+					return;
+				} else if (check=='prevent') {
+					Alert.show("You are deleting too much data from OpenStreetMap - remember your changes affect the map everyone sees. If the data genuinely needs to be removed, please ask an experienced user to do it.","Deleting data",Alert.CANCEL);
+					return;
+				}
+			}
             instance.save(instance.saveData,connection);
         }
 
