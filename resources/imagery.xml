@@ -13,7 +13,7 @@
   </set>
   <set>
     <name>MapBox Satellite</name>
-    <url>https://tiles.mapbox.com/v3/openstreetmap.map-4wvf9l0l/$z/$x/$y.png</url>
+    <url>http://${a|b|c}.tiles.mapbox.com/v3/openstreetmap.map-4wvf9l0l/$z/$x/$y.png</url>
   </set>
   <set>
     <name>MapQuest Open Aerial</name>
