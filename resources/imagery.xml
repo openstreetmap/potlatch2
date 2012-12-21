@@ -12,6 +12,10 @@
     <default>yes</default>
   </set>
   <set>
+    <name>MapBox Satellite</name>
+    <url>https://tiles.mapbox.com/v3/openstreetmap.map-4wvf9l0l/$z/$x/$y.png</url>
+  </set>
+  <set>
     <name>MapQuest Open Aerial</name>
     <url>http://oatile1.mqcdn.com/tiles/1.0.0/sat/$z/$x/$y.jpg</url>
   </set>
