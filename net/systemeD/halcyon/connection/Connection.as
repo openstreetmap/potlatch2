@@ -516,6 +516,24 @@ package net.systemeD.halcyon.connection {
 			return null;
 		}
 
+		// Assess if user's changes are largely destructive
+		
+		public function changesAreDestructive():Boolean {
+			var score:int=0;
+			var entity:Entity;
+			for each (entity in nodes) { score+=changeScore(entity); }
+			for each (entity in ways) { score+=changeScore(entity)*10; }
+			for each (entity in relations) { score+=changeScore(entity)*5; }
+			return (score<-15);
+		}
+		
+		private function changeScore(entity:Entity):int {
+			if (!entity.loaded) { return 0; }
+			if (entity.id>0 &&  entity.deleted) { return -1; }
+			if (entity.id<0 && !entity.deleted) { return  1; }
+			return 0;
+		}
+
 		// Error-handling
 		
 		protected function throwConflictError(entity:Entity,serverVersion:uint,message:String):void {
