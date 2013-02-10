@@ -148,6 +148,20 @@
   </feature>
 
 
+  <feature name="Department Store">
+    <category>shopping</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Ddepartment_store</help>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="web"/>
+    <inputSet ref="buildingAddress"/>
+    <icon image="features/pois/shopping_department_store.n.24.png"/>
+    <tag k="shop" v="department_store"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
   <feature name="DIY">
     <category>shopping</category>
     <point/>
