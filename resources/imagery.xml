@@ -15,23 +15,28 @@
     <name>MapBox Satellite</name>
     <url>http://${a|b|c}.tiles.mapbox.com/v3/openstreetmap.map-4wvf9l0l/$z/$x/$y.png</url>
     <terms_url>http://mapbox.com/tos/</terms_url>
+    <sourcetag>MapBox Satellite</sourcetag>
   </set>
   <set>
     <name>MapQuest Open Aerial</name>
     <url>http://oatile1.mqcdn.com/tiles/1.0.0/sat/$z/$x/$y.jpg</url>
     <terms_url>http://developer.mapquest.com/web/products/open/map#terms</terms_url>
+    <sourcetag>MapQuest Open Aerial</sourcetag>
   </set>
   <set>
     <name>OSM - Mapnik</name>
     <url>http://${a|b|c}.tile.openstreetmap.org/$z/$x/$y.png</url>
+    <sourcetag>Mapnik</sourcetag>
   </set>
   <set>
     <name>OSM - OpenCycleMap</name>
     <url>http://tile.opencyclemap.org/cycle/$z/$x/$y.png</url>
+    <sourcetag>OpenCycleMap</sourcetag>
   </set>
   <set>
     <name>OSM - MapQuest</name>
     <url>http://otile1.mqcdn.com/tiles/1.0.0/osm/$z/$x/$y.jpg</url>
+    <sourcetag>MapQuest Open</sourcetag>
   </set>
   <set minlat="24.055" minlon="-124.810" maxlat="49.386" maxlon="-66.865">
     <name>OSM - Tiger Edited Map</name>
@@ -67,21 +72,25 @@
     <name>OSM US USGS Topographic Maps</name>
     <type>900913</type>
     <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    <sourcetag>USGS Topo</sourcetag>
   </set>
   <set minlat="18.902" minlon="-160.579" maxlat="22.508" maxlon="-154.793">
     <name>OSM US USGS Topographic Maps</name>
     <type>900913</type>
     <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    <sourcetag>USGS Topo</sourcetag>
   </set>
   <set minlat="51.255" minlon="-178.001" maxlat="71.999" maxlon="-130.004">
     <name>OSM US USGS Topographic Maps</name>
     <type>900913</type>
     <url>http://${a|b|c}.tile.openstreetmap.us/usgs_scanned_topos/$z/$x/$y.png</url>
+    <sourcetag>USGS Topo</sourcetag>
   </set>
   <set minlat="24.496" minlon="-124.819" maxlat="49.443" maxlon="-66.931">
     <name>OSM US USGS Large Scale Aerial Imagery</name>
     <type>900913</type>
     <url>http://${a|b|c}.tile.openstreetmap.us/usgs_large_scale/$z/$x/$y.jpg</url>
+    <sourcetag>USGS LSAI</sourcetag>
   </set>
   <set minlat="48.995" minlon="-123.441" maxlat="50.426" maxlon="-121.346">
     <name>British Columbia bc_mosaic</name>
