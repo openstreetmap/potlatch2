@@ -65,6 +65,7 @@ node[shop=car] { icon-image: icons/shopping_car.n.16.png; z-index: 20; }
 node[shop=clothes] { icon-image: icons/shopping_clothes.n.16.png; z-index: 20; }
 node[shop=confectionery] { icon-image: icons/shopping_confectionery.n.16.png; z-index: 20; }
 node[shop=convenience] { icon-image: icons/shopping_convenience.n.16.png; z-index: 20; }
+node[shop=department_store] { icon-image: icons/shopping_department_store.n.16.png; z-index: 20; }
 node[shop=doityourself] { icon-image: icons/shopping_diy.n.16.png; z-index: 20; }
 node[shop=fishmonger] { icon-image: icons/shopping_fish.n.16.png; z-index: 20; }
 node[shop=florist] { icon-image: icons/shopping_florist.n.16.png; z-index: 20; }
