@@ -234,6 +234,10 @@
     <url>http://masstracks.media-lab.com.pl/$z/$x/$y.png</url>
     <sourcetag>masstracks</sourcetag>
   </set>
+  <set minlat="13.518" minlon="-6.929" maxlat="16.852" maxlon="-1.356">
+    <name>Niger Delta - October 2012 Landsat Visible Light</name>
+    <url>http://pnorman.dev.openstreetmap.org/imagery/niger_oct_2012_321/$z/$x/$y.png</url>
+  </set>
   <set minlat="-34.95" minlon="17.64" maxlat="-22.05" maxlon="32.87">
     <name>South Africa - CD:NGI Aerial</name>
     <url>http://${a|b|c}.aerial.openstreetmap.org.za/ngi-aerial/$z/$x/$y.jpg</url>
