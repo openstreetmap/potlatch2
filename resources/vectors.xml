@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vectors>
-  <set loaded="true">
+  <set disabled="true" loaded="true">
     <name>Mapdust Bugs</name>
     <loader>BugLoader</loader>
     <url>http://www.mapdust.com/api/</url>
