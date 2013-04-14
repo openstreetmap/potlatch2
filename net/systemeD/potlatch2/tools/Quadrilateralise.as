@@ -30,7 +30,7 @@ package net.systemeD.potlatch2.tools {
         var newScore:Number = functor.goodness;
         if (newScore > score) {
           return false;
-	    }
+        }
         score = newScore;
         if (score < TOLERANCE) {
         break;
@@ -50,8 +50,8 @@ package net.systemeD.potlatch2.tools {
       way = way_;
       performAction = performAction_;
       points = way.sliceNodes(0, way.length - 1).map(function (n:Node, i:int, a:Array) : Point {
-	  return new Point(n.lon, n.latp);
-	});
+      return new Point(n.lon, n.latp);
+    });
     }
 
     /**
@@ -75,8 +75,8 @@ package net.systemeD.potlatch2.tools {
     private function get goodness():Number {
       var g:Number = 0.0;
       for (var i:uint = 1; i < points.length - 1; ++i) {
-	var score:Number = scoreOf(points[i-1], points[i], points[i+1]);
-	g += score;
+    var score:Number = scoreOf(points[i-1], points[i], points[i+1]);
+    g += score;
       }
       var startScore:Number = scoreOf(points[points.length-1], points[0], points[1]);
       var endScore:Number = scoreOf(points[points.length-2], points[points.length-1], points[0]);
@@ -91,24 +91,24 @@ package net.systemeD.potlatch2.tools {
      */
     private function step():void {
       var motions:Array = points.map(function (b:Point, i:int, array:Array) : Point {
-	  var a:Point = array[(i-1+array.length) % array.length];
-	  var c:Point = array[(i+1) % array.length];
-	  var p:Point = a.subtract(b);
-	  var q:Point = c.subtract(b);
-	  var scale:Number = p.length + q.length;
-	  p.normalize(1.0);
-	  q.normalize(1.0);
-	  var dotp:Number = p.x*q.x + p.y*q.y;
-	  // nasty hack to deal with almost-straight segments (angle is closer to 180 than to 90/270).
-	  if (dotp < -0.707106781186547) {
-	    dotp += 1.0;
-	  }
-	  var v:Point = p.add(q);
-	  v.normalize(0.1 * dotp * scale);
-	  return v;
-	});
+      var a:Point = array[(i-1+array.length) % array.length];
+      var c:Point = array[(i+1) % array.length];
+      var p:Point = a.subtract(b);
+      var q:Point = c.subtract(b);
+      var scale:Number = p.length + q.length;
+      p.normalize(1.0);
+      q.normalize(1.0);
+      var dotp:Number = p.x*q.x + p.y*q.y;
+      // nasty hack to deal with almost-straight segments (angle is closer to 180 than to 90/270).
+      if (dotp < -0.707106781186547) {
+        dotp += 1.0;
+      }
+      var v:Point = p.add(q);
+      v.normalize(0.1 * dotp * scale);
+      return v;
+    });
       for (var i:uint = 0; i < motions.length; ++i) {
-	points[i] = points[i].add(motions[i]);
+    points[i] = points[i].add(motions[i]);
       }
     }
 
