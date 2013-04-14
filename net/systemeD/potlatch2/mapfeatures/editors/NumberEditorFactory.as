@@ -4,11 +4,11 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.display.*;
 
-	public class NumberEditorFactory extends SingleTagEditorFactory {
+    public class NumberEditorFactory extends SingleTagEditorFactory {
         private var _minimum:Number;
         private var _maximum:Number;
         private var _stepSize:Number;
-	    private var _notPresentText:String;
+        private var _notPresentText:String;
         private var _notValidText:String;
 
         public function NumberEditorFactory(inputXML:XML) {
