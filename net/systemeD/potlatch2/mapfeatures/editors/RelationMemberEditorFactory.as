@@ -5,11 +5,11 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.potlatch2.mapfeatures.*;
 
-	public class RelationMemberEditorFactory extends EditorFactory {
-	    /** Contains "route"=["hiking","foot"] key/values. The &lt;match&gt; map_features tag is parsed here from
-	    * "hiking|foot" pipe-separated values. */
-	    private var _relationTagPatterns:Object;
-		private var _role:String;
+    public class RelationMemberEditorFactory extends EditorFactory {
+        /** Contains "route"=["hiking","foot"] key/values. The &lt;match&gt; map_features tag is parsed here from
+        * "hiking|foot" pipe-separated values. */
+        private var _relationTagPatterns:Object;
+        private var _role:String;
         
         /** Constructs the editing panel for a relation(###), given its &lt;relation&gt; in map_features.xml */
         public function RelationMemberEditorFactory(inputXML:XML) {
@@ -18,9 +18,9 @@ package net.systemeD.potlatch2.mapfeatures.editors {
             for each(var match:XML in inputXML.match) {
                 _relationTagPatterns[match.@k] = match.@v.split('|');
             }
-			for each(var role:XML in inputXML.role) {
-				_role=role.@role;
-			}
+            for each(var role:XML in inputXML.role) {
+                _role=role.@role;
+            }
         }
         
         public function get relationTagPatterns():Object {
@@ -38,15 +38,15 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
             // get relations for the entity
             for each(var relation:Relation in parentRelations) {
-				var match:Boolean=true;
+                var match:Boolean=true;
                 for ( var k:String in _relationTagPatterns ) {
                     var relVal:String = relation.getTag(k);
                     if (_relationTagPatterns[k].indexOf(relVal) < 0) { match=false; break; }
-					if ( _role && !relation.hasMemberInRole(entity,_role) ) { match=false; break; }
+                    if ( _role && !relation.hasMemberInRole(entity,_role) ) { match=false; break; }
                 }
-				if (match) { return true; }
+                if (match) { return true; }
             }
-			return false;
+            return false;
         }
         
         override public function createEditorInstance(entity:Entity):DisplayObject {
