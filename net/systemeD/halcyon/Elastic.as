@@ -84,11 +84,11 @@ package net.systemeD.halcyon {
 			var a:Number, xc:Number, yc:Number;
 			var curx:Number, cury:Number;
 			var dx:Number, dy:Number, segleft:Number=0;
- 			var i:int=0;
+			var i:int=0;
 
             var p0:Point = start;
             var p1:Point = end;
- 			g.moveTo(map.lon2coord(p0.x), map.latp2coord(p0.y));
+			g.moveTo(map.lon2coord(p0.x), map.latp2coord(p0.y));
 			while (i < 1 || segleft>0) {
 				if (dashleft<=0) {	// should be ==0
 					if (dc.length==0) { dc=dashes.slice(0); }
@@ -107,7 +107,7 @@ package net.systemeD.halcyon {
 
 				if (segleft<=dashleft) {
 					// the path segment is shorter than the dash
-		 			curx+=dx; cury+=dy;
+					curx+=dx; cury+=dy;
 					moveLine(g,curx,cury,draw);
 					dashleft-=segleft; segleft=0;
 				} else {
