@@ -5,7 +5,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import mx.containers.VBox;
     import flash.events.*;
 
-	public class RelationMemberEditor extends VBox {
+    public class RelationMemberEditor extends VBox {
 
       protected var _factory:RelationMemberEditorFactory;
       protected var _entity:Entity;
