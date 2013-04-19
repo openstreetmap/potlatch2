@@ -243,4 +243,30 @@
     <url>http://${a|b|c}.aerial.openstreetmap.org.za/ngi-aerial/$z/$x/$y.jpg</url>
     <sourcetag>ngi-aerial</sourcetag>
   </set>
+    <set minlat="46.365" minlon="6.20447" maxlat="46.4077" maxlon="6.24961">
+    <name>Switzerland - Ville de Nyon - Orthophoto 2010 HD 5cm/pi</name>
+    <scheme>tms</scheme>
+    <url>http://osmdata.asitvd.ch/tiles/nyon2010/$z/$x/$y.png</url>
+    <sourcetag>Ville de Nyon - Orthophoto 2010 HD 5cm</sourcetag>
+    <terms_url>http://www.nyon.ch/fr/officiel/services-offices/informatique-et-population-776-3911</terms_url>
+  </set>
+  <set minlat="46.383" minlon="6.78698" maxlat="46.5541" maxlon="7.07437">
+    <name>Switzerland - Cartoriviera - Orthophoto 2012</name>
+    <scheme>tms</scheme>
+    <url>http://osmdata.asitvd.ch/tiles/cartoriviera2012/$z/$x/$y.png</url>
+    <sourcetag>Cartoriviera - Orthophoto 2012</sourcetag>
+    <terms_url>http://map.cartoriviera.ch?baselayer_ref=orthos_2012_mobile&amp;baselayer_opacity=100</terms_url>
+  </set>
+  <set minlat="46.4985" minlon="6.63489" maxlat="46.5529" maxlon="6.72996">
+    <name>Switzerland - Pully, Paudex, Belmont/Lsne - Orthophoto 2012</name>
+    <url>http://osmdata.asitvd.ch/tiles/sigip2012/$z/$x/$y.png</url>
+    <sourcetag>SIGIP - Orthophoto 2012</sourcetag>
+    <terms_url>http://www.sigip.ch</terms_url>
+  </set>
+  <set minlat="46.4893" minlon="6.55774" maxlat="46.598" maxlon="6.73044">
+    <name>Switzerland - Lausanne - Orthophoto technique 2012</name>
+    <url>http://osmdata.asitvd.ch/tiles/lausanne2012/$z/$x/$y.png</url>
+    <sourcetag>Ville de Lausanne - Orthophoto technique 2012</sourcetag>
+    <terms_url>http://carto.lausanne.ch/lausanne-gc/</terms_url>
+  </set>
 </imagery>
