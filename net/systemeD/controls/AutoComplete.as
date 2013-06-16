@@ -17,6 +17,7 @@ package net.systemeD.controls {
 	import flash.events.MouseEvent;
 	import flash.net.SharedObject;
 	import flash.ui.Keyboard;
+	import flash.utils.*;
 	import mx.core.UIComponent;
 	import mx.controls.ComboBox;
 	import mx.controls.DataGrid;
@@ -81,6 +82,7 @@ package net.systemeD.controls {
 			setStyle("cornerRadius",0);
 			setStyle("paddingLeft",0);
 			setStyle("paddingRight",0);
+			setStyle("openDuration",0);
 			rowCount = 7;
 			
 			if (maxChars) textInput.maxChars=maxChars;
@@ -96,6 +98,7 @@ package net.systemeD.controls {
 		private var showingDropdown:Boolean=false;
 		private var tempCollection:Object;
 		private var dropdownClosed:Boolean=true;
+		private var dropdownTimer:uint;
 		public var maxChars:uint=0;
 
 		//--------------------------------------------------------------------------
@@ -231,11 +234,17 @@ package net.systemeD.controls {
 
 			if (showDropdown && !dropdown.visible) {
 				// controls the open duration of the dropdown
-				super.open();
 				showDropdown = false;
-				showingDropdown = true;
-				dropdownClosed = false;
+				clearTimeout(dropdownTimer);
+				dropdownTimer=setTimeout(openDropdown,100);
 			}
+		}
+
+		private function openDropdown():void {
+			clearTimeout(dropdownTimer);
+			super.open();
+			showingDropdown = true;
+			dropdownClosed = false;
 		}
 	
 		override protected function keyDownHandler(event:KeyboardEvent):void {
