@@ -188,7 +188,7 @@ package net.systemeD.controls {
 
 					if( collection.length==0 || typedText=="" || typedText==null ) {
 						// no suggestions, so no dropdown
-						dropdownClosed=true;
+						dropdownClosed=true; clearTimeout(dropdownTimer);
 						showDropdown=false;
 						showingDropdown=false;
 						selectedIndex=-1;		// nothing selected
@@ -246,6 +246,11 @@ package net.systemeD.controls {
 			showingDropdown = true;
 			dropdownClosed = false;
 		}
+
+		override protected function focusOutHandler(event:FocusEvent):void {
+			clearTimeout(dropdownTimer);
+			super.focusOutHandler(event);
+		}
 	
 		override protected function keyDownHandler(event:KeyboardEvent):void {
 			super.keyDownHandler(event);
@@ -259,24 +264,24 @@ package net.systemeD.controls {
 				textInput.text = typedText;
 				textInput.selectRange(textInput.text.length, textInput.text.length);
 				showingDropdown = false;
-				dropdownClosed=true;
+				dropdownClosed=true; clearTimeout(dropdownTimer);
 
 			} else if (event.keyCode == Keyboard.ENTER) {
 				// ENTER pressed, so select the topmost item (if it exists)
 				if (selectedIndex>-1) { textInput.text = selectedLabel; }
-				dropdownClosed=true;
+				dropdownClosed=true; clearTimeout(dropdownTimer);
 				
 				// and move on to the next field
 				event.stopImmediatePropagation();
 				selectNextField();
 
 			} else if (event.ctrlKey && event.keyCode == Keyboard.UP) {
-				dropdownClosed=true;
+				dropdownClosed=true; clearTimeout(dropdownTimer);
 			}
 		
 			prevIndex = selectedIndex;
 		}
-	
+
 		override public function getStyle(styleProp:String):* {
 			if (styleProp != "openDuration") {
 				return super.getStyle(styleProp);
