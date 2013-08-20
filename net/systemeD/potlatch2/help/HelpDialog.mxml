@@ -57,10 +57,16 @@
 
     private function getIntroText():String {
         var site_name:String = loaderInfo.parameters["site_name"];
-        if (site_name) {
-          return "<p><b>Potlatch2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through the " + site_name + " website.</p>";
-        }
-        return "<p><b>Potlatch2</b> is an OpenStreetMap (OSM) editor that allows you to make edits directly through this website.</p>";
+		var browser:String = String(ExternalInterface.call("function() {return navigator.userAgent;}")).toLowerCase();
+
+		var intro:String = '';
+		if (site_name=='OpenStreetMap' && browser.indexOf('msie')==-1) {
+			intro+="<p><font size='+4' color='#FF0000'><b>New user?</b> There's now an easier first-time editor you can try instead of this. Click the triangle by the Edit menu and select 'iD'.</font></p>";
+		}
+		intro+="<p><b>Potlatch 2</b> is an intermediate-level OpenStreetMap (OSM) editor that allows you to make edits directly through ";
+        if (site_name) { intro+="the " + site_name + " website.</p>"; }
+		else { intro+="this website.</p>"; }
+		return intro;
     }
 
     private function getSaveText():String {
