@@ -185,18 +185,10 @@ package net.systemeD.halcyon {
 
 		/** Tile image has been downloaded, so start displaying it. */
 		protected function doImgInit(event:Event):void {
-			event.target.loader.alpha=0;
-			var t:Timer=new Timer(10,10);
-			t.addEventListener(TimerEvent.TIMER,function():void { upFade(DisplayObject(event.target.loader)); });
-			t.start();
 			waiting--;
 			loadcount++;
 			if (loadcount>MAXTILESLOADED) purgeTiles();
 			return;
-		}
-		
-		protected function upFade(s:DisplayObject):void {
-			s.alpha+=0.1;
 		}
 		
 		protected function purgeTiles():void {
