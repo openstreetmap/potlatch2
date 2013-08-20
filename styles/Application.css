@@ -344,3 +344,7 @@ s|FormItem {
 	selectedFillColors: haloBlue, black;
 	color: white;
 }
+
+/* Misc */
+
+#twitter { color: white; textRollOverColor: white; }

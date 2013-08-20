@@ -84,6 +84,10 @@
   </mx:ViewStack>
 
   <mx:ControlBar>
+    <mx:CheckBox id="twitter" selected="{getTwitter()}"
+                label="Post on Twitter"
+                change="setTwitter(twitter.selected)" />
+
     <mx:Button id="dataButton" label="View data" visible="false" click="processSequence.selectedChild=dataTab" styleName="titleWindowButton" />
     <mx:Spacer width="100%"/>
     <mx:Button id="cancelButton" label="Cancel" click="close();" styleName="titleWindowButton" />
@@ -98,21 +102,25 @@
 	import mx.core.FlexGlobals;
     import mx.events.DataGridEvent;
     import mx.events.DataGridEventReason;
-    
+    import flash.net.*;
+
     import net.systemeD.halcyon.connection.*;
     import net.systemeD.halcyon.AttentionEvent;
     
     private var _connection:Connection;
 	private var doSkip:Boolean = false;
-    
+    private var newChangeset:Boolean = true;
+
     [Bindable] private var failureText:String = "";
 	[Bindable] private var application:Object = FlexGlobals.topLevelApplication;
 
 	public function setConnection(connection:Connection):void {
 		_connection=connection;
+		newChangeset=true;
 	}
 
 	public function dontPrompt():void {
+		newChangeset=false;
 		if (processSequence.initialized) { skipInput(); } else { doSkip=true; }
 	}
 
@@ -186,6 +194,7 @@
         addStatus("Saving to changeset "+changeset.id);
         
         saveProgress.label = "Uploading changes";
+		twitter.visible=false; twitter.includeInLayout=false;
         _connection.addEventListener(Connection.SAVE_COMPLETED, saveCompleted);
         var rawData:*=_connection.uploadChanges();
         if (rawData) {
@@ -201,6 +210,13 @@
     private function saveCompleted(event:SaveCompleteEvent):void {
         if ( event.saveOK ) {
 			_connection.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Changes successfully saved"));
+			if (twitter.selected && newChangeset) {
+				var url:String="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.openstreetmap.org%2Fbrowse%2Fchangeset%2F";
+				url+=_connection.getActiveChangeset().id;
+				var comment:String=_connection.getActiveChangeset().getTag('comment') || "I just edited OpenStreetMap!";
+				url+="&text="+encodeURIComponent(comment);
+				navigateToURL(new URLRequest(url), "_blank");
+			}
             if (processSequence.selectedChild!=dataTab) close();
         } else {
             fail("Failure when uploading data");
@@ -227,6 +243,18 @@
         _connection.removeEventListener(Connection.SAVE_COMPLETED, saveCompleted);
         PopUpManager.removePopUp(this);
     }
+
+	public function getTwitter():Boolean {
+		return SharedObject.getLocal('user_state','/').data['twitter'];
+	}
+
+	public function setTwitter(v:Boolean):void {
+		var obj:SharedObject=SharedObject.getLocal("user_state","/");
+		obj.setProperty('twitter',v);
+		try { obj.flush(); } catch (e:Error) {}
+		comment.setFocus();
+	}
+
   ]]></fx:Script>
 </mx:TitleWindow>
 
