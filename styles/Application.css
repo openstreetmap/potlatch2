@@ -20,7 +20,7 @@ mx|TitleWindow {
 	fontFamily: Arial;
 	fontSize: 11;
 	fontWeight: bold;
-	cornerRadius: 12;
+	cornerRadius: 2px;
 	paddingLeft: 5;
 	paddingRight: 5;
 	highlightAlphas: 0, 0;
@@ -57,6 +57,11 @@ mx|TextInput {
 
 mx|Label {
 	fontWeight: normal;
+}
+
+mx|PopUpButton {
+	openDuration: 0;
+	closeDuration: 0;
 }
 
 s|FormItem s|Label#labelDisplay {
@@ -112,12 +117,12 @@ mx|ApplicationControlBar {
 	fontFamily: Arial;
 	fontSize: 11;
 	fontWeight: bold;
-	cornerRadius: 12;
+	cornerRadius: 2px;
 	paddingLeft: 5;
 	paddingRight: 5;
 	highlightAlphas: 0, 0;
 	fillAlphas: 1,1;
-	fillColors: haloBlue, #6495ED;
+	fillColors: haloBlue,#77AAF4;
 	color: white;
 	textRollOverColor: white;
 	disabledColor: #5555bb;

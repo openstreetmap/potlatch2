@@ -31,7 +31,7 @@
             <mx:Text condenseWhite="true" width="100%" id="iconText" styleName="dndIconText"/>
           </mx:HBox>
           <mx:HBox width="100%">
-            <mx:PopUpButton id="popupChange" openAlways="true" width="100%" styleName="dndTagPopUpMenu" closeDuration="0" />
+            <mx:PopUpButton id="popupChange" openAlways="true" width="100%" styleName="dndTagPopUpMenu" />
             <mx:LinkButton icon="@Embed('../../../embedded/information.svg')" click="openDescription()" id="helpLabel" styleName="helpInfo"/>
           </mx:HBox>
           <mx:HBox width="100%" id="summaryContainer" visible="false">
