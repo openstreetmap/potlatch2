@@ -17,9 +17,7 @@ package net.systemeD.halcyon {
 		private var offset_lon:Number=0;
 		private var offset_lat:Number=0;
 
-		private var requests:Array=[];
 		private var tiles:Object={};		// key is "z,x,y"; value "true" if queued, or reference to loader object if requested
-		private var waiting:int=0;			// number of tiles currently being downloaded
 		private var loadcount:int=0;		// number of tiles fully downloaded
 		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
 		private var scheme:String;			// 900913 or microsoft
@@ -29,7 +27,6 @@ package net.systemeD.halcyon {
 		private static const ROUNDROBIN:RegExp =/\$\{([^}]+)\}/;
 
 		private var map:Map;
-		private const MAXTILEREQUESTS:uint= 4;
 		private const MAXTILESLOADED:uint=30;
 
 		private var sharpenFilter:BitmapFilter = new ConvolutionFilter(3, 3, 
@@ -53,7 +50,7 @@ package net.systemeD.halcyon {
 		public function init(params:Object, update:Boolean=false):void {
 			baseurl=params.url;
 			scheme =params.scheme ? params.scheme : '900913';
-			requests=[]; waiting=loadcount=0;
+			loadcount=0;
 			for (var tilename:String in tiles) {
 				if (tiles[tilename] is Loader) tiles[tilename].unload();
 				tiles[tilename]=null;
@@ -116,76 +113,29 @@ package net.systemeD.halcyon {
 			tile_b=lat2tile(map.edge_b-offset_lat);
 			for (var tx:int=tile_l; tx<=tile_r; tx++) {
 				for (var ty:int=tile_t; ty<=tile_b; ty++) {
-					if (!tiles[map.scale+','+tx+','+ty]) { addRequest(tx,ty); }
+					if (!tiles[map.scale+','+tx+','+ty]) { 
+						var loader:Loader = new Loader();
+						tiles[map.scale+','+tx+','+ty]=loader;
+						loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit, false, 0, true);
+						loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError, false, 0, true);
+						loader.load(new URLRequest(tileURL(tx,ty,map.scale)), 
+						            new LoaderContext(true));
+						Sprite(this.getChildAt(map.scale-map.MINSCALE)).addChild(loader);
+						loader.x=map.lon2coord(tile2lon(tx));
+						loader.y=map.lat2coord(tile2lat(ty));
+						if (sharpening) { loader.filters=[sharpenFilter]; }
+					}
 				}
 			}
 		}
 
-		/** Mark that a tile needs to be loaded*/
-		
-		public function addRequest(tx:int,ty:int):void {
-			tiles[map.scale+','+tx+','+ty]=true;
-			requests.push([map.scale,tx,ty]);
-		}
-
-		/** Service tile queue - called on every frame to download new tiles */
-		
-		public function serviceQueue():void {
-			if (waiting==MAXTILEREQUESTS || requests.length==0) { return; } //SB
-			var r:Array, tx:int, ty:int, tz:int, l:DisplayObject;
-
-			for (var i:uint=0; i<Math.min(requests.length, MAXTILEREQUESTS-waiting); i++) {
-				r=requests.shift(); tz=r[0]; tx=r[1]; ty=r[2];
-				if (tx>=tile_l && tx<=tile_r && ty>=tile_t && ty<=tile_b) {
-					// Tile is on-screen, so load
-					waiting++;
-					var loader:Loader = new Loader();
-					tiles[map.scale+','+tx+','+ty]=loader;
-					loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit, false, 0, true);
-					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError, false, 0, true);
-					loader.load(new URLRequest(tileURL(tx,ty,tz)), 
-					            new LoaderContext(true));
-					l=this.getChildAt(map.scale-map.MINSCALE);
-					Sprite(l).addChild(loader);
-					loader.x=map.lon2coord(tile2lon(tx));
-					loader.y=map.lat2coord(tile2lat(ty));
-					if (sharpening) { loader.filters=[sharpenFilter]; }
-                    /*
-                    var timer:Timer = new Timer(5000, 1);
-                    timer.addEventListener(TimerEvent.TIMER, function(){checkTileLoaded(map.scale,tx,ty);});
-                    timer.start();
-					*/
-
-				} else {
-					tiles[tz+','+tx+','+ty]=false; // Map has moved between the time we wanted this tile and now, so make 
-					                               //it available for a future request
-				}
-			}
-		}
-
-/* We may need something like this in the future, not sure. Trouble is if a tile doesn't get loaded on first go,
-   it will never get loaded. 
-        private function checkTileLoaded(z,x,y) {
-            if (tiles[z+','+x+','+y]==true){
-            	trace("Didn't even start getting tile: " + z+','+x+','+y);
-            	requests.push([z,x,y]);
-            	return; 
-            }	
-        	var l:Loader = tiles[z+','+x+','+y];
-        	if (l.alpha < 0.1) { 
-        		trace('Broken tile:' + z+','+x+','+y); 
-        	}
-
-        }
-        */
         private function missingTileError(event:Event):void {
-			waiting--;
+			// *** needs to blank the loader
 			return;
 		}
 
 		/** Tile image has been downloaded, so start displaying it. */
 		protected function doImgInit(event:Event):void {
-			waiting--;
 			loadcount++;
 			if (loadcount>MAXTILESLOADED) purgeTiles();
 			return;
