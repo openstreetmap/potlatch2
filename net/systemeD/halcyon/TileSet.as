@@ -118,6 +118,7 @@ package net.systemeD.halcyon {
 						tiles[map.scale+','+tx+','+ty]=loader;
 						loader.contentLoaderInfo.addEventListener(Event.INIT, doImgInit, false, 0, true);
 						loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, missingTileError, false, 0, true);
+						loader.contentLoaderInfo.addEventListener(HTTPStatusEvent.HTTP_STATUS, function(e:HTTPStatusEvent):void { tileLoadStatus(e,map.scale,tx,ty); }, false, 0, true);
 						loader.load(new URLRequest(tileURL(tx,ty,map.scale)), 
 						            new LoaderContext(true));
 						Sprite(this.getChildAt(map.scale-map.MINSCALE)).addChild(loader);
@@ -130,8 +131,13 @@ package net.systemeD.halcyon {
 		}
 
         private function missingTileError(event:Event):void {
-			// *** needs to blank the loader
 			return;
+		}
+		private function tileLoadStatus(event:HTTPStatusEvent,z:int,x:int,y:int):void {
+			if (event.status==200) return;				// fine, carry on
+			if (event.status==404) return;				// doesn't exist, so ignore forever
+			// Dodgy tile response - probably a 502/503 from Bing - so can be retried
+			delete tiles[z+','+x+','+y];
 		}
 
 		/** Tile image has been downloaded, so start displaying it. */
