@@ -60,9 +60,6 @@
 		var browser:String = String(ExternalInterface.call("function() {return navigator.userAgent;}")).toLowerCase();
 
 		var intro:String = '';
-		if (site_name=='OpenStreetMap' && browser.indexOf('msie')==-1) {
-			intro+="<p><font size='+4' color='#FF0000'><b>New user?</b> There's now an easier first-time editor you can try instead of this. Click the triangle by the Edit menu and select 'iD'.</font></p>";
-		}
 		intro+="<p><b>Potlatch 2</b> is an intermediate-level OpenStreetMap (OSM) editor that allows you to make edits directly through the " + site_name + " website.</p>";
 		return intro;
     }
