@@ -9,8 +9,10 @@ package net.systemeD.halcyon {
 		public static const DOWNLOAD:String = "download";
 		/** Viewport size has changed. */
 		public static const RESIZE:String = "resize";
-		/** Map has moved relative to viewport. */
+		/** Map is being moved relative to viewport. */
 		public static const MOVE:String = "move";
+		/** Map has finished being moved relative to viewport. */
+		public static const MOVE_END:String = "move_end";
 		/** Zoom level has changed. */
 		public static const SCALE:String = "scale";
 		/** Background imagery has moved relative to map. */

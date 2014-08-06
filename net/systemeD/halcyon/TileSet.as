@@ -20,11 +20,11 @@ package net.systemeD.halcyon {
 		private var tiles:Object={};		// key is "z,x,y"; value "true" if queued, or reference to loader object if requested
 		private var loadcount:int=0;		// number of tiles fully downloaded
 		private var baseurl:String;			// e.g. http://npe.openstreetmap.org/$z/$x/$y.png
-		private var scheme:String;			// 900913 or microsoft
+		private var scheme:String;			// tms or bing
 		public var blocks:Array;			// array of regexes which are verboten
 
 		private var count:Number=0;			// counter incremented to provide a/b/c/d tile swapping
-		private static const ROUNDROBIN:RegExp =/\$\{([^}]+)\}/;
+		private static const ROUNDROBIN:RegExp =/\{switch\:([^}]+)\}/;
 
 		private var map:Map;
 		private const MAXTILESLOADED:uint=30;
@@ -49,7 +49,7 @@ package net.systemeD.halcyon {
 		 */
 		public function init(params:Object, update:Boolean=false):void {
 			baseurl=params.url;
-			scheme =params.scheme ? params.scheme : '900913';
+			scheme =params.type ? params.type : 'tms';
 			loadcount=0;
 			for (var tilename:String in tiles) {
 				if (tiles[tilename] is Loader) tiles[tilename].unload();
@@ -168,7 +168,7 @@ package net.systemeD.halcyon {
 			var tmsy:int=Math.pow(2,tz)-1-ty;
 			switch (scheme.toLowerCase()) {
 
-				case 'microsoft':
+				case 'bing':
 					var u:String='';
 					for (var zoom:uint=tz; zoom>0; zoom--) {
 						var byte:uint=0;
@@ -177,24 +177,23 @@ package net.systemeD.halcyon {
 						if ((ty & mask)!=0) byte+=2;
 						u+=String(byte);
 					}
-					t=baseurl.replace('$quadkey',u); break;
-
-				case 'tms':
-					t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',tmsy);
-					break;
+					t=baseurl.replace('{quadkey}',u); break;
 
 				default:
-					if (baseurl.indexOf('$x')>-1) {
+					if (baseurl.indexOf('{x}')>-1) {
+						t=baseurl.replace('{zoom}',map.scale).replace('{x}',tx).replace('{y}',ty).replace('{-y}',tmsy);
+					} else if (baseurl.indexOf('$x')>-1) {
 						t=baseurl.replace('$z',map.scale).replace('$x',tx).replace('$y',ty).replace('$-y',tmsy);
 					} else {
 						t=baseurl.replace('!',map.scale).replace('!',tx).replace('!',ty);
 					}
+					// also, someone should invent yet another variable substitution scheme
 					break;
 
 			}
 			var o:Object=new Object();
 			if ((o=ROUNDROBIN.exec(t))) {
-				var prefixes:Array=o[1].split('|');
+				var prefixes:Array=o[1].split(',');
 				var p:String = prefixes[count % prefixes.length];
 				t=t.replace(ROUNDROBIN,p);
 				count++;

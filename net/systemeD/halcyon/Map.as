@@ -209,6 +209,7 @@ package net.systemeD.halcyon {
 			updateCoords(getX(),getY());
 
 			this.dispatchEvent(new MapEvent(MapEvent.RESIZE, {width:w, height:h}));
+			this.dispatchEvent(new MapEvent(MapEvent.MOVE_END, {lat:centre_lat, lon:centre_lon, scale:scale, minlon:edge_l, maxlon:edge_r, minlat:edge_b, maxlat:edge_t}));
 			
             if ( backdrop != null ) {
                 backdrop.width=mapwidth;

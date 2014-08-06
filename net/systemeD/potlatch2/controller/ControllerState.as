@@ -266,11 +266,13 @@ package net.systemeD.potlatch2.controller {
 		/** Create an action to add "source=*" tag to current entity based on background imagery. This is a convenient shorthand for users. */
 		protected function setSourceTag():void {
 			if (selectCount!=1) { return; }
-			if (Imagery.instance().selected && Imagery.instance().selected.sourcetag) {
-				if ("sourcekey" in Imagery.instance().selected)
-				    firstSelected.setTag(Imagery.instance().selected.sourcekey,Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
-				else
-				    firstSelected.setTag('source',Imagery.instance().selected.sourcetag, MainUndoStack.getGlobalStack().addAction);
+			if (!Imagery.instance().selected) { return; }
+			var sourceTag:String = Imagery.instance().selected.sourcetag || Imagery.instance().selected.id || Imagery.instance().selected.name;
+			if (sourceTag=='None') { return; }
+			if ("sourcekey" in Imagery.instance().selected) {
+			    firstSelected.setTag(Imagery.instance().selected.sourcekey, sourceTag, MainUndoStack.getGlobalStack().addAction);
+			} else {
+			    firstSelected.setTag('source', sourceTag, MainUndoStack.getGlobalStack().addAction);
 			}
 			controller.updateSelectionUI();
 		}
