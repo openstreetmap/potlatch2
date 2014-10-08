@@ -292,7 +292,27 @@
 
 <!-- ************************************************************************
        Natural
-       ************************************************************************ -->
+     ************************************************************************ -->
+
+  <feature name="Peak">
+    <help>http://wiki.openstreetmap.org/wiki/Tag:natural%3Dpeak</help>
+    <category>natural</category>
+    <icon image="features/pois/natural_peak.n.24.png"/>
+    <point/>
+    <tag k="natural" v="peak"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+  <feature name="Tree">
+    <help>http://wiki.openstreetmap.org/wiki/Tag:natural%3Dtree</help>
+    <category>natural</category>
+    <icon image="features/pois/natural_tree.n.24.png"/>
+    <point/>
+    <tag k="natural" v="tree"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
 
   <feature name="Park">
     <category>natural</category>
