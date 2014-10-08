@@ -26,7 +26,7 @@ package net.systemeD.halcyon.connection {
 			"geobase:datasetName", "geobase:uuid", "sub_sea:type",
 			"odbl", "odbl:note",
 			"yh:LINE_NAME", "yh:LINE_NUM", "yh:STRUCTURE", "yh:TOTYUMONO",
-			"yh:TYPE", "yh:WIDTH_RANK"];
+			"yh:TYPE", "yh:WIDTH_RANK","SK53_bulk:load"];
 
         /**
         * Create a new XML connection
