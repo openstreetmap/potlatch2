@@ -67,8 +67,7 @@ package net.systemeD.potlatch2.controller {
 				var lat:Number = controller.map.coord2lat(event.localY);
 				var lon:Number = controller.map.coord2lon(event.localX);
 				var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
-				var node:Node = firstSelected.connection.createNode({}, lat, lon, undo.push);
-				Way(firstSelected).insertNodeAtClosestPosition(node, false, undo.push);
+				Way(firstSelected).insertNodeOrMoveExisting(lat, lon, undo.push);
 				MainUndoStack.getGlobalStack().addAction(undo);
 				return this;
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected && paint.interactive) {

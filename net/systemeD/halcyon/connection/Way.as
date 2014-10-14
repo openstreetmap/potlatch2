@@ -206,16 +206,42 @@ package net.systemeD.halcyon.connection {
 			else { return true; }
 		}
 
-        /**
-         * Finds the 1st way segment which intersects the projected
-         * coordinate and adds the node to that segment. If snap is
-         * specified then the node is moved to exactly bisect the
-         * segment.
-         */
-        public function insertNodeAtClosestPosition(newNode:Node, isSnap:Boolean, performAction:Function):int {
-            var closestProportion:Number = 1;
+		/**
+		 * Finds the 1st way segment which intersects the projected
+		 * coordinate and adds the node to that segment. If snap is
+		 * specified then the node is moved to exactly bisect the
+		 * segment.
+		 */
+		public function insertNodeAtClosestPosition(newNode:Node, isSnap:Boolean, performAction:Function):int {
+			var o:Object=indexOfClosestNode(newNode.lon, newNode.latp);
+			if (isSnap) { newNode.setLonLatp(o.snapped.x, o.snapped.y, performAction); }
+			insertNode(o.index, newNode, performAction);
+			return o.index;
+		}
+
+		/* Variant of insertNodeAtClosestPosition that will move an existing node if available,
+		   rather than creating a new one. Used for 'improve way accuracy' click.
+		   
+		   Ideally, rather than using 0.15/0.85, we should be sensitive to actual distance and to zoom level.
+		   Could maybe also do with being bent to fix the issue at concave angles. */
+		public function insertNodeOrMoveExisting(lat:Number, lon:Number, performAction:Function):void {
+			var latp:Number=Node.lat2latp(lat);
+			var o:Object=distanceFromWay2(lon,latp);
+			if (o.proportion<0.15) {
+				nodes[o.index-1].setLatLon(lat,lon,performAction);
+			} else if (o.proportion>0.85) {
+				nodes[o.index  ].setLatLon(lat,lon,performAction);
+			} else {
+				var node:Node = connection.createNode({}, lat, lon, performAction);
+				insertNode(o.index, node, performAction);
+			}
+		}
+
+		/* Find which node is closest to a given lat/lon. */
+		private function indexOfClosestNode(lon:Number, latp:Number):Object {
+            var closestProportion:Number = Infinity;
             var newIndex:uint = 0;
-            var nP:Point = new Point(newNode.lon, newNode.latp);
+            var nP:Point = new Point(lon, latp);
             var snapped:Point = null;
             
             for ( var i:uint; i < length - 1; i++ ) {
@@ -234,13 +260,7 @@ package net.systemeD.halcyon.connection {
                     snapped = calculateSnappedPoint(p1, p2, nP);
                 }
             }
-            
-            // splice in new node
-            if ( isSnap ) {
-                newNode.setLonLatp(snapped.x, snapped.y, performAction);
-            }
-            insertNode(newIndex, newNode, performAction);
-            return newIndex;
+            return { index: newIndex, snapped: snapped };
         }
         
         private function calculateSnappedPoint(p1:Point, p2:Point, nP:Point):Point {
@@ -385,6 +405,64 @@ package net.systemeD.halcyon.connection {
 			return (topoverlap<botoverlap) && (!((botoverlap<t) || (topoverlap>b)));
 		}
 
+		public function distanceFromWay(lon:Number, latp:Number, startAt:uint=0, endAt:int=-1):Object {
+			var i:uint, ax:Number, ay:Number, bx:Number, by:Number, l:Number;
+			var ad:Number, bd:Number;
+			var r:Number, d:Number, px:Number, py:Number;
+			var furthdist:Number=-1; var furthsgn:int=1;
+			var bestIndex:uint;
+			if (endAt==-1) { endAt=nodes.length-1; }
+			for (i=startAt; i<endAt; i++) {
+				ax=nodes[i  ].lon; ay=nodes[i  ].latp;
+				bx=nodes[i+1].lon; by=nodes[i+1].latp;
 
+				ad=Math.sqrt(Math.pow(lon-ax,2)+Math.pow(latp-ay,2));	// distance to ax,ay
+				bd=Math.sqrt(Math.pow(bx-lon,2)+Math.pow(by-latp,2));	// distance to bx,by
+				l =Math.sqrt(Math.pow(bx-ax ,2)+Math.pow(by-ay  ,2));	// length of segment
+				r =ad/(ad+bd);											// proportion along segment
+				px=ax+r*(bx-ax); py=ay+r*(by-ay);						// nearest point on line
+				d=Math.sqrt(Math.pow(px-lon,2)+Math.pow(py-latp,2));	// distance from px,py to lon,latp
+
+				if (furthdist<0 || furthdist>d) {
+					furthdist=d;
+					furthsgn=sgn((bx-ax)*(latp-ay)-(by-ay)*(lon-ax));
+					bestIndex=i+1;
+				}
+			}
+			return { index: bestIndex, distance: furthdist*furthsgn };
+		}
+
+		/* This is a better algorithm than the above (doesn't screw up when near to vertices),
+		   but we need to backport the furthsgn calculation. */
+		public function distanceFromWay2(lon:Number, latp:Number):Object {
+			var q:Point = new Point(lon,latp);		// q is the point
+			var dist:Number = Infinity;
+
+			var a:Point, b:Point, daq:Point, dbq:Point, dab:Point, currentDist:Number, index:uint, u:Number;
+			for (var i:uint=1; i<nodes.length; i++) {
+				a = new Point(nodes[i-1].lon, nodes[i-1].latp);
+				b = new Point(nodes[i  ].lon, nodes[i  ].latp);
+				daq = new Point(a.x-q.x, a.y-q.y);
+				dbq = new Point(b.x-q.x, b.y-q.y);
+				dab = new Point(a.x-b.x, a.y-b.y);
+				var inv:Number=1/(Math.pow(dab.x,2)+Math.pow(dab.y,2));
+				var t:Number=(dab.x*daq.x + dab.y*daq.y)*inv;
+				if (t>=0) {
+					if (t<=1) {
+						currentDist = Math.pow(dab.x*dbq.y - dab.y*dbq.x, 2)*inv;
+					} else {
+						currentDist = Math.pow(dbq.x,2)+Math.pow(dbq.y,2);
+					}
+					if (currentDist<dist) { dist=currentDist; index=i; u=t; }
+				}
+			}
+			return { index: index, distance: dist, proportion: u };
+		}
+
+		private function sgn(a:Number):Number {
+			if (a==0) return 0;
+			if (a<0) return -1;
+			return 1;
+		}
     }
 }

@@ -60,6 +60,14 @@ package net.systemeD.potlatch2.controller {
           		var d:DragWayNode=new DragWayNode(parentWay, -1, event, true);
 				d.forceDragStart();
 				return d;
+			} else if ( event.type == MouseEvent.MOUSE_UP && !entity && event.shiftKey ) {
+				// shift-clicked nearby to insert node
+				var lat:Number = controller.map.coord2lat(event.localY);
+				var lon:Number = controller.map.coord2lon(event.localX);
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+				parentWay.insertNodeOrMoveExisting(lat, lon, undo.push);
+				MainUndoStack.getGlobalStack().addAction(undo);
+				return new SelectedWay(parentWay);
 			}
 			var cs:ControllerState = sharedMouseEvents(event, entity);
 			return cs ? cs : this;
