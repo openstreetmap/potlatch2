@@ -59,6 +59,7 @@ package net.systemeD.potlatch2.collections {
 			if (SharedObject.getLocal("user_state","/").data['background_url']!=undefined) {
 				saved={ url:  SharedObject.getLocal("user_state","/").data['background_url' ],
 						name: SharedObject.getLocal("user_state","/").data['background_name'],
+						userDefined: true,
 						type: "tms",
 						extent: { bbox: { min_lon: -180, max_lon: 180, min_lat: -90, max_lat: 90 } }}
 			}
@@ -267,7 +268,7 @@ package net.systemeD.potlatch2.collections {
 					}
 				} else if (!bg.type || bg.type!='wms') {
 					// if there's no bbox (i.e. global set) and default is set, include it
-					if (bg.name=='None' || bg.default) { available.push(bg); }
+					if (bg.name=='None' || bg.default || bg.userDefined) { available.push(bg); }
 				}
 			}
 			available.sort(function(a:Object,b:Object):int {

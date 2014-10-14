@@ -68,7 +68,7 @@
     }
 
 	private function addNewSource():void {
-		dataCollection.addItemAt( {name:'(new name)',url:'(new URL)'} , dataCollection.length);
+		dataCollection.addItemAt( {name:'(new name)',url:'(new URL)',userDefined:true} , dataCollection.length);
 		dataGrid.validateNow();
 		dataGrid.verticalScrollPosition=dataGrid.maxVerticalScrollPosition;
 		dataGrid.editedItemPosition = {rowIndex: dataCollection.length-1, columnIndex: 0};
