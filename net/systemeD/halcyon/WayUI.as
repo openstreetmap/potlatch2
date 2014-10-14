@@ -237,7 +237,13 @@ package net.systemeD.halcyon {
 			if (!paint.ready) { return false; }
 
             // Copy tags object, and add states
-            var tags:Object = entity.getTagsCopy();
+			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
+			var tags:Object;
+			if (!entity.hasTags() && multis.length>0) {
+				tags = multis[0].getTagsCopy();
+			} else {
+				tags = entity.getTagsCopy();
+			}
             setStateClass('area', Way(entity).isArea());
             setStateClass('background', paint.isBackground);
             setStateClass('tiger', (entity.isUneditedTiger() && Globals.vars.highlightTiger));
@@ -270,7 +276,6 @@ package net.systemeD.halcyon {
 
 			// Iterate through each subpart, drawing any styles on that layer
 			var drawn:Boolean;
-			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var inners:Array=[];
 			for each (var m:Relation in multis) {
 				inners=inners.concat(m.findMembersByRole('inner',Way));
