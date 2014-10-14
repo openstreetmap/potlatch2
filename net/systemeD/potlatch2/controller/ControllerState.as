@@ -7,6 +7,7 @@ package net.systemeD.potlatch2.controller {
     import net.systemeD.halcyon.AttentionEvent;
     import net.systemeD.potlatch2.collections.Imagery;
     import net.systemeD.potlatch2.EditController;
+    import net.systemeD.potlatch2.FunctionKeyManager;
     import net.systemeD.potlatch2.history.HistoryDialog;
 	import net.systemeD.potlatch2.save.SaveManager;
 	import net.systemeD.potlatch2.utils.SnapshotConnection;
@@ -77,6 +78,7 @@ package net.systemeD.potlatch2.controller {
 		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
 			var editableLayer:MapPaint=controller.map.editableLayer;								// shorthand for this method
+			if (event.keyCode>=112 && event.keyCode<=126 && event.shiftKey) { memoriseTags(event.keyCode); return null; }
 			switch (event.keyCode) {
 				case 48:	removeTags(); break;													// 0 - remove all tags
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
@@ -246,6 +248,29 @@ package net.systemeD.potlatch2.controller {
 				item.suspend();
 				var tags:Array=item.getTagArray();
 				for each (var tag:Tag in tags) item.setTag(tag.key,null,undo.push);
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+			controller.updateSelectionUI();
+			for each (item in _selection) item.resume();
+		}
+		
+		/** Memorise tags. 
+			Should ideally do relations too. */
+		protected function memoriseTags(keycode:uint):void {
+			if (selectCount!=1) return;
+			var str:String=firstSelected.getTagList().toString();
+			FunctionKeyManager.instance().setKey(keycode-111,'Saved tags',str);
+			controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Tags memorised on F"+(keycode-111)));
+		}
+		
+		/** Recall memorised tags. */
+		public function recallTags(str:String):void {
+			if (selectCount==0) return;
+			var kv:Object=TagList.fromString(str);
+		    var undo:CompositeUndoableAction = new CompositeUndoableAction("Recall tags");
+			for each (var item:Entity in _selection) {
+				item.suspend();
+				for (var k:String in kv) item.setTag(k, kv[k], undo.push)
 			}
 			MainUndoStack.getGlobalStack().addAction(undo);
 			controller.updateSelectionUI();

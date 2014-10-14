@@ -80,6 +80,5 @@ package net.systemeD.potlatch2 {
 			listeners[keys[fkey].code](keys[fkey].value);
 			return true;
 		}
-		
 	}
 }

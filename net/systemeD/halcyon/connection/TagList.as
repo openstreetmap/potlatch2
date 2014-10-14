@@ -29,6 +29,13 @@ package net.systemeD.halcyon.connection {
                 arr.push(getTagKey(i) + "=" + getTagValue(i));
             return arr.join('; ');
         }
-    }
 
+		public static function fromString(str:String):Object {
+			var kv:Object={};
+			var arr:Array=str.split('; ');
+			for (var i:uint = 0; i < arr.length; i++)
+				kv[arr[i].split('=')[0]] = arr[i].split('=')[1];
+			return kv;
+		}
+    }
 }

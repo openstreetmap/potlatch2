@@ -72,6 +72,9 @@ package net.systemeD.potlatch2 {
             map.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
             map.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 
+            FunctionKeyManager.instance().registerListener('Saved tags',
+                function(o:String):void { state.recallTags(o); });
+
             if (this.moveFunction) {
                 var lon:Number = ( map.edge_r + map.edge_l ) / 2;
                 var lat:Number = ( map.edge_b + map.edge_t ) / 2;
@@ -130,7 +133,7 @@ package net.systemeD.potlatch2 {
 			if (keys[event.keyCode] && new Date().getTime()-keys[event.keyCode]<300) return;
 			delete keys[event.keyCode];
 
-			if (FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
+			if (!event.shiftKey && FunctionKeyManager.instance().handleKeypress(event.keyCode)) { return; }
             
             if (event.keyCode == 77) { toggleSize(); } // 'M'
             var newState:ControllerState = state.processKeyboardEvent(event);
