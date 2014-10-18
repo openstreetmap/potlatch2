@@ -80,12 +80,12 @@ package net.systemeD.halcyon {
 		
 		// ------------------------------------------------------------------------------------------
 		/** Map constructor function */
-        public function Map() {
+        public function Map(overlay:Sprite) {
 			// Remove any existing sprites
 			while (numChildren) { removeChildAt(0); }
 
-			// 900913 background
-			tileset=new TileSet(this);
+			// Tile background
+			tileset=new TileSet(this,overlay);
 			addChild(tileset);
 
 			// Container for all MapPaint objects
@@ -134,7 +134,7 @@ package net.systemeD.halcyon {
 		}
 		
 		/** Move the map to centre on a given latitude/longitude. */
-		private function updateCoordsFromLatLon(lat:Number,lon:Number):void {
+		public function updateCoordsFromLatLon(lat:Number,lon:Number):void {
 			var cy:Number=-(lat2coord(lat)-mapheight/2);
 			var cx:Number=-(lon2coord(lon)-mapwidth/2);
 			updateCoords(cx,cy);
@@ -327,7 +327,7 @@ package net.systemeD.halcyon {
 			if (scale!=MINSCALE) changeScale(scale-1);
 		}
 
-		private function changeScale(newscale:uint):void {
+		public function changeScale(newscale:uint):void {
 			scale=newscale;
 			this.dispatchEvent(new MapEvent(MapEvent.SCALE, {scale:scale}));
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);

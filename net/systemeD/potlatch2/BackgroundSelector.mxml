@@ -11,11 +11,11 @@
 
     <s:List width="100%" height="100%" id="background"
             labelField="name"
-            change="FlexGlobals.topLevelApplication.bgButton.close(); Imagery.instance().setBackground(background.selectedItem);"
-            dataProvider="{Imagery.instance().getAvailableImagery()}"
-            selectedItem="{Imagery.instance().selected}">
+            change="FlexGlobals.topLevelApplication.bgButton.close(); application.theMap.tileset.setBackgroundFromImagery(background.selectedItem,true);"
+            dataProvider="{Imagery.instance().getAvailableImagery(application.theMap)}"
+            selectedItem="{application.theMap.tileset.selected}">
       <s:layout>
-        <s:VerticalLayout requestedRowCount="{Imagery.instance().getAvailableImagery().length}" gap="0" horizontalAlign="contentJustify"/>
+        <s:VerticalLayout requestedRowCount="{Imagery.instance().getAvailableImagery(application.theMap).length}" gap="0" horizontalAlign="contentJustify"/>
       </s:layout>
     </s:List>
 
@@ -26,7 +26,12 @@
           change="setSharpen(sharpen.selected)" />
     </s:HGroup>
 
-    <s:HGroup>
+    <s:HGroup width="100%" horizontalAlign="center">
+      <s:CheckBox label="Show floating window" id="showFloatingMap" selected="{application.floatingMap.visible}" 
+		  change="application.floatingMap.setFloatingMapVisible(showFloatingMap.selected);FlexGlobals.topLevelApplication.bgButton.close();" />
+    </s:HGroup>
+
+    <s:HGroup horizontalAlign="center">
       <s:Button id="editLabel" label="Edit..." click="FlexGlobals.topLevelApplication.bgButton.close(); new BackgroundDialog().init('Background imagery',background,Imagery.instance());" />
       <s:Button label="Vector file..." click="FlexGlobals.topLevelApplication.bgButton.close(); new VectorSourceDialog().init();" />
     </s:HGroup>

@@ -3,13 +3,13 @@ package net.systemeD.potlatch2.collections {
 	import flash.events.*;
 	import flash.display.*;
 	import flash.net.*;
-	import flash.text.TextField;
 	import net.systemeD.halcyon.FileBank;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapEvent;
 	import net.systemeD.potlatch2.FunctionKeyManager;
 	import mx.collections.ArrayCollection;
     import com.adobe.serialization.json.JSON;
+	import mx.core.FlexGlobals;
 
 	/*
 		There's lots of further tidying we can do:
@@ -27,15 +27,9 @@ package net.systemeD.potlatch2.collections {
 		public var collection:Array=[];
 		private var _selected:Object={};
 
-		private var _map:Map;
-		private var _overlay:Sprite;
-
 		/* Load catalogue file */
 
-		public function init(map:Map, overlay:Sprite):void {
-			_map = map;
-			_overlay = overlay;
-
+		public function init():void {
 			// load imagery file
 			var request:URLRequest = new URLRequest(INDEX_URL);
 			var loader:URLLoader = new URLLoader();
@@ -43,10 +37,6 @@ package net.systemeD.potlatch2.collections {
 			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
 			loader.load(request);
-
-			// create map listeners
-			map.addEventListener(MapEvent.MOVE_END, moveHandler);
-			map.addEventListener(MapEvent.RESIZE, resizeHandler);
 		}
 
 		private function onImageryIndexLoad(event:Event):void {
@@ -87,7 +77,7 @@ package net.systemeD.potlatch2.collections {
 						bg.logoData   = fb.getAsBitmapData(name);
 						bg.logoWidth  = fb.getWidth(name);
 						bg.logoHeight = fb.getHeight(name);
-						setLogo();
+						dispatchEvent(new Event("refreshAttribution"));
 						});
 				}
 				if (bg.attribution && bg.attribution.data_url) {
@@ -100,11 +90,8 @@ package net.systemeD.potlatch2.collections {
 				}
 			});
 			if (saved.name && !_selected) { collection.push(saved); _selected=saved; }
-			setBackground(_selected);
-
-			// Tell the function key manager that we'd like to receive function key calls
-			FunctionKeyManager.instance().registerListener('Background imagery',
-				function(o:String):void { setBackground(findBackgroundWithName(o)); });
+			if (_selected) dispatchEvent(new CollectionEvent(CollectionEvent.SELECT, _selected));
+			dispatchEvent(new Event("imageryLoaded"));
 			dispatchEvent(new Event("collection_changed"));
 		}
 		
@@ -131,110 +118,16 @@ package net.systemeD.potlatch2.collections {
             }
 			default xml namespace = new Namespace("");
 			bg.attribution.providers=providers;
-			setAttribution();
+			dispatchEvent(new Event("refreshAttribution"));
 		}
 
-		public function setBackground(bg:Object):void {
-			// set background
-			_selected=bg;
-			dispatchEvent(new CollectionEvent(CollectionEvent.SELECT, bg));
-			// update attribution and logo
-			_overlay.visible=bg.hasOwnProperty('attribution');
-			setLogo(); setAttribution(); setTerms();
-			// save as SharedObject for next time
-			var obj:SharedObject = SharedObject.getLocal("user_state","/");
-			obj.setProperty('background_url' ,String(bg.url));
-			obj.setProperty('background_name',String(bg.name));
-			try { obj.flush(); } catch (e:Error) {}
-		}
-		
 		public function get selected():Object { return _selected; }
 		
-		private function findBackgroundWithName(name:String):Object {
+		public function findBackgroundWithName(name:String):Object {
 			for each (var bg:Object in collection) {
 				if (bg.name==name) { return bg; }
 			}
 			return { url:'' };
-		}
-
-		private function moveHandler(event:MapEvent):void {
-			setAttribution();
-			dispatchEvent(new Event("collection_changed"));
-		}
-
-		/* --------------------
-		   Attribution and logo */
-
-		private function setAttribution():void {
-			var tf:TextField=TextField(_overlay.getChildAt(0));
-			tf.text='';
-			if (!_selected.attribution) return;
-			var attr:Array=[];
-			if (_selected.attribution.providers) {
-				// Bing attribution scheme
-				for (var provider:String in _selected.attribution.providers) {
-					for each (var bounds:Array in _selected.attribution.providers[provider]) {
-						if (_map.scale>=bounds[0] && _map.scale<=bounds[1] &&
-						  ((_map.edge_l>bounds[3] && _map.edge_l<bounds[5]) ||
-						   (_map.edge_r>bounds[3] && _map.edge_r<bounds[5]) ||
-				     	   (_map.edge_l<bounds[3] && _map.edge_r>bounds[5])) &&
-						  ((_map.edge_b>bounds[2] && _map.edge_b<bounds[4]) ||
-						   (_map.edge_t>bounds[2] && _map.edge_t<bounds[4]) ||
-						   (_map.edge_b<bounds[2] && _map.edge_t>bounds[4]))) {
-							attr.push(provider);
-						}
-					}
-				}
-			}
-			if (attr.length==0) return;
-			tf.text="Background "+attr.join(", ");
-			positionAttribution();
-			dispatchEvent(new MapEvent(MapEvent.BUMP, { y: tf.textHeight }));	// don't let the toolbox obscure it
-		}
-		private function positionAttribution():void {
-			var tf:TextField=TextField(_overlay.getChildAt(0));
-			tf.x=_map.mapwidth  - 5 - tf.textWidth;
-			tf.y=_map.mapheight - 5 - tf.textHeight;
-		}
-
-		private function setLogo():void {
-			while (_overlay.numChildren>2) { _overlay.removeChildAt(2); }
-			if (!_selected.logoData) return;
-			var logo:Sprite=new Sprite();
-			logo.addChild(new Bitmap(_selected.logoData));
-			if (_selected.attribution.url) { logo.buttonMode=true; logo.addEventListener(MouseEvent.CLICK, launchLogoLink, false, 0, true); }
-			_overlay.addChild(logo);
-			positionLogo();
-		}
-		private function positionLogo():void {
-			_overlay.getChildAt(2).x=5;
-			_overlay.getChildAt(2).y=_map.mapheight - 5 - _selected.logoHeight - (_selected.terms_url ? 10 : 0);
-		}
-		private function launchLogoLink(e:Event):void {
-			if (!_selected.attribution.url) return;
-			navigateToURL(new URLRequest(_selected.attribution.url), '_blank');
-		}
-		private function setTerms():void {
-			var terms:TextField=TextField(_overlay.getChildAt(1));
-			if (!_selected.attribution) { terms.text=''; return; }
-			if (_selected.attribution && _selected.attribution.text) { terms.text=_selected.attribution.text; }
-			else { terms.text="Background terms of use"; }
-			positionTerms();
-			terms.addEventListener(MouseEvent.CLICK, launchTermsLink, false, 0, true);
-		}
-		private function positionTerms():void {
-			_overlay.getChildAt(1).x=5;
-			_overlay.getChildAt(1).y=_map.mapheight - 15;
-		}
-		private function launchTermsLink(e:Event):void {
-			if (!_selected.attribution.url) return;
-			navigateToURL(new URLRequest(_selected.attribution.url), '_blank');
-		}
-
-		private function resizeHandler(event:MapEvent):void {
-			if (_selected.logoData) positionLogo();
-			if (_selected.terms_url) positionTerms();
-			if (_selected.attribution) positionAttribution();
 		}
 
         [Bindable(event="collection_changed")]
@@ -246,24 +139,24 @@ package net.systemeD.potlatch2.collections {
 		   Imagery index parser */
 
 		[Bindable(event="collection_changed")]
-		public function getAvailableImagery():ArrayCollection {
+		public function getAvailableImagery(map:Map):ArrayCollection {
 			var available:Array=[];
 			for each (var bg:Object in collection) {
 				if (bg.extent && bg.extent.polygon) {
 					// check if in boundary polygon
 					var included:Boolean=false;
 					for each (var poly:Array in bg.extent.polygon) {
-						if (pointInPolygon(_map.centre_lon, _map.centre_lat, poly)) { included=true; }
+						if (pointInPolygon(map.centre_lon, map.centre_lat, poly)) { included=true; }
 					}
 					if (included) { available.push(bg); }
 				} else if (bg.extent && bg.extent.bbox && bg.extent.bbox.min_lon) {
 					// if there's a bbox, check the current viewport intersects it
-					if (((_map.edge_l>bg.extent.bbox.min_lon && _map.edge_l<bg.extent.bbox.max_lon) ||
-					     (_map.edge_r>bg.extent.bbox.min_lon && _map.edge_r<bg.extent.bbox.max_lon) ||
-					     (_map.edge_l<bg.extent.bbox.min_lon && _map.edge_r>bg.extent.bbox.max_lon)) &&
-					    ((_map.edge_b>bg.extent.bbox.min_lat && _map.edge_b<bg.extent.bbox.max_lat) ||
-					     (_map.edge_t>bg.extent.bbox.min_lat && _map.edge_t<bg.extent.bbox.max_lat) ||
-					     (_map.edge_b<bg.extent.bbox.min_lat && _map.edge_t>bg.extent.bbox.max_lat))) {
+					if (((map.edge_l>bg.extent.bbox.min_lon && map.edge_l<bg.extent.bbox.max_lon) ||
+					     (map.edge_r>bg.extent.bbox.min_lon && map.edge_r<bg.extent.bbox.max_lon) ||
+					     (map.edge_l<bg.extent.bbox.min_lon && map.edge_r>bg.extent.bbox.max_lon)) &&
+					    ((map.edge_b>bg.extent.bbox.min_lat && map.edge_b<bg.extent.bbox.max_lat) ||
+					     (map.edge_t>bg.extent.bbox.min_lat && map.edge_t<bg.extent.bbox.max_lat) ||
+					     (map.edge_b<bg.extent.bbox.min_lat && map.edge_t>bg.extent.bbox.max_lat))) {
 						available.push(bg);
 					}
 				} else if (!bg.type || bg.type!='wms') {
