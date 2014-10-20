@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
+	xmlns:controls="net.systemeD.controls.*"
+	skinClass="net.systemeD.controls.ResizableDraggableTitleWindowSkin"
+	title="Potlatch 2"
+	height="400" width="400"
+	close="setFloatingMapVisible(false);"
+	styleName="theFloatingMap">
+
+	<mx:UIComponent id='container' includeInLayout='false' depth='1' />
+
+	<mx:PopUpMenuButton id='imageryMenu' label='Imagery' x='5' y='5' depth='2' labelField='name' 
+	dataProvider="{Imagery.instance().getAvailableImagery(map)}"
+    itemClick="itemClickHandler(event)"
+	 />
+
+    <s:CheckBox label="Lock zoom" selected="{zoomLocked}" id="lockZoom" x='5' y='30' depth='3'
+        change="setLockZoom(lockZoom.selected)" />
+
+	<fx:Script><![CDATA[
+
+	import net.systemeD.halcyon.Map;
+	import net.systemeD.halcyon.MapEvent;
+	import net.systemeD.halcyon.TileSet;
+	import net.systemeD.potlatch2.collections.Imagery;
+	import mx.core.UIComponent;
+	import mx.events.ResizeEvent;
+	import mx.events.ListEvent;
+	import mx.events.MenuEvent;
+	import mx.collections.ArrayCollection;
+
+	private var controller:EditController;
+	[Bindable] private var map:Map;
+	[Bindable] private var zoomLocked:Boolean=false;
+	private var maxZoom:uint=50;
+	private var crosshair:Sprite=new Sprite();
+
+	/* FloatingMap still to do:
+		- selection UI
+		- zoom lock button
+		- show/hide (and close box)
+		- auto position (top RH corner?)
+		- crosshair
+		- why does the main imagery change?
+		- credit
+	*/
+
+	public function init(controller:EditController):void {
+		this.controller=controller;
+		addElement(container);
+
+		// Attribution and terms
+		var overlay:Sprite=TileSet.overlaySprite();
+		crosshair.graphics.lineStyle(1,0);
+		crosshair.graphics.moveTo(-10,  0);
+		crosshair.graphics.lineTo( 10,  0);
+		crosshair.graphics.moveTo(  0,-10);
+		crosshair.graphics.lineTo(  0, 10);
+
+		// Create map
+		map = new Map(overlay);
+        updateSize();
+		container.addChild(map);
+		container.addChild(overlay);
+		container.addChild(crosshair);
+
+		// Imagery collection
+		var imagery:Imagery = Imagery.instance();
+		imagery.addEventListener('imageryLoaded',function(e:Event):void {
+			var bg:Object=imagery.findBackgroundWithName("Bing aerial imagery");
+            map.tileset.setBackgroundFromImagery(bg,false);
+			imageryMenu.label=bg.name;
+			if (visible) map.tileset.update();
+			controller.map.addEventListener(MapEvent.MOUSE_MOVE,function(e:MapEvent):void {
+				if (visible) map.updateCoordsFromLatLon(e.params.y,e.params.x);
+			});
+			controller.map.addEventListener(MapEvent.SCALE,changeZoom);
+			addEventListener(ResizeEvent.RESIZE,function(e:ResizeEvent):void { updateSize(); });
+			ArrayCollection(imageryMenu.dataProvider).refresh();
+		});
+		imagery.addEventListener('refreshAttribution',function(e:Event):void {
+			if (visible) {
+				map.tileset.setLogo(); map.tileset.setAttribution(); map.tileset.setTerms(); 
+			}
+		});
+
+		// Initialise map and tileset
+		map.init(controller.map.centre_lat || 51,
+			     controller.map.centre_lon || 0.1,
+			     controller.map.scale || 16);
+	}
+
+	protected function itemClickHandler(event:MenuEvent):void {
+		map.tileset.setBackgroundFromImagery(event.item,false);
+		imageryMenu.label=event.item.name;
+		maxZoom=(event.item.extent && event.item.extent.max_zoom) ? event.item.extent.max_zoom : 50;
+		map.changeScale(Math.min(controller.map.scale,maxZoom));
+	}
+	
+	public function setFloatingMapVisible(v:Boolean):void {
+		visible=v;
+		if (v) {
+			map.updateCoordsFromLatLon(controller.map.centre_lat,controller.map.centre_lon);
+			if (!zoomLocked) map.changeScale(Math.min(controller.map.scale,maxZoom));
+			map.tileset.update();
+			map.tileset.setLogo(); map.tileset.setAttribution(); map.tileset.setTerms(); 
+		}
+	}
+
+	public function setLockZoom(v:Boolean):void {
+		zoomLocked=v;
+		if (!v && map.scale!=controller.map.scale) map.changeScale(Math.min(controller.map.scale,maxZoom));
+	}
+
+	public function changeZoom(e:MapEvent):void { 
+		if (zoomLocked || !visible) return;
+		map.changeScale(Math.min(e.params.scale,maxZoom));
+	}
+
+	public function updateSize():void {
+		map.updateSize(width-2,height-34);
+		crosshair.x=(width-2)/2; crosshair.y=(height-34)/2;
+		map.tileset.setLogo(); map.tileset.setAttribution(); map.tileset.setTerms(); 
+	}
+
+	]]>
+	</fx:Script>
+</s:TitleWindow>
