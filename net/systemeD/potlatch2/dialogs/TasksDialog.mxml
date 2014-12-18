@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        title="Load tasks file"
+        width="350" height="120">
+
+    <s:layout>
+      <s:VerticalLayout
+          paddingLeft="5" paddingRight="5"
+          paddingTop="5" paddingBottom="5" />
+    </s:layout>
+
+	<s:Label text="Enter the URL of a GPX or GeoJSON file containing a series of points."/>
+	<s:TextInput id="src" text="" width="100%" />
+
+	<s:controlBarContent>
+		<s:Button label="Open file..." click="loadTasksFile()" styleName="titleWindowButton" />
+		<s:Spacer width="100%"/>
+		<s:Button label="Cancel" click="PopUpManager.removePopUp(this);" styleName="titleWindowButton" />
+		<s:Button label="Fetch URL" click="loadTasksRemote()" styleName="titleWindowButton" />
+	</s:controlBarContent>
+
+  <fx:Script><![CDATA[
+    import mx.managers.PopUpManager;
+    import mx.events.CloseEvent;
+    import mx.core.Application;
+    import mx.core.FlexGlobals;
+    import net.systemeD.halcyon.Globals;
+    import net.systemeD.halcyon.Map;
+    import net.systemeD.halcyon.AttentionEvent;
+    import net.systemeD.halcyon.connection.Connection;
+	import net.systemeD.potlatch2.EditController;
+	import net.systemeD.potlatch2.TasksPalette;
+    import com.adobe.serialization.json.JSON;
+	import flash.events.*;
+	import flash.net.*;
+
+	private var palette:TasksPalette;
+	private var controller:EditController;
+	private var localFileReference:FileReference;
+
+	public function init(_controller:EditController):void {
+		controller=_controller;
+		PopUpManager.addPopUp(this, Application(FlexGlobals.topLevelApplication), true);
+		PopUpManager.centerPopUp(this);
+		this.addEventListener(CloseEvent.CLOSE, tasksDialog_close);
+	}
+
+    private function tasksDialog_close(evt:CloseEvent):void {
+        PopUpManager.removePopUp(this);
+    }
+
+	private function loadTasksRemote():void {
+        PopUpManager.removePopUp(this);
+		var loader:URLLoader = new URLLoader();
+		loader.addEventListener(Event.COMPLETE, fileLoaded);
+		loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
+		loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+		loader.load(new URLRequest(src.text));
+	}
+
+	private function loadTasksFile():void {
+		localFileReference=new FileReference(); 
+		var fileTypes:String="*.json;*.geojson;*.gpx";
+		localFileReference.browse([new FileFilter(fileTypes,fileTypes)]); 
+		localFileReference.addEventListener(Event.SELECT, selectFileLocal);
+	}
+	private function selectFileLocal(event:Event):void {
+        PopUpManager.removePopUp(this);
+		localFileReference.addEventListener(Event.COMPLETE, fileLoaded);
+		localFileReference.addEventListener(IOErrorEvent.IO_ERROR,ioErrorHandler);
+		localFileReference.addEventListener(SecurityErrorEvent.SECURITY_ERROR,securityErrorHandler);
+		localFileReference.load();
+	}
+	private function fileLoaded(e:Event):void {
+		openPalette();
+		palette.resetTasks();
+		var result:String=e.target.data;
+		if (result.substr(0,5)=='<?xml') { parseFromGPX(result); }
+									else { parseFromGeoJSON(result); }
+		if (palette.hasTasks()) {
+			palette.updateText();
+		} else {
+			closePalette();
+			controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "No points found in the input file"));
+		}
+	}
+	private function parseFromGPX(str:String):void {
+		var file:XML = new XML(str);
+		for each (var ns:Namespace in file.namespaceDeclarations()) {
+			if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) {
+				default xml namespace = ns;
+			}
+		}
+		for each (var wpt:XML in file.wpt) {
+			palette.addTask({ lat: wpt.@lat, lon: wpt.@lon, text: wpt.desc || wpt.cmt || wpt.sym })
+		}
+		default xml namespace = new Namespace("");
+	}
+	private function parseFromGeoJSON(str:String):void {
+		var file:Object = com.adobe.serialization.json.JSON.decode(str);
+		for each (var feature:Object in file.features) {
+			if (feature.geometry.type=='Point') {
+				var text:String = null;
+				if (feature.properties) { text = feature.properties.name || getFirstProperty(feature.properties); }
+				palette.addTask({ lat: feature.geometry.coordinates[1], lon: feature.geometry.coordinates[0], text: text });
+			}
+		}
+	}
+	private function getFirstProperty(obj:Object):String { for (var k:String in obj) { return obj[k]; } return null; }
+
+	private function openPalette():void {
+		if (palette) {
+			palette.visible=true;
+		} else {
+			palette=TasksPalette(PopUpManager.createPopUp(Globals.vars.root,TasksPalette,false));
+			palette.init(controller);
+			palette.x=FlexGlobals.topLevelApplication.suggestTasksPaletteX();
+			palette.y=FlexGlobals.topLevelApplication.suggestTasksPaletteY();
+		}
+	}
+	private function closePalette():void { palette.visible=false; }
+
+	protected function securityErrorHandler(event:SecurityErrorEvent):void {
+		controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't open the file (security error)"));
+	}
+	protected function ioErrorHandler(event:IOErrorEvent):void { 
+		controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't open the file (IO error)"));
+	}
+
+    ]]>
+  </fx:Script>
+</s:TitleWindow>

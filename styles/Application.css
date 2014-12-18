@@ -300,7 +300,7 @@ s|FormItem {
 
 /* Toolbox */
 
-.theToolBox {
+.tasksPalette,.theToolBox {
 	headerColors: haloBlue, #6495ED;
 	headerAlphas: 1,1;
 	headerHeight: 6;

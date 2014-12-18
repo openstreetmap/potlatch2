@@ -62,6 +62,7 @@
 				</fx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
+        <mx:Button id="tasksButton" label="Tasks" click="new TasksDialog().init(theController);" styleName="appBarButton" toolTip="Load tasks file" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
     </mx:ApplicationControlBar>
     
@@ -457,6 +458,14 @@
 		private function suggestToolboxY(yOffset:int=0):int {
 			var rhCP:Point=rhContent.localToGlobal(new Point(0,0));	// stage co-ordinates of right-hand content area
 			return rhCP.y + theMap.scrollRect.height - toolbox.height - 5 - yOffset;
+		}
+		public function suggestTasksPaletteX():int {
+			var rhCP:Point=rhContent.localToGlobal(new Point(0,0));
+			return rhCP.x + 5;
+		}
+		public function suggestTasksPaletteY():int {
+			var rhCP:Point=rhContent.localToGlobal(new Point(0,0));
+			return rhCP.y + theMap.scrollRect.height - 55;
 		}
 
 		private function disableMapMouse():void {

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:potlatch2="net.systemeD.potlatch2.*"
+	height="50" width="220" layout="absolute" verticalScrollPolicy="off"
+	styleName="tasksPalette">
+
+	<mx:Image data="@Embed('../../../embedded/close_small.png')"
+		includeInLayout="false" id="paletteClose" click="toggle();" 
+		y="-6" x="206" />
+
+	<s:Button icon="@Embed('../../../embedded/task_previous.svg')"
+		id="previousTaskButton"
+		click='previousTask();'
+		toolTip="Go to previous task" 
+		width="28" height="28" y="4" x="6" />
+	<s:Button icon="@Embed('../../../embedded/task_next.svg')"
+		id="nextTaskButton"
+		click='nextTask();'
+		toolTip="Go to next task" 
+		width="28" height="28" y="4" x="36" />
+
+	<s:Label id="taskDescription" width="145" height="38" y="4" x="71" text="" />
+
+	<fx:Script><![CDATA[
+
+		import flash.events.Event;
+		import flash.events.MouseEvent;
+		import net.systemeD.halcyon.AttentionEvent;
+		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.halcyon.connection.actions.*;
+		import net.systemeD.potlatch2.controller.*;
+		import net.systemeD.potlatch2.tools.*;
+		import embedded.*;	// for FXG icons
+
+		private var controller:EditController;
+		private var tasks:Array;				// array of { lat:.., lon:.., text:.. }
+		private var taskNumber:uint=0;
+
+		public function init(controller:EditController):void {
+			this.controller=controller;
+		}
+		public function resetTasks():void { tasks=[]; taskNumber=0; }
+		public function addTask(obj:Object):void { tasks.push(obj); }
+		public function hasTasks():Boolean { return (tasks.length>0); }
+		public function updateText():void {
+			taskDescription.text=tasks[taskNumber].text || "("+taskNumber+" of "+tasks.length()+")";
+			controller.map.moveMapFromLatLon(tasks[taskNumber].lat, tasks[taskNumber].lon);
+		}
+
+		public function previousTask():void {
+			taskNumber = (taskNumber==0) ? tasks.length-1 : taskNumber-1;
+			updateText();
+		}
+		public function nextTask():void {
+			taskNumber += 1;
+			if (taskNumber==tasks.length) taskNumber=0;
+			updateText();
+		}
+
+		override protected function createChildren():void {
+			super.createChildren();
+			super.titleBar.addEventListener(MouseEvent.MOUSE_DOWN,handleDown);
+		}
+
+		private function handleDown(e:Event):void {
+			this.startDrag();
+			stage.addEventListener(MouseEvent.MOUSE_UP,handleUp);
+		}
+
+		private function handleUp(e:Event):void {
+			this.stopDrag();
+			stage.removeEventListener(MouseEvent.MOUSE_UP,handleUp);
+		}
+		
+		public function toggle():void { this.visible=!this.visible; }
+
+	]]>
+</fx:Script>
+</mx:Panel>

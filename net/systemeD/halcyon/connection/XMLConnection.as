@@ -81,12 +81,13 @@ package net.systemeD.halcyon.connection {
 
 		private function sendLoadRequest(request:URLRequest):void {
 			var mapLoader:URLLoader = new URLLoader();
-            var errorHandler:Function = function(event:IOErrorEvent):void {
+            var errorHandler:Function = function(event:Event):void {
                 errorOnMapLoad(event, request);
             }
 			mapLoader.addEventListener(Event.COMPLETE, loadedMap);
 			mapLoader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
 			mapLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, mapLoadStatus);
+			mapLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
             request.requestHeaders.push(new URLRequestHeader("X-Error-Format", "XML"));
 			mapLoader.load(request);
 			dispatchEvent(new Event(LOAD_STARTED));

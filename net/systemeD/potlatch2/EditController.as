@@ -18,6 +18,8 @@ package net.systemeD.potlatch2 {
 	import flash.system.Capabilities;
 	import flash.text.TextField;
     import mx.controls.TextArea;
+    import mx.controls.TextInput;
+    import spark.components.RichEditableText;
 
     /** Controller for the main map editing window itself. The logic that responds to mouse and keyboard events is all 
     * buried in various ControllerState classes. */
@@ -119,7 +121,7 @@ package net.systemeD.potlatch2 {
 		}
         
         private function keyDownHandler(event:KeyboardEvent):void {
-			if ((event.target is TextField) || (event.target is TextArea)) {
+			if ((event.target is TextField) || (event.target is TextArea) || (event.target is TextInput) || (event.target is RichEditableText)) {
 				keys[event.keyCode]=new Date().getTime();
 				return;
 			}
@@ -128,7 +130,7 @@ package net.systemeD.potlatch2 {
 		}
 
         private function keyUpHandler(event:KeyboardEvent):void {
-			if ((event.target is TextField) || (event.target is TextArea)) return;
+			if ((event.target is TextField) || (event.target is TextArea) || (event.target is TextInput) || (event.target is RichEditableText)) return;
 			if (event.keyCode==Keyboard.SPACE) spaceHeld=false;
 			if (keys[event.keyCode] && new Date().getTime()-keys[event.keyCode]<300) return;
 			delete keys[event.keyCode];
