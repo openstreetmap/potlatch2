@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2010/04/09/adding-a-delete-button-in-the-hovered-state-of-a-spark-list-control-item-renderer-in-flex-4/ -->
+<s:ItemRenderer name="DeletableListItemRenderer"
+        xmlns:fx="http://ns.adobe.com/mxml/2009" 
+        xmlns:s="library://ns.adobe.com/flex/spark" 
+        xmlns:mx="library://ns.adobe.com/flex/mx" 
+        autoDrawBackground="true"
+        minHeight="24">
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="hovered" />
+        <s:State name="selected" />
+    </s:states>
+ 
+    <fx:Script>
+        <![CDATA[
+            import mx.controls.Alert;
+            import mx.events.CloseEvent;
+ 
+            import spark.components.List;
+ 
+            protected function button1_clickHandler(evt:MouseEvent):void {
+                Alert.show(data.label,
+                        "Are you sure you want to delete this item?",
+                        Alert.YES|Alert.CANCEL,
+                        null,
+                        alrt_closeHandler);
+            }
+ 
+            protected function alrt_closeHandler(evt:CloseEvent):void {
+                switch (evt.detail) {
+                    case Alert.YES:
+                    case Alert.OK:
+                        Object(owner).dataProvider.removeItemAt(itemIndex);
+                        break;
+                    case Alert.CANCEL:
+                    case Alert.NO:
+                        Object(owner).selectedIndex = -1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        ]]>
+    </fx:Script>
+ 
+    <s:HGroup width="100%" height="100%"
+            verticalAlign="middle"
+            paddingLeft="2" paddingRight="2"
+            paddingTop="2" paddingBottom="2">
+        <s:Label id="lbl" text="{data.name}" width="100%" />
+        <s:Image id="btn" includeIn="hovered,selected" source="@Embed('../../../embedded/delete_small.svg')" click="button1_clickHandler(event)" />
+    </s:HGroup>
+ 
+</s:ItemRenderer>

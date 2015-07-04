@@ -45,7 +45,7 @@ mx|VScrollBar {
 	thumbOffset: 1;
 }
 
-mx|CheckBox, mx|List, p2|StyleSelector, p2|BackgroundSelector { color: black; }
+mx|CheckBox, mx|List, p2|BookmarkSelector, p2|StyleSelector, p2|BackgroundSelector { color: black; textAlign: left; }
 
 mx|TabNavigator {
 	horizontalGap: 3;

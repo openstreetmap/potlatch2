@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer
+    xmlns:controls="net.systemeD.controls.*"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark" >
+
+    <s:layout>
+      <s:VerticalLayout
+          paddingLeft="5" paddingRight="5"
+          paddingTop="5" paddingBottom="5"/>
+    </s:layout>
+
+	<s:List width="100%" height="100%" id="bookmarkMenu"
+	        labelField="name"
+            itemRenderer="net.systemeD.controls.DeletableListItemRenderer"
+	        change="FlexGlobals.topLevelApplication.bookmarkButton.close(); goToBookmark(event);"
+            dataProvider="{bookmarks}">
+      <s:layout>
+        <s:VerticalLayout requestedRowCount="{bookmarks.length}" gap="0" rowHeight="20" variableRowHeight="false" horizontalAlign="contentJustify"/> 
+      </s:layout>
+    </s:List>
+
+ 	<s:Button id="addButton" label="Add..." click="FlexGlobals.topLevelApplication.bookmarkButton.close(); addBookmark();" />
+
+	<fx:Script><![CDATA[
+		import net.systemeD.halcyon.*;
+		import net.systemeD.halcyon.connection.*;
+		import net.systemeD.potlatch2.*;
+		import net.systemeD.potlatch2.collections.Stylesheets;
+		import net.systemeD.potlatch2.dialogs.*;
+		import net.systemeD.controls.DeletableListItemRenderer;
+		import mx.core.*;
+        import spark.events.IndexChangeEvent;
+		import mx.collections.ArrayCollection;
+        import mx.managers.PopUpManager;
+
+		[Bindable]
+        public var bookmarks:ArrayCollection = new ArrayCollection([]);
+		// of format { name: "Bookmark 1", lat: 53, lon: 0 }, { name: "Bookmark 2", lat: 54, lon: -1 }
+
+		private var userState:SharedObject=SharedObject.getLocal("user_state","/");
+
+		public function init():BookmarkSelector {
+			if (userState.data['bookmarks']) {
+				bookmarks = new ArrayCollection(userState.data['bookmarks']);
+			}
+			return this;
+		}
+
+		private function goToBookmark(event:IndexChangeEvent):void {
+			FlexGlobals.topLevelApplication.theController.map.moveMapFromLatLon(event.currentTarget.selectedItem.lat, event.currentTarget.selectedItem.lon);
+		}
+		
+		private function addBookmark():void {
+			var dialog:BookmarkNameDialog = BookmarkNameDialog(
+			    PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), BookmarkNameDialog, true));
+			PopUpManager.centerPopUp(dialog);
+			// save to SharedObject
+	        userState.setProperty("bookmarks",bookmarks.source);
+	        try { userState.flush(); } catch (e:Error) {}
+		}
+    ]]></fx:Script>
+</s:BorderContainer>
+

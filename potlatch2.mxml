@@ -62,6 +62,8 @@
 				</fx:Array>
 			</mx:dataProvider>
 		</mx:PopUpMenuButton>
+        <mx:PopUpButton id="bookmarkButton" label="Bookmarks" openAlways="true" styleName="appBarButton" open="disableMapMouse();" close="enableMapMouse();" 
+            creationComplete="bookmarkButton.popUp = new BookmarkSelector().init();"/>
         <mx:Button id="tasksButton" label="Tasks" click="new TasksDialog().init(theController);" styleName="appBarButton" toolTip="Load tasks file" />
         <mx:Button id="optionsButton" label="Options" click="new OptionsDialog().init();" styleName="appBarButton" />
     </mx:ApplicationControlBar>
