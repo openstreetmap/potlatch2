@@ -77,6 +77,7 @@ package net.systemeD.potlatch2.controller {
 			switch (event.keyCode) {
 				case 189:					return removeNode();					// '-'
 				case 88:					return splitWay();						// 'X'
+				case 78:					return otherEnd();						// 'N'
 				case 79:					return replaceNode();					// 'O'
                 case 81:  /* Q */           Quadrilateralise.quadrilateralise(parentWay, MainUndoStack.getGlobalStack().addAction); return this;
                 case 82:  /* R */           { if (! event.shiftKey) repeatTags(firstSelected); 
@@ -265,6 +266,13 @@ package net.systemeD.potlatch2.controller {
             controller.map.scrollIfNeeded(parentWay.getNode(ni).lat,parentWay.getNode(ni).lon);
             return new SelectedWayNode(parentWay, ni);
         }
+
+		/** Jump to the other end of the way **/
+		public function otherEnd():ControllerState {
+			var n:Node = parentWay.getFirstNode().within(map.edge_l, map.edge_r, map.edge_t, map.edge_b) ? parentWay.getLastNode() : parentWay.getFirstNode();
+           	controller.map.scrollIfNeeded(n.lat,n.lon);
+			return new SelectedWay(parentWay);
+		}
 
     }
     

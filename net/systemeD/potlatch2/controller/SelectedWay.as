@@ -92,6 +92,7 @@ package net.systemeD.potlatch2.controller {
 			}
 			if (!layer.isBackground) {
 				switch (event.keyCode) {
+					case 78:  /* N */		otherEnd(); return this;
 					case 80:  /* P */       return new SelectedParallelWay(firstSelected as Way); 
 					case 81:  /* Q */       Quadrilateralise.quadrilateralise(firstSelected as Way, MainUndoStack.getGlobalStack().addAction); return this;
 					case 86:  /* V */       Way(firstSelected).reverseNodes(MainUndoStack.getGlobalStack().addAction); return this;
@@ -121,6 +122,12 @@ package net.systemeD.potlatch2.controller {
 			layer.setHighlightOnNodes(firstSelected as Way, {selectedway: false});
 			selectedWay.remove(MainUndoStack.getGlobalStack().addAction);
 			return new NoSelection();
+		}
+
+		/** Jump to the other end of the way **/
+		public function otherEnd():void {
+			var n:Node = initWay.getFirstNode().within(map.edge_l, map.edge_r, map.edge_t, map.edge_b) ? initWay.getLastNode() : initWay.getFirstNode();
+           	controller.map.scrollIfNeeded(n.lat,n.lon);
 		}
 
         /** Officially enter this state by marking the previously nominated way as selected. */
