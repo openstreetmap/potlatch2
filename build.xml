@@ -20,6 +20,7 @@
   <target name="git-buildnumber" description="Store output from git-describe in ${buildnumber}" if="git.present">
     <exec outputproperty="build_number" executable="git" dir="${basedir}">
       <arg value="describe" />
+      <arg value="--tags" />
     </exec>
   </target>
 
