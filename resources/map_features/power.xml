@@ -63,10 +63,32 @@
 
   <feature name="Substation">
     <category>power</category>
-    <icon image="features/pois/power_substation.n.24.png"/>"
+    <icon image="features/pois/power_substation.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:power%3Dsubstation</help>
     <area/>
     <point/>
-    <tag k="power" v="station"/>
+    <tag k="power" v="substation"/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="always" category="Details" name="Voltage" key="voltage" description="The different voltages of the substation, ordered from highest to lowest (ex: 400000;225000;63000)." priority="high"/>
+    <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="Name of the company that operates the substation." priority="low"/>
+    <input type="choice" presence="always"  name="Type" key="substation" category="Details">
+      <choice value="transmission" text="Transmission"/>
+      <choice value="distribution" text="Distribution"/>
+      <choice value="minor_distribution" text="Minor distribution"/>
+      <choice value="converter" text="Converter"/>
+      <choice value="compensation" text="Compensation"/>
+      <choice value="transition" text="Transition"/>
+      <choice value="traction" text="Traction"/>
+      <choice value="industrial" text="Industrial"/>
+    </input>
+    <input type="choice" presence="always"  name="Location" key="location" category="Details">
+      <choice value="outdoor" text="Outdoor"/>
+      <choice value="indoor" text="Indoor"/>
+      <choice value="underground" text="Underground"/>
+      <choice value="platform" text="Platform"/>
+      <choice value="rooftop" text="Rooftop"/>
+      <choice value="kiosk" text="Kiosk"/>
+    </input>
     <inputSet ref="common"/>
   </feature>
 
@@ -74,9 +96,32 @@
   <feature name="Transformer">
     <category>power</category>
     <icon image="features/pois/power_transformer.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:power%3Dtransformer</help>
     <area/>
     <point/>
-    <tag k="power" v="sub_station"/>
+    <tag k="power" v="transformer"/>
+    <inputSet ref="names"/>
+    <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="Name of the company that operates the substation." priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Voltage" key="voltage" description="The different voltages of the substation, ordered from highest to lowest (ex: 400000;225000;63000)." priority="high"/>
+    <input type="freetext" presence="always" category="Details" name="Frequency" key="frequency" description="The frequency of the transformer." priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Phases" key="phases" description="Number of phases." priority="low"/>
+    <input type="freetext" presence="always" category="Details" name="Rating" key="rating" description="The value should be in kVA (kilovolt-ampere) or MVA (megavolt-ampere)." priority="low"/>
+    <input type="choice" presence="always"  name="Type" key="transformer" category="Details">
+      <choice value="distribution" text="Distribution"/>
+      <choice value="generator" text="Generator"/>
+      <choice value="converter" text="Converter"/>
+      <choice value="traction" text="Traction"/>
+      <choice value="auto" text="Auto"/>
+      <choice value="phase_angle_regulator" text="Phase angle regulator"/>
+    </input>
+    <input type="choice" presence="always"  name="Location" key="location" category="Details">
+      <choice value="outdoor" text="Outdoor"/>
+      <choice value="indoor" text="Indoor"/>
+      <choice value="underground" text="Underground"/>
+      <choice value="platform" text="Platform"/>
+      <choice value="rooftop" text="Rooftop"/>
+      <choice value="kiosk" text="Kiosk"/>
+    </input>
     <inputSet ref="common"/>
   </feature>
 </featureGroup>
