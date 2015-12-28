@@ -306,6 +306,16 @@
     </icon>
     <point/>
     <tag k="amenity" v="toilets"/>
+    <input type="choice" presence="always" category="Diaper" name="Diaper changing available" key="diaper" description="Are there diaper changing facilities available?">
+      <choice value="yes" text="Yes"/>
+      <choice value="no" text="No"/>
+      <choice value="room" text="Separate room"/>
+      <choice value="1" text="1 table"/>
+      <choice value="2" text="2 table"/>
+      <choice value="3" text="3 table"/>
+      <choice value="4" text="4 table"/>
+      <choice value="5" text="5 table"/>
+    </input>    
     <inputSet ref="common"/>
   </feature>
 
