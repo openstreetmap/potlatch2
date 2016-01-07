@@ -6,6 +6,7 @@
     <icon image="features/pois/amenity_firestation2.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfire_station</help>
     <point/>
+    <area/>
     <tag k="amenity" v="fire_station"/>
     <inputSet ref="simpleName" />
     <inputSet ref="common"/>
@@ -72,6 +73,7 @@
     <icon image="features/pois/place_of_worship_unknown.n.24.png"/>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
     <point/>
+    <area/>
     <tag k="amenity" v="place_of_worship"/>
     <inputSet ref="simpleName" />
     <input type="choice" presence="always" category="Details" name="Religion" key="religion" description="The religion worshipped here.">
@@ -107,6 +109,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbank</help>
     <point/>
+    <area/>
     <tag k="amenity" v="bank"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
@@ -224,6 +227,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool</help>
     <point/>
+    <area/>
     <tag k="amenity" v="school"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
@@ -238,6 +242,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dkindergarten</help>
     <point/>
+    <area/>
     <tag k="amenity" v="kindergarten"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
@@ -251,6 +256,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dtownhall</help>
     <point/>
+    <area/>
     <tag k="amenity" v="townhall"/>
     <inputSet ref="names"/>
     <inputSet ref="buildingAddress"/>
@@ -440,6 +446,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpub</help>
     <point/>
+    <area/>
     <tag k="amenity" v="pub"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -455,6 +462,7 @@
       ${name}
     </icon>
     <point/>
+    <area/>
     <tag k="amenity" v="bar"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -470,6 +478,7 @@
       ${name}
     </icon>
     <point/>
+    <area/>
     <tag k="amenity" v="restaurant"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -486,6 +495,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcafe</help>
     <point/>
+    <area/>
     <tag k="amenity" v="cafe"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -503,6 +513,7 @@
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfast_food</help>
     <point/>
+    <area/>
     <tag k="amenity" v="fast_food"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
@@ -519,6 +530,7 @@
       ${name}
     </icon>
     <point/>
+    <area/>
     <tag k="amenity" v="nightclub"/>
     <inputSet ref="names"/>
     <inputSet ref="web"/>
