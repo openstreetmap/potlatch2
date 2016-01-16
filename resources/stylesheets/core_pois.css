@@ -39,6 +39,7 @@ node[amenity=bank] { icon-image: icons/money_bank2.n.16.png; z-index: 20; }
 node[amenity=bench] { icon-image: icons/amenity_bench.n.16.png; z-index: 20; }
 node[amenity=drinking_water] { icon-image: icons/food_drinkingtap.n.16.png; z-index: 20; }
 node[amenity=emergency_phone] { icon-image: icons/emergency-telephone-16.png; z-index: 20; }
+node[emergency=phone] { icon-image: icons/emergency-telephone-16.png; z-index: 20; }
 node[amenity=fountain] { icon-image: icons/amenity_fountain2.n.16.png; z-index: 20; }
 node[amenity=hunting_stand] { icon-image: icons/sport_shooting.n.16.png; z-index: 20; }
 node[amenity=kindergarten] { icon-image: icons/education_nursery3.n.16.png; z-index: 20; text-offset:15; text: name; font-size: 10; z-index: 20; }
@@ -52,7 +53,6 @@ node[amenity=toilets] { icon-image: icons/amenity_toilets.n.16.png; z-index: 20;
 node[amenity=vending_machine] { icon-image: icons/shopping_vending_machine.n.16.png; z-index: 20; }
 node[amenity=veterinary] { icon-image: icons/health_veterinary.n.8E7409.16.png; z-index: 20; }
 node[amenity=waste_basket] { icon-image: icons/amenity_waste_bin.n.16.png; z-index: 20; }
-node[amenity=fire_hydrant] { icon-image: icons/emergency_hydrant.n.16.png; z-index: 20; }
 node[emergency=fire_hydrant] { icon-image: icons/emergency_hydrant.n.16.png; z-index: 20; }
 /* Shops */
 node[shop=alcohol] { icon-image: icons/shopping_alcohol.n.16.png; z-index: 20; }

@@ -379,9 +379,10 @@
     <icon image="features/pois/emergency-telephone-24.png" />
     <!-- icon from http://www.clker.com/clipart-emergency-telephone-blue.html, feel free to (re)move this notice -->
     <point/>
-    <tag k="amenity" v="emergency_phone"/>
+    <tag k="emergency" v="phone"/>
     <inputSet ref="common"/>
-    <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of emergency phone."/>    
+    <input type="freetext" presence="always" category="Details" name="Operator" key="ref" description="Operator of emergency phone."/>
+    <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of emergency phone."/>
   </feature>
 
 
@@ -403,7 +404,6 @@
       <choice value="no" text="Outdoor"/>
     </input>
     <input type="freetext" presence="onTagMatch" category="Details" name="Operator" key="operator" description="The organisation that runs the swimming pool." />    
-
   </feature>
 
   <feature name="Fountain">
