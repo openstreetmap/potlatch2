@@ -182,7 +182,7 @@ package net.systemeD.halcyon.connection {
 			             Math.cos(lat1*Math.PI/180) * 
 			             Math.cos(lat2*Math.PI/180) * 
 			             Math.pow(Math.sin(dlon / 2),2);
-			a=Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+			a=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 			return a*3958.75*1609;
 		}
 		

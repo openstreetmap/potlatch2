@@ -84,6 +84,7 @@ package net.systemeD.potlatch2.controller {
 				case 66:	setSourceTag(); break;													// B - set source tag for current object
 				case 67:	editableLayer.connection.closeChangeset(); break;						// C - close changeset
 				case 68:	editableLayer.alpha=1.3-editableLayer.alpha; return null;				// D - dim
+				case 69:	return new Measurement(this);											// E - measurement
 				case 71:	FlexGlobals.topLevelApplication.trackLoader.load(); break;				// G - GPS tracks **FIXME: move from Application to Map
                 case 72:    showHistory(); break;                                                   // H - History
 				case 83:	SaveManager.saveChanges(editableLayer.connection); break;				// S - save
