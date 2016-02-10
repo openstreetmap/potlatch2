@@ -98,11 +98,11 @@
     <tag k="natural" v="water"/>
     <tag k="water" v="reservoir"/>
     <input type="choice" presence="always" category="Details" name="Reservoir type" key="reservoir_type" description="Select type of reservoir">
-      <choice value="evaporator"/>
-      <choice value="cooling"/>
-      <choice value="sewage"/>
-      <choice value="tailings"/>
-      <choice value="water_storage"/>
+      <choice value="evaporator" text="Evaporation"/>
+      <choice value="cooling" text="Cooling"/>
+      <choice value="sewage" text="Sewage"/>
+      <choice value="tailings" text="Tailings"/>
+      <choice value="water_storage" text="Water storage"/>
     </input>
     <inputSet ref="boatPermissions"/>
     <inputSet ref="common"/>
