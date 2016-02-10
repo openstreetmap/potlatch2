@@ -387,7 +387,7 @@
     <point/>
     <tag k="emergency" v="phone"/>
     <inputSet ref="common"/>
-    <input type="freetext" presence="always" category="Details" name="Operator" key="ref" description="Operator of emergency phone."/>
+    <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="Operator of emergency phone."/>
     <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of emergency phone."/>
   </feature>
 
