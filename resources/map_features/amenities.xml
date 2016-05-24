@@ -53,6 +53,15 @@
     <inputSet ref="common"/>
   </feature>
 
+  <feature name="Defibrillator">
+    <category>amenity</category>
+    <icon image="features/pois/ISO_7010_E010.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:emergency%3Ddefibrillator</help>
+    <point/>
+    <tag k="emergency" v="defibrillator"/>
+    <inputSet ref="common"/>
+  </feature>
+
   <feature name="Veterinarian">
     <category>amenity</category>
     <icon image="features/pois/health_veterinary.n.8E7409.24.png">
