@@ -33,6 +33,7 @@ node[amenity=pub] { icon-image: icons/food_pub.n.16.png; text-offset: 15; text: 
 node[amenity=restaurant] { icon-image: icons/food_restaurant.n.16.png; text-offset:15; text: name; font-size: 10; z-index: 20; }
 node[amenity=hospital] { icon-image: icons/health_hospital.n.16.png; z-index: 20; }
 node[amenity=pharmacy] { icon-image: icons/health_pharmacy.n.16.png; z-index: 20; }
+node[emergency=defibrillator] { icon-image: icons/ISO_7010_E010.16.png; z-index: 20; }
 node[amenity=atm] { icon-image: icons/money_atm.n.16.png; z-index: 20; }
 node[amenity=bank] { icon-image: icons/money_bank2.n.16.png; z-index: 20; }
 /* More Amenities */
