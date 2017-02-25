@@ -14,8 +14,8 @@ package net.systemeD.potlatch2 {
 
     public class Preloader extends net.systemeD.potlatch2.PreloaderDisplayBase {
 
-        [Embed("../../../embedded/potlatch2logo.png") ] [Bindable] public var Logo:Class;
-        [Embed("../../../embedded/zebra.png") ] private var Zebra:Class;
+        [Embed("../../../embedded/potlatch2logo.png") ] [Bindable] public var Preloader_Logo:Class;
+        [Embed("../../../embedded/zebra.png") ] private var Preloader_Zebra:Class;
 
         private var t:TextField;
         private var f:DropShadowFilter=new DropShadowFilter(2,45,0x000000,0.5)
@@ -40,7 +40,7 @@ package net.systemeD.potlatch2 {
 
             clear();  // clear here, rather than in draw(), to speed up the drawing
 
-            var b:Bitmap=new Zebra();
+            var b:Bitmap=new Preloader_Zebra();
             zebra=new BitmapData(b.width,b.height); zebra.draw(b);
 
             var indent:int = 20;
@@ -99,7 +99,7 @@ package net.systemeD.potlatch2 {
         protected function createAssets():void
         {
             //create the logo
-            p2Logo = new Logo();
+            p2Logo = new Preloader_Logo();
             p2Logo.y = stageHeight/2 - p2Logo.height/2;
             p2Logo.x = stageWidth/2 - p2Logo.width/2;
             //p2Logo.filters = [f];
