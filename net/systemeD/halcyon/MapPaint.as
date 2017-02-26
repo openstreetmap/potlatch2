@@ -169,7 +169,8 @@ package net.systemeD.halcyon {
         */
 		public function updateEntityUIs(redraw:Boolean, remove:Boolean):void {
 			var way:Way, poi:Node, marker:Marker;
-			var o:Object = connection.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b);
+			var o:Object = (map.scale < ruleset.minscale) ? connection.getEmptyObjectList() :
+				connection.getObjectsByBbox(map.edge_l,map.edge_r,map.edge_t,map.edge_b);
 
 			for each (way in o.waysInside) {
 				if (!wayuis[way.id]) { createWayUI(way); }
@@ -371,7 +372,7 @@ package net.systemeD.halcyon {
 		/** Switch to new MapCSS. */
 		public function setStyle(url:String):void {
             style = url;
-			ruleset=new RuleSet(map.MINSCALE,map.MAXSCALE,redraw,redrawPOIs);
+			ruleset=new RuleSet(map.MINSCALE_DATA,map.MAXSCALE,redraw,redrawPOIs);
 			ruleset.loadFromCSS(url);
         }
 

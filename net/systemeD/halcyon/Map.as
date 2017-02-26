@@ -24,7 +24,8 @@ package net.systemeD.halcyon {
 		public const MASTERSCALE:Number=5825.4222222222; 
 												
 		/** don't zoom out past this */
-		public const MINSCALE:uint=13; 
+		public const MINSCALE_TILES:uint=3;
+		public const MINSCALE_DATA:uint=14;
 		/** don't zoom in past this */
 		public const MAXSCALE:uint=23; 
 
@@ -225,6 +226,7 @@ package net.systemeD.halcyon {
         * The bounding box for the download is taken from the current map edges.
         */
 		public function download():void {
+			if (scale<MINSCALE_DATA) return;	// could potentially be different per layer
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
 				if(getLayerAt(i).visible == true) {
                     getLayerAt(i).connection.loadBbox(edge_l,edge_r,edge_t,edge_b);
@@ -324,7 +326,7 @@ package net.systemeD.halcyon {
 		}
 
 		public function zoomOut():void {
-			if (scale!=MINSCALE) changeScale(scale-1);
+			if (scale!=MINSCALE_TILES) changeScale(scale-1);
 		}
 
 		public function changeScale(newscale:uint):void {

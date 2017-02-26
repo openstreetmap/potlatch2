@@ -75,7 +75,7 @@ package net.systemeD.halcyon {
 		}
 
 		private function createSprites():void {
-			for (var i:uint=_map.MINSCALE; i<=_map.MAXSCALE; i++) {
+			for (var i:uint=_map.MINSCALE_TILES; i<=_map.MAXSCALE; i++) {
 				this.addChild(new Sprite());
 			}
 		}
@@ -108,8 +108,8 @@ package net.systemeD.halcyon {
 
 		/** Set zoom scale (no update triggerd). */
 		public function changeScale(scale:uint):void {
-			for (var i:uint=_map.MINSCALE; i<=_map.MAXSCALE; i++) {
-				this.getChildAt(i-_map.MINSCALE).visible=(scale==i);
+			for (var i:uint=_map.MINSCALE_TILES; i<=_map.MAXSCALE; i++) {
+				this.getChildAt(i-_map.MINSCALE_TILES).visible=(scale==i);
 			}
 			x=_map.lon2coord(_map.centre_lon+offset_lon)-_map.lon2coord(_map.centre_lon);
 			y=_map.lat2coord(_map.centre_lat+offset_lat)-_map.lat2coord(_map.centre_lat);
@@ -133,7 +133,7 @@ package net.systemeD.halcyon {
 						loader.contentLoaderInfo.addEventListener(HTTPStatusEvent.HTTP_STATUS, function(e:HTTPStatusEvent):void { tileLoadStatus(e,_map.scale,tx,ty); }, false, 0, true);
 						loader.load(new URLRequest(tileURL(tx,ty,_map.scale)), 
 						            new LoaderContext(true));
-						Sprite(this.getChildAt(_map.scale-_map.MINSCALE)).addChild(loader);
+						Sprite(this.getChildAt(_map.scale-_map.MINSCALE_TILES)).addChild(loader);
 						loader.x=_map.lon2coord(tile2lon(tx));
 						loader.y=_map.lat2coord(tile2lat(ty));
 						if (sharpening) { loader.filters=[sharpenFilter]; }

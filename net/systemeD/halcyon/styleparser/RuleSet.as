@@ -24,8 +24,8 @@ package net.systemeD.halcyon.styleparser {
 		private var iconsToLoad:uint=0;				// number of icons left to load (fire iconCallback when ==0)
 		private var evalsToLoad:uint=0;				// number of evals left to load (fire redrawCallback when ==0)
 
-		private var minscale:uint;
-		private var maxscale:uint;
+		public var minscale:uint;
+		public var maxscale:uint;
 		public var choosers:Array;
 		public var evals:Array;
 

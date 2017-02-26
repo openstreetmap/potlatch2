@@ -390,6 +390,15 @@ package net.systemeD.halcyon.connection {
 			return o;
 		}
 
+		public function getEmptyObjectList():Object {
+			var o:Object = { poisInside: [], poisOutside: [], waysInside: [], waysOutside: [],
+                              markersInside: [], markersOutside: [] };
+			for each (var way:Way in ways) o.waysOutside.push(way);
+			for each (var poi:Node in pois) o.poisOutside.push(poi);
+            for each (var marker:Marker in markers) o.markersOutside.push(marker);
+			return o;
+		}
+
 		public function purgeOutside(left:Number, right:Number, top:Number, bottom:Number):void {
 			for each (var way:Way in ways) {
 				if (!way.within(left,right,top,bottom) && !way.isDirty && !way.locked && !way.hasLockedNodes()) {
