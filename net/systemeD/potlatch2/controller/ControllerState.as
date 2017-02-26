@@ -154,6 +154,8 @@ package net.systemeD.potlatch2.controller {
 					return new DragSelection(selection, event);
 				} else if (entity) {
 					return controller.findStateForSelection([entity]);
+				} else if (!entity && event.shiftKey) {
+					return new ZoomArea(event.localX,event.localY,this);
 				} else if (event.ctrlKey && !layer.isBackground) {
 					return new SelectArea(event.localX,event.localY,selection);
 				}

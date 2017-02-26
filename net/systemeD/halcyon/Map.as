@@ -178,6 +178,14 @@ package net.systemeD.halcyon {
 			updateAllEntityUIs(false,false);
 			download();
 		}
+
+		public function moveMapFromLatLonScale(lat:Number,lon:Number,z:Number):void {
+			setScale(z);
+			updateCoordsFromLatLon(lat,lon);
+			tileset.changeScale(z);
+			updateAllEntityUIs(true,true);
+			download();
+		}
 		
 		/** Recentre map at given lat/lon, if that point is currently outside the visible area. */
 		public function scrollIfNeeded(lat:Number,lon:Number): void{
@@ -308,7 +316,7 @@ package net.systemeD.halcyon {
 		// ------------------------------------------------------------------------------------------
 		// Redraw all items, zoom in and out
 		
-		private function updateAllEntityUIs(redraw:Boolean,remove:Boolean):void {
+		public function updateAllEntityUIs(redraw:Boolean,remove:Boolean):void {
 			for (var i:uint=0; i<paintContainer.numChildren; i++)
 				getLayerAt(i).updateEntityUIs(redraw, remove);
 		}
@@ -328,11 +336,15 @@ package net.systemeD.halcyon {
 		public function zoomOut():void {
 			if (scale!=MINSCALE_TILES) changeScale(scale-1);
 		}
-
-		public function changeScale(newscale:uint):void {
+		
+		public function setScale(newscale:uint):void {
 			scale=newscale;
 			this.dispatchEvent(new MapEvent(MapEvent.SCALE, {scale:scale}));
 			scalefactor=MASTERSCALE/Math.pow(2,13-scale);
+		}
+
+		public function changeScale(newscale:uint):void {
+			setScale(newscale);
 			updateCoordsFromLatLon((edge_t+edge_b)/2,(edge_l+edge_r)/2);	// recentre
 			tileset.changeScale(scale);
 			updateAllEntityUIs(true,true);
