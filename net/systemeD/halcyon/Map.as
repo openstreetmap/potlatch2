@@ -329,12 +329,12 @@ package net.systemeD.halcyon {
 				getLayerAt(i).redrawPOIs();
 		}
 		
-		public function zoomIn():void {
-			if (scale!=MAXSCALE) changeScale(scale+1);
+		public function zoomIn(increment:uint=1):void {
+			changeScale(Math.min(scale+increment, MAXSCALE));
 		}
 
-		public function zoomOut():void {
-			if (scale!=MINSCALE_TILES) changeScale(scale-1);
+		public function zoomOut(increment:uint=1):void {
+			changeScale(Math.max(scale-increment, MINSCALE_TILES));
 		}
 		
 		public function setScale(newscale:uint):void {
