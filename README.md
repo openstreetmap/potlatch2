@@ -16,7 +16,7 @@ You'll only need OSM Rails port installed on your local machine if you are doing
 
 * `fcsh`
   - launches the Flex Compiler SHell -- stops the compiler having to
-    bootstrap itself each time you invoke it. You don't /need/ this, but it
+    bootstrap itself each time you invoke it. You don't need this, but it
     does make things slightly faster (about a second a shot for me)
 * `mxmlc -load-config+=debug-config.xml potlatch2.mxml`
   - compile potlatch2 in debug configuration -- build is incremental so you
@@ -24,7 +24,7 @@ You'll only need OSM Rails port installed on your local machine if you are doing
     enabled along with decent stack traces.
     (you can substitute halcyon_viewer.as in the above to compile that)
 * `compile 1`
-  - when using fcsh recompile the first command
+  - when using fcsh recompile the first command. (Incremental recompiling does not work on Java 8, but 6 or 7 are fine.)
 
 If you have rlwrap on your system, use `rlwrap fcsh` so that command-line history will work within fcsh.
 
