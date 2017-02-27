@@ -88,8 +88,8 @@ package net.systemeD.potlatch2.controller {
                 case 74:                    if (event.shiftKey) { return unjoin() }; return join();// 'J'
 				case Keyboard.BACKSPACE:	return deleteNode();
 				case Keyboard.DELETE:		return deleteNode();
-				case 188: /* , */           return stepNode(-1);
-				case 190: /* . */           return stepNode(+1);           
+				case 188: /* , */           return stepNode(event.shiftKey ? -10 : -1);
+				case 190: /* . */           return stepNode(event.shiftKey ? +10 : +1);
 			}
 			var cs:ControllerState = sharedKeyboardEvents(event);
 			return cs ? cs : this;
@@ -260,12 +260,19 @@ package net.systemeD.potlatch2.controller {
             return new SelectedWayNode(n.parentWays[0], Way(n.parentWays[0]).indexOfNode(n));
         }
         
-        /** Move the selection one node further up or down this way, looping if necessary. */
-        public function stepNode(delta:int):ControllerState {
-            var ni:int = (selectedIndex + delta + parentWay.length) %  parentWay.length
-            controller.map.scrollIfNeeded(parentWay.getNode(ni).lat,parentWay.getNode(ni).lon);
-            return new SelectedWayNode(parentWay, ni);
-        }
+		/** Move the selection one node further up or down this way, looping if necessary. */
+		public function stepNode(delta:int):ControllerState {
+			var ni:int;
+			if (Math.abs(delta)==1) {
+				ni = (selectedIndex + delta + parentWay.length) % parentWay.length;
+			} else if (delta<0) {
+				ni = Math.max(selectedIndex+delta, 0);
+			} else {
+				ni = Math.min(selectedIndex+delta, parentWay.length-1);
+			}
+			controller.map.scrollIfNeeded(parentWay.getNode(ni).lat,parentWay.getNode(ni).lon);
+			return new SelectedWayNode(parentWay, ni);
+		}
 
 		/** Jump to the other end of the way **/
 		public function otherEnd():ControllerState {
