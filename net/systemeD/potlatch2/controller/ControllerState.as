@@ -13,6 +13,7 @@ package net.systemeD.potlatch2.controller {
 	import net.systemeD.potlatch2.utils.SnapshotConnection;
     import net.systemeD.halcyon.AttentionEvent;
 	import flash.ui.Keyboard;
+	import flash.geom.Point;
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
 	import mx.core.FlexGlobals;
@@ -163,6 +164,12 @@ package net.systemeD.potlatch2.controller {
             } else if ( event.type==MouseEvent.MOUSE_UP && focus == null && map.dragstate!=map.DRAGGING && !event.ctrlKey) {
                 return (this is NoSelection) ? null : new NoSelection();
             }
+
+			if (entity && event.type==MouseEvent.MOUSE_MOVE && map.dragstate!=map.DRAGGING) {
+				// send mouse-move events up to the map, for co-ordinate display and floating map listeners
+            	var mapLoc:Point = controller.map.globalToLocal(new Point(event.stageX, event.stageY));
+				controller.map.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, mapLoc.x, mapLoc.y));
+			}
 			return null;
 		}
 
