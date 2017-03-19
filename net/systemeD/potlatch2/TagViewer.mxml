@@ -41,10 +41,6 @@
         </mx:VBox>
       </mx:VBox>
       <mx:VBox width="100%" height="100%" label="Advanced" id="advancedContainer" initialize="checkAdvanced()" verticalGap="1">
-        <mx:Label id="advancedID" click="new HistoryDialog().init(selectedEntity);">
-          <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
-        </mx:Label>
-
 		<potlatch2:TagGrid id="advancedTagGrid" width="100%" height="75%" />
 
         <mx:HBox horizontalAlign="right" width="100%">
@@ -125,6 +121,10 @@
 			toolTip="Show in sliding windows"
 			enabled="{editorStack is TabNavigator &amp;&amp; stack.selectedIndex==0}" />
 	  </mx:HBox>
+
+      <mx:Label id="entityDisplayID" click="new HistoryDialog().init(selectedEntity);" paddingLeft="4" paddingBottom="3">
+        <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
+      </mx:Label>
   </mx:VBox>
 
   <!-- Multiple selection -->
@@ -290,8 +290,8 @@
 			}
 			selectedEntity=firstSelected;
 			connection=firstSelected.connection;
-			if (advancedID!=null) { setupAdvanced(firstSelected); }
-			if (firstSelected is Relation) { stack.addChild(membersVBox); }
+			if (entityDisplayID!=null) { setupAdvanced(firstSelected); }
+			if (selectedEntity is Relation) { stack.addChild(membersVBox); }
             if (selectedEntity is Marker && connection is BugConnection) {
               bugPanelContents.init(selectedEntity, BugConnection(connection));
               sidebar.selectedChild = bugPanel;
@@ -668,20 +668,22 @@
 
       private var listeningToRelations:Array = [];
 
-      private function setupAdvanced(entity:Entity):void {
-		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
-		advancedTagGrid.init(entity);
-
+	private function updateEntityDisplay(entity:Entity):void {
 		if ( entity == null ) {
-			advancedID.htmlText = "";
+			entityDisplayID.htmlText = "";
 		} else {
 			var entityText:String = "xx";
 			if      ( entity is Node     ) entityText = "Node";
 			else if ( entity is Way      ) entityText = "Way";
 			else if ( entity is Relation ) entityText = "Relation";
-			advancedID.htmlText = entityText+": <b>"+entity.id+"</b> "+(entity.status ? entity.status : '');
+			entityDisplayID.htmlText = entityText+": <b>"+entity.id+"</b> "+(entity.status ? entity.status : '');
 		}
+	}
 
+      private function setupAdvanced(entity:Entity):void {
+		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
+		advancedTagGrid.init(entity);
+		updateEntityDisplay(entity);
 		removeRelationListeners();
 
 		if ( entity == null ) {
