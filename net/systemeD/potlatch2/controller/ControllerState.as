@@ -66,6 +66,9 @@ package net.systemeD.potlatch2.controller {
         */
         public function exitState(newState:ControllerState):void {}
 
+		/** Mark that the state should process a shift-click on entry (because ZoomArea rejected it). */
+		public function handleShiftClickOnEntry(event:MouseEvent):void {}
+
 		/** Represent the state in text for debugging. */
 		public function toString():String {
 			return "(No state)";

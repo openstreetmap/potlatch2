@@ -16,7 +16,8 @@ package net.systemeD.potlatch2.controller {
         private var clicked:Point;		// did the user enter this state by clicking at a particular point?
 		private var wayList:Array;		// list of ways to cycle through with '/' keypress
 		private var initIndex: int;     // index of last selected node if entered from SelectedWayNode
-        
+		private var shiftClickEvent:MouseEvent;	// shift-click event if rejected by ZoomArea
+
         /** 
         * @param way The way that is now selected.
         * @param point The location that was clicked.
@@ -28,6 +29,10 @@ package net.systemeD.potlatch2.controller {
 			wayList = ways;
 			initIndex=index;
         }
+
+		override public function handleShiftClickOnEntry(event:MouseEvent):void {
+			shiftClickEvent=event;
+		}
 
         private function updateSelectionUI(e:Event):void {
             controller.updateSelectionUIWithoutTagChange();
@@ -61,14 +66,6 @@ package net.systemeD.potlatch2.controller {
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && entity is Node && focus!=firstSelected && event.shiftKey && !layer.isBackground ) {
 				// shift-clicked POI node to insert it
 				Way(firstSelected).insertNodeAtClosestPosition(Node(entity), false, MainUndoStack.getGlobalStack().addAction);
-				return this;
-			} else if ( event.type == MouseEvent.MOUSE_UP && !entity && event.shiftKey ) {
-				// shift-clicked nearby to insert node
-				var lat:Number = controller.map.coord2lat(event.localY);
-				var lon:Number = controller.map.coord2lon(event.localX);
-				var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
-				Way(firstSelected).insertNodeOrMoveExisting(lat, lon, undo.push);
-				MainUndoStack.getGlobalStack().addAction(undo);
 				return this;
 			} else if ( event.type == MouseEvent.MOUSE_DOWN && event.ctrlKey && !event.altKey && entity && entity!=firstSelected && paint.interactive) {
 				// multiple selection
@@ -132,6 +129,15 @@ package net.systemeD.potlatch2.controller {
 
         /** Officially enter this state by marking the previously nominated way as selected. */
         override public function enterState():void {
+			if (shiftClickEvent) {
+				// previously shift-clicked nearby to insert node, passed through by ZoomArea
+				var lat:Number = controller.map.coord2lat(shiftClickEvent.localY);
+				var lon:Number = controller.map.coord2lon(shiftClickEvent.localX);
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+				initWay.insertNodeOrMoveExisting(lat, lon, undo.push);
+				MainUndoStack.getGlobalStack().addAction(undo);
+				shiftClickEvent = null;
+			}
             if (firstSelected!=initWay) {
 	            clearSelection(this);
 	            layer.setHighlight(initWay, { selected: true, hover: false });

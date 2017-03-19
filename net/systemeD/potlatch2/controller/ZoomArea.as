@@ -47,8 +47,11 @@ package net.systemeD.potlatch2.controller {
 						z++; w/=2; h/=2;
 					} while (left>=(lon-w/2) && right<=(lon+w/2) && bottom>=(lat-h/2) && top<=(lat+h/2) && z<controller.map.MAXSCALE);
 					controller.map.moveMapFromLatLonScale(lat,lon,z-1);
+					return previousState;
+				} else {
+					previousState.handleShiftClickOnEntry(event);
+					return previousState;
 				}
-               	return previousState;
 			}
             return this;
         }

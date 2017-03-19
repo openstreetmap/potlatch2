@@ -13,12 +13,17 @@ package net.systemeD.potlatch2.controller {
 		private var parentWay:Way;
 		private var initIndex:int;
 		private var selectedIndex:int;
+		private var shiftClickEvent:MouseEvent;
         
         public function SelectedWayNode(way:Way,index:int) {
             parentWay = way;
 			initIndex = index;
         }
- 
+
+		override public function handleShiftClickOnEntry(event:MouseEvent):void {
+			shiftClickEvent=event;
+		}
+
         protected function selectNode(way:Way,index:int):void {
 			var node:Node=way.getNode(index);
             if ( way == parentWay && node == firstSelected )
@@ -117,6 +122,15 @@ package net.systemeD.potlatch2.controller {
 		}
 
 		override public function enterState():void {
+			if (shiftClickEvent) {
+				// previously shift-clicked nearby to insert node, passed through by ZoomArea
+				var lat:Number = controller.map.coord2lat(shiftClickEvent.localY);
+				var lon:Number = controller.map.coord2lon(shiftClickEvent.localX);
+				var undo:CompositeUndoableAction = new CompositeUndoableAction("Insert node");
+				parentWay.insertNodeOrMoveExisting(lat, lon, undo.push);
+				MainUndoStack.getGlobalStack().addAction(undo);
+				shiftClickEvent = null;
+			}
             selectNode(parentWay,initIndex);
 			layer.setPurgable(selection,false);
         }
