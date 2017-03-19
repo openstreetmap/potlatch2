@@ -20,7 +20,10 @@
       </s:layout>
     </s:List>
 
- 	<s:Button id="addButton" label="Add..." click="FlexGlobals.topLevelApplication.bookmarkButton.close(); addBookmark();" />
+	<s:HGroup horizontalAlign="center">
+ 		<s:Button id="addButton" label="Add..." click="FlexGlobals.topLevelApplication.bookmarkButton.close(); addBookmark();" />
+ 		<s:Button id="clearButton" label="Clear all" click="FlexGlobals.topLevelApplication.bookmarkButton.close(); clearBookmarks();" />
+	</s:HGroup>
 
 	<fx:Script><![CDATA[
 		import net.systemeD.halcyon.*;
@@ -56,6 +59,12 @@
 			    PopUpManager.createPopUp(Application(FlexGlobals.topLevelApplication), BookmarkNameDialog, true));
 			PopUpManager.centerPopUp(dialog);
 			// save to SharedObject
+	        userState.setProperty("bookmarks",bookmarks.source);
+	        try { userState.flush(); } catch (e:Error) {}
+		}
+		
+		private function clearBookmarks():void {
+			bookmarks.removeAll();
 	        userState.setProperty("bookmarks",bookmarks.source);
 	        try { userState.flush(); } catch (e:Error) {}
 		}
