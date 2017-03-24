@@ -3,5 +3,5 @@
 // at some point in the future.
 
 public var build_number:String="@@@buildnumber@@@";
-public var version:String="2.4";
+public var version:String="2.5";
 
