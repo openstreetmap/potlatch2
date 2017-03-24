@@ -13,6 +13,7 @@
             labelField="name"
             change="FlexGlobals.topLevelApplication.bgButton.close(); application.theMap.tileset.setBackgroundFromImagery(background.selectedItem,true);"
             dataProvider="{Imagery.instance().getAvailableImagery(application.theMap)}"
+			maxHeight="{this.screen.height-120}"
             selectedItem="{application.theMap.tileset.selected}">
       <s:layout>
         <s:VerticalLayout requestedRowCount="{Imagery.instance().getAvailableImagery(application.theMap).length}" gap="0" horizontalAlign="contentJustify"/>
