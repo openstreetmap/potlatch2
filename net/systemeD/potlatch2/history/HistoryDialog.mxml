@@ -9,6 +9,7 @@
         xmlns:mx="library://ns.adobe.com/flex/mx"
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:help="net.systemeD.potlatch2.help.*"
+        skinClass="net.systemeD.controls.ResizableDraggableTitleWindowSkin"
         title="History for {entity.getType()} {entity.id}"
         width="640" height="400">
 

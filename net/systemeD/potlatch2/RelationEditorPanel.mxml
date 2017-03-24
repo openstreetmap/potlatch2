@@ -4,6 +4,7 @@
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:potlatch2="net.systemeD.potlatch2.*"
     xmlns:s="library://ns.adobe.com/flex/spark"
+	skinClass="net.systemeD.controls.ResizableDraggableTitleWindowSkin"
 	title="Edit Relation" width="350" height="420" close="closePanel(event)" >
 	
 	<potlatch2:TagViewer width="100%" height="100%" id="tagViewer"
