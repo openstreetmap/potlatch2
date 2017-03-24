@@ -3,6 +3,7 @@ package net.systemeD.controls {
 	import mx.controls.listClasses.*;
 	import flash.display.DisplayObject;
 	import mx.controls.Image;
+	import mx.controls.Text;
 
     /**
     * The DataGridWarningField is a custom Label component that highlights values containing semicolons.
@@ -12,7 +13,7 @@ package net.systemeD.controls {
     * @see PromptingTextInputWarning
     */
 
-	public class DataGridWarningField extends Label {
+	public class DataGridWarningField extends Text {
 
 		private var _image:Image;
 		[Embed(source="../../../embedded/warning.png")] private var warningIcon:Class;

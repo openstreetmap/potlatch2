@@ -5,6 +5,7 @@
 -->
 
 <mx:DataGrid editable="true" doubleClickEnabled="true" doubleClick="addNewTag(event)" sortableColumns="false"
+	variableRowHeight="true"
     xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:controls="net.systemeD.controls.*"
 	xmlns:mx="library://ns.adobe.com/flex/mx">
@@ -30,7 +31,7 @@
 
 		<!-- Value -->
 
-		<mx:DataGridColumn editable="true" dataField="value" headerText="Value" itemRenderer="net.systemeD.controls.DataGridWarningField" >
+		<mx:DataGridColumn wordWrap="true" editable="true" dataField="value" headerText="Value" itemRenderer="net.systemeD.controls.DataGridWarningField" >
 			<mx:itemEditor>
 				<fx:Component>
 					<controls:AutoComplete
@@ -51,7 +52,7 @@
 		<mx:DataGridColumn width="20" editable="false">
 			<mx:itemRenderer>
 				<fx:Component>
-                    <mx:HBox horizontalAlign="center" verticalAlign="middle">
+                    <mx:HBox horizontalAlign="center" verticalAlign="top">
                       <mx:Image source="@Embed('../../../embedded/delete_small.svg')"
                           click='event.stopPropagation();outerDocument.removeTag();'
                           buttonMode="true" useHandCursor="true" width="12" height="12">
