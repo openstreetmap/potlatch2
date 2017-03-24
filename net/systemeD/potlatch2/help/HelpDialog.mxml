@@ -340,7 +340,7 @@
         <mx:htmlText>
           <![CDATA[
             <p><b>To add a point to an existing way</b>, select the way and shift+click at the desired location.</p>
-            <p><b>To delete a point</b>, select the way and click the Delete Item button in the bottom right corner or press Delete (or Backspace) on your keyboard.</p>
+            <p><b>To delete a point</b>, select the point and click the Delete Item button in the bottom right corner or press Delete (or Backspace) on your keyboard.</p>
             <p><b>To delete a way</b>, select the way and click the Delete Item button in the bottom right corner or press shift+Delete (or shift+Backspace) on your keyboard.</p>
             <p><b>To move a point</b>, click and drag the point.</p>
             <p><b>To move a way</b>, click and drag the entire feature (hint: grab a segment where you won't accidentally move a node).</p>
