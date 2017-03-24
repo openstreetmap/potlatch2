@@ -228,7 +228,7 @@ package net.systemeD.potlatch2.controller {
 			var undo:CompositeUndoableAction = new CompositeUndoableAction("Repeat relations");
 			var relationsadded:uint;
 			for each (var rr:Object in controller.relationClipboards[object.getType()]) {
-				if (!rr.relation.findEntityMemberIndex(object)>-1) {
+				if (rr.relation.findEntityMemberIndex(object)==-1) {
 					rr.relation.appendMember(new RelationMember(object, rr.role), undo.push);
 					relationsadded++;
 				}
