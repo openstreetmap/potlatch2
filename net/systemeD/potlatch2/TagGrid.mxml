@@ -66,6 +66,7 @@
 
 		import net.systemeD.halcyon.connection.*;
 		import mx.collections.*;
+		import mx.utils.StringUtil;
 
 		private var selectedEntity:Entity;
 		private var tagDataProvider:ArrayCollection;
@@ -100,8 +101,8 @@
 					if (event.newValue && event.key) {
 						if (!set) {
 							// this entry in the dataProvider has changed
-							tagDataProvider[i].key=event.key;
-							tagDataProvider[i].value=event.newValue;
+							tagDataProvider[i].key = StringUtil.trim(event.key);
+							tagDataProvider[i].value = StringUtil.trim(event.newValue);
 							set=true;
 						} else {
 							// trap duplicate tags
