@@ -251,16 +251,6 @@
   </feature>
 
 
-  <feature name="Field">
-    <category>agriculture</category>
-    <icon image="features/pois/landuse_grass.n.24.png"/>
-    <area/>
-    <tag k="landuse" v="meadow"/>
-    <inputSet ref="simpleName"/>
-    <inputSet ref="common"/>
-  </feature>
-
-
   <feature name="Orchard">
     <category>agriculture</category>
     <icon image="features/pois/landuse_grass.n.24.png"/>
