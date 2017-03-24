@@ -17,6 +17,8 @@ package net.systemeD.potlatch2.controller {
 	import mx.controls.Alert;
 	import mx.events.CloseEvent;
 	import mx.core.FlexGlobals;
+	import mx.core.IChildList;
+	import mx.core.UIComponent;
 	
     /** Represents a particular state of the controller, such as "dragging a way" or "nothing selected". Key methods are 
     * processKeyboardEvent and processMouseEvent which take some action, and return a new state for the controller. 
@@ -81,6 +83,7 @@ package net.systemeD.potlatch2.controller {
 
 		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */
 		protected function sharedKeyboardEvents(event:KeyboardEvent):ControllerState {
+			if (popupsAreOpen()) { return null; }
 			var editableLayer:MapPaint=controller.map.editableLayer;								// shorthand for this method
 			if (event.keyCode>=112 && event.keyCode<=126 && event.shiftKey) { memoriseTags(event.keyCode); return null; }
 			switch (event.keyCode) {
@@ -101,6 +104,17 @@ package net.systemeD.potlatch2.controller {
 							controller.tagViewer.addNewTag(); return null;							//   |
 			}
 			return null;
+		}
+
+		protected function popupsAreOpen():Boolean {
+			var rawChildren:IChildList = FlexGlobals.topLevelApplication.systemManager.rawChildren;
+			for (var i: int = 0; i < rawChildren.numChildren; i++) {
+				var currRawChild:DisplayObject = rawChildren.getChildAt(i);
+				if ((currRawChild is UIComponent) && UIComponent(currRawChild).isPopUp && UIComponent(currRawChild).visible) {
+					if (!('allowControllerKeyboardEvents' in currRawChild)) { return true; }
+				}
+			}
+			return false;
 		}
 
 		/** Default behaviour for the current state that should be called if state-specific action has been taken care of or ruled out. */

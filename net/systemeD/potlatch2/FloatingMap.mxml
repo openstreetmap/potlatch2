@@ -38,6 +38,7 @@
 	[Bindable] private var zoomLocked:Boolean=false;
 	private var maxZoom:uint=50;
 	private var crosshair:Sprite=new Sprite();
+	public var allowControllerKeyboardEvents:Boolean = true;
 
 	/* FloatingMap still to do:
 		- selection UI

@@ -38,6 +38,7 @@
 		private var controller:EditController;
 		private var tasks:Array;				// array of { lat:.., lon:.., text:.. }
 		private var taskNumber:uint=0;
+		public var allowControllerKeyboardEvents:Boolean = true;
 
 		public function init(controller:EditController):void {
 			this.controller=controller;

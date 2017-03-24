@@ -113,6 +113,7 @@
         public var deleteArea:String = "Delete Area (Shift+Delete)";
         public var deleteWay:String = "Delete Way (Shift+Delete)";
         public var deleteItem:String = "Delete Item"; // When nothing is selected
+		public var allowControllerKeyboardEvents:Boolean = true;
 
       	[Bindable] [Embed(source="../../../embedded/merge.svg"       )] private var mergeIcon:Class;
       	[Bindable] [Embed(source="../../../embedded/multipolygon.svg")] private var multipolygonIcon:Class;
