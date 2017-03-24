@@ -122,9 +122,15 @@
 			enabled="{editorStack is TabNavigator &amp;&amp; stack.selectedIndex==0}" />
 	  </mx:HBox>
 
-      <mx:Label id="entityDisplayID" click="new HistoryDialog().init(selectedEntity);" paddingLeft="4" paddingBottom="3">
-        <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
-      </mx:Label>
+	  <mx:HBox width="100%">
+	      <mx:Label id="entityDisplayID" click="new HistoryDialog().init(selectedEntity);" paddingLeft="4" paddingBottom="3">
+	        <mx:htmlText><![CDATA[<i>No Selection</i>]]></mx:htmlText>
+	      </mx:Label>
+		  <mx:PopUpButton id="entitySelectButton" arrowButtonWidth="12" paddingLeft="0" paddingRight="0" 
+		                  width="12" height="12" enabled="false"
+		                  creationComplete="{createEntityMenu(PopUpButton(event.target));}" />
+	  </mx:HBox>
+
   </mx:VBox>
 
   <!-- Multiple selection -->
@@ -255,6 +261,7 @@
       public var mapFeatures:MapFeatures;
       public var controller:EditController;
       private var selectedEntity:Entity;
+      private var relatedEntities:Array;
       private var connection:Connection;
       private var currentCategorySelector:CategorySelector;
       private var categorySelectors:Object = {};	// hash of categorySelectors for each limitType
@@ -264,7 +271,10 @@
 
       private var rowData:Object;		// relation membership reference, needed so it's accessible from relation actions menu
 
-	  public function setEntity(entities:Array, layer:MapPaint=null):void {
+	  /** Set the entity for the tag viewer, and refresh all the UI
+	   *  If autoselect is true, then the tag viewer may choose to show a 'parent' multipolygon element instead
+	   */
+	  public function setEntity(entities:Array, layer:MapPaint=null, autoselect:Boolean=true):void {
 		UIComponent.suspendBackgroundProcessing();
 		connection=null;
 
@@ -285,13 +295,23 @@
 
 		} else if (entities.length==1) {
 			// Single entity selected, so show tag panel
-			if (firstSelected!=null && selectedEntity!=firstSelected) { 
-				firstSelected.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+			var lastSelected:Entity = selectedEntity;
+			if (autoselect) {
+				relatedEntities = firstSelected.getRelatedEntities();
+				selectedEntity = relatedEntities[0];
+			} else {
+				selectedEntity = firstSelected;
 			}
-			selectedEntity=firstSelected;
+			if (lastSelected!=selectedEntity) { relatedEntities[0].addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true); }
+
+			updateEntityMenuDataProvider();
 			connection=firstSelected.connection;
-			if (entityDisplayID!=null) { setupAdvanced(firstSelected); }
+			if (entityDisplayID!=null) {
+				setupAdvanced(selectedEntity);
+				updateEntityDisplay(selectedEntity);
+			}
 			if (selectedEntity is Relation) { stack.addChild(membersVBox); }
+			else if (membersVBox.parent==stack) { stack.removeChild(membersVBox); }
             if (selectedEntity is Marker && connection is BugConnection) {
               bugPanelContents.init(selectedEntity, BugConnection(connection));
               sidebar.selectedChild = bugPanel;
@@ -468,7 +488,7 @@
       private function limitType(entity:Entity):String {
           if      (entity is Node    ) return "point";
           else if (entity is Way     ) return Way(entity).isArea() ? "area" : "line";
-          else if (entity is Relation) return "relation";
+          else if (entity is Relation) return Relation(entity).getRelationType()=='multipolygon' ? "area" : "relation";
           return null;
       }
 
@@ -661,10 +681,12 @@
 		stack.selectedChild=advancedContainer;
 	}
 
-      private function checkAdvanced():void {
-          if ( selectedEntity != null )
-             setupAdvanced(selectedEntity);
-      }
+	private function checkAdvanced():void {
+		if ( selectedEntity != null ) {
+			setupAdvanced(selectedEntity);
+			updateEntityDisplay(selectedEntity);
+		}
+	}
 
       private var listeningToRelations:Array = [];
 
@@ -679,11 +701,35 @@
 			entityDisplayID.htmlText = entityText+": <b>"+entity.id+"</b> "+(entity.status ? entity.status : '');
 		}
 	}
+	
+	[bindable] private var entityMenuList:ArrayCollection = new ArrayCollection([]);
+
+	// Create drop-down entity select menu (for multipolygons)
+	private function createEntityMenu(button:PopUpButton):void {
+		var menu:Menu = new Menu(); 
+		menu.dataProvider = entityMenuList;
+		button.popUp = menu;
+		menu.addEventListener("itemClick", selectEntityMenu); 
+	}
+
+	// Update entries in entity select menu
+	private function updateEntityMenuDataProvider():void {
+		entityMenuList.removeAll();
+		for each (var e:Entity in relatedEntities) {
+			entityMenuList.addItem({ label: e.getType()+" "+e.id, data: e });
+		}
+		entitySelectButton.enabled = relatedEntities.length>1;
+	}
+	
+	// An entity has been selected from the drop-down menu
+	private function selectEntityMenu(event:MenuEvent):void {
+		selectedEntity = event.item.data;
+		setEntity([selectedEntity],null,false);
+	}
 
       private function setupAdvanced(entity:Entity):void {
 		if (!advancedTagGrid) advancedContainer.createComponentsFromDescriptors();	// if Flex hasn't created it, force it
 		advancedTagGrid.init(entity);
-		updateEntityDisplay(entity);
 		removeRelationListeners();
 
 		if ( entity == null ) {
@@ -962,8 +1008,10 @@
           }
 
           // remove tags from the current feature
+          // (but don't drop multipolygon tags)
           if ( feature != null ) {
               for each( var oldtag:Object in feature.tags ) {
+                  if (oldtag["k"]=='type' && oldtag["v"]=='multipolygon' && selectedEntity is Relation) { continue; }
                   if ( editableTags.indexOf(oldtag["k"]) < 0 ) {
                       selectedEntity.setTag(oldtag["k"], null, action.push);
                   }

@@ -239,12 +239,14 @@ package net.systemeD.halcyon {
             // Copy tags object, and add states
 			var multis:Array=entity.findParentRelationsOfType('multipolygon','outer');
 			var tags:Object;
-			if (!entity.hasTags() && multis.length>0) {
+			var isArea:Boolean = Way(entity).isArea();
+			if (!entity.hasInterestingTags() && multis.length>0) {
 				tags = multis[0].getTagsCopy();
+				isArea = true;
 			} else {
 				tags = entity.getTagsCopy();
 			}
-            setStateClass('area', Way(entity).isArea());
+            setStateClass('area', isArea);
             setStateClass('background', paint.isBackground);
             setStateClass('tiger', (entity.isUneditedTiger() && Globals.vars.highlightTiger));
             tags=applyStateClasses(tags);

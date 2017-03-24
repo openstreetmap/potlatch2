@@ -117,22 +117,25 @@ package net.systemeD.potlatch2.controller {
 				controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Couldn't make the multipolygon"));
 				return this;
 			}
+			var action:CompositeUndoableAction = new CompositeUndoableAction("Add to multipolygon");
 
 			// If relation exists, add any inners that aren't currently present
 			if (multi.relation) {
-				var action:CompositeUndoableAction = new CompositeUndoableAction("Add to multipolygon");
 				for each (inner in multi.inners) {
 					if (!multi.relation.hasMemberInRole(inner,'inner'))
 						multi.relation.appendMember(new RelationMember(inner,'inner'),action.push);
 				}
 				MainUndoStack.getGlobalStack().addAction(action);
 				
-			// Otherwise, create whole new relation
+			// Otherwise, create whole new relation, and transfer the tags
 			} else {
 				var memberlist:Array=[new RelationMember(multi.outer,'outer')];
-				for each (inner in multi.inners) 
-					memberlist.push(new RelationMember(inner,'inner'));
-				layer.connection.createRelation( { type: 'multipolygon' }, memberlist, MainUndoStack.getGlobalStack().addAction);
+				for each (inner in multi.inners) { memberlist.push(new RelationMember(inner,'inner')); }
+				var tags:Object = multi.outer.getTagsCopy();
+				tags['type'] = 'multipolygon';
+				for (var key:String in tags) { multi.outer.setTag(key, null, action.push); }
+				layer.connection.createRelation( tags, memberlist, action.push);
+				MainUndoStack.getGlobalStack().addAction(action);
 			}
 
 			return new SelectedWay(multi.outer);

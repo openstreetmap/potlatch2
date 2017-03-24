@@ -393,6 +393,12 @@ package net.systemeD.halcyon.connection {
             return parents[entity] == true;
         }
 
+		/** Get all entities that the user might want to edit after clicking this.
+		*   Usually just the entity itself, but could also include related multipolygon relations. */		
+		public function getRelatedEntities():Array {
+			return [this];
+		}
+
             /** Returns all relations that this Entity is part of, as array of {relation, position, role}, sorted by position. */
             public function get memberships():Array {
 			var list:Array=[];

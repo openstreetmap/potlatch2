@@ -144,6 +144,19 @@ package net.systemeD.halcyon.connection {
             markDirty();
         }
 
+		override public function getRelatedEntities():Array {
+			var multis:Array = findParentRelationsOfType('multipolygon');
+			var related:Array = [this];
+			var wayHasInteresting:Boolean = hasInterestingTags();
+			for each (var multi:Relation in multis) {
+				// if an old-style multipolygon, add to end of list
+				if (wayHasInteresting && multi.hasKeysOtherThanType()) { related.push(multi); }
+				// if a new-style multipolygon, add to start of list
+				else { related.unshift(multi); }
+			}
+			return related;
+		}
+
 		/** Merges another way into this one, removing the other one. */
 		public function mergeWith(way:Way,topos:int,frompos:int, performAction:Function):void {
 			performAction(new MergeWaysAction(this, way, topos, frompos));

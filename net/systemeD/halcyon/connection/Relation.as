@@ -157,6 +157,14 @@ package net.systemeD.halcyon.connection {
 			return relTags["type"] ? relTags["type"] : getType();
 		}
 		
+		public function hasKeysOtherThanType():Boolean {
+			// used for detecting old-style vs new-style multipolygons
+			for (var key:String in getTagsHash()) {
+				if (key!='type' && key!='created_by' && key!='source') { return false; }
+			}
+			return true;
+		}
+
 		private function getSignificantName(entity:Entity):String {
 			if (!entity.loaded || (entity is Relation)) return '';
 
