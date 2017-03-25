@@ -409,7 +409,7 @@
     </icon>
     <point/>
     <area/>
-    <tag k="amenity" v="swimming_pool"/>
+    <tag k="leisure" v="swimming_pool"/>
     <tag k="sport" v="swimming"/>
     <inputSet ref="simpleName"/>    
     <inputSet ref="common"/>
