@@ -48,6 +48,8 @@
       private var _limit:String;
       private var _formerIndex:int=0;
 
+      public var allowControllerKeyboardEvents:Boolean = true;
+
       [Bindable(event="selectedType")]
       /** The Feature type (eg, "residential road") currently selected. */
       public function get selectedType():Feature {

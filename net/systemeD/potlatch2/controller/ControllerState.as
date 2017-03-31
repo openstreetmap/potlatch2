@@ -110,7 +110,10 @@ package net.systemeD.potlatch2.controller {
 			var rawChildren:IChildList = FlexGlobals.topLevelApplication.systemManager.rawChildren;
 			for (var i: int = 0; i < rawChildren.numChildren; i++) {
 				var currRawChild:DisplayObject = rawChildren.getChildAt(i);
-				if ((currRawChild is UIComponent) && UIComponent(currRawChild).isPopUp && UIComponent(currRawChild).visible) {
+				if (!(currRawChild is UIComponent)) { continue; }
+				if (!UIComponent(currRawChild).visible) { continue; }
+				if (!UIComponent(currRawChild).enabled) { continue; }
+				if (UIComponent(currRawChild).isPopUp) {
 					if (!('allowControllerKeyboardEvents' in currRawChild)) { return true; }
 				}
 			}
@@ -306,8 +309,10 @@ package net.systemeD.potlatch2.controller {
 
         /** Show the history dialog, if only one object is selected. */
         protected function showHistory():void {
-            if (selectCount == 1) {
+            if (selectCount == 1 && firstSelected.id>0) {
                 new HistoryDialog().init(firstSelected);
+            } else if (selectCount == 1) {
+                controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history of an unsaved object"));
             } else if (selectCount == 0) {
                 controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Can't show history, nothing selected"));
             } else {
