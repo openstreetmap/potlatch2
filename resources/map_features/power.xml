@@ -64,7 +64,7 @@
   <feature name="Substation">
     <category>power</category>
     <icon image="features/pois/power_substation.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:power%3Dsubstation</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:power%3Dsubstation</help>
     <area/>
     <point/>
     <tag k="power" v="substation"/>
@@ -75,7 +75,7 @@
   <feature name="Transformer">
     <category>power</category>
     <icon image="features/pois/power_transformer.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:power%3Dtransformer</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:power%3Dtransformer</help>
     <area/>
     <point/>
     <tag k="power" v="transformer"/>

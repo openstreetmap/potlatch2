@@ -71,7 +71,7 @@
     <category>places</category>
     <line/>
     <icon image="features/pois/poi_boundary_administrative.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:boundary=administrative</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:boundary=administrative</help>
     <tag k="boundary" v="administrative"/>
     <input type="number" minimum="2" maximum="10" presence="always" name="Admin Level" key="admin_level" description="The Administrative level" />
     <inputSet ref="simpleName"/>
@@ -82,7 +82,7 @@
     <category>places</category>
     <category>natural</category>
     <line/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:boundary=national_park</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:boundary=national_park</help>
     <tag k="boundary" v="national_park"/>
     <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
@@ -92,7 +92,7 @@
     <category>places</category>
     <category>natural</category>
     <line/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:boundary=protected_area</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:boundary=protected_area</help>
     <tag k="boundary" v="protected_area"/>
     <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
@@ -101,7 +101,7 @@
   <feature name="Town boundary">
     <category>places</category>
     <line/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:boundary=town</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:boundary=town</help>
     <tag k="boundary" v="town"/>
     <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
@@ -112,7 +112,7 @@
   <feature name="Census boundary">
     <category>places</category>
     <line/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:boundary=census</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:boundary=census</help>
     <tag k="boundary" v="census"/>
     <inputSet ref="simpleName"/>
     <inputSet ref="common"/>
