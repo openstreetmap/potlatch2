@@ -20,7 +20,7 @@
 		import net.systemeD.halcyon.Globals;
 		
 		private var nominatim:HTTPService = new HTTPService;
-		private var nominatimURL:String = "http://nominatim.openstreetmap.org/search?";	// ** FIXME - this should be user-configurable
+		private var nominatimURL:String = "https://nominatim.openstreetmap.org/search?";	// ** FIXME - this should be user-configurable
 		private var nomOptions:Object = { addressdetails:"1", limit:"10", format:"xml" };
         private var selectedResult:Object = {lat: "0", lon: "0"};
 

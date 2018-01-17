@@ -165,7 +165,7 @@
     <icon image="features/pois/transport_car_wash.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcar_wash</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcar_wash</help>
     <point/>
     <tag k="amenity" v="car_wash"/>
     <inputSet ref="names"/>
@@ -207,7 +207,7 @@
         <point/>
         <inputSet ref="names"/>
         <input type="freetext" presence="always" category="Details" name="International Air Transport Association (IATA) airport code" key="ref"/>
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
     
@@ -219,7 +219,7 @@
         <area/>
         <point/>
         <inputSet ref="names"/>
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
     
@@ -231,7 +231,7 @@
         <area/>
         <point/>
         <inputSet ref="names"/>
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
     
@@ -243,7 +243,7 @@
         <line/>
         <inputSet ref="names"/>
         <input type="freetext" presence="always" category="Details" name="Runway number (01-36)" key="ref"/>
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
     
@@ -255,7 +255,7 @@
         <line/>
         <inputSet ref="names"/>
         <input type="freetext" presence="always" category="Details" name="Taxiway number" key="ref" />
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
     
@@ -266,7 +266,7 @@
         <tag k="aeroway" v="apron"/>
         <area/>
         <inputSet ref="names"/>
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
     
@@ -277,7 +277,7 @@
         <tag k="aeroway" v="gate"/>
         <point/>
         <input type="freetext" presence="always" category="Details" name="Gate number" key="ref"/>
-        <help>http://wiki.openstreetmap.org/wiki/Key:aeroway</help>
+        <help>https://wiki.openstreetmap.org/wiki/Key:aeroway</help>
         <inputSet ref="common"/>
       </feature>
       
@@ -285,7 +285,7 @@
 <feature name="Aerodrome">
     <category>aeroway</category>
     <icon image="features/aeroway__aerodrome.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:aeroway%3Daerodrome</help>
     <point/>
     <tag k="aeroway" v="aerodrome"/>
     <inputSet ref="simpleName"/>
@@ -310,7 +310,7 @@
     <icon image="features/amenity__parking.png" dnd="features/pois/transport_parking_car.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking</help>
     <point/>
     <area/>
     <tag k="amenity" v="parking"/>
@@ -336,7 +336,7 @@
     <icon image="features/pois/transport_parking_bicycle.n.24.png">
       ${name} ${capacity}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbicycle_parking</help>
     <point/>
     <tag k="amenity" v="bicycle_parking"/>
     <inputSet ref="names"/>
@@ -511,7 +511,7 @@
   <feature name="Ferry Terminal">
     <category>transport</category>
     <icon image="features/pois/transport_port.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dferry_terminal</help>
     <point/>
     <tag k="amenity" v="ferry_terminal"/>
     <inputSet ref="simpleName" />
