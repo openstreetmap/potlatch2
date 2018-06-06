@@ -256,6 +256,7 @@ package net.systemeD.halcyon {
 		public function setAttribution():void {
 			var tf:TextField=TextField(_overlay.getChildAt(0));
 			tf.text='';
+			tf.visible=false;
 			if (!_selected.attribution) return;
 			var attr:Array=[];
 			if (_selected.attribution.providers) {
@@ -275,6 +276,7 @@ package net.systemeD.halcyon {
 				}
 			}
 			if (attr.length==0) return;
+			tf.visible=true;
 			tf.text="Background "+attr.join(", ");
 			positionAttribution();
 			dispatchEvent(new MapEvent(MapEvent.BUMP, { y: tf.textHeight }));	// don't let the toolbox obscure it
@@ -306,7 +308,9 @@ package net.systemeD.halcyon {
 		}
 		public function setTerms():void {
 			var terms:TextField=TextField(_overlay.getChildAt(1));
+			terms.visible=false;
 			if (!_selected.attribution) { terms.text=''; return; }
+			terms.visible=true;
 			if (_selected.attribution && _selected.attribution.text) { terms.text=_selected.attribution.text; }
 			else { terms.text="Background terms of use"; }
 			positionTerms();
@@ -341,11 +345,13 @@ package net.systemeD.halcyon {
 			attribution.wordWrap=true;
 			attribution.selectable=false;
 			attribution.defaultTextFormat=new TextFormat("_sans", 9, 0, false, false, false);
+			attribution.visible=false;
 			overlay.addChild(attribution);
 			var terms:TextField=new TextField();
 			terms.width=200; terms.height=15;
 			terms.selectable=false;
 			terms.defaultTextFormat=new TextFormat("_sans", 9, 0, false, false, true);
+			terms.visible=false;
 			overlay.addChild(terms);
 			return overlay;
 		}
