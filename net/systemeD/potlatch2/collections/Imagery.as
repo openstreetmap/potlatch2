@@ -3,6 +3,7 @@ package net.systemeD.potlatch2.collections {
 	import flash.events.*;
 	import flash.display.*;
 	import flash.net.*;
+	import flash.system.ApplicationDomain;
 	import net.systemeD.halcyon.FileBank;
 	import net.systemeD.halcyon.Map;
 	import net.systemeD.halcyon.MapEvent;
@@ -41,7 +42,12 @@ package net.systemeD.potlatch2.collections {
 
 		private function onImageryIndexLoad(event:Event):void {
 			var result:String = String(event.target.data);
-			collection = com.adobe.serialization.json.JSON.decode(result) as Array;
+			try {
+				var j:Object = ApplicationDomain.currentDomain.getDefinition("JSON");
+				collection = j.parse(result) as Array;
+			} catch(e:ReferenceError) {
+				collection = com.adobe.serialization.json.JSON.decode(result) as Array;
+			}
 
 			// Has the user saved something? If so, create dummy object
 			var saved:Object = {};
