@@ -277,9 +277,9 @@ package net.systemeD.potlatch2.mapfeatures {
                 return _xml.help;
             else if (_tags.length > 0) {
                 if (_tags[0].v == "*")
-                    return "http://www.openstreetmap.org/wiki/Key:" + _tags[0].k;
+                    return "https://wiki.openstreetmap.org/wiki/Key:" + _tags[0].k;
                 else
-                    return "http://www.openstreetmap.org/wiki/Tag:" + _tags[0].k + "=" + _tags[0].v;                
+                    return "https://wiki.openstreetmap.org/wiki/Tag:" + _tags[0].k + "=" + _tags[0].v;                
             } else
                 return "";
 

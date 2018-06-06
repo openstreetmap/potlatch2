@@ -4,7 +4,7 @@
   <feature name="Fire station">
     <category>amenity</category>
     <icon image="features/pois/amenity_firestation2.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfire_station</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfire_station</help>
     <point/>
     <area/>
     <tag k="amenity" v="fire_station"/>
@@ -16,7 +16,7 @@
   <feature name="Police Station">
     <category>amenity</category>
     <icon image="features/pois/amenity_police2.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpolice</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpolice</help>
     <point/>
     <area/>
     <tag k="amenity" v="police"/>
@@ -29,7 +29,7 @@
     <icon image="features/pois/amenity_library.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dlibrary</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dlibrary</help>
     <point/>
     <area/>
     <tag k="amenity" v="library"/>
@@ -41,7 +41,7 @@
   <feature name="Hospital">
     <category>amenity</category>
     <icon image="features/pois/health_hospital.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dhospital</help>
     <point/>
     <area/>
     <tag k="amenity" v="hospital"/>
@@ -56,7 +56,7 @@
   <feature name="Defibrillator">
     <category>amenity</category>
     <icon image="features/pois/ISO_7010_E010.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:emergency%3Ddefibrillator</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:emergency%3Ddefibrillator</help>
     <point/>
     <tag k="emergency" v="defibrillator"/>
     <inputSet ref="common"/>
@@ -67,7 +67,7 @@
     <icon image="features/pois/health_veterinary.n.8E7409.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dveterinary</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dveterinary</help>
     <point/>
     <area/>
     <tag k="amenity" v="veterinary"/>
@@ -80,7 +80,7 @@
   <feature name="Place of Worship">
     <category>amenity</category>
     <icon image="features/pois/place_of_worship_unknown.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dplace_of_worship</help>
     <point/>
     <area/>
     <tag k="amenity" v="place_of_worship"/>
@@ -102,7 +102,7 @@
   <feature name="ATM">
     <category>amenity</category>
     <icon image="features/pois/money_atm.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Atm</help>
+    <help>https://wiki.openstreetmap.org/wiki/Atm</help>
     <point/>
     <tag k="amenity" v="atm"/>
     <input type="freetext" presence="always" category="Details" name="Operator" key="operator" description="The organisation that provides this ATM" priority="low"/>
@@ -116,7 +116,7 @@
     <icon image="features/pois/money_bank2.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbank</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dbank</help>
     <point/>
     <area/>
     <tag k="amenity" v="bank"/>
@@ -133,7 +133,7 @@
   <feature name="Recycling">
     <category>amenity</category>
     <icon image="features/pois/amenity_recycling.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Drecycling</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Drecycling</help>
     <point/>
     <area/>
     <tag k="amenity" v="recycling"/>
@@ -234,7 +234,7 @@
     <icon image="features/pois/education_school.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dschool</help>
     <point/>
     <area/>
     <tag k="amenity" v="school"/>
@@ -249,7 +249,7 @@
     <icon image="features/pois/education_nursery3.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dkindergarten</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dkindergarten</help>
     <point/>
     <area/>
     <tag k="amenity" v="kindergarten"/>
@@ -263,7 +263,7 @@
     <icon image="features/pois/amenity_town_hall.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dtownhall</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dtownhall</help>
     <point/>
     <area/>
     <tag k="amenity" v="townhall"/>
@@ -278,7 +278,7 @@
     <icon image="features/pois/amenity_post_box.n.24.png">
       ${ref}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Post_box</help>
+    <help>https://wiki.openstreetmap.org/wiki/Post_box</help>
     <point/>
     <tag k="amenity" v="post_box"/>
     <input type="freetext" presence="always" category="Details" name="Ref" key="ref" description="Reference number of the post box"/>
@@ -292,7 +292,7 @@
     <icon image="features/pois/amenity_post_office.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity=post_office</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity=post_office</help>
     <point/>
     <area/>
     <tag k="amenity" v="post_office"/>
@@ -307,7 +307,7 @@
     <icon image="features/pois/amenity_waste_bin.n.24.png">
       ${ref}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity=waste_basket</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity=waste_basket</help>
     <point/>
     <tag k="amenity" v="waste_basket"/>
     <inputSet ref="common"/>
@@ -453,7 +453,7 @@
     <icon image="features/pois/food_pub.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpub</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dpub</help>
     <point/>
     <area/>
     <tag k="amenity" v="pub"/>
@@ -502,7 +502,7 @@
     <icon image="features/pois/food_cafe.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcafe</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcafe</help>
     <point/>
     <area/>
     <tag k="amenity" v="cafe"/>
@@ -520,7 +520,7 @@
     <icon image="features/pois/food_fastfood.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfast_food</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dfast_food</help>
     <point/>
     <area/>
     <tag k="amenity" v="fast_food"/>

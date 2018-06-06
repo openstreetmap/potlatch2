@@ -9,7 +9,7 @@
     <icon image="features/highway__motorway.png">
       <font size="16pt"><b>${ref}</b></font><br/>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dmotorway</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dmotorway</help>
 
     <line/>
     <tag k="highway" v="motorway"/>
@@ -34,7 +34,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dtrunk</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dtrunk</help>
 
     <line/>
     <tag k="highway" v="trunk"/>
@@ -59,7 +59,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dprimary</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dprimary</help>
 
     <line/>
     <tag k="highway" v="primary"/>
@@ -74,7 +74,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dprimary_link</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dprimary_link</help>
 
     <line/>
     <tag k="highway" v="primary_link"/>
@@ -90,7 +90,7 @@
       <font size="16pt"><b>${ref}</b></font><br/>
       <font size="10pt">${name}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsecondary</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dsecondary</help>
 
     <line/>
     <tag k="highway" v="secondary"/>
@@ -108,7 +108,7 @@
       <br/>
       <font size="10pt">${name}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsecondary_link</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dsecondary_link</help>
 
     <line/>
     <tag k="highway" v="secondary_link"/>
@@ -125,7 +125,7 @@
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="10pt">${ref}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dtertiary</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dtertiary</help>
 
     <line/>
     <tag k="highway" v="tertiary"/>
@@ -140,7 +140,7 @@
       <font size="14pt"><b>${name}</b></font><br/>
       <font size="10pt">${ref}</font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dtertiary_link</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dtertiary_link</help>
 
     <line/>
     <tag k="highway" v="tertiary_link"/>
@@ -155,7 +155,7 @@
     <icon image="features/highway__unclassified.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dunclassified</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dunclassified</help>
 
     <line/>
     <tag k="highway" v="unclassified"/>
@@ -174,7 +174,7 @@
       <font size="8pt">${postal_code}</font>
       <br/>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dresidential</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dresidential</help>
 
     <line/>
     <tag k="highway" v="residential"/>
@@ -188,7 +188,7 @@
     <icon image="features/highway__service.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dservice</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dservice</help>
     <description>
       Access roads
     </description>
@@ -225,7 +225,7 @@
     <icon image="features/highway__living_street.png">
       <font size="14pt"><b>${name}</b></font>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dliving_street</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dliving_street</help>
 
     <line/>
     <tag k="highway" v="living_street"/>
@@ -266,7 +266,7 @@
   <feature name="Turning circle">
     <category>transport</category>
     <icon image="features/pois/transport_turning_circle.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dturning_circle</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dturning_circle</help>
     <point draganddrop="no"/>
     <within entity="way" k="highway"/>
     <tag k="highway" v="turning_circle"/>
@@ -276,7 +276,7 @@
   <feature name="Mini Roundabout">
     <category>transport</category>
     <icon image="features/pois/transport_miniroundabout_anticlockwise.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dmini_roundabout</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dmini_roundabout</help>
     <point draganddrop="no"/>
     <within entity="way" k="highway"/>
     <tag k="highway" v="mini_roundabout"/>
@@ -287,7 +287,7 @@
   <feature name="Traffic calming">
     <category>transport</category>
     <icon image="features/pois/transport_speedbump.n.24.png"/>
-<!--    <help>http://wiki.openstreetmap.org/wiki/Key:traffic_calming</help>-->
+<!--    <help>https://wiki.openstreetmap.org/wiki/Key:traffic_calming</help>-->
     <point draganddrop="no"/>
     <within entity="way" k="highway"/>
     <tag k="traffic_calming" v="yes" vmatch="*"/>
@@ -329,7 +329,7 @@
 
   <feature name="Turn restriction">
     <category>advanced</category>
-    <help>http://wiki.openstreetmap.org/wiki/Turn_restrictions</help>
+    <help>https://wiki.openstreetmap.org/wiki/Turn_restrictions</help>
     <relation/>
     <tag k="type" v="restriction"/>
     <input type="choice" category="Restrictions" presence="always" name="Type" key="restriction" description="What's the restriction?" layout="horizontal" priority="high">

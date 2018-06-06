@@ -275,7 +275,7 @@
      ************************************************************************ -->
 
   <feature name="Peak">
-    <help>http://wiki.openstreetmap.org/wiki/Tag:natural%3Dpeak</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:natural%3Dpeak</help>
     <category>natural</category>
     <icon image="features/pois/natural_peak.n.24.png"/>
     <point/>
@@ -285,7 +285,7 @@
   </feature>
 
   <feature name="Tree">
-    <help>http://wiki.openstreetmap.org/wiki/Tag:natural%3Dtree</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:natural%3Dtree</help>
     <category>natural</category>
     <icon image="features/pois/natural_tree.n.24.png"/>
     <point/>

@@ -3,7 +3,7 @@
   <feature name="Hotel">
     <category>accommodation</category>
     <icon image="features/pois/accommodation_hotel.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
     <point/>
     <area/>
     <tag k="tourism" v="hotel"/>
@@ -14,7 +14,7 @@
 
   <feature name="Motel">
     <category>accommodation</category>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmotel</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmotel</help>
     <point/>
     <area/>
     <icon image="features/pois/accommodation_motel.n.24.png"/>
@@ -111,7 +111,7 @@
   <feature name="Museum">
     <category>tourism</category>
     <icon image="features/pois/tourist_museum.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
     <point/>
     <area/>
     <tag k="tourism" v="museum"/>
@@ -197,7 +197,7 @@
   <feature name="Cinema">
     <category>tourism</category>
     <icon image="features/pois/tourist_cinema.n.24.png"/>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
     <point/>
     <area/>
     <tag k="amenity" v="cinema"/>

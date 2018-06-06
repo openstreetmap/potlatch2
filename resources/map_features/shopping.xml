@@ -4,7 +4,7 @@
     <icon image="features/pois/shopping_supermarket.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dsupermarket</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:shop%3Dsupermarket</help>
     <point/>
     <area/>
     <tag k="shop" v="supermarket"/>
@@ -19,7 +19,7 @@
     <icon image="features/pois/shopping_convenience.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Dconvenience</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:shop%3Dconvenience</help>
     <point/>
     <area/>
     <tag k="shop" v="convenience"/>
@@ -150,7 +150,7 @@
 
   <feature name="Department Store">
     <category>shopping</category>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:shop%3Ddepartment_store</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:shop%3Ddepartment_store</help>
     <point/>
     <area/>
     <inputSet ref="simpleName"/>
@@ -334,7 +334,7 @@
     <icon image="features/pois/health_pharmacy.n.24.png">
       ${name}
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Pharmacy</help>
+    <help>https://wiki.openstreetmap.org/wiki/Pharmacy</help>
     <point/>
     <area/>
     <tag k="amenity" v="pharmacy"/>

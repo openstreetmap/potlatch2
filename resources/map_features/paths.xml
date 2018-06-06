@@ -4,7 +4,7 @@
     <icon image="features/paths__footway.png">
       ${name} <i>${ref}</i>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dfootway</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dfootway</help>
     <line/>
     <tag k="highway" v="footway"/>
     <inputSet ref="path"/>
@@ -16,7 +16,7 @@
     <icon image="features/paths__bike.png">
       ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dcycleway</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dcycleway</help>
     <line/>
     <tag k="highway" v="cycleway"/>
     <inputSet ref="path"/>
@@ -64,7 +64,7 @@
     <category>paths</category>
     <icon image="features/paths__steps.png">
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dsteps</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dsteps</help>
 
     <line/>
     <tag k="highway" v="steps"/>
@@ -78,7 +78,7 @@
     <icon image="features/paths__unofficial.png">
       ${name} <i>${ncn_ref} ${rcn_ref} ${lcn_ref} ${ref}</i>
     </icon>
-    <help>http://wiki.openstreetmap.org/wiki/Tag:highway%3Dpath</help>
+    <help>https://wiki.openstreetmap.org/wiki/Tag:highway%3Dpath</help>
 
     <line/>
     <tag k="highway" v="path"/>
