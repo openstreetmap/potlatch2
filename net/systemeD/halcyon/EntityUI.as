@@ -25,13 +25,13 @@ package net.systemeD.halcyon {
 		/** Map layer */
 		protected var layer:Number=0;
 		/** Is drawing suspended? */
-		protected var suspended:Boolean=false;	
+		protected var suspended:Boolean=false;
 		/** Redraw called while suspended? */
 		protected var redrawDue:Boolean=false;
 		/** Sprite to clear back to */
 		protected var clearLimit:uint=0;
 		/** Reference to parent MapPaint */
-		public var paint:MapPaint;	
+		public var paint:MapPaint;
 		/** Does object respond to clicks? */
 		public var interactive:Boolean=true;
 		/** Can it be deleted when offscreen? */
@@ -54,8 +54,8 @@ package net.systemeD.halcyon {
 		public function EntityUI(entity:Entity, paint:MapPaint) {
 			this.entity=entity;
 			this.paint=paint;
-            entity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
-            entity.addEventListener(Connection.STATUS_CHANGED, statusChanged, false, 0, true);
+			entity.addEventListener(Connection.TAG_CHANGED, tagChanged, false, 0, true);
+			entity.addEventListener(Connection.STATUS_CHANGED, statusChanged, false, 0, true);
 			entity.addEventListener(Connection.ADDED_TO_RELATION, relationAdded, false, 0, true);
 			entity.addEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved, false, 0, true);
 			entity.addEventListener(Connection.SUSPEND_REDRAW, suspendRedraw, false, 0, true);
@@ -71,8 +71,8 @@ package net.systemeD.halcyon {
 
 		/** Remove the default event listeners. */
 		protected function removeGenericEventListeners():void {
-            entity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
-            entity.removeEventListener(Connection.STATUS_CHANGED, statusChanged);
+			entity.removeEventListener(Connection.TAG_CHANGED, tagChanged);
+			entity.removeEventListener(Connection.STATUS_CHANGED, statusChanged);
 			entity.removeEventListener(Connection.ADDED_TO_RELATION, relationAdded);
 			entity.removeEventListener(Connection.REMOVED_FROM_RELATION, relationRemoved);
 			entity.removeEventListener(Connection.SUSPEND_REDRAW, suspendRedraw);
@@ -88,12 +88,12 @@ package net.systemeD.halcyon {
 
 		// -----------------------------------------------------------------
 		// Event listeners
-		
+
 		protected function attachRelationListeners():void {
-		    var relations:Array = entity.parentRelations;
-            for each(var relation:Relation in relations ) {
-                relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged, false, 0, true);
-            }
+			var relations:Array = entity.parentRelations;
+			for each(var relation:Relation in relations ) {
+				relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged, false, 0, true);
+			}
 		}
 
 		protected function removeRelationListeners():void {
@@ -104,41 +104,41 @@ package net.systemeD.halcyon {
 		}
 
 		protected function relationAdded(event:RelationMemberEvent):void {
-		    event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged, false, 0, true);
+			event.relation.addEventListener(Connection.TAG_CHANGED, relationTagChanged, false, 0, true);
 			invalidateStyleList();
-		    redraw();
+			redraw();
 		}
 		
 		protected function relationRemoved(event:RelationMemberEvent):void {
-		    event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
+			event.relation.removeEventListener(Connection.TAG_CHANGED, relationTagChanged);
 			invalidateStyleList();
-		    redraw();
+			redraw();
 		}
-		
-        protected function tagChanged(event:TagEvent):void {
-			invalidateStyleList();
-            redraw();
-        }
 
-        protected function relationTagChanged(event:TagEvent):void {
+		protected function tagChanged(event:TagEvent):void {
 			invalidateStyleList();
-            redraw();
-        }
-		
-        protected function statusChanged(event:EntityEvent):void {
-			invalidateStyleList();
-            redraw();
-        }
+			edraw();
+		}
 
-        protected function mouseEvent(event:MouseEvent):void {
+		protected function relationTagChanged(event:TagEvent):void {
+			invalidateStyleList();
+			redraw();
+		}
+
+		protected function statusChanged(event:EntityEvent):void {
+			invalidateStyleList();
+			redraw();
+		}
+
+		protected function mouseEvent(event:MouseEvent):void {
 			paint.map.entityMouseEvent(event, entity);
-        }
+		}
 
 
 		// -----------------------------------------------------------------
 
 		/** Add object (stroke/fill/roadname) to layer sprite*/
-		
+
 		protected function addToLayer(s:DisplayObject,spritetype:uint,sublayer:int=-1):void {
 			var l:Sprite, o:Sprite;
 			if (sublayer!=-1) {
@@ -149,10 +149,10 @@ package net.systemeD.halcyon {
 			}
 			o.addChild(s);
 			if (sprites.indexOf(s)==-1) { sprites.push(s); }
-            if ( s is Sprite ) {
-                Sprite(s).mouseChildren = false;
-                Sprite(s).mouseEnabled = false;
-            }
+			if ( s is Sprite ) {
+				Sprite(s).mouseChildren = false;
+				Sprite(s).mouseEnabled = false;
+			}
 		}
 
 		protected function setListenSprite():void {
@@ -191,7 +191,7 @@ package net.systemeD.halcyon {
 			listenSprite=null;
 			hitzone=null;
 		}
-		
+
 		public function protectSprites():void { clearLimit=sprites.length; }
 		public function unprotectSprites():void { clearLimit=0; }
 
@@ -201,36 +201,36 @@ package net.systemeD.halcyon {
 			}
 		}
 
-        public function setHighlight(settings:Object):void {
+		public function setHighlight(settings:Object):void {
 			var changed:Boolean=false;
 			for (var stateType:String in settings) {
 				if (setStateClass(stateType, settings[stateType])) { changed=true; }
 			}
 			if (changed) redraw();
-        }
+		}
 
-        /**
-        * Sets a state class (eg :hover, :dupe) for this entityUI. If the state class has changed it will
-        * invalidate the style list to force the style to be recalculated during redraw.
-        */
-        public function setStateClass(stateType:String, isOn:*):Boolean {
+		/**
+		* Sets a state class (eg :hover, :dupe) for this entityUI. If the state class has changed it will
+		* invalidate the style list to force the style to be recalculated during redraw.
+		*/
+		public function setStateClass(stateType:String, isOn:*):Boolean {
 			if ( isOn == true ) { isOn='yes'; }
-            if ( isOn && stateClasses[stateType] != isOn ) {
+			if ( isOn && stateClasses[stateType] != isOn ) {
                 stateClasses[stateType] = isOn;
 				invalidateStyleList();
 				return true;
-            } else if ( !isOn && stateClasses[stateType] != null ) {
-                delete stateClasses[stateType];
+			} else if ( !isOn && stateClasses[stateType] != null ) {
+				delete stateClasses[stateType];
 				invalidateStyleList();
 				return true;
             }
 			return false;
         }
 
-        /**
-        * applies the state classes (eg :hover, :area) for this entityUI to the given list of 'real' tags.
-        * This then gives you a modified list of tags used for styling the entityUI.
-        */
+		/**
+		* applies the state classes (eg :hover, :area) for this entityUI to the given list of 'real' tags.
+		* This then gives you a modified list of tags used for styling the entityUI.
+		*/
 		public function applyStateClasses(tags:Object):Object {
             for (var stateKey:String in stateClasses) {
                 tags[":"+stateKey] = 'yes';
@@ -243,23 +243,23 @@ package net.systemeD.halcyon {
 		}
 
 		/** Request redraw */
-		
+
 		public function redraw():Boolean {
 			if (suspended) { redrawDue=true; return false; }
 			return doRedraw();
 		}
-		
+
 		/** Actually do the redraw. To be overwritten. */
 		public function doRedraw():Boolean {
 			return false;
 		}
-		
+
 		/** Temporarily suspend redrawing of object. */
 		public function suspendRedraw(event:EntityEvent):void {
 			suspended=true;
 			redrawDue=false;
 		}
-		
+
 		/** Resume redrawing. */
 		public function resumeRedraw(event:EntityEvent):void {
 			suspended=false;
@@ -268,11 +268,11 @@ package net.systemeD.halcyon {
 				redrawDue=false;
 			}
 		}
-		
+
 		public function invalidateStyleList():void {
 			styleList=null;
 		}
-		
+
 	}
 
 }

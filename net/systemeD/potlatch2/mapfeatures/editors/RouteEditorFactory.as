@@ -4,7 +4,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.display.*;
 
-	public class RouteEditorFactory extends RelationMemberEditorFactory {
+    public class RouteEditorFactory extends RelationMemberEditorFactory {
         private var _icon:XMLList;
         
         public function RouteEditorFactory(inputXML:XML) {

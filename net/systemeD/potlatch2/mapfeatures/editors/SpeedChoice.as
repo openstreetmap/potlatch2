@@ -2,7 +2,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
 
     import flash.events.*;
 
-	public class SpeedChoice extends EventDispatcher {
+    public class SpeedChoice extends EventDispatcher {
 
         private static const speedRE:RegExp = /^([0-9.]+)\s*(.*)$/;
         

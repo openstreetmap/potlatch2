@@ -4,7 +4,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.display.*;
 
-	public class SpeedEditorFactory extends SingleTagEditorFactory {
+    public class SpeedEditorFactory extends SingleTagEditorFactory {
         
         public function SpeedEditorFactory(inputXML:XML) {
             super(inputXML);

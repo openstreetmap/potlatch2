@@ -4,15 +4,15 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.display.*;
 
-	public class SingleTagEditorFactory extends EditorFactory {
-	    private var tagKey:String;
-		private var boxDirection:String;
+    public class SingleTagEditorFactory extends EditorFactory {
+        private var tagKey:String;
+        private var boxDirection:String;
         
         public function SingleTagEditorFactory(inputXML:XML, defaultLayout:String="vertical") {
             super(inputXML);
             tagKey = inputXML.@key;
-			boxDirection = inputXML.@layout;
-			if (!boxDirection) { boxDirection=defaultLayout; }
+            boxDirection = inputXML.@layout;
+            if (!boxDirection) { boxDirection=defaultLayout; }
         }
         
         override public function areTagsMatching(entity:Entity):Boolean {

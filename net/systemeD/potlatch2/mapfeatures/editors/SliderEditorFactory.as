@@ -4,7 +4,7 @@ package net.systemeD.potlatch2.mapfeatures.editors {
     import net.systemeD.potlatch2.mapfeatures.*;
     import flash.display.*;
 
-	public class SliderEditorFactory extends SingleTagEditorFactory {
+    public class SliderEditorFactory extends SingleTagEditorFactory {
         private var _minimum:Number;
         private var _maximum:Number;
         private var _default:Number;
