@@ -175,6 +175,7 @@ package net.systemeD.halcyon {
 			for each (way in o.waysInside) {
 				if (!wayuis[way.id]) { createWayUI(way); }
 				else if (redraw) { wayuis[way.id].recalculate(); wayuis[way.id].redraw(); }
+				else if (wayuis[way.id].partial) { wayuis[way.id].redraw(); wayuis[way.id].updateHighlights(); }
 				else wayuis[way.id].updateHighlights();//dubious
 			}
 

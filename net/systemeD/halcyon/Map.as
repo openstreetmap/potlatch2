@@ -207,6 +207,19 @@ package net.systemeD.halcyon {
 		public function lat2coord(a:Number):Number	{ return -(lat2latp(a)-basey)*scalefactor; }
 		public function coord2lat(a:Number):Number	{ return latp2lat(a/-scalefactor+basey); }
 
+		// Does a segment cross the map?
+		public function segmentCrosses(n0:Node,n1:Node):Boolean {
+			var xmin:Number = Math.min(n0.lon,n1.lon),
+				ymin:Number = Math.min(n0.lat,n1.lat),
+				xmax:Number = Math.max(n0.lon,n1.lon),
+				ymax:Number = Math.max(n0.lat,n1.lat);
+			return ( (xmin>=edge_l && xmin<=edge_r) ||
+					 (xmax>=edge_l && xmax<=edge_r) ||
+					 (xmin< edge_l && xmax> edge_r) ) &&
+				   ( (ymin>=edge_b && ymin<=edge_t) ||
+					 (ymax>=edge_b && ymax<=edge_t) ||
+					 (ymin< edge_b && ymax> edge_t) );
+		}
 
 		// ------------------------------------------------------------------------------------------
 		/** Resize map size based on current stage and height */

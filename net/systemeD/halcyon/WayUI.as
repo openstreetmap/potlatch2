@@ -24,6 +24,8 @@ package net.systemeD.halcyon {
 		public var centroid_y:Number;				//  |
 		/** Angle at each node */
 		public var heading:Array=new Array();
+		/** Is this only partially drawn? */
+		public var partial:Boolean=false;
 		/** vertex to draw exclusively, or not at all (used by DragWayNode) */ 
 		public var drawExcept:Number;
 		/** " */
@@ -155,7 +157,7 @@ package net.systemeD.halcyon {
 				// Currently this means if you highlight an object then scroll, nodes will scroll
 				// into view that should be highlighted but aren't.
 				if (settings.hoverway==false || 
-				    settings.selectedway==false || 
+				    settings.selectedway==false ||
 				    node.within(paint.map.edge_l, paint.map.edge_r, paint.map.edge_t, paint.map.edge_b)) {
 				    paint.setHighlight(node,settings); // Triggers redraw if required
 				}
@@ -215,7 +217,9 @@ package net.systemeD.halcyon {
             }
             heading[way.length-1] = heading[way.length-2];
 
-            pathlength *= paint.map.scalefactor;
+            pathlength *= paint.map.scalefactor; // length in pixels
+            partial = !(way.isArea()) && (pathlength>paint.map.mapwidth*6);
+
             patharea /= 2;
             if (patharea != 0 && way.isArea()) {
                 centroid_x = paint.map.lon2coord(cx / patharea / 6);
@@ -268,10 +272,29 @@ package net.systemeD.halcyon {
 			}
 
 			// Do we have to draw all nodes in the way?
+			indexStart=0; indexEnd=Way(entity).length;
 			var hasFills:Boolean=styleList.hasFills();
-			if (isNaN(drawOnly) || hasFills) {
-				indexStart=0; indexEnd=Way(entity).length; 
+			var i:uint;
+			if (hasFills) {
+				// draw full line
+			} else if (partial) {
+				// long polyline (e.g. powerline) so just draw the on-screen section
+				var isWithin:Boolean=false;
+				for (i=0; i<Way(entity).length-1; i++) {
+					if (paint.map.segmentCrosses(Way(entity).getNode(i), Way(entity).getNode(i+1) )) {
+						indexStart=Math.max(i-1,0); isWithin=true; break;
+					}
+				}
+				for (i=Way(entity).length-2; i>indexStart; i--) {
+					if (paint.map.segmentCrosses(Way(entity).getNode(i), Way(entity).getNode(i+1) )) {
+						indexEnd=Math.min(i+2,Way(entity).length); isWithin=true; break;
+					}
+				}
+				if (!isWithin) return true;
+			} else if (isNaN(drawOnly)) {
+				// draw full line
 			} else {
+				// we only need to redraw around a dragged vertex
 				indexStart=Math.max(0,drawOnly-1);
 				indexEnd  =Math.min(drawOnly+2,Way(entity).length);
 			}
@@ -330,7 +353,7 @@ package net.systemeD.halcyon {
 					}
 				}
 				
-				if (styleList.textStyles[subpart] && isNaN(drawExcept)) {
+				if (styleList.textStyles[subpart] && isNaN(drawExcept) && !partial) {
 					var t:TextStyle=styleList.textStyles[subpart];
 					interactive||=t.interactive;
 					roadname=new Sprite(); addToLayer(roadname,NAMESPRITE);
@@ -352,7 +375,7 @@ package net.systemeD.halcyon {
 
 			// Draw icons
 			var r:Number;
-			for (var i:uint = indexStart; i < indexEnd; i++) {
+			for (i = indexStart; i < indexEnd; i++) {
                 var node:Node = Way(entity).getNode(i);
 				var nodeStateClasses:Object={};
 //				if (i==0) { nodetags['_heading']= heading[i]; }
