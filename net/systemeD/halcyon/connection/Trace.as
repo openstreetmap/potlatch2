@@ -152,29 +152,76 @@ package net.systemeD.halcyon.connection {
 				if (ns.uri.match(/^http:\/\/www\.topografix\.com\/GPX\/1\/[01]$/)) { default xml namespace = ns; }
 			}
 			for each (var trkseg:XML in file..trkseg) {
-				var nodestring:Array = [];
-				var lat:Number = NaN, lastlat:Number = NaN;
-				var lon:Number = NaN, lastlon:Number = NaN;
-				var dist:Number=0;
-				for each (var trkpt:XML in trkseg.trkpt) {
-					lat = trkpt.@lat;
-					lon = trkpt.@lon;
-					if (isNaN(lastlat)) { lastlat = lat; lastlon = lon; }
-					dist=Trace.greatCircle(lat, lon, lastlat, lastlon);
-					if (dist>3) {
-						if ((dist>50 && smartSplitting) || nodestring.length>500) {
-							if (dist<=50 || !smartSplitting) nodestring.push(connection.createNode({}, lat, lon, action.push));
-							if (nodestring.length>1) connection.createWay({}, nodestring, action.push);
-							nodestring=[];
-						}
-						nodestring.push(connection.createNode({}, lat, lon, action.push));
-						lastlat=lat; lastlon=lon;
-					}
+				var pts:Array = [];				// XML can fuck off
+				for each (var trkpt:XML in trkseg.children()) { pts.push([trkpt.@lat, trkpt.@lon]); }
+				if (trkseg.trkpt[0].time.length()>0) {
+					Trace.createFromOrdered(pts,connection,action,smartSplitting);
+				} else {
+					Trace.createFromUnordered(pts,connection,action);
 				}
-				if (nodestring.length > 1) { connection.createWay({}, nodestring, action.push); }
 			}
 		}
-		
+		public static function createFromOrdered(pts:Array,connection:Connection,action:CompositeUndoableAction,smartSplitting:Boolean):void {
+			var nodestring:Array = [];
+			var lat:Number = NaN, lastlat:Number = NaN;
+			var lon:Number = NaN, lastlon:Number = NaN;
+			var dist:Number=0;
+			for each (var pt:Array in pts) {
+				lat = pt[0];
+				lon = pt[1];
+				if (isNaN(lastlat)) { lastlat = lat; lastlon = lon; }
+				dist=Trace.greatCircle(lat, lon, lastlat, lastlon);
+				if (dist>3) {
+					if ((dist>50 && smartSplitting) || nodestring.length>500) {
+						if (dist<=50 || !smartSplitting) nodestring.push(connection.createNode({}, lat, lon, action.push));
+						if (nodestring.length>1) connection.createWay({}, nodestring, action.push);
+						nodestring=[];
+					}
+					nodestring.push(connection.createNode({}, lat, lon, action.push));
+					lastlat=lat; lastlon=lon;
+				}
+			}
+			if (nodestring.length > 1) { connection.createWay({}, nodestring, action.push); }
+		}
+		public static function createFromUnordered(pts:Array,connection:Connection,action:CompositeUndoableAction):void {
+			var active:int = pts.length;
+			var lat:Number = NaN;
+			var lon:Number = NaN;
+			var nodestring:Array = [];
+			while (true) {
+				var created:Boolean = false;
+				for (var i:int=0; i<pts.length; i++) {
+					if (pts[i]==null) { continue; }
+					lat = pts[i][0];
+					lon = pts[i][1];
+					// Find the nearest
+					var bestDist:Number = 20;
+					var bestIndex:int = -1;
+					for (var j:int=i+1; j<=Math.min(i+5,pts.length-1); j++) {
+						if (pts[j]==null) { continue; }
+						var dist:Number = Trace.greatCircle(lat,lon,pts[j][0],pts[j][1]);
+						if (dist<bestDist) { bestDist=dist; bestIndex=j; }
+					}
+					if (bestIndex==-1) {
+						if (nodestring.length > 1) { created=true; connection.createWay({}, nodestring, action.push); }
+						nodestring = [];
+						break;
+					} else {
+						if (i==bestIndex) return;
+						nodestring.push(connection.createNode({}, lat, lon, action.push));
+						pts[i]=null;
+						active--;
+						i=bestIndex-1;
+					}
+				} // end for i
+				if (nodestring.length > 1) {
+					created=true; connection.createWay({}, nodestring, action.push);
+					nodestring=[];
+				}
+				if (!created || active==0) { return; }
+			} // end while
+		} // end function
+
 		public static function greatCircle(lat1:Number,lon1:Number,lat2:Number,lon2:Number):Number {
 			var dlat:Number=(lat2-lat1)*Math.PI/180;
 			var dlon:Number=(lon2-lon1)*Math.PI/180;
