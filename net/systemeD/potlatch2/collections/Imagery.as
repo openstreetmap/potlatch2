@@ -69,11 +69,11 @@ package net.systemeD.potlatch2.collections {
 			collection.forEach(function(bg:Object, index:int, array:Array):void {
 				if (saved.name && saved.name==bg.name) { _selected=bg; }
 				if (bg.id=='Bing') {
-					bg.url="http://ecn.t{switch:0,1,2,3}.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=587&amp;mkt=en-gb&amp;n=z";
+					bg.url="https://ecn.t{switch:0,1,2,3}.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=587&amp;mkt=en-gb&amp;n=z";
 					bg.attribution={
-						data_url: "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=Arzdiw4nlOJzRwOz__qailc8NiR31Tt51dN2D7cm57NrnceZnCpgOkmJhNpGoppU&include=ImageryProviders&output=xml",
+						data_url: "https://dev.virtualearth.net/REST/v1/Imagery/Metadata/Aerial/0,0?zl=1&mapVersion=v1&key=Arzdiw4nlOJzRwOz__qailc8NiR31Tt51dN2D7cm57NrnceZnCpgOkmJhNpGoppU&include=ImageryProviders&output=xml",
 						logo: "bing_maps.png",
-						url: "http://opengeodata.org/microsoft-imagery-details"
+						url: "https://opengeodata.org/microsoft-imagery-details"
 					}
 				}
 				if (bg.id=='Bing' && !_selected) { _selected=bg; }
