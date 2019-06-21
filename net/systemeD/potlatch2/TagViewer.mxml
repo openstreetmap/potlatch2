@@ -78,6 +78,7 @@
 						</fx:Component>
 					</mx:itemRenderer>
 				</mx:DataGridColumn>
+				<mx:DataGridColumn minWidth="4" /><!-- Dummy column forces Flex to render previous one at proper width -->
             </mx:columns>
         </mx:DataGrid>
 
@@ -791,6 +792,7 @@
       }
 
       private function relationRoleChanged(event:DataGridEvent):void {
+		if (!selectedEntity) return;
 		if (event.dataField != 'role') { return; }	// shouldn't really happen
 
 		var relations:Array=event.currentTarget.dataProvider.toArray();
@@ -813,11 +815,13 @@
       }
 
       private function relationTagChanged(event:TagEvent):void {
+          if (!selectedEntity) return;
           resetRelationsGrid(selectedEntity);
           refreshFeatureIcon();
       }
 
       private function entityRelationMemberChanged(event:RelationMemberEvent):void {
+          if (!selectedEntity) return;
           resetRelationsGrid(selectedEntity);
       }
 
@@ -883,7 +887,11 @@
 		var dp:Object = [ {label: "Select all members"}, 
 						  {label: "Deselect all members"}, 
 						  {label: "Add selection to this relation", enabled: false},
-						  {label: "Delete relation"} ]; 
+						  {label: "Delete relation"},
+						  {label: "Assign to F1"},
+						  {label: "Assign to F2"},
+						  {label: "Assign to F3"},
+						  {label: "Assign to F4"} ]; 
 		menu.dataProvider = dp; 
 		menu.addEventListener("itemClick", selectRelationMenu); 
 		button.popUp = menu;
@@ -943,6 +951,13 @@
 						if (event.detail==Alert.CANCEL) return;
 						rel.remove(MainUndoStack.getGlobalStack().addAction);
 					} , null, Alert.CANCEL);
+				break;
+				
+			case 4: // Function key assignment
+			case 5:
+			case 6:
+			case 7:
+				FunctionKeyManager.instance().setKey(event.index-3, 'Add to relation',String(rel.id));
 				break;
 		}
 	}

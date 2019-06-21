@@ -44,7 +44,7 @@ package net.systemeD.potlatch2 {
 			keys[fkey]={ code:code, value:value };
 			var obj:SharedObject=SharedObject.getLocal("user_state","/");
 			obj.setProperty('F'+fkey,{ code:code, value:value });
-			try { obj.flush(); } catch (e:Error) {}
+			try { obj.flush(); } catch (e:Error) { trace("Error: "+e.toString()); }
 			dispatchEvent(new Event("key_changed"));
 		}
 

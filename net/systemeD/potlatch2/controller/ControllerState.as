@@ -307,6 +307,25 @@ package net.systemeD.potlatch2.controller {
 			for each (item in _selection) item.resume();
 		}
 
+		/** Recall memorised relation by ID. */
+		public function recallRelation(str:String):void {
+			if (selectCount==0) return;
+			var rel:Relation = controller.map.editableLayer.connection.getRelation(Number(str));
+			if (!rel) {
+				controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "That relation hasn't been loaded"));
+				return;
+			}
+			var undo:CompositeUndoableAction = new CompositeUndoableAction("Recall relation");
+			for each (var item:Entity in _selection) {
+				item.suspend();
+				rel.appendMember(new RelationMember(item, ''), undo.push);
+			}
+			MainUndoStack.getGlobalStack().addAction(undo);
+			controller.updateSelectionUI();
+			for each (item in _selection) item.resume();
+			controller.dispatchEvent(new AttentionEvent(AttentionEvent.ALERT, null, "Added to relation"));
+		}
+
         /** Show the history dialog, if only one object is selected. */
         protected function showHistory():void {
             if (selectCount == 1 && firstSelected.id>0) {

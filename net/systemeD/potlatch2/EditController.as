@@ -76,6 +76,8 @@ package net.systemeD.potlatch2 {
 
             FunctionKeyManager.instance().registerListener('Saved tags',
                 function(o:String):void { state.recallTags(o); });
+            FunctionKeyManager.instance().registerListener('Add to relation',
+                function(o:String):void { state.recallRelation(o); });
 
             if (this.moveFunction) {
                 var lon:Number = ( map.edge_r + map.edge_l ) / 2;
