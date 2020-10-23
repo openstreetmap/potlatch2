@@ -353,7 +353,7 @@
       <choice value="lockers" text="Lockers" description="A cabinet for storing bikes induvidually."/>
       <choice value="shed" text="Shed" description="A custom built shed in which many bikes can be stored."/>
       <choice value="stands" text="Stands" description="Bent piece of metal, often called Sheffield stands in the UK, or staple racks in the US."/>
-      <choice value="wall_hoops" text="Wall Hoops" description="Hoops to lock the wheel. Sometimes called 'Wheelbenders'."/>
+      <choice value="wall_loops" text="Wall Loops" description="Loops to lock the wheel. Sometimes called 'Wheelbenders'."/>
     </input>
     <input type="choice" presence="always" category="Cycle" name="Covered" key="covered" description="Is the cycle parking covered, so that the bikes are kept dry?">
       <choice value="yes" text="Yes"/>
