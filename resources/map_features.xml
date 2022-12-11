@@ -699,7 +699,7 @@
       <choice value="gymnastics" text="Gymnastics"/>
       <choice value="team_handball" text="(Team) handball"/>
       <choice value="hockey" text="(Field) hockey"/>
-      <choice value="korfball" text="Korball"/>
+      <choice value="korfball" text="Korfball"/>
       <choice value="pelota" text="Pelota"/>
       <choice value="rugby_league" text="Rugby league"/>
       <choice value="rugby_union" text="Rugby union"/>
